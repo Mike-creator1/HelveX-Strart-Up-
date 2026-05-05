@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" class="notranslate">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CreateX — Verify Email</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    if (window.tailwind) {
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              neon: '#00E5FF', 'neon-v': '#9D5CFF', 'neon-g': '#00FFA3',
+              dark: '#04040D', 'dark-card': '#08081A',
+            },
+            fontFamily: {
+              serif: ['Playfair Display', 'Georgia', 'serif'],
+              sans: ['Inter', '-apple-system', 'sans-serif'],
+            },
+          },
+        },
+      };
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    window.SUPABASE_URL  = 'https://ikbdhxobdjlwirydhxym.supabase.co';
+    window.SUPABASE_ANON = 'sb_publishable_chzlbY97SlQx_Apf4zqrTQ_mdwWhmyE';
+    (function initSB(tries){
+      tries = tries || 0;
+      var lib = window.supabase;
+      if (lib && typeof lib.createClient === 'function') {
+        try {
+          window.sb = lib.createClient(window.SUPABASE_URL, window.SUPABASE_ANON, {
+            auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
+          });
+          document.dispatchEvent(new Event('sb:ready'));
+        } catch (err) { console.error('Supabase init failed:', err); }
+        return;
+      }
+      if (tries > 80) { console.warn('Supabase SDK failed to load'); return; }
+      setTimeout(function(){ initSB(tries + 1); }, 40);
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet" />
+  <script src="lang/en.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Inter',sans-serif;background:#04040D;color:#fff;-webkit-font-smoothing:antialiased;min-height:100vh;}
+    .font-serif{font-family:'Playfair Display',Georgia,serif;}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes shimmer{from{background-position:0% center;}to{background-position:-200% center;}}
+    @keyframes popIn{0%{transform:scale(0);opacity:0;}70%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,229,255,.45);}50%{box-shadow:0 0 0 8px rgba(0,229,255,0);}}
+    @keyframes neonGlow{0%,100%{box-shadow:0 0 8px rgba(0,229,255,.3);}50%{box-shadow:0 0 20px rgba(0,229,255,.6);}}
+
+    .gradient-text{
+      background:linear-gradient(120deg,#00E5FF 0%,#9D5CFF 35%,#00E5FF 65%,#9D5CFF 100%);
+      background-size:250% auto;-webkit-background-clip:text;background-clip:text;
+      -webkit-text-fill-color:transparent;animation:shimmer 5s linear infinite;
+    }
+    .btn-gold{
+      background:linear-gradient(135deg,#00B8D9 0%,#7C3AED 50%,#00B8D9 100%);
+      background-size:200% auto;color:#fff;font-weight:700;
+      border-radius:100px;transition:all .3s;cursor:pointer;border:none;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      box-shadow:0 6px 24px rgba(0,184,217,.28),inset 0 1px 0 rgba(255,255,255,.15);
+    }
+    .btn-gold:hover{background-position:right center;transform:translateY(-2px);box-shadow:0 14px 44px rgba(0,184,217,.48),0 0 60px rgba(124,58,237,.2);}
+    .btn-ghost{background:none;border:none;color:rgba(0,229,255,.45);cursor:pointer;
+      font-size:13px;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;
+      transition:color .2s;text-decoration:none;}
+    .btn-ghost:hover{color:#00E5FF;}
+    .back-premium{position:fixed;top:12px;left:18px;z-index:120;height:36px;padding:0 15px 0 12px;border-radius:100px;
+      display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-size:12px;font-weight:850;color:rgba(0,229,255,.85);
+      border:1px solid rgba(0,229,255,.22);background:linear-gradient(135deg,rgba(0,229,255,.1),rgba(157,92,255,.05));
+      box-shadow:0 14px 38px rgba(0,0,0,.34),0 0 0 1px rgba(0,229,255,.04) inset;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      transition:transform .22s,border-color .22s,background .22s,color .22s,box-shadow .22s;}
+    .back-premium svg{width:15px;height:15px;transition:transform .22s;}
+    .back-premium:hover{transform:translateX(-2px);border-color:rgba(0,229,255,.5);background:linear-gradient(135deg,rgba(0,229,255,.18),rgba(157,92,255,.1));color:#00E5FF;box-shadow:0 0 24px rgba(0,229,255,.12),0 14px 38px rgba(0,0,0,.36);}
+    .back-premium:hover svg{transform:translateX(-2px);}
+
+    .otp-input{
+      width:52px;height:60px;text-align:center;font-size:22px;font-weight:700;
+      background:rgba(0,229,255,.03);border:1.5px solid rgba(0,229,255,.12);
+      color:#fff;border-radius:12px;outline:none;
+      transition:border-color .2s,box-shadow .2s,background .2s;
+      font-family:'Inter',sans-serif;
+    }
+    .otp-input:focus{border-color:rgba(0,229,255,.6);box-shadow:0 0 0 3px rgba(0,229,255,.1),0 0 16px rgba(0,229,255,.08);background:rgba(0,229,255,.05);}
+    .otp-input.filled{border-color:rgba(0,229,255,.4);background:rgba(0,229,255,.06);box-shadow:0 0 8px rgba(0,229,255,.08);}
+
+    .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+
+    .step-flow{display:flex;align-items:center;gap:0;}
+    .step-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.12);}
+    .step-dot.active{background:#00E5FF;box-shadow:0 0 8px rgba(0,229,255,.7);animation:pulse 2s infinite;}
+    .step-dot.done{background:rgba(0,229,255,.45);}
+    .step-line{width:28px;height:1px;background:rgba(255,255,255,.08);}
+    .step-line.done{background:rgba(0,229,255,.3);}
+
+    .glass-card{background:rgba(0,229,255,.02);border:1px solid rgba(0,229,255,.09);border-radius:20px;}
+    @media(max-width:1280px){.brand-link{margin-left:154px;}}
+    @media(max-width:680px){
+      .back-premium{left:12px;width:38px;padding:0;justify-content:center;gap:0;}
+      .back-premium span{display:none;}
+      .brand-link{margin-left:48px;}
+    }
+
+    .anim{animation:fadeUp .55s ease both;}
+    .d1{animation-delay:.05s;}.d2{animation-delay:.12s;}.d3{animation-delay:.20s;}.d4{animation-delay:.30s;}.d5{animation-delay:.40s;}
+  </style>
+</head>
+<body>
+
+<div id="lang-host" style="position:fixed;top:16px;right:20px;z-index:200;"></div>
+
+<!-- Background -->
+<div class="orb" style="width:500px;height:500px;background:#00E5FF;top:-15%;left:-10%;opacity:.07;filter:blur(90px);"></div>
+<div class="orb" style="width:350px;height:350px;background:#9D5CFF;bottom:10%;right:-8%;opacity:.08;filter:blur(90px);"></div>
+
+<!-- ─── HEADER ─── -->
+<header style="position:sticky;top:0;z-index:50;background:rgba(4,4,13,.94);
+     backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+     border-bottom:1px solid rgba(0,229,255,.07);">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;height:60px;
+       display:flex;align-items:center;justify-content:space-between;">
+    <a href="landing.html" class="back-premium" onclick="if(window.history.length>1){window.history.back();return false;}">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      <span>Back</span>
+    </a>
+    <a href="landing.html" class="brand-link" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <svg style="filter:drop-shadow(0 0 10px rgba(0,229,255,.55));" width="26" height="26" viewBox="0 0 34 34" fill="none">
+        <rect width="34" height="34" rx="9" fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.28)" stroke-width="1"/>
+        <path d="M10 10.5L24 23.5M24 10.5L10 23.5" stroke="url(#xgv)" stroke-width="2.8" stroke-linecap="round"/>
+        <defs><linearGradient id="xgv" x1="10" y1="10" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00E5FF"/><stop offset="100%" stop-color="#9D5CFF"/></linearGradient></defs>
+      </svg>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#fff;line-height:1;">CreateX</div>
+        <div style="font-size:9px;font-weight:500;color:#00E5FF;letter-spacing:.15em;margin-top:2px;">AI Agent</div>
+      </div>
+    </a>
+
+    <!-- Flow progress -->
+    <div class="step-flow hidden md:flex" style="align-items:center;gap:0;">
+      <div style="font-size:10px;color:rgba(255,255,255,.3);margin-right:8px;">Account</div>
+      <div class="step-dot done"></div>
+      <div class="step-line done"></div>
+      <div class="step-dot active"></div>
+      <div class="step-line"></div>
+      <div class="step-dot"></div>
+      <div class="step-line"></div>
+      <div class="step-dot"></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.3);margin-left:8px;">Done</div>
+    </div>
+
+    <span aria-hidden="true" style="width:92px;"></span>
+  </div>
+</header>
+
+<!-- ─── MAIN ─── -->
+<main style="min-height:calc(100vh - 60px);display:flex;align-items:center;
+     justify-content:center;padding:40px 20px;position:relative;">
+
+  <div style="width:100%;max-width:460px;text-align:center;">
+
+    <!-- Icon -->
+    <div class="anim d1" style="width:72px;height:72px;border-radius:20px;margin:0 auto 24px;
+         display:flex;align-items:center;justify-content:center;
+         background:linear-gradient(135deg,rgba(0,229,255,.12),rgba(157,92,255,.06));
+         border:1px solid rgba(0,229,255,.25);box-shadow:0 0 30px rgba(0,229,255,.08);">
+      <svg width="32" height="32" fill="none" stroke="#00E5FF" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+      </svg>
+    </div>
+
+    <!-- Heading -->
+    <h1 class="anim d2 font-serif" style="font-size:32px;font-weight:800;margin-bottom:10px;">
+      Check your <span class="gradient-text">email</span>
+    </h1>
+    <p class="anim d2" style="font-size:15px;color:rgba(255,255,255,.42);line-height:1.65;margin-bottom:6px;">
+      We sent a 6-digit verification code to
+    </p>
+    <p class="anim d2" style="font-size:15px;font-weight:600;color:#00E5FF;margin-bottom:32px;text-shadow:0 0 16px rgba(0,229,255,.4);"
+       id="email-display">your email address</p>
+
+    <!-- OTP inputs -->
+    <div class="anim d3" style="display:flex;gap:10px;justify-content:center;margin-bottom:28px;">
+      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" />
+      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" />
+      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" />
+      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" />
+      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" />
+      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" />
+    </div>
+
+    <!-- Error msg (hidden by default) -->
+    <div id="err-msg" style="display:none;color:rgba(239,68,68,.8);font-size:13px;margin-bottom:16px;">
+      Please enter the complete 6-digit code.
+    </div>
+
+    <!-- Verify button -->
+    <div class="anim d4">
+      <button onclick="verifyCode()" class="btn-gold"
+              style="width:100%;max-width:320px;padding:15px;font-size:15px;margin-bottom:20px;">
+        Verify &amp; Continue
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Timer / Resend -->
+    <div class="anim d5" id="timer-section" style="font-size:13px;color:rgba(255,255,255,.3);margin-bottom:10px;">
+      Resend code in <span id="countdown" style="color:rgba(255,255,255,.55);font-weight:600;">30</span>s
+    </div>
+    <div id="resend-section" style="display:none;margin-bottom:10px;">
+      <button onclick="resendCode()" style="background:none;border:none;color:rgba(0,229,255,.65);
+              font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:underline;transition:color .2s;"
+              onmouseover="this.style.color='#00E5FF'" onmouseout="this.style.color='rgba(0,229,255,.65)'">
+        Resend code
+      </button>
+    </div>
+
+    <!-- Different email -->
+    <div class="anim d5" style="margin-top:28px;padding-top:24px;border-top:1px solid rgba(0,229,255,.07);">
+      <a href="landing.html" class="btn-ghost" style="justify-content:center;font-size:13px;">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Use a different email address
+      </a>
+    </div>
+
+    <!-- Security note -->
+    <div class="anim d5 glass-card" style="margin-top:20px;padding:14px 18px;
+         display:flex;align-items:center;gap:10px;text-align:left;">
+      <svg width="16" height="16" fill="none" stroke="rgba(0,229,255,.45)" viewBox="0 0 24 24" style="flex-shrink:0;">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+      </svg>
+      <span style="font-size:12px;color:rgba(255,255,255,.3);line-height:1.5;">
+        This code expires in 10 minutes. Never share this code with anyone.
+      </span>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  // ── Read email from URL ──────────────────────────────
+  const params = new URLSearchParams(window.location.search);
+  const email = params.get('email') || 'your email';
+  document.getElementById('email-display').textContent = email;
+
+  // ── OTP logic ────────────────────────────────────────
+  const inputs = document.querySelectorAll('.otp-input');
+
+  inputs.forEach((inp, i) => {
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !inp.value && i > 0) {
+        inputs[i - 1].focus();
+        inputs[i - 1].classList.remove('filled');
+      }
+      if (e.key === 'ArrowLeft' && i > 0) inputs[i - 1].focus();
+      if (e.key === 'ArrowRight' && i < inputs.length - 1) inputs[i + 1].focus();
+    });
+
+    inp.addEventListener('input', e => {
+      const val = e.target.value.replace(/\D/g, '');
+      inp.value = val.slice(-1);
+      if (val) {
+        inp.classList.add('filled');
+        if (i < inputs.length - 1) inputs[i + 1].focus();
+      } else {
+        inp.classList.remove('filled');
+      }
+    });
+
+    inp.addEventListener('paste', e => {
+      e.preventDefault();
+      const paste = e.clipboardData.getData('text').replace(/\D/g, '');
+      paste.split('').forEach((ch, j) => {
+        if (inputs[i + j]) {
+          inputs[i + j].value = ch;
+          inputs[i + j].classList.add('filled');
+        }
+      });
+      const last = Math.min(i + paste.length - 1, inputs.length - 1);
+      inputs[last].focus();
+    });
+  });
+
+  // ── Query params ─────────────────────────────────────
+  const _qs = new URLSearchParams(window.location.search);
+  const _email = (_qs.get('email') || '').trim();
+  const _mode  = (_qs.get('mode') || 'su').trim();
+
+  function _authErr(error, fallback) {
+    if (!error) return fallback || 'Authentication error';
+    const parts = [error.message || error.error_description || error.error || fallback || 'Authentication error'];
+    if (error.status) parts.push('Status: ' + error.status);
+    if (error.code) parts.push('Code: ' + error.code);
+    return parts.filter(Boolean).join('\n');
+  }
+  function _reportAuthErr(method, error, fallback, silent) {
+    const msg = _authErr(error, fallback);
+    console.error('Supabase auth error:', {
+      method,
+      message: error && error.message,
+      status: error && error.status,
+      code: error && error.code,
+      error
+    });
+    return msg;
+  }
+  function _isSupabaseMailerFailure(error) {
+    const message = String((error && error.message) || '').toLowerCase();
+    const status = String((error && error.status) || '');
+    const code = String((error && error.code) || '');
+    return status === '500'
+      && code === 'unexpected_failure'
+      && (
+        message.includes('magic link email')
+        || message.includes('confirmation email')
+        || message.includes('email')
+      );
+  }
+  function _showErr(msg) {
+    const el = document.getElementById('err-msg');
+    if (el) {
+      if (msg) el.textContent = msg;
+      el.style.display = 'block';
+    }
+  }
+  function _hideErr() {
+    const el = document.getElementById('err-msg');
+    if (el) el.style.display = 'none';
+  }
+  function _waitSB(cb, tries){
+    tries = tries || 0;
+    if (window.sb) return cb();
+    if (tries > 80) return cb();
+    setTimeout(function(){ _waitSB(cb, tries + 1); }, 40);
+  }
+
+  // ── Verify ───────────────────────────────────────────
+  async function verifyCode() {
+    const code = [...inputs].map(inp => inp.value).join('');
+    if (!/^\d{6}$/.test(code)) {
+      _showErr('Please enter the complete 6-digit code.');
+      inputs[Math.min(code.length > 0 ? code.length : 0, inputs.length - 1)].focus();
+      return;
+    }
+    _hideErr();
+
+    const verifyBtn = document.querySelector('button[onclick="verifyCode()"]');
+    if (verifyBtn) { verifyBtn.disabled = true; verifyBtn.style.opacity = '.7'; verifyBtn.style.cursor = 'wait'; }
+
+    _waitSB(async () => {
+      if (!window.sb || !_email) {
+        if (verifyBtn) { verifyBtn.disabled = false; verifyBtn.style.opacity = ''; verifyBtn.style.cursor = ''; }
+        window.location.href = (_mode === 'reset') ? 'reset.html' : 'pricing.html';
+        return;
+      }
+      try {
+        const { error } = await window.sb.auth.verifyOtp({
+          email: _email,
+          token: code,
+          type: 'email'
+        });
+        if (error) {
+          const msg = _reportAuthErr('verifyOtp:email', error, 'Invalid or expired code. Please try again.');
+          _showErr(msg);
+          return;
+        }
+        console.info('Supabase OTP verified:', { mode: _mode, email: _email });
+        if (_mode === 'reset') {
+          window.location.href = 'reset.html';
+        } else if (_mode === 'su') {
+          window.location.href = 'set-password.html';
+        } else if (_mode === 'si') {
+          window.location.href = 'dashboard.html';
+        } else {
+          window.location.href = 'pricing.html';
+        }
+      } catch (err) {
+        const msg = _reportAuthErr('verifyCode', err, 'Verification failed. Please try again.');
+        _showErr(msg);
+      } finally {
+        if (verifyBtn) { verifyBtn.disabled = false; verifyBtn.style.opacity = ''; verifyBtn.style.cursor = ''; }
+      }
+    });
+  }
+
+  // ── Timer ────────────────────────────────────────────
+  let timeLeft = 30;
+  const countdownEl = document.getElementById('countdown');
+  const timerSec   = document.getElementById('timer-section');
+  const resendSec  = document.getElementById('resend-section');
+
+  const timer = setInterval(() => {
+    timeLeft--;
+    countdownEl.textContent = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      timerSec.style.display = 'none';
+      resendSec.style.display = 'block';
+    }
+  }, 1000);
+
+  function resendCode() {
+    _hideErr();
+    resendSec.style.display = 'none';
+    timerSec.style.display = 'block';
+    timeLeft = 30;
+    countdownEl.textContent = timeLeft;
+    const newTimer = setInterval(() => {
+      timeLeft--;
+      countdownEl.textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(newTimer);
+        timerSec.style.display = 'none';
+        resendSec.style.display = 'block';
+      }
+    }, 1000);
+    inputs.forEach(inp => { inp.value = ''; inp.classList.remove('filled'); });
+    inputs[0].focus();
+
+    _waitSB(async () => {
+      if (!window.sb || !_email) return;
+      try {
+        const { error } = await window.sb.auth.signInWithOtp({
+          email: _email,
+          options: { shouldCreateUser: _mode === 'su' }
+        });
+        if (error) {
+          const msg = _reportAuthErr('signInWithOtp:resend', error, 'Could not resend the code. Please try again.', _isSupabaseMailerFailure(error));
+          _showErr(msg);
+        }
+        if (!error) console.info('Supabase OTP resent:', { mode: _mode, email: _email });
+      } catch (err) {
+        const msg = _reportAuthErr('resendCode', err, 'Could not resend the code. Please try again.');
+        _showErr(msg);
+      }
+    });
+  }
+
+  // Focus first input on load
+  inputs[0].focus();
+</script>
+<script>window.SSAI_LANGS={en:'English',el:'Ελληνικά',de:'Deutsch',fr:'Français',it:'Italiano',es:'Español',pt:'Português',ko:'한국어',zh:'中文'};</script>
+<script src="lang-widget.js?v=6"></script>
+<script>initLang('lang-host');</script>
+</body>
+</html>

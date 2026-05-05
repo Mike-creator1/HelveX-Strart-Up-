@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" class="notranslate">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google" content="notranslate" />
+  <title>CreateX - Account Control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@800;900&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{min-height:100%;overflow-x:hidden}
+    body{font-family:Inter,-apple-system,sans-serif;background:#09090B;color:#fff;-webkit-font-smoothing:antialiased}
+    .font-serif{font-family:"Playfair Display",Georgia,serif}
+    .orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none}
+    .page{min-height:100vh;display:grid;place-items:center;padding:72px 20px;position:relative}
+    .card{width:min(760px,100%);border:1px solid rgba(196,165,90,.22);border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));box-shadow:0 26px 80px rgba(0,0,0,.48),0 0 0 1px rgba(255,255,255,.035) inset;padding:36px;position:relative;overflow:hidden}
+    .card:before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#C4A55A,transparent)}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:100px;border:1px solid rgba(34,197,94,.2);background:rgba(34,197,94,.07);color:#58F09A;font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px}
+    h1{font-size:46px;line-height:1.05;margin-bottom:14px}
+    p{color:rgba(255,255,255,.56);font-size:16px;line-height:1.72;margin-bottom:22px;max-width:620px}
+    .steps{display:grid;gap:10px;margin:26px 0}
+    .step{display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(255,255,255,.075);background:rgba(255,255,255,.03);border-radius:8px;padding:13px}
+    .num{width:24px;height:24px;border-radius:7px;background:rgba(196,165,90,.14);border:1px solid rgba(196,165,90,.28);color:#E2C66E;display:grid;place-items:center;font-size:12px;font-weight:900;flex-shrink:0}
+    .step strong{display:block;font-size:13px;margin-bottom:3px}
+    .step span{display:block;color:rgba(255,255,255,.48);font-size:13px;line-height:1.5}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+    a{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:100px;padding:13px 20px;font-weight:850;font-size:13px}
+    .gold{background:linear-gradient(135deg,#C4A55A,#D8BE70,#C4A55A);color:#08080A;box-shadow:0 16px 46px rgba(196,165,90,.22)}
+    .ghost{border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.74);background:rgba(255,255,255,.03)}
+    .mini-brand{position:fixed;top:18px;left:22px;z-index:120;display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff}.mini-brand img{width:38px;height:38px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(24,215,255,.3))}.mini-brand strong{display:block;font-size:14px;line-height:1;font-weight:850}.mini-brand small{display:block;margin-top:4px;color:#18d7ff;font-size:9px;letter-spacing:.18em;font-weight:900;text-transform:uppercase}
+  </style>
+<script src="lang/en.js"></script></head>
+<body><a href="landing.html" class="mini-brand"><img src="createx-logo.svg" alt="CreateX" /><span><strong>CreateX</strong><small>AI Agent</small></span></a><div id="lang-host" style="position:fixed;top:18px;right:22px;z-index:120"></div>
+  <div class="orb" style="width:520px;height:520px;background:#C4A55A;top:-18%;left:-12%;opacity:.08"></div>
+  <div class="orb" style="width:360px;height:360px;background:#22C55E;bottom:-10%;right:-12%;opacity:.06"></div>
+  <div style="position:fixed;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:30px 30px;pointer-events:none;opacity:.7"></div>
+  <main class="page">
+    <section class="card">
+      <div class="eyebrow">Plan control</div>
+      <h1 class="font-serif">Account control. Clear plan access.</h1>
+      <p>Your account area is built to keep plan access clear, secure, and easy to understand before you activate or manage any subscription.</p>
+      <div class="steps">
+        <div class="step"><div class="num">1</div><div><strong>Open your dashboard</strong><span>Go to your plan settings after signing in.</span></div></div>
+        <div class="step"><div class="num">2</div><div><strong>Review plan controls</strong><span>Your billing settings stay visible inside the account area.</span></div></div>
+        <div class="step"><div class="num">3</div><div><strong>Keep your account access</strong><span>Your profile and setup remain available unless you delete your account.</span></div></div>
+      </div>
+      <div class="actions">
+        <a class="gold" href="pricing.html">Back to pricing</a>
+        <a class="ghost" href="dashboard.html">Open dashboard</a>
+      </div>
+    </section>
+  </main>
+<script src="lang-widget.js?v=6"></script><script>initLang('lang-host');</script></body>
+</html>

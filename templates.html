@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" class="notranslate">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="google" content="notranslate"/>
+<title>AI Template Hub — CreateX</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>window.SUPABASE_URL='https://ikbdhxobdjlwirydhxym.supabase.co';window.SUPABASE_ANON='sb_publishable_chzlbY97SlQx_Apf4zqrTQ_mdwWhmyE';(function i(t){t=t||0;var l=window.supabase;if(l&&typeof l.createClient==='function'){try{window.sb=l.createClient(window.SUPABASE_URL,window.SUPABASE_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});}catch(e){}return;}if(t>80)return;setTimeout(function(){i(t+1);},40);})();</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#05070b;--panel:#0c0e15;--line:rgba(255,255,255,.08);--text:#f0f4ff;--muted:rgba(255,255,255,.55);--soft:rgba(255,255,255,.34);--cyan:#18d7ff;--violet:#7c3dff;--green:#39f58a;--amber:#ffb347;--pink:#ff5e9d;--blue:#4d7dff}
+html,body{height:100%}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);background-size:30px 30px;opacity:.5}
+.glow{position:fixed;border-radius:999px;filter:blur(110px);pointer-events:none;z-index:0}
+.app-shell{display:grid;grid-template-columns:252px 1fr;min-height:100vh;position:relative;z-index:1}
+.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;background:rgba(7,9,16,.96);border-right:1px solid var(--line);padding:22px 14px;display:flex;flex-direction:column;gap:4px;backdrop-filter:blur(22px)}
+.main-area{display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
+.topbar{position:sticky;top:0;z-index:50;height:64px;display:flex;align-items:center;gap:12px;padding:0 28px;background:rgba(5,7,11,.85);border-bottom:1px solid var(--line);backdrop-filter:blur(22px)}
+.online-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(57,245,138,.15);animation:pulseDot 2.4s infinite}
+.tb-title{font-size:14.5px;font-weight:900;letter-spacing:-.01em}
+.main-content{padding:32px 28px 60px;flex:1;max-width:1480px;width:100%}
+
+/* ── Page header ── */
+.page-head{margin-bottom:28px}
+.page-eyebrow{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;background:rgba(124,61,255,.08);border:1px solid rgba(124,61,255,.22);font:800 10px Inter,sans-serif;color:#b489ff;text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
+.page-h1{font-size:30px;font-weight:900;letter-spacing:-.025em;color:#fff;margin-bottom:8px;line-height:1.1}
+.page-sub{font-size:14px;color:var(--muted);font-weight:600;line-height:1.6;max-width:580px}
+
+/* ── Search & filters ── */
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:22px}
+.search-wrap{position:relative;flex:1;min-width:280px;max-width:520px}
+.search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--soft);pointer-events:none}
+.search{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:11px;padding:12px 16px 12px 42px;color:#fff;font:600 13.5px Inter,sans-serif;outline:none;transition:.18s}
+.search:focus{border-color:rgba(24,215,255,.4);box-shadow:0 0 0 3px rgba(24,215,255,.07);background:rgba(255,255,255,.05)}
+.search::placeholder{color:rgba(255,255,255,.32)}
+.sort{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:10px 32px 10px 14px;color:rgba(255,255,255,.78);font:700 12px Inter,sans-serif;cursor:pointer;outline:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(255,255,255,.4)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.sort:focus{border-color:rgba(24,215,255,.4)}
+
+/* ── Categories ── */
+.cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.cat{padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:rgba(255,255,255,.7);font:700 12px Inter,sans-serif;cursor:pointer;transition:.16s;display:inline-flex;align-items:center;gap:7px}
+.cat:hover{color:#fff;border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.06)}
+.cat.active{background:rgba(24,215,255,.1);border-color:rgba(24,215,255,.32);color:#65efff}
+.cat .count{font-size:10.5px;color:var(--soft);font-weight:700;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:999px}
+.cat.active .count{background:rgba(24,215,255,.14);color:#65efff}
+
+/* ── Result count ── */
+.result-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.result-count{font:700 12.5px Inter,sans-serif;color:var(--muted)}
+.result-count strong{color:#fff;font-weight:900}
+
+/* ── Grid ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.tcard{position:relative;background:linear-gradient(150deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border:1px solid var(--line);border-radius:14px;padding:18px 20px 16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 18px 60px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.04);transition:.2s;animation:fadeUp .35s ease both;overflow:hidden}
+.tcard:hover{transform:translateY(-2px);border-color:rgba(24,215,255,.3);box-shadow:0 22px 70px rgba(0,0,0,.4),0 0 0 1px rgba(24,215,255,.12)}
+.tc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.tc-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(24,215,255,.1);color:#65efff;border:1px solid rgba(24,215,255,.22);flex-shrink:0}
+.tc-icon.violet{background:rgba(124,61,255,.1);color:#b489ff;border-color:rgba(124,61,255,.22)}
+.tc-icon.green{background:rgba(57,245,138,.1);color:#6dffa7;border-color:rgba(57,245,138,.22)}
+.tc-icon.amber{background:rgba(255,179,71,.1);color:#ffd089;border-color:rgba(255,179,71,.22)}
+.tc-icon.pink{background:rgba(255,94,157,.1);color:#ff8eb9;border-color:rgba(255,94,157,.22)}
+.tc-icon.blue{background:rgba(77,125,255,.12);color:#8aabff;border-color:rgba(77,125,255,.22)}
+.tc-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font:800 9.5px Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;flex-shrink:0;background:rgba(255,255,255,.05);color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.08)}
+.tc-pill.beg{background:rgba(57,245,138,.1);color:#6dffa7;border-color:rgba(57,245,138,.22)}
+.tc-pill.int{background:rgba(255,179,71,.1);color:#ffd089;border-color:rgba(255,179,71,.24)}
+.tc-pill.adv{background:rgba(255,94,157,.1);color:#ff8eb9;border-color:rgba(255,94,157,.24)}
+.tc-pill.pop{background:rgba(124,61,255,.1);color:#b489ff;border-color:rgba(124,61,255,.22);position:absolute;top:14px;right:14px}
+.tc-name{font:900 15px Inter,sans-serif;color:#fff;letter-spacing:-.01em;line-height:1.25}
+.tc-cat{font:700 10.5px Inter,sans-serif;color:#65efff;text-transform:uppercase;letter-spacing:.08em;margin-top:3px}
+.tc-desc{font:600 12.5px Inter,sans-serif;color:var(--muted);line-height:1.6;flex:1}
+.tc-tags{display:flex;flex-wrap:wrap;gap:5px}
+.tc-tag{font:700 10.5px Inter,sans-serif;color:rgba(255,255,255,.6);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);padding:3px 8px;border-radius:6px}
+.tc-actions{display:flex;gap:6px;margin-top:6px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:9px;font:800 12px Inter,sans-serif;cursor:pointer;transition:.18s;border:0;font-family:inherit;text-decoration:none;white-space:nowrap;flex:1}
+.btn-primary{background:linear-gradient(135deg,#19c9ff,#4d7dff,#7c3dff);background-size:190% auto;color:#fff;box-shadow:0 10px 24px rgba(45,141,255,.18)}
+.btn-primary:hover{background-position:right center;transform:translateY(-1px)}
+.btn-soft{background:rgba(255,255,255,.05);border:1px solid var(--line);color:rgba(255,255,255,.78)}
+.btn-soft:hover{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.18)}
+.tc-meta{display:flex;gap:12px;font:700 10.5px Inter,sans-serif;color:var(--soft);padding-top:8px;border-top:1px solid rgba(255,255,255,.05);margin-top:2px}
+.tc-meta span{display:inline-flex;align-items:center;gap:5px}
+
+/* ── Empty ── */
+.empty{text-align:center;padding:60px 24px;background:linear-gradient(150deg,rgba(255,255,255,.025),rgba(255,255,255,.008));border:1px dashed var(--line);border-radius:14px}
+.empty .ic{width:54px;height:54px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;color:var(--muted)}
+.empty h3{font:900 16px Inter,sans-serif;color:#fff;margin-bottom:6px}
+.empty p{font:600 13px Inter,sans-serif;color:var(--muted);max-width:420px;margin:0 auto 14px;line-height:1.55}
+
+/* ── Modal ── */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.74);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:.22s;backdrop-filter:blur(6px)}
+.ov.open{opacity:1;pointer-events:auto}
+.ov-box{background:#0c0e15;border:1px solid var(--line);border-radius:16px;width:100%;max-width:560px;padding:0;box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.04);font-family:Inter,sans-serif;max-height:88vh;display:flex;flex-direction:column}
+.ov-h{padding:22px 26px 18px;border-bottom:1px solid var(--line);display:flex;gap:14px;align-items:flex-start}
+.ov-c{padding:20px 26px;overflow-y:auto;flex:1}
+.ov-f{padding:16px 26px 22px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+.ov-name{font:900 18px Inter,sans-serif;color:#fff;margin-bottom:4px;letter-spacing:-.01em}
+.ov-cat{font:700 11px Inter,sans-serif;color:#65efff;text-transform:uppercase;letter-spacing:.08em}
+.ov-desc{font:600 13px Inter,sans-serif;color:rgba(255,255,255,.72);line-height:1.65;margin-bottom:18px}
+.ov-section{margin-bottom:18px}
+.ov-label{font:900 10px Inter,sans-serif;color:var(--soft);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.ov-pre{background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:14px 16px;font:600 12px ui-monospace,monospace;color:#c9d1d9;line-height:1.6;white-space:pre-wrap;max-height:240px;overflow-y:auto}
+.ov-x{background:rgba(255,255,255,.05);border:1px solid var(--line);color:rgba(255,255,255,.5);border-radius:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-left:auto}
+.ov-x:hover{background:rgba(255,255,255,.1);color:#fff}
+
+@media(max-width:1100px){.app-shell{grid-template-columns:1fr}.sidebar{display:none}}
+@media(max-width:640px){.main-content{padding:24px 16px 50px}.page-h1{font-size:24px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="glow" style="width:480px;height:480px;background:#7c3dff;top:-15%;left:-10%;opacity:.05"></div>
+<div class="glow" style="width:380px;height:380px;background:#18d7ff;right:-10%;bottom:0;opacity:.05"></div>
+
+<div class="app-shell">
+  <nav class="sidebar" id="app-sidebar"></nav>
+  <div class="main-area">
+    <header class="topbar">
+      <span class="online-dot"></span>
+      <span class="tb-title">AI Template Hub</span>
+    </header>
+
+    <main class="main-content">
+
+      <div class="page-head">
+        <span class="page-eyebrow">
+          <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Template Hub
+        </span>
+        <h1 class="page-h1">Ship faster with AI templates.</h1>
+        <p class="page-sub">A curated library of production-ready blueprints for every CreateX builder. Pick a template, hit <strong>Use Template</strong>, and the matching builder opens with the full prompt pre-filled.</p>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-wrap">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input class="search" id="search" type="search" placeholder="Search templates by name, tag, or use case…" autocomplete="off"/>
+        </div>
+        <select class="sort" id="sort">
+          <option value="popular">Most popular</option>
+          <option value="newest">Newest</option>
+          <option value="az">A → Z</option>
+          <option value="difficulty">Difficulty (easy → hard)</option>
+        </select>
+      </div>
+
+      <div class="cats" id="cats"></div>
+
+      <div class="result-bar">
+        <div class="result-count" id="result-count">Loading…</div>
+      </div>
+
+      <div id="grid-host"></div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Preview modal -->
+<div class="ov" id="preview-modal" onclick="if(event.target===this)closePreview()">
+  <div class="ov-box">
+    <div class="ov-h">
+      <div class="tc-icon" id="ov-icon"></div>
+      <div style="flex:1;min-width:0">
+        <div class="ov-name" id="ov-name"></div>
+        <div class="ov-cat" id="ov-cat"></div>
+      </div>
+      <button class="ov-x" onclick="closePreview()" aria-label="Close">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="ov-c">
+      <p class="ov-desc" id="ov-desc"></p>
+      <div class="ov-section">
+        <div class="ov-label">Tags</div>
+        <div class="tc-tags" id="ov-tags"></div>
+      </div>
+      <div class="ov-section">
+        <div class="ov-label">Prompt preview</div>
+        <pre class="ov-pre" id="ov-prompt"></pre>
+      </div>
+      <div class="ov-section">
+        <div class="ov-label">Details</div>
+        <div class="tc-meta" id="ov-meta" style="border:0;padding:0;margin:0;flex-wrap:wrap;gap:18px"></div>
+      </div>
+    </div>
+    <div class="ov-f">
+      <button class="btn btn-soft" onclick="closePreview()" style="flex:0">Close</button>
+      <button class="btn btn-primary" id="ov-use" style="flex:0;padding:9px 22px">
+        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        Use Template
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ─── Auth ─── */
+(function(){function w(cb,t){if(window.sb)return cb();if((t=t||0)>80)return;setTimeout(function(){w(cb,t+1)},40)}w(async function(){if(!window.sb)return;try{var r=await window.sb.auth.getSession();var s=r&&r.data&&r.data.session;if(!s||!s.user){window.location.href='index.html';return}window.sb.auth.onAuthStateChange(function(_,ss){if(!ss||!ss.user)window.location.href='index.html'})}catch(e){}})})();
+async function handleSignOut(){try{if(window.sb)await window.sb.auth.signOut()}catch(e){}window.location.href='index.html'}
+
+/* ─── Categories (fixed taxonomy) ─── */
+var CATEGORIES=[
+  {id:'all',         name:'All templates',color:'cyan',  icon:'M4 6h16M4 12h16M4 18h16'},
+  {id:'website',     name:'Website',      color:'green', icon:'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9'},
+  {id:'app',         name:'App',          color:'cyan',  icon:'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z'},
+  {id:'agent',       name:'Agent',        color:'violet',icon:'M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9'},
+  {id:'workflow',    name:'Workflow',     color:'amber', icon:'M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4'},
+  {id:'business',    name:'Business',     color:'blue',  icon:'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'},
+  {id:'content',     name:'Content',      color:'pink',  icon:'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'},
+  {id:'code',        name:'Code',         color:'cyan',  icon:'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4'},
+  {id:'seo',         name:'SEO',          color:'green', icon:'M9 17v-2a4 4 0 014-4h4M5 21V5a2 2 0 012-2h7l5 5v13a2 2 0 01-2 2H7a2 2 0 01-2-2z'},
+  {id:'email',       name:'Email',        color:'amber', icon:'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'},
+  {id:'automation',  name:'Automation',   color:'violet',icon:'M13 10V3L4 14h7v7l9-11h-7z'}
+];
+
+/* ─── Templates (static; matches schema for backend swap) ─── */
+var TEMPLATES=[
+  {id:'saas-landing',category:'website',name:'SaaS landing page',desc:'Modern conversion-focused landing for a B2B SaaS product, with hero, features, pricing, testimonials, and FAQ sections.',tags:['B2B','Conversion','Hero','Pricing'],difficulty:'Beginner',builder:'website-builder',uses:1842,popular:true,prompt:'Build a complete SaaS landing page for [Product Name]. Include: navigation, hero with headline + sub + CTA, social-proof bar, 3-feature grid, product screenshot, pricing table (3 tiers), testimonials carousel, FAQ accordion, and footer. Dark theme, modern typography.'},
+  {id:'portfolio',category:'website',name:'Personal portfolio',desc:'Premium developer/designer portfolio with projects, about, contact, and testimonials.',tags:['Portfolio','Personal brand','Projects'],difficulty:'Beginner',builder:'website-builder',uses:1240,prompt:'Create a personal portfolio website for [Your Name], a [role]. Sections: hero with photo + tagline, About, Featured Projects (6 cards), Skills, Testimonials, Contact form. Minimal premium design.'},
+  {id:'docs-site',category:'website',name:'Documentation site',desc:'Clean docs site with sidebar navigation, search, and code-block syntax highlighting.',tags:['Docs','Sidebar','Search'],difficulty:'Intermediate',builder:'website-builder',uses:642,prompt:'Build a documentation site with: left sidebar (collapsible categories), main content with H1/H2 anchors, in-content search, copy-to-clipboard code blocks, prev/next navigation, dark/light toggle.'},
+  {id:'ecommerce',category:'website',name:'E-commerce storefront',desc:'Product catalog, search, filters, cart drawer, and checkout flow.',tags:['E-commerce','Cart','Checkout'],difficulty:'Advanced',builder:'website-builder',uses:891,prompt:'Build an e-commerce storefront for [Brand]. Include: product grid with filters, product detail page, cart drawer, mock checkout flow (cart → shipping → payment → confirmation). Uses localStorage for state.'},
+  {id:'crm-app',category:'app',name:'CRM dashboard',desc:'Contact list, deals pipeline (kanban), activity timeline, and reports.',tags:['CRM','Kanban','Pipeline'],difficulty:'Intermediate',builder:'app-builder',uses:980,prompt:'Build a CRM dashboard with: contacts table (sortable, filterable), deals kanban board (4 stages, drag-and-drop), activity timeline per contact, quick-add modals. Persist to localStorage.'},
+  {id:'kanban',category:'app',name:'Kanban board',desc:'Trello-style board with drag-and-drop cards, lists, labels, and due dates.',tags:['Kanban','Productivity'],difficulty:'Beginner',builder:'app-builder',uses:1532,popular:true,prompt:'Build a Kanban board app with: 4 columns (Backlog, In Progress, Review, Done), drag-and-drop cards, card detail modal (title, description, labels, due date, checklist), keyboard shortcuts.'},
+  {id:'budget-tracker',category:'app',name:'Budget tracker',desc:'Personal finance app with categories, recurring transactions, and charts.',tags:['Finance','Charts'],difficulty:'Intermediate',builder:'app-builder',uses:712,prompt:'Build a budget tracker with: monthly summary card, transaction list (income/expense), category breakdown donut chart, last-6-months bar chart, add-transaction modal, export to CSV.'},
+  {id:'project-mgmt',category:'app',name:'Project management',desc:'Tasks, milestones, time tracking, and team workload views.',tags:['PM','Tasks','Time tracking'],difficulty:'Advanced',builder:'app-builder',uses:520,prompt:'Build a project management app with: project list, task tree per project (parent/subtask), milestones, time-tracking timer per task, team workload view (Gantt-style), markdown task descriptions.'},
+  {id:'support-agent',category:'agent',name:'Customer support agent',desc:'Multi-turn agent that triages, answers FAQs, and escalates to humans.',tags:['Support','FAQ','Triage'],difficulty:'Beginner',builder:'agents',uses:2104,popular:true,prompt:'Design a customer support agent for [Company]. Tools: knowledge-base lookup, order-status fetch, ticket-create, hand-off-to-human. Behavior: empathic, ask clarifying questions, escalate when frustrated or out-of-scope.'},
+  {id:'research-agent',category:'agent',name:'Research agent (web search)',desc:'Autonomous agent that searches, summarizes, and cites sources.',tags:['Research','Web search','Citations'],difficulty:'Intermediate',builder:'agents',uses:1389,prompt:'Build a research agent that takes a topic, runs 5–10 web searches, reads top results, synthesizes a 500-word briefing with bullet points and inline citations [1], [2]. Output structured markdown.'},
+  {id:'coding-assistant',category:'agent',name:'Coding assistant',desc:'Reviews, debugs, and refactors code with explanations.',tags:['Code review','Refactor','Debug'],difficulty:'Intermediate',builder:'agents',uses:962,prompt:'Design a coding assistant agent specialised in [language]. Capabilities: explain code, suggest refactors with rationale, find bugs with reproduction steps, write unit tests, propose architecture improvements.'},
+  {id:'sales-agent',category:'agent',name:'Sales outreach agent',desc:'Personalised cold-outreach generator with multi-step sequences.',tags:['Sales','Outreach','Sequences'],difficulty:'Advanced',builder:'agents',uses:438,prompt:'Build a sales outreach agent. Inputs: lead profile (LinkedIn URL, company, role). Outputs: 4-step email sequence (initial, follow-up 3d, follow-up 7d, breakup), each personalised with 2 specific hooks from the profile.'},
+  {id:'lead-qual',category:'workflow',name:'Lead qualification',desc:'Form submission → enrich → score → CRM → Slack alert if high-intent.',tags:['Lead qual','CRM','Slack'],difficulty:'Beginner',builder:'workflow-builder',uses:1108,popular:true,prompt:'Automate lead qualification.\nTrigger: HubSpot form submission.\nSteps: 1) Enrich with Clearbit. 2) Score 0–100 using firmographic + behavioral signals. 3) If >70 → push to Salesforce as MQL + Slack ping #sales. 4) Else → drip nurture sequence.'},
+  {id:'content-approval',category:'workflow',name:'Content approval',desc:'Draft submitted → AI review → human approval → publish to CMS.',tags:['Content','Approval','CMS'],difficulty:'Intermediate',builder:'workflow-builder',uses:524,prompt:'Build a content approval workflow.\nTrigger: New draft in Notion.\nSteps: 1) AI review for tone, SEO, and brand voice. 2) Slack notification to editor with diff. 3) On approval → publish to CMS. 4) Schedule social posts.'},
+  {id:'onboarding-pipeline',category:'workflow',name:'Customer onboarding',desc:'Welcome email → setup checklist → day-3 nudge → day-7 success call.',tags:['Onboarding','Lifecycle'],difficulty:'Intermediate',builder:'workflow-builder',uses:680,prompt:'Customer onboarding pipeline.\nTrigger: Stripe customer.created.\nSteps: 1) Send welcome email + setup checklist. 2) Day 3: AI checks setup completion → nudge if stuck. 3) Day 7: Auto-book success call. 4) Day 14: NPS survey.'},
+  {id:'data-sync',category:'workflow',name:'Airtable ↔ Sheets sync',desc:'Bi-directional sync with conflict resolution every 5 minutes.',tags:['Sync','Airtable','Sheets'],difficulty:'Advanced',builder:'workflow-builder',uses:298,prompt:'Build a bi-directional sync between Airtable base [X] and Google Sheet [Y]. Run every 5 minutes. Conflict resolution: last-write-wins by updated_at. Log all changes to a third sheet for audit.'},
+  {id:'biz-plan',category:'business',name:'One-page business plan',desc:'Lean canvas with problem, solution, segments, channels, and revenue.',tags:['Strategy','Lean canvas'],difficulty:'Beginner',builder:'agents',uses:817,prompt:'Generate a one-page lean business plan for [Idea]. Sections: problem, customer segments, unique value proposition, solution, channels, revenue streams, cost structure, key metrics, unfair advantage.'},
+  {id:'pitch-deck',category:'business',name:'Investor pitch deck',desc:'10-slide YC-style deck outline with speaker notes.',tags:['Pitch','Investors','Deck'],difficulty:'Intermediate',builder:'agents',uses:612,prompt:'Write a 10-slide investor pitch deck for [Startup]. Slides: 1) Cover, 2) Problem, 3) Solution, 4) Demo, 5) Market size, 6) Business model, 7) Traction, 8) Competition, 9) Team, 10) Ask. One paragraph + speaker notes per slide.'},
+  {id:'okrs',category:'business',name:'Quarterly OKRs',desc:'Generate 3 ambitious objectives with 3 measurable key results each.',tags:['OKR','Goals','Quarterly'],difficulty:'Beginner',builder:'agents',uses:402,prompt:'Generate Q[N] OKRs for a [stage] [industry] company. 3 objectives, each with 3 key results. KRs must be specific, measurable, time-bound. Include a stretch target per objective.'},
+  {id:'blog-post',category:'content',name:'Long-form blog post',desc:'1500-word SEO-optimized post with H2/H3 structure and CTA.',tags:['Blog','SEO','Long-form'],difficulty:'Beginner',builder:'agents',uses:2890,popular:true,prompt:'Write a 1,500-word blog post on [Topic] for [Audience]. SEO target: [primary keyword]. Structure: hook, intro, 5 H2 sections with H3 subsections, conclusion with CTA to [URL]. Tone: [voice]. Include 3 internal-link suggestions.'},
+  {id:'social-pack',category:'content',name:'Social media pack',desc:'30 days of posts across LinkedIn, X, Instagram, and TikTok hooks.',tags:['Social','LinkedIn','X','IG'],difficulty:'Intermediate',builder:'agents',uses:1124,prompt:'Generate a 30-day social-media calendar for [Brand]. 4 LinkedIn posts/week, 7 X posts/week, 3 Instagram captions/week, 5 TikTok hooks/week. Include posting times. Match brand voice: [tone].'},
+  {id:'product-desc',category:'content',name:'Product descriptions',desc:'E-commerce product copy that converts, with bullets and SEO.',tags:['Product','Copy','E-commerce'],difficulty:'Beginner',builder:'agents',uses:734,prompt:'Write a product description for [Product]. Format: punchy headline, 2-sentence story-driven intro, 5 bullet-point features with benefits, technical specs table, SEO meta-title and meta-description (≤155 chars).'},
+  {id:'rest-api',category:'code',name:'REST API scaffold',desc:'Express.js or Fastify boilerplate with auth, CRUD, and tests.',tags:['API','Express','CRUD','Tests'],difficulty:'Intermediate',builder:'app-builder',uses:486,prompt:'Generate a Node.js REST API scaffold for resource [X]. Stack: Fastify + Prisma + Postgres + Zod validation. Endpoints: list, get, create, update, delete. Include JWT auth middleware, error handler, and Vitest tests.'},
+  {id:'react-component',category:'code',name:'React component library',desc:'Headless UI component (button, modal, dropdown) with TypeScript.',tags:['React','TypeScript','Headless UI'],difficulty:'Intermediate',builder:'app-builder',uses:392,prompt:'Build a React component library starter with: Button, Modal, Dropdown, Tabs. TypeScript, headless API (no styles), variants via className prop, full keyboard accessibility, Storybook stories.'},
+  {id:'sql-explainer',category:'code',name:'SQL query optimizer',desc:'Paste a slow query → get explanation, EXPLAIN plan, and rewrite.',tags:['SQL','Performance','EXPLAIN'],difficulty:'Advanced',builder:'agents',uses:218,prompt:'Act as a SQL query optimizer. For the query the user pastes: 1) Explain what it does in plain English, 2) Identify performance issues, 3) Suggest indexes, 4) Provide an optimized rewrite, 5) Show expected EXPLAIN plan diff.'},
+  {id:'seo-cluster',category:'seo',name:'Topic cluster builder',desc:'Pillar page + 10 supporting articles with internal-link map.',tags:['SEO','Cluster','Pillar'],difficulty:'Intermediate',builder:'agents',uses:564,prompt:'Build an SEO topic cluster around [primary keyword]. Output: 1 pillar-page outline (2,500 words), 10 supporting article titles with target long-tail keywords, internal-link map (which links to which), and search-intent classification per article.'},
+  {id:'meta-tags',category:'seo',name:'Meta tag generator',desc:'Title, description, OG, and Twitter cards for any page.',tags:['Meta','OG','Twitter'],difficulty:'Beginner',builder:'agents',uses:1128,prompt:'Generate complete meta tags for a page about [topic]: <title> (≤60 chars), meta description (≤155 chars), Open Graph tags (og:title, og:description, og:image suggestion), Twitter Card tags. Include 3 A/B variations of the title.'},
+  {id:'keyword-research',category:'seo',name:'Keyword research brief',desc:'Find low-competition long-tail keywords with intent and difficulty.',tags:['Keywords','Long-tail','Intent'],difficulty:'Beginner',builder:'agents',uses:683,prompt:'Run a keyword-research brief for [niche]. Return 25 long-tail keywords with: estimated monthly searches, difficulty (low/medium/high), search intent (informational/commercial/transactional), and a one-line content angle for each.'},
+  {id:'cold-email',category:'email',name:'Cold-email sequence',desc:'5-step warm outreach sequence with breakup email.',tags:['Cold email','Outreach','Sequence'],difficulty:'Beginner',builder:'agents',uses:1546,prompt:'Write a 5-step cold-email sequence to sell [Product] to [ICP]. Email 1: pattern interrupt + value prop. Email 2 (day 3): case study. Email 3 (day 7): different angle. Email 4 (day 14): social proof. Email 5 (day 21): breakup. Personalise on [data point].'},
+  {id:'newsletter',category:'email',name:'Weekly newsletter',desc:'Newsletter template with intro, 3 stories, tool of the week, and CTA.',tags:['Newsletter','Recurring'],difficulty:'Beginner',builder:'agents',uses:891,prompt:'Generate a weekly newsletter on [topic]. Format: friendly intro, 3 curated stories with 2-sentence commentary, "tool of the week" with link, community spotlight, single clear CTA. Voice: [tone].'},
+  {id:'transactional',category:'email',name:'Transactional email pack',desc:'Welcome, password reset, receipt, abandoned cart, and re-engagement.',tags:['Transactional','Lifecycle'],difficulty:'Intermediate',builder:'agents',uses:312,prompt:'Generate a transactional email pack for [Product]: welcome email, email verification, password reset, payment receipt, abandoned cart, 30-day re-engagement, account deletion confirmation. Plain HTML, brand voice: [tone].'},
+  {id:'slack-alert',category:'automation',name:'Slack error alerter',desc:'Catch app errors → format → post to Slack with stack trace.',tags:['Slack','Errors','Alerts'],difficulty:'Beginner',builder:'workflow-builder',uses:944,prompt:'Automate Slack error alerts.\nTrigger: Sentry new issue.\nSteps: 1) Format with severity, env, stack trace. 2) Post to #alerts. 3) Tag on-call engineer if severity=critical. 4) Auto-create Linear issue if first occurrence.'},
+  {id:'invoice-process',category:'automation',name:'Invoice processing',desc:'Email attachment → OCR → categorise → push to accounting.',tags:['Invoices','OCR','Accounting'],difficulty:'Advanced',builder:'workflow-builder',uses:226,prompt:'Automate invoice processing.\nTrigger: Email to invoices@ with PDF.\nSteps: 1) OCR PDF, 2) Extract vendor/amount/date/line items, 3) Categorise expense, 4) Push to QuickBooks, 5) Reply confirmation, 6) Flag if amount > $5k for human review.'},
+  {id:'social-scheduler',category:'automation',name:'Social post scheduler',desc:'AI writes post → human approves → schedule across networks.',tags:['Social','Scheduler','Approval'],difficulty:'Intermediate',builder:'workflow-builder',uses:518,prompt:'Build a social post scheduler.\nTrigger: New row in "Content" Airtable.\nSteps: 1) AI rewrites for each network (LinkedIn, X, IG). 2) Slack approval thread. 3) On approval → schedule via Buffer at optimal time. 4) Log to "Posted" sheet.'}
+];
+
+/* ─── State ─── */
+var STATE={cat:'all',q:'',sort:'popular',timer:null};
+
+/* ─── Render categories with counts ─── */
+function renderCats(){
+  var counts={};TEMPLATES.forEach(function(t){counts[t.category]=(counts[t.category]||0)+1});
+  document.getElementById('cats').innerHTML=CATEGORIES.map(function(c){
+    var n=c.id==='all'?TEMPLATES.length:(counts[c.id]||0);
+    return '<button class="cat'+(STATE.cat===c.id?' active':'')+'" data-cat="'+c.id+'" onclick="setCat(\''+c.id+'\')">'
+      +'<svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="'+c.icon+'"/></svg>'
+      +c.name+'<span class="count">'+n+'</span></button>';
+  }).join('');
+}
+
+/* ─── Filter + sort ─── */
+function getFiltered(){
+  var q=STATE.q.trim().toLowerCase();
+  var arr=TEMPLATES.filter(function(t){
+    if(STATE.cat!=='all'&&t.category!==STATE.cat)return false;
+    if(!q)return true;
+    var hay=(t.name+' '+t.desc+' '+t.tags.join(' ')+' '+t.category).toLowerCase();
+    return hay.indexOf(q)!==-1;
+  });
+  if(STATE.sort==='newest')arr.reverse();
+  else if(STATE.sort==='az')arr.sort(function(a,b){return a.name.localeCompare(b.name)});
+  else if(STATE.sort==='difficulty'){var rank={Beginner:0,Intermediate:1,Advanced:2};arr.sort(function(a,b){return rank[a.difficulty]-rank[b.difficulty]})}
+  else arr.sort(function(a,b){return (b.uses||0)-(a.uses||0)});
+  return arr;
+}
+
+/* ─── Render grid ─── */
+function catColor(id){var c=CATEGORIES.find(function(x){return x.id===id});return c?c.color:'cyan'}
+function catName(id){var c=CATEGORIES.find(function(x){return x.id===id});return c?c.name:id}
+function catIcon(id){var c=CATEGORIES.find(function(x){return x.id===id});return c?c.icon:''}
+function diffClass(d){return d==='Beginner'?'beg':d==='Intermediate'?'int':'adv'}
+
+function renderGrid(){
+  var arr=getFiltered();
+  document.getElementById('result-count').innerHTML='<strong>'+arr.length+'</strong> '+(arr.length===1?'template':'templates')+(STATE.q?' matching "'+STATE.q.replace(/[<>"]/g,'')+'"':'')+(STATE.cat!=='all'?' in '+catName(STATE.cat):'');
+  if(!arr.length){
+    document.getElementById('grid-host').innerHTML='<div class="empty"><div class="ic"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div><h3>No templates found</h3><p>Try a different category, clear your search, or pick another sort. New templates ship every week.</p><button class="btn btn-soft" style="flex:0;padding:9px 18px" onclick="resetFilters()">Reset filters</button></div>';
+    return;
+  }
+  document.getElementById('grid-host').innerHTML='<div class="grid">'+arr.map(function(t){
+    var col=catColor(t.category);
+    return '<article class="tcard" data-id="'+t.id+'">'
+      +(t.popular?'<span class="tc-pill pop">Popular</span>':'')
+      +'<div class="tc-head"><div class="tc-icon '+col+'"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="'+catIcon(t.category)+'"/></svg></div></div>'
+      +'<div><div class="tc-name">'+t.name+'</div><div class="tc-cat">'+catName(t.category)+'</div></div>'
+      +'<p class="tc-desc">'+t.desc+'</p>'
+      +'<div class="tc-tags">'+t.tags.slice(0,3).map(function(tag){return '<span class="tc-tag">'+tag+'</span>'}).join('')+'</div>'
+      +'<div class="tc-meta"><span><svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>'+(t.uses>=1000?(t.uses/1000).toFixed(1)+'K':t.uses)+' uses</span><span class="tc-pill '+diffClass(t.difficulty)+'" style="position:static">'+t.difficulty+'</span></div>'
+      +'<div class="tc-actions"><button class="btn btn-soft" onclick="preview(\''+t.id+'\')">Preview</button><button class="btn btn-primary" onclick="useTemplate(\''+t.id+'\')"><svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>Use Template</button></div>'
+      +'</article>';
+  }).join('')+'</div>';
+}
+
+/* ─── Controls ─── */
+function setCat(id){STATE.cat=id;renderCats();renderGrid()}
+function resetFilters(){STATE.cat='all';STATE.q='';document.getElementById('search').value='';renderCats();renderGrid()}
+document.getElementById('search').addEventListener('input',function(e){STATE.q=e.target.value;clearTimeout(STATE.timer);STATE.timer=setTimeout(renderGrid,160)});
+document.getElementById('sort').addEventListener('change',function(e){STATE.sort=e.target.value;renderGrid()});
+
+/* ─── Preview modal ─── */
+function preview(id){
+  var t=TEMPLATES.find(function(x){return x.id===id});if(!t)return;
+  var col=catColor(t.category);
+  var icoEl=document.getElementById('ov-icon');
+  icoEl.className='tc-icon '+col;
+  icoEl.innerHTML='<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="'+catIcon(t.category)+'"/></svg>';
+  document.getElementById('ov-name').textContent=t.name;
+  document.getElementById('ov-cat').textContent=catName(t.category);
+  document.getElementById('ov-desc').textContent=t.desc;
+  document.getElementById('ov-tags').innerHTML=t.tags.map(function(x){return '<span class="tc-tag">'+x+'</span>'}).join('');
+  document.getElementById('ov-prompt').textContent=t.prompt;
+  document.getElementById('ov-meta').innerHTML='<span><svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>'+(t.uses>=1000?(t.uses/1000).toFixed(1)+'K':t.uses)+' uses</span><span class="tc-pill '+diffClass(t.difficulty)+'" style="position:static">'+t.difficulty+'</span><span style="color:rgba(255,255,255,.45)">Opens in '+t.builder.replace(/-/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase()})+'</span>';
+  document.getElementById('ov-use').onclick=function(){useTemplate(id)};
+  document.getElementById('preview-modal').classList.add('open');
+}
+function closePreview(){document.getElementById('preview-modal').classList.remove('open')}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closePreview()});
+
+/* ─── Use template → seed prompt + open builder ─── */
+function useTemplate(id){
+  var t=TEMPLATES.find(function(x){return x.id===id});if(!t)return;
+  try{localStorage.setItem('createx_template_seed',JSON.stringify({id:t.id,name:t.name,prompt:t.prompt,builder:t.builder,ts:Date.now()}))}catch(e){}
+  if(window.cxTrack)cxTrack('template_use',{module:'templates',metadata:{template_id:t.id,builder:t.builder}});
+  if(window.cxToast)cxToast('Loading "'+t.name+'" in '+t.builder.replace(/-/g,' ')+'…');
+  setTimeout(function(){window.location.href=t.builder+'.html?template='+encodeURIComponent(t.id)},500);
+}
+
+/* ─── Init ─── */
+document.addEventListener('DOMContentLoaded',function(){renderCats();renderGrid()});
+</script>
+<script src="sidebar.js"></script>
+</body>
+</html>

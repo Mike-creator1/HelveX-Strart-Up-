@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" class="notranslate">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google" content="notranslate" />
+  <title>CreateX — Reset Password</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    if (window.tailwind) {
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              gold: '#C4A55A', 'gold-light': '#D4B870',
+              dark: '#09090B', 'dark-card': '#111113',
+            },
+            fontFamily: {
+              serif: ['Playfair Display', 'Georgia', 'serif'],
+              sans: ['Inter', '-apple-system', 'sans-serif'],
+            },
+          },
+        },
+      };
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    window.SUPABASE_URL  = 'https://ikbdhxobdjlwirydhxym.supabase.co';
+    window.SUPABASE_ANON = 'sb_publishable_chzlbY97SlQx_Apf4zqrTQ_mdwWhmyE';
+    (function initSB(tries){
+      tries = tries || 0;
+      var lib = window.supabase;
+      if (lib && typeof lib.createClient === 'function') {
+        try {
+          window.sb = lib.createClient(window.SUPABASE_URL, window.SUPABASE_ANON, {
+            auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+          });
+          document.dispatchEvent(new Event('sb:ready'));
+        } catch (err) { console.error('Supabase init failed:', err); }
+        return;
+      }
+      if (tries > 80) { console.warn('Supabase SDK failed to load'); return; }
+      setTimeout(function(){ initSB(tries + 1); }, 40);
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet" />
+  <script src="lang/en.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Inter',sans-serif;background:#09090B;color:#fff;-webkit-font-smoothing:antialiased;min-height:100vh;}
+    .font-serif{font-family:'Playfair Display',Georgia,serif;}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes shimmer{from{background-position:0% center;}to{background-position:-200% center;}}
+
+    .gradient-text{
+      background:linear-gradient(120deg,#fff 0%,#C4A55A 35%,#fff 65%,#C4A55A 100%);
+      background-size:250% auto;-webkit-background-clip:text;background-clip:text;
+      -webkit-text-fill-color:transparent;animation:shimmer 7s linear infinite;
+    }
+    .btn-gold{
+      background:linear-gradient(135deg,#C4A55A 0%,#D4B870 50%,#C4A55A 100%);
+      background-size:200% auto;color:#09090B;font-weight:700;
+      border-radius:100px;transition:all .3s;cursor:pointer;border:none;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .btn-gold:hover{background-position:right center;transform:translateY(-2px);box-shadow:0 14px 40px rgba(196,165,90,.4);}
+
+    .btn-ghost{background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;
+      font-size:13px;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;
+      transition:color .2s;text-decoration:none;}
+    .btn-ghost:hover{color:#fff;}
+    .back-premium{position:fixed;top:12px;left:18px;z-index:120;height:36px;padding:0 15px 0 12px;border-radius:100px;
+      display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-size:12px;font-weight:850;color:rgba(255,236,178,.86);
+      border:1px solid rgba(196,165,90,.24);background:linear-gradient(135deg,rgba(196,165,90,.12),rgba(255,255,255,.035));
+      box-shadow:0 14px 38px rgba(0,0,0,.34),0 0 0 1px rgba(255,255,255,.025) inset;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      transition:transform .22s,border-color .22s,background .22s,color .22s,box-shadow .22s;}
+    .back-premium svg{width:15px;height:15px;transition:transform .22s;}
+    .back-premium:hover{transform:translateX(-2px);border-color:rgba(196,165,90,.5);background:linear-gradient(135deg,rgba(196,165,90,.2),rgba(255,255,255,.055));color:#FFE8A6;box-shadow:0 18px 46px rgba(196,165,90,.14),0 14px 38px rgba(0,0,0,.36);}
+    .back-premium:hover svg{transform:translateX(-2px);}
+
+    .form-input{
+      width:100%;background:rgba(255,255,255,.04);
+      border:1.5px solid rgba(255,255,255,.08);color:#fff;
+      border-radius:12px;padding:13px 16px;font-size:14px;
+      font-family:'Inter',sans-serif;outline:none;
+      transition:border-color .2s,box-shadow .2s;display:block;
+    }
+    .form-input:focus{border-color:rgba(196,165,90,.5);box-shadow:0 0 0 3px rgba(196,165,90,.08);}
+    .form-input::placeholder{color:rgba(255,255,255,.2);}
+
+    .form-label{display:block;font-size:11px;font-weight:600;color:rgba(255,255,255,.35);
+      text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;}
+
+    .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+
+    .glass-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:20px;}
+    @media(max-width:1280px){.brand-link{margin-left:154px;}}
+    @media(max-width:680px){
+      .back-premium{left:12px;width:38px;padding:0;justify-content:center;gap:0;}
+      .back-premium span{display:none;}
+      .brand-link{margin-left:48px;}
+    }
+
+    .anim{animation:fadeUp .55s ease both;}
+    .d1{animation-delay:.05s;}.d2{animation-delay:.12s;}.d3{animation-delay:.20s;}.d4{animation-delay:.30s;}
+  </style>
+</head>
+<body>
+
+<div id="lang-host" style="position:fixed;top:16px;right:20px;z-index:200;"></div>
+<div class="orb" style="width:400px;height:400px;background:#C4A55A;top:-15%;left:-10%;opacity:.08;"></div>
+<div class="orb" style="width:300px;height:300px;background:#CC1016;bottom:10%;right:-8%;opacity:.05;"></div>
+
+<header style="position:sticky;top:0;z-index:50;background:rgba(9,9,11,.92);
+     backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+     border-bottom:1px solid rgba(255,255,255,.06);">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;height:60px;
+       display:flex;align-items:center;justify-content:space-between;">
+    <a href="landing.html" class="back-premium" onclick="if(window.history.length>1){window.history.back();return false;}">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      <span data-i18n="reset_back">Back</span>
+    </a>
+    <a href="landing.html" class="brand-link" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <img src="createx-logo.svg" alt="CreateX" style="width:34px;height:34px;object-fit:contain;display:block;filter:drop-shadow(0 0 16px rgba(24,215,255,.32));" />
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#fff;line-height:1;">CreateX</div>
+        <div style="font-size:9px;font-weight:500;color:#18d7ff;letter-spacing:.15em;margin-top:2px;">AI Agent</div>
+      </div>
+    </a>
+
+    <span aria-hidden="true" style="width:92px;"></span>
+  </div>
+</header>
+
+<main style="max-width:460px;margin:0 auto;padding:70px 24px 80px;position:relative;">
+  <div class="glass-card anim d2" style="padding:36px 32px;">
+    <div class="anim d1" style="margin-bottom:22px;text-align:center;">
+      <h1 class="font-serif" style="font-size:28px;font-weight:800;line-height:1.15;margin-bottom:8px;">
+        <span data-i18n="reset_h1">Set a new</span> <span class="gradient-text" data-i18n="reset_h1b">password</span>
+      </h1>
+      <p style="font-size:13.5px;color:rgba(255,255,255,.4);line-height:1.6;" data-i18n="reset_sub">
+        Choose a strong password to secure your account.
+      </p>
+    </div>
+
+    <form class="anim d3" onsubmit="handleReset(event)">
+      <div style="margin-bottom:14px;">
+        <label class="form-label" data-i18n="reset_label_new">New password</label>
+        <input id="pw-new" type="password" class="form-input" data-i18n-placeholder="reset_ph_new" placeholder="Min. 8 characters" autocomplete="new-password" required minlength="8" />
+      </div>
+      <div style="margin-bottom:22px;">
+        <label class="form-label" data-i18n="reset_label_confirm">Confirm password</label>
+        <input id="pw-confirm" type="password" class="form-input" data-i18n-placeholder="reset_ph_confirm" placeholder="Repeat the same password" autocomplete="new-password" required minlength="8" />
+      </div>
+      <div id="reset-err" style="display:none;font-size:12.5px;color:#ff6b6b;margin-bottom:14px;text-align:center;"></div>
+      <button type="submit" class="btn-gold" style="width:100%;padding:14px;font-size:15px;">
+        <span data-i18n="reset_btn">Save new password</span>
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+      </button>
+    </form>
+
+    <p class="anim d4" style="font-size:11px;color:rgba(255,255,255,.2);text-align:center;margin-top:20px;line-height:1.6;" data-i18n="reset_note">
+      After saving, you'll be signed in automatically.
+    </p>
+  </div>
+</main>
+
+<script>
+  function _showErr(msg){
+    var el = document.getElementById('reset-err');
+    if (!el) return;
+    el.textContent = msg || '';
+    el.style.display = msg ? 'block' : 'none';
+  }
+  function _hideErr(){ _showErr(''); }
+  function _waitSB(cb, tries){
+    tries = tries || 0;
+    if (window.sb) return cb();
+    if (tries > 80) return cb();
+    setTimeout(function(){ _waitSB(cb, tries + 1); }, 40);
+  }
+
+  async function handleReset(e){
+    e.preventDefault();
+    _hideErr();
+    var pw1 = document.getElementById('pw-new').value;
+    var pw2 = document.getElementById('pw-confirm').value;
+    if (pw1.length < 8) { _showErr('Password must be at least 8 characters.'); return; }
+    if (pw1 !== pw2)    { _showErr('Passwords do not match.'); return; }
+
+    var btn = e.target.querySelector('button[type="submit"]');
+    if (btn) { btn.disabled = true; btn.style.opacity = '.7'; btn.style.cursor = 'wait'; }
+
+    _waitSB(async () => {
+      if (!window.sb) {
+        _showErr('Service unavailable. Please try again.');
+        if (btn) { btn.disabled = false; btn.style.opacity = ''; btn.style.cursor = ''; }
+        return;
+      }
+      try {
+        var res = await window.sb.auth.updateUser({ password: pw1 });
+        if (res && res.error) {
+          _showErr(res.error.message || 'Could not update password.');
+          if (btn) { btn.disabled = false; btn.style.opacity = ''; btn.style.cursor = ''; }
+          return;
+        }
+        window.location.href = 'dashboard.html';
+      } catch (err) {
+        _showErr((err && err.message) || 'Could not update password.');
+        if (btn) { btn.disabled = false; btn.style.opacity = ''; btn.style.cursor = ''; }
+      }
+    });
+  }
+</script>
+
+<script>window.SSAI_LANGS={en:'English',el:'Ελληνικά',de:'Deutsch',fr:'Français',it:'Italiano',es:'Español',pt:'Português',zh:'中文',ko:'한국어'};window.SSAI_FLAGS={en:'gb',el:'gr',de:'de',fr:'fr',it:'it',es:'es',pt:'pt',zh:'cn',ko:'kr'};</script>
+<script src="lang-widget.js?v=6"></script>
+<script>initLang('lang-host');</script>
+</body>
+</html>

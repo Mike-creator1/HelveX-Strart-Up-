@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" class="notranslate">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CreateX - CV Setup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet" />
+  <script src="lang/en.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#05070b;--card:#0d1118;--line:rgba(255,255,255,.105);--text:#f8fbff;--muted:rgba(255,255,255,.58);--soft:rgba(255,255,255,.36);--cyan:#18d7ff;--blue:#4c7dff;--violet:#7c3dff;--green:#39f58a;--red:#ff5570}
+    html{scroll-behavior:smooth}
+    body{min-height:100vh;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    .font-serif{font-family:'Playfair Display',Georgia,serif}
+    @keyframes shimmer{from{background-position:0% center}to{background-position:-220% center}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.86)}}
+    @keyframes glowMove{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(18px,-14px,0) scale(1.06)}}
+    @keyframes checkPop{0%{transform:scale(0);opacity:0}70%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:1}}
+    ::-webkit-scrollbar{width:5px}
+    ::-webkit-scrollbar-track{background:#05070b}
+    ::-webkit-scrollbar-thumb{background:rgba(24,215,255,.28);border-radius:999px}
+    .dot-grid{position:fixed;inset:0;z-index:0;background-image:radial-gradient(rgba(255,255,255,.062) 1px,transparent 1px);background-size:30px 30px;pointer-events:none;opacity:.62}
+    .orb{position:fixed;border-radius:999px;filter:blur(88px);pointer-events:none;z-index:0;animation:glowMove 12s ease-in-out infinite}
+    .orb.cyan{width:560px;height:560px;background:#18d7ff;top:-18%;left:-14%;opacity:.095}
+    .orb.violet{width:460px;height:460px;background:#7c3dff;right:-12%;bottom:0;opacity:.12;animation-delay:-4s}
+    .orb.green{width:320px;height:320px;background:#39f58a;left:46%;top:18%;opacity:.055;animation-delay:-7s}
+    .gradient-text{background:linear-gradient(120deg,#fff 0%,#18d7ff 28%,#7c3dff 55%,#39f58a 78%,#fff 100%);background-size:260% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 7s linear infinite}
+    .live-dot{width:8px;height:8px;border-radius:999px;background:#39f58a;box-shadow:0 0 0 4px rgba(57,245,138,.15);animation:pulseDot 2.3s infinite;display:inline-block}
+    .topbar{position:sticky;top:0;z-index:70;background:rgba(5,7,11,.78);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-bottom:1px solid rgba(255,255,255,.075)}
+    .topbar-inner{max-width:1360px;margin:0 auto;height:72px;padding:0 240px 0 26px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff;min-width:190px}
+    .brand-mark{width:42px;height:42px;border:0;border-radius:14px;background:transparent;display:grid;place-items:center;box-shadow:none}
+    .brand-mark img{width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 0 18px rgba(24,215,255,.24))}
+    .brand strong{display:block;font-size:15px;font-weight:900;line-height:1}
+    .brand small{display:block;color:#18d7ff;letter-spacing:.18em;font-size:9px;font-weight:900;text-transform:uppercase;margin-top:5px}
+    .top-trust{display:flex;align-items:center;gap:9px;color:rgba(255,255,255,.45);font-size:12px;font-weight:800}.top-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}.back-link svg{width:15px;height:15px;flex-shrink:0}
+    .btn-neon{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:999px;background:linear-gradient(135deg,#18d7ff 0%,#4c7dff 48%,#7c3dff 100%);background-size:190% auto;color:#fff;font-weight:900;text-decoration:none;padding:13px 22px;cursor:pointer;box-shadow:0 18px 52px rgba(45,141,255,.26),inset 0 1px 0 rgba(255,255,255,.24);transition:transform .24s ease,box-shadow .24s ease,background-position .24s ease}
+    .btn-neon:hover{transform:translateY(-2px);background-position:right center;box-shadow:0 24px 76px rgba(45,141,255,.38)}
+    .btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid rgba(24,215,255,.14);background:linear-gradient(135deg,rgba(24,215,255,.06),rgba(124,61,255,.04));color:rgba(255,255,255,.72);border-radius:999px;text-decoration:none;font-weight:850;padding:11px 16px;cursor:pointer;transition:.24s}
+    .btn-ghost:hover{border-color:rgba(57,245,138,.34);color:#fff}
+    .progress-wrap{position:relative;z-index:5;background:rgba(5,7,11,.52);border-bottom:1px solid rgba(255,255,255,.075);backdrop-filter:blur(14px)}
+    .progress-inner{max-width:1360px;margin:0 auto;padding:24px 26px}
+    .progress-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .prog-card{position:relative;border:1px solid rgba(255,255,255,.08);background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border-radius:16px;padding:14px 14px 14px 52px;color:rgba(255,255,255,.45);font-size:12px;font-weight:900;min-height:58px;transition:.25s}
+    .prog-card span{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:27px;height:27px;border-radius:10px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);color:rgba(255,255,255,.42)}
+    .prog-card.active{border-color:rgba(24,215,255,.4);box-shadow:0 0 42px rgba(24,215,255,.10);color:#fff;background:linear-gradient(145deg,rgba(24,215,255,.12),rgba(124,61,255,.055))}
+    .prog-card.active span{border-color:rgba(24,215,255,.55);color:#9ff2ff;background:rgba(24,215,255,.12)}
+    .prog-card.done{border-color:rgba(57,245,138,.24);color:rgba(255,255,255,.68)}
+    .prog-card.done span{border-color:rgba(57,245,138,.35);background:#39f58a;color:#06120b}
+    .shell{position:relative;z-index:1;max-width:1360px;margin:0 auto;padding:58px 26px 92px}
+    .layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(360px,.65fr);gap:28px;align-items:start}
+    .hero-kicker{display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(57,245,138,.22);background:linear-gradient(135deg,rgba(57,245,138,.11),rgba(24,215,255,.05));color:#82ffc0;border-radius:999px;padding:9px 16px;font-size:11px;font-weight:950;letter-spacing:.07em;text-transform:uppercase;margin-bottom:22px;box-shadow:0 16px 46px rgba(57,245,138,.08)}
+    .step-title{font-size:clamp(38px,5vw,68px);line-height:.98;letter-spacing:-.035em;margin-bottom:18px}
+    .step-subtitle{font-size:17px;color:rgba(255,255,255,.58);line-height:1.72;max-width:780px;font-weight:700;margin-bottom:28px}
+    .panel,.card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.068),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:18px;box-shadow:0 26px 90px rgba(0,0,0,.36),inset 0 1px 0 rgba(255,255,255,.07)}
+    .panel::before,.card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 13% 0%,rgba(24,215,255,.11),transparent 30%),radial-gradient(circle at 100% 22%,rgba(124,61,255,.12),transparent 34%);opacity:.86;pointer-events:none}
+    .panel>*,.card>*{position:relative;z-index:1}
+    .panel{padding:28px;margin-bottom:18px}
+.cv-builder-onboarding{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;border:1px solid rgba(24,215,255,.2);background:linear-gradient(135deg,rgba(24,215,255,.1),rgba(124,61,255,.08));border-radius:18px;padding:20px;box-shadow:0 22px 70px rgba(24,215,255,.08)}.cv-builder-onboarding p{color:rgba(255,255,255,.56);font-size:13px;line-height:1.6;font-weight:750;margin-top:6px}.cv-builder-onboarding-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.cv-builder-onboarding-tags span{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);border-radius:999px;padding:7px 10px;color:rgba(255,255,255,.62);font-size:11px;font-weight:900}.cv-builder-onboarding-icon{width:46px;height:46px;border-radius:15px;background:rgba(24,215,255,.12);border:1px solid rgba(24,215,255,.22);display:flex;align-items:center;justify-content:center;color:#9ff2ff}
+    .section-title{font-size:14px;font-weight:950;color:#fff;margin-bottom:18px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+    .section-title::before{content:'';width:8px;height:8px;border-radius:999px;background:#18d7ff;box-shadow:0 0 18px rgba(24,215,255,.6)}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .form-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .field-block{display:block}
+    .label{display:block;color:#18d7ff;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:950;margin:0 0 9px}
+    .input,.select,.textarea{width:100%;border:1px solid rgba(24,215,255,.14);background:rgba(255,255,255,.038);color:#fff;border-radius:12px;padding:15px 15px;font:inherit;font-size:14px;font-weight:750;outline:none;transition:border-color .2s,box-shadow .2s,background .2s}
+    .textarea{min-height:122px;resize:vertical;line-height:1.55}
+    .input:focus,.select:focus,.textarea:focus{border-color:rgba(24,215,255,.52);background:rgba(24,215,255,.055);box-shadow:0 0 0 4px rgba(24,215,255,.07),0 0 34px rgba(24,215,255,.12)}
+    .input::placeholder,.textarea::placeholder{color:rgba(255,255,255,.25)}
+    .select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.45)' stroke-width='1.8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:15px;padding-right:42px}
+    .select option{background:#10131a;color:#fff}
+    .upload-zone{border:1.5px dashed rgba(24,215,255,.28);border-radius:18px;padding:42px 26px;text-align:center;cursor:pointer;background:linear-gradient(145deg,rgba(24,215,255,.055),rgba(124,61,255,.035));transition:.24s;position:relative}
+    .upload-zone:hover,.upload-zone.drag-over{border-color:rgba(57,245,138,.55);box-shadow:0 0 55px rgba(24,215,255,.13);background:linear-gradient(145deg,rgba(24,215,255,.09),rgba(57,245,138,.045))}
+    .upload-zone.has-file{border-color:rgba(57,245,138,.45);background:rgba(57,245,138,.05)}
+    .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+    .upload-icon{width:62px;height:62px;margin:0 auto 18px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(24,215,255,.16),rgba(124,61,255,.14));border:1px solid rgba(24,215,255,.28);box-shadow:0 0 45px rgba(24,215,255,.11)}
+    .mini-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
+    .mini-tag,.pill-option{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035);border-radius:999px;color:rgba(255,255,255,.66);font-size:12px;font-weight:850;padding:8px 12px;cursor:pointer;transition:.2s;user-select:none}
+    .pill-option input{display:none}
+    .pill-option:has(input:checked){border-color:rgba(57,245,138,.38);background:rgba(57,245,138,.075);color:#e5fff0;box-shadow:0 0 30px rgba(57,245,138,.08)}
+    .info-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+    .info-card{padding:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.032);border-radius:14px}
+    .info-card strong{display:block;font-size:18px;margin-bottom:3px}
+    .info-card span{font-size:12px;color:rgba(255,255,255,.45);font-weight:750}
+    .step-panel{display:none;animation:fadeUp .45s ease both}
+    .step-panel.active{display:block}
+    .nav-row{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:24px}
+    .side{position:sticky;top:118px;display:grid;gap:16px}
+    .side-card{padding:20px;border-radius:18px}
+    .side-head{display:flex;align-items:center;gap:11px;margin-bottom:16px}
+    .side-icon{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(24,215,255,.14),rgba(124,61,255,.1));border:1px solid rgba(24,215,255,.22);color:#9ff2ff}
+    .side-title{font-size:14px;font-weight:950}
+    .side-list{display:grid;gap:12px}
+    .side-item{display:grid;grid-template-columns:26px minmax(0,1fr);gap:11px;align-items:start}
+    .side-index{width:26px;height:26px;border-radius:9px;display:grid;place-items:center;background:rgba(24,215,255,.08);border:1px solid rgba(24,215,255,.18);color:#7cecff;font-size:11px;font-weight:950}
+    .side-item p{font-size:12.5px;color:rgba(255,255,255,.52);font-weight:750;line-height:1.55}
+    .quality-row{display:flex;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+    .quality-row:last-child{border-bottom:0}
+    .quality-row span{font-size:12px;color:rgba(255,255,255,.5);font-weight:850}
+    .quality-row strong{font-size:12px;color:#78ffc0;font-weight:950}
+    .summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .summary-card{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035);border-radius:14px;padding:15px}
+    .summary-card span{display:block;font-size:11px;color:#18d7ff;font-weight:950;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px}
+    .summary-card strong{display:block;font-size:14px;color:#fff;font-weight:850;line-height:1.45;min-height:20px}
+    .custom-check{appearance:none;width:18px;height:18px;border-radius:6px;border:1px solid rgba(24,215,255,.28);background:rgba(255,255,255,.04);position:relative;flex-shrink:0;cursor:pointer}
+    .custom-check:checked{background:#39f58a;border-color:#39f58a}
+    .custom-check:checked::after{content:'';position:absolute;top:3px;left:6px;width:5px;height:9px;border:2px solid #06120b;border-top:0;border-left:0;transform:rotate(45deg);animation:checkPop .2s ease both}
+    .consent{display:flex;gap:13px;align-items:flex-start;padding:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.032);border-radius:14px}
+    .consent p{font-size:13px;color:rgba(255,255,255,.58);line-height:1.55;font-weight:750}
+    #success-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(5,7,11,.96);align-items:center;justify-content:center;text-align:center;padding:24px}
+    #success-overlay.show{display:flex;animation:fadeUp .45s ease both}
+    .success-box{max-width:560px}
+    @media(max-width:1120px){.topbar-inner{padding-right:26px}.layout{grid-template-columns:1fr}.side{position:static}.form-grid,.form-grid.three{grid-template-columns:1fr 1fr}.progress-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:720px){#lang-host{top:12px!important;right:12px!important}.topbar-inner{height:auto;min-height:72px;padding:14px 170px 14px 16px;align-items:flex-start;flex-direction:column}.top-actions{width:100%}.top-actions .btn-ghost{width:auto}.top-trust{display:none}.shell{padding:38px 16px 72px}.progress-inner{padding:18px 16px}.progress-grid{grid-template-columns:1fr}.form-grid,.form-grid.three,.summary-grid,.info-strip{grid-template-columns:1fr}.step-title{font-size:40px}.nav-row{flex-direction:column-reverse;align-items:stretch}.btn-neon,.btn-ghost{width:100%}}
+  </style>
+</head>
+<body>
+<div id="lang-host" style="position:fixed;top:16px;right:20px;z-index:200"></div>
+<div class="dot-grid"></div>
+<div class="orb cyan"></div>
+<div class="orb violet"></div>
+<div class="orb green"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="landing.html" class="brand">
+      <span class="brand-mark"><img src="createx-logo.svg" alt="CreateX" /></span>
+      <span><strong>CreateX</strong><small>AI Agent</small></span>
+    </a>
+    <div class="top-trust"><span class="live-dot"></span><span>Secure CV setup - AI Swiss profile builder</span></div>
+    <div class="top-actions"><a href="landing.html" class="btn-ghost back-link"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg><span>Back</span></a></div>
+  </div>
+</header>
+
+<section class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-grid">
+      <div id="pcard-1" class="prog-card active"><span>1</span>CV source and links</div>
+      <div id="pcard-2" class="prog-card"><span>2</span>Identity and contact</div>
+      <div id="pcard-3" class="prog-card"><span>3</span>Experience and skills</div>
+      <div id="pcard-4" class="prog-card"><span>4</span>Preferences and launch</div>
+    </div>
+  </div>
+</section>
+
+<main class="shell">
+  <div class="layout">
+    <section>
+      <div class="hero-kicker"><span class="live-dot"></span><span id="step-tag">Step 1 of 4</span></div>
+      <h1 id="step-title" class="font-serif step-title gradient-text">Build your Swiss CV profile</h1>
+      <p id="step-subtitle" class="step-subtitle">Upload your CV and add the signals CreateX needs to position you for Swiss employers.</p>
+<div id="step-1" class="step-panel active">
+        <div class="panel">
+          <div class="section-title">CV document</div>
+          <div class="upload-zone" id="upload-zone">
+            <input type="file" id="file-input" accept=".pdf,.doc,.docx" onchange="handleFileSelect(this)" />
+            <div id="upload-default">
+              <div class="upload-icon">
+                <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:#9ff2ff"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 0l-4 4m4-4l4 4M4 20h16"/></svg>
+              </div>
+              <h3 style="font-size:18px;margin-bottom:8px">Drop your CV here</h3>
+              <p style="color:rgba(255,255,255,.5);font-size:14px;font-weight:750">PDF, DOC or DOCX. CreateX will use it as the base for your Swiss CV.</p>
+              <div class="mini-tags"><span class="mini-tag">PDF</span><span class="mini-tag">DOCX</span><span class="mini-tag">Max 10MB</span><span class="mini-tag">ATS scan</span></div>
+            </div>
+            <div id="upload-success" style="display:none">
+              <div class="upload-icon" style="background:rgba(57,245,138,.12);border-color:rgba(57,245,138,.3)">
+                <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:#57f59b"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <h3 style="font-size:18px;margin-bottom:8px">CV uploaded successfully</h3>
+              <p id="file-name" style="color:#8cffc4;font-size:14px;font-weight:850"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="section-title">CV Builder</div>
+          <div class="cv-builder-onboarding">
+            <div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <div class="cv-builder-onboarding-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8M8 11h8M8 15h5M6 3h12a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg>
+                </div>
+                <div>
+                  <h3 style="font-size:18px;font-weight:950;color:#fff">Create your Swiss CV before launch</h3>
+                  <p>Use the CV Builder step to add structured data, generate a professional summary, improve experience bullets, choose a template and export PDF.</p>
+                </div>
+              </div>
+              <div class="cv-builder-onboarding-tags"><span>Personal info</span><span>Experience</span><span>Education</span><span>Skills</span><span>PDF export</span></div>
+            </div>
+            <a href="cv-builder.html?from=onboarding" class="btn-neon" style="white-space:nowrap">Open CV Builder</a>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="section-title">Online profile and CV positioning</div>
+          <div class="form-grid">
+            <label class="field-block"><span class="label">LinkedIn profile</span><input id="f-linkedin" class="input" placeholder="https://linkedin.com/in/your-profile"></label>
+            <label class="field-block"><span class="label">Portfolio / personal site</span><input id="f-portfolio" class="input" placeholder="https://yourportfolio.com"></label>
+            <label class="field-block"><span class="label">GitHub / case studies</span><input id="f-github" class="input" placeholder="GitHub, Behance, Dribbble, Notion, etc."></label>
+            <label class="field-block"><span class="label">Selected job from search</span><input id="f-selected-job" class="input" placeholder="Selected job appears here"></label>
+            <label class="field-block"><span class="label">Professional headline</span><input id="f-headline" class="input" placeholder="Clinical Project Manager | AI-ready Swiss CV"></label>
+            <label class="field-block"><span class="label">Current / latest role</span><input id="f-current-role" class="input" placeholder="Project Manager, Data Analyst, Product Lead"></label>
+          </div>
+          <div style="margin-top:16px">
+            <label class="field-block"><span class="label">Short professional summary</span><textarea id="f-summary" class="textarea" placeholder="Write 3-5 lines about your background, measurable results, domain expertise and target direction."></textarea></label>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="step-2" class="step-panel">
+        <div class="panel">
+          <div class="section-title">Personal and contact details</div>
+          <div class="form-grid">
+            <label class="field-block"><span class="label">Full name *</span><input id="f-name" class="input" placeholder="e.g. Marco Rossi"></label>
+            <label class="field-block"><span class="label">Email address *</span><input id="f-email" type="email" class="input" placeholder="you@example.com"></label>
+            <label class="field-block"><span class="label">Phone number</span><input id="f-phone" class="input" placeholder="+41 79 000 00 00"></label>
+            <label class="field-block"><span class="label">Current city and country</span><input id="f-location-now" class="input" placeholder="Athens, Greece"></label>
+            <label class="field-block"><span class="label">Nationality</span><input id="f-nationality" class="input" placeholder="EU, Swiss, non-EU"></label>
+            <label class="field-block"><span class="label">Swiss permit / eligibility</span><select id="f-eligibility" class="select"><option value="">Select status...</option><option>Swiss citizen</option><option>EU/EFTA eligible</option><option>B permit</option><option>C permit</option><option>L permit</option><option>Needs sponsorship</option><option>Not sure yet</option></select></label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="section-title">Availability, mobility and contact rules</div>
+          <div class="form-grid three">
+            <label class="field-block"><span class="label">Earliest start date</span><input id="f-startdate" type="date" class="input" style="color-scheme:dark"></label>
+            <label class="field-block"><span class="label">Notice period</span><select id="f-notice" class="select"><option>No preference</option><option>Immediately</option><option>2 weeks</option><option>1 month</option><option>2 months</option><option>3 months</option></select></label>
+            <label class="field-block"><span class="label">Preferred contact language</span><select id="f-contact-lang" class="select"><option>English</option><option>German</option><option>French</option><option>Italian</option><option>Spanish</option></select></label>
+            <label class="field-block"><span class="label">Relocation readiness</span><select id="f-relocation" class="select"><option>Open to relocate</option><option>Already in Switzerland</option><option>Remote first</option><option>Only selected cities</option></select></label>
+            <label class="field-block"><span class="label">Work mode preference</span><select id="f-workmode" class="select"><option>Hybrid</option><option>On-site</option><option>Remote</option><option>Flexible</option></select></label>
+            <label class="field-block"><span class="label">Driving license</span><select id="f-license" class="select"><option>Not important</option><option>Yes</option><option>No</option><option>In progress</option></select></label>
+          </div>
+        </div>
+      </div>
+
+      <div id="step-3" class="step-panel">
+        <div class="panel">
+          <div class="section-title">Experience, education and achievements</div>
+          <div class="form-grid">
+            <label class="field-block"><span class="label">Total years of experience</span><select id="f-years" class="select"><option value="">Select years...</option><option>0-1 years</option><option>2-3 years</option><option>4-6 years</option><option>7-10 years</option><option>10+ years</option></select></label>
+            <label class="field-block"><span class="label">Seniority level</span><select id="f-level" class="select"><option value="">Select level...</option><option>Junior</option><option>Mid-level</option><option>Senior</option><option>Lead</option><option>Manager</option><option>Director</option></select></label>
+            <label class="field-block"><span class="label">Main function</span><select id="f-field" class="select"><option value="">Select field...</option><option>AI / Data</option><option>Product</option><option>Software Engineering</option><option>Project Management</option><option>Finance</option><option>Operations</option><option>Healthcare</option><option>Marketing</option><option>Sales</option><option>HR / Recruiting</option></select></label>
+            <label class="field-block"><span class="label">Target industry</span><input id="f-industry" class="input" placeholder="Health, Finance, Tech, Pharma, Hospitality"></label>
+            <label class="field-block"><span class="label">Highest education</span><input id="f-education" class="input" placeholder="BSc, MSc, MBA, PhD, apprenticeship"></label>
+            <label class="field-block"><span class="label">Certifications</span><input id="f-certifications" class="input" placeholder="PMP, Scrum, AWS, Google, CFA, clinical certs"></label>
+          </div>
+          <div class="form-grid" style="margin-top:16px">
+            <label class="field-block"><span class="label">Key achievements</span><textarea id="f-achievements" class="textarea" placeholder="Add measurable wins: revenue, cost reduction, team size, project delivery, compliance, patient outcomes, product launches."></textarea></label>
+            <label class="field-block"><span class="label">Responsibilities and scope</span><textarea id="f-responsibilities" class="textarea" placeholder="Describe ownership, budgets, stakeholders, markets, systems, tools, reporting and leadership scope."></textarea></label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="section-title">Skills, tools and languages</div>
+          <div class="form-grid">
+            <label class="field-block"><span class="label">Core skills</span><textarea id="f-skills" class="textarea" placeholder="Project planning, stakeholder management, SQL, Python, Excel, clinical trials, risk management, communication..."></textarea></label>
+            <label class="field-block"><span class="label">Tools and systems</span><textarea id="f-tools" class="textarea" placeholder="Jira, SAP, Salesforce, Tableau, Power BI, Figma, GitHub, Notion, MS Project, CRM, ERP..."></textarea></label>
+          </div>
+          <div class="form-grid three" style="margin-top:16px">
+            <label class="field-block"><span class="label">German</span><select id="f-german" class="select"><option>None</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option><option>Native</option></select></label>
+            <label class="field-block"><span class="label">English</span><select id="f-english" class="select"><option>None</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option selected>C2</option><option>Native</option></select></label>
+            <label class="field-block"><span class="label">French / Italian</span><select id="f-french" class="select"><option>None</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option><option>Native</option></select></label>
+          </div>
+        </div>
+      </div>
+
+      <div id="step-4" class="step-panel">
+        <div class="panel">
+          <div class="section-title">Swiss job targeting</div>
+          <div class="form-grid">
+            <label class="field-block"><span class="label">Target job titles</span><input id="f-target-title" class="input" placeholder="Clinical Project Manager, Product Manager, Data Analyst"></label>
+            <label class="field-block"><span class="label">Salary expectation CHF / year</span><select id="f-salary" class="select"><option>No preference</option><option>CHF 70'000 - 90'000</option><option>CHF 90'000 - 110'000</option><option>CHF 110'000 - 130'000</option><option>CHF 130'000 - 160'000</option><option>CHF 160'000+</option></select></label>
+          </div>
+          <div style="margin-top:18px">
+            <span class="label">Preferred Swiss locations</span>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">
+              <label class="pill-option"><input type="checkbox" name="location" value="Zurich">Zurich</label>
+              <label class="pill-option"><input type="checkbox" name="location" value="Basel">Basel</label>
+              <label class="pill-option"><input type="checkbox" name="location" value="Geneva">Geneva</label>
+              <label class="pill-option"><input type="checkbox" name="location" value="Bern">Bern</label>
+              <label class="pill-option"><input type="checkbox" name="location" value="Lausanne">Lausanne</label>
+              <label class="pill-option"><input type="checkbox" name="location" value="Zug">Zug</label>
+              <label class="pill-option"><input type="checkbox" name="location" value="Lucerne">Lucerne</label>
+              <label class="pill-option"><input type="checkbox" name="location" value="Anywhere in Switzerland">Anywhere</label>
+            </div>
+          </div>
+          <div style="margin-top:18px">
+            <span class="label">Employment type</span>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">
+              <label class="pill-option"><input type="checkbox" name="emptype" value="Full-time">Full-time</label>
+              <label class="pill-option"><input type="checkbox" name="emptype" value="Part-time">Part-time</label>
+              <label class="pill-option"><input type="checkbox" name="emptype" value="Hybrid">Hybrid</label>
+              <label class="pill-option"><input type="checkbox" name="emptype" value="Remote">Remote</label>
+              <label class="pill-option"><input type="checkbox" name="emptype" value="Contract">Contract</label>
+              <label class="pill-option"><input type="checkbox" name="emptype" value="Internship">Internship</label>
+            </div>
+          </div>
+          <div class="form-grid" style="margin-top:18px">
+            <label class="field-block"><span class="label">Target companies / sectors</span><textarea id="f-target-companies" class="textarea" placeholder="Hospitals, pharma, fintech, AI startups, consulting firms, NGOs, luxury brands..."></textarea></label>
+            <label class="field-block"><span class="label">Avoid / exclude</span><textarea id="f-exclusions" class="textarea" placeholder="Roles, locations, industries or companies you do not want."></textarea></label>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="section-title">Launch summary</div>
+          <div class="summary-grid">
+            <div class="summary-card"><span>CV document</span><strong id="sum-cv">No file uploaded</strong></div>
+            <div class="summary-card"><span>Contact</span><strong id="sum-contact">-</strong></div>
+            <div class="summary-card"><span>Target role</span><strong id="sum-role">-</strong></div>
+            <div class="summary-card"><span>Experience</span><strong id="sum-experience">-</strong></div>
+            <div class="summary-card"><span>Locations</span><strong id="sum-locations">Any location</strong></div>
+            <div class="summary-card"><span>Salary</span><strong id="sum-salary">No preference</strong></div>
+          </div>
+          <div style="display:grid;gap:12px;margin-top:18px">
+            <label class="consent"><input type="checkbox" id="consent-terms" class="custom-check" required><p>I confirm that CreateX can process my CV profile to generate Swiss-standard CV content, matching signals and application material.</p></label>
+            <label class="consent"><input type="checkbox" id="consent-updates" class="custom-check" checked><p>Send me updates when new matches, replies or interview opportunities are available.</p></label>
+          </div>
+          <button onclick="launchAI()" class="btn-neon" style="width:100%;margin-top:18px;padding:16px 24px;font-size:16px">Launch CreateX AI profile</button>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button id="btn-back" onclick="prevStep()" class="btn-ghost" style="display:none">Back</button>
+        <button id="btn-next" onclick="nextStep()" class="btn-neon">Next step</button>
+      </div>
+    </section>
+
+    <aside class="side">
+      <div class="card side-card">
+        <div class="side-head"><div class="side-icon"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div><div class="side-title">What CreateX builds</div></div>
+        <div class="side-list">
+          <div class="side-item"><div class="side-index">1</div><p>Swiss-standard CV structure with stronger recruiter readability.</p></div>
+          <div class="side-item"><div class="side-index">2</div><p>ATS keywords, skills mapping and job title positioning.</p></div>
+          <div class="side-item"><div class="side-index">3</div><p>Cover letter context for every matched Swiss job.</p></div>
+          <div class="side-item"><div class="side-index">4</div><p>Dashboard signals for applications, replies and interviews.</p></div>
+        </div>
+      </div>
+
+      <div class="card side-card">
+        <div class="side-head"><div class="side-icon"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><div class="side-title">CV quality checklist</div></div>
+        <div class="quality-row"><span>Swiss CV format</span><strong>Ready</strong></div>
+        <div class="quality-row"><span>ATS keywords</span><strong>Mapped</strong></div>
+        <div class="quality-row"><span>Language signals</span><strong>Included</strong></div>
+        <div class="quality-row"><span>Salary targeting</span><strong>Optional</strong></div>
+        <div class="quality-row"><span>Privacy</span><strong>Protected</strong></div>
+      </div>
+
+      <div class="card side-card">
+        <div class="side-head"><div class="side-icon"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h10"/></svg></div><div class="side-title">Selected job</div></div>
+        <p id="side-job" style="font-size:13px;color:rgba(255,255,255,.58);font-weight:750;line-height:1.6">No job selected yet.</p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<div id="success-overlay">
+  <div class="success-box">
+    <img src="createx-logo.svg" alt="CreateX" style="width:72px;height:72px;object-fit:contain;margin:0 auto 22px;filter:drop-shadow(0 0 24px rgba(24,215,255,.32))">
+    <h2 class="font-serif step-title gradient-text" style="margin-bottom:16px">Your CV profile is ready.</h2>
+    <p style="color:rgba(255,255,255,.58);font-size:16px;line-height:1.7;font-weight:750;margin-bottom:28px">CreateX now has the CV details needed for Swiss positioning, job matching and application preparation.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="dashboard.html" class="btn-neon">Open dashboard</a>
+      <a href="find-jobs.html" class="btn-ghost">Find jobs</a>
+    </div>
+  </div>
+</div>
+
+<script src="lang-widget.js?v=6"></script>
+<script>
+  initLang('lang-host');
+
+  let currentStep = 1;
+  const TOTAL = 4;
+  let uploadedFileName = null;
+  const selectedFromUrl = new URLSearchParams(location.search).get('job') || localStorage.getItem('ssai_selected_job') || '';
+  const stepMeta = {
+    1: { tag:'Step 1 of 4', title:'Build your Swiss CV profile', subtitle:'Upload your CV and add the profile links CreateX needs to position you for Swiss employers.' },
+    2: { tag:'Step 2 of 4', title:'Identity and contact details', subtitle:'Add contact, eligibility, mobility and availability signals so employers understand your profile clearly.' },
+    3: { tag:'Step 3 of 4', title:'Experience, education and skills', subtitle:'Give CreateX the deep CV details needed for strong Swiss-standard positioning and ATS matching.' },
+    4: { tag:'Step 4 of 4', title:'Target Switzerland precisely', subtitle:'Choose where, how and for which roles CreateX should prepare your profile and application material.' }
+  };
+
+  function byId(id){ return document.getElementById(id); }
+  function value(id){ const el = byId(id); return el ? el.value.trim() : ''; }
+  function checkedValues(name){ return [...document.querySelectorAll('input[name="'+name+'"]:checked')].map(el => el.value); }
+
+  function showStep(n) {
+    currentStep = n;
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    byId('step-' + n).classList.add('active');
+    byId('step-tag').textContent = stepMeta[n].tag;
+    byId('step-title').textContent = stepMeta[n].title;
+    byId('step-subtitle').textContent = stepMeta[n].subtitle;
+    byId('btn-back').style.display = n === 1 ? 'none' : 'inline-flex';
+    byId('btn-next').style.display = n === TOTAL ? 'none' : 'inline-flex';
+    updateProgress();
+    if (n === 4) buildSummary();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function updateProgress() {
+    for (let i = 1; i <= TOTAL; i++) {
+      const card = byId('pcard-' + i);
+      const badge = card.querySelector('span');
+      card.classList.remove('active','done');
+      badge.textContent = i;
+      if (i < currentStep) {
+        card.classList.add('done');
+        badge.textContent = 'β“';
+      } else if (i === currentStep) {
+        card.classList.add('active');
+      }
+    }
+  }
+
+  function nextStep(){ if (currentStep < TOTAL) showStep(currentStep + 1); }
+  function prevStep(){ if (currentStep > 1) showStep(currentStep - 1); }
+
+  function handleFileSelect(input) {
+    const file = input.files && input.files[0];
+    if (file) showFileUploaded(file.name);
+  }
+
+  function showFileUploaded(name) {
+    uploadedFileName = name;
+    byId('upload-default').style.display = 'none';
+    byId('upload-success').style.display = 'block';
+    byId('file-name').textContent = name;
+    byId('upload-zone').classList.add('has-file');
+  }
+
+  function buildSummary() {
+    byId('sum-cv').textContent = uploadedFileName || 'No file uploaded';
+    byId('sum-contact').textContent = [value('f-name'), value('f-email'), value('f-phone')].filter(Boolean).join(' - ') || '-';
+    byId('sum-role').textContent = [value('f-target-title') || value('f-selected-job'), value('f-field')].filter(Boolean).join(' - ') || '-';
+    byId('sum-experience').textContent = [value('f-years'), value('f-level'), value('f-industry')].filter(Boolean).join(' - ') || '-';
+    byId('sum-locations').textContent = checkedValues('location').join(', ') || 'Any location';
+    byId('sum-salary').textContent = value('f-salary') || 'No preference';
+  }
+
+  function launchAI() {
+    if (!byId('consent-terms').checked) {
+      byId('consent-terms').focus();
+      return;
+    }
+    buildSummary();
+    const profile = {
+      cv_file: uploadedFileName,
+      linkedin: value('f-linkedin'),
+      portfolio: value('f-portfolio'),
+      github: value('f-github'),
+      selected_job: value('f-selected-job'),
+      headline: value('f-headline'),
+      current_role: value('f-current-role'),
+      summary: value('f-summary'),
+      full_name: value('f-name'),
+      email: value('f-email'),
+      phone: value('f-phone'),
+      location_now: value('f-location-now'),
+      nationality: value('f-nationality'),
+      eligibility: value('f-eligibility'),
+      notice: value('f-notice'),
+      contact_language: value('f-contact-lang'),
+      relocation: value('f-relocation'),
+      workmode: value('f-workmode'),
+      years: value('f-years'),
+      level: value('f-level'),
+      field: value('f-field'),
+      industry: value('f-industry'),
+      education: value('f-education'),
+      certifications: value('f-certifications'),
+      achievements: value('f-achievements'),
+      responsibilities: value('f-responsibilities'),
+      skills: value('f-skills'),
+      tools: value('f-tools'),
+      german: value('f-german'),
+      english: value('f-english'),
+      french_italian: value('f-french'),
+      target_title: value('f-target-title'),
+      salary: value('f-salary'),
+      locations: checkedValues('location'),
+      employment_types: checkedValues('emptype'),
+      target_companies: value('f-target-companies'),
+      exclusions: value('f-exclusions'),
+      saved_at: new Date().toISOString()
+    };
+    localStorage.setItem('createx_cv_profile', JSON.stringify(profile));
+    byId('success-overlay').classList.add('show');
+  }
+
+  const zone = byId('upload-zone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (file) showFileUploaded(file.name);
+  });
+
+  if (selectedFromUrl) {
+    byId('f-selected-job').value = selectedFromUrl;
+    byId('f-target-title').value = selectedFromUrl;
+    byId('side-job').textContent = selectedFromUrl;
+  }
+  showStep(1);
+</script>
+</body>
+</html>

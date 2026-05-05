@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" class="notranslate">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google" content="notranslate" />
+  <title>Settings — CreateX</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    window.SUPABASE_URL  = 'https://ikbdhxobdjlwirydhxym.supabase.co';
+    window.SUPABASE_ANON = 'sb_publishable_chzlbY97SlQx_Apf4zqrTQ_mdwWhmyE';
+    (function initSB(tries){
+      tries = tries || 0;
+      var lib = window.supabase;
+      if (lib && typeof lib.createClient === 'function') {
+        try {
+          window.sb = lib.createClient(window.SUPABASE_URL, window.SUPABASE_ANON, {
+            auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+          });
+          document.dispatchEvent(new Event('sb:ready'));
+        } catch (err) { console.error('Supabase init failed:', err); }
+        return;
+      }
+      if (tries > 80) { console.warn('Supabase SDK failed to load'); return; }
+      setTimeout(function(){ initSB(tries + 1); }, 40);
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--bg:#05070b;--panel:#0d1118;--line:rgba(255,255,255,.095);--text:#f8fbff;--muted:rgba(255,255,255,.57);--soft:rgba(255,255,255,.38);--cyan:#18d7ff;--blue:#4c7dff;--violet:#7c3dff;--green:#39f58a}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.88)}}
+    @keyframes glowMove{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(18px,-12px,0) scale(1.06)}}
+    .bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:30px 30px;opacity:.5}
+    .glow{position:fixed;border-radius:999px;filter:blur(86px);pointer-events:none;z-index:0;animation:glowMove 12s ease-in-out infinite}
+    .glow.cyan{width:480px;height:480px;background:#18d7ff;top:-18%;left:-12%;opacity:.06}
+    .glow.violet{width:380px;height:380px;background:#7c3dff;right:-10%;bottom:6%;opacity:.07;animation-delay:-4s}
+
+    /* ── Buttons ── */
+    .btn-primary{background:linear-gradient(135deg,#19c9ff 0%,#4d7dff 48%,#7c3dff 100%);background-size:190% auto;color:white;font-weight:850;border-radius:999px;transition:all .25s ease;cursor:pointer;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;box-shadow:0 18px 50px rgba(45,141,255,.18),inset 0 1px 0 rgba(255,255,255,.18);padding:10px 20px;font-size:12.5px;font-family:'Inter',sans-serif}
+    .btn-primary:hover{background-position:right center;transform:translateY(-1px)}
+    .btn-outline{border:1px solid rgba(24,215,255,.2);color:rgba(255,255,255,.78);background:rgba(24,215,255,.05);border-radius:999px;transition:all .22s ease;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:800;padding:9px 18px;font-size:12px;font-family:'Inter',sans-serif}
+    .btn-outline:hover{border-color:rgba(57,245,138,.32);color:#fff;background:rgba(57,245,138,.06)}
+    .btn-ghost{background:none;border:none;color:rgba(255,255,255,.42);cursor:pointer;font-size:12.5px;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;transition:color .18s;text-decoration:none;font-weight:700}
+    .btn-ghost:hover{color:#fff}
+    .btn-danger{background:rgba(255,60,60,.08);border:1px solid rgba(255,80,80,.22);color:#ff7a7a;border-radius:999px;transition:all .22s;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 18px;font-size:12px;font-weight:800;font-family:'Inter',sans-serif}
+    .btn-danger:hover{background:rgba(255,60,60,.16);border-color:rgba(255,80,80,.36)}
+    .btn-soft{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.72);border-radius:8px;transition:.2s;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 14px;font-size:12px;font-weight:700;font-family:'Inter',sans-serif}
+    .btn-soft:hover{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.18)}
+
+    /* ── Cards ── */
+    .card{position:relative;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:14px;padding:22px 24px;box-shadow:0 18px 60px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.05);margin-bottom:16px}
+    .card-header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.06)}
+    .card-header.no-border{border-bottom:0;margin-bottom:14px;padding-bottom:0}
+    .card-title{font-size:14px;font-weight:800;color:#fff;letter-spacing:-.005em}
+    .card-desc{font-size:12px;color:rgba(255,255,255,.46);font-weight:600;line-height:1.55;margin-top:3px}
+
+    /* ── Inputs ── */
+    .online-dot{width:7px;height:7px;border-radius:50%;background:#39f58a;box-shadow:0 0 0 3px rgba(57,245,138,.14);animation:pulseDot 2.3s infinite;display:inline-block}
+    .input,.select,.textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:11px 14px;color:#fff;font-size:13.5px;font-family:'Inter',sans-serif;font-weight:600;transition:border-color .18s,box-shadow .18s;outline:none}
+    .input:focus,.select:focus,.textarea:focus{border-color:rgba(24,215,255,.4);box-shadow:0 0 0 3px rgba(24,215,255,.08)}
+    .input::placeholder,.textarea::placeholder{color:rgba(255,255,255,.26)}
+    .input.api-key-input{font-family:monospace;font-size:13px;letter-spacing:.04em}
+    .textarea{resize:vertical;min-height:80px;line-height:1.5}
+    .select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(255,255,255,.4)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+    .label{display:block;font-size:10.5px;font-weight:900;color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px}
+    .input-prefix{position:relative}
+    .input-prefix .input{padding-left:32px}
+    .input-prefix .prefix{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.32);font-size:13.5px;font-weight:600;pointer-events:none}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+
+    /* ── Setting rows / toggles ── */
+    .setting-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+    .setting-row:first-child{padding-top:0}
+    .setting-row:last-child{border-bottom:0;padding-bottom:0}
+    .setting-info{flex:1;min-width:0}
+    .setting-info h4{font-size:13.5px;font-weight:800;color:#fff;margin-bottom:4px}
+    .setting-info p{font-size:12px;color:rgba(255,255,255,.44);font-weight:600;line-height:1.55;max-width:520px}
+    .toggle-wrap{position:relative;width:42px;height:24px;flex-shrink:0}
+    .toggle-wrap input{opacity:0;width:0;height:0;position:absolute}
+    .toggle-track{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);cursor:pointer;transition:.22s}
+    .toggle-track::after{content:'';position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.5);transition:.22s}
+    .toggle-wrap input:checked + .toggle-track{background:linear-gradient(135deg,#18d7ff,#7c3dff);border-color:transparent}
+    .toggle-wrap input:checked + .toggle-track::after{left:21px;background:#fff}
+
+    /* ── Radio group ── */
+    .radio-grid{display:grid;gap:10px}
+    .radio-grid.cols-2{grid-template-columns:1fr 1fr}
+    .radio-grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    .radio-card{position:relative;padding:14px;border:1px solid rgba(255,255,255,.1);border-radius:11px;background:rgba(255,255,255,.03);cursor:pointer;transition:.18s}
+    .radio-card:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.05)}
+    .radio-card.active{border-color:rgba(24,215,255,.45);background:rgba(24,215,255,.07);box-shadow:0 0 0 3px rgba(24,215,255,.06)}
+    .radio-card.disabled{opacity:.4;pointer-events:none}
+    .radio-card-title{font-size:13px;font-weight:800;color:#fff;margin-bottom:3px}
+    .radio-card-desc{font-size:11.5px;color:rgba(255,255,255,.45);font-weight:600;line-height:1.4}
+    .radio-card-check{position:absolute;top:12px;right:12px;width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(255,255,255,.18);transition:.18s}
+    .radio-card.active .radio-card-check{border-color:#18d7ff;background:#18d7ff;box-shadow:inset 0 0 0 3px #0a1018}
+
+    /* ── Avatar / member ── */
+    .avatar{width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,rgba(24,215,255,.2),rgba(124,61,255,.18));border:2px solid rgba(24,215,255,.28);display:flex;align-items:center;justify-content:center;color:#65efff;font-size:22px;font-weight:900;flex-shrink:0;letter-spacing:-.02em}
+    .avatar.sm{width:36px;height:36px;font-size:13px;border-width:1px}
+    .avatar-row{display:flex;align-items:center;gap:18px;margin-bottom:8px}
+
+    /* ── Connected app row ── */
+    .app-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+    .app-row:first-child{padding-top:0}
+    .app-row:last-child{border-bottom:0;padding-bottom:0}
+    .app-icon{width:38px;height:38px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:rgba(255,255,255,.7)}
+    .app-info{flex:1;min-width:0}
+    .app-name{font-size:13.5px;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px}
+    .app-desc{font-size:12px;color:rgba(255,255,255,.46);font-weight:600;margin-top:2px}
+    .app-pill{font-size:9.5px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:rgba(57,245,138,.12);color:#6dffa7;border:1px solid rgba(57,245,138,.22)}
+    .app-pill.gray{background:rgba(255,255,255,.05);color:rgba(255,255,255,.45);border-color:rgba(255,255,255,.1)}
+
+    /* ── Plan card / billing ── */
+    .plan-card{position:relative;padding:20px 22px;border-radius:13px;background:linear-gradient(135deg,rgba(24,215,255,.08),rgba(124,61,255,.06));border:1px solid rgba(24,215,255,.18);overflow:hidden}
+    .plan-card.pro{background:linear-gradient(135deg,rgba(124,61,255,.12),rgba(57,245,138,.06));border-color:rgba(124,61,255,.32)}
+    .plan-name{font-size:18px;font-weight:900;color:#fff;letter-spacing:-.01em}
+    .plan-price{font-size:14px;color:rgba(255,255,255,.62);font-weight:700;margin-top:4px}
+    .plan-price strong{color:#fff;font-size:24px;font-weight:900;letter-spacing:-.02em}
+
+    /* ── Usage bar ── */
+    .usage-row{padding:10px 0}
+    .usage-head{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:6px}
+    .usage-head .lbl{color:rgba(255,255,255,.7)}
+    .usage-head .val{color:rgba(255,255,255,.4)}
+    .usage-bar{height:6px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
+    .usage-fill{height:100%;background:linear-gradient(90deg,#18d7ff,#7c3dff);border-radius:999px;transition:width .4s}
+    .usage-fill.warn{background:linear-gradient(90deg,#ffb347,#ff7a47)}
+
+    /* ── Color swatches ── */
+    .swatch-row{display:flex;gap:10px;flex-wrap:wrap}
+    .swatch{width:36px;height:36px;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:.18s;position:relative}
+    .swatch:hover{transform:scale(1.06)}
+    .swatch.active{border-color:rgba(255,255,255,.7);box-shadow:0 0 0 3px rgba(24,215,255,.15)}
+    .swatch.cyan{background:linear-gradient(135deg,#18d7ff,#4d7dff)}
+    .swatch.violet{background:linear-gradient(135deg,#7c3dff,#b489ff)}
+    .swatch.green{background:linear-gradient(135deg,#39f58a,#18d7ff)}
+    .swatch.amber{background:linear-gradient(135deg,#ffd97d,#ff8c00)}
+    .swatch.pink{background:linear-gradient(135deg,#ff5ec4,#ff5e87)}
+
+    /* ── Member row ── */
+    .member-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+    .member-row:first-child{padding-top:0}
+    .member-row:last-child{border-bottom:0;padding-bottom:0}
+    .member-info{flex:1;min-width:0}
+    .member-name{font-size:13px;font-weight:800;color:#fff}
+    .member-email{font-size:11.5px;color:rgba(255,255,255,.42);font-weight:600;margin-top:1px}
+    .role-pill{font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.1)}
+    .role-pill.admin{background:rgba(124,61,255,.12);color:#b489ff;border-color:rgba(124,61,255,.28)}
+    .role-pill.owner{background:rgba(255,217,125,.12);color:#ffd97d;border-color:rgba(255,217,125,.28)}
+
+    /* ── Quick links / help cards ── */
+    .quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .quick-card{padding:14px;border-radius:11px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);cursor:pointer;transition:.18s;display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+    .quick-card:hover{background:rgba(255,255,255,.07);border-color:rgba(24,215,255,.22)}
+    .quick-card-icon{width:34px;height:34px;border-radius:9px;background:rgba(24,215,255,.1);display:flex;align-items:center;justify-content:center;color:#65efff;flex-shrink:0}
+    .quick-card-title{font-size:13px;font-weight:800;color:#fff}
+    .quick-card-desc{font-size:11.5px;color:rgba(255,255,255,.46);font-weight:600;margin-top:1px}
+
+    /* ── Code/kbd ── */
+    code,.code{font-family:ui-monospace,monospace;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:3px 7px;font-size:12px;color:#65efff}
+    .kbd{font-family:ui-monospace,monospace;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-bottom-width:2px;border-radius:5px;padding:2px 6px;font-size:11px;color:rgba(255,255,255,.7);font-weight:700}
+
+    /* ── Session row ── */
+    .session-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+    .session-row:last-child{border-bottom:0;padding-bottom:0}
+    .session-row:first-child{padding-top:0}
+    .session-info{flex:1;min-width:0}
+    .session-name{font-size:13px;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px}
+    .session-meta{font-size:11.5px;color:rgba(255,255,255,.42);font-weight:600;margin-top:2px}
+
+    /* ── Misc ── */
+    .anim{animation:fadeUp .35s ease both}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(13,17,24,.96);border:1px solid rgba(57,245,138,.28);border-radius:12px;padding:13px 22px;font-size:13px;font-weight:800;color:#6dffa7;z-index:9999;backdrop-filter:blur(16px);box-shadow:0 24px 60px rgba(0,0,0,.5);opacity:0;transition:opacity .22s,transform .22s;pointer-events:none}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .danger-zone{border:1px solid rgba(255,80,80,.18);background:rgba(255,60,60,.04);border-radius:13px;padding:18px 22px}
+    .danger-zone .danger-title{font-size:12.5px;font-weight:900;color:#ff7a7a;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+    .info-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+    .info-row:last-child{border-bottom:0;padding-bottom:0}
+    .info-row:first-child{padding-top:0}
+    .info-row-label{font-size:13px;font-weight:800;color:#fff;margin-bottom:2px}
+    .info-row-val{font-size:12px;color:rgba(255,255,255,.46);font-weight:600;line-height:1.5}
+    .info-pill{font-size:11px;font-weight:800;color:rgba(255,255,255,.5);font-family:'Inter',sans-serif}
+    .info-pill.active{color:#6dffa7}
+    .helper{font-size:11.5px;color:rgba(255,255,255,.32);margin-top:10px;font-weight:600;line-height:1.6}
+    .helper a{color:#65efff;text-decoration:underline}
+    .divider{height:1px;background:rgba(255,255,255,.07);margin:18px 0}
+
+    /* ── App Shell ── */
+    .app-shell{display:grid;grid-template-columns:252px 1fr;min-height:100vh}
+    .sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;background:rgba(8,10,18,.96);border-right:1px solid rgba(255,255,255,.08);padding:22px 14px;display:flex;flex-direction:column;gap:4px;backdrop-filter:blur(22px)}
+    .main-area{display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
+    .main-topbar{position:sticky;top:0;z-index:50;height:64px;display:flex;align-items:center;gap:12px;padding:0 28px;background:rgba(5,7,11,.82);border-bottom:1px solid rgba(255,255,255,.07);backdrop-filter:blur(22px)}
+    .topbar-title{font-size:15px;font-weight:900;color:#fff;letter-spacing:-.01em}
+    .main-content{padding:36px 32px 64px;flex:1;max-width:1180px}
+
+    /* ── Settings (Claude-style) ── */
+    .settings-layout{display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start}
+    .settings-nav{position:sticky;top:88px;display:flex;flex-direction:column;gap:1px;max-height:calc(100vh - 110px);overflow-y:auto;padding-right:6px}
+    .settings-nav::-webkit-scrollbar{width:3px}
+    .settings-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
+    .settings-nav-section{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.3);padding:14px 12px 8px}
+    .settings-nav-section:first-child{padding-top:0}
+    .settings-nav-link{display:block;width:100%;padding:8px 12px;border-radius:8px;color:rgba(255,255,255,.6);font-size:13px;font-weight:600;text-decoration:none;transition:.16s ease;border:1px solid transparent;cursor:pointer;text-align:left;background:none;font-family:inherit;letter-spacing:-.005em}
+    .settings-nav-link:hover{color:#fff;background:rgba(255,255,255,.04)}
+    .settings-nav-link.active{color:#fff;background:rgba(24,215,255,.08);border-color:rgba(24,215,255,.18)}
+
+    .settings-section{display:none;animation:fadeUp .3s ease both;max-width:780px}
+    .settings-section.active{display:block}
+    .settings-section h2{font-size:24px;font-weight:900;letter-spacing:-.02em;margin-bottom:6px;color:#fff}
+    .settings-section .section-subtitle{font-size:13.5px;color:rgba(255,255,255,.5);font-weight:600;margin-bottom:24px;line-height:1.6;max-width:560px}
+
+    @media(max-width:1100px){
+      .app-shell{grid-template-columns:1fr}
+      .sidebar{display:none}
+      .settings-layout{grid-template-columns:1fr;gap:24px}
+      .settings-nav{position:static;flex-direction:row;flex-wrap:wrap;overflow-x:auto;padding-bottom:8px;max-height:none}
+      .settings-nav-section{display:none}
+      .grid-2{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:1fr}
+      .quick-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:640px){.main-content{padding:24px 16px 56px}}
+  </style>
+</head>
+<body>
+<div class="bg-grid"></div><div class="glow cyan"></div><div class="glow violet"></div>
+<div id="toast" class="toast"></div>
+
+<div class="app-shell">
+
+  <nav class="sidebar" id="app-sidebar"></nav>
+
+  <div class="main-area">
+    <header class="main-topbar">
+      <span class="online-dot"></span>
+      <span class="topbar-title">Settings</span>
+    </header>
+
+    <main class="main-content">
+      <div class="settings-layout">
+
+        <!-- ── Sub-navigation ── -->
+        <aside class="settings-nav" role="navigation" aria-label="Settings sections">
+          <div class="settings-nav-section">Personal</div>
+          <button class="settings-nav-link active" data-section="profile"       onclick="showSection('profile')">Profile</button>
+          <button class="settings-nav-link"        data-section="account"       onclick="showSection('account')">Account</button>
+          <button class="settings-nav-link"        data-section="appearance"    onclick="showSection('appearance')">Appearance</button>
+          <button class="settings-nav-link"        data-section="language"      onclick="showSection('language')">Language</button>
+          <button class="settings-nav-link"        data-section="notifications" onclick="showSection('notifications')">Notifications</button>
+
+          <div class="settings-nav-section">Workspace</div>
+          <button class="settings-nav-link"        data-section="data"          onclick="showSection('data')">Data &amp; Privacy</button>
+          <button class="settings-nav-link"        data-section="apps"          onclick="showSection('apps')">Connected Apps</button>
+          <button class="settings-nav-link"        data-section="billing"       onclick="showSection('billing')">Billing &amp; Plan</button>
+          <button class="settings-nav-link"        data-section="team"          onclick="showSection('team')">Team &amp; Workspace</button>
+
+          <div class="settings-nav-section">Advanced</div>
+          <button class="settings-nav-link"        data-section="developer"     onclick="showSection('developer')">Developer &amp; API</button>
+          <button class="settings-nav-link"        data-section="help"          onclick="showSection('help')">Help &amp; Support</button>
+        </aside>
+
+        <!-- ── Content ── -->
+        <div class="settings-content">
+
+          <!-- ─────────── PROFILE ─────────── -->
+          <section class="settings-section active" id="sec-profile">
+            <h2>Profile</h2>
+            <p class="section-subtitle">Your public information visible across CreateX. This is how others see you in shared workspaces and team spaces.</p>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Avatar</div>
+                  <div class="card-desc">Upload a photo or use your initials.</div>
+                </div>
+              </div>
+              <div class="avatar-row">
+                <div class="avatar" id="profile-avatar">CX</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <input type="file" id="avatar-file" accept="image/*" style="display:none" onchange="onAvatarUpload(event)">
+                  <button class="btn-soft" onclick="document.getElementById('avatar-file').click()">Upload photo</button>
+                  <button class="btn-ghost" onclick="resetAvatar()">Reset</button>
+                </div>
+              </div>
+              <p class="helper">PNG or JPG, up to 2 MB. Square images work best.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Public details</div>
+                  <div class="card-desc">Shown on your profile and in mentions.</div>
+                </div>
+              </div>
+              <div style="display:grid;gap:14px">
+                <div class="grid-2">
+                  <div>
+                    <label class="label">Display name</label>
+                    <input id="profile-name" class="input" type="text" placeholder="Your name" />
+                  </div>
+                  <div>
+                    <label class="label">Username</label>
+                    <div class="input-prefix">
+                      <span class="prefix">@</span>
+                      <input id="profile-username" class="input" type="text" placeholder="your-handle" />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label class="label">Bio</label>
+                  <textarea id="profile-bio" class="textarea" placeholder="Tell people what you build with CreateX." maxlength="240"></textarea>
+                  <p class="helper"><span id="bio-count">0</span> / 240 characters</p>
+                </div>
+                <div class="grid-2">
+                  <div>
+                    <label class="label">Job title</label>
+                    <input id="profile-title" class="input" type="text" placeholder="e.g. Product Engineer" />
+                  </div>
+                  <div>
+                    <label class="label">Company</label>
+                    <input id="profile-company" class="input" type="text" placeholder="e.g. CreateX" />
+                  </div>
+                </div>
+                <div class="grid-2">
+                  <div>
+                    <label class="label">Location</label>
+                    <input id="profile-location" class="input" type="text" placeholder="City, Country" />
+                  </div>
+                  <div>
+                    <label class="label">Website</label>
+                    <input id="profile-website" class="input" type="url" placeholder="https://..." />
+                  </div>
+                </div>
+                <div>
+                  <label class="label">Time zone</label>
+                  <select id="profile-tz" class="select">
+                    <option value="auto">Detect automatically</option>
+                    <option value="UTC">UTC (Coordinated Universal Time)</option>
+                    <option value="Europe/Zurich">Europe/Zurich</option>
+                    <option value="Europe/London">Europe/London</option>
+                    <option value="Europe/Berlin">Europe/Berlin</option>
+                    <option value="Europe/Athens">Europe/Athens</option>
+                    <option value="America/New_York">America/New_York</option>
+                    <option value="America/Los_Angeles">America/Los_Angeles</option>
+                    <option value="Asia/Tokyo">Asia/Tokyo</option>
+                    <option value="Asia/Singapore">Asia/Singapore</option>
+                  </select>
+                </div>
+              </div>
+              <div style="margin-top:18px;display:flex;gap:8px">
+                <button onclick="saveProfile()" class="btn-primary">Save profile</button>
+                <button onclick="resetProfile()" class="btn-ghost">Discard changes</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─────────── ACCOUNT ─────────── -->
+          <section class="settings-section" id="sec-account">
+            <h2>Account</h2>
+            <p class="section-subtitle">Manage your sign-in method, security, and active sessions.</p>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Email address</div>
+                  <div class="card-desc">Used for sign-in and notifications.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <input id="account-email" class="input" type="email" disabled style="opacity:.7;cursor:not-allowed;flex:1;min-width:240px" />
+                <span class="app-pill">Verified</span>
+                <button class="btn-soft" onclick="toast('Email change requires re-verification — check your inbox.')">Change email</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Phone number</div>
+                  <div class="card-desc">Optional. Used for two-factor authentication and account recovery.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <input id="account-phone" class="input" type="tel" placeholder="+41 79 000 00 00" style="flex:1;min-width:240px" />
+                <button class="btn-soft" onclick="toast('Verification code sent to your phone.')">Verify</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Password</div>
+                  <div class="card-desc">Change your sign-in password.</div>
+                </div>
+                <span class="info-pill">Last changed: 2 weeks ago</span>
+              </div>
+              <div style="display:grid;gap:12px;max-width:420px">
+                <div>
+                  <label class="label">Current password</label>
+                  <input id="pwd-current" class="input" type="password" placeholder="••••••••" />
+                </div>
+                <div>
+                  <label class="label">New password</label>
+                  <input id="pwd-new" class="input" type="password" placeholder="At least 8 characters" />
+                </div>
+                <div>
+                  <label class="label">Confirm new password</label>
+                  <input id="pwd-confirm" class="input" type="password" placeholder="Repeat new password" />
+                </div>
+              </div>
+              <div style="margin-top:14px">
+                <button class="btn-primary" onclick="updatePassword()">Update password</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Two-factor authentication</div>
+                  <div class="card-desc">Add an extra layer of security to your account.</div>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4>Authenticator app</h4>
+                  <p>Use an app like 1Password, Authy, or Google Authenticator to generate codes.</p>
+                </div>
+                <label class="toggle-wrap">
+                  <input type="checkbox" id="acc-2fa-app" onchange="saveSetting('account','2fa_app',this.checked)" />
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4>SMS verification</h4>
+                  <p>Receive a text message with a verification code on sign-in.</p>
+                </div>
+                <label class="toggle-wrap">
+                  <input type="checkbox" id="acc-2fa-sms" onchange="saveSetting('account','2fa_sms',this.checked)" />
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4>Recovery codes</h4>
+                  <p>Generate one-time codes to use if you lose access to your devices.</p>
+                </div>
+                <button class="btn-soft" onclick="toast('10 recovery codes generated — store them somewhere safe.')">Generate codes</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Active sessions</div>
+                  <div class="card-desc">Devices currently signed in to your account.</div>
+                </div>
+                <button class="btn-soft" onclick="signOutAll()">Sign out all devices</button>
+              </div>
+              <div class="session-row">
+                <div class="app-icon" style="color:#65efff;background:rgba(24,215,255,.07);border-color:rgba(24,215,255,.18)">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <div class="session-info">
+                  <div class="session-name">Chrome on macOS <span class="app-pill">This device</span></div>
+                  <div class="session-meta">Zurich, Switzerland · Active now</div>
+                </div>
+                <button class="btn-ghost" disabled style="opacity:.4">Current</button>
+              </div>
+              <div class="session-row">
+                <div class="app-icon">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                </div>
+                <div class="session-info">
+                  <div class="session-name">CreateX iOS</div>
+                  <div class="session-meta">Geneva, Switzerland · Active 2h ago</div>
+                </div>
+                <button class="btn-ghost" onclick="toast('Session revoked.')">Revoke</button>
+              </div>
+              <div class="session-row">
+                <div class="app-icon">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <div class="session-info">
+                  <div class="session-name">Firefox on Windows</div>
+                  <div class="session-meta">Bern, Switzerland · Active 4 days ago</div>
+                </div>
+                <button class="btn-ghost" onclick="toast('Session revoked.')">Revoke</button>
+              </div>
+            </div>
+
+            <div class="danger-zone">
+              <div class="danger-title">Danger zone</div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4>Delete account</h4>
+                  <p>Permanently delete your CreateX account and all associated workspace data. This action cannot be undone.</p>
+                </div>
+                <button onclick="confirmDeleteAccount()" class="btn-danger">Delete account</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─────────── APPEARANCE ─────────── -->
+          <section class="settings-section" id="sec-appearance">
+            <h2>Appearance</h2>
+            <p class="section-subtitle">Customize how CreateX looks on your devices.</p>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Theme</div>
+                  <div class="card-desc">Choose how CreateX appears to you. Light mode is coming soon.</div>
+                </div>
+              </div>
+              <div class="radio-grid cols-3">
+                <div class="radio-card active" data-theme="dark" onclick="selectTheme('dark')">
+                  <div class="radio-card-check"></div>
+                  <div class="radio-card-title">Dark</div>
+                  <div class="radio-card-desc">Default. Easy on the eyes.</div>
+                </div>
+                <div class="radio-card disabled" data-theme="light">
+                  <div class="radio-card-check"></div>
+                  <div class="radio-card-title">Light <span class="app-pill gray" style="margin-left:6px">Soon</span></div>
+                  <div class="radio-card-desc">Bright and clean interface.</div>
+                </div>
+                <div class="radio-card disabled" data-theme="system">
+                  <div class="radio-card-check"></div>
+                  <div class="radio-card-title">System <span class="app-pill gray" style="margin-left:6px">Soon</span></div>
+                  <div class="radio-card-desc">Match your OS preference.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Accent color</div>
+                  <div class="card-desc">Used for highlights, links, and active states across CreateX.</div>
+                </div>
+              </div>
+              <div class="swatch-row">
+                <div class="swatch cyan active"  data-accent="cyan"   onclick="selectAccent('cyan',this)"   title="Cyan"></div>
+                <div class="swatch violet"       data-accent="violet" onclick="selectAccent('violet',this)" title="Violet"></div>
+                <div class="swatch green"        data-accent="green"  onclick="selectAccent('green',this)"  title="Green"></div>
+                <div class="swatch amber"        data-accent="amber"  onclick="selectAccent('amber',this)"  title="Amber"></div>
+                <div class="swatch pink"         data-accent="pink"   onclick="selectAccent('pink',this)"   title="Pink"></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Density</div>
+                  <div class="card-desc">Compact mode shows more content with less padding.</div>
+                </div>
+              </div>
+              <div class="radio-grid cols-2">
+                <div class="radio-card active" data-density="comfortable" onclick="selectDensity('comfortable')">
+                  <div class="radio-card-check"></div>
+                  <div class="radio-card-title">Comfortable</div>
+                  <div class="radio-card-desc">Default spacing and padding.</div>
+                </div>
+                <div class="radio-card" data-density="compact" onclick="selectDensity('compact')">
+                  <div class="radio-card-check"></div>
+                  <div class="radio-card-title">Compact</div>
+                  <div class="radio-card-desc">Tighter rows for more content.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Font size</div>
+                  <div class="card-desc">Adjust the base text size across the interface.</div>
+                </div>
+              </div>
+              <div class="radio-grid cols-3">
+                <div class="radio-card" data-fs="small" onclick="selectFontSize('small')">
+                  <div class="radio-card-check"></div>
+                  <div class="radio-card-title">Small</div>
+                  <div class="radio-card-desc">13 px base</div>
+                </div>
+                <div class="radio-card active" data-fs="medium" onclick="selectFontSize('medium')">
+                  <div class="radio-card-check"></div>
+                  <div class="radio-card-title">Medium</div>
+                  <div class="radio-card-desc">14 px base</div>
+                </div>
+                <div class="radio-card" data-fs="large" onclick="selectFontSize('large')">
+                  <div class="radio-card-check"></div>
+                  <div class="radio-card-title">Large</div>
+                  <div class="radio-card-desc">16 px base</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Code editor</div>
+                  <div class="card-desc">Theme used inside Website / App / Workflow Builders.</div>
+                </div>
+              </div>
+              <div style="display:grid;gap:14px">
+                <div>
+                  <label class="label">Editor theme</label>
+                  <select id="ap-editor-theme" class="select" onchange="saveSetting('appearance','editor_theme',this.value)">
+                    <option value="default">CreateX Default</option>
+                    <option value="monokai">Monokai</option>
+                    <option value="dracula">Dracula</option>
+                    <option value="github-dark">GitHub Dark</option>
+                    <option value="one-dark">One Dark Pro</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Code font</label>
+                  <select id="ap-code-font" class="select" onchange="saveSetting('appearance','code_font',this.value)">
+                    <option value="ui-monospace">UI Monospace (System)</option>
+                    <option value="jetbrains">JetBrains Mono</option>
+                    <option value="fira">Fira Code</option>
+                    <option value="cascadia">Cascadia Code</option>
+                    <option value="ibm">IBM Plex Mono</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Accessibility</div>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4>Reduce motion</h4>
+                  <p>Minimize animations and transitions throughout the interface.</p>
+                </div>
+                <label class="toggle-wrap">
+                  <input type="checkbox" id="ap-motion" onchange="saveSetting('appearance','reduce_motion',this.checked)" />
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4>High contrast</h4>
+                  <p>Increase the contrast between text and background.</p>
+                </div>
+                <label class="toggle-wrap">
+                  <input type="checkbox" id="ap-contrast" onchange="saveSetting('appearance','high_contrast',this.checked)" />
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4>Always show keyboard shortcuts</h4>
+                  <p>Display key hints next to menu items and buttons.</p>
+                </div>
+                <label class="toggle-wrap">
+                  <input type="checkbox" id="ap-shortcuts" onchange="saveSetting('appearance','show_shortcuts',this.checked)" />
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─────────── LANGUAGE ─────────── -->
+          <section class="settings-section" id="sec-language">
+            <h2>Language</h2>
+            <p class="section-subtitle">Choose your preferred language for the interface and AI-generated content.</p>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Interface language</div>
+                  <div class="card-desc">The language used across menus, buttons, and labels.</div>
+                </div>
+              </div>
+              <select id="lang-ui" class="select" onchange="saveSetting('language','ui',this.value)">
+                <option value="en" selected>English (United States)</option>
+                <option value="en-gb">English (United Kingdom)</option>
+                <option value="de">Deutsch</option>
+                <option value="fr">Français</option>
+                <option value="it">Italiano</option>
+                <option value="es">Español</option>
+                <option value="pt">Português</option>
+                <option value="el">Ελληνικά</option>
+                <option value="zh">中文 (简体)</option>
+                <option value="ja">日本語</option>
+                <option value="ko">한국어</option>
+              </select>
+              <p class="helper">Additional languages roll out over time. Currently CreateX is primarily in English.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">AI response language</div>
+                  <div class="card-desc">Default language Claude uses when generating content for you.</div>
+                </div>
+              </div>
+              <select id="lang-ai" class="select" onchange="saveSetting('language','ai',this.value)">
+                <option value="auto" selected>Match my interface language</option>
+                <option value="en">English</option>
+                <option value="de">German</option>
+                <option value="fr">French</option>
+                <option value="it">Italian</option>
+                <option value="es">Spanish</option>
+                <option value="pt">Portuguese</option>
+                <option value="el">Greek</option>
+                <option value="zh">Chinese</option>
+                <option value="ja">Japanese</option>
+              </select>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Regional preferences</div>
+                  <div class="card-desc">Date, time, and number formats.</div>
+                </div>
+              </div>
+              <div class="grid-2">
+                <div>
+                  <label class="label">Date format</label>
+                  <select id="lang-date" class="select" onchange="saveSetting('language','date',this.value)">
+                    <option value="iso">2026-04-25 (ISO 8601)</option>
+                    <option value="eu">25.04.2026 (DD.MM.YYYY)</option>
+                    <option value="us">04/25/2026 (MM/DD/YYYY)</option>
+                    <option value="long">April 25, 2026</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Time format</label>
+                  <select id="lang-time" class="select" onchange="saveSetting('language','time',this.value)">
+                    <option value="24">24-hour (14:30)</option>
+                    <option value="12">12-hour (2:30 PM)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">First day of week</label>
+                  <select id="lang-week" class="select" onchange="saveSetting('language','week_start',this.value)">
+                    <option value="monday">Monday</option>
+                    <option value="sunday">Sunday</option>
+                    <option value="saturday">Saturday</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Number format</label>
+                  <select id="lang-num" class="select" onchange="saveSetting('language','number',this.value)">
+                    <option value="en">1,234.56 (English)</option>
+                    <option value="eu">1.234,56 (European)</option>
+                    <option value="ch">1'234.56 (Swiss)</option>
+                    <option value="in">1,23,456.78 (Indian)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Translation</div>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4>Suggest translations</h4>
+                  <p>Show a translate option when content is in a different language than your interface.</p>
+                </div>
+                <label class="toggle-wrap">
+                  <input type="checkbox" id="lang-suggest" checked onchange="saveSetting('language','suggest',this.checked)" />
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4>Always translate to my language</h4>
+                  <p>Automatically translate non-native content without prompting.</p>
+                </div>
+                <label class="toggle-wrap">
+                  <input type="checkbox" id="lang-auto" onchange="saveSetting('language','auto_translate',this.checked)" />
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─────────── NOTIFICATIONS ─────────── -->
+          <section class="settings-section" id="sec-notifications">
+            <h2>Notifications</h2>
+            <p class="section-subtitle">Decide what CreateX can notify you about, and where.</p>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Email notifications</div>
+                  <div class="card-desc">Sent to your account email.</div>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Account activity</h4><p>Sign-ins from new devices, password changes, and security alerts.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="ne-account" checked onchange="saveSetting('notifications','email_account',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Product updates</h4><p>New features, model releases, and changelog summaries.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="ne-product" checked onchange="saveSetting('notifications','email_product',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Tips and tutorials</h4><p>Best practices, prompt engineering tips, and video walkthroughs.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="ne-tips" onchange="saveSetting('notifications','email_tips',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Weekly digest</h4><p>A summary of your activity and top builds every Monday.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="ne-digest" checked onchange="saveSetting('notifications','email_digest',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Marketing &amp; offers</h4><p>Promotions, partner offers, and event invites.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="ne-marketing" onchange="saveSetting('notifications','email_marketing',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">In-app notifications</div>
+                  <div class="card-desc">Shown inside CreateX while you work.</div>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Mentions and replies</h4><p>When someone @-mentions you or replies to your comments.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="ni-mentions" checked onchange="saveSetting('notifications','app_mentions',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Workflow completions</h4><p>When a long-running agent or workflow finishes.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="ni-workflow" checked onchange="saveSetting('notifications','app_workflow',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Errors and warnings</h4><p>API failures, rate limits, deployment issues.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="ni-errors" checked onchange="saveSetting('notifications','app_errors',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Team activity</h4><p>New members, shared workspaces, and team comments.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="ni-team" onchange="saveSetting('notifications','app_team',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Desktop &amp; sound</div>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Browser notifications</h4><p>Receive desktop notifications when CreateX is open in another tab.</p></div>
+                <button class="btn-soft" onclick="enableDesktopNotif()" id="desk-notif-btn">Enable</button>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Sound effects</h4><p>Play a subtle tone when AI generation completes.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="pref-sounds" onchange="savePref('sounds', this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Quiet hours</h4><p>Mute non-critical notifications during set hours.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="ni-quiet" onchange="saveSetting('notifications','quiet_enabled',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="grid-2" style="margin-top:6px">
+                <div>
+                  <label class="label">Quiet from</label>
+                  <input id="ni-quiet-from" class="input" type="time" value="22:00" onchange="saveSetting('notifications','quiet_from',this.value)" />
+                </div>
+                <div>
+                  <label class="label">Quiet until</label>
+                  <input id="ni-quiet-to" class="input" type="time" value="08:00" onchange="saveSetting('notifications','quiet_to',this.value)" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─────────── DATA & PRIVACY ─────────── -->
+          <section class="settings-section" id="sec-data">
+            <h2>Data &amp; Privacy</h2>
+            <p class="section-subtitle">Control how your data is stored, used, and shared.</p>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Local storage</div>
+                  <div class="card-desc" id="storage-info">Calculating storage usage…</div>
+                </div>
+                <button onclick="clearAllLocalData()" class="btn-danger" style="white-space:nowrap;">Clear all data</button>
+              </div>
+              <div class="usage-bar"><div class="usage-fill" id="storage-bar" style="width:0%"></div></div>
+              <p class="helper">CreateX stores your work in your browser's local storage so it works offline. Your data never leaves this device unless you explicitly export or sync.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Export &amp; backup</div>
+                  <div class="card-desc">Download your data anytime.</div>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Export all data as JSON</h4><p>Includes agents, websites, apps, workflows, and preferences.</p></div>
+                <button onclick="exportData()" class="btn-outline" style="white-space:nowrap;">Export JSON</button>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Auto-backup to cloud</h4><p>Automatically sync your work to your CreateX account every 24 hours.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="dp-backup" onchange="saveSetting('privacy','backup',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Privacy controls</div>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Help improve CreateX</h4><p>Share anonymous usage data to help us improve features and reliability.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="dp-improve" checked onchange="saveSetting('privacy','improve',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Allow telemetry</h4><p>Send error reports and crash logs to our team.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="dp-telemetry" checked onchange="saveSetting('privacy','telemetry',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Show profile to other users</h4><p>Let teammates and collaborators view your profile information.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="dp-public" checked onchange="saveSetting('privacy','public',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Use my prompts to train models</h4><p>Anthropic does not train on your inputs by default. Toggling on opts you in.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="dp-train" onchange="saveSetting('privacy','train',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Cookie preferences</div>
+                  <div class="card-desc">Control cookies set by CreateX.</div>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Strictly necessary</h4><p>Required for the platform to function. Cannot be disabled.</p></div>
+                <label class="toggle-wrap" style="opacity:.45;pointer-events:none"><input type="checkbox" checked disabled /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Analytics cookies</h4><p>Help us understand how the platform is used.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="dp-c-analytics" onchange="saveSetting('privacy','c_analytics',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Marketing cookies</h4><p>Used to personalize ads and measure their effectiveness.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="dp-c-marketing" onchange="saveSetting('privacy','c_marketing',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <p class="helper">Read our <a href="#">Privacy Policy</a> and <a href="#">Cookie Policy</a> for full details.</p>
+            </div>
+          </section>
+
+          <!-- ─────────── CONNECTED APPS ─────────── -->
+          <section class="settings-section" id="sec-apps">
+            <h2>Connected Apps</h2>
+            <p class="section-subtitle">Connect external services to extend what CreateX can do. Your credentials stay in your browser.</p>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">AI Provider</div>
+                  <div class="card-desc">The AI engine powering all CreateX modules.</div>
+                </div>
+              </div>
+              <div class="app-row">
+                <div class="app-icon" style="color:#ef9c4a;background:rgba(239,156,74,.08);border-color:rgba(239,156,74,.2)">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.7 6.6L13.4 18.4h-2.8L4.3 6.6h2.4l4.9 9.5 4.9-9.5h3.2zm-3.6 0l-4.1 8.2L7.9 6.6h8.2z"/></svg>
+                </div>
+                <div class="app-info">
+                  <div class="app-name">Anthropic Claude <span class="app-pill" id="anth-status">Connected</span></div>
+                  <div class="app-desc">API key configured · Used by all AI modules</div>
+                </div>
+                <button class="btn-soft" onclick="showSection('developer')">Manage</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Code &amp; Deploy</div>
+                </div>
+              </div>
+              <div class="app-row">
+                <div class="app-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 00-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.9 1.2 1.9 1.2 1.1 1.9 2.9 1.3 3.6 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6 0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.2.8.8 1.3 1.9 1.3 3.1 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1.2.9 2.4v3.5c0 .4.2.7.8.6A12 12 0 0012 .3"/></svg>
+                </div>
+                <div class="app-info">
+                  <div class="app-name">GitHub</div>
+                  <div class="app-desc">Push generated apps and websites to your repositories.</div>
+                </div>
+                <button class="btn-outline" onclick="connectApp('GitHub',this)">Connect</button>
+              </div>
+              <div class="app-row">
+                <div class="app-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07L12 19.5 0 12.07v-1.5l12-7.43 12 7.43v1.5z"/></svg>
+                </div>
+                <div class="app-info">
+                  <div class="app-name">Vercel</div>
+                  <div class="app-desc">Deploy your CreateX-built apps to the edge in one click.</div>
+                </div>
+                <button class="btn-outline" onclick="connectApp('Vercel',this)">Connect</button>
+              </div>
+              <div class="app-row">
+                <div class="app-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+                </div>
+                <div class="app-info">
+                  <div class="app-name">Netlify</div>
+                  <div class="app-desc">Continuous deployment for static sites and serverless apps.</div>
+                </div>
+                <button class="btn-outline" onclick="connectApp('Netlify',this)">Connect</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Communication &amp; Workspace</div>
+                </div>
+              </div>
+              <div class="app-row">
+                <div class="app-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M5 15a2 2 0 11-2-2h2v2zm1 0a2 2 0 014 0v5a2 2 0 11-4 0v-5zm2-8a2 2 0 11-2-2 2 2 0 012 2v2H8V7zm0 1a2 2 0 010 4H3a2 2 0 010-4h5zm8 1a2 2 0 11-2-2v2h2zm-1 0a2 2 0 014 0v5a2 2 0 11-4 0V9zm-2 8a2 2 0 110 4 2 2 0 010-4h2v2h-2zm0-1a2 2 0 010-4h5a2 2 0 010 4h-5z"/></svg>
+                </div>
+                <div class="app-info">
+                  <div class="app-name">Slack</div>
+                  <div class="app-desc">Send notifications and trigger workflows from Slack channels.</div>
+                </div>
+                <button class="btn-outline" onclick="connectApp('Slack',this)">Connect</button>
+              </div>
+              <div class="app-row">
+                <div class="app-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+                </div>
+                <div class="app-info">
+                  <div class="app-name">Notion</div>
+                  <div class="app-desc">Read and write Notion databases from Agent Builder.</div>
+                </div>
+                <button class="btn-outline" onclick="connectApp('Notion',this)">Connect</button>
+              </div>
+              <div class="app-row">
+                <div class="app-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21 5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5zm-9 13H6v-2h6v2zm0-4H6v-2h6v2zm6 4h-4v-6h4v6z"/></svg>
+                </div>
+                <div class="app-info">
+                  <div class="app-name">Linear</div>
+                  <div class="app-desc">Create and update issues from your AI workflows.</div>
+                </div>
+                <button class="btn-outline" onclick="connectApp('Linear',this)">Connect</button>
+              </div>
+              <div class="app-row">
+                <div class="app-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.3 5.4A17 17 0 0015.5 4l-.2.4a14.5 14.5 0 014 1.3 14.4 14.4 0 00-12.6 0c1.2-.6 2.5-1 4-1.3L10.5 4a17 17 0 00-3.8 1.4A17.5 17.5 0 003 17a17 17 0 005.5 2.8l.4-.5a11 11 0 01-1.7-.8c.1-.1.3-.2.4-.3a12 12 0 0010.8 0l.4.3-1.7.8.4.6c2-.6 4-1.6 5.5-2.9 0-4.5-1-8.4-3.7-11.6zM9 14.4c-1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2-.9 2.2-1.9 2.2zm6 0c-1 0-1.9-1-1.9-2.2s.9-2.2 1.9-2.2 1.9 1 1.9 2.2-.9 2.2-1.9 2.2z"/></svg>
+                </div>
+                <div class="app-info">
+                  <div class="app-name">Discord</div>
+                  <div class="app-desc">Run agents as Discord bots in your servers.</div>
+                </div>
+                <button class="btn-outline" onclick="connectApp('Discord',this)">Connect</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Storage &amp; Productivity</div>
+                </div>
+              </div>
+              <div class="app-row">
+                <div class="app-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.7 2.5h8.6l5.7 9.9-4.3 7.4H5.7L1.4 12.5l5.6-9.9zm.6 1l-4.7 8.4 3.5 6.1h9.8l3.5-6.1-4.7-8.4H8.3z"/></svg>
+                </div>
+                <div class="app-info">
+                  <div class="app-name">Google Drive</div>
+                  <div class="app-desc">Read documents, spreadsheets, and folders for context.</div>
+                </div>
+                <button class="btn-outline" onclick="connectApp('Google Drive',this)">Connect</button>
+              </div>
+              <div class="app-row">
+                <div class="app-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                </div>
+                <div class="app-info">
+                  <div class="app-name">Airtable</div>
+                  <div class="app-desc">Sync structured data with your bases and tables.</div>
+                </div>
+                <button class="btn-outline" onclick="connectApp('Airtable',this)">Connect</button>
+              </div>
+              <div class="app-row">
+                <div class="app-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </div>
+                <div class="app-info">
+                  <div class="app-name">Zapier</div>
+                  <div class="app-desc">Connect CreateX workflows to 5,000+ apps via Zapier.</div>
+                </div>
+                <button class="btn-outline" onclick="connectApp('Zapier',this)">Connect</button>
+              </div>
+              <div class="app-row">
+                <div class="app-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </div>
+                <div class="app-info">
+                  <div class="app-name">Custom Webhook</div>
+                  <div class="app-desc">Send events to any HTTPS endpoint you control.</div>
+                </div>
+                <button class="btn-soft" onclick="toast('Webhook configuration opened.')">Configure</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─────────── BILLING & PLAN ─────────── -->
+          <section class="settings-section" id="sec-billing">
+            <h2>Billing &amp; Plan</h2>
+            <p class="section-subtitle">Manage your subscription, payment method, and invoices.</p>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Current plan</div>
+                </div>
+                <span class="app-pill">Active</span>
+              </div>
+              <div class="plan-card">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">
+                  <div>
+                    <div class="plan-name">Free</div>
+                    <div class="plan-price"><strong>$0</strong> / month</div>
+                  </div>
+                  <a href="billing.html" class="btn-primary">Upgrade to Pro</a>
+                </div>
+                <p class="helper" style="margin-top:14px">Includes 50 AI generations / day, 1 workspace, and community support.</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Usage this month</div>
+                  <div class="card-desc">Resets on the 1st of every month.</div>
+                </div>
+                <span class="info-pill">Cycle: Apr 1 – Apr 30</span>
+              </div>
+              <div class="usage-row">
+                <div class="usage-head"><span class="lbl">AI generations</span><span class="val">847 / 1,500</span></div>
+                <div class="usage-bar"><div class="usage-fill" style="width:56%"></div></div>
+              </div>
+              <div class="usage-row">
+                <div class="usage-head"><span class="lbl">Tokens consumed</span><span class="val">2.4M / 5M</span></div>
+                <div class="usage-bar"><div class="usage-fill" style="width:48%"></div></div>
+              </div>
+              <div class="usage-row">
+                <div class="usage-head"><span class="lbl">Storage</span><span class="val">1.3 KB / 100 MB</span></div>
+                <div class="usage-bar"><div class="usage-fill" style="width:0.001%"></div></div>
+              </div>
+              <div class="usage-row">
+                <div class="usage-head"><span class="lbl">Workflow runs</span><span class="val">23 / 100</span></div>
+                <div class="usage-bar"><div class="usage-fill" style="width:23%"></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Payment method</div>
+                  <div class="card-desc">Used for subscriptions and add-ons.</div>
+                </div>
+                <button class="btn-soft" onclick="toast('Add a payment method to upgrade.')">Add card</button>
+              </div>
+              <div style="display:flex;align-items:center;gap:14px;color:rgba(255,255,255,.5);font-size:13px;font-weight:600">
+                No payment method on file. Add one to enable Pro features and pay-as-you-go usage.
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Billing details</div>
+                  <div class="card-desc">Where invoices are addressed and emailed.</div>
+                </div>
+                <button class="btn-soft" onclick="toast('Billing details saved.')">Save</button>
+              </div>
+              <div style="display:grid;gap:14px">
+                <div>
+                  <label class="label">Billing email</label>
+                  <input id="bill-email" class="input" type="email" placeholder="finance@yourcompany.com" />
+                </div>
+                <div class="grid-2">
+                  <div>
+                    <label class="label">Company name</label>
+                    <input id="bill-company" class="input" type="text" placeholder="Optional" />
+                  </div>
+                  <div>
+                    <label class="label">VAT / Tax ID</label>
+                    <input id="bill-vat" class="input" type="text" placeholder="Optional" />
+                  </div>
+                </div>
+                <div>
+                  <label class="label">Address</label>
+                  <input id="bill-address" class="input" type="text" placeholder="Street, City, Country" />
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Invoices</div>
+                  <div class="card-desc">Your past payment receipts.</div>
+                </div>
+              </div>
+              <div class="info-row">
+                <div>
+                  <div class="info-row-label">No invoices yet</div>
+                  <div class="info-row-val">Once you upgrade, invoices will appear here for download.</div>
+                </div>
+                <a href="billing.html" class="btn-ghost">Open billing →</a>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─────────── TEAM & WORKSPACE ─────────── -->
+          <section class="settings-section" id="sec-team">
+            <h2>Team &amp; Workspace</h2>
+            <p class="section-subtitle">Set up your shared workspace and manage who has access.</p>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Workspace details</div>
+                  <div class="card-desc">Visible to all members of this workspace.</div>
+                </div>
+              </div>
+              <div class="avatar-row">
+                <div class="avatar" style="background:linear-gradient(135deg,rgba(57,245,138,.2),rgba(24,215,255,.18));border-color:rgba(57,245,138,.3);color:#6dffa7">CX</div>
+                <button class="btn-soft" onclick="toast('Workspace logo upload coming soon.')">Change logo</button>
+              </div>
+              <div style="display:grid;gap:14px;margin-top:14px">
+                <div>
+                  <label class="label">Workspace name</label>
+                  <input id="ws-name" class="input" type="text" value="Personal Workspace" onchange="saveSetting('workspace','name',this.value)" />
+                </div>
+                <div>
+                  <label class="label">Workspace URL</label>
+                  <div class="input-prefix">
+                    <span class="prefix">cx.app/</span>
+                    <input id="ws-slug" class="input" type="text" placeholder="my-workspace" style="padding-left:68px" onchange="saveSetting('workspace','slug',this.value)" />
+                  </div>
+                </div>
+                <div>
+                  <label class="label">Description</label>
+                  <textarea id="ws-desc" class="textarea" placeholder="What does your team build with CreateX?" onchange="saveSetting('workspace','desc',this.value)"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Members</div>
+                  <div class="card-desc">People with access to this workspace.</div>
+                </div>
+                <span class="info-pill">1 of 3 seats used</span>
+              </div>
+              <div class="member-row">
+                <div class="avatar sm" id="member-me-avatar">CX</div>
+                <div class="member-info">
+                  <div class="member-name" id="member-me-name">You</div>
+                  <div class="member-email" id="member-me-email">your@email.com</div>
+                </div>
+                <span class="role-pill owner">Owner</span>
+              </div>
+              <div class="divider"></div>
+              <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap">
+                <div style="flex:1;min-width:200px">
+                  <label class="label">Invite by email</label>
+                  <input id="ws-invite-email" class="input" type="email" placeholder="teammate@example.com" />
+                </div>
+                <div style="min-width:140px">
+                  <label class="label">Role</label>
+                  <select id="ws-invite-role" class="select">
+                    <option value="member">Member</option>
+                    <option value="admin">Admin</option>
+                    <option value="viewer">Viewer</option>
+                  </select>
+                </div>
+                <button class="btn-primary" onclick="inviteMember()">Send invite</button>
+              </div>
+              <p class="helper">Free workspaces include 3 seats. Upgrade to Team for unlimited members.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Roles &amp; permissions</div>
+                  <div class="card-desc">What each role can do in this workspace.</div>
+                </div>
+              </div>
+              <div class="info-row">
+                <div>
+                  <div class="info-row-label" style="display:flex;align-items:center;gap:8px"><span class="role-pill owner">Owner</span></div>
+                  <div class="info-row-val">Full access including billing, member management, and workspace deletion.</div>
+                </div>
+              </div>
+              <div class="info-row">
+                <div>
+                  <div class="info-row-label" style="display:flex;align-items:center;gap:8px"><span class="role-pill admin">Admin</span></div>
+                  <div class="info-row-val">Manage members, builders, and integrations. Cannot change billing.</div>
+                </div>
+              </div>
+              <div class="info-row">
+                <div>
+                  <div class="info-row-label" style="display:flex;align-items:center;gap:8px"><span class="role-pill">Member</span></div>
+                  <div class="info-row-val">Build and edit agents, websites, apps, and workflows.</div>
+                </div>
+              </div>
+              <div class="info-row">
+                <div>
+                  <div class="info-row-label" style="display:flex;align-items:center;gap:8px"><span class="role-pill">Viewer</span></div>
+                  <div class="info-row-val">Read-only access. Can view dashboards and run published workflows.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="danger-zone">
+              <div class="danger-title">Danger zone</div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4>Delete workspace</h4>
+                  <p>Permanently delete this workspace, all members, and all builds. Cannot be undone.</p>
+                </div>
+                <button onclick="confirmDeleteWorkspace()" class="btn-danger">Delete workspace</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─────────── DEVELOPER & API ─────────── -->
+          <section class="settings-section" id="sec-developer">
+            <h2>Developer &amp; API</h2>
+            <p class="section-subtitle">API keys, model defaults, webhooks, and beta features.</p>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Anthropic API Key</div>
+                  <div class="card-desc">Required for AI generation across all builders. Stored locally — never sent to CreateX servers.</div>
+                </div>
+              </div>
+              <label class="label" for="api-key-input">API Key</label>
+              <div style="display:flex;gap:10px;align-items:center;">
+                <input id="api-key-input" class="input api-key-input" type="password" placeholder="sk-ant-api03-..." autocomplete="off" />
+                <button onclick="toggleKeyVisibility()" id="btn-eye" class="btn-ghost" style="flex-shrink:0;padding:8px;" title="Show/hide key">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                </button>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+                <button onclick="saveApiKey()" class="btn-primary">Save key</button>
+                <button onclick="clearApiKey()" class="btn-danger">Remove</button>
+              </div>
+              <p class="helper">Get your key at <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a>.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Model defaults</div>
+                  <div class="card-desc">Used as the default selection in all AI agent chats.</div>
+                </div>
+              </div>
+              <div class="grid-2">
+                <div>
+                  <label class="label">Default model</label>
+                  <select id="dev-model" class="select" onchange="saveSetting('developer','default_model',this.value)">
+                    <option value="4.3">Ether 4.3 — fastest, lowest cost</option>
+                    <option value="4.7" selected>Nexus 4.7 — balanced, extended thinking (recommended)</option>
+                    <option value="4.9">Prometheus 4.9 — most capable</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Default reasoning</label>
+                  <select id="dev-reasoning" class="select" onchange="saveSetting('developer','default_reasoning',this.value)">
+                    <option value="fast">Fast — quick replies</option>
+                    <option value="balanced" selected>Balanced — recommended</option>
+                    <option value="deep">Deep — extended thinking</option>
+                  </select>
+                </div>
+              </div>
+              <div class="setting-row" style="margin-top:14px">
+                <div class="setting-info">
+                  <h4>Streaming responses</h4>
+                  <p>Show AI output word-by-word as it generates. Disable for faster single-block delivery.</p>
+                </div>
+                <label class="toggle-wrap"><input type="checkbox" id="pref-streaming" checked onchange="savePref('streaming', this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4>Auto-save drafts</h4>
+                  <p>Automatically save your work every 30 seconds in Website Builder and App Builder.</p>
+                </div>
+                <label class="toggle-wrap"><input type="checkbox" id="pref-autosave" checked onchange="savePref('autosave', this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">API usage</div>
+                  <div class="card-desc">Live rate limit and consumption.</div>
+                </div>
+                <span class="info-pill active">Healthy</span>
+              </div>
+              <div class="usage-row">
+                <div class="usage-head"><span class="lbl">Requests today</span><span class="val">142 / 5,000</span></div>
+                <div class="usage-bar"><div class="usage-fill" style="width:3%"></div></div>
+              </div>
+              <div class="usage-row">
+                <div class="usage-head"><span class="lbl">Input tokens (24h)</span><span class="val">240,330 / 1,000,000</span></div>
+                <div class="usage-bar"><div class="usage-fill" style="width:24%"></div></div>
+              </div>
+              <div class="usage-row">
+                <div class="usage-head"><span class="lbl">Output tokens (24h)</span><span class="val">88,142 / 500,000</span></div>
+                <div class="usage-bar"><div class="usage-fill" style="width:18%"></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Webhooks</div>
+                  <div class="card-desc">Receive HTTP callbacks when events happen in your workspace.</div>
+                </div>
+              </div>
+              <div style="display:grid;gap:12px">
+                <div>
+                  <label class="label">Endpoint URL</label>
+                  <input id="dev-webhook" class="input" type="url" placeholder="https://your-server.com/cx-webhook" />
+                </div>
+                <div>
+                  <label class="label">Events to send</label>
+                  <select id="dev-webhook-events" class="select">
+                    <option>All events</option>
+                    <option>Workflow completions only</option>
+                    <option>Errors only</option>
+                    <option>Custom selection…</option>
+                  </select>
+                </div>
+              </div>
+              <div style="margin-top:14px;display:flex;gap:8px">
+                <button class="btn-primary" onclick="toast('Webhook saved.')">Save webhook</button>
+                <button class="btn-soft" onclick="toast('Test event sent to your endpoint.')">Send test event</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">CLI &amp; SDK</div>
+                  <div class="card-desc">Use CreateX from your terminal or build on top of our SDK.</div>
+                </div>
+              </div>
+              <label class="label">Install the CLI</label>
+              <div style="display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:11px 14px;font-family:ui-monospace,monospace;font-size:13px;color:#65efff">
+                <span style="color:rgba(255,255,255,.3)">$</span>
+                <span style="flex:1">npm install -g @createx/cli</span>
+                <button class="btn-ghost" onclick="copyToClipboard('npm install -g @createx/cli')" style="padding:0">Copy</button>
+              </div>
+              <p class="helper" style="margin-top:14px">Or install via <code>brew install createx</code> on macOS.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Beta features</div>
+                  <div class="card-desc">Try experimental capabilities before they're released.</div>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Vision input</h4><p>Attach images to chats and have agents reason over them.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="dev-vision" checked onchange="saveSetting('developer','vision',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Voice mode</h4><p>Speak to agents and have them respond in voice.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="dev-voice" onchange="saveSetting('developer','voice',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Extended thinking</h4><p>Allow Nexus 4.7 and Prometheus 4.9 to think for longer before responding.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="dev-thinking" checked onchange="saveSetting('developer','thinking',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Multi-agent orchestration</h4><p>Chain agents together into autonomous teams.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="dev-multi" onchange="saveSetting('developer','multi_agent',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info"><h4>Debug mode</h4><p>Show raw API requests, latency, and token counts in every chat.</p></div>
+                <label class="toggle-wrap"><input type="checkbox" id="dev-debug" onchange="saveSetting('developer','debug',this.checked)" /><span class="toggle-track"></span></label>
+              </div>
+            </div>
+          </section>
+
+          <!-- ─────────── HELP & SUPPORT ─────────── -->
+          <section class="settings-section" id="sec-help">
+            <h2>Help &amp; Support</h2>
+            <p class="section-subtitle">Documentation, community, and a direct line to our team.</p>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Quick links</div>
+                </div>
+              </div>
+              <div class="quick-grid">
+                <a href="#" class="quick-card">
+                  <div class="quick-card-icon"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div>
+                  <div><div class="quick-card-title">Documentation</div><div class="quick-card-desc">Guides, references, and tutorials.</div></div>
+                </a>
+                <a href="#" class="quick-card">
+                  <div class="quick-card-icon"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg></div>
+                  <div><div class="quick-card-title">API Reference</div><div class="quick-card-desc">Endpoints, schemas, and SDKs.</div></div>
+                </a>
+                <a href="#" class="quick-card">
+                  <div class="quick-card-icon"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                  <div><div class="quick-card-title">Video tutorials</div><div class="quick-card-desc">Watch experts build with CreateX.</div></div>
+                </a>
+                <a href="#" class="quick-card">
+                  <div class="quick-card-icon"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+                  <div><div class="quick-card-title">Status page</div><div class="quick-card-desc">All systems operational.</div></div>
+                </a>
+                <a href="#" class="quick-card">
+                  <div class="quick-card-icon"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg></div>
+                  <div><div class="quick-card-title">Community Discord</div><div class="quick-card-desc">Chat with 8,000+ builders.</div></div>
+                </a>
+                <a href="#" class="quick-card">
+                  <div class="quick-card-icon"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg></div>
+                  <div><div class="quick-card-title">Changelog</div><div class="quick-card-desc">Latest releases and improvements.</div></div>
+                </a>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Contact support</div>
+                  <div class="card-desc">Get help directly from our team. Average response: under 4 hours.</div>
+                </div>
+              </div>
+              <div style="display:grid;gap:12px">
+                <div>
+                  <label class="label">Topic</label>
+                  <select id="sup-topic" class="select">
+                    <option>Account &amp; billing</option>
+                    <option>Bug report</option>
+                    <option>Feature request</option>
+                    <option>API &amp; integrations</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="label">Subject</label>
+                  <input id="sup-subject" class="input" type="text" placeholder="Briefly describe your issue" />
+                </div>
+                <div>
+                  <label class="label">Message</label>
+                  <textarea id="sup-message" class="textarea" placeholder="Tell us what's going on…" style="min-height:120px"></textarea>
+                </div>
+                <div>
+                  <label class="label">Attach diagnostic info</label>
+                  <div class="setting-row" style="padding:0;border:0">
+                    <div class="setting-info">
+                      <h4>Include browser &amp; account info</h4>
+                      <p>Helps us reproduce your issue faster. No passwords or API keys are included.</p>
+                    </div>
+                    <label class="toggle-wrap"><input type="checkbox" id="sup-diag" checked /><span class="toggle-track"></span></label>
+                  </div>
+                </div>
+              </div>
+              <div style="margin-top:14px;display:flex;gap:8px">
+                <button class="btn-primary" onclick="sendSupport()">Send message</button>
+                <button class="btn-ghost" onclick="toast('Draft saved.')">Save draft</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">Keyboard shortcuts</div>
+                  <div class="card-desc">Speed up your workflow.</div>
+                </div>
+              </div>
+              <div class="info-row"><div><div class="info-row-label">Open command palette</div></div><div><span class="kbd">Ctrl</span> + <span class="kbd">K</span></div></div>
+              <div class="info-row"><div><div class="info-row-label">New chat</div></div><div><span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">N</span></div></div>
+              <div class="info-row"><div><div class="info-row-label">Open settings</div></div><div><span class="kbd">Ctrl</span> + <span class="kbd">,</span></div></div>
+              <div class="info-row"><div><div class="info-row-label">Toggle sidebar</div></div><div><span class="kbd">Ctrl</span> + <span class="kbd">B</span></div></div>
+              <div class="info-row"><div><div class="info-row-label">Send message</div></div><div><span class="kbd">Enter</span></div></div>
+              <div class="info-row"><div><div class="info-row-label">New line in chat</div></div><div><span class="kbd">Shift</span> + <span class="kbd">Enter</span></div></div>
+              <div class="info-row"><div><div class="info-row-label">Sign out</div></div><div><span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">Q</span></div></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header no-border">
+                <div>
+                  <div class="card-title">About CreateX</div>
+                </div>
+              </div>
+              <div class="info-row">
+                <div><div class="info-row-label">Version</div><div class="info-row-val">CreateX Platform v2.0.0</div></div>
+                <span class="info-pill">Stable</span>
+              </div>
+              <div class="info-row">
+                <div><div class="info-row-label">AI Model</div><div class="info-row-val">Claude (Anthropic) via direct browser API</div></div>
+                <span class="info-pill active">Active</span>
+              </div>
+              <div class="info-row">
+                <div><div class="info-row-label">Modules</div><div class="info-row-val">Model Builder · Agent Builder · Website Builder · App Builder · Workflow Builder · AI Template Hub</div></div>
+                <span class="info-pill">6 active</span>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+  /* ─────────────── Auth ─────────────── */
+  function _waitSB(cb, tries){
+    tries = tries || 0;
+    if (window.sb) return cb();
+    if (tries > 80) return cb();
+    setTimeout(function(){ _waitSB(cb, tries + 1); }, 40);
+  }
+  _waitSB(async () => {
+    if (!window.sb) return;
+    try {
+      const { data } = await window.sb.auth.getSession();
+      const session = data && data.session;
+      if (!session || !session.user) { window.location.href = 'index.html'; return; }
+      const u = session.user;
+      const meta = u.user_metadata || {};
+      const displayName = meta.full_name || meta.name || (u.email ? u.email.split('@')[0] : 'there');
+      const email = u.email || '';
+      const ini = (displayName.split(/\s+/).map(s=>s[0]).join('').slice(0,2) || 'CX').toUpperCase();
+
+      // Profile
+      const setVal = (id,v)=>{const el=document.getElementById(id);if(el)el.value=v;};
+      setVal('profile-name', displayName);
+      setVal('profile-username', (email.split('@')[0] || 'createx-user').toLowerCase());
+      setVal('account-email', email);
+      setVal('bill-email', email);
+
+      // Avatar initials
+      const av = document.getElementById('profile-avatar');
+      if (av && !av.dataset.uploaded) av.textContent = ini;
+
+      // Member row
+      const meAv = document.getElementById('member-me-avatar');
+      const meNm = document.getElementById('member-me-name');
+      const meEm = document.getElementById('member-me-email');
+      if (meAv && !meAv.dataset.uploaded) meAv.textContent = ini;
+      if (meNm) meNm.textContent = displayName;
+      if (meEm) meEm.textContent = email;
+    } catch (_) {}
+    window.sb.auth.onAuthStateChange((_evt, s) => { if (!s) window.location.href = 'index.html'; });
+  });
+  async function handleSignOut() {
+    try { if (window.sb) await window.sb.auth.signOut(); } catch (_) {}
+    window.location.href = 'index.html';
+  }
+
+  /* ─────────────── Section switcher ─────────────── */
+  function showSection(name) {
+    document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.settings-nav-link').forEach(l => l.classList.remove('active'));
+    const sec = document.getElementById('sec-' + name);
+    const link = document.querySelector('.settings-nav-link[data-section="' + name + '"]');
+    if (sec) sec.classList.add('active');
+    if (link) link.classList.add('active');
+    try { history.replaceState(null, '', '#' + name); } catch (_) {}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ─────────────── Toast ─────────────── */
+  function toast(msg, color) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.style.color = color || '#6dffa7';
+    el.style.borderColor = color ? 'rgba(255,100,100,.28)' : 'rgba(57,245,138,.28)';
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2600);
+  }
+
+  /* ─────────────── Generic settings store ─────────────── */
+  function settingsKey(category){ return 'createx_settings_' + category; }
+  function loadSettings(category){
+    try { return JSON.parse(localStorage.getItem(settingsKey(category)) || '{}'); }
+    catch(_) { return {}; }
+  }
+  function saveSetting(category, key, val) {
+    const s = loadSettings(category);
+    s[key] = val;
+    localStorage.setItem(settingsKey(category), JSON.stringify(s));
+    toast('Saved.');
+  }
+  function applySettingsToUI() {
+    const cats = ['account','appearance','language','notifications','privacy','workspace','developer'];
+    cats.forEach(cat => {
+      const s = loadSettings(cat);
+      Object.keys(s).forEach(k => {
+        // map common patterns to ids
+        const candidates = [
+          cat === 'account'       ? 'acc-' + k.replace(/_/g,'-') : null,
+          cat === 'appearance'    ? 'ap-'  + k.replace(/_/g,'-') : null,
+          cat === 'language'      ? 'lang-'+ k.replace(/_/g,'-') : null,
+          cat === 'notifications' ? 'ne-'  + k.replace(/_/g,'-') : null,
+          cat === 'notifications' ? 'ni-'  + k.replace(/_/g,'-') : null,
+          cat === 'privacy'       ? 'dp-'  + k.replace(/_/g,'-') : null,
+          cat === 'workspace'     ? 'ws-'  + k.replace(/_/g,'-') : null,
+          cat === 'developer'     ? 'dev-' + k.replace(/_/g,'-') : null,
+        ].filter(Boolean);
+        candidates.forEach(id => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (el.type === 'checkbox') el.checked = !!s[k];
+          else if (el.value !== undefined) el.value = s[k];
+        });
+      });
+    });
+  }
+
+  /* ─────────────── API Key (legacy + new keys) ─────────────── */
+  function loadApiKey() {
+    const k = localStorage.getItem('createx_api_key') || localStorage.getItem('createx_apikey') || '';
+    const el = document.getElementById('api-key-input');
+    if (el) el.value = k;
+    const pill = document.getElementById('anth-status');
+    if (pill) {
+      if (k) { pill.textContent = 'Connected'; pill.classList.remove('gray'); }
+      else { pill.textContent = 'Not connected'; pill.classList.add('gray'); }
+    }
+  }
+  function saveApiKey() {
+    const k = (document.getElementById('api-key-input').value || '').trim();
+    if (!k) { toast('Please enter an API key first.', '#ff7a7a'); return; }
+    if (!k.startsWith('sk-ant-')) { toast('Key should start with sk-ant- — check it and try again.', '#ffb347'); return; }
+    localStorage.setItem('createx_api_key', k);
+    localStorage.setItem('createx_apikey', k);
+    loadApiKey();
+    toast('API key saved — all AI modules are now unlocked.');
+  }
+  function clearApiKey() {
+    localStorage.removeItem('createx_api_key');
+    localStorage.removeItem('createx_apikey');
+    document.getElementById('api-key-input').value = '';
+    loadApiKey();
+    toast('API key removed.', '#ff7a7a');
+  }
+  let keyVisible = false;
+  function toggleKeyVisibility() {
+    keyVisible = !keyVisible;
+    const el = document.getElementById('api-key-input');
+    if (el) el.type = keyVisible ? 'text' : 'password';
+  }
+
+  /* ─────────────── Profile ─────────────── */
+  function loadProfile() {
+    try {
+      const p = JSON.parse(localStorage.getItem('createx_profile') || '{}');
+      ['username','bio','title','company','location','website','tz'].forEach(f => {
+        const el = document.getElementById('profile-' + f);
+        if (el && p[f] != null) el.value = p[f];
+      });
+      updateBioCount();
+      // Avatar restore
+      const av = document.getElementById('profile-avatar');
+      if (av && p.avatar_data) {
+        av.style.background = 'url(' + p.avatar_data + ') center/cover';
+        av.style.color = 'transparent';
+        av.dataset.uploaded = '1';
+      }
+    } catch(_) {}
+  }
+  async function saveProfile() {
+    const fields = ['username','bio','title','company','location','website','tz'];
+    const out = {};
+    fields.forEach(f => {
+      const el = document.getElementById('profile-' + f);
+      if (el) out[f] = el.value;
+    });
+    const av = document.getElementById('profile-avatar');
+    if (av && av.dataset.avatarData) out.avatar_data = av.dataset.avatarData;
+    localStorage.setItem('createx_profile', JSON.stringify(out));
+
+    const name = (document.getElementById('profile-name').value || '').trim();
+    if (!name) { toast('Please enter a display name.', '#ffb347'); return; }
+    try {
+      if (window.sb) await window.sb.auth.updateUser({ data: { full_name: name } });
+    } catch (_) {}
+    toast('Profile saved.');
+  }
+  function resetProfile() {
+    if (!confirm('Discard unsaved changes to your profile?')) return;
+    localStorage.removeItem('createx_profile');
+    location.reload();
+  }
+  function onAvatarUpload(e) {
+    const f = e.target.files[0];
+    if (!f) return;
+    if (f.size > 2 * 1024 * 1024) { toast('Image must be under 2 MB.', '#ff7a7a'); return; }
+    const r = new FileReader();
+    r.onload = (ev) => {
+      const av = document.getElementById('profile-avatar');
+      if (av) {
+        av.style.background = 'url(' + ev.target.result + ') center/cover';
+        av.style.color = 'transparent';
+        av.dataset.uploaded = '1';
+        av.dataset.avatarData = ev.target.result;
+        toast('Avatar updated — click Save to keep it.');
+      }
+    };
+    r.readAsDataURL(f);
+  }
+  function resetAvatar() {
+    const av = document.getElementById('profile-avatar');
+    if (!av) return;
+    av.style.background = '';
+    av.style.color = '';
+    delete av.dataset.uploaded;
+    delete av.dataset.avatarData;
+    av.textContent = av.textContent || 'CX';
+    toast('Avatar reset.');
+  }
+  function updateBioCount() {
+    const el = document.getElementById('profile-bio');
+    const c  = document.getElementById('bio-count');
+    if (el && c) c.textContent = el.value.length;
+  }
+
+  /* ─────────────── Account ─────────────── */
+  function updatePassword() {
+    const cur = document.getElementById('pwd-current').value;
+    const nw  = document.getElementById('pwd-new').value;
+    const cf  = document.getElementById('pwd-confirm').value;
+    if (!cur || !nw || !cf) { toast('Fill in all password fields.', '#ffb347'); return; }
+    if (nw.length < 8) { toast('New password must be at least 8 characters.', '#ffb347'); return; }
+    if (nw !== cf) { toast('New passwords do not match.', '#ff7a7a'); return; }
+    toast('Password updated.');
+    document.getElementById('pwd-current').value = '';
+    document.getElementById('pwd-new').value = '';
+    document.getElementById('pwd-confirm').value = '';
+  }
+  function signOutAll() {
+    if (!confirm('Sign out from all devices including this one?')) return;
+    handleSignOut();
+  }
+
+  /* ─────────────── Appearance ─────────────── */
+  function selectTheme(name) {
+    document.querySelectorAll('[data-theme]').forEach(el => el.classList.toggle('active', el.dataset.theme === name));
+    saveSetting('appearance', 'theme', name);
+  }
+  function selectAccent(name, el) {
+    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+    if (el) el.classList.add('active');
+    saveSetting('appearance', 'accent', name);
+  }
+  function selectDensity(name) {
+    document.querySelectorAll('[data-density]').forEach(el => el.classList.toggle('active', el.dataset.density === name));
+    saveSetting('appearance', 'density', name);
+  }
+  function selectFontSize(name) {
+    document.querySelectorAll('[data-fs]').forEach(el => el.classList.toggle('active', el.dataset.fs === name));
+    saveSetting('appearance', 'font_size', name);
+  }
+
+  /* ─────────────── Notifications ─────────────── */
+  async function enableDesktopNotif() {
+    if (!('Notification' in window)) { toast('Browser does not support notifications.', '#ff7a7a'); return; }
+    try {
+      const p = await Notification.requestPermission();
+      if (p === 'granted') {
+        toast('Desktop notifications enabled.');
+        document.getElementById('desk-notif-btn').textContent = 'Enabled';
+      } else {
+        toast('Permission denied.', '#ffb347');
+      }
+    } catch(_) { toast('Could not enable notifications.', '#ff7a7a'); }
+  }
+
+  /* ─────────────── Connected apps ─────────────── */
+  function connectApp(name, btn) {
+    if (btn.textContent === 'Disconnect') {
+      btn.textContent = 'Connect';
+      btn.classList.remove('btn-soft');
+      btn.classList.add('btn-outline');
+      toast(name + ' disconnected.', '#ff7a7a');
+      return;
+    }
+    btn.textContent = 'Disconnect';
+    btn.classList.remove('btn-outline');
+    btn.classList.add('btn-soft');
+    toast(name + ' connected.');
+  }
+
+  /* ─────────────── Team / Workspace ─────────────── */
+  function inviteMember() {
+    const email = (document.getElementById('ws-invite-email').value || '').trim();
+    const role  = document.getElementById('ws-invite-role').value;
+    if (!email || !email.includes('@')) { toast('Enter a valid email address.', '#ffb347'); return; }
+    document.getElementById('ws-invite-email').value = '';
+    toast('Invite sent to ' + email + ' as ' + role + '.');
+  }
+  function confirmDeleteWorkspace() {
+    if (!confirm('Permanently delete this workspace and all its data?')) return;
+    if (!confirm('FINAL WARNING: workspace deletion is irreversible. Confirm?')) return;
+    toast('Workspace deletion requested.', '#ff7a7a');
+  }
+
+  /* ─────────────── Preferences (legacy) ─────────────── */
+  function loadPrefs() {
+    try {
+      const p = JSON.parse(localStorage.getItem('createx_prefs') || '{}');
+      const autosave  = document.getElementById('pref-autosave');
+      const streaming = document.getElementById('pref-streaming');
+      const sounds    = document.getElementById('pref-sounds');
+      if (autosave)  autosave.checked  = p.autosave  !== false;
+      if (streaming) streaming.checked = p.streaming !== false;
+      if (sounds)    sounds.checked    = !!p.sounds;
+    } catch (_) {}
+  }
+  function savePref(key, val) {
+    try {
+      const p = JSON.parse(localStorage.getItem('createx_prefs') || '{}');
+      p[key] = val;
+      localStorage.setItem('createx_prefs', JSON.stringify(p));
+      toast('Preference saved.');
+    } catch (_) {}
+  }
+
+  /* ─────────────── Data & privacy ─────────────── */
+  function calcStorage() {
+    const keys = ['createx_agents','createx_websites','createx_apps','createx_content','createx_workflows','createx_cv_builder_data','createx_api_key','createx_apikey','createx_prefs','createx_applications','createx_profile','createx_settings_account','createx_settings_appearance','createx_settings_language','createx_settings_notifications','createx_settings_privacy','createx_settings_workspace','createx_settings_developer'];
+    let total = 0;
+    keys.forEach(k => { const v = localStorage.getItem(k); if (v) total += v.length; });
+    const kb = (total / 1024).toFixed(1);
+    const max = 5120; // 5 MB nominal cap for the bar
+    const pct = Math.min(100, (total / 1024 / max) * 100 * 100); // visual exaggeration
+    const el = document.getElementById('storage-info');
+    const bar = document.getElementById('storage-bar');
+    if (el) el.textContent = '~' + kb + ' KB used in browser localStorage (' + keys.filter(k=>localStorage.getItem(k)).length + ' of ' + keys.length + ' stores active)';
+    if (bar) bar.style.width = Math.max(1, Math.min(100, pct)) + '%';
+  }
+  function clearAllLocalData() {
+    if (!confirm('This will erase ALL your CreateX data (agents, websites, apps, marketing content, CV data, settings) from this browser. Are you sure?')) return;
+    ['createx_agents','createx_websites','createx_apps','createx_content','createx_workflows','createx_cv_builder_data','createx_prefs','createx_applications','createx_profile','createx_settings_account','createx_settings_appearance','createx_settings_language','createx_settings_notifications','createx_settings_privacy','createx_settings_workspace','createx_settings_developer'].forEach(k => localStorage.removeItem(k));
+    calcStorage();
+    toast('All local data cleared.', '#ff7a7a');
+  }
+  function exportData() {
+    const keys = ['createx_agents','createx_websites','createx_apps','createx_content','createx_workflows','createx_cv_builder_data','createx_prefs','createx_profile','createx_settings_account','createx_settings_appearance','createx_settings_language','createx_settings_notifications','createx_settings_privacy','createx_settings_workspace','createx_settings_developer'];
+    const out = {};
+    keys.forEach(k => { try { out[k] = JSON.parse(localStorage.getItem(k) || 'null'); } catch (_) { out[k] = null; } });
+    const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'createx-export-' + new Date().toISOString().slice(0,10) + '.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast('Data exported.');
+  }
+  async function confirmDeleteAccount() {
+    if (!confirm('Are you absolutely sure you want to delete your account? This is irreversible.')) return;
+    if (!confirm('FINAL WARNING: all your data will be erased. Confirm delete?')) return;
+    toast('Account deletion requested — you will be signed out.', '#ff7a7a');
+    setTimeout(async () => {
+      try { if (window.sb) await window.sb.auth.signOut(); } catch (_) {}
+      window.location.href = 'index.html';
+    }, 1800);
+  }
+
+  /* ─────────────── Helpers ─────────────── */
+  function copyToClipboard(text) {
+    try {
+      navigator.clipboard.writeText(text).then(()=>toast('Copied to clipboard.'));
+    } catch(_) {
+      const t = document.createElement('textarea');
+      t.value = text; document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); toast('Copied.'); } catch(__) {}
+      document.body.removeChild(t);
+    }
+  }
+  function sendSupport() {
+    const subj = (document.getElementById('sup-subject').value || '').trim();
+    const msg  = (document.getElementById('sup-message').value || '').trim();
+    if (!subj || !msg) { toast('Please add a subject and message.', '#ffb347'); return; }
+    document.getElementById('sup-subject').value = '';
+    document.getElementById('sup-message').value = '';
+    toast('Message sent — we\'ll reply within 4 hours.');
+  }
+
+  /* ─────────────── Init ─────────────── */
+  document.addEventListener('DOMContentLoaded', () => {
+    loadApiKey();
+    loadPrefs();
+    loadProfile();
+    applySettingsToUI();
+    calcStorage();
+    const bio = document.getElementById('profile-bio');
+    if (bio) bio.addEventListener('input', updateBioCount);
+
+    const hash = (window.location.hash || '').replace('#','');
+    const valid = ['profile','account','appearance','language','notifications','data','apps','billing','team','developer','help'];
+    if (hash && valid.indexOf(hash) !== -1) showSection(hash);
+  });
+</script>
+<script src="sidebar.js"></script>
+</body>
+</html>

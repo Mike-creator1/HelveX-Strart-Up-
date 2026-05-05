@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" class="notranslate">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CreateX — Checkout</title>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: '#C4A55A', 'gold-light': '#D4B870',
+            dark: '#09090B', 'dark-card': '#111113',
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['Inter', '-apple-system', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet" />
+  <script src="lang/en.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Inter',sans-serif;background:#09090B;color:#fff;-webkit-font-smoothing:antialiased;min-height:100vh;}
+    .font-serif{font-family:'Playfair Display',Georgia,serif;}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes shimmer{from{background-position:0% center;}to{background-position:-200% center;}}
+    @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+    .gradient-text{
+      background:linear-gradient(120deg,#fff 0%,#C4A55A 35%,#fff 65%,#C4A55A 100%);
+      background-size:250% auto;-webkit-background-clip:text;background-clip:text;
+      -webkit-text-fill-color:transparent;animation:shimmer 7s linear infinite;
+    }
+    .btn-gold{
+      background:linear-gradient(135deg,#C4A55A 0%,#D4B870 50%,#C4A55A 100%);
+      background-size:200% auto;color:#09090B;font-weight:700;
+      border-radius:12px;transition:all .3s;cursor:pointer;border:none;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .btn-gold:hover{background-position:right center;transform:translateY(-2px);box-shadow:0 14px 40px rgba(196,165,90,.4);}
+    .btn-gold:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;}
+
+    .btn-ghost{background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;
+      font-size:13px;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;
+      transition:color .2s;text-decoration:none;}
+    .btn-ghost:hover{color:#fff;}
+    .back-premium{position:fixed;top:12px;left:18px;z-index:120;height:36px;padding:0 15px 0 12px;border-radius:100px;
+      display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-size:12px;font-weight:850;color:rgba(255,236,178,.86);
+      border:1px solid rgba(196,165,90,.24);background:linear-gradient(135deg,rgba(196,165,90,.12),rgba(255,255,255,.035));
+      box-shadow:0 14px 38px rgba(0,0,0,.34),0 0 0 1px rgba(255,255,255,.025) inset;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      transition:transform .22s,border-color .22s,background .22s,color .22s,box-shadow .22s;}
+    .back-premium svg{width:15px;height:15px;transition:transform .22s;}
+    .back-premium:hover{transform:translateX(-2px);border-color:rgba(196,165,90,.5);background:linear-gradient(135deg,rgba(196,165,90,.2),rgba(255,255,255,.055));color:#FFE8A6;box-shadow:0 18px 46px rgba(196,165,90,.14),0 14px 38px rgba(0,0,0,.36);}
+    .back-premium:hover svg{transform:translateX(-2px);}
+
+    .form-label{display:block;font-size:11px;font-weight:600;color:rgba(255,255,255,.32);
+      text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;}
+
+    .form-input{
+      width:100%;background:rgba(255,255,255,.04);
+      border:1.5px solid rgba(255,255,255,.08);color:#fff;
+      border-radius:10px;padding:12px 14px;font-size:14px;
+      font-family:'Inter',sans-serif;outline:none;
+      transition:border-color .2s,box-shadow .2s;display:block;
+    }
+    .form-input:focus{border-color:rgba(196,165,90,.5);box-shadow:0 0 0 3px rgba(196,165,90,.08);}
+    .form-input::placeholder{color:rgba(255,255,255,.18);}
+
+    .card-field{
+      background:rgba(255,255,255,.04);
+      border:1.5px solid rgba(255,255,255,.08);
+      border-radius:10px;padding:13px 14px;
+      font-size:14px;color:rgba(255,255,255,.5);
+      display:flex;align-items:center;justify-content:space-between;
+      cursor:text;
+    }
+    .card-field.focused{border-color:rgba(196,165,90,.5);box-shadow:0 0 0 3px rgba(196,165,90,.08);}
+
+    .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+    .glass-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:18px;}
+
+    .feature-row{display:flex;align-items:center;gap:10px;padding:11px 0;
+      border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;color:rgba(255,255,255,.5);}
+    .feature-row:last-child{border-bottom:none;}
+    .feature-icon{width:20px;height:20px;border-radius:6px;
+      background:rgba(196,165,90,.1);border:1px solid rgba(196,165,90,.18);
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+    .card-brand{width:38px;height:24px;border-radius:5px;
+      background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+      display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(255,255,255,.4);}
+
+    .spinner{width:18px;height:18px;border:2px solid rgba(9,9,11,.3);
+      border-top-color:#09090B;border-radius:50%;animation:spin .7s linear infinite;}
+    @media(max-width:1280px){.brand-link{margin-left:154px;}}
+    @media(max-width:680px){
+      .back-premium{left:12px;width:38px;padding:0;justify-content:center;gap:0;}
+      .back-premium span{display:none;}
+      .brand-link{margin-left:48px;}
+    }
+
+    .anim{animation:fadeUp .55s ease both;}
+    .d1{animation-delay:.04s;}.d2{animation-delay:.10s;}.d3{animation-delay:.17s;}.d4{animation-delay:.25s;}
+  </style>
+</head>
+<body>
+
+<div id="lang-host" style="position:fixed;top:16px;right:20px;z-index:200;"></div>
+<div class="orb" style="width:400px;height:400px;background:#C4A55A;top:-15%;left:-10%;opacity:.07;position:fixed;"></div>
+<div class="orb" style="width:300px;height:300px;background:#CC1016;bottom:5%;right:-8%;opacity:.05;position:fixed;"></div>
+
+<!-- ─── HEADER ─── -->
+<header style="position:sticky;top:0;z-index:50;background:rgba(9,9,11,.92);
+     backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px;height:60px;
+       display:flex;align-items:center;justify-content:space-between;">
+    <a href="pricing.html" class="back-premium" onclick="if(window.history.length>1){window.history.back();return false;}">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      <span>Back</span>
+    </a>
+    <a href="landing.html" class="brand-link" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <img src="createx-logo.svg" alt="CreateX" style="width:34px;height:34px;object-fit:contain;display:block;filter:drop-shadow(0 0 16px rgba(24,215,255,.32));" />
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#fff;line-height:1;">CreateX</div>
+        <div style="font-size:9px;font-weight:500;color:#18d7ff;letter-spacing:.15em;margin-top:2px;">AI Agent</div>
+      </div>
+    </a>
+    <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.28);">
+      <svg width="13" height="13" fill="none" stroke="rgba(196,165,90,.5)" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+      </svg>
+      Secure Checkout · SSL Encrypted
+    </div>
+    <span aria-hidden="true" style="width:92px;"></span>
+  </div>
+</header>
+
+<!-- ─── MAIN ─── -->
+<main style="max-width:1000px;margin:0 auto;padding:48px 24px 80px;position:relative;">
+
+  <div style="display:grid;grid-template-columns:1fr;gap:28px;" class="lg:grid-cols-5" id="checkout-grid">
+
+    <!-- LEFT: Payment form -->
+    <div style="grid-column:1/span 3;" class="anim d1" id="left-col">
+
+      <h1 class="font-serif" style="font-size:30px;font-weight:800;margin-bottom:6px;">
+        Complete your order
+      </h1>
+      <p style="font-size:14px;color:rgba(255,255,255,.38);margin-bottom:32px;">
+        You're one step away from automated job applications in Switzerland.
+      </p>
+
+      <!-- Contact -->
+      <div style="margin-bottom:24px;">
+        <div class="form-label" style="font-size:12px;font-weight:700;color:rgba(255,255,255,.5);
+             text-transform:none;letter-spacing:0;margin-bottom:14px;">Contact information</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+          <div>
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-input" placeholder="Marco" />
+          </div>
+          <div>
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-input" placeholder="Rossi" />
+          </div>
+        </div>
+        <div>
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" placeholder="you@example.com" id="co-email" />
+        </div>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,.06);margin-bottom:24px;"></div>
+
+      <!-- Payment -->
+      <div style="margin-bottom:28px;">
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.5);margin-bottom:14px;">
+          Payment details
+        </div>
+
+        <!-- Card number (simulated) -->
+        <div style="margin-bottom:12px;">
+          <label class="form-label">Card Number</label>
+          <div class="card-field" id="card-num" onclick="this.classList.add('focused')" onblur="this.classList.remove('focused')">
+            <span id="card-display" style="font-size:14px;color:rgba(255,255,255,.3);letter-spacing:.1em;">
+              •••• •••• •••• ••••
+            </span>
+            <div style="display:flex;gap:5px;">
+              <div class="card-brand">VISA</div>
+              <div class="card-brand">MC</div>
+            </div>
+          </div>
+          <input type="text" id="card-input" placeholder="1234 5678 9012 3456"
+                 maxlength="19" oninput="formatCard(this)"
+                 style="position:absolute;opacity:0;width:1px;height:1px;" />
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label class="form-label">Expiry Date</label>
+            <input type="text" class="form-input" placeholder="MM / YY" maxlength="7"
+                   oninput="formatExpiry(this)" />
+          </div>
+          <div>
+            <label class="form-label">CVC</label>
+            <div style="position:relative;">
+              <input type="text" class="form-input" placeholder="•••" maxlength="4"
+                     oninput="this.value=this.value.replace(/\D/g,'')" />
+              <div style="position:absolute;right:13px;top:50%;transform:translateY(-50%);">
+                <svg width="16" height="16" fill="none" stroke="rgba(255,255,255,.2)" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Consent -->
+      <label style="display:flex;align-items:flex-start;gap:11px;cursor:pointer;margin-bottom:24px;">
+        <input type="checkbox" id="co-terms"
+               style="appearance:none;width:18px;height:18px;border-radius:5px;
+                      background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.15);
+                      cursor:pointer;flex-shrink:0;margin-top:1px;
+                      checked:background:#C4A55A;transition:all .2s;"
+               onchange="styleCheck(this)" />
+        <span style="font-size:13px;color:rgba(255,255,255,.4);line-height:1.6;">
+          I agree to the <a href="#" style="color:rgba(196,165,90,.6);text-decoration:none;">Terms of Service</a>
+          and <a href="#" style="color:rgba(196,165,90,.6);text-decoration:none;">Privacy Policy</a>.
+          I authorise CreateX to charge my card monthly.
+        </span>
+      </label>
+
+      <!-- Submit button -->
+      <button id="pay-btn" onclick="submitPayment()" class="btn-gold"
+              style="width:100%;padding:15px;font-size:16px;">
+        <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        </svg>
+        Pay &amp; Activate
+      </button>
+
+      <p style="font-size:11px;color:rgba(255,255,255,.18);text-align:center;margin-top:12px;line-height:1.6;">
+        Secured by Stripe · 256-bit SSL · Card data protected
+      </p>
+    </div>
+
+    <!-- RIGHT: Order summary -->
+    <div style="grid-column:4/span 2;" class="anim d2" id="right-col">
+      <div class="glass-card" style="padding:24px;position:sticky;top:80px;">
+
+        <!-- Plan badge -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.3);
+                 text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;">Your plan</div>
+            <div style="font-size:20px;font-weight:800;color:#fff;" id="ord-plan">Pro</div>
+          </div>
+          <img src="createx-logo.svg" alt="CreateX" style="width:48px;height:48px;object-fit:contain;display:block;filter:drop-shadow(0 0 18px rgba(24,215,255,.34));" />
+        </div>
+
+        <div style="height:1px;background:rgba(255,255,255,.06);margin-bottom:18px;"></div>
+
+        <!-- Price breakdown -->
+        <div style="font-size:13px;color:rgba(255,255,255,.4);display:flex;justify-content:space-between;margin-bottom:10px;">
+          <span id="ord-plan-label">Pro plan</span>
+          <span id="ord-price">CHF 49</span>
+        </div>
+        <div id="enterprise-price-box" style="display:none;margin:0 0 16px;">
+          <label for="enterprise-checkout-price" style="display:block;font-size:11px;font-weight:800;color:rgba(196,165,90,.72);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Enterprise monthly price</label>
+          <div style="display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;border:1px solid rgba(196,165,90,.28);background:linear-gradient(135deg,rgba(196,165,90,.11),rgba(255,255,255,.035));border-radius:10px;padding:12px 13px;">
+            <span style="font-size:16px;font-weight:900;color:rgba(196,165,90,.78);">CHF</span>
+            <input id="enterprise-checkout-price" type="number" min="999" max="50000" step="1" value="999" inputmode="numeric" style="width:100%;min-width:0;border:0;background:transparent;color:#fff;font-size:28px;font-weight:900;line-height:1;outline:none;font-family:'Inter',sans-serif;" />
+            <span style="font-size:12px;font-weight:800;color:rgba(255,255,255,.42);white-space:nowrap;">/month</span>
+          </div>
+          <div style="font-size:11px;color:rgba(255,255,255,.34);font-weight:700;line-height:1.45;margin-top:8px;">Choose any monthly amount from CHF 999 to CHF 50.000.</div>
+        </div>
+        <div style="font-size:13px;color:rgba(255,255,255,.4);display:flex;justify-content:space-between;margin-bottom:16px;">
+          <span>VAT (0%)</span>
+          <span>CHF 0</span>
+        </div>
+
+        <div style="height:1px;background:rgba(255,255,255,.06);margin-bottom:16px;"></div>
+
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:22px;">
+          <span style="font-size:13px;font-weight:600;color:rgba(255,255,255,.7);">Total today</span>
+          <span style="font-size:22px;font-weight:800;color:#C4A55A;" id="ord-total">CHF 49</span>
+        </div>
+
+        <!-- Features summary -->
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.25);
+             text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;">Included</div>
+
+        <div id="plan-features"></div>
+
+        <div style="height:1px;background:rgba(255,255,255,.06);margin:18px 0;"></div>
+
+        <!-- Guarantee -->
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:9px;flex-shrink:0;
+               background:rgba(196,165,90,.08);border:1px solid rgba(196,165,90,.15);
+               display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" fill="none" stroke="#C4A55A" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:3px;">Secure activation</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.32);line-height:1.5;">
+              Encrypted payment processed by Stripe before plan activation.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<style>
+  @media(min-width:900px){
+    #checkout-grid{display:grid !important;grid-template-columns:3fr 2fr;}
+    #left-col{grid-column:1/2 !important;}
+    #right-col{grid-column:2/3 !important;}
+  }
+</style>
+
+<script>
+  // ── Read plan from URL ─────────────────────────
+  const params = new URLSearchParams(window.location.search);
+  const plan  = (params.get('plan') === 'Ultimate' ? 'Ultra' : (params.get('plan') || 'Pro'));
+  let price = params.get('price') || (plan === 'Enterprise' ? '999' : '49');
+  function clampEnterprisePrice(raw) {
+    let value = parseInt(String(raw || '').replace(/[^0-9]/g, ''), 10);
+    if (!Number.isFinite(value)) value = 999;
+    return Math.max(999, Math.min(50000, value));
+  }
+  if (plan === 'Enterprise') price = String(clampEnterprisePrice(price));
+  function updateOrderPrice() {
+    document.getElementById('ord-price').textContent = 'CHF ' + price;
+    document.getElementById('ord-total').textContent = 'CHF ' + price;
+  }
+
+  document.getElementById('ord-plan').textContent       = plan;
+  document.getElementById('ord-plan-label').textContent = plan + ' plan';
+  document.getElementById('ord-price').textContent      = 'CHF ' + price;
+  document.getElementById('ord-total').textContent      = 'CHF ' + price;
+
+  const featureSets = {
+Basic:     ['100 applications / month','Saved profile and onboarding data','Job filters by canton, industry and salary','Application dashboard visibility','Match score preview per job'],
+Standard:  ['250 applications / month','Saved target role, canton and salary preferences','Reusable profile data across steps','CV preview and PDF export','Clearer application status visibility'],
+Pro:       ['500 applications / month','AI CV summary generator','AI rewrite for work experience bullets','AI skill suggestions from target roles','3 CV templates with live preview','PDF export'],
+Ultra:     ['1000 applications / month','Full AI CV builder workflow','AI summary, rewrite and skill suggestions','3 CV templates and PDF export','Saved profile reuse across onboarding, search and CV building','Highest current monthly volume'],
+Enterprise:['Custom monthly price from CHF 999 to CHF 5,000','Custom company setup','Structured company job-post workflow','Live job preview and posting flow','Direct plan coordination'],
+  };
+  const features = featureSets[plan] || featureSets['Pro'];
+  const container = document.getElementById('plan-features');
+  features.forEach(f => {
+    container.innerHTML += `
+      <div class="feature-row">
+        <div class="feature-icon">
+          <svg width="9" height="9" fill="none" stroke="#C4A55A" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>${f}
+      </div>`;
+  });
+
+  // ── Card formatting ────────────────────────────
+  const enterprisePriceBox=document.getElementById('enterprise-price-box');
+  const enterprisePriceInput=document.getElementById('enterprise-checkout-price');
+  function syncEnterpriseCheckoutPrice(clamp){
+    if(plan!=='Enterprise'||!enterprisePriceInput)return;
+    let value=parseInt(String(enterprisePriceInput.value||'').replace(/[^0-9]/g,''),10);
+    if(!Number.isFinite(value))value=999;
+    if(clamp){
+      value=Math.max(999,Math.min(50000,value));
+      enterprisePriceInput.value=String(value);
+    }
+    if(value>=999&&value<=50000){
+      price=String(value);
+      updateOrderPrice();
+    }
+  }
+  if(plan==='Enterprise'&&enterprisePriceBox&&enterprisePriceInput){
+    enterprisePriceBox.style.display='block';
+    enterprisePriceInput.value=price;
+    enterprisePriceInput.addEventListener('input',()=>syncEnterpriseCheckoutPrice(false));
+    enterprisePriceInput.addEventListener('blur',()=>syncEnterpriseCheckoutPrice(true));
+    syncEnterpriseCheckoutPrice(true);
+  }
+  function formatCard(inp) {
+    let v = inp.value.replace(/\D/g, '').slice(0, 16);
+    inp.value = v.replace(/(\d{4})(?=\d)/g, '$1 ');
+    const display = document.getElementById('card-display');
+    const raw = v.padEnd(16, '•');
+    display.textContent =
+      raw.slice(0,4) + ' ' + raw.slice(4,8) + ' ' + raw.slice(8,12) + ' ' + raw.slice(12,16);
+    display.style.color = v ? 'rgba(255,255,255,.8)' : 'rgba(255,255,255,.3)';
+  }
+
+  function formatExpiry(inp) {
+    let v = inp.value.replace(/\D/g, '').slice(0, 4);
+    if (v.length >= 2) v = v.slice(0,2) + ' / ' + v.slice(2);
+    inp.value = v;
+  }
+
+  function styleCheck(el) {
+    el.style.background    = el.checked ? '#C4A55A' : 'rgba(255,255,255,.04)';
+    el.style.borderColor   = el.checked ? '#C4A55A' : 'rgba(255,255,255,.15)';
+  }
+
+  // Make card-field clickable → focus hidden input
+  document.getElementById('card-num').addEventListener('click', () => {
+    document.getElementById('card-input').focus();
+  });
+  document.getElementById('card-input').addEventListener('input', function() {
+    formatCard(this);
+  });
+
+  // ── Submit ─────────────────────────────────────
+  function submitPayment() {
+    if(plan==='Enterprise')syncEnterpriseCheckoutPrice(true);
+    const btn = document.getElementById('pay-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div> Processing...';
+    setTimeout(() => {
+      window.location.href = 'payment-success.html?plan=' + encodeURIComponent(plan) + '&price=' + encodeURIComponent(price);
+    }, 1800);
+  }
+</script>
+<script>window.SSAI_LANGS={en:'English',el:'Ελληνικά',de:'Deutsch',fr:'Français',it:'Italiano',es:'Español',pt:'Português',ko:'한국어',zh:'中文'};</script>
+<script src="lang-widget.js?v=6"></script>
+<script>initLang('lang-host');</script>
+</body>
+</html>

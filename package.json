@@ -1,0 +1,10 @@
+{
+  "name": "createx",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CreateX — AI Platform (static site)",
+  "scripts": {
+    "build": "echo \"Static site — no build step\"",
+    "start": "echo \"Static site — served by Vercel\""
+  }
+}
