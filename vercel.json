@@ -10,6 +10,24 @@
     { "source": "/updates", "destination": "/updates.html" },
     { "source": "/about", "destination": "/about.html" },
     { "source": "/resources", "destination": "/resources.html" },
-    { "source": "/legal", "destination": "/legal.html" }
+    { "source": "/legal", "destination": "/legal.html" },
+    { "source": "/careers", "destination": "/careers.html" },
+    { "source": "/press", "destination": "/press.html" },
+    { "source": "/brand", "destination": "/brand.html" },
+    { "source": "/quickstart", "destination": "/quickstart.html" },
+    { "source": "/tutorials", "destination": "/tutorials.html" },
+    { "source": "/workflows", "destination": "/workflows.html" },
+    { "source": "/model-picker", "destination": "/model-picker.html" },
+    { "source": "/use-cases", "destination": "/use-cases.html" },
+    { "source": "/best-practices", "destination": "/best-practices.html" },
+    { "source": "/customer-stories", "destination": "/customer-stories.html" },
+    { "source": "/help-center", "destination": "/help-center.html" },
+    { "source": "/community", "destination": "/community.html" },
+    { "source": "/status", "destination": "/status.html" },
+    { "source": "/trust-center", "destination": "/trust-center.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/security-page", "destination": "/security-page.html" },
+    { "source": "/dpa", "destination": "/dpa.html" }
   ]
 }
