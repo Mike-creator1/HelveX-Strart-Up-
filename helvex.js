@@ -29,61 +29,6 @@
       }, { passive: true });
     })();
 
-    /* Top nav mega menus */
-    (function () {
-      var navItems = document.querySelectorAll('.nav-item[data-nav]');
-      if (!navItems.length) return;
-
-      var closeTimer = null;
-      var openItem   = null;
-
-      function open(item) {
-        if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
-        if (openItem === item) return;
-        if (openItem) close(openItem);
-        item.setAttribute('data-open', '');
-        var trigger = item.querySelector('.nav-trigger');
-        if (trigger) trigger.setAttribute('aria-expanded', 'true');
-        openItem = item;
-      }
-      function close(item) {
-        if (!item) return;
-        item.removeAttribute('data-open');
-        var trigger = item.querySelector('.nav-trigger');
-        if (trigger) trigger.setAttribute('aria-expanded', 'false');
-        if (openItem === item) openItem = null;
-      }
-      function scheduleClose(item) {
-        if (closeTimer) clearTimeout(closeTimer);
-        closeTimer = setTimeout(function () { close(item); }, 140);
-      }
-      function closeAll() {
-        navItems.forEach(close);
-      }
-
-      navItems.forEach(function (item) {
-        item.addEventListener('mouseenter', function () { open(item); });
-        item.addEventListener('mouseleave', function () { scheduleClose(item); });
-        // Trigger is an <a> — clicking navigates to the dedicated page
-        // (no preventDefault). Hover opens the preview dropdown for
-        // exploration without committing the user away from this page.
-        // Clicking any feature inside the dropdown closes it so it
-        // doesn't linger after navigation begins.
-        item.querySelectorAll('.nav-feature').forEach(function (link) {
-          link.addEventListener('click', function () {
-            setTimeout(function () { close(item); }, 0);
-          });
-        });
-      });
-
-      document.addEventListener('click', function (e) {
-        if (!e.target.closest('.nav-item[data-nav]')) closeAll();
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closeAll();
-      });
-    })();
-
     /* Workspace feature modals
        Scroll-lock strategy: simply set overflow:hidden on <html>+<body>
        and compensate for the scrollbar gutter. The page's actual scroll
