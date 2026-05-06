@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
+  <title>Research — HelveX</title>
+  <meta name="description" content="Research at HelveX — methodology, plainly written. Papers, engineering posts, and notes on reasoning, agents, evaluation, safety, and retrieval." />
+  <meta property="og:title" content="Research — HelveX" />
+  <meta property="og:description" content="Pick the mind for the moment. Ether for speed, Nexus for depth, Prometheus for action." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="HelveX" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#FFFFFF" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h4v16H4V4zm12 0h4v16h-4V4zM8 11h8v2H8v-2z' fill='%23DC2626'/%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0A0A0A',
+            'ink-soft': '#171717',
+            'ink-mid': '#525252',
+            'ink-light': '#A3A3A3',
+            'ink-faint': '#D4D4D4',
+            line: '#E5E5E5',
+            'line-soft': '#F0EFEC',
+            cream: '#FAFAF7',
+            beige: '#F4EFE6',
+            'beige-warm': '#EDE5D6',
+            red: '#DC2626',
+            'red-deep': '#991B1B',
+            'red-soft': '#FEE2E2',
+            yellow: '#FCD34D',
+            'yellow-deep': '#F59E0B',
+            'yellow-soft': '#FEF3C7',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <link rel="stylesheet" href="/helvex.css" />
+
+</head>
+<body class="bg-white text-ink antialiased">
+
+  <!-- ════════ ANNOUNCEMENT ════════ -->
+  <div class="bg-ink text-white text-xs sm:text-sm">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8 h-9 flex items-center justify-center gap-3">
+      <span class="hidden sm:inline-flex h-1.5 w-1.5 rounded-full bg-yellow"></span>
+      <span class="text-white/80">New —</span>
+      <span class="font-medium">Prometheus 2.0 launches with agents that run for hours.</span>
+      <a href="#research" class="ml-2 text-yellow hover:text-white transition-colors font-medium inline-flex items-center gap-1 group">
+        Read the post
+        <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- ════════ NAV ════════ -->
+  <header class="sticky top-0 z-50 bg-white/85 backdrop-blur-xl border-b border-line">
+    <nav class="max-w-7xl mx-auto px-6 sm:px-8 h-16 sm:h-[68px] flex items-center justify-between gap-4">
+      <a href="/" class="brand-mark text-xl sm:text-[22px] flex items-center gap-2 flex-shrink-0">
+        <svg class="w-6 h-6 sm:w-[26px] sm:h-[26px]" viewBox="0 0 24 24" fill="none"><path d="M4 4h4v16H4V4zm12 0h4v16h-4V4zM8 11h8v2H8v-2z" fill="currentColor"/></svg>
+        Helve<span class="x">X</span>
+      </a>
+      <div class="hidden lg:flex items-center gap-1" id="nav-mega">
+
+        <!-- Models -->
+        <div class="nav-item" data-nav="models">
+          <a href="/models.html" class="nav-trigger" aria-haspopup="true" aria-expanded="false">
+            Models
+            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="nav-dropdown" role="menu">
+            <div class="nav-dropdown-inner nav-w-md">
+              <div class="nav-col-left">
+                <p class="nav-eyebrow">Three minds</p>
+                <h3 class="nav-headline">Pick the model<br />for the moment.</h3>
+                <p class="nav-description">Each is tuned for a different shape of work — speed, depth, or autonomous action. Switch between them in any chat, or let HelveX choose.</p>
+                <a href="/models.html" class="nav-cta">See full model details<svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
+              </div>
+              <div class="nav-col-right nav-stack">
+                <a href="#model-ether" class="nav-feature">
+                  <span class="nav-feature-icon" style="background:#FCD34D;">
+                    <svg viewBox="0 0 24 24" fill="none" style="color:#0A0A0A;"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                  </span>
+                  <div class="nav-feature-content">
+                    <p class="nav-feature-title">Ether <span class="nav-feature-tag">Real-time</span></p>
+                    <p class="nav-feature-desc">Sub-100ms responses. Drafting, translating, conversing — the model that feels invisible.</p>
+                  </div>
+                </a>
+                <a href="#model-nexus" class="nav-feature">
+                  <span class="nav-feature-icon" style="background:#DC2626;">
+                    <svg viewBox="0 0 24 24" fill="none" style="color:#fff;"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4M5 5l3 3m8 8l3 3M5 19l3-3m8-8l3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                  </span>
+                  <div class="nav-feature-content">
+                    <p class="nav-feature-title">Nexus <span class="nav-feature-tag">Reasoning</span></p>
+                    <p class="nav-feature-desc">1M-token context. Citations, math, science, multi-step analysis — the model that thinks.</p>
+                  </div>
+                </a>
+                <a href="#model-prometheus" class="nav-feature">
+                  <span class="nav-feature-icon" style="background:#0A0A0A;">
+                    <svg viewBox="0 0 24 24" fill="none" style="color:#FCD34D;"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7l3-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  </span>
+                  <div class="nav-feature-content">
+                    <p class="nav-feature-title">Prometheus <span class="nav-feature-tag">Agentic</span></p>
+                    <p class="nav-feature-desc">Hours-of-work agents. Plans, calls tools, ships outcomes — the model that acts.</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Workspace -->
+        <div class="nav-item" data-nav="workspace">
+          <a href="/workspace.html" class="nav-trigger" aria-haspopup="true" aria-expanded="false">
+            Workspace
+            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="nav-dropdown" role="menu">
+            <div class="nav-dropdown-inner nav-w-lg">
+              <div class="nav-col-left">
+                <p class="nav-eyebrow">The product</p>
+                <h3 class="nav-headline">A real place<br />to do the work.</h3>
+                <p class="nav-description">Conversations, projects, agents, knowledge — co-owned by your team and held together by a single workspace.</p>
+                <a href="/workspace.html" class="nav-cta">Tour the workspace<svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
+              </div>
+              <div class="nav-col-right nav-grid-2">
+                <button type="button" data-feature="chat" class="nav-feature">
+                  <span class="nav-feature-icon" style="background:rgba(10,10,10,0.05);">
+                    <svg viewBox="0 0 24 24" fill="none" style="color:#0A0A0A;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="currentColor" stroke-width="1.8"/></svg>
+                  </span>
+                  <div class="nav-feature-content">
+                    <p class="nav-feature-title">Chat</p>
+                    <p class="nav-feature-desc">Talk to any model. Switch mid-thread.</p>
+                  </div>
+                </button>
+                <button type="button" data-feature="projects" class="nav-feature">
+                  <span class="nav-feature-icon" style="background:#FEF3C7;">
+                    <svg viewBox="0 0 24 24" fill="none" style="color:#F59E0B;"><path d="M3 7l9-4 9 4v10l-9 4-9-4V7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                  </span>
+                  <div class="nav-feature-content">
+                    <p class="nav-feature-title">Projects</p>
+                    <p class="nav-feature-desc">Folders that remember everything.</p>
+                  </div>
+                </button>
+                <button type="button" data-feature="agents" class="nav-feature">
+                  <span class="nav-feature-icon" style="background:rgba(220,38,38,0.10);">
+                    <svg viewBox="0 0 24 24" fill="none" style="color:#DC2626;"><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="1.8"/></svg>
+                  </span>
+                  <div class="nav-feature-content">
+                    <p class="nav-feature-title">Agents</p>
+                    <p class="nav-feature-desc">Send work into the background.</p>
+                  </div>
+                </button>
+                <button type="button" data-feature="knowledge" class="nav-feature">
+                  <span class="nav-feature-icon" style="background:rgba(10,10,10,0.05);">
+                    <svg viewBox="0 0 24 24" fill="none" style="color:#0A0A0A;"><path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4V4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 9h6M9 13h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  </span>
+                  <div class="nav-feature-content">
+                    <p class="nav-feature-title">Knowledge</p>
+                    <p class="nav-feature-desc">Your team's library, asked plain.</p>
+                  </div>
+                </button>
+                <button type="button" data-feature="spaces" class="nav-feature">
+                  <span class="nav-feature-icon" style="background:#FCD34D;">
+                    <svg viewBox="0 0 24 24" fill="none" style="color:#0A0A0A;"><circle cx="9" cy="9" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="14" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 21v-2a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v2" stroke="currentColor" stroke-width="1.8"/></svg>
+                  </span>
+                  <div class="nav-feature-content">
+                    <p class="nav-feature-title">Spaces</p>
+                    <p class="nav-feature-desc">Shared rooms for the team.</p>
+                  </div>
+                </button>
+                <button type="button" data-feature="history" class="nav-feature">
+                  <span class="nav-feature-icon" style="background:#0A0A0A;">
+                    <svg viewBox="0 0 24 24" fill="none" style="color:#FCD34D;"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  </span>
+                  <div class="nav-feature-content">
+                    <p class="nav-feature-title">History</p>
+                    <p class="nav-feature-desc">Find anything in one keystroke.</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Research -->
+        <div class="nav-item" data-nav="research">
+          <a href="/research.html" class="nav-trigger is-active" aria-haspopup="true" aria-expanded="false">
+            Research
+            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="nav-dropdown" role="menu">
+            <div class="nav-dropdown-inner nav-w-md">
+              <div class="nav-col-left">
+                <p class="nav-eyebrow">From the lab</p>
+                <h3 class="nav-headline">Methodology,<br />plainly written.</h3>
+                <p class="nav-description">We share how the models think, where they fall short, and what we are doing about it.</p>
+                <a href="/research.html" class="nav-cta">See all research<svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
+              </div>
+              <div class="nav-col-right nav-stack">
+                <a href="#research" class="nav-feature">
+                  <div class="nav-feature-content">
+                    <span class="nav-feature-meta">Paper · Nov 2026</span>
+                    <p class="nav-feature-title nav-feature-title-block">Adaptive depth: when models should think longer</p>
+                    <p class="nav-feature-desc">A study on dynamically allocating compute per token, and the surprising places it pays off.</p>
+                  </div>
+                </a>
+                <a href="#research" class="nav-feature">
+                  <div class="nav-feature-content">
+                    <span class="nav-feature-meta">Engineering · Oct 2026</span>
+                    <p class="nav-feature-title nav-feature-title-block">How Prometheus runs for hours without losing the plot</p>
+                    <p class="nav-feature-desc">Memory hierarchies, plan critique, and the engineering behind reliable long-horizon agents.</p>
+                  </div>
+                </a>
+                <a href="#research" class="nav-feature">
+                  <div class="nav-feature-content">
+                    <span class="nav-feature-meta">Note · Sep 2026</span>
+                    <p class="nav-feature-title nav-feature-title-block">Our approach to evaluation, red-teaming, and refusals</p>
+                    <p class="nav-feature-desc">A pragmatic framework for measuring what matters — and being honest about what we cannot yet measure.</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Updates (replaces Trust in nav) -->
+        <div class="nav-item nav-item-right" data-nav="updates">
+          <a href="/updates.html" class="nav-trigger" aria-haspopup="true" aria-expanded="false">
+            Updates
+            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="nav-dropdown" role="menu">
+            <div class="nav-dropdown-inner nav-w-md">
+              <div class="nav-col-left">
+                <p class="nav-eyebrow">What's new</p>
+                <h3 class="nav-headline">The platform,<br />this week.</h3>
+                <p class="nav-description">Releases, model updates, and platform notes — every change in one place. No inbox archaeology required.</p>
+                <a href="/updates.html" class="nav-cta">Open the changelog<svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
+              </div>
+              <div class="nav-col-right nav-stack">
+                <a href="#research" class="nav-feature">
+                  <div class="nav-feature-content">
+                    <span class="nav-feature-meta nav-meta-release">Release · Nov 12</span>
+                    <p class="nav-feature-title nav-feature-title-block">Prometheus 2.0 — agents that run for hours</p>
+                    <p class="nav-feature-desc">Live now. Plan-and-critique, deterministic replay, and approval gates for sensitive steps.</p>
+                  </div>
+                </a>
+                <a href="#workspace" class="nav-feature">
+                  <div class="nav-feature-content">
+                    <span class="nav-feature-meta">Improvement · Nov 5</span>
+                    <p class="nav-feature-title nav-feature-title-block">Spaces v2: live presence + threaded comments</p>
+                    <p class="nav-feature-desc">See who is reading what right now, and comment on any line — agent steps included.</p>
+                  </div>
+                </a>
+                <a href="#models" class="nav-feature">
+                  <div class="nav-feature-content">
+                    <span class="nav-feature-meta">Model · Oct 28</span>
+                    <p class="nav-feature-title nav-feature-title-block">Ether sub-100ms median, worldwide</p>
+                    <p class="nav-feature-desc">A new routing layer cuts first-token latency by 38% across all regions.</p>
+                  </div>
+                </a>
+                <a href="#" class="nav-feature">
+                  <div class="nav-feature-content">
+                    <span class="nav-feature-meta nav-meta-event">Event · Dec 5</span>
+                    <p class="nav-feature-title nav-feature-title-block">HelveX Forum · Zurich</p>
+                    <p class="nav-feature-desc">A morning of demos and conversations with the team. Engineering, research, and customers.</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="flex items-center gap-1 sm:gap-2">
+        <a href="/signup.html" class="hidden sm:inline-flex text-[14px] font-medium text-ink-mid hover:text-ink px-3 py-2 transition-colors">Sign in</a>
+        <a href="/signup.html" class="btn-primary inline-flex items-center gap-1.5 bg-ink hover:bg-ink-soft text-white text-[13px] font-semibold px-4 py-2.5 rounded-full transition-colors btn-shadow">
+          Enter Platform
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </nav>
+  </header>
+  <!-- ════════ HERO ════════ -->
+  <section class="relative pt-14 sm:pt-24 pb-16 sm:pb-24 overflow-hidden bg-beige border-b border-line-soft">
+    <div class="hero-orb hero-orb-1" style="opacity: 0.25;"></div>
+
+    <div class="relative max-w-5xl mx-auto px-6 sm:px-8 text-center">
+      <p class="reveal section-mark justify-center mb-7">Research at HelveX</p>
+      <h1 class="reveal h-display balance text-[44px] sm:text-7xl lg:text-[88px] mb-6">
+        How we think<br />
+        <span class="italic font-serif font-normal">about intelligence.</span>
+      </h1>
+      <p class="reveal pretty text-base sm:text-xl text-ink-mid max-w-2xl mx-auto leading-relaxed">
+        We share methodology, not magic. The papers, engineering posts, and notes below are how we work in public — what we tried, what worked, and where the answer is still open.
+      </p>
+    </div>
+  </section>
+
+  <!-- ════════ FEATURED PAPER ════════ -->
+  <section class="py-20 sm:py-28">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8">
+      <p class="reveal section-mark mb-7">Featured</p>
+      <a href="#" class="reveal card group block rounded-3xl border border-line overflow-hidden hover:border-ink/20 bg-white">
+        <div class="grid lg:grid-cols-12">
+          <div class="lg:col-span-6 aspect-[16/9] lg:aspect-auto relative bg-gradient-to-br from-yellow via-yellow-soft to-cream overflow-hidden">
+            <div class="absolute inset-0 grid-bg-light opacity-30"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="font-serif italic text-5xl sm:text-7xl text-ink/40">∇ depth</span>
+            </div>
+            <div class="absolute bottom-5 left-5 text-[10px] font-mono uppercase tracking-widest text-ink/60">Fig.01 · attention layers</div>
+          </div>
+          <div class="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-center">
+            <p class="h-eyebrow text-ink-light mb-4">Paper · Nov 2026 · 24 pages</p>
+            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tightest mb-4 leading-tight group-hover:text-red transition-colors">Adaptive depth: when models should think longer</h2>
+            <p class="text-base text-ink-mid leading-relaxed mb-6 pretty">
+              A study on dynamically allocating compute per token. We measure where additional inference depth pays off, where it costs more than it returns, and how the routing model decides — including the failure modes that surprised us.
+            </p>
+            <div class="flex flex-wrap gap-2 mb-6">
+              <span class="text-[11px] bg-cream border border-line rounded-full px-3 py-1 text-ink-mid">Inference</span>
+              <span class="text-[11px] bg-cream border border-line rounded-full px-3 py-1 text-ink-mid">Routing</span>
+              <span class="text-[11px] bg-cream border border-line rounded-full px-3 py-1 text-ink-mid">Compute efficiency</span>
+            </div>
+            <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-ink group-hover:text-red transition-colors">Read the paper <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ════════ RESEARCH AREAS ════════ -->
+  <section class="py-20 sm:py-28 bg-cream/40 border-y border-line">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8">
+      <div class="max-w-3xl mb-12 sm:mb-16">
+        <p class="reveal section-mark mb-7">Areas</p>
+        <h2 class="reveal h-section balance text-4xl sm:text-5xl mb-5">What we work on.</h2>
+        <p class="reveal pretty text-base sm:text-lg text-ink-mid leading-relaxed">
+          Six concentrations across the team. The list isn't exhaustive — it's the work we believe matters most for the next era of capable, honest AI.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="reveal card border border-line rounded-2xl p-7 bg-white hover:border-ink/20">
+          <div class="text-4xl font-extrabold tracking-tightest mb-3 text-ink">01</div>
+          <h3 class="text-lg font-bold tracking-tight mb-3">Reasoning</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">How models allocate thought, when they should slow down, and what makes a chain of reasoning trustworthy enough to act on.</p>
+        </div>
+        <div class="reveal card border border-line rounded-2xl p-7 bg-white hover:border-ink/20">
+          <div class="text-4xl font-extrabold tracking-tightest mb-3 text-red">02</div>
+          <h3 class="text-lg font-bold tracking-tight mb-3">Long-horizon agents</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Memory hierarchies, plan critique, deterministic replay — the engineering of agents that hold their head over hours of work.</p>
+        </div>
+        <div class="reveal card border border-line rounded-2xl p-7 bg-white hover:border-ink/20">
+          <div class="text-4xl font-extrabold tracking-tightest mb-3 text-yellow-deep">03</div>
+          <h3 class="text-lg font-bold tracking-tight mb-3">Evaluation</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Measuring what matters. Benchmarks that map to actual outcomes, and the honest limits of what current evaluations can claim.</p>
+        </div>
+        <div class="reveal card border border-line rounded-2xl p-7 bg-white hover:border-ink/20">
+          <div class="text-4xl font-extrabold tracking-tightest mb-3 text-ink">04</div>
+          <h3 class="text-lg font-bold tracking-tight mb-3">Safety &amp; alignment</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Refusals, red-teaming, failure mode taxonomies, and the engineering of guardrails that don't degrade the model into unhelpfulness.</p>
+        </div>
+        <div class="reveal card border border-line rounded-2xl p-7 bg-white hover:border-ink/20">
+          <div class="text-4xl font-extrabold tracking-tightest mb-3 text-red">05</div>
+          <h3 class="text-lg font-bold tracking-tight mb-3">Multimodal grounding</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Reading documents, charts, diagrams, scans, and audio with the same reliability as well-formatted text. The hard half of "multimodal."</p>
+        </div>
+        <div class="reveal card border border-line rounded-2xl p-7 bg-white hover:border-ink/20">
+          <div class="text-4xl font-extrabold tracking-tightest mb-3 text-yellow-deep">06</div>
+          <h3 class="text-lg font-bold tracking-tight mb-3">Retrieval &amp; citation</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Hybrid search, permission-aware retrieval, and how to make every claim traceable to the source it came from.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ PUBLICATIONS GRID ════════ -->
+  <section class="py-20 sm:py-28">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8">
+      <div class="flex items-end justify-between mb-12 sm:mb-16 flex-wrap gap-6">
+        <div>
+          <p class="reveal section-mark mb-7">Publications</p>
+          <h2 class="reveal h-section balance text-4xl sm:text-5xl">Recent work, in our own words.</h2>
+        </div>
+        <p class="reveal text-sm text-ink-mid font-mono">9 of 47 · <a href="#" class="underline hover:text-ink">show all</a></p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+
+        <a href="#" class="reveal card group block bg-white border border-line rounded-2xl overflow-hidden hover:border-ink/20">
+          <div class="aspect-[4/3] bg-gradient-to-br from-yellow via-yellow-soft to-cream relative overflow-hidden">
+            <div class="absolute inset-0 grid-bg-light opacity-30"></div>
+            <div class="absolute bottom-4 left-4 text-[10px] font-mono uppercase tracking-widest text-ink/60">Fig.01 · attention layers</div>
+          </div>
+          <div class="p-6">
+            <p class="h-eyebrow text-ink-light mb-3">Paper · Nov 2026</p>
+            <h3 class="text-lg font-bold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors">Adaptive depth: when models should think longer</h3>
+            <p class="text-sm text-ink-mid leading-relaxed">Dynamically allocating compute per token, and the surprising places it pays off.</p>
+          </div>
+        </a>
+
+        <a href="#" class="reveal card group block bg-white border border-line rounded-2xl overflow-hidden hover:border-ink/20">
+          <div class="aspect-[4/3] bg-gradient-to-br from-red-soft via-red/10 to-cream relative overflow-hidden">
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 30% 40%, rgba(220,38,38,0.25), transparent 50%);"></div>
+            <div class="absolute bottom-4 left-4 text-[10px] font-mono uppercase tracking-widest text-ink/60">Fig.02 · agent traces</div>
+          </div>
+          <div class="p-6">
+            <p class="h-eyebrow text-ink-light mb-3">Engineering · Oct 2026</p>
+            <h3 class="text-lg font-bold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors">How Prometheus runs for hours without losing the plot</h3>
+            <p class="text-sm text-ink-mid leading-relaxed">Memory hierarchies, plan critique, and the engineering behind reliable long-horizon agents.</p>
+          </div>
+        </a>
+
+        <a href="#" class="reveal card group block bg-white border border-line rounded-2xl overflow-hidden hover:border-ink/20">
+          <div class="aspect-[4/3] bg-ink relative overflow-hidden">
+            <div class="absolute inset-0 grid-bg-dark opacity-60"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="text-yellow font-serif italic text-3xl">trust</span>
+            </div>
+            <div class="absolute bottom-4 left-4 text-[10px] font-mono uppercase tracking-widest text-white/40">Note · safety</div>
+          </div>
+          <div class="p-6">
+            <p class="h-eyebrow text-ink-light mb-3">Note · Sep 2026</p>
+            <h3 class="text-lg font-bold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors">Our approach to evaluation, red-teaming, and refusals</h3>
+            <p class="text-sm text-ink-mid leading-relaxed">A pragmatic framework for measuring what matters — and being honest about what we cannot yet measure.</p>
+          </div>
+        </a>
+
+        <a href="#" class="reveal card group block bg-white border border-line rounded-2xl overflow-hidden hover:border-ink/20">
+          <div class="aspect-[4/3] bg-gradient-to-br from-cream to-beige-warm relative overflow-hidden">
+            <div class="absolute inset-0 grid-bg-light opacity-30"></div>
+            <div class="absolute bottom-4 left-4 text-[10px] font-mono uppercase tracking-widest text-ink/60">Fig.03 · retrieval</div>
+          </div>
+          <div class="p-6">
+            <p class="h-eyebrow text-ink-light mb-3">Paper · Aug 2026</p>
+            <h3 class="text-lg font-bold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors">Permission-aware retrieval at workspace scale</h3>
+            <p class="text-sm text-ink-mid leading-relaxed">Building a retrieval system where the answer is correct, the citation is traceable, and the user is never shown what they shouldn't see.</p>
+          </div>
+        </a>
+
+        <a href="#" class="reveal card group block bg-white border border-line rounded-2xl overflow-hidden hover:border-ink/20">
+          <div class="aspect-[4/3] bg-gradient-to-br from-yellow-soft to-cream relative overflow-hidden">
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 70% 30%, rgba(252,211,77,0.40), transparent 50%);"></div>
+            <div class="absolute bottom-4 left-4 text-[10px] font-mono uppercase tracking-widest text-ink/60">Fig.04 · latency</div>
+          </div>
+          <div class="p-6">
+            <p class="h-eyebrow text-ink-light mb-3">Engineering · Aug 2026</p>
+            <h3 class="text-lg font-bold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors">Cutting first-token latency by 38%</h3>
+            <p class="text-sm text-ink-mid leading-relaxed">A new routing layer behind Ether's sub-100ms median response. What we changed and what we learned about queueing under bursty load.</p>
+          </div>
+        </a>
+
+        <a href="#" class="reveal card group block bg-white border border-line rounded-2xl overflow-hidden hover:border-ink/20">
+          <div class="aspect-[4/3] bg-gradient-to-br from-red-soft to-cream relative overflow-hidden">
+            <div class="absolute inset-0 grid-bg-light opacity-30"></div>
+            <div class="absolute bottom-4 left-4 text-[10px] font-mono uppercase tracking-widest text-ink/60">Fig.05 · vision</div>
+          </div>
+          <div class="p-6">
+            <p class="h-eyebrow text-ink-light mb-3">Paper · Jul 2026</p>
+            <h3 class="text-lg font-bold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors">Reading the documents people actually read</h3>
+            <p class="text-sm text-ink-mid leading-relaxed">Real-world evaluation on annotated PDFs, slides with multi-column layout, and handwritten scans. Where current vision models still fail.</p>
+          </div>
+        </a>
+
+        <a href="#" class="reveal card group block bg-white border border-line rounded-2xl overflow-hidden hover:border-ink/20">
+          <div class="aspect-[4/3] bg-ink relative overflow-hidden">
+            <div class="absolute inset-0 grid-bg-dark opacity-50"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="text-yellow font-serif italic text-3xl">policy</span>
+            </div>
+            <div class="absolute bottom-4 left-4 text-[10px] font-mono uppercase tracking-widest text-white/40">Note · alignment</div>
+          </div>
+          <div class="p-6">
+            <p class="h-eyebrow text-ink-light mb-3">Note · Jun 2026</p>
+            <h3 class="text-lg font-bold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors">A taxonomy of refusals — and when they are wrong</h3>
+            <p class="text-sm text-ink-mid leading-relaxed">When over-cautious refusals make a model less helpful — and how we evaluate the trade-off without overclaiming safety.</p>
+          </div>
+        </a>
+
+        <a href="#" class="reveal card group block bg-white border border-line rounded-2xl overflow-hidden hover:border-ink/20">
+          <div class="aspect-[4/3] bg-gradient-to-br from-cream to-yellow-soft relative overflow-hidden">
+            <div class="absolute inset-0 grid-bg-light opacity-30"></div>
+            <div class="absolute bottom-4 left-4 text-[10px] font-mono uppercase tracking-widest text-ink/60">Fig.06 · evals</div>
+          </div>
+          <div class="p-6">
+            <p class="h-eyebrow text-ink-light mb-3">Paper · May 2026</p>
+            <h3 class="text-lg font-bold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors">Benchmarks that mean what they say</h3>
+            <p class="text-sm text-ink-mid leading-relaxed">A framework for evaluating models on tasks that matter — and disclosing where the benchmark is gameable.</p>
+          </div>
+        </a>
+
+        <a href="#" class="reveal card group block bg-white border border-line rounded-2xl overflow-hidden hover:border-ink/20">
+          <div class="aspect-[4/3] bg-gradient-to-br from-beige-warm to-cream relative overflow-hidden">
+            <div class="absolute inset-0 grid-bg-light opacity-30"></div>
+            <div class="absolute bottom-4 left-4 text-[10px] font-mono uppercase tracking-widest text-ink/60">Fig.07 · context</div>
+          </div>
+          <div class="p-6">
+            <p class="h-eyebrow text-ink-light mb-3">Engineering · Apr 2026</p>
+            <h3 class="text-lg font-bold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors">Living with a 1M-token context window</h3>
+            <p class="text-sm text-ink-mid leading-relaxed">What changes when the model can hold a whole case file at once — and what stays the same.</p>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ COMMITMENTS ════════ -->
+  <section class="bg-ink text-white py-20 sm:py-28 overflow-hidden relative">
+    <div class="absolute inset-0 grid-bg-dark"></div>
+    <div class="hero-orb hero-orb-1" style="top: -180px; right: -120px; opacity: 0.15;"></div>
+
+    <div class="relative max-w-5xl mx-auto px-6 sm:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+        <div>
+          <p class="reveal section-mark text-yellow mb-7">Open questions</p>
+          <h2 class="reveal h-section text-4xl sm:text-5xl balance">What we are still working on.</h2>
+        </div>
+        <div class="reveal text-base sm:text-lg text-white/70 leading-relaxed pretty space-y-5">
+          <p>Long-horizon agents that hold their head over a full workday without human nudging.</p>
+          <p>Evaluations that capture useful work, not just academic benchmarks.</p>
+          <p>Honest refusals — saying no for the right reasons, not for the easy ones.</p>
+          <p>Retrieval that respects permissions and never leaks what it shouldn't.</p>
+          <p>Reasoning we can audit, not just trust.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ FOOTER ════════ -->
+  <footer class="pt-16 sm:pt-20 pb-10 bg-white">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8">
+      <div class="grid lg:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-12 sm:gap-8 mb-14 sm:mb-16">
+        <div>
+          <a href="/" class="brand-mark text-2xl flex items-center gap-2 mb-4">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none"><path d="M4 4h4v16H4V4zm12 0h4v16h-4V4zM8 11h8v2H8v-2z" fill="currentColor"/></svg>
+            Helve<span class="x">X</span>
+          </a>
+          <p class="text-sm text-ink-mid leading-relaxed max-w-sm mb-6">
+            Ether, Nexus, Prometheus — and the workspace around them. Designed and built in Switzerland.
+          </p>
+          <form class="flex gap-2 max-w-sm" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed ✓';">
+            <input type="email" placeholder="you@company.com" class="flex-1 border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-ink/40 transition-colors" />
+            <button type="submit" class="bg-ink hover:bg-ink-soft text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors whitespace-nowrap">Subscribe</button>
+          </form>
+          <p class="text-[11px] text-ink-light mt-2">Monthly digest. No spam. Unsubscribe anytime.</p>
+        </div>
+        <div>
+          <p class="h-eyebrow text-ink-light mb-4">Product</p>
+          <ul class="space-y-2.5 text-sm text-ink-soft">
+            <li><a href="#models" class="hover:text-red transition-colors">Models</a></li>
+            <li><a href="#workspace" class="hover:text-red transition-colors">Workspace</a></li>
+            <li><a href="#trust" class="hover:text-red transition-colors">Trust</a></li>
+            <li><a href="/signup.html" class="hover:text-red transition-colors">Enter platform</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="h-eyebrow text-ink-light mb-4">Company</p>
+          <ul class="space-y-2.5 text-sm text-ink-soft">
+            <li><a href="#" class="hover:text-red transition-colors">About</a></li>
+            <li><a href="#research" class="hover:text-red transition-colors">Research</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Careers</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Press</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Brand</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="h-eyebrow text-ink-light mb-4">Resources</p>
+          <ul class="space-y-2.5 text-sm text-ink-soft">
+            <li><a href="#" class="hover:text-red transition-colors">Help center</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Status</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Changelog</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Community</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="h-eyebrow text-ink-light mb-4">Legal</p>
+          <ul class="space-y-2.5 text-sm text-ink-soft">
+            <li><a href="#trust" class="hover:text-red transition-colors">Trust center</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Privacy</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Terms</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Security</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">DPA</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-line pt-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs text-ink-mid">
+        <p>© 2026 HelveX AG · All rights reserved.</p>
+        <div class="flex items-center gap-5">
+          <a href="#" aria-label="X / Twitter" class="text-ink-mid hover:text-ink transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="#" aria-label="LinkedIn" class="text-ink-mid hover:text-ink transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5a5 5 0 00-5 5v14a5 5 0 005 5h14a5 5 0 005-5V5a5 5 0 00-5-5zM8 19H5V8h3v11zm-1.5-12.3a1.7 1.7 0 110-3.4 1.7 1.7 0 010 3.4zM20 19h-3v-5.6c0-1.4-.5-2.4-1.7-2.4-1 0-1.6.7-1.8 1.3-.1.2-.1.5-.1.8V19h-3V8h3v1.3c.4-.6 1.1-1.5 2.7-1.5 2 0 3.5 1.3 3.5 4.1V19z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/helvex.js" defer></script>
+</body>
+</html>
