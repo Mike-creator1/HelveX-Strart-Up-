@@ -139,22 +139,81 @@
       width: 100%;
       cursor: pointer;
       background: #fff;
-      transition: background 0.25s;
+      transition: background 0.3s cubic-bezier(0.22,1,0.36,1);
     }
     .ws-card:hover { background: #FAFAF7; }
     .ws-card:focus-visible {
       outline: none;
       box-shadow: inset 0 0 0 2px rgba(10,10,10,0.18);
     }
-    .ws-card .ws-arrow {
-      transform: translateX(-4px);
-      opacity: 0;
-      transition: opacity 0.3s, transform 0.3s cubic-bezier(0.22,1,0.36,1);
+
+    /* Always-visible indicator pill — black ring, fills on hover */
+    .ws-indicator {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 9999px;
+      background: #ffffff;
+      border: 1.5px solid #0A0A0A;
+      color: #0A0A0A;
+      flex-shrink: 0;
+      transition:
+        background 0.35s cubic-bezier(0.22,1,0.36,1),
+        color 0.35s cubic-bezier(0.22,1,0.36,1),
+        transform 0.35s cubic-bezier(0.22,1,0.36,1),
+        box-shadow 0.35s cubic-bezier(0.22,1,0.36,1);
     }
-    .ws-card:hover .ws-arrow,
-    .ws-card:focus-visible .ws-arrow {
-      transform: translateX(0);
-      opacity: 1;
+    .ws-indicator svg {
+      width: 15px;
+      height: 15px;
+      transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+    }
+    .ws-card:hover .ws-indicator,
+    .ws-card:focus-visible .ws-indicator {
+      background: #0A0A0A;
+      color: #FCD34D;
+      transform: scale(1.06);
+      box-shadow: 0 6px 18px -4px rgba(10,10,10,0.35);
+    }
+    .ws-card:hover .ws-indicator svg,
+    .ws-card:focus-visible .ws-indicator svg {
+      transform: translateX(2px);
+    }
+    .ws-card:active .ws-indicator {
+      transform: scale(0.98);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ws-indicator, .ws-indicator svg { transition: none !important; }
+    }
+
+    /* Hint text (mobile-friendly affordance) */
+    .ws-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font: 700 10.5px/1 'Inter', sans-serif;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #525252;
+      margin-top: 18px;
+      transition: color 0.3s, gap 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .ws-card:hover .ws-hint,
+    .ws-card:focus-visible .ws-hint {
+      color: #DC2626;
+      gap: 10px;
+    }
+    .ws-hint::after {
+      content: '';
+      width: 14px; height: 1px;
+      background: currentColor;
+      transition: width 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .ws-card:hover .ws-hint::after,
+    .ws-card:focus-visible .ws-hint::after {
+      width: 22px;
     }
 
     /* ── Workspace modal ──────────────────────────────────────── */
@@ -190,7 +249,7 @@
     .ws-modal-panel {
       position: relative;
       width: 100%;
-      max-width: 780px;
+      max-width: 860px;
       background: #fff;
       border-radius: 24px;
       border: 1px solid #E5E5E5;
@@ -331,6 +390,88 @@
     }
     .ws-tags li:hover { background: #fff; border-color: #D4D4D4; }
 
+    /* Workflow examples (scenario cards) */
+    .ws-examples-wrap { padding: 0 40px 32px; }
+    .ws-examples-wrap h4 {
+      font: 700 11px/1 'Inter', sans-serif;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: #A3A3A3;
+      margin: 0 0 14px;
+    }
+    .ws-examples-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .ws-example {
+      border: 1px solid #E5E5E5;
+      background: #FAFAF7;
+      border-radius: 12px;
+      padding: 16px 16px 18px;
+    }
+    .ws-example-tag {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #DC2626;
+      margin-bottom: 10px;
+    }
+    .ws-example-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0A0A0A;
+      margin: 0 0 6px;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+    .ws-example-body {
+      font-size: 12.5px;
+      color: #525252;
+      margin: 0;
+      line-height: 1.55;
+    }
+    @media (max-width: 720px) {
+      .ws-examples-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Productivity bullet row */
+    .ws-benefits-wrap { padding: 0 40px 32px; }
+    .ws-benefits-wrap h4 {
+      font: 700 11px/1 'Inter', sans-serif;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: #A3A3A3;
+      margin: 0 0 14px;
+    }
+    .ws-benefits {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .ws-benefits li {
+      font-size: 13px;
+      color: #171717;
+      line-height: 1.5;
+      padding-left: 22px;
+      position: relative;
+    }
+    .ws-benefits li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 6px;
+      width: 14px; height: 1.5px;
+      background: #DC2626;
+    }
+    @media (max-width: 720px) {
+      .ws-benefits { grid-template-columns: 1fr; gap: 10px; }
+    }
+
     .ws-mockup-wrap { padding: 0 40px 32px; }
     .ws-mockup {
       background: #0A0A0A;
@@ -383,7 +524,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .ws-modal, .ws-modal-panel, .ws-card .ws-arrow {
+      .ws-modal, .ws-modal-panel, .ws-indicator, .ws-hint {
         transition: none !important;
       }
     }
@@ -710,69 +851,87 @@
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-line border border-line rounded-3xl overflow-hidden">
 
         <button type="button" data-feature="chat" class="ws-card reveal p-8 sm:p-10 group">
-          <div class="w-10 h-10 rounded-lg bg-ink/5 flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="currentColor" stroke-width="1.8"/></svg>
+          <div class="flex items-start justify-between gap-3 mb-6">
+            <div class="w-10 h-10 rounded-lg bg-ink/5 flex items-center justify-center">
+              <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="currentColor" stroke-width="1.8"/></svg>
+            </div>
+            <span class="ws-indicator" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
           </div>
-          <div class="flex items-center justify-between gap-2 mb-2">
-            <h3 class="text-xl font-bold tracking-tight">Chat</h3>
-            <svg class="ws-arrow w-4 h-4 text-ink-mid" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Chat</h3>
           <p class="text-sm text-ink-mid leading-relaxed">Talk to any model. Switch mid-conversation without losing the thread. Voice, files, images — all in one place.</p>
+          <span class="ws-hint">Explore</span>
         </button>
 
         <button type="button" data-feature="projects" class="ws-card reveal p-8 sm:p-10 group">
-          <div class="w-10 h-10 rounded-lg bg-yellow-soft flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-yellow-deep" viewBox="0 0 24 24" fill="none"><path d="M3 7l9-4 9 4v10l-9 4-9-4V7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          <div class="flex items-start justify-between gap-3 mb-6">
+            <div class="w-10 h-10 rounded-lg bg-yellow-soft flex items-center justify-center">
+              <svg class="w-5 h-5 text-yellow-deep" viewBox="0 0 24 24" fill="none"><path d="M3 7l9-4 9 4v10l-9 4-9-4V7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="ws-indicator" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
           </div>
-          <div class="flex items-center justify-between gap-2 mb-2">
-            <h3 class="text-xl font-bold tracking-tight">Projects</h3>
-            <svg class="ws-arrow w-4 h-4 text-ink-mid" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Projects</h3>
           <p class="text-sm text-ink-mid leading-relaxed">Folders that remember. Drop in your context once and every chat inside picks it up — no copy-paste rituals.</p>
+          <span class="ws-hint">Explore</span>
         </button>
 
         <button type="button" data-feature="agents" class="ws-card reveal p-8 sm:p-10 group">
-          <div class="w-10 h-10 rounded-lg bg-red/10 flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-red" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="1.8"/></svg>
+          <div class="flex items-start justify-between gap-3 mb-6">
+            <div class="w-10 h-10 rounded-lg bg-red/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-red" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="1.8"/></svg>
+            </div>
+            <span class="ws-indicator" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
           </div>
-          <div class="flex items-center justify-between gap-2 mb-2">
-            <h3 class="text-xl font-bold tracking-tight">Agents</h3>
-            <svg class="ws-arrow w-4 h-4 text-ink-mid" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Agents</h3>
           <p class="text-sm text-ink-mid leading-relaxed">Assistants that take action. Set them off, watch the live trace, come back to a finished result.</p>
+          <span class="ws-hint">Explore</span>
         </button>
 
         <button type="button" data-feature="knowledge" class="ws-card reveal p-8 sm:p-10 group">
-          <div class="w-10 h-10 rounded-lg bg-ink/5 flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4V4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 9h6M9 13h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <div class="flex items-start justify-between gap-3 mb-6">
+            <div class="w-10 h-10 rounded-lg bg-ink/5 flex items-center justify-center">
+              <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4V4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 9h6M9 13h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <span class="ws-indicator" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
           </div>
-          <div class="flex items-center justify-between gap-2 mb-2">
-            <h3 class="text-xl font-bold tracking-tight">Knowledge</h3>
-            <svg class="ws-arrow w-4 h-4 text-ink-mid" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Knowledge</h3>
           <p class="text-sm text-ink-mid leading-relaxed">Bring your team's documents, decks, and notes. Ask anything across them — the answer cites the source.</p>
+          <span class="ws-hint">Explore</span>
         </button>
 
         <button type="button" data-feature="spaces" class="ws-card reveal p-8 sm:p-10 group">
-          <div class="w-10 h-10 rounded-lg bg-yellow flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="14" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 21v-2a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v2" stroke="currentColor" stroke-width="1.8"/></svg>
+          <div class="flex items-start justify-between gap-3 mb-6">
+            <div class="w-10 h-10 rounded-lg bg-yellow flex items-center justify-center">
+              <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="14" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 21v-2a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v2" stroke="currentColor" stroke-width="1.8"/></svg>
+            </div>
+            <span class="ws-indicator" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
           </div>
-          <div class="flex items-center justify-between gap-2 mb-2">
-            <h3 class="text-xl font-bold tracking-tight">Spaces</h3>
-            <svg class="ws-arrow w-4 h-4 text-ink-mid" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Spaces</h3>
           <p class="text-sm text-ink-mid leading-relaxed">Shared workspaces where teams plan, pair, and review. The same chats and agents, owned together.</p>
+          <span class="ws-hint">Explore</span>
         </button>
 
         <button type="button" data-feature="history" class="ws-card reveal p-8 sm:p-10 group">
-          <div class="w-10 h-10 rounded-lg bg-ink flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-yellow" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <div class="flex items-start justify-between gap-3 mb-6">
+            <div class="w-10 h-10 rounded-lg bg-ink flex items-center justify-center">
+              <svg class="w-5 h-5 text-yellow" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <span class="ws-indicator" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
           </div>
-          <div class="flex items-center justify-between gap-2 mb-2">
-            <h3 class="text-xl font-bold tracking-tight">History</h3>
-            <svg class="ws-arrow w-4 h-4 text-ink-mid" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">History</h3>
           <p class="text-sm text-ink-mid leading-relaxed">Every conversation, every agent run, fully searchable. The thing you said three weeks ago, in one keystroke.</p>
+          <span class="ws-hint">Explore</span>
         </button>
       </div>
     </div>
@@ -795,31 +954,56 @@
           </div>
           <p class="h-eyebrow text-red">Workspace · Chat</p>
           <h2 id="ws-chat-title">Talk to the model that fits the moment.</h2>
-          <p class="ws-hero-sub">One thread. Switch from Ether to Nexus to Prometheus mid-conversation without losing context, files, or history.</p>
+          <p class="ws-hero-sub">A single thread that escalates from instant to deep to autonomous. Ether for speed, Nexus when accuracy matters, Prometheus when the work itself needs doing — same memory, same context, no copy-paste.</p>
         </div>
 
         <div class="ws-grid">
           <section>
             <h4>How it works</h4>
             <ol class="ws-steps">
-              <li>Open a new chat or pick up where you left off.</li>
-              <li>Ask in text, voice, or by dropping a file.</li>
-              <li>HelveX picks the right model — or you can pin one.</li>
-              <li>Escalate mid-thread from speed to depth to action.</li>
+              <li>Open a new chat or pick up where you left off — past threads stay in the sidebar tagged with the model that wrote them.</li>
+              <li>Type, talk, or drop a file. Inline attachments up to 100&nbsp;MB.</li>
+              <li>HelveX picks the model based on your latency, depth, and budget targets — or you pin one yourself.</li>
+              <li>Need more depth mid-thread? Press <span class="font-mono text-ink">⌘E</span> to escalate. Full conversation context comes with you.</li>
+              <li>Ready to act? Hand the thread to a Prometheus agent — it inherits everything said so far.</li>
             </ol>
           </section>
           <section>
             <h4>Capabilities</h4>
             <ul class="ws-tags">
+              <li>Mid-thread escalation (⌘E)</li>
               <li>Voice in 14 languages</li>
               <li>Image understanding</li>
               <li>File attachments</li>
               <li>Forked threads</li>
               <li>Saved snippets</li>
-              <li>Mentions &amp; reactions</li>
-              <li>Diff view for revisions</li>
+              <li>@-mentions</li>
+              <li>Diff view</li>
+              <li>Auto-pruning context</li>
+              <li>Resume from any message</li>
             </ul>
           </section>
+        </div>
+
+        <div class="ws-examples-wrap">
+          <h4>Workflow examples</h4>
+          <div class="ws-examples-grid">
+            <div class="ws-example">
+              <div class="ws-example-tag">Drafting</div>
+              <p class="ws-example-title">Tighten a 2,000-word draft</p>
+              <p class="ws-example-body">Ether returns a tightened pass in 3 seconds. You spot a fact that needs verifying. ⌘E to Nexus — same thread, same draft, now with citations.</p>
+            </div>
+            <div class="ws-example">
+              <div class="ws-example-tag">Translation</div>
+              <p class="ws-example-title">German support reply, formal register</p>
+              <p class="ws-example-body">Ether streams the translation in under a second, preserves the original tone, flags one idiom worth a human eye.</p>
+            </div>
+            <div class="ws-example">
+              <div class="ws-example-tag">Transcript</div>
+              <p class="ws-example-title">Three numbers from a 90-minute call</p>
+              <p class="ws-example-body">Drop the audio. Ether transcribes, isolates the figures, returns a markdown table you can paste anywhere.</p>
+            </div>
+          </div>
         </div>
 
         <div class="ws-mockup-wrap">
@@ -831,6 +1015,15 @@
             <div class="meta">— escalated to Nexus —</div>
             <div class="row"><span class="nexus">[nexus]</span> Considering positioning vs. last quarter, here's a sharper revision with two pulled metrics and a softer first line.</div>
           </div>
+        </div>
+
+        <div class="ws-benefits-wrap">
+          <h4>Productivity benefits</h4>
+          <ul class="ws-benefits">
+            <li>One context, three modes — no copy-paste between tools.</li>
+            <li>⌘E escalation feels native, not jarring.</li>
+            <li>Forking experiments keeps the main thread intact.</li>
+          </ul>
         </div>
 
         <div class="ws-quote">
@@ -855,31 +1048,56 @@
           </div>
           <p class="h-eyebrow text-yellow-deep">Workspace · Projects</p>
           <h2 id="ws-projects-title">Folders that remember everything you put in.</h2>
-          <p class="ws-hero-sub">Pin sources, system prompts, and defaults once. Every chat inside the project starts from there — your context becomes a reflex.</p>
+          <p class="ws-hero-sub">Pin sources, instructions, defaults, and teammates once. Every chat inside the project starts from there. Context becomes a setting, not a ritual.</p>
         </div>
 
         <div class="ws-grid">
           <section>
             <h4>How it works</h4>
             <ol class="ws-steps">
-              <li>Create a project for a body of work.</li>
-              <li>Pin files, links, and a custom system prompt.</li>
-              <li>Choose a default model and tone of voice.</li>
-              <li>Open any chat inside — context is already loaded.</li>
+              <li>Create a project for a body of work — a launch, a paper, a customer.</li>
+              <li>Pin files (up to 1&nbsp;GB combined), web links, and a custom system prompt.</li>
+              <li>Choose a default model and tone. Set sharing — private, team, or Space-wide.</li>
+              <li>Open any chat inside the project. Pinned context is preloaded automatically.</li>
+              <li>The project keeps a rolling summary of recent activity, so you always know where you left off.</li>
             </ol>
           </section>
           <section>
             <h4>Capabilities</h4>
             <ul class="ws-tags">
-              <li>Pinned files &amp; URLs</li>
+              <li>Pinned files (auto-update)</li>
               <li>Custom instructions</li>
-              <li>Default model</li>
+              <li>Default model &amp; tone</li>
               <li>Folder-level memory</li>
               <li>Sharing controls</li>
               <li>Templates</li>
               <li>Auto-summary on entry</li>
+              <li>Context budget meter</li>
+              <li>Per-project permissions</li>
+              <li>Pinned URLs (re-fetched)</li>
             </ul>
           </section>
+        </div>
+
+        <div class="ws-examples-wrap">
+          <h4>Workflow examples</h4>
+          <div class="ws-examples-grid">
+            <div class="ws-example">
+              <div class="ws-example-tag">Client work</div>
+              <p class="ws-example-title">One project per client</p>
+              <p class="ws-example-body">Brand guide, last engagement, stakeholder map — pinned once. Every new request starts grounded. Switch clients, switch context, in a click.</p>
+            </div>
+            <div class="ws-example">
+              <div class="ws-example-tag">Engineering</div>
+              <p class="ws-example-title">Service-level project</p>
+              <p class="ws-example-body">Architecture diagram, README, last 90 days of incidents pinned. Bug triage starts with the codebase already loaded.</p>
+            </div>
+            <div class="ws-example">
+              <div class="ws-example-tag">Fundraise</div>
+              <p class="ws-example-title">Investor-facing project</p>
+              <p class="ws-example-body">Pitch deck, FAQ, term sheet, investor list pinned. Every email draft stays on-message without you re-pasting the deck.</p>
+            </div>
+          </div>
         </div>
 
         <div class="ws-mockup-wrap">
@@ -894,6 +1112,15 @@
             <div class="row"><span class="dim">model:</span> <span class="nexus">nexus</span> <span class="dim">· tone:</span> confident, sober</div>
             <div class="row"><span class="dim">members:</span> Lina · Marcus · You</div>
           </div>
+        </div>
+
+        <div class="ws-benefits-wrap">
+          <h4>Productivity benefits</h4>
+          <ul class="ws-benefits">
+            <li>Stop re-explaining context every time you open a new chat.</li>
+            <li>Onboard a teammate by sharing a project — they inherit the brain.</li>
+            <li>Auto-update on pinned sources keeps answers from going stale.</li>
+          </ul>
         </div>
 
         <div class="ws-quote">
@@ -918,31 +1145,57 @@
           </div>
           <p class="h-eyebrow text-red">Workspace · Agents</p>
           <h2 id="ws-agents-title">Send work into the background.</h2>
-          <p class="ws-hero-sub">Describe a goal. Pick the tools and limits. Walk away. Come back to a finished result with a replayable trace you can audit step by step.</p>
+          <p class="ws-hero-sub">Describe an outcome, set the rules, walk away. Prometheus plans, takes the steps, asks for input only when it has to — and leaves a trace you can replay step by step.</p>
         </div>
 
         <div class="ws-grid">
           <section>
             <h4>How it works</h4>
             <ol class="ws-steps">
-              <li>Describe the outcome you want — in your own words.</li>
-              <li>Select which tools and sources the agent can touch.</li>
-              <li>Set time, scope, and budget guardrails.</li>
-              <li>Run it. Watch the live plan. Step in only if needed.</li>
+              <li>Describe the outcome in plain language. ("Draft a weekly competitor brief by 9am Monday.")</li>
+              <li>Pick which tools and sources the agent can touch.</li>
+              <li>Set guardrails: time budget, money budget, scope, approval points.</li>
+              <li>Run once or schedule. The agent generates a plan and grades it before executing.</li>
+              <li>Watch the live trace. Edit the plan mid-run, pause, or hand off to a teammate.</li>
+              <li>On finish: the result, the replayable trace, and a cost summary.</li>
             </ol>
           </section>
           <section>
             <h4>Capabilities</h4>
             <ul class="ws-tags">
+              <li>Plan-and-critique loop</li>
+              <li>Sub-agents (parallel branches)</li>
               <li>Pause &amp; resume</li>
-              <li>Edit the plan mid-run</li>
-              <li>Sub-agents</li>
-              <li>Live trace</li>
-              <li>Schedules (daily, weekly)</li>
-              <li>Replay any run</li>
+              <li>Live plan editing</li>
+              <li>Deterministic replay</li>
+              <li>Schedules (cron-style)</li>
               <li>Approval gates</li>
+              <li>Tool budget caps</li>
+              <li>Memory across runs</li>
+              <li>Notify on finish</li>
             </ul>
           </section>
+        </div>
+
+        <div class="ws-examples-wrap">
+          <h4>Workflow examples</h4>
+          <div class="ws-examples-grid">
+            <div class="ws-example">
+              <div class="ws-example-tag">Weekly intel</div>
+              <p class="ws-example-title">Competitor brief, every Monday</p>
+              <p class="ws-example-body">Scan ten competitor product pages, diff against last week, post a summary to #gtm. Ninety minutes of work, runs forever.</p>
+            </div>
+            <div class="ws-example">
+              <div class="ws-example-tag">RFP draft</div>
+              <p class="ws-example-title">First-pass answers</p>
+              <p class="ws-example-body">Read an incoming RFP. Draft answers from the knowledge library. Leave the questions it could not answer with high confidence flagged for a human.</p>
+            </div>
+            <div class="ws-example">
+              <div class="ws-example-tag">Synthesis</div>
+              <p class="ws-example-title">Customer interview themes</p>
+              <p class="ws-example-body">Compile last quarter's interviews into themes — three quotes per theme, organised by frequency, ready for a deck.</p>
+            </div>
+          </div>
         </div>
 
         <div class="ws-mockup-wrap">
@@ -958,6 +1211,15 @@
             <div class="row"><span class="dim">▸</span> Draft summary in shared doc</div>
             <div class="row"><span class="pause">⏸ Awaiting approval before publish</span></div>
           </div>
+        </div>
+
+        <div class="ws-benefits-wrap">
+          <h4>Productivity benefits</h4>
+          <ul class="ws-benefits">
+            <li>A 90-minute investigation runs once and repeats forever.</li>
+            <li>Approval gates keep humans on the irreversible decisions.</li>
+            <li>Replayable traces make every "how did that happen?" answerable.</li>
+          </ul>
         </div>
 
         <div class="ws-quote">
@@ -982,32 +1244,56 @@
           </div>
           <p class="h-eyebrow text-ink-mid">Workspace · Knowledge</p>
           <h2 id="ws-knowledge-title">Your team's library, asked in plain English.</h2>
-          <p class="ws-hero-sub">Upload anything. Ask anything across it. Every answer cites the exact source it came from — open the document at the right paragraph in one click.</p>
+          <p class="ws-hero-sub">Upload anything. Connect anything. Ask anything. Every answer cites the source — and clicking the citation opens the document at the exact paragraph, slide, or audio timestamp.</p>
         </div>
 
         <div class="ws-grid">
           <section>
             <h4>How it works</h4>
             <ol class="ws-steps">
-              <li>Drop in docs, decks, transcripts, recordings.</li>
-              <li>HelveX indexes them — text, tables, audio, scans.</li>
-              <li>Ask in natural language across the whole library.</li>
-              <li>Get answers with citations. Click any to jump to source.</li>
+              <li>Connect sources — drag in files, paste URLs, or link Google Drive, SharePoint, Notion, or Slack.</li>
+              <li>HelveX indexes everything: text, tables, images, audio, scans (with OCR).</li>
+              <li>Ask in natural language across the entire library, or scope to one folder.</li>
+              <li>Get an answer with citations. Click any citation to jump to source — at the right paragraph, slide, or timestamp.</li>
+              <li>The library stays fresh. Sources re-index when they change, and answers flag if context has shifted.</li>
             </ol>
           </section>
           <section>
-            <h4>Formats supported</h4>
+            <h4>Capabilities</h4>
             <ul class="ws-tags">
-              <li>PDF</li>
-              <li>DOCX</li>
-              <li>Slides</li>
-              <li>Spreadsheets</li>
-              <li>Audio (transcribed)</li>
-              <li>Video</li>
+              <li>PDF · DOCX · MD · CSV</li>
+              <li>Slides &amp; spreadsheets</li>
+              <li>Audio &amp; video transcription</li>
               <li>OCR for scans</li>
-              <li>Permission-aware</li>
+              <li>Permission-aware retrieval</li>
+              <li>Hybrid search</li>
+              <li>Citation timestamps</li>
+              <li>"Why this answer"</li>
+              <li>Cross-language retrieval</li>
+              <li>Folder-level scope</li>
             </ul>
           </section>
+        </div>
+
+        <div class="ws-examples-wrap">
+          <h4>Workflow examples</h4>
+          <div class="ws-examples-grid">
+            <div class="ws-example">
+              <div class="ws-example-tag">Recall</div>
+              <p class="ws-example-title">"What did we promise the Q3 council?"</p>
+              <p class="ws-example-body">Returns three commitments with citations from a docx, a meeting note, and an email thread. Each click jumps to the line.</p>
+            </div>
+            <div class="ws-example">
+              <div class="ws-example-tag">Sales onboarding</div>
+              <p class="ws-example-title">"How do we handle EU residency objections?"</p>
+              <p class="ws-example-body">Surfaces the canonical answer from a Slack discussion and a deck slide. A new rep gets an authoritative response in seconds.</p>
+            </div>
+            <div class="ws-example">
+              <div class="ws-example-tag">Comparative</div>
+              <p class="ws-example-title">"Which competitors raised this year?"</p>
+              <p class="ws-example-body">Builds a table from press releases and CRM notes, with sources. Sortable, exportable, ready for a board pre-read.</p>
+            </div>
+          </div>
         </div>
 
         <div class="ws-mockup-wrap">
@@ -1019,6 +1305,15 @@
             <div class="row"><span class="check">▸</span> Audit log export <span class="cite">[cite: meeting-notes-2026-09-12.md]</span></div>
             <div class="row"><span class="check">▸</span> Bulk export option <span class="cite">[cite: email-thread-Marcus.eml]</span></div>
           </div>
+        </div>
+
+        <div class="ws-benefits-wrap">
+          <h4>Productivity benefits</h4>
+          <ul class="ws-benefits">
+            <li>New hires onboard against the library, not against people's calendars.</li>
+            <li>Institutional memory survives turnover.</li>
+            <li>"Where was that thing we said?" is finally a question with an answer.</li>
+          </ul>
         </div>
 
         <div class="ws-quote">
@@ -1043,31 +1338,57 @@
           </div>
           <p class="h-eyebrow text-yellow-deep">Workspace · Spaces</p>
           <h2 id="ws-spaces-title">Shared rooms where the team thinks together.</h2>
-          <p class="ws-hero-sub">Chats, projects, agents — co-owned, not copy-pasted into Slack. Comment, hand off, and pick up where someone left off without losing a thread.</p>
+          <p class="ws-hero-sub">A Space holds chats, projects, agents, and knowledge that the team co-owns. Mention each other, comment on any line, hand off context with one click — without losing what was said before.</p>
         </div>
 
         <div class="ws-grid">
           <section>
             <h4>How it works</h4>
             <ol class="ws-steps">
-              <li>Create a Space for a team or initiative.</li>
-              <li>Invite teammates and set roles.</li>
-              <li>Share chats, projects, and agents inside the Space.</li>
-              <li>Comment, mention, hand off — context follows.</li>
+              <li>Create a Space for a team or initiative — sales, security, the Q4 launch.</li>
+              <li>Invite teammates and set roles (owner, editor, commenter, viewer).</li>
+              <li>Share chats, projects, and agents into the Space — they become co-owned.</li>
+              <li>Comment on any message or step. Mention people with @, link to a moment in one click.</li>
+              <li>Hand off a thread — the receiver gets the full context plus your note on what to do next.</li>
+              <li>Track activity in a real-time feed, filterable by person, project, or agent.</li>
             </ol>
           </section>
           <section>
             <h4>Team controls</h4>
             <ul class="ws-tags">
-              <li>Role-based access</li>
+              <li>Role-based permissions</li>
               <li>Real-time presence</li>
               <li>Threaded comments</li>
+              <li>@-mentions</li>
               <li>Handoff with context</li>
               <li>Activity feed</li>
-              <li>@-mentions</li>
               <li>Per-Space audit log</li>
+              <li>Shared knowledge library</li>
+              <li>Per-Space usage</li>
+              <li>Guest access</li>
             </ul>
           </section>
+        </div>
+
+        <div class="ws-examples-wrap">
+          <h4>Workflow examples</h4>
+          <div class="ws-examples-grid">
+            <div class="ws-example">
+              <div class="ws-example-tag">Go-to-market</div>
+              <p class="ws-example-title">"Q4 Launch" Space</p>
+              <p class="ws-example-body">Pricing project, customer interview chats, the competitor agent — all live there. Marketing comments on Engineering's draft brief without a single DM thread.</p>
+            </div>
+            <div class="ws-example">
+              <div class="ws-example-tag">Vendor reviews</div>
+              <p class="ws-example-title">Security team Space</p>
+              <p class="ws-example-body">Each vendor is a project. Reviewer agents post findings overnight. The owner approves before procurement sees anything.</p>
+            </div>
+            <div class="ws-example">
+              <div class="ws-example-tag">Research lab</div>
+              <p class="ws-example-title">Co-authored paper Space</p>
+              <p class="ws-example-body">Co-authors edit chats together. The literature-review agent runs nightly. Comments are how they argue methodology — preserved alongside the work.</p>
+            </div>
+          </div>
         </div>
 
         <div class="ws-mockup-wrap">
@@ -1079,6 +1400,15 @@
             <div class="row"><span class="check">✓</span> Northstar agent finished overnight scan <span class="dim">· 1h ago · open</span></div>
             <div class="row"><span class="dim">▸</span> Daniela handed off the customer-call summary to you <span class="dim">· yesterday</span></div>
           </div>
+        </div>
+
+        <div class="ws-benefits-wrap">
+          <h4>Productivity benefits</h4>
+          <ul class="ws-benefits">
+            <li>One source of truth for the team's AI work — not scattered across personal accounts.</li>
+            <li>Handoffs preserve full context, so nobody re-explains.</li>
+            <li>New members get the full conversation history on day one.</li>
+          </ul>
         </div>
 
         <div class="ws-quote">
@@ -1103,17 +1433,18 @@
           </div>
           <p class="h-eyebrow text-ink-mid">Workspace · History</p>
           <h2 id="ws-history-title">Find the thing you said three weeks ago.</h2>
-          <p class="ws-hero-sub">Every conversation, every agent run, every draft — searchable in one keystroke. Semantic, keyword, and filtered. Open the exact moment, not just the file.</p>
+          <p class="ws-hero-sub">Every chat, every agent run, every draft — fully searchable, semantically and by keyword. Not just file names. The actual content. The actual moment.</p>
         </div>
 
         <div class="ws-grid">
           <section>
             <h4>How it works</h4>
             <ol class="ws-steps">
-              <li>Hit the search bar — or speak it.</li>
-              <li>Search runs across chats, projects, and agent runs.</li>
-              <li>Filter by date, model, project, or person.</li>
-              <li>Open the exact line — and continue from there.</li>
+              <li>Open the search bar (<span class="font-mono text-ink">⌘K</span>) — or speak it.</li>
+              <li>Type or say what you remember: a phrase, a number, a person, a topic.</li>
+              <li>Search runs across chats, projects, agent runs, and pinned moments.</li>
+              <li>Filter by date, model, project, person, or content type.</li>
+              <li>Click a result to jump straight to the line — and continue the thread from there.</li>
             </ol>
           </section>
           <section>
@@ -1125,10 +1456,33 @@
               <li>Model filter</li>
               <li>Person filter</li>
               <li>Timeline view</li>
+              <li>Resume from result</li>
               <li>Pin moments</li>
               <li>Export thread</li>
+              <li>Find similar</li>
             </ul>
           </section>
+        </div>
+
+        <div class="ws-examples-wrap">
+          <h4>Workflow examples</h4>
+          <div class="ws-examples-grid">
+            <div class="ws-example">
+              <div class="ws-example-tag">Draft recovery</div>
+              <p class="ws-example-title">"What did I write about Q4 pricing in October?"</p>
+              <p class="ws-example-body">Returns the exact draft, the discussion around it, and the agent run that built on it. Open the line, keep writing.</p>
+            </div>
+            <div class="ws-example">
+              <div class="ws-example-tag">Meeting moment</div>
+              <p class="ws-example-title">"Where Marcus questioned the ARR projection"</p>
+              <p class="ws-example-body">Jumps straight to the line in a 40-minute call transcript. Click to play from that timestamp.</p>
+            </div>
+            <div class="ws-example">
+              <div class="ws-example-tag">Pattern search</div>
+              <p class="ws-example-title">"Every chat where Nexus suggested GDPR Art. 28"</p>
+              <p class="ws-example-body">Instant filter across two years of conversations. Useful for compliance reviews — auditable, exportable, defensible.</p>
+            </div>
+          </div>
         </div>
 
         <div class="ws-mockup-wrap">
@@ -1141,6 +1495,15 @@
             <div class="row"><span class="prom">▸</span> Mentioned in agent run #218 — Sep 28</div>
             <div class="row"><span class="dim">▸</span> Pinned moment from board prep — Aug 14</div>
           </div>
+        </div>
+
+        <div class="ws-benefits-wrap">
+          <h4>Productivity benefits</h4>
+          <ul class="ws-benefits">
+            <li>Conversations stop being throwaway — they become a searchable past.</li>
+            <li>New hires search the team's history before asking the team.</li>
+            <li>Decision archaeology becomes a single query, not a three-day excavation.</li>
+          </ul>
         </div>
 
         <div class="ws-quote">
@@ -1564,44 +1927,74 @@
       }, { passive: true });
     })();
 
-    /* Workspace feature modals */
+    /* Workspace feature modals
+       Scroll-lock strategy: simply set overflow:hidden on <html>+<body>
+       and compensate for the scrollbar gutter. The page's actual scroll
+       position is never touched, so closing the modal leaves the user
+       exactly where they were — no jump to top, no jump back. */
     (function () {
       var triggers = document.querySelectorAll('.ws-card[data-feature]');
       var modals   = document.querySelectorAll('.ws-modal[data-modal]');
       if (!triggers.length || !modals.length) return;
 
       var lastTrigger = null;
-      var scrollY = 0;
+      var lockCount   = 0;
+      var savedHtml   = null;
+      var savedBody   = null;
+
+      function lockScroll() {
+        if (lockCount === 0) {
+          var sbw = window.innerWidth - document.documentElement.clientWidth;
+          savedHtml = {
+            overflow: document.documentElement.style.overflow,
+          };
+          savedBody = {
+            overflow: document.body.style.overflow,
+            paddingRight: document.body.style.paddingRight,
+          };
+          document.documentElement.style.overflow = 'hidden';
+          document.body.style.overflow = 'hidden';
+          if (sbw > 0) document.body.style.paddingRight = sbw + 'px';
+        }
+        lockCount++;
+      }
+      function unlockScroll() {
+        lockCount = Math.max(0, lockCount - 1);
+        if (lockCount === 0 && savedHtml && savedBody) {
+          document.documentElement.style.overflow = savedHtml.overflow;
+          document.body.style.overflow            = savedBody.overflow;
+          document.body.style.paddingRight        = savedBody.paddingRight;
+          savedHtml = savedBody = null;
+        }
+      }
 
       function openModal(name) {
         var modal = document.querySelector('.ws-modal[data-modal="' + name + '"]');
         if (!modal) return;
-        scrollY = window.scrollY;
-        document.body.style.position = 'fixed';
-        document.body.style.top = '-' + scrollY + 'px';
-        document.body.style.left = '0';
-        document.body.style.right = '0';
-        document.body.style.width = '100%';
+        if (modal.hasAttribute('data-open')) return;
+        lockScroll();
         modal.setAttribute('data-open', '');
         modal.setAttribute('aria-hidden', 'false');
+        // Reset the modal's own scroll so users start at the top of the panel
+        var shell = modal.querySelector('.ws-modal-shell');
+        if (shell) shell.scrollTop = 0;
         var closeBtn = modal.querySelector('.ws-modal-close');
         if (closeBtn) {
-          setTimeout(function () { closeBtn.focus(); }, 60);
+          setTimeout(function () {
+            try { closeBtn.focus({ preventScroll: true }); } catch (e) { closeBtn.focus(); }
+          }, 60);
         }
       }
 
       function closeModal(modal) {
         if (!modal) return;
+        if (!modal.hasAttribute('data-open')) return;
         modal.removeAttribute('data-open');
         modal.setAttribute('aria-hidden', 'true');
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.left = '';
-        document.body.style.right = '';
-        document.body.style.width = '';
-        if (typeof scrollY === 'number') window.scrollTo(0, scrollY);
+        unlockScroll();
         if (lastTrigger) {
-          try { lastTrigger.focus({ preventScroll: true }); } catch (e) {}
+          try { lastTrigger.focus({ preventScroll: true }); }
+          catch (e) { /* older browsers ignore preventScroll */ }
         }
       }
 
@@ -1618,7 +2011,10 @@
 
       modals.forEach(function (modal) {
         modal.querySelectorAll('[data-close]').forEach(function (el) {
-          el.addEventListener('click', function () { closeModal(modal); });
+          el.addEventListener('click', function (e) {
+            e.preventDefault();
+            closeModal(modal);
+          });
         });
       });
 
