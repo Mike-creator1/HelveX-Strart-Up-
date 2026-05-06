@@ -16,8 +16,28 @@
     }
 
     /* Type scale */
-    .h-display { font-weight: 900; letter-spacing: -0.045em; line-height: 0.95; }
-    .h-section { font-weight: 800; letter-spacing: -0.035em; line-height: 1.04; }
+    /* Premium headline weights — refined, less aggressive than 900/800.
+       Letter-spacing pulled tighter for an elegant, modern AI-platform feel.
+       Colour softened from pure ink (#0A0A0A) to #171717 — less stark on
+       large-display sizes, still high contrast. */
+    .h-display {
+      font-weight: 600;
+      letter-spacing: -0.055em;
+      line-height: 0.96;
+      color: #171717;
+      font-feature-settings: "ss01", "cv11";
+    }
+    .h-section {
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      color: #171717;
+    }
+    /* When a headline is rendered as the original 800/900 weight via Tailwind
+       (font-extrabold) we still soften it a touch via a CSS-only override
+       inside hero/section contexts, so the new tone is consistent everywhere. */
+    .h-display.balance,
+    .h-section.balance { font-weight: 600; }
     .h-eyebrow { font-size: 11px; letter-spacing: 0.20em; font-weight: 700; text-transform: uppercase; }
     .tracking-tightest { letter-spacing: -0.05em; }
     .balance { text-wrap: balance; }
