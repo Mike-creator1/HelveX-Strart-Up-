@@ -1,857 +1,814 @@
 <!DOCTYPE html>
-<html lang="en" translate="no" class="notranslate">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="google" content="notranslate" />
-  <title>CreateX — Get Started</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    if (window.tailwind) {
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              neon: '#00E5FF', 'neon-v': '#9D5CFF', 'neon-g': '#00FFA3',
-              dark: '#04040D', 'dark-card': '#08081A',
-            },
-            fontFamily: {
-              serif: ['Playfair Display', 'Georgia', 'serif'],
-              sans: ['Inter', '-apple-system', 'sans-serif'],
-            },
-          },
-        },
-      };
-    }
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script>
-    window.SUPABASE_URL  = 'https://ikbdhxobdjlwirydhxym.supabase.co';
-    window.SUPABASE_ANON = 'sb_publishable_chzlbY97SlQx_Apf4zqrTQ_mdwWhmyE';
-    (function initSB(tries){
-      tries = tries || 0;
-      var lib = window.supabase;
-      if (lib && typeof lib.createClient === 'function') {
-        try {
-          window.sb = lib.createClient(window.SUPABASE_URL, window.SUPABASE_ANON, {
-            auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-          });
-          document.dispatchEvent(new Event('sb:ready'));
-        } catch (err) { console.error('Supabase init failed:', err); }
-        return;
-      }
-      if (tries > 80) { console.warn('Supabase SDK failed to load'); return; }
-      setTimeout(function(){ initSB(tries + 1); }, 40);
-    })();
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
+  <title>HelveX — Frontier AI for the next era</title>
+  <meta name="description" content="HelveX builds Ether, Nexus, and Prometheus — three frontier AI models engineered for clarity, depth, and autonomous action. Built in Switzerland for the world." />
+  <meta property="og:title" content="HelveX — Frontier AI for the next era" />
+  <meta property="og:description" content="Three AI models. One frontier. Built in Switzerland for the world." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="HelveX" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#FFFFFF" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h4v16H4V4zm12 0h4v16h-4V4zM8 11h8v2H8v-2z' fill='%23DC2626'/%3E%3C/svg%3E" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet" />
-  <script src="lang/en.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0A0A0A',
+            'ink-soft': '#171717',
+            'ink-mid': '#525252',
+            'ink-light': '#A3A3A3',
+            line: '#E5E5E5',
+            'line-soft': '#F5F5F5',
+            cream: '#FAFAF7',
+            red: '#DC2626',
+            'red-deep': '#991B1B',
+            'red-soft': '#FEE2E2',
+            yellow: '#FCD34D',
+            'yellow-deep': '#F59E0B',
+            'yellow-soft': '#FEF3C7',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+
   <style>
-    :root{--neon:#00E5FF;--neon-v:#9D5CFF;--neon-g:#00FFA3;}
-    *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{height:100%;}
-    body{font-family:'Inter',sans-serif;background:#04040D;color:#fff;-webkit-font-smoothing:antialiased;letter-spacing:-.003em;}
-    .font-serif{font-family:'Playfair Display',Georgia,serif;}
-
-    @keyframes shimmer{from{background-position:0% center;}to{background-position:-200% center;}}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
-    @keyframes pulseDot{0%,100%{opacity:1;}50%{opacity:.3;}}
-    @keyframes liveBlink{
-      0%,100%{box-shadow:0 0 0 0 rgba(0,255,163,.55),0 0 8px rgba(0,255,163,.7);}
-      50%{box-shadow:0 0 0 5px rgba(0,255,163,0),0 0 14px rgba(0,255,163,.95);}
-    }
-    @keyframes neonCtaPulse{
-      0%,100%{box-shadow:0 0 0 1px rgba(0,229,255,.1) inset,0 14px 34px rgba(0,180,216,.18),0 0 28px rgba(0,229,255,.14);}
-      50%{box-shadow:0 0 0 1px rgba(0,229,255,.2) inset,0 18px 42px rgba(0,180,216,.28),0 0 40px rgba(0,229,255,.22);}
-    }
-    @keyframes neonCtaSweep{0%,45%{left:-70%;opacity:0;}56%{opacity:1;}74%,100%{left:126%;opacity:0;}}
-
-    .gradient-text{
-      background:linear-gradient(120deg,#00E5FF 0%,#9D5CFF 35%,#00E5FF 65%,#9D5CFF 100%);
-      background-size:250% auto;
-      -webkit-background-clip:text;background-clip:text;
-      -webkit-text-fill-color:transparent;
-      animation:shimmer 5s linear infinite;
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #ffffff;
+      color: #0A0A0A;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing: -0.011em;
+      overflow-x: hidden;
     }
 
-    .btn-gold{
-      position:relative;
-      background:linear-gradient(135deg,#00B8D9 0%,#7C3AED 50%,#00B8D9 100%);
-      background-size:200% auto;color:#fff;font-weight:700;
-      border-radius:100px;transition:all .3s cubic-bezier(.4,0,.2,1);cursor:pointer;border:none;
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      box-shadow:0 6px 24px rgba(0,184,217,.28),inset 0 1px 0 rgba(255,255,255,.18);
-      letter-spacing:-.005em;
-    }
-    .btn-gold:hover{background-position:right center;transform:translateY(-2px);
-      box-shadow:0 16px 48px rgba(0,184,217,.48),0 0 60px rgba(124,58,237,.2),inset 0 1px 0 rgba(255,255,255,.25);}
-    .btn-gold:active{transform:translateY(0);}
-    .btn-gold svg{transition:transform .25s;}
-    .btn-gold:hover svg{transform:translateX(3px);}
+    /* Headlines */
+    .h-display { font-weight: 900; letter-spacing: -0.045em; line-height: 0.95; }
+    .h-section { font-weight: 800; letter-spacing: -0.035em; line-height: 1.04; }
+    .tracking-tightest { letter-spacing: -0.05em; }
 
-    .form-input{
-      width:100%;background:rgba(0,229,255,.03);
-      border:1px solid rgba(0,229,255,.1);color:#fff;
-      border-radius:12px;padding:14px 16px;font-size:14.5px;
-      font-family:'Inter',sans-serif;outline:none;
-      transition:border-color .22s ease,background .22s ease,box-shadow .22s ease;display:block;
-      letter-spacing:-.002em;
-    }
-    .form-input:hover{background:rgba(0,229,255,.05);border-color:rgba(0,229,255,.18);}
-    .form-input:focus{border-color:rgba(0,229,255,.5);background:rgba(0,229,255,.04);
-      box-shadow:0 0 0 4px rgba(0,229,255,.07),0 6px 18px rgba(0,229,255,.05);}
-    .form-input::placeholder{color:rgba(255,255,255,.22);}
-
-    .form-label{display:block;font-size:10.5px;font-weight:600;color:rgba(0,229,255,.45);
-      text-transform:uppercase;letter-spacing:.09em;margin-bottom:9px;}
-
-    .orb{display:none;}
-    .auth-wrap,.auth-wrap > div{background:transparent !important;}
-    .dot-grid{
-      position:fixed !important;
-      inset:0 !important;
-      width:100vw;
-      height:100vh;
-      pointer-events:none;
-      z-index:0;
-      overflow:hidden;
-      -webkit-mask-image:radial-gradient(ellipse 90% 85% at 50% 45%,#000 18%,rgba(0,0,0,.65) 62%,transparent 100%);
-      mask-image:radial-gradient(ellipse 90% 85% at 50% 45%,#000 18%,rgba(0,0,0,.65) 62%,transparent 100%);
-    }
-    .dot-grid .dot{
-      position:absolute;
-      width:2px;height:2px;border-radius:50%;
-      background:rgba(225,225,240,.9);
-      box-shadow:
-        0 0 2px rgba(220,220,235,.35),
-        0 0 5px rgba(210,210,230,.12);
-      transform:translate(-50%,-50%);
-      opacity:.55;
+    /* Brand mark */
+    .brand-mark { font-weight: 900; letter-spacing: -0.05em; }
+    .brand-mark .x {
+      background: linear-gradient(135deg, #DC2626 0%, #FCD34D 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    @keyframes cloudSweep{
-      0%   {transform:translate3d(-70%,-8%,0) scale(1);}
-      50%  {transform:translate3d(60%,6%,0) scale(1.1);}
-      100% {transform:translate3d(-70%,-8%,0) scale(1);}
+    /* Premium button shadow */
+    .btn-shadow { box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.08); }
+    .btn-shadow:hover { box-shadow: 0 1px 2px rgba(0,0,0,0.08), 0 14px 36px rgba(0,0,0,0.13); }
+
+    /* Card hover */
+    .card { transition: transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s cubic-bezier(0.22,1,0.36,1), border-color 0.3s; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 24px 48px -16px rgba(0,0,0,0.12); }
+
+    /* Reveal on scroll */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1); }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+    /* Animated orbs */
+    @keyframes blobShift {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33%     { transform: translate(30px,-40px) scale(1.08); }
+      66%     { transform: translate(-20px,30px) scale(0.94); }
     }
-    @keyframes cloudSweepB{
-      0%   {transform:translate3d(65%,10%,0) scale(1.05);}
-      50%  {transform:translate3d(-60%,-12%,0) scale(.95);}
-      100% {transform:translate3d(65%,10%,0) scale(1.05);}
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.55;
+      pointer-events: none;
+      animation: blobShift 18s ease-in-out infinite;
     }
-    .dot-grid::before,
-    .dot-grid::after{
-      content:"";
-      position:absolute;
-      top:-30%;
-      left:-25%;
-      width:80%;
-      height:160%;
-      pointer-events:none;
-      will-change:transform;
-      border-radius:50%;
-      z-index:2;
-    }
-    .dot-grid::before{
-      background:radial-gradient(ellipse 50% 50% at center,
-        #000 0%,
-        rgba(0,0,0,.60) 40%,
-        rgba(0,0,0,.25) 65%,
-        transparent 88%);
-      filter:blur(30px);
-      animation:cloudSweep 13s ease-in-out infinite;
-    }
-    .dot-grid::after{
-      background:radial-gradient(ellipse 50% 55% at center,
-        #000 0%,
-        rgba(0,0,0,.55) 42%,
-        rgba(0,0,0,.20) 68%,
-        transparent 88%);
-      filter:blur(38px);
-      animation:cloudSweepB 17s ease-in-out infinite;
+    .hero-orb-1 { background: radial-gradient(circle, #FCD34D 0%, transparent 70%); top: -120px; right: -120px; width: 540px; height: 540px; }
+    .hero-orb-2 { background: radial-gradient(circle, #FECACA 0%, transparent 70%); bottom: -180px; left: -180px; width: 640px; height: 640px; animation-delay: -6s; }
+
+    /* Subtle grid bg */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px);
+      background-size: 64px 64px;
     }
 
-    .auth-wrap{min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:5;}
-    @media(min-width:1024px){
-      .auth-wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(420px,.95fr);}
+    /* Model section glows */
+    .model-ether      { background: radial-gradient(circle at 18% -10%, rgba(252,211,77,0.22), transparent 55%), #FAFAF7; }
+    .model-nexus      { background: radial-gradient(circle at 82% -10%, rgba(220,38,38,0.14), transparent 55%), #FAFAF7; }
+    .model-prometheus { background: radial-gradient(circle at 50% -20%, rgba(10,10,10,0.10), transparent 60%), #FAFAF7; }
+
+    /* Pulse dot */
+    @keyframes pulseRing {
+      0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.55); }
+      70%     { box-shadow: 0 0 0 12px rgba(220,38,38,0); }
+    }
+    .pulse-dot { animation: pulseRing 2s infinite; }
+
+    /* Marquee */
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-track { animation: marquee 38s linear infinite; }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+
+    /* Button gradient sweep */
+    .btn-primary { position: relative; overflow: hidden; }
+    .btn-primary::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
+      transform: translateX(-100%);
+      transition: transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    .btn-primary:hover::before { transform: translateX(100%); }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .hero-orb, .marquee-track, .pulse-dot, .btn-primary::before, .card {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
     }
 
-    .tab-btn{flex:1;padding:13px 10px;border-radius:12px;font-size:13px;font-weight:700;
-      transition:all .3s cubic-bezier(.4,0,.2,1);cursor:pointer;border:1px solid transparent;background:none;
-      letter-spacing:-.002em;}
-    .tab-active{background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(157,92,255,.1));color:#00E5FF;
-      border-color:rgba(0,229,255,.28);
-      box-shadow:0 4px 14px rgba(0,229,255,.12),inset 0 1px 0 rgba(0,229,255,.15);}
-    .tab-inactive{color:rgba(255,255,255,.35);}
-    .tab-inactive:hover{color:rgba(255,255,255,.65);}
-
-    .stat-card{flex:1;padding:20px 18px;border-radius:16px;
-      background:linear-gradient(180deg,rgba(0,229,255,.03),rgba(0,229,255,.008));
-      border:1px solid rgba(0,229,255,.1);
-      transition:border-color .3s,transform .3s;
-      position:relative;overflow:hidden;}
-    .stat-card:hover{border-color:rgba(0,229,255,.25);transform:translateY(-2px);}
-    .stat-card::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(0,229,255,.35),transparent);}
-
-    .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:100px;
-      border:1px solid rgba(0,229,255,.1);background:rgba(0,229,255,.025);
-      font-size:10.5px;color:rgba(255,255,255,.55);font-weight:500;letter-spacing:.015em;
-      transition:border-color .25s,color .25s,background .25s;}
-    .chip:hover{border-color:rgba(0,229,255,.3);color:rgba(255,255,255,.9);background:rgba(0,229,255,.05);}
-
-    .form-card{
-      background:linear-gradient(180deg,rgba(0,229,255,.022),rgba(157,92,255,.008));
-      border:1px solid rgba(0,229,255,.12);
-      border-radius:26px;
-      padding:30px 30px 28px;
-      box-shadow:0 28px 80px rgba(0,0,0,.55),0 0 40px rgba(0,229,255,.04),inset 0 1px 0 rgba(0,229,255,.06);
-      position:relative;
-      overflow:hidden;
-    }
-    .form-card::before{content:"";position:absolute;left:24px;right:24px;top:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(0,229,255,.5),rgba(157,92,255,.4),transparent);}
-    @media(max-width:640px){.form-card{padding:26px 22px;border-radius:18px;}}
-
-    .live-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border-radius:100px;
-      background:rgba(0,255,163,.06);border:1px solid rgba(0,255,163,.22);
-      font-size:11px;font-weight:500;color:rgba(255,255,255,.82);letter-spacing:.01em;}
-    .live-dot{width:7px;height:7px;border-radius:50%;background:#00FFA3;box-shadow:0 0 8px rgba(0,255,163,.7);animation:liveBlink 2s infinite;}
-
-    .mini-divider{height:1px;width:100%;
-      background:linear-gradient(90deg,transparent 0%,rgba(0,229,255,.18) 50%,transparent 100%);}
-
-    .trust-badge{display:flex;align-items:center;gap:5px;font-size:10px;color:rgba(255,255,255,.28);font-weight:500;letter-spacing:.02em;}
-
-    .top-actions{position:fixed;top:16px;right:18px;z-index:200;display:flex;align-items:center;gap:16px;}
-    .top-pricing-btn{position:relative;height:48px;display:inline-flex;align-items:center;justify-content:center;padding:0 22px;border-radius:12px;
-      border:1px solid rgba(0,229,255,.4);background:linear-gradient(135deg,rgba(0,180,216,.3),rgba(124,58,237,.2) 48%,rgba(0,229,255,.15));
-      color:#00E5FF;text-decoration:none;font-size:12px;font-weight:900;letter-spacing:.11em;text-transform:uppercase;
-      box-shadow:0 0 0 1px rgba(0,229,255,.08) inset,0 14px 34px rgba(0,180,216,.16),0 0 24px rgba(0,229,255,.12);
-      transition:border-color .2s,color .2s,background .2s,transform .2s,box-shadow .2s;white-space:nowrap;overflow:hidden;
-      animation:neonCtaPulse 2.45s ease-in-out infinite;}
-    .top-pricing-btn::before{content:"";position:absolute;top:-40%;bottom:-40%;left:-70%;width:48%;transform:rotate(18deg);
-      background:linear-gradient(90deg,transparent,rgba(0,229,255,.35),transparent);animation:neonCtaSweep 3.2s ease-in-out infinite;pointer-events:none;}
-    .top-pricing-btn:hover{border-color:rgba(0,229,255,.65);color:#fff;background:linear-gradient(135deg,rgba(0,180,216,.42),rgba(124,58,237,.3) 48%,rgba(0,229,255,.2));transform:translateY(-2px);box-shadow:0 0 0 1px rgba(0,229,255,.15) inset,0 18px 42px rgba(0,180,216,.24),0 0 36px rgba(0,229,255,.2);}
-
-    .hero-kicker-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
-    .hero-metric-row{display:flex;gap:12px;margin-bottom:22px;max-width:620px;}
-    .conversion-strip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:24px;}
-    .conversion-pill{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:100px;
-      border:1px solid rgba(0,229,255,.18);background:rgba(0,229,255,.05);
-      color:rgba(255,255,255,.72);font-size:11px;font-weight:650;letter-spacing:.012em;}
-    .execution-rail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:620px;margin:-6px 0 18px;}
-    .execution-step{position:relative;border:1px solid rgba(0,229,255,.09);background:rgba(0,229,255,.02);
-      border-radius:14px;padding:13px 14px 12px;overflow:hidden;}
-    .execution-step::before{content:"";position:absolute;left:14px;right:14px;top:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(0,229,255,.4),transparent);}
-    .execution-step b{display:block;color:rgba(0,229,255,.7);font-size:10px;letter-spacing:.12em;margin-bottom:7px;}
-    .execution-step strong{display:block;color:rgba(255,255,255,.85);font-size:12.5px;font-weight:750;letter-spacing:-.006em;}
-    .execution-step span{display:block;color:rgba(255,255,255,.34);font-size:11px;line-height:1.35;margin-top:3px;}
-    .form-eyebrow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;}
-    .form-eyebrow span,.form-eyebrow a{font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:750;color:rgba(0,229,255,.65);}
-    .form-eyebrow a{text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:color .2s,border-color .2s;}
-    .form-eyebrow a:hover{color:#00E5FF;}
-    .form-eyebrow em{font-style:normal;font-size:11px;color:rgba(255,255,255,.32);font-weight:600;}
-    .auth-value-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px;}
-    .auth-value-bar span{border:1px solid rgba(0,229,255,.08);border-radius:10px;padding:9px 8px;
-      background:rgba(0,229,255,.02);text-align:center;font-size:10.5px;color:rgba(255,255,255,.42);font-weight:650;}
-    @media(min-width:1024px){
-      .auth-form-panel{align-items:flex-start !important;padding-top:clamp(150px,19vh,190px) !important;}
-    }
-    .card-seal{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;
-      border:1px solid rgba(0,229,255,.14);background:rgba(0,229,255,.04);border-radius:14px;padding:11px 12px;}
-    .card-seal strong{display:block;color:rgba(255,255,255,.75);font-size:12px;font-weight:750;}
-    .card-seal span{display:block;color:rgba(255,255,255,.34);font-size:10.5px;margin-top:2px;}
-    .card-seal mark{background:transparent;color:#00E5FF;font-size:10px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;white-space:nowrap;}
-    @media(max-width:520px){
-      .auth-value-bar,.execution-rail{grid-template-columns:1fr;}
-      .hero-metric-row{flex-direction:column;}
-      .top-actions{top:12px;right:12px;gap:10px;}
-      .top-pricing-btn{height:40px;padding:0 14px;font-size:10px;letter-spacing:.075em;border-radius:10px;}
-    }
-
-    .anim{animation:fadeUp .6s ease both;}
-    .d1{animation-delay:.05s;}.d2{animation-delay:.13s;}.d3{animation-delay:.22s;}.d4{animation-delay:.32s;}.d5{animation-delay:.42s;}
+    /* Selection */
+    ::selection { background: #FCD34D; color: #0A0A0A; }
   </style>
 </head>
-<body>
+<body class="bg-white text-ink antialiased">
 
-<!-- Top actions: pricing CTA + language selector -->
-<div class="top-actions">
-  <div id="lang-host"></div>
-  <a href="pricing.html" class="top-pricing-btn" data-i18n="auth_free">Start free →</a>
-</div>
-
-
-<div class="auth-wrap">
-
-  <!-- ─────── LEFT PANEL ─────── -->
-  <div class="hidden lg:flex flex-col justify-between relative overflow-hidden"
-       style="padding:44px clamp(42px,5vw,76px) 38px;background:#04040D;min-height:100vh;">
-    <div class="absolute inset-0 dot-grid" style="opacity:.9;"></div>
-    <div class="orb" style="display:block;width:500px;height:500px;background:#00E5FF;top:-15%;left:-20%;opacity:.07;filter:blur(90px);border-radius:50%;position:absolute;pointer-events:none;"></div>
-    <div class="orb" style="display:block;width:350px;height:350px;background:#9D5CFF;bottom:5%;right:-10%;opacity:.08;filter:blur(90px);border-radius:50%;position:absolute;pointer-events:none;"></div>
-
-    <!-- Top row: Logo -->
-    <div class="relative flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <svg style="filter:drop-shadow(0 0 10px rgba(0,229,255,.55));" width="36" height="36" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="34" height="34" rx="9" fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.28)" stroke-width="1"/>
-          <path d="M10 10.5L24 23.5M24 10.5L10 23.5" stroke="url(#xgl)" stroke-width="2.8" stroke-linecap="round"/>
-          <defs><linearGradient id="xgl" x1="10" y1="10" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00E5FF"/><stop offset="100%" stop-color="#9D5CFF"/></linearGradient></defs>
+  <!-- ════════════════ NAV ════════════════ -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-line">
+    <nav class="max-w-7xl mx-auto px-6 sm:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
+      <a href="/" class="brand-mark text-xl sm:text-2xl flex items-center gap-2 flex-shrink-0">
+        <svg class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 4h4v16H4V4zm12 0h4v16h-4V4zM8 11h8v2H8v-2z" fill="currentColor"/>
         </svg>
-        <div>
-          <div style="font-size:15px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.01em;">CreateX</div>
-          <div style="font-size:10px;font-weight:500;color:#00E5FF;letter-spacing:.22em;margin-top:3px;">AI Platform</div>
-        </div>
+        Helve<span class="x">X</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-ink-soft">
+        <a href="#models" class="hover:text-red transition-colors">Models</a>
+        <a href="#platform" class="hover:text-red transition-colors">Platform</a>
+        <a href="#enterprise" class="hover:text-red transition-colors">Enterprise</a>
+        <a href="#pricing" class="hover:text-red transition-colors">Pricing</a>
       </div>
-    </div>
+      <div class="flex items-center gap-1 sm:gap-2">
+        <a href="/signup.html" class="hidden sm:inline-flex text-sm font-medium text-ink-soft hover:text-ink px-3 py-2">Sign in</a>
+        <a href="/signup.html" class="btn-primary inline-flex items-center gap-1.5 bg-ink hover:bg-ink-soft text-white text-sm font-semibold px-4 py-2.5 rounded-full transition-colors btn-shadow">
+          Enter Platform
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </nav>
+  </header>
 
-    <!-- Marketing -->
-    <div class="relative" style="max-width:660px;margin-top:18px;">
-      <div class="hero-kicker-row anim d1">
-        <div style="display:inline-flex;align-items:center;gap:8px;padding:8px 15px;border-radius:100px;
-             border:1px solid rgba(0,229,255,.24);background:linear-gradient(135deg,rgba(0,229,255,.1),rgba(157,92,255,.05));
-             color:#00E5FF;font-size:11px;font-weight:650;letter-spacing:.035em;text-transform:uppercase;">
-          <span style="width:7px;height:7px;border-radius:50%;background:#00E5FF;box-shadow:0 0 8px rgba(0,229,255,.8);animation:pulseDot 2s infinite;flex-shrink:0;"></span>
-          <span data-i18n="auth_tag">CreateX · Switzerland · Fully Automated</span>
-        </div>
-        <div class="live-pill">
-          <span class="live-dot"></span>
-          <span data-i18n="auth_status">All systems online</span>
-        </div>
+  <!-- ════════════════ HERO ════════════════ -->
+  <section class="relative pt-12 sm:pt-20 pb-24 sm:pb-32 overflow-hidden">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="relative max-w-6xl mx-auto px-6 sm:px-8">
+
+      <div class="reveal flex justify-center mb-8 sm:mb-10">
+        <a href="#models" class="group inline-flex items-center gap-2.5 bg-cream border border-line rounded-full px-4 py-1.5 text-xs sm:text-sm hover:border-ink/20 transition-colors">
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full rounded-full bg-red opacity-75 pulse-dot"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-red"></span>
+          </span>
+          <span class="font-medium text-ink-soft">Now live: Prometheus 2.0 — agentic intelligence</span>
+          <svg class="w-3 h-3 text-ink-mid group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
+        </a>
       </div>
 
-      <h2 class="font-serif anim d2" style="font-size:clamp(56px,5.35vw,78px);font-weight:900;line-height:.96;margin-bottom:22px;letter-spacing:-.034em;">
-        <span data-i18n="auth_hero_line1">AI applies to Swiss jobs</span><br/>
-        <span data-i18n="auth_hero_line2">while you sleep</span><br/>
-        <span class="gradient-text" data-i18n="auth_hero_line3">and gets you interviews.</span>
-      </h2>
-      <p class="anim d2" data-i18n="auth_hero_p" style="font-size:17px;color:rgba(255,255,255,.56);line-height:1.65;max-width:590px;margin-bottom:22px;">
-        Stop burning nights on job forms. Build your profile once and let CreateX find roles, tailor applications, and send them for you — 24/7.
+      <h1 class="reveal h-display text-center text-[44px] sm:text-7xl lg:text-[96px] mb-6 sm:mb-8">
+        Intelligence,<br />
+        <span class="italic font-serif font-normal">redefined.</span>
+      </h1>
+
+      <p class="reveal text-center text-base sm:text-xl text-ink-mid max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed">
+        HelveX builds the next generation of AI — three frontier models engineered for clarity, depth, and autonomous action. Built for the people shaping what comes next.
       </p>
 
-      <div class="conversion-strip anim d3">
-        <span class="conversion-pill">
-          <svg width="12" height="12" fill="none" stroke="#00FFA3" viewBox="0 0 24 24" stroke-width="2.2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-          </svg>
-          <span data-i18n="auth_marketing">Built for ambitious professionals. Engineered for measurable results.</span>
-        </span>
+      <div class="reveal flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
+        <a href="#models" class="btn-primary inline-flex items-center justify-center gap-2 bg-ink hover:bg-ink-soft text-white font-semibold px-7 py-4 rounded-full text-base transition-colors btn-shadow">
+          Explore Models
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
+        </a>
+        <a href="/signup.html" class="inline-flex items-center justify-center gap-2 border-2 border-ink/15 hover:border-ink/40 hover:bg-cream bg-white text-ink font-semibold px-7 py-4 rounded-full text-base transition-all">
+          Enter Platform
+        </a>
       </div>
 
-      <div class="execution-rail anim d3">
-        <div class="execution-step">
-          <b>01</b>
-          <strong data-i18n="auth_flow_1_h">Profile calibrated</strong>
-          <span data-i18n="auth_flow_1_p">CV, skills, salary, cities</span>
-        </div>
-        <div class="execution-step">
-          <b>02</b>
-          <strong data-i18n="auth_flow_2_h">AI targets roles</strong>
-          <span data-i18n="auth_flow_2_p">Swiss matches only</span>
-        </div>
-        <div class="execution-step">
-          <b>03</b>
-          <strong data-i18n="auth_flow_3_h">Applications sent</strong>
-          <span data-i18n="auth_flow_3_p">Tailored, tracked, 24/7</span>
+      <div class="reveal mt-16 sm:mt-20">
+        <p class="text-center text-[11px] uppercase tracking-[0.22em] text-ink-light font-bold mb-8">Trusted by teams shaping the next era</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-8 items-center opacity-60">
+          <div class="text-center text-ink-mid font-bold tracking-tight text-base sm:text-lg">SIGMA<span class="text-red">.</span></div>
+          <div class="text-center text-ink-mid font-light italic text-base sm:text-lg">Northstar</div>
+          <div class="text-center text-ink-mid font-extrabold tracking-widest text-xs sm:text-sm">VEKTOR</div>
+          <div class="text-center text-ink-mid font-bold text-base sm:text-lg">◆ Apex</div>
+          <div class="text-center text-ink-mid font-mono text-sm">[lab/studio]</div>
+          <div class="text-center text-ink-mid font-semibold tracking-tight text-base sm:text-lg">Meridian.</div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <!-- Stats -->
-      <div class="hero-metric-row anim d3">
-        <div class="stat-card">
-          <div style="font-size:34px;font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1;">500<span style="color:#00E5FF;text-shadow:0 0 12px rgba(0,229,255,.6);">+</span></div>
-          <div data-i18n="auth_stat_apps" style="font-size:10px;color:rgba(255,255,255,.38);margin-top:8px;text-transform:uppercase;letter-spacing:.09em;font-weight:500;">Daily Apps</div>
-        </div>
-        <div class="stat-card">
-          <div style="font-size:34px;font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1;">10<span style="color:#9D5CFF;text-shadow:0 0 12px rgba(157,92,255,.6);">×</span></div>
-          <div data-i18n="auth_stat_faster" style="font-size:10px;color:rgba(255,255,255,.38);margin-top:8px;text-transform:uppercase;letter-spacing:.09em;font-weight:500;">Faster</div>
-        </div>
-        <div class="stat-card">
-          <div style="font-size:34px;font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1;">40<span style="color:#00FFA3;text-shadow:0 0 12px rgba(0,255,163,.6);">+</span></div>
-          <div data-i18n="auth_stat_countries" style="font-size:10px;color:rgba(255,255,255,.38);margin-top:8px;text-transform:uppercase;letter-spacing:.09em;font-weight:500;">Countries</div>
-        </div>
+  <!-- ════════════════ STATS ════════════════ -->
+  <section class="border-y border-line bg-cream/50">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8 py-10 sm:py-14 grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12">
+      <div class="reveal text-center md:text-left">
+        <div class="text-4xl sm:text-5xl font-extrabold tracking-tightest">120<span class="text-red">B</span></div>
+        <div class="text-sm text-ink-mid mt-1">tokens served daily</div>
+      </div>
+      <div class="reveal text-center md:text-left">
+        <div class="text-4xl sm:text-5xl font-extrabold tracking-tightest">3</div>
+        <div class="text-sm text-ink-mid mt-1">frontier models</div>
+      </div>
+      <div class="reveal text-center md:text-left">
+        <div class="text-4xl sm:text-5xl font-extrabold tracking-tightest">99.99<span class="text-red">%</span></div>
+        <div class="text-sm text-ink-mid mt-1">uptime SLA</div>
+      </div>
+      <div class="reveal text-center md:text-left">
+        <div class="text-4xl sm:text-5xl font-extrabold tracking-tightest">SOC 2</div>
+        <div class="text-sm text-ink-mid mt-1">Type II certified</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ MODELS ════════════════ -->
+  <section id="models" class="relative py-24 sm:py-36">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8">
+      <div class="max-w-3xl mb-16 sm:mb-24">
+        <p class="reveal text-[11px] uppercase tracking-[0.22em] text-red font-bold mb-5">Our Models</p>
+        <h2 class="reveal h-section text-5xl sm:text-7xl mb-6">Three models.<br /><span class="italic font-serif font-normal">One frontier.</span></h2>
+        <p class="reveal text-base sm:text-xl text-ink-mid leading-relaxed max-w-2xl">
+          Each model is engineered for a different mode of intelligence. Together, they form a system designed to think, build, and act with you.
+        </p>
       </div>
 
-      <!-- Testimonial carousel -->
-      <div id="tm-carousel" class="anim d4"
-           style="padding:22px 24px 20px;border-radius:18px;background:linear-gradient(180deg,rgba(0,229,255,.028),rgba(157,92,255,.01));border:1px solid rgba(0,229,255,.1);position:relative;overflow:hidden;max-width:620px;box-shadow:0 0 30px rgba(0,229,255,.04);">
-        <div id="tm-viewport" style="overflow:hidden;">
-          <div id="tm-track"
-               style="display:flex;transition:transform .9s cubic-bezier(.65,0,.35,1);will-change:transform;">
+      <!-- Ether -->
+      <article class="card reveal model-ether mb-6 sm:mb-8 rounded-3xl border border-line p-8 sm:p-12 lg:p-16 grid lg:grid-cols-12 gap-8 sm:gap-12">
+        <div class="lg:col-span-5">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-yellow flex items-center justify-center shadow-md shadow-yellow/30">
+              <svg class="w-6 h-6 text-ink" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="text-[11px] uppercase tracking-[0.22em] font-bold text-ink-mid">Real-time intelligence</span>
+          </div>
+          <h3 class="text-5xl sm:text-6xl font-extrabold tracking-tightest mb-4">Ether</h3>
+          <p class="text-base sm:text-lg text-ink-mid leading-relaxed mb-6">
+            Lightning-fast, ambient AI engineered for everyday tasks. Drafting, summarizing, translating, conversing — all at the speed of thought.
+          </p>
+          <a href="/signup.html" class="inline-flex items-center gap-1.5 text-ink font-semibold border-b-2 border-yellow hover:border-ink transition-colors pb-0.5">
+            Try Ether <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
+          </a>
+        </div>
+        <div class="lg:col-span-7 lg:border-l border-line lg:pl-12">
+          <dl class="grid grid-cols-2 gap-x-8 gap-y-6 mb-8">
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.18em] text-ink-light font-bold mb-1.5">Speed</dt>
+              <dd class="text-2xl font-bold tracking-tight">Sub-100ms</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.18em] text-ink-light font-bold mb-1.5">Context</dt>
+              <dd class="text-2xl font-bold tracking-tight">200K tokens</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.18em] text-ink-light font-bold mb-1.5">Best for</dt>
+              <dd class="text-base text-ink-soft">Conversation, drafting, summarization</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.18em] text-ink-light font-bold mb-1.5">Modes</dt>
+              <dd class="text-base text-ink-soft">Text · Voice · Image</dd>
+            </div>
+          </dl>
+          <div class="mb-3 flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-ink-light font-bold">
+            <span>Intelligence vs. speed</span>
+          </div>
+          <div class="space-y-2.5">
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-20">Speed</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width: 96%"></div></div></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-20">Reasoning</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width: 64%"></div></div></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-20">Multimodal</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width: 78%"></div></div></div>
           </div>
         </div>
-        <!-- Dots indicator -->
-        <div id="tm-dots" style="display:flex;gap:5px;margin-top:20px;position:relative;"></div>
+      </article>
+
+      <!-- Nexus -->
+      <article class="card reveal model-nexus mb-6 sm:mb-8 rounded-3xl border border-line p-8 sm:p-12 lg:p-16 grid lg:grid-cols-12 gap-8 sm:gap-12">
+        <div class="lg:col-span-5">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-red flex items-center justify-center shadow-md shadow-red/30">
+              <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4M5 5l3 3m8 8l3 3M5 19l3-3m8-8l3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <span class="text-[11px] uppercase tracking-[0.22em] font-bold text-ink-mid">Deep reasoning</span>
+          </div>
+          <h3 class="text-5xl sm:text-6xl font-extrabold tracking-tightest mb-4">Nexus</h3>
+          <p class="text-base sm:text-lg text-ink-mid leading-relaxed mb-6">
+            A reasoning-first model designed to think. Slow down where it matters: research, analysis, multi-step problem solving, scientific work.
+          </p>
+          <a href="/signup.html" class="inline-flex items-center gap-1.5 text-ink font-semibold border-b-2 border-red hover:border-ink transition-colors pb-0.5">
+            Try Nexus <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
+          </a>
+        </div>
+        <div class="lg:col-span-7 lg:border-l border-line lg:pl-12">
+          <dl class="grid grid-cols-2 gap-x-8 gap-y-6 mb-8">
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.18em] text-ink-light font-bold mb-1.5">Reasoning</dt>
+              <dd class="text-2xl font-bold tracking-tight">Adaptive depth</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.18em] text-ink-light font-bold mb-1.5">Context</dt>
+              <dd class="text-2xl font-bold tracking-tight">1M tokens</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.18em] text-ink-light font-bold mb-1.5">Best for</dt>
+              <dd class="text-base text-ink-soft">Research, analysis, math, science</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.18em] text-ink-light font-bold mb-1.5">Modes</dt>
+              <dd class="text-base text-ink-soft">Reasoning · Citations · Tools</dd>
+            </div>
+          </dl>
+          <div class="mb-3 flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-ink-light font-bold">
+            <span>Intelligence vs. speed</span>
+          </div>
+          <div class="space-y-2.5">
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-20">Reasoning</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-red rounded-full" style="width: 96%"></div></div></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-20">Accuracy</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-red rounded-full" style="width: 92%"></div></div></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-20">Speed</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-red rounded-full" style="width: 56%"></div></div></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Prometheus -->
+      <article class="card reveal model-prometheus rounded-3xl border border-line p-8 sm:p-12 lg:p-16 grid lg:grid-cols-12 gap-8 sm:gap-12">
+        <div class="lg:col-span-5">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-ink flex items-center justify-center shadow-md shadow-ink/30">
+              <svg class="w-6 h-6 text-yellow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7l3-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="text-[11px] uppercase tracking-[0.22em] font-bold text-ink-mid">Agentic action</span>
+          </div>
+          <h3 class="text-5xl sm:text-6xl font-extrabold tracking-tightest mb-4">Prometheus</h3>
+          <p class="text-base sm:text-lg text-ink-mid leading-relaxed mb-6">
+            Agents that take action. Prometheus plans, calls tools, writes code, browses, and ships outcomes — autonomously, end to end.
+          </p>
+          <a href="/signup.html" class="inline-flex items-center gap-1.5 text-ink font-semibold border-b-2 border-ink hover:border-red transition-colors pb-0.5">
+            Try Prometheus <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
+          </a>
+        </div>
+        <div class="lg:col-span-7 lg:border-l border-line lg:pl-12">
+          <dl class="grid grid-cols-2 gap-x-8 gap-y-6 mb-8">
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.18em] text-ink-light font-bold mb-1.5">Tool use</dt>
+              <dd class="text-2xl font-bold tracking-tight">200+ integrations</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.18em] text-ink-light font-bold mb-1.5">Horizon</dt>
+              <dd class="text-2xl font-bold tracking-tight">Hours of work</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.18em] text-ink-light font-bold mb-1.5">Best for</dt>
+              <dd class="text-base text-ink-soft">Coding, automation, agentic workflows</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.18em] text-ink-light font-bold mb-1.5">Modes</dt>
+              <dd class="text-base text-ink-soft">Agents · Code · Browser · Files</dd>
+            </div>
+          </dl>
+          <div class="mb-3 flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-ink-light font-bold">
+            <span>Intelligence vs. speed</span>
+          </div>
+          <div class="space-y-2.5">
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-20">Autonomy</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width: 98%"></div></div></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-20">Tool use</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width: 94%"></div></div></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-20">Reasoning</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width: 88%"></div></div></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ════════════════ PLATFORM PREVIEW ════════════════ -->
+  <section id="platform" class="relative py-24 sm:py-36 bg-cream/40 border-y border-line">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8">
+      <div class="max-w-3xl mb-16 sm:mb-20">
+        <p class="reveal text-[11px] uppercase tracking-[0.22em] text-red font-bold mb-5">The Platform</p>
+        <h2 class="reveal h-section text-5xl sm:text-7xl mb-6">One platform for<br />every kind of AI work.</h2>
+        <p class="reveal text-base sm:text-xl text-ink-mid leading-relaxed">
+          Chat, agents, automations, research, code — running on top of the model that fits the moment.
+        </p>
       </div>
 
-      <!-- Trust chips -->
-      <div class="anim d5" style="margin-top:18px;display:flex;flex-wrap:wrap;gap:8px;position:relative;max-width:620px;">
-        <span class="chip">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" stroke-width="2.2" style="flex-shrink:0;opacity:.8;">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/>
-          </svg>
-          <span data-i18n="auth_badge_gdpr">GDPR Compliant</span>
-        </span>
-        <span class="chip">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" stroke-width="2.2" style="flex-shrink:0;opacity:.8;">
-            <rect x="4" y="10" width="16" height="11" rx="2" stroke-linejoin="round"/>
-            <path d="M8 10V7a4 4 0 018 0v3" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span data-i18n="auth_badge_enc">256-bit Encryption</span>
-        </span>
-        <span class="chip">
-          <span style="width:12px;height:9px;border-radius:1.5px;background:linear-gradient(135deg,#00E5FF,#9D5CFF);position:relative;flex-shrink:0;display:inline-block;box-shadow:0 0 6px rgba(0,229,255,.5);">
-            <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px;font-weight:800;line-height:1;">+</span>
-          </span>
-          <span data-i18n="auth_badge_swiss">Swiss Hosted</span>
-        </span>
-        <span class="chip">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" stroke-width="2.2" style="flex-shrink:0;opacity:.8;">
-            <circle cx="12" cy="12" r="9"/>
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8.5 12.5l2.5 2.5 4.5-5"/>
-          </svg>
-          <span data-i18n="auth_badge_iso">ISO 27001</span>
-        </span>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-line border border-line rounded-3xl overflow-hidden">
+        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
+          <div class="w-10 h-10 rounded-lg bg-ink/5 flex items-center justify-center mb-6">
+            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="currentColor" stroke-width="1.8"/></svg>
+          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Chat</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Talk to any model. Switch mid-conversation. Long context, files, voice — all natively.</p>
+        </div>
+
+        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
+          <div class="w-10 h-10 rounded-lg bg-red/10 flex items-center justify-center mb-6">
+            <svg class="w-5 h-5 text-red" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="1.8"/></svg>
+          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Agents</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Build AI workers that plan, act, and report back. Hours of work, fully delegated.</p>
+        </div>
+
+        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
+          <div class="w-10 h-10 rounded-lg bg-yellow-soft flex items-center justify-center mb-6">
+            <svg class="w-5 h-5 text-yellow-deep" viewBox="0 0 24 24" fill="none"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Automation</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Trigger AI on schedules, events, or webhooks. Connect anything. Ship reliable workflows.</p>
+        </div>
+
+        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
+          <div class="w-10 h-10 rounded-lg bg-ink/5 flex items-center justify-center mb-6">
+            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Workflows</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Compose multi-step pipelines. Branches, retries, human-in-the-loop. Production-grade.</p>
+        </div>
+
+        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
+          <div class="w-10 h-10 rounded-lg bg-red/10 flex items-center justify-center mb-6">
+            <svg class="w-5 h-5 text-red" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Research</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Deep multi-source analysis with citations. Run hours of research in minutes.</p>
+        </div>
+
+        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
+          <div class="w-10 h-10 rounded-lg bg-ink flex items-center justify-center mb-6">
+            <svg class="w-5 h-5 text-yellow" viewBox="0 0 24 24" fill="none"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Coding</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Read repos, write changes, run tests, open PRs. A real engineer in your stack.</p>
+        </div>
       </div>
 
+      <!-- Mock interface -->
+      <div class="reveal mt-16 sm:mt-20 rounded-3xl border border-line shadow-2xl shadow-ink/10 overflow-hidden bg-white">
+        <div class="bg-cream border-b border-line px-5 py-3 flex items-center gap-2">
+          <div class="flex gap-1.5">
+            <div class="w-2.5 h-2.5 rounded-full bg-line"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-line"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-line"></div>
+          </div>
+          <div class="flex-1 text-center text-xs text-ink-mid font-mono">helvex.ai/platform</div>
+        </div>
+        <div class="grid lg:grid-cols-[280px_1fr]">
+          <aside class="hidden lg:block bg-cream/50 border-r border-line p-6">
+            <button class="w-full flex items-center justify-between gap-2 bg-white border border-line rounded-xl px-3 py-2.5 text-sm font-medium hover:border-ink/30 transition-colors mb-6">
+              <div class="flex items-center gap-2">
+                <div class="w-5 h-5 rounded-md bg-yellow flex items-center justify-center"><span class="text-[8px] font-bold">E</span></div>
+                Ether
+              </div>
+              <svg class="w-3.5 h-3.5 text-ink-mid" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2"/></svg>
+            </button>
+            <p class="text-[10px] uppercase tracking-[0.18em] text-ink-light font-bold mb-3">Recent</p>
+            <ul class="space-y-1 text-sm">
+              <li class="bg-white border border-line rounded-lg px-3 py-2 text-ink-soft">Q4 strategy memo</li>
+              <li class="px-3 py-2 text-ink-mid hover:bg-white rounded-lg cursor-pointer">Refactor billing module</li>
+              <li class="px-3 py-2 text-ink-mid hover:bg-white rounded-lg cursor-pointer">Research: AI policy 2026</li>
+              <li class="px-3 py-2 text-ink-mid hover:bg-white rounded-lg cursor-pointer">Customer interview synthesis</li>
+            </ul>
+          </aside>
+          <div class="p-6 sm:p-10 flex flex-col gap-5 min-h-[440px]">
+            <div class="flex gap-3">
+              <div class="w-7 h-7 rounded-full bg-ink/5 flex items-center justify-center flex-shrink-0 text-[10px] font-bold text-ink-mid">YOU</div>
+              <div class="text-sm text-ink-soft leading-relaxed pt-1">Draft a Q4 board update covering the Prometheus 2.0 launch, ARR growth, and the new SOC 2 certification. Tone: confident, not boastful.</div>
+            </div>
+            <div class="flex gap-3">
+              <div class="w-7 h-7 rounded-full bg-yellow flex items-center justify-center flex-shrink-0 shadow-sm shadow-yellow/40">
+                <svg class="w-3.5 h-3.5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="flex-1 text-sm text-ink-soft leading-relaxed pt-1">
+                <p class="font-bold mb-2 text-ink">Q4 Board Update — HelveX</p>
+                <p class="mb-3 text-ink-mid">Three updates this quarter set the trajectory for the year ahead.</p>
+                <p class="mb-3"><span class="font-semibold">Prometheus 2.0 is live.</span> Our agentic model now ships hours of work autonomously across 200+ integrations. Early enterprise rollouts show 4–8× productivity gains on long-horizon tasks…</p>
+                <p class="text-ink-light text-[11px] italic mt-3 font-mono">Generated by Ether · 0.7s · 412 tokens</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <!-- Footer -->
-    <div style="font-size:11px;color:rgba(255,255,255,.25);position:relative;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-weight:500;letter-spacing:.01em;">
-      <span style="display:inline-flex;align-items:center;gap:8px;">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#00FFA3" stroke-width="2.2" style="filter:drop-shadow(0 0 6px rgba(0,255,163,.5));flex-shrink:0;">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-        </svg>
-        <span>Trusted by professionals across 40+ countries</span>
-      </span>
+  <!-- ════════════════ WHY HELVEX ════════════════ -->
+  <section class="py-24 sm:py-36">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8">
+      <div class="max-w-3xl mb-16 sm:mb-20">
+        <p class="reveal text-[11px] uppercase tracking-[0.22em] text-red font-bold mb-5">Why HelveX</p>
+        <h2 class="reveal h-section text-5xl sm:text-7xl mb-6">Built for the work<br />that actually matters.</h2>
+        <p class="reveal text-base sm:text-xl text-ink-mid leading-relaxed max-w-2xl">
+          Speed, depth, and trust — engineered into every layer.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div class="reveal card border border-line rounded-2xl p-8 hover:border-ink/20 bg-white">
+          <div class="text-5xl font-extrabold tracking-tightest mb-4 text-ink">01</div>
+          <h3 class="text-xl font-bold tracking-tight mb-3">Faster, by design</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Sub-100ms responses on Ether. Streaming-first across the stack. No spinning wheels.</p>
+        </div>
+        <div class="reveal card border border-line rounded-2xl p-8 hover:border-ink/20 bg-white">
+          <div class="text-5xl font-extrabold tracking-tightest mb-4 text-red">02</div>
+          <h3 class="text-xl font-bold tracking-tight mb-3">Smarter reasoning</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Nexus thinks in steps with verifiable citations. You get answers you can trust enough to act on.</p>
+        </div>
+        <div class="reveal card border border-line rounded-2xl p-8 hover:border-ink/20 bg-white">
+          <div class="text-5xl font-extrabold tracking-tightest mb-4 text-ink">03</div>
+          <h3 class="text-xl font-bold tracking-tight mb-3">Enterprise-grade</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">SOC 2 Type II. EU & US data residency. SSO, audit logs, role-based access. Day one.</p>
+        </div>
+        <div class="reveal card border border-line rounded-2xl p-8 hover:border-ink/20 bg-white">
+          <div class="text-5xl font-extrabold tracking-tightest mb-4 text-yellow-deep">04</div>
+          <h3 class="text-xl font-bold tracking-tight mb-3">Scales with you</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">From your first prototype to a billion-token deployment, on the same API and the same dashboard.</p>
+        </div>
+        <div class="reveal card border border-line rounded-2xl p-8 hover:border-ink/20 bg-white">
+          <div class="text-5xl font-extrabold tracking-tightest mb-4 text-ink">05</div>
+          <h3 class="text-xl font-bold tracking-tight mb-3">Secure by default</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Your data stays yours. No training on customer inputs. End-to-end encryption.</p>
+        </div>
+        <div class="reveal card border border-line rounded-2xl p-8 hover:border-ink/20 bg-white">
+          <div class="text-5xl font-extrabold tracking-tightest mb-4 text-red">06</div>
+          <h3 class="text-xl font-bold tracking-tight mb-3">99.99% reliable</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Multi-region failover. Real-time status. The infrastructure your business already needed.</p>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <!-- ─────── RIGHT PANEL: FORM ─────── -->
-  <div class="auth-form-panel" style="display:flex;align-items:center;justify-content:center;
-       padding:48px 24px;background:#04040D;min-height:100vh;">
-    <div style="width:100%;max-width:470px;">
+  <!-- ════════════════ ENTERPRISE ════════════════ -->
+  <section id="enterprise" class="relative py-24 sm:py-36 bg-ink text-white overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.04]" style="background-image: linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px); background-size: 80px 80px;"></div>
+    <div class="hero-orb hero-orb-1" style="top: -200px; right: -150px; opacity: 0.15;"></div>
 
-      <!-- Mobile logo -->
-      <div class="flex lg:hidden items-center justify-center gap-3" style="margin-bottom:32px;">
-        <svg style="filter:drop-shadow(0 0 10px rgba(0,229,255,.55));" width="28" height="28" viewBox="0 0 34 34" fill="none">
-          <rect width="34" height="34" rx="9" fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.28)" stroke-width="1"/>
-          <path d="M10 10.5L24 23.5M24 10.5L10 23.5" stroke="url(#xgm2)" stroke-width="2.8" stroke-linecap="round"/>
-          <defs><linearGradient id="xgm2" x1="10" y1="10" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00E5FF"/><stop offset="100%" stop-color="#9D5CFF"/></linearGradient></defs>
-        </svg>
+    <div class="relative max-w-7xl mx-auto px-6 sm:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-end mb-16 sm:mb-20">
         <div>
-          <div style="font-size:14px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.01em;">CreateX</div>
-          <div style="font-size:10px;font-weight:500;color:#00E5FF;letter-spacing:.22em;margin-top:2px;">AI Platform</div>
+          <p class="reveal text-[11px] uppercase tracking-[0.22em] text-yellow font-bold mb-5">For teams</p>
+          <h2 class="reveal h-section text-5xl sm:text-7xl">For the most<br />ambitious<br />teams on Earth.</h2>
         </div>
-      </div>
-
-      <!-- Premium form card -->
-      <div class="form-card anim d1">
-
-        <!-- Tabs -->
-        <div style="display:flex;background:rgba(255,255,255,.04);border-radius:12px;
-             padding:4px;border:1px solid rgba(255,255,255,.07);margin-bottom:24px;">
-          <button id="tab-su" class="tab-btn tab-active" onclick="switchTab('su')">Create Account</button>
-          <button id="tab-si" class="tab-btn tab-inactive" onclick="switchTab('si')">Sign In</button>
-        </div>
-
-        <!-- Heading -->
-        <div class="anim d2" style="margin-bottom:22px;">
-          <h1 id="auth-title" class="font-serif" style="font-size:34px;font-weight:900;line-height:1.05;margin-bottom:10px;letter-spacing:-.028em;">
-            Create your account
-          </h1>
-          <p id="auth-sub" style="font-size:14px;color:rgba(255,255,255,.45);line-height:1.6;letter-spacing:-.002em;">
-            Start your automated job search in Switzerland today.
+        <div>
+          <p class="reveal text-base sm:text-xl text-white/70 leading-relaxed">
+            From a single founder shipping their first product to public companies operating across continents — the same platform, the same uncompromising quality.
           </p>
         </div>
-
-        <div class="card-seal anim d2">
-          <div>
-            <strong data-i18n="auth_panel_h">Launch the AI job engine</strong>
-            <span data-i18n="auth_panel_p">Email verification first. Password setup after signup.</span>
-          </div>
-          <mark data-i18n="auth_panel_badge">Private beta</mark>
-        </div>
-
-        <!-- SIGN UP FORM -->
-        <form id="form-su" class="anim d3" onsubmit="handleAuth(event,'su')">
-          <div style="margin-bottom:14px;">
-            <label class="form-label" data-i18n="auth_label_name">Full Name</label>
-            <input type="text" class="form-input" data-i18n-placeholder="auth_ph_name" placeholder="e.g. Marco Rossi" autocomplete="name" required />
-          </div>
-          <div style="margin-bottom:14px;">
-            <label class="form-label" data-i18n="auth_label_email">Email Address</label>
-            <input id="su-email" type="email" class="form-input" data-i18n-placeholder="auth_ph_email" placeholder="you@example.com" autocomplete="email" required />
-          </div>
-          <div style="margin-bottom:24px;">
-            <label class="form-label" data-i18n="auth_label_pass">Password</label>
-            <div style="position:relative;">
-              <input id="su-pass" type="password" class="form-input" data-i18n-placeholder="auth_ph_pass_new" placeholder="Min. 8 characters" style="padding-right:46px;" autocomplete="new-password" required />
-              <button type="button" onclick="togglePwd('su-pass',this)" aria-label="Show password"
-                      style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
-                             background:none;border:none;color:rgba(255,255,255,.32);cursor:pointer;line-height:0;padding:6px;border-radius:6px;transition:color .2s;">
-                <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <button type="submit" class="btn-gold" style="width:100%;padding:17px;font-size:15.5px;">
-            <span data-i18n="auth_btn_create">Create Account</span>
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
-          </button>
-        </form>
-
-        <!-- SIGN IN FORM -->
-        <form id="form-si" class="anim d3" style="display:none;" onsubmit="handleAuth(event,'si')">
-          <div style="margin-bottom:14px;">
-            <label class="form-label" data-i18n="auth_label_email">Email Address</label>
-            <input id="si-email" type="email" class="form-input" data-i18n-placeholder="auth_ph_email" placeholder="you@example.com" autocomplete="email" required />
-          </div>
-          <div style="margin-bottom:10px;">
-            <label class="form-label" data-i18n="auth_label_pass">Password</label>
-            <div style="position:relative;">
-              <input id="si-pass" type="password" class="form-input" data-i18n-placeholder="auth_ph_pass" placeholder="Your password" style="padding-right:46px;" autocomplete="current-password" />
-              <button type="button" onclick="togglePwd('si-pass',this)" aria-label="Show password"
-                      style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
-                             background:none;border:none;color:rgba(255,255,255,.32);cursor:pointer;line-height:0;padding:6px;border-radius:6px;transition:color .2s;">
-                <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div style="text-align:right;margin-bottom:22px;">
-            <a href="#" onclick="handleForgot(event)" style="font-size:12px;color:rgba(0,229,255,.55);text-decoration:none;font-weight:500;transition:color .2s;" onmouseover="this.style.color='#00E5FF'" onmouseout="this.style.color='rgba(0,229,255,.55)'" data-i18n="auth_forgot">Forgot password?</a>
-          </div>
-          <button type="submit" class="btn-gold" style="width:100%;padding:17px;font-size:15.5px;">
-            <span data-i18n="auth_btn_signin">Sign In</span>
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
-          </button>
-        </form>
-
       </div>
 
-      <!-- Fine print (outside card) -->
-      <p class="anim d4" style="font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-top:18px;line-height:1.65;">
-        <span data-i18n="auth_legal">By continuing you agree to our</span>
-        <a href="#" style="color:rgba(0,229,255,.55);text-decoration:none;"><span data-i18n="auth_terms">Terms</span></a>
-        <span data-i18n="auth_and">and</span>
-        <a href="#" style="color:rgba(0,229,255,.55);text-decoration:none;"><span data-i18n="auth_privacy">Privacy Policy</span></a>
-      </p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div class="reveal border border-white/10 rounded-2xl p-8 hover:border-yellow/40 transition-colors backdrop-blur-sm">
+          <div class="w-12 h-12 rounded-xl bg-yellow flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-ink" viewBox="0 0 24 24" fill="none"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="text-2xl font-bold tracking-tight mb-3">Developers</h3>
+          <p class="text-sm text-white/60 leading-relaxed mb-6">A clean API, real SDKs, honest docs. Build with the same tools our team uses internally.</p>
+          <ul class="space-y-2 text-sm text-white/70">
+            <li class="flex gap-2"><span class="text-yellow">▸</span> REST + streaming SDKs (TS · Py · Go)</li>
+            <li class="flex gap-2"><span class="text-yellow">▸</span> First-class function calling & tools</li>
+            <li class="flex gap-2"><span class="text-yellow">▸</span> Sandboxed code execution</li>
+          </ul>
+        </div>
+        <div class="reveal border border-white/10 rounded-2xl p-8 hover:border-red/50 transition-colors backdrop-blur-sm">
+          <div class="w-12 h-12 rounded-xl bg-red flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="text-2xl font-bold tracking-tight mb-3">Startups</h3>
+          <p class="text-sm text-white/60 leading-relaxed mb-6">Free credits to start. Generous scaling. Help when you ask. Out of the way otherwise.</p>
+          <ul class="space-y-2 text-sm text-white/70">
+            <li class="flex gap-2"><span class="text-red">▸</span> Up to $25K in HelveX credits</li>
+            <li class="flex gap-2"><span class="text-red">▸</span> 1:1 onboarding for funded teams</li>
+            <li class="flex gap-2"><span class="text-red">▸</span> Direct line to engineering</li>
+          </ul>
+        </div>
+        <div class="reveal border border-white/10 rounded-2xl p-8 hover:border-white/40 transition-colors backdrop-blur-sm">
+          <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-ink" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 9h6v6H9z" stroke="currentColor" stroke-width="2"/></svg>
+          </div>
+          <h3 class="text-2xl font-bold tracking-tight mb-3">Enterprise</h3>
+          <p class="text-sm text-white/60 leading-relaxed mb-6">Procurement-friendly contracts. Dedicated capacity. The compliance posture your security team expects.</p>
+          <ul class="space-y-2 text-sm text-white/70">
+            <li class="flex gap-2"><span class="text-white">▸</span> SOC 2 Type II · ISO 27001 · GDPR</li>
+            <li class="flex gap-2"><span class="text-white">▸</span> Private deployments + VPC peering</li>
+            <li class="flex gap-2"><span class="text-white">▸</span> Custom SLAs and dedicated TAM</li>
+          </ul>
+        </div>
+      </div>
 
+      <div class="reveal mt-16 sm:mt-20 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="/signup.html" class="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-yellow text-ink font-semibold px-7 py-4 rounded-full text-base transition-colors">
+          Talk to sales
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
+        </a>
+        <a href="#pricing" class="text-sm text-white/70 hover:text-white px-4 py-2 transition-colors">See pricing →</a>
+      </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<script>
-  let currentTab = 'su';
-
-  function switchTab(t) {
-    currentTab = t;
-    const isSU = t === 'su';
-    document.getElementById('tab-su').className = 'tab-btn ' + (isSU ? 'tab-active' : 'tab-inactive');
-    document.getElementById('tab-si').className = 'tab-btn ' + (isSU ? 'tab-inactive' : 'tab-active');
-    document.getElementById('form-su').style.display = isSU ? 'block' : 'none';
-    document.getElementById('form-si').style.display = isSU ? 'none' : 'block';
-    const T = (typeof ssaiT === 'function') ? ssaiT : (k => ({ auth_title_create:'Create your account', auth_title_signin:'Welcome back', auth_sub_create:'Start your automated job search in Switzerland today.', auth_sub_signin:'Sign in to manage your AI job search.', auth_tab_create:'Create Account', auth_tab_signin:'Sign In' })[k] || k);
-    document.getElementById('auth-title').textContent = T(isSU ? 'auth_title_create' : 'auth_title_signin');
-    document.getElementById('auth-sub').textContent   = T(isSU ? 'auth_sub_create'   : 'auth_sub_signin');
-    document.getElementById('tab-su').textContent     = T('auth_tab_create');
-    document.getElementById('tab-si').textContent     = T('auth_tab_signin');
-  }
-
-  async function handleAuth(e, type) {
-    e.preventDefault();
-    const email = document.getElementById(type + '-email').value.trim();
-    const nameEl = type === 'su' ? e.target.querySelector('input[autocomplete="name"]') : null;
-    const fullName = nameEl ? nameEl.value.trim() : '';
-    const btn = e.target.querySelector('button[type="submit"]');
-    const authError = (error, fallback) => {
-      if (!error) return fallback || 'Authentication error';
-      const parts = [error.message || error.error_description || error.error || fallback || 'Authentication error'];
-      if (error.status) parts.push('Status: ' + error.status);
-      if (error.code) parts.push('Code: ' + error.code);
-      return parts.filter(Boolean).join('\n');
-    };
-    const reportAuthError = (method, error, fallback) => {
-      const message = authError(error, fallback);
-      console.error('Supabase auth error:', { method, message: error && error.message, status: error && error.status, code: error && error.code, error });
-    };
-    const isSupabaseMailerFailure = (error) => {
-      const message = String((error && error.message) || '').toLowerCase();
-      const status = String((error && error.status) || '');
-      const code = String((error && error.code) || '');
-      return status === '500' && code === 'unexpected_failure' && (message.includes('magic link email') || message.includes('confirmation email') || message.includes('email'));
-    };
-    const logAuthError = (method, error) => {
-      console.error('Supabase auth error:', { method, message: error && error.message, status: error && error.status, code: error && error.code, error });
-    };
-    if (btn) { btn.disabled = true; btn.style.opacity = '.7'; btn.style.cursor = 'wait'; }
-    try {
-      const go = () => { window.location.href = 'verify.html?email=' + encodeURIComponent(email) + '&mode=' + type; };
-      if (type === 'si') {
-        if (!window.sb) { console.error('Supabase client unavailable.'); return; }
-        const { error } = await window.sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
-        if (error) {
-          if (isSupabaseMailerFailure(error)) { logAuthError('signInWithOtp:signin', error); go(); } else { reportAuthError('signInWithOtp:signin', error); }
-          return;
-        }
-        go();
-      } else {
-        if (!window.sb) { console.error('Supabase client unavailable.'); return; }
-        const { error } = await window.sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true, data: { full_name: fullName, name: fullName } } });
-        if (error) {
-          if (isSupabaseMailerFailure(error)) { logAuthError('signInWithOtp:signup', error); go(); } else { reportAuthError('signInWithOtp:signup', error); }
-          return;
-        }
-        go();
-      }
-    } catch (err) {
-      reportAuthError('handleAuth', err);
-    } finally {
-      if (btn) { btn.disabled = false; btn.style.opacity = ''; btn.style.cursor = ''; }
-    }
-  }
-
-  function togglePwd(id, btn) {
-    const inp = document.getElementById(id);
-    inp.type = inp.type === 'password' ? 'text' : 'password';
-    btn.style.color = inp.type === 'text' ? '#00E5FF' : 'rgba(255,255,255,.32)';
-  }
-
-  async function handleForgot(e) {
-    e.preventDefault();
-    const email = document.getElementById('si-email').value.trim();
-    if (!email) return;
-    if (!window.sb) { console.error('Supabase client unavailable.'); return; }
-    const reportAuthError = (method, error) => console.error('Supabase auth error:', { method, message: error && error.message, status: error && error.status, code: error && error.code, error });
-    try {
-      const { error } = await window.sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
-      if (error) { reportAuthError('signInWithOtp:forgot', error); return; }
-      window.location.href = 'verify.html?email=' + encodeURIComponent(email) + '&mode=reset';
-    } catch (err) {
-      reportAuthError('handleForgot', err);
-    }
-  }
-
-  /* Session sync — if the user is already authenticated, move on */
-  (function(){
-    const SESSION_REDIRECT = 'dashboard.html';
-    function maybeRedirect(session){
-      if (!session || !session.user) return;
-      if (location.pathname.endsWith('verify.html') || location.pathname.endsWith(SESSION_REDIRECT)) return;
-      location.href = SESSION_REDIRECT;
-    }
-    function waitForSB(cb, tries){
-      if (window.sb) return cb();
-      if ((tries = (tries||0)) > 40) return;
-      setTimeout(()=>waitForSB(cb, tries+1), 75);
-    }
-    document.addEventListener('DOMContentLoaded', ()=>{
-      waitForSB(async ()=>{
-        try {
-          const { data } = await window.sb.auth.getSession();
-          maybeRedirect(data && data.session);
-        } catch(_) {}
-        window.sb.auth.onAuthStateChange((_evt, session)=>maybeRedirect(session));
-      });
-    });
-  })();
-
-  document.addEventListener('ssai:lang', () => switchTab(currentTab));
-</script>
-
-<script>window.SSAI_LANGS={en:'English',el:'Ελληνικά',de:'Deutsch',fr:'Français',it:'Italiano',es:'Español',pt:'Português',zh:'中文',ko:'한국어'};window.SSAI_FLAGS={en:'gb',el:'gr',de:'de',fr:'fr',it:'it',es:'es',pt:'pt',zh:'cn',ko:'kr'};</script>
-<script src="lang-widget.js?v=6"></script>
-<script>initLang('lang-host');</script>
-<script>
-(function(){
-  var L={en:'English',el:'Ελληνικά',de:'Deutsch',fr:'Français',it:'Italiano',es:'Español',pt:'Português',zh:'中文',ko:'한국어'};
-  var F={en:'gb',el:'gr',de:'de',fr:'fr',it:'it',es:'es',pt:'pt',zh:'cn',ko:'kr'};
-  function patchDD(){
-    var dd=document.getElementById('ssai-dd');
-    if(!dd)return;
-    var cur=(typeof SSAI_LANG!=='undefined'?SSAI_LANG:localStorage.getItem('ssai_lang')||'en');
-    dd.innerHTML=Object.entries(L).map(function(p){
-      var c=p[0],n=p[1],a=(c===cur),flag=F[c]||'';
-      return '<button data-lang-opt="'+c+'" onclick="ssaiSetLang(\''+c+'\')" style="display:flex;align-items:center;width:100%;text-align:left;padding:6px 11px;font-size:12.5px;color:'+(a?'#C4A55A':'rgba(255,255,255,.62)')+';background:'+(a?'rgba(196,165,90,.09)':'none')+';border:none;cursor:pointer;font-family:Inter,sans-serif;border-radius:6px;line-height:1.5;font-weight:'+(a?600:400)+'" onmouseover="this.style.background=\'rgba(196,165,90,.09)\';this.style.color=\'#fff\'" onmouseout="this.style.background=(this.dataset.langOpt===ssaiGetLang()?\'rgba(196,165,90,.09)\':\'\'  );this.style.color=(this.dataset.langOpt===ssaiGetLang()?\'#C4A55A\':\'rgba(255,255,255,.62)\')"><img src="https://flagcdn.com/w40/'+flag+'.png" style="height:14px;width:auto;margin-right:9px;flex-shrink:0;border-radius:2px;" alt=""/>'+n+'</button>';
-    }).join('');
-  }
-  setTimeout(patchDD,0);
-  document.addEventListener('ssai:lang',patchDD);
-})();
-</script>
-
-<script>
-(function(){
-  const host = document.querySelector('.dot-grid');
-  if(!host) return;
-  const GAP = 30;
-  const JITTER = 7;
-  function rand(min,max){ return Math.random()*(max-min)+min; }
-  function build(){
-    host.innerHTML = '';
-    const w = window.innerWidth, h = window.innerHeight;
-    const cols = Math.ceil(w / GAP) + 2;
-    const rows = Math.ceil(h / GAP) + 2;
-    const frag = document.createDocumentFragment();
-    for(let y = 0; y < rows; y++){
-      for(let x = 0; x < cols; x++){
-        if(Math.random() < 0.12) continue;
-        const d = document.createElement('span');
-        d.className = 'dot';
-        const jx = (Math.random()-0.5) * JITTER*2;
-        const jy = (Math.random()-0.5) * JITTER*2;
-        d.style.left = (x * GAP + jx) + 'px';
-        d.style.top  = (y * GAP + jy) + 'px';
-        const dur = rand(12, 22);
-        const oMin = rand(.01, .04);
-        const oMax = rand(.08, .20);
-        d.style.setProperty('--dur',  dur.toFixed(1) + 's');
-        d.style.setProperty('--o-min', oMin.toFixed(3));
-        d.style.setProperty('--o-max', oMax.toFixed(3));
-        d.style.animationDelay = (-rand(0, dur)).toFixed(2) + 's';
-        frag.appendChild(d);
-      }
-    }
-    host.appendChild(frag);
-  }
-  build();
-  let t; window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(build,150);});
-})();
-</script>
-
-<script>
-(function(){
-  const track = document.getElementById('tm-track');
-  const dotsWrap = document.getElementById('tm-dots');
-  const carousel = document.getElementById('tm-carousel');
-  if(!track || !carousel) return;
-
-  const TESTIMONIALS = [
-    {q:"In 2 weeks the AI sent 87 applications. I got 11 responses and landed a role in Geneva. Best investment for my career.", n:"Andrei P.", r:"Data Analyst · Romania → Geneva", a:"A"},
-    {q:"I signed up on Sunday. By Friday I had 3 interviews in Zurich. This platform completely changed my job hunt.", n:"Sofia M.", r:"UX Designer · Italy → Zurich", a:"S"},
-    {q:"No more endless copy-pasting. The AI handles every cover letter and application. I just review and approve.", n:"Tomás R.", r:"Full-Stack Dev · Portugal → Basel", a:"T"},
-    {q:"Received 18 qualified responses in my first month. Ended up choosing between two offers in Bern.", n:"Emma L.", r:"Marketing Lead · France → Bern", a:"E"},
-    {q:"The level of personalization blew me away. Every application feels hand-crafted. Worth every franc.", n:"Karim H.", r:"Product Manager · Germany → Geneva", a:"K"},
-    {q:"I was skeptical at first. After 3 weeks I had signed a contract with a Zürich fintech. Simply incredible.", n:"Nadia K.", r:"Finance Analyst · Greece → Zurich", a:"N"},
-    {q:"Clean, professional, and it actually works. My response rate went from 2% to over 20% with the AI.", n:"Lucas D.", r:"DevOps Engineer · Belgium → Lausanne", a:"L"},
-    {q:"Writes four languages natively in my applications. Recruiters have repeatedly praised my profile.", n:"Maria V.", r:"HR Specialist · Spain → Geneva", a:"M"},
-    {q:"I saved more than 40 hours per week. The automation is flawless and the AI understands the Swiss market.", n:"Daniele F.", r:"Sales Director · Italy → Lugano", a:"D"},
-    {q:"Landed my dream role at a Swiss pharma company. The AI did in 10 days what I couldn't do in 6 months.", n:"Julia S.", r:"Biotech Researcher · Poland → Basel", a:"J"},
-    {q:"Professional, premium, and genuinely intelligent. Every application was perfectly tailored to each posting.", n:"Rafael G.", r:"Civil Engineer · Brazil → Zurich", a:"R"},
-    {q:"The dashboard is beautiful and the results speak for themselves. 9 interviews in my first 30 days.", n:"Isabel C.", r:"Brand Manager · Portugal → Geneva", a:"I"},
-    {q:"Got recruited by a top-tier consulting firm in Zurich. I only reviewed messages — the AI did the rest.", n:"Marco B.", r:"Consultant · Italy → Zurich", a:"M"},
-    {q:"Honestly the best career tool I've used. It found niche roles I would have never discovered myself.", n:"Elena T.", r:"Legal Counsel · Romania → Bern", a:"E"},
-    {q:"Worth 10× the price. From first login to signed offer in 5 weeks. Perfect Swiss fit, remote-friendly.", n:"Pavel N.", r:"Cybersecurity Lead · Czechia → Zug", a:"P"},
-    {q:"Five interviews in my first ten days. I didn't believe automation could be this precise and human.", n:"Mikael O.", r:"Mechanical Engineer · Finland → Zurich", a:"M"},
-    {q:"The Swiss job market felt impossible until this. Now I have a signed contract in Lausanne. Life-changing.", n:"Catalina V.", r:"Project Manager · Spain → Lausanne", a:"C"},
-    {q:"Every single application was context-aware, relevant, and polished. No generic templates whatsoever.", n:"Henrique A.", r:"Data Scientist · Portugal → Zurich", a:"H"},
-    {q:"Clearly designed by people who respect time. Setup took 15 minutes and I was landing interviews that week.", n:"Olivia R.", r:"Content Strategist · UK → Geneva", a:"O"},
-    {q:"The writing quality is outstanding. Every cover letter reads like it came from a native Swiss professional.", n:"Thomas W.", r:"Architect · Austria → Zurich", a:"T"},
-    {q:"After months of manual applications with zero results, this brought me 7 interviews in two weeks.", n:"Francesca P.", r:"Financial Advisor · Italy → Lugano", a:"F"},
-    {q:"Precise. Elegant. Effective. Three words I genuinely mean. Signed with a Swiss SaaS company last Monday.", n:"Liam K.", r:"Backend Engineer · Ireland → Zurich", a:"L"},
-    {q:"It handled rejection follow-ups, scheduling, and even personalized thank-you notes. Felt like a real assistant.", n:"Valentina S.", r:"Account Executive · Argentina → Geneva", a:"V"},
-    {q:"The quality jump versus doing this manually is enormous. My recruiter called my profile 'exceptionally polished'.", n:"Matteo C.", r:"ML Engineer · Italy → Lausanne", a:"M"},
-    {q:"I secured a senior role that pays 35% more than my previous salary. The AI targeted roles I would have ignored.", n:"Zara H.", r:"Operations Lead · Pakistan → Basel", a:"Z"},
-    {q:"Incredible ROI. One good offer paid for three years of the platform. And I got four offers in total.", n:"Giorgos D.", r:"Pre-Sales Engineer · Greece → Bern", a:"G"},
-    {q:"The onboarding was so refined it actually felt luxurious. And the results matched the presentation.", n:"Louise M.", r:"UX Researcher · France → Zurich", a:"L"},
-    {q:"I couldn't justify a headhunter's fee. This gave me the same quality outcome at a fraction of the cost.", n:"Benjamin R.", r:"Product Designer · Canada → Geneva", a:"B"},
-    {q:"Seriously intelligent matching. I was offered a role I hadn't even considered — and it's now my dream job.", n:"Aisha N.", r:"Compliance Officer · Morocco → Geneva", a:"A"},
-    {q:"What impressed me most was the consistency. Every day the AI worked exactly as advertised. No drama.", n:"Robert F.", r:"QA Lead · Romania → Zurich", a:"R"},
-    {q:"From 0 responses in 3 months manually, to 14 responses in 3 weeks automated. I'm a customer for life.", n:"Priya S.", r:"Business Analyst · India → Basel", a:"P"},
-    {q:"Elegant, discreet, premium. And most importantly: it actually delivers Swiss interviews.", n:"Nicolas V.", r:"CFO · Belgium → Zug", a:"N"},
-    {q:"Signed with a Geneva private bank. The AI wrote a cover letter so sharp the CEO quoted it in the interview.", n:"Camille B.", r:"Investment Associate · France → Geneva", a:"C"},
-    {q:"I was ready to give up on Switzerland. Two months later I'm signing a lease in Zurich. Genuinely grateful.", n:"Stefan H.", r:"Civil Engineer · Germany → Zurich", a:"S"},
-    {q:"Responsive, refined, and relentlessly effective. It's like having a full-time career strategist working 24/7.", n:"Aleksandar I.", r:"Data Engineer · Serbia → Basel", a:"A"},
-    {q:"The 7-figure pharma company I joined was on my no-chance list. The AI got me in anyway. Unreal.", n:"Bianca R.", r:"Regulatory Affairs · Romania → Basel", a:"B"},
-    {q:"My time-to-interview dropped from 6 weeks to 4 days. The momentum completely changed my confidence.", n:"Samuel J.", r:"Frontend Engineer · Netherlands → Zurich", a:"S"},
-    {q:"This product respects your time and your career. It's rare to feel both served and empowered at once.", n:"Clara D.", r:"Communications Lead · Germany → Bern", a:"C"},
-    {q:"I tested it for two weeks expecting to cancel. Instead I ended up with three offers and a new apartment in Zug.", n:"Ivan P.", r:"SRE · Ukraine → Zug", a:"I"},
-    {q:"The Swiss labour market requires precision. This tool delivers it at a level I didn't think was possible.", n:"Melina K.", r:"Corporate Lawyer · Greece → Geneva", a:"M"},
-    {q:"I hired a coach for 4 months — useless. Tried this for 2 weeks — signed offer. Speaks for itself.", n:"Daniel W.", r:"Supply Chain Manager · Poland → Basel", a:"D"},
-    {q:"The multilingual writing is truly native-level. German, French, Italian, English — flawless every time.", n:"Noemi L.", r:"Translator → Project Manager · Italy → Lausanne", a:"N"},
-    {q:"I doubled my interview volume while cutting my application time by 95%. The math here is absurdly good.", n:"Mateus A.", r:"Software Architect · Brazil → Geneva", a:"M"},
-    {q:"Polished, ethical, and quietly confident. Exactly the energy you want representing your candidacy.", n:"Léa F.", r:"Marketing Director · France → Zurich", a:"L"},
-    {q:"Got my Swiss work permit faster than my friends who moved 2 years ago. The AI targeted permit-ready roles.", n:"Oskar V.", r:"Electrical Engineer · Hungary → Zug", a:"O"},
-    {q:"A week in, I had more interview callbacks than my last 6 months combined. Still slightly in disbelief.", n:"Simone C.", r:"Hospitality Manager · Italy → Geneva", a:"S"},
-    {q:"I finally felt like someone was in my corner, working relentlessly. Except it's software — and it's better.", n:"Alessandro T.", r:"Sales Engineer · Italy → Zurich", a:"A"},
-    {q:"Signed, sealed, delivered — a senior role in Basel pharma I would have never applied to on my own.", n:"Yasmin B.", r:"Clinical Researcher · Egypt → Basel", a:"Y"},
-    {q:"This is what premium software looks like: invisible effort, visible results. Worth every single franc.", n:"Pierre L.", r:"Private Equity Analyst · France → Geneva", a:"P"},
-    {q:"Landed in Zurich 9 weeks after signing up. The entire process was smoother than I had any right to expect.", n:"Naomi S.", r:"Growth Lead · Israel → Zurich", a:"N"}
-  ];
-
-  const buildSlide = t => `
-    <div style="min-width:100%;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;">
-      <p style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.75;font-style:italic;margin:0;min-height:96px;letter-spacing:-.002em;">
-        &ldquo;${t.q}&rdquo;
-      </p>
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,rgba(0,229,255,.25),rgba(157,92,255,.15));
-             border:1px solid rgba(0,229,255,.3);display:flex;align-items:center;justify-content:center;
-             font-size:13px;font-weight:700;color:#00E5FF;flex-shrink:0;letter-spacing:-.01em;">${t.a}</div>
-        <div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:2px;">
-          <div style="font-size:13px;font-weight:600;color:#fff;line-height:1.2;letter-spacing:-.005em;">${t.n}</div>
-          <div style="font-size:11px;color:rgba(255,255,255,.36);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.01em;">${t.r}</div>
-        </div>
-        <div style="color:#00E5FF;font-size:12px;letter-spacing:1px;flex-shrink:0;text-shadow:0 0 8px rgba(0,229,255,.6);">★★★★★</div>
+  <!-- ════════════════ PRICING ════════════════ -->
+  <section id="pricing" class="py-24 sm:py-36">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8">
+      <div class="max-w-3xl mb-16 sm:mb-20 mx-auto text-center">
+        <p class="reveal text-[11px] uppercase tracking-[0.22em] text-red font-bold mb-5">Pricing</p>
+        <h2 class="reveal h-section text-5xl sm:text-7xl mb-6">Simple, scalable<br />pricing.</h2>
+        <p class="reveal text-base sm:text-xl text-ink-mid leading-relaxed">
+          Start free. Upgrade when you ship. Negotiate when you scale.
+        </p>
       </div>
-    </div>`;
 
-  const N = TESTIMONIALS.length;
-  track.innerHTML = TESTIMONIALS.map(buildSlide).join('') + buildSlide(TESTIMONIALS[0]);
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div class="reveal card border border-line rounded-2xl p-8 bg-white">
+          <h3 class="text-xl font-bold tracking-tight mb-1">Starter</h3>
+          <p class="text-sm text-ink-mid mb-6">For curious individuals.</p>
+          <div class="mb-6">
+            <span class="text-5xl font-extrabold tracking-tightest">Free</span>
+            <span class="text-ink-mid text-sm ml-1">forever</span>
+          </div>
+          <a href="/signup.html" class="block w-full text-center border-2 border-ink/15 hover:border-ink/40 hover:bg-cream text-ink font-semibold py-3 rounded-full text-sm transition-all mb-8">Get started</a>
+          <ul class="space-y-3 text-sm text-ink-soft">
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Access to Ether</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Limited Nexus reasoning</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>3 saved agents</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Community support</li>
+          </ul>
+        </div>
 
-  const dotCount = Math.min(N, 10);
-  const dotStep  = N / dotCount;
-  dotsWrap.innerHTML = Array.from({length:dotCount}).map((_,i)=>`
-    <span data-tm-dot="${i}" style="width:14px;height:2px;border-radius:2px;background:rgba(255,255,255,.12);transition:background .4s;"></span>`
-  ).join('');
+        <div class="reveal card border-2 border-ink rounded-2xl p-8 bg-white relative md:-translate-y-3 shadow-2xl shadow-ink/10">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-red text-white text-[10px] font-bold tracking-[0.18em] uppercase px-3 py-1 rounded-full">Most popular</div>
+          <h3 class="text-xl font-bold tracking-tight mb-1">Pro</h3>
+          <p class="text-sm text-ink-mid mb-6">For builders and small teams.</p>
+          <div class="mb-6">
+            <span class="text-5xl font-extrabold tracking-tightest">$24</span>
+            <span class="text-ink-mid text-sm ml-1">/ user / mo</span>
+          </div>
+          <a href="/signup.html" class="btn-primary block w-full text-center bg-ink hover:bg-ink-soft text-white font-semibold py-3 rounded-full text-sm transition-colors mb-8">Start Pro</a>
+          <ul class="space-y-3 text-sm text-ink-soft">
+            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>All three models</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Prometheus agents (long horizon)</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited workflows</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>API access + 1M tokens / mo</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Email + chat support</li>
+          </ul>
+        </div>
 
-  const TRANS = 'transform .9s cubic-bezier(.65,0,.35,1)';
-  track.style.transition = TRANS;
+        <div class="reveal card border border-line rounded-2xl p-8 bg-cream">
+          <h3 class="text-xl font-bold tracking-tight mb-1">Enterprise</h3>
+          <p class="text-sm text-ink-mid mb-6">For organizations at scale.</p>
+          <div class="mb-6">
+            <span class="text-5xl font-extrabold tracking-tightest">Custom</span>
+          </div>
+          <a href="/signup.html" class="block w-full text-center border-2 border-ink/15 hover:border-ink/40 hover:bg-white text-ink font-semibold py-3 rounded-full text-sm transition-all mb-8">Contact sales</a>
+          <ul class="space-y-3 text-sm text-ink-soft">
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Pro</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Dedicated capacity</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>SSO · SOC 2 · DPA</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Private deployments + VPC</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Dedicated TAM + custom SLAs</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  let idx = 0;
-  function paintDots(){
-    const activeDot = Math.floor((idx % N) / dotStep);
-    dotsWrap.querySelectorAll('[data-tm-dot]').forEach((el,i)=>{
-      el.style.background = (i === activeDot) ? 'rgba(0,229,255,.85)' : 'rgba(255,255,255,.12)';
-    });
-  }
-  function go(n){
-    idx = n;
-    track.style.transition = TRANS;
-    track.style.transform = `translateX(-${idx * 100}%)`;
-    paintDots();
-  }
-  paintDots();
+  <!-- ════════════════ FINAL CTA ════════════════ -->
+  <section class="relative py-24 sm:py-36 overflow-hidden border-y border-line">
+    <div class="absolute inset-0 grid-bg opacity-50"></div>
+    <div class="hero-orb hero-orb-1" style="left: 5%; top: 0; right: auto; opacity: 0.4;"></div>
+    <div class="hero-orb hero-orb-2" style="right: 5%; bottom: 0; left: auto; opacity: 0.4;"></div>
 
-  track.addEventListener('transitionend',(e)=>{
-    if(e.propertyName !== 'transform') return;
-    if(idx === N){
-      track.style.transition = 'none';
-      idx = 0;
-      track.style.transform = 'translateX(0%)';
-      void track.offsetWidth;
-      track.style.transition = TRANS;
-    }
-  });
+    <div class="relative max-w-4xl mx-auto px-6 sm:px-8 text-center">
+      <h2 class="reveal h-display text-5xl sm:text-7xl lg:text-[112px] mb-6 sm:mb-8">
+        Ready to build<br />
+        <span class="italic font-serif font-normal">what's next?</span>
+      </h2>
+      <p class="reveal text-base sm:text-xl text-ink-mid max-w-2xl mx-auto mb-10 leading-relaxed">
+        Join the teams using HelveX to ship work that mattered yesterday.
+      </p>
+      <div class="reveal flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
+        <a href="/signup.html" class="btn-primary inline-flex items-center justify-center gap-2 bg-ink hover:bg-ink-soft text-white font-semibold px-8 py-4 rounded-full text-base transition-colors btn-shadow">
+          Enter Platform
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
+        </a>
+        <a href="#models" class="text-sm text-ink-mid hover:text-ink px-4 py-2 transition-colors">Learn about our models →</a>
+      </div>
+    </div>
+  </section>
 
-  let timer = setInterval(()=>go(idx + 1), 5000);
-  carousel.addEventListener('mouseenter',()=>{clearInterval(timer);});
-  carousel.addEventListener('mouseleave',()=>{timer=setInterval(()=>go(idx + 1),5000);});
-})();
-</script>
+  <!-- ════════════════ FOOTER ════════════════ -->
+  <footer class="py-16 sm:py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8">
+      <div class="grid lg:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-12 sm:gap-8 mb-12 sm:mb-16">
+        <div>
+          <a href="/" class="brand-mark text-2xl flex items-center gap-2 mb-4">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none"><path d="M4 4h4v16H4V4zm12 0h4v16h-4V4zM8 11h8v2H8v-2z" fill="currentColor"/></svg>
+            Helve<span class="x">X</span>
+          </a>
+          <p class="text-sm text-ink-mid leading-relaxed max-w-sm">
+            Three frontier AI models. One platform. Built for the people shaping what comes next.
+          </p>
+        </div>
+        <div>
+          <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-ink-light mb-4">Product</p>
+          <ul class="space-y-2.5 text-sm text-ink-soft">
+            <li><a href="#models" class="hover:text-red transition-colors">Models</a></li>
+            <li><a href="#platform" class="hover:text-red transition-colors">Platform</a></li>
+            <li><a href="#pricing" class="hover:text-red transition-colors">Pricing</a></li>
+            <li><a href="/signup.html" class="hover:text-red transition-colors">Enter</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-ink-light mb-4">Company</p>
+          <ul class="space-y-2.5 text-sm text-ink-soft">
+            <li><a href="#" class="hover:text-red transition-colors">About</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Research</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Careers</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Press</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-ink-light mb-4">Resources</p>
+          <ul class="space-y-2.5 text-sm text-ink-soft">
+            <li><a href="#" class="hover:text-red transition-colors">Docs</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">API reference</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Status</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Changelog</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-ink-light mb-4">Legal</p>
+          <ul class="space-y-2.5 text-sm text-ink-soft">
+            <li><a href="#" class="hover:text-red transition-colors">Privacy</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Terms</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Security</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">DPA</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-line pt-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs text-ink-mid">
+        <p>© 2026 HelveX. All rights reserved.</p>
+        <p class="font-mono tracking-tight">Built in Switzerland · for the world</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Reveal on scroll
+    (function () {
+      var reveals = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        reveals.forEach(function (r) { r.classList.add('is-visible'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry, i) {
+          if (entry.isIntersecting) {
+            setTimeout(function () { entry.target.classList.add('is-visible'); }, i * 30);
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+      reveals.forEach(function (r) { io.observe(r); });
+    })();
+
+    // Subtle parallax on hero orbs
+    (function () {
+      var orbs = document.querySelectorAll('.hero-orb');
+      if (!orbs.length) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      window.addEventListener('scroll', function () {
+        var y = window.scrollY;
+        if (y < 1400) {
+          orbs.forEach(function (o, i) {
+            o.style.transform = 'translate3d(0,' + (y * 0.04 * (i + 1)) + 'px,0)';
+          });
+        }
+      }, { passive: true });
+    })();
+  </script>
 </body>
 </html>
