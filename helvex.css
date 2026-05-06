@@ -756,3 +756,77 @@
       .stat-tile:hover { transform: none; }
       .stat-tile::after { display: none; }
     }
+
+    /* ─── BRAND LOGO: powered-up animation suite ───────────────────────────
+       Entry: scale-up from 0.6 with overshoot + red glow that fades
+       Ambient: subtle red drop-shadow pulse on a 4.5 s loop
+       Sheen: a red→white→transparent gradient sweeps across the logo
+              silhouette (clipped via CSS mask) every 7 s
+       Hover: scale 1.05 + strong red glow
+       All motion respects prefers-reduced-motion: reduce.
+       ──────────────────────────────────────────────────────────────────── */
+    .brand-logo {
+      display: inline-block;
+      position: relative;
+      line-height: 0;
+      transform-origin: center;
+      animation:
+        brand-entry .9s cubic-bezier(.22,.85,.35,1) both,
+        brand-pulse 4.5s ease-in-out 1.2s infinite;
+      transition: transform .35s cubic-bezier(.2,.7,.25,1), filter .35s ease;
+      will-change: transform, filter;
+    }
+    .brand-logo img {
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+    /* The sheen layer — clipped to the logo's actual silhouette via mask */
+    .brand-logo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      -webkit-mask: url('/helvex-logo.png') center / contain no-repeat;
+              mask: url('/helvex-logo.png') center / contain no-repeat;
+      background: linear-gradient(115deg,
+        transparent 35%,
+        rgba(220, 38, 38, 0.55) 47%,
+        rgba(255, 255, 255, 0.95) 52%,
+        rgba(220, 38, 38, 0.55) 57%,
+        transparent 70%);
+      background-size: 260% 100%;
+      background-position: -160% 0;
+      opacity: 0;
+      animation: brand-sheen 7s cubic-bezier(.4,0,.2,1) 2.2s infinite;
+    }
+    .brand-logo:hover {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 14px rgba(220, 38, 38, 0.55));
+    }
+    .brand-logo:active { transform: scale(0.98); }
+
+    @keyframes brand-entry {
+      0%   { opacity: 0; transform: translateY(-4px) scale(.6); filter: drop-shadow(0 0 22px rgba(220,38,38,.85)); }
+      60%  { opacity: 1; transform: translateY(0)    scale(1.06); filter: drop-shadow(0 0 12px rgba(220,38,38,.55)); }
+      100% { opacity: 1; transform: translateY(0)    scale(1);    filter: drop-shadow(0 0 0  rgba(220,38,38,0)); }
+    }
+    @keyframes brand-pulse {
+      0%, 100% { filter: drop-shadow(0 0 0 rgba(220, 38, 38, 0)); }
+      50%      { filter: drop-shadow(0 0 9px rgba(220, 38, 38, .4)); }
+    }
+    @keyframes brand-sheen {
+      0%, 14%   { background-position: -160% 0; opacity: 0; }
+      18%       { opacity: 1; }
+      40%       { background-position:  200% 0; opacity: 1; }
+      42%, 100% { background-position:  200% 0; opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .brand-logo,
+      .brand-logo::after { animation: none; opacity: 1; }
+      .brand-logo { filter: none; }
+      .brand-logo:hover { transform: none; filter: none; }
+      .brand-logo::after { display: none; }
+    }
