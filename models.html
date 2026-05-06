@@ -80,7 +80,7 @@
         <a href="/workspace" class="nav-link">Workspace</a>
         <a href="/research" class="nav-link">Research</a>
         <a href="/updates" class="nav-link">Updates</a>
-      </div>      <div class="flex items-center gap-1 sm:gap-2">
+      </div>      <button type="button" class="mobile-menu-trigger lg:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>      <div class="flex items-center gap-1 sm:gap-2">
         <a href="/signup.html" class="hidden sm:inline-flex text-[14px] font-medium text-ink-mid hover:text-ink px-3 py-2 transition-colors">Sign in</a>
         <a href="/signup.html" class="btn-primary inline-flex items-center gap-1.5 bg-ink hover:bg-ink-soft text-white text-[13px] font-semibold px-4 py-2.5 rounded-full transition-colors btn-shadow">
           Enter Platform
@@ -89,6 +89,37 @@
       </div>
     </nav>
   </header>
+
+  <!-- ════════ MOBILE MENU DRAWER ════════ -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Site navigation">
+    <div class="mobile-menu-backdrop" data-close></div>
+    <div class="mobile-menu-panel">
+      <div class="mobile-menu-header">
+        <a href="/" class="brand-mark text-xl flex items-center gap-2">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none"><path d="M4 4h4v16H4V4zm12 0h4v16h-4V4zM8 11h8v2H8v-2z" fill="currentColor"/></svg>
+          Helve<span class="x">X</span>
+        </a>
+        <button type="button" class="mobile-menu-close" data-close aria-label="Close menu">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6l-12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <nav class="mobile-menu-nav" aria-label="Main">
+        <a href="/" class="mobile-menu-link">Home</a>
+        <a href="/models" class="mobile-menu-link is-active">Models</a>
+        <a href="/workspace" class="mobile-menu-link">Workspace</a>
+        <a href="/research" class="mobile-menu-link">Research</a>
+        <a href="/updates" class="mobile-menu-link">Updates</a>
+      </nav>
+      <div class="mobile-menu-cta">
+        <a href="/signup.html" class="primary">
+          Enter Platform
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+        <a href="/signup.html" class="secondary">Sign in</a>
+      </div>
+      <div class="mobile-menu-meta">Built in Switzerland</div>
+    </div>
+  </div>
   <!-- ════════ HERO ════════ -->
   <section class="relative pt-14 sm:pt-24 pb-16 sm:pb-24 overflow-hidden">
     <div class="hero-orb hero-orb-1" style="opacity: 0.4;"></div>

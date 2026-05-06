@@ -29,6 +29,52 @@
       }, { passive: true });
     })();
 
+    /* Mobile nav drawer */
+    (function () {
+      var trigger = document.querySelector('.mobile-menu-trigger');
+      var menu    = document.querySelector('.mobile-menu');
+      if (!trigger || !menu) return;
+
+      function open() {
+        menu.setAttribute('data-open', '');
+        menu.setAttribute('aria-hidden', 'false');
+        trigger.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('menu-open');
+        var first = menu.querySelector('.mobile-menu-close');
+        if (first) {
+          setTimeout(function () {
+            try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); }
+          }, 60);
+        }
+      }
+      function close() {
+        menu.removeAttribute('data-open');
+        menu.setAttribute('aria-hidden', 'true');
+        trigger.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('menu-open');
+      }
+
+      trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (menu.hasAttribute('data-open')) close();
+        else open();
+      });
+
+      menu.querySelectorAll('[data-close]').forEach(function (el) {
+        el.addEventListener('click', function (e) { e.preventDefault(); close(); });
+      });
+      menu.querySelectorAll('.mobile-menu-link').forEach(function (link) {
+        link.addEventListener('click', function () {
+          // Let the navigation start, then close.
+          setTimeout(close, 30);
+        });
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && menu.hasAttribute('data-open')) close();
+      });
+    })();
+
     /* Workspace feature modals
        Scroll-lock strategy: simply set overflow:hidden on <html>+<body>
        and compensate for the scrollbar gutter. The page's actual scroll
