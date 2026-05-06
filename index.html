@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
   <title>HelveX — Frontier AI for the next era</title>
-  <meta name="description" content="HelveX is the AI platform built for the moments intelligence has to land — fast, deep, or autonomous. Three models, one router, one place to ship them." />
+  <meta name="description" content="HelveX is the AI platform built for the moments intelligence has to land — fast, deep, or autonomous. Three frontier models, one workspace, ready when you are." />
   <meta property="og:title" content="HelveX — Frontier AI for the next era" />
   <meta property="og:description" content="Pick the mind for the moment. Ether for speed, Nexus for depth, Prometheus for action." />
   <meta property="og:type" content="website" />
@@ -15,7 +15,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -43,7 +43,6 @@
           fontFamily: {
             sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
             serif: ['"Instrument Serif"', 'Georgia', 'serif'],
-            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
           },
         },
       },
@@ -65,14 +64,14 @@
     }
 
     /* Type scale */
-    .h-display    { font-weight: 900; letter-spacing: -0.045em; line-height: 0.95; }
-    .h-section    { font-weight: 800; letter-spacing: -0.035em; line-height: 1.04; }
-    .h-eyebrow    { font-size: 11px; letter-spacing: 0.22em; font-weight: 700; text-transform: uppercase; }
+    .h-display { font-weight: 900; letter-spacing: -0.045em; line-height: 0.95; }
+    .h-section { font-weight: 800; letter-spacing: -0.035em; line-height: 1.04; }
+    .h-eyebrow { font-size: 11px; letter-spacing: 0.20em; font-weight: 700; text-transform: uppercase; }
     .tracking-tightest { letter-spacing: -0.05em; }
-    .balance      { text-wrap: balance; }
-    .pretty       { text-wrap: pretty; }
+    .balance { text-wrap: balance; }
+    .pretty  { text-wrap: pretty; }
 
-    /* Brand mark */
+    /* Brand */
     .brand-mark { font-weight: 900; letter-spacing: -0.05em; }
     .brand-mark .x {
       background: linear-gradient(135deg, #DC2626 0%, #FCD34D 100%);
@@ -111,12 +110,11 @@
     .hero-orb-1 { background: radial-gradient(circle, #FCD34D 0%, transparent 70%); top: -120px; right: -120px; width: 540px; height: 540px; }
     .hero-orb-2 { background: radial-gradient(circle, #FECACA 0%, transparent 70%); bottom: -180px; left: -180px; width: 640px; height: 640px; animation-delay: -6s; }
 
-    /* Grid backgrounds */
-    .grid-bg       { background-image: linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px); background-size: 64px 64px; }
+    /* Backgrounds */
     .grid-bg-light { background-image: linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px); background-size: 48px 48px; }
     .grid-bg-dark  { background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 64px 64px; }
 
-    /* Model accents */
+    /* Model glows */
     .model-ether      { background: radial-gradient(circle at 18% -10%, rgba(252,211,77,0.22), transparent 55%), #FAFAF7; }
     .model-nexus      { background: radial-gradient(circle at 82% -10%, rgba(220,38,38,0.14), transparent 55%), #FAFAF7; }
     .model-prometheus { background: radial-gradient(circle at 50% -20%, rgba(10,10,10,0.10), transparent 60%), #FAFAF7; }
@@ -126,24 +124,18 @@
     .pulse-dot { animation: pulseRing 2s infinite; }
     @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
     .cursor-blink { animation: blink 1s infinite; }
-
-    /* Code block */
-    .code-block { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; line-height: 1.65; letter-spacing: 0; }
-    .code-block .tk-comment  { color: #737373; }
-    .code-block .tk-keyword  { color: #FCD34D; }
-    .code-block .tk-string   { color: #FECACA; }
-    .code-block .tk-fn       { color: #93C5FD; }
-    .code-block .tk-prop     { color: #DDD6FE; }
-    .code-block .tk-num      { color: #FDBA74; }
-    .code-block .tk-comma    { color: #525252; }
+    @keyframes typingDot { 0%,80%,100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-3px); opacity: 1; } }
+    .typing-dot { animation: typingDot 1.2s ease-in-out infinite; display: inline-block; }
+    .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.3s; }
 
     /* Section mark */
-    .section-mark { display: inline-flex; align-items: center; gap: 10px; font: 700 11px/1 'Inter', sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: #DC2626; }
+    .section-mark { display: inline-flex; align-items: center; gap: 10px; font: 700 11px/1 'Inter', sans-serif; letter-spacing: 0.20em; text-transform: uppercase; color: #DC2626; }
     .section-mark::before { content: ''; width: 24px; height: 1px; background: currentColor; }
 
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
-      .reveal, .hero-orb, .pulse-dot, .btn-primary::before, .card, .cursor-blink {
+      .reveal, .hero-orb, .pulse-dot, .btn-primary::before, .card, .cursor-blink, .typing-dot {
         animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important;
       }
     }
@@ -157,7 +149,7 @@
 </head>
 <body class="bg-white text-ink antialiased">
 
-  <!-- ════════ ANNOUNCEMENT (single news beat — only here) ════════ -->
+  <!-- ════════ ANNOUNCEMENT ════════ -->
   <div class="bg-ink text-white text-xs sm:text-sm">
     <div class="max-w-7xl mx-auto px-6 sm:px-8 h-9 flex items-center justify-center gap-3">
       <span class="hidden sm:inline-flex h-1.5 w-1.5 rounded-full bg-yellow"></span>
@@ -178,15 +170,13 @@
         Helve<span class="x">X</span>
       </a>
       <div class="hidden lg:flex items-center gap-1 text-[14px] font-medium text-ink-soft">
-        <a href="#models"     class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Models</a>
-        <a href="#api"        class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">API</a>
-        <a href="#studio"     class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Studio</a>
-        <a href="#research"   class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Research</a>
-        <a href="#trust"      class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Trust</a>
-        <a href="#pricing"    class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Pricing</a>
+        <a href="#models"    class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Models</a>
+        <a href="#workspace" class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Workspace</a>
+        <a href="#research"  class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Research</a>
+        <a href="#trust"     class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Trust</a>
+        <a href="#pricing"   class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Pricing</a>
       </div>
       <div class="flex items-center gap-1 sm:gap-2">
-        <a href="#docs" class="hidden md:inline-flex text-[14px] font-medium text-ink-mid hover:text-ink px-3 py-2 transition-colors">Docs</a>
         <a href="/signup.html" class="hidden sm:inline-flex text-[14px] font-medium text-ink-mid hover:text-ink px-3 py-2 transition-colors">Sign in</a>
         <a href="/signup.html" class="btn-primary inline-flex items-center gap-1.5 bg-ink hover:bg-ink-soft text-white text-[13px] font-semibold px-4 py-2.5 rounded-full transition-colors btn-shadow">
           Enter Platform
@@ -196,20 +186,19 @@
     </nav>
   </header>
 
-  <!-- ════════ HERO (positioning + live demo) ════════ -->
+  <!-- ════════ HERO ════════ -->
   <section class="relative pt-14 sm:pt-24 pb-20 sm:pb-32 overflow-hidden">
     <div class="hero-orb hero-orb-1"></div>
     <div class="hero-orb hero-orb-2"></div>
 
     <div class="relative max-w-6xl mx-auto px-6 sm:px-8">
-
       <h1 class="reveal h-display balance text-center text-[44px] sm:text-7xl lg:text-[104px] mb-6 sm:mb-8">
         Frontier intelligence,<br />
         <span class="italic font-serif font-normal">made useful.</span>
       </h1>
 
       <p class="reveal pretty text-center text-base sm:text-xl text-ink-mid max-w-2xl mx-auto mb-9 sm:mb-12 leading-relaxed">
-        HelveX is the AI platform built for the moments intelligence has to land — fast, deep, or autonomous. Pick a model. Or let the router pick one for you.
+        HelveX is the AI platform built for the moments intelligence has to land — fast, deep, or autonomous.
       </p>
 
       <div class="reveal flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 mb-16 sm:mb-20">
@@ -222,7 +211,7 @@
         </a>
       </div>
 
-      <!-- Live playground card -->
+      <!-- Hero card: product chat (no developer params) -->
       <div class="reveal max-w-4xl mx-auto">
         <div class="rounded-2xl border border-line bg-white shadow-2xl shadow-ink/5 overflow-hidden">
           <div class="bg-cream/70 border-b border-line px-4 py-3 flex items-center gap-3">
@@ -231,23 +220,29 @@
               <div class="w-2.5 h-2.5 rounded-full bg-line"></div>
               <div class="w-2.5 h-2.5 rounded-full bg-line"></div>
             </div>
-            <div class="flex-1 text-center text-[11px] text-ink-mid font-mono tracking-tight">helvex.ai/playground</div>
-            <span class="hidden sm:inline-flex h-1.5 w-1.5 rounded-full bg-red"></span>
-            <span class="hidden sm:inline text-[11px] text-ink-mid font-medium">Live</span>
+            <div class="flex-1 text-center text-[11px] text-ink-mid font-medium tracking-tight">helvex.ai</div>
           </div>
           <div class="p-5 sm:p-7">
-            <div class="flex flex-wrap items-center gap-2 mb-5 text-[11px] font-mono">
-              <span class="bg-yellow text-ink rounded-full px-3 py-1 font-bold tracking-tight">Ether</span>
-              <span class="text-ink-light">·</span>
-              <span class="text-ink-mid">temperature 0.7</span>
-              <span class="text-ink-light">·</span>
-              <span class="text-ink-mid">stream on</span>
-              <span class="ml-auto text-ink-light">240ms</span>
+            <!-- Model selector strip -->
+            <div class="flex items-center justify-between gap-3 mb-5 pb-5 border-b border-line">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-yellow flex items-center justify-center shadow-sm shadow-yellow/40">
+                  <svg class="w-4 h-4 text-ink" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <p class="text-sm font-bold tracking-tight">Ether</p>
+                  <p class="text-[11px] text-ink-mid">Real-time intelligence</p>
+                </div>
+              </div>
+              <button class="text-[11px] font-medium text-ink-mid hover:text-ink transition-colors inline-flex items-center gap-1">
+                Switch model
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2"/></svg>
+              </button>
             </div>
-            <div class="space-y-4">
+            <div class="space-y-5">
               <div class="flex gap-3">
                 <div class="w-7 h-7 rounded-full bg-ink/5 flex items-center justify-center flex-shrink-0 text-[10px] font-bold text-ink-mid">YOU</div>
-                <p class="text-sm text-ink-soft pt-1.5 leading-relaxed">Summarize the Q3 earnings call in five precise bullets.</p>
+                <p class="text-sm text-ink-soft pt-1.5 leading-relaxed">Summarize today's customer call into five precise bullets I can send the team.</p>
               </div>
               <div class="flex gap-3">
                 <div class="w-7 h-7 rounded-full bg-yellow flex items-center justify-center flex-shrink-0 shadow-sm shadow-yellow/40">
@@ -255,10 +250,10 @@
                 </div>
                 <div class="flex-1 text-sm text-ink-soft pt-1.5 leading-relaxed">
                   <ul class="space-y-1.5">
-                    <li><span class="text-ink-mid">▸</span> Revenue $2.1B, +34% YoY — guidance raised on enterprise tailwind.</li>
-                    <li><span class="text-ink-mid">▸</span> Gross margin expanded 280bps; operating leverage intact.</li>
-                    <li><span class="text-ink-mid">▸</span> Net new ARR led by Prometheus agents (40% of expansion).</li>
-                    <li><span class="text-ink-mid">▸</span> EU data residency live; SOC 2 Type II reaffirmed.<span class="cursor-blink">▍</span></li>
+                    <li><span class="text-ink-mid">▸</span> Renewal at risk on the Q1 plan — they want a multi-region option.</li>
+                    <li><span class="text-ink-mid">▸</span> Procurement asked for a signed DPA and EU residency confirmation.</li>
+                    <li><span class="text-ink-mid">▸</span> Two open questions on residency — security team to follow up Tuesday.</li>
+                    <li><span class="text-ink-mid">▸</span> Strong interest in Prometheus for ops — pilot proposal owed by Friday.<span class="cursor-blink">▍</span></li>
                   </ul>
                 </div>
               </div>
@@ -269,7 +264,7 @@
     </div>
   </section>
 
-  <!-- ════════ STATS (compact, no narrative) ════════ -->
+  <!-- ════════ STATS ════════ -->
   <section class="border-y border-line bg-cream/50">
     <div class="max-w-7xl mx-auto px-6 sm:px-8 py-10 sm:py-14 grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12">
       <div class="reveal text-center md:text-left">
@@ -291,7 +286,7 @@
     </div>
   </section>
 
-  <!-- ════════ MODELS (deep dive: specs + use cases inline) ════════ -->
+  <!-- ════════ MODELS ════════ -->
   <section id="models" class="relative py-24 sm:py-36">
     <div class="max-w-7xl mx-auto px-6 sm:px-8">
 
@@ -299,11 +294,11 @@
         <p class="reveal section-mark mb-6">Models</p>
         <h2 class="reveal h-section balance text-5xl sm:text-7xl mb-6">Pick the mind for the moment.</h2>
         <p class="reveal pretty text-base sm:text-xl text-ink-mid leading-relaxed max-w-2xl">
-          We built three. Each is tuned for a different shape of work — speed, depth, or action. The router calls one when you don't want to.
+          We built three. Each is tuned for a different shape of work — speed, depth, or action. HelveX picks one for you when you don't want to choose.
         </p>
       </div>
 
-      <!-- Model index strip -->
+      <!-- Model index -->
       <div class="reveal mb-12 sm:mb-16 grid grid-cols-3 gap-px bg-line border border-line rounded-2xl overflow-hidden text-[11px] sm:text-sm">
         <a href="#model-ether" class="bg-white px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-3 hover:bg-cream transition-colors group">
           <div class="flex items-center gap-2.5 min-w-0"><span class="w-2 h-2 rounded-full bg-yellow flex-shrink-0"></span><span class="font-bold tracking-tight truncate">Ether</span></div>
@@ -341,18 +336,17 @@
         </div>
         <div class="lg:col-span-7 lg:border-l border-line lg:pl-12 space-y-8">
           <dl class="grid grid-cols-2 gap-x-8 gap-y-6">
-            <div><dt class="h-eyebrow text-ink-light mb-1.5">First token</dt><dd class="text-2xl font-bold tracking-tight">Sub-100ms</dd></div>
-            <div><dt class="h-eyebrow text-ink-light mb-1.5">Context</dt><dd class="text-2xl font-bold tracking-tight">200K tokens</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Response</dt><dd class="text-2xl font-bold tracking-tight">Sub-100 ms</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Memory</dt><dd class="text-2xl font-bold tracking-tight">200K tokens</dd></div>
             <div><dt class="h-eyebrow text-ink-light mb-1.5">Inputs</dt><dd class="text-base text-ink-soft">Text · voice · image</dd></div>
-            <div><dt class="h-eyebrow text-ink-light mb-1.5">Pricing</dt><dd class="text-base text-ink-soft">$0.40 / M input</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Languages</dt><dd class="text-base text-ink-soft">28 native</dd></div>
           </dl>
           <div class="space-y-2.5">
             <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Speed</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width:96%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">96</span></div>
             <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Reasoning</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width:64%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">64</span></div>
             <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Multimodal</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width:78%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">78</span></div>
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Cost</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width:92%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">92</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Concision</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width:88%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">88</span></div>
           </div>
-          <!-- Use cases (was its own section — now lives here) -->
           <div class="border-t border-line pt-6">
             <p class="h-eyebrow text-ink-light mb-4">Where it shines</p>
             <ul class="space-y-3 text-sm">
@@ -384,9 +378,9 @@
         <div class="lg:col-span-7 lg:border-l border-line lg:pl-12 space-y-8">
           <dl class="grid grid-cols-2 gap-x-8 gap-y-6">
             <div><dt class="h-eyebrow text-ink-light mb-1.5">Thinking</dt><dd class="text-2xl font-bold tracking-tight">Adaptive depth</dd></div>
-            <div><dt class="h-eyebrow text-ink-light mb-1.5">Context</dt><dd class="text-2xl font-bold tracking-tight">1M tokens</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Memory</dt><dd class="text-2xl font-bold tracking-tight">1M tokens</dd></div>
             <div><dt class="h-eyebrow text-ink-light mb-1.5">Outputs</dt><dd class="text-base text-ink-soft">Citations · tables · charts</dd></div>
-            <div><dt class="h-eyebrow text-ink-light mb-1.5">Pricing</dt><dd class="text-base text-ink-soft">$3.00 / M input</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Best for</dt><dd class="text-base text-ink-soft">Research · analysis · review</dd></div>
           </dl>
           <div class="space-y-2.5">
             <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Reasoning</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-red rounded-full" style="width:96%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">96</span></div>
@@ -416,7 +410,7 @@
           </div>
           <h3 class="text-5xl sm:text-6xl font-extrabold tracking-tightest mb-4">Prometheus</h3>
           <p class="text-base sm:text-lg text-ink-mid leading-relaxed mb-7 pretty">
-            Plans, calls tools, ships outcomes. Designed to keep its head over hours — auditable, pausable, and on-task.
+            Plans, takes action, ships outcomes. Designed to keep its head over hours — auditable, pausable, and on-task.
           </p>
           <a href="/signup.html" class="inline-flex items-center gap-1.5 text-ink font-semibold border-b-2 border-ink hover:border-red transition-colors pb-0.5">
             Try Prometheus <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
@@ -424,135 +418,38 @@
         </div>
         <div class="lg:col-span-7 lg:border-l border-line lg:pl-12 space-y-8">
           <dl class="grid grid-cols-2 gap-x-8 gap-y-6">
-            <div><dt class="h-eyebrow text-ink-light mb-1.5">Tool catalog</dt><dd class="text-2xl font-bold tracking-tight">200+ integrations</dd></div>
             <div><dt class="h-eyebrow text-ink-light mb-1.5">Run horizon</dt><dd class="text-2xl font-bold tracking-tight">Hours, not turns</dd></div>
-            <div><dt class="h-eyebrow text-ink-light mb-1.5">Surfaces</dt><dd class="text-base text-ink-soft">Code · browser · files</dd></div>
-            <div><dt class="h-eyebrow text-ink-light mb-1.5">Pricing</dt><dd class="text-base text-ink-soft">$8.00 / M input</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Memory</dt><dd class="text-2xl font-bold tracking-tight">Persistent</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Surfaces</dt><dd class="text-base text-ink-soft">Web · files · screen</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Best for</dt><dd class="text-base text-ink-soft">Operations · research agents</dd></div>
           </dl>
           <div class="space-y-2.5">
             <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Autonomy</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width:98%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">98</span></div>
             <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Tool use</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width:94%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">94</span></div>
             <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Reasoning</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width:88%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">88</span></div>
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Code quality</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width:95%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">95</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Reliability</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width:95%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">95</span></div>
           </div>
           <div class="border-t border-line pt-6">
             <p class="h-eyebrow text-ink-light mb-4">Where it shines</p>
             <ul class="space-y-3 text-sm">
-              <li class="flex gap-3"><span class="text-ink font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">Engineering work</span><span class="text-ink-mid"> — read repos, write changes, run tests, open the PR.</span></div></li>
-              <li class="flex gap-3"><span class="text-ink font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">Operations</span><span class="text-ink-mid"> — multi-step jobs across CRM, ERP, data warehouse, files.</span></div></li>
+              <li class="flex gap-3"><span class="text-ink font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">Operations</span><span class="text-ink-mid"> — multi-step jobs across the documents and tools your team already uses.</span></div></li>
               <li class="flex gap-3"><span class="text-ink font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">Research agents</span><span class="text-ink-mid"> — full investigations finished while you sleep.</span></div></li>
+              <li class="flex gap-3"><span class="text-ink font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">Knowledge work</span><span class="text-ink-mid"> — long-form drafting, synthesis, reporting in one go.</span></div></li>
             </ul>
           </div>
         </div>
       </article>
-
-      <!-- Router note -->
-      <p class="reveal mt-10 text-center text-sm text-ink-mid max-w-2xl mx-auto pretty">
-        Don't want to choose? Send <span class="font-mono text-ink">"model": "auto"</span> and the router picks the cheapest model that meets your latency and quality target.
-      </p>
     </div>
   </section>
 
-  <!-- ════════ API (developer-side) ════════ -->
-  <section id="api" class="relative py-24 sm:py-36 bg-cream/40 border-y border-line overflow-hidden">
-    <div class="absolute inset-0 grid-bg-light opacity-50"></div>
-
-    <div class="relative max-w-7xl mx-auto px-6 sm:px-8">
-      <div class="max-w-3xl mb-16 sm:mb-20">
-        <p class="reveal section-mark mb-6">API</p>
-        <h2 class="reveal h-section balance text-5xl sm:text-7xl mb-6">Three lines.<br /><span class="italic font-serif font-normal">First call.</span></h2>
-        <p class="reveal pretty text-base sm:text-xl text-ink-mid leading-relaxed">
-          The same primitives our team uses internally. Typed, streaming, well-behaved under load. No magic — just an API that respects your time.
-        </p>
-      </div>
-
-      <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-        <div class="reveal lg:col-span-7 rounded-2xl border border-ink bg-ink overflow-hidden shadow-2xl shadow-ink/20">
-          <div class="border-b border-white/10 px-4 py-3 flex items-center gap-3">
-            <div class="flex gap-1.5">
-              <div class="w-2.5 h-2.5 rounded-full bg-white/15"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-white/15"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-white/15"></div>
-            </div>
-            <div class="flex-1 flex items-center gap-3 text-[11px] font-mono">
-              <span class="bg-white/10 text-white/80 rounded-md px-2 py-1 font-medium">app.ts</span>
-              <span class="text-white/30">·</span>
-              <span class="text-white/40">@helvex/sdk</span>
-            </div>
-            <button class="text-[10px] text-white/40 hover:text-white/80 font-medium uppercase tracking-widest transition-colors" data-copy>Copy</button>
-          </div>
-          <pre class="code-block px-5 sm:px-7 py-6 text-white/90 overflow-x-auto"><span class="tk-comment">// Stream a response from Ether — sub-100ms first token</span>
-<span class="tk-keyword">import</span> { helvex } <span class="tk-keyword">from</span> <span class="tk-string">"@helvex/sdk"</span><span class="tk-comma">;</span>
-
-<span class="tk-keyword">const</span> stream <span class="tk-comma">=</span> <span class="tk-keyword">await</span> helvex<span class="tk-comma">.</span><span class="tk-fn">complete</span><span class="tk-comma">({</span>
-  <span class="tk-prop">model</span><span class="tk-comma">:</span> <span class="tk-string">"ether-1"</span><span class="tk-comma">,</span>
-  <span class="tk-prop">stream</span><span class="tk-comma">:</span> <span class="tk-keyword">true</span><span class="tk-comma">,</span>
-  <span class="tk-prop">messages</span><span class="tk-comma">: [</span>
-    <span class="tk-comma">{</span> <span class="tk-prop">role</span><span class="tk-comma">:</span> <span class="tk-string">"system"</span><span class="tk-comma">,</span> <span class="tk-prop">content</span><span class="tk-comma">:</span> <span class="tk-string">"You are a precise editor."</span> <span class="tk-comma">},</span>
-    <span class="tk-comma">{</span> <span class="tk-prop">role</span><span class="tk-comma">:</span> <span class="tk-string">"user"</span><span class="tk-comma">,</span>  <span class="tk-prop">content</span><span class="tk-comma">:</span> <span class="tk-string">"Tighten this paragraph."</span> <span class="tk-comma">},</span>
-  <span class="tk-comma">],</span>
-<span class="tk-comma">});</span>
-
-<span class="tk-keyword">for await</span> <span class="tk-comma">(</span><span class="tk-keyword">const</span> chunk <span class="tk-keyword">of</span> stream<span class="tk-comma">)</span> process<span class="tk-comma">.</span>stdout<span class="tk-comma">.</span><span class="tk-fn">write</span><span class="tk-comma">(</span>chunk<span class="tk-comma">.</span>delta<span class="tk-comma">);</span></pre>
-          <div class="border-t border-white/10 px-5 py-3 flex flex-wrap items-center gap-3 text-[11px] font-mono text-white/50">
-            <span class="inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-yellow"></span>Streaming</span>
-            <span class="text-white/20">·</span>
-            <span>240 tokens / s</span>
-            <span class="text-white/20">·</span>
-            <span>p50: 240ms</span>
-            <span class="ml-auto text-white/30">helvex-sdk@1.4.0</span>
-          </div>
-        </div>
-
-        <div class="lg:col-span-5 grid sm:grid-cols-2 lg:grid-cols-1 gap-4">
-          <div class="reveal rounded-2xl border border-line bg-white p-6">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-lg bg-ink flex items-center justify-center"><svg class="w-4 h-4 text-yellow" viewBox="0 0 24 24" fill="none"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-              <p class="font-bold tracking-tight">Typed SDKs</p>
-            </div>
-            <p class="text-sm text-ink-mid leading-relaxed">First-party for TypeScript, Python, Go, and Rust. Streaming, tool calls, structured outputs all typed.</p>
-          </div>
-          <div class="reveal rounded-2xl border border-line bg-white p-6">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-lg bg-red flex items-center justify-center"><svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none"><path d="M14 6l-4 4-2-2-3 3 5 5 7-7-3-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
-              <p class="font-bold tracking-tight">Function calling</p>
-            </div>
-            <p class="text-sm text-ink-mid leading-relaxed">Bring your APIs and schemas. Models call them with confidence — and fail noisily when they shouldn't.</p>
-          </div>
-          <div class="reveal rounded-2xl border border-line bg-white p-6">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-lg bg-yellow flex items-center justify-center"><svg class="w-4 h-4 text-ink" viewBox="0 0 24 24" fill="none"><path d="M3 12h6l3-9 3 18 3-9h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-              <p class="font-bold tracking-tight">Built-in evals</p>
-            </div>
-            <p class="text-sm text-ink-mid leading-relaxed">Run your test suite against new model versions before they reach production. Diff results, gate releases.</p>
-          </div>
-          <div class="reveal rounded-2xl border border-line bg-white p-6">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-lg bg-ink/5 flex items-center justify-center"><svg class="w-4 h-4 text-ink" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-              <p class="font-bold tracking-tight">Idempotency</p>
-            </div>
-            <p class="text-sm text-ink-mid leading-relaxed">Idempotency keys, retry headers, rate-limit hints. The boring things that keep production calm.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="reveal mt-12 sm:mt-16 grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px] sm:text-xs font-mono">
-        <div class="border border-line bg-white rounded-xl px-3 py-3"><span class="text-yellow-deep font-bold">POST</span> <span class="text-ink-mid">/v1/complete</span></div>
-        <div class="border border-line bg-white rounded-xl px-3 py-3"><span class="text-yellow-deep font-bold">POST</span> <span class="text-ink-mid">/v1/agents</span></div>
-        <div class="border border-line bg-white rounded-xl px-3 py-3"><span class="text-red font-bold">GET</span> <span class="text-ink-mid">/v1/research</span></div>
-        <div class="border border-line bg-white rounded-xl px-3 py-3"><span class="text-yellow-deep font-bold">POST</span> <span class="text-ink-mid">/v1/embeddings</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════ STUDIO (operator-side; platform layer above the models — no model-strength overlap) ════════ -->
-  <section id="studio" class="py-24 sm:py-36">
+  <!-- ════════ WORKSPACE (product-side, fully user-facing) ════════ -->
+  <section id="workspace" class="py-24 sm:py-36 bg-cream/40 border-y border-line">
     <div class="max-w-7xl mx-auto px-6 sm:px-8">
       <div class="max-w-3xl mb-16 sm:mb-20">
-        <p class="reveal section-mark mb-6">Studio</p>
-        <h2 class="reveal h-section balance text-5xl sm:text-7xl mb-6">For the people<br /><span class="italic font-serif font-normal">who run them.</span></h2>
+        <p class="reveal section-mark mb-6">Workspace</p>
+        <h2 class="reveal h-section balance text-5xl sm:text-7xl mb-6">A real place<br /><span class="italic font-serif font-normal">to do the work.</span></h2>
         <p class="reveal pretty text-base sm:text-xl text-ink-mid leading-relaxed max-w-2xl">
-          Models are the engine. Studio is the cockpit — where teams design agents, watch traffic, and ship safely.
+          Not a chat box. A workspace that holds your conversations, your projects, your team's library, and the agents working in the background.
         </p>
       </div>
 
@@ -560,56 +457,56 @@
 
         <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
           <div class="w-10 h-10 rounded-lg bg-ink/5 flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h12M3 18h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="currentColor" stroke-width="1.8"/></svg>
           </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Workflow composer</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Design pipelines visually or in code. Branches, retries, human-in-the-loop, sub-agents. Versioned and diffable.</p>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Chat</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Talk to any model. Switch mid-conversation without losing the thread. Voice, files, images — all in one place.</p>
         </div>
 
         <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
           <div class="w-10 h-10 rounded-lg bg-yellow-soft flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-yellow-deep" viewBox="0 0 24 24" fill="none"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <svg class="w-5 h-5 text-yellow-deep" viewBox="0 0 24 24" fill="none"><path d="M3 7l9-4 9 4v10l-9 4-9-4V7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
           </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Triggers</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Cron, webhook, event, or inbox. Whatever sets things off in your business, Studio listens for it.</p>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Projects</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Folders that remember. Drop in your context once and every chat inside picks it up — no copy-paste rituals.</p>
         </div>
 
         <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
           <div class="w-10 h-10 rounded-lg bg-red/10 flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-red" viewBox="0 0 24 24" fill="none"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6M14 4l-4 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="w-5 h-5 text-red" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="1.8"/></svg>
           </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Tool catalog</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">200+ vetted connectors out of the box — Slack, Linear, Stripe, Salesforce, your own SQL, your own code.</p>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Agents</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Assistants that take action. Set them off, watch the live trace, come back to a finished result.</p>
         </div>
 
         <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
           <div class="w-10 h-10 rounded-lg bg-ink/5 flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4V4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 9h6M9 13h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Memory &amp; retrieval</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Persistent, structured state across sessions. Bring your vectors, or use ours. Scoped per user, team, or agent.</p>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Knowledge</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Bring your team's documents, decks, and notes. Ask anything across them — the answer cites the source.</p>
         </div>
 
         <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
           <div class="w-10 h-10 rounded-lg bg-yellow flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="14" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 21v-2a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v2" stroke="currentColor" stroke-width="1.8"/></svg>
           </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Guardrails &amp; evals</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Define policy in plain language. Evaluate agents against your own test bank. Block bad outputs before they ship.</p>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Spaces</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Shared workspaces where teams plan, pair, and review. The same chats and agents, owned together.</p>
         </div>
 
         <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
           <div class="w-10 h-10 rounded-lg bg-ink flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-yellow" viewBox="0 0 24 24" fill="none"><path d="M3 3v18h18M7 14l4-4 4 4 5-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="w-5 h-5 text-yellow" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Observability</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Every step traced. Every output replayable. Audit logs that satisfy your security team — and your own debugging.</p>
+          <h3 class="text-xl font-bold tracking-tight mb-2">History</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Every conversation, every agent run, fully searchable. The thing you said three weeks ago, in one keystroke.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ════════ RESEARCH (Anthropic-style: actual posts, no marketing repeat) ════════ -->
+  <!-- ════════ RESEARCH ════════ -->
   <section id="research" class="relative py-24 sm:py-36 bg-beige border-y border-line-soft">
     <div class="relative max-w-7xl mx-auto px-6 sm:px-8">
       <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-end mb-14 sm:mb-20">
@@ -676,7 +573,7 @@
     </div>
   </section>
 
-  <!-- ════════ TRUST (refocused: compliance + deployment + data — no audience cards) ════════ -->
+  <!-- ════════ TRUST (privacy + residency, no infra pitch) ════════ -->
   <section id="trust" class="relative py-24 sm:py-36 bg-ink text-white overflow-hidden">
     <div class="absolute inset-0 grid-bg-dark"></div>
     <div class="hero-orb hero-orb-1" style="top: -200px; right: -150px; opacity: 0.18;"></div>
@@ -685,11 +582,11 @@
       <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-end mb-16 sm:mb-20">
         <div>
           <p class="reveal section-mark text-yellow mb-6">Trust</p>
-          <h2 class="reveal h-section balance text-5xl sm:text-7xl">The hard parts,<br /><span class="italic font-serif font-normal">already solved.</span></h2>
+          <h2 class="reveal h-section balance text-5xl sm:text-7xl">Your work,<br /><span class="italic font-serif font-normal">your data, yours.</span></h2>
         </div>
         <div>
           <p class="reveal pretty text-base sm:text-xl text-white/70 leading-relaxed">
-            Procurement, security review, and data residency are usually where AI projects stall. We start them on day one, so your rollout doesn't.
+            HelveX is the AI platform serious teams put in front of their CISO without flinching. Privacy, residency, and compliance are decisions we made before you arrived.
           </p>
         </div>
       </div>
@@ -714,26 +611,26 @@
         </div>
       </div>
 
-      <!-- Trust pillars: deployment + data -->
+      <!-- Two pillars: residency + privacy -->
       <div class="grid lg:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16">
         <div class="reveal border border-white/10 rounded-2xl p-8 sm:p-10 backdrop-blur-sm">
-          <p class="h-eyebrow text-yellow mb-5">Deployment</p>
-          <h3 class="text-3xl font-bold tracking-tight mb-5">Run where your data lives.</h3>
+          <p class="h-eyebrow text-yellow mb-5">Where your data stays</p>
+          <h3 class="text-3xl font-bold tracking-tight mb-5 balance">Residency you choose, never guessed.</h3>
           <ul class="space-y-4 text-sm text-white/70">
-            <li class="flex gap-3"><span class="text-yellow font-bold flex-shrink-0">01</span><div><span class="font-semibold text-white">Multi-tenant cloud</span> — US-East and EU-Central regions, sub-second cross-AZ failover.</div></li>
-            <li class="flex gap-3"><span class="text-yellow font-bold flex-shrink-0">02</span><div><span class="font-semibold text-white">Dedicated capacity</span> — reserved GPUs and isolated routing on Pro and Enterprise.</div></li>
-            <li class="flex gap-3"><span class="text-yellow font-bold flex-shrink-0">03</span><div><span class="font-semibold text-white">Private deployment</span> — your AWS, GCP, or Azure account. VPC peering. Customer-managed keys.</div></li>
-            <li class="flex gap-3"><span class="text-yellow font-bold flex-shrink-0">04</span><div><span class="font-semibold text-white">Air-gapped option</span> — for the regulated environments that need it.</div></li>
+            <li class="flex gap-3"><span class="text-yellow font-bold flex-shrink-0">01</span><div><span class="font-semibold text-white">Two regions</span> — pick US-East or EU-Central at the workspace level. Cross-region routing is opt-in only.</div></li>
+            <li class="flex gap-3"><span class="text-yellow font-bold flex-shrink-0">02</span><div><span class="font-semibold text-white">Single-tenant capacity</span> — Enterprise workspaces run on isolated capacity, not shared with anyone else.</div></li>
+            <li class="flex gap-3"><span class="text-yellow font-bold flex-shrink-0">03</span><div><span class="font-semibold text-white">Customer-controlled retention</span> — set the lifetime of every conversation, attachment, and agent run.</div></li>
+            <li class="flex gap-3"><span class="text-yellow font-bold flex-shrink-0">04</span><div><span class="font-semibold text-white">Audit logs</span> — every action, every actor, exportable to your SIEM.</div></li>
           </ul>
         </div>
         <div class="reveal border border-white/10 rounded-2xl p-8 sm:p-10 backdrop-blur-sm">
-          <p class="h-eyebrow text-red mb-5">Data handling</p>
-          <h3 class="text-3xl font-bold tracking-tight mb-5">Your inputs are not our training set.</h3>
+          <p class="h-eyebrow text-red mb-5">How your data is handled</p>
+          <h3 class="text-3xl font-bold tracking-tight mb-5 balance">Your inputs are not our training set.</h3>
           <ul class="space-y-4 text-sm text-white/70">
-            <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">01</span><div><span class="font-semibold text-white">Zero training</span> — API and platform inputs are never used to improve models. Ever.</div></li>
-            <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">02</span><div><span class="font-semibold text-white">Zero retention mode</span> — Enterprise can opt into immediate deletion after response.</div></li>
-            <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">03</span><div><span class="font-semibold text-white">Encryption in flight and at rest</span> — TLS 1.3, AES-256, key rotation.</div></li>
-            <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">04</span><div><span class="font-semibold text-white">Signed DPA</span> — sub-processor list, breach SLAs, deletion guarantees on request.</div></li>
+            <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">01</span><div><span class="font-semibold text-white">Zero training</span> — what you write into HelveX is never used to improve our models. Ever.</div></li>
+            <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">02</span><div><span class="font-semibold text-white">Zero retention mode</span> — Enterprise can opt into immediate deletion after a response is delivered.</div></li>
+            <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">03</span><div><span class="font-semibold text-white">Encryption everywhere</span> — TLS 1.3 in flight, AES-256 at rest, key rotation on by default.</div></li>
+            <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">04</span><div><span class="font-semibold text-white">Signed DPA</span> — sub-processor list, breach SLAs, deletion guarantees, available before you sign.</div></li>
           </ul>
         </div>
       </div>
@@ -742,33 +639,33 @@
       <div class="reveal grid grid-cols-2 md:grid-cols-4 gap-8 py-10 sm:py-12 border-y border-white/10">
         <div>
           <div class="text-3xl sm:text-4xl font-extrabold tracking-tightest text-white mb-1">300+</div>
-          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">enterprise customers</div>
+          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">enterprise teams</div>
         </div>
         <div>
           <div class="text-3xl sm:text-4xl font-extrabold tracking-tightest text-white mb-1">2 regions</div>
           <div class="text-xs uppercase tracking-widest text-white/50 font-bold">data residency</div>
         </div>
         <div>
-          <div class="text-3xl sm:text-4xl font-extrabold tracking-tightest text-white mb-1">14 day</div>
-          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">avg. security review</div>
+          <div class="text-3xl sm:text-4xl font-extrabold tracking-tightest text-white mb-1">99.99%</div>
+          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">uptime SLA</div>
         </div>
         <div>
           <div class="text-3xl sm:text-4xl font-extrabold tracking-tightest text-yellow mb-1">$25K</div>
-          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">free startup credits</div>
+          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">free for startups</div>
         </div>
       </div>
 
       <div class="reveal mt-14 sm:mt-16 flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="/signup.html" class="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-yellow text-ink font-semibold px-7 py-4 rounded-full text-base transition-colors">
-          Talk to sales
+        <a href="#" class="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-yellow text-ink font-semibold px-7 py-4 rounded-full text-base transition-colors">
+          Visit the Trust Center
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
         </a>
-        <a href="#" class="text-sm text-white/70 hover:text-white px-4 py-2 transition-colors">Visit the trust center →</a>
+        <a href="/signup.html" class="text-sm text-white/70 hover:text-white px-4 py-2 transition-colors">Talk to our team →</a>
       </div>
     </div>
   </section>
 
-  <!-- ════════ STORIES (real outcomes — different content from anywhere else) ════════ -->
+  <!-- ════════ STORIES ════════ -->
   <section class="py-24 sm:py-36">
     <div class="max-w-7xl mx-auto px-6 sm:px-8">
       <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-end mb-14 sm:mb-20">
@@ -778,7 +675,7 @@
         </div>
         <div>
           <p class="reveal pretty text-base sm:text-xl text-ink-mid leading-relaxed">
-            What teams ship after they integrate. Numbers from the field, not from our marketing department.
+            What teams ship after they switch. Numbers from the field, not from our marketing department.
           </p>
         </div>
       </div>
@@ -814,8 +711,8 @@
           </div>
           <div class="p-6 sm:p-8">
             <div class="text-ink-soft font-light italic text-lg mb-3">Northstar</div>
-            <p class="text-base text-ink-mid leading-relaxed mb-4 italic">"Switching from a single-model approach to Ether + Nexus halved our cost without touching quality. The router 'just works'."</p>
-            <p class="text-xs text-ink-light"><span class="font-semibold text-ink-soft">Marcus Reuter</span> · Co-Founder, CTO</p>
+            <p class="text-base text-ink-mid leading-relaxed mb-4 italic">"Moving to Ether and Nexus together gave us better answers at lower cost — without us having to think about it. The way HelveX picks the right model is invisible."</p>
+            <p class="text-xs text-ink-light"><span class="font-semibold text-ink-soft">Marcus Reuter</span> · Co-Founder, COO</p>
           </div>
         </a>
 
@@ -846,7 +743,7 @@
         <p class="reveal section-mark justify-center mb-6">Pricing</p>
         <h2 class="reveal h-section balance text-5xl sm:text-6xl mb-6">Pay for what you ship.</h2>
         <p class="reveal pretty text-base sm:text-xl text-ink-mid leading-relaxed">
-          Free to start. Per-token API. Seat-based for teams. Custom when scale demands it.
+          Free to start. Per-seat for teams. Custom when scale demands it.
         </p>
       </div>
 
@@ -858,8 +755,8 @@
           <a href="/signup.html" class="block w-full text-center border-2 border-ink/15 hover:border-ink/40 hover:bg-cream text-ink font-semibold py-3 rounded-full text-sm transition-all mb-8">Get started</a>
           <ul class="space-y-3 text-sm text-ink-soft">
             <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Ether + limited Nexus</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>3 saved agents</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Studio (single seat)</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>3 projects, 3 saved agents</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Personal workspace</li>
             <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Community support</li>
           </ul>
         </div>
@@ -873,9 +770,8 @@
           <ul class="space-y-3 text-sm text-ink-soft">
             <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>All three models, no caps</li>
             <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Long-horizon Prometheus agents</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>API + 1M included tokens / mo</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Studio for teams</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Email + chat support</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Team Spaces &amp; shared knowledge</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Priority support</li>
           </ul>
         </div>
 
@@ -886,16 +782,16 @@
           <a href="/signup.html" class="block w-full text-center border-2 border-ink/15 hover:border-ink/40 hover:bg-cream text-ink font-semibold py-3 rounded-full text-sm transition-all mb-8">Contact sales</a>
           <ul class="space-y-3 text-sm text-ink-soft">
             <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Dedicated capacity + SLAs</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>SSO · zero-retention · DPA</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Private deployments + VPC</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Dedicated TAM + onboarding</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>SSO + audit logs + zero retention</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Signed DPA + breach SLAs</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Dedicated success manager</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ════════ FAQ (specific Qs — no positioning repeats) ════════ -->
+  <!-- ════════ FAQ (product/privacy questions only) ════════ -->
   <section class="py-24 sm:py-36">
     <div class="max-w-4xl mx-auto px-6 sm:px-8">
       <div class="text-center mb-14 sm:mb-20">
@@ -906,58 +802,58 @@
       <div class="divide-y divide-line border-t border-b border-line">
         <details class="reveal group">
           <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 list-none">
-            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Can the router pick a model automatically?</span>
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Which model should I use?</span>
             <svg class="w-5 h-5 text-ink-mid flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </summary>
-          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Yes — pass <span class="font-mono text-ink">"model": "auto"</span> and we route per request based on your latency, cost, and quality targets. You can also constrain the choice (e.g. <span class="font-mono text-ink">"prefer": ["nexus","prometheus"]</span>) or pin a model explicitly. Routing decisions are exposed in the response so you can audit them.</p>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">If the answer needs to land in seconds, Ether. If it needs to be right and well-sourced, Nexus. If it needs to actually go and do the thing, Prometheus. You can also let HelveX choose for you — it picks the cheapest model that meets your quality bar, and tells you which one it picked.</p>
         </details>
 
         <details class="reveal group">
           <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 list-none">
-            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Do you train on customer inputs?</span>
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Will my data be used to train the models?</span>
             <svg class="w-5 h-5 text-ink-mid flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </summary>
-          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Never. Inputs and outputs through the API and Studio are not used for training. Enterprise plans add zero-retention mode (immediate deletion after the response is delivered) and a signed DPA.</p>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Never. Anything you write or upload into HelveX is not used to improve our models. Enterprise plans add a zero-retention mode that deletes inputs immediately after the response is delivered, plus a signed DPA covering breach SLAs and deletion guarantees.</p>
         </details>
 
         <details class="reveal group">
           <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 list-none">
-            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Where is data processed?</span>
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Where is my data stored?</span>
             <svg class="w-5 h-5 text-ink-mid flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </summary>
-          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Default residency is US-East. EU residency (Frankfurt + Zurich) is available on Pro and Enterprise. Choose at the workspace level. Cross-region routing is opt-in, never automatic.</p>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">You choose at the workspace level: US-East or EU-Central (Frankfurt + Zurich). Cross-region routing is opt-in only and clearly labelled. Audit logs export to your own SIEM if you want them to.</p>
         </details>
 
         <details class="reveal group">
           <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 list-none">
-            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">How does Prometheus stay coherent over many hours?</span>
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">How do agents stay reliable on long-running tasks?</span>
             <svg class="w-5 h-5 text-ink-mid flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </summary>
-          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Structured planning, plan critique, and a memory hierarchy with verifiable checkpoints. Agents can be paused, inspected, resumed, or replayed. We wrote up the engineering details in the post linked under Research.</p>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Prometheus plans before it acts, checks itself at every step, and remembers what matters. You can pause an agent, look inside it, edit the plan, and resume. Every run leaves a replayable trace, so you and your team always know what happened and why.</p>
         </details>
 
         <details class="reveal group">
           <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 list-none">
-            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Can we self-host or run inside our cloud account?</span>
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Can my team work together inside HelveX?</span>
             <svg class="w-5 h-5 text-ink-mid flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </summary>
-          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Yes — Enterprise supports private deployments inside your AWS, GCP, or Azure account, with VPC peering and customer-managed keys. Air-gapped is available on case-by-case review. Talk to sales for the architecture conversation.</p>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Yes. Spaces let teams share Projects, agents, and a shared library of knowledge. Permissions are role-based, every change is logged, and any conversation can be handed off to a teammate without losing context.</p>
         </details>
 
         <details class="reveal group">
           <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 list-none">
-            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">What's the migration path from another provider?</span>
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">What languages does HelveX support?</span>
             <svg class="w-5 h-5 text-ink-mid flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </summary>
-          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Most teams swap their base URL and headers, run their existing eval suite against our models, and ship. Our SDK ships shims for the common provider shapes so you can A/B test without rewriting prompts. We've migrated teams of 1,000+ engineers in under a sprint.</p>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">All three models are natively fluent in 28 languages, with strong cross-lingual reasoning. Voice is currently available in 14 languages with the rest rolling out through 2026. The interface is localised in 9.</p>
         </details>
       </div>
     </div>
   </section>
 
-  <!-- ════════ FINAL CTA (different angle from hero) ════════ -->
+  <!-- ════════ FINAL CTA ════════ -->
   <section class="relative py-24 sm:py-36 overflow-hidden border-y border-line">
-    <div class="absolute inset-0 grid-bg opacity-50"></div>
+    <div class="absolute inset-0 grid-bg-light opacity-50"></div>
     <div class="hero-orb hero-orb-1" style="left: 5%; top: 0; right: auto; opacity: 0.4;"></div>
     <div class="hero-orb hero-orb-2" style="right: 5%; bottom: 0; left: auto; opacity: 0.4;"></div>
 
@@ -968,7 +864,7 @@
         <span class="italic font-serif font-normal">Start shipping.</span>
       </h2>
       <p class="reveal pretty text-base sm:text-xl text-ink-mid max-w-2xl mx-auto mb-10 leading-relaxed">
-        From your first call to a billion. Same API, same dashboard, same uncompromising standard.
+        From your first conversation to your team's daily work — same workspace, same standard. No compromises.
       </p>
       <div class="reveal flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 mb-6">
         <a href="/signup.html" class="btn-primary inline-flex items-center justify-center gap-2 bg-ink hover:bg-ink-soft text-white font-semibold px-8 py-4 rounded-full text-base transition-colors btn-shadow">
@@ -979,7 +875,7 @@
           Talk to sales
         </a>
       </div>
-      <p class="reveal text-xs text-ink-light font-mono">No credit card required · Cancel anytime</p>
+      <p class="reveal text-xs text-ink-light tracking-tight">No credit card required · Cancel anytime</p>
     </div>
   </section>
 
@@ -993,7 +889,7 @@
             Helve<span class="x">X</span>
           </a>
           <p class="text-sm text-ink-mid leading-relaxed max-w-sm mb-6">
-            Ether, Nexus, Prometheus — and the platform around them. Designed and built in Switzerland.
+            Ether, Nexus, Prometheus — and the workspace around them. Designed and built in Switzerland.
           </p>
           <form class="flex gap-2 max-w-sm" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed ✓';">
             <input type="email" placeholder="you@company.com" class="flex-1 border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-ink/40 transition-colors" />
@@ -1005,9 +901,9 @@
           <p class="h-eyebrow text-ink-light mb-4">Product</p>
           <ul class="space-y-2.5 text-sm text-ink-soft">
             <li><a href="#models" class="hover:text-red transition-colors">Models</a></li>
-            <li><a href="#api" class="hover:text-red transition-colors">API</a></li>
-            <li><a href="#studio" class="hover:text-red transition-colors">Studio</a></li>
+            <li><a href="#workspace" class="hover:text-red transition-colors">Workspace</a></li>
             <li><a href="#pricing" class="hover:text-red transition-colors">Pricing</a></li>
+            <li><a href="#trust" class="hover:text-red transition-colors">Trust</a></li>
             <li><a href="/signup.html" class="hover:text-red transition-colors">Enter platform</a></li>
           </ul>
         </div>
@@ -1024,8 +920,7 @@
         <div>
           <p class="h-eyebrow text-ink-light mb-4">Resources</p>
           <ul class="space-y-2.5 text-sm text-ink-soft">
-            <li><a href="#" class="hover:text-red transition-colors">Docs</a></li>
-            <li><a href="#" class="hover:text-red transition-colors">API reference</a></li>
+            <li><a href="#" class="hover:text-red transition-colors">Help center</a></li>
             <li><a href="#" class="hover:text-red transition-colors">Status</a></li>
             <li><a href="#" class="hover:text-red transition-colors">Changelog</a></li>
             <li><a href="#" class="hover:text-red transition-colors">Community</a></li>
@@ -1049,9 +944,6 @@
           <a href="#" aria-label="X / Twitter" class="text-ink-mid hover:text-ink transition-colors">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
-          <a href="#" aria-label="GitHub" class="text-ink-mid hover:text-ink transition-colors">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-1.95c-3.2.7-3.87-1.55-3.87-1.55-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.76 2.69 1.25 3.34.96.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.27-5.23-5.66 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.17.91-.25 1.89-.38 2.86-.39.97 0 1.95.13 2.86.39 2.18-1.48 3.14-1.17 3.14-1.17.62 1.58.23 2.75.11 3.04.74.8 1.18 1.82 1.18 3.07 0 4.4-2.68 5.36-5.24 5.65.41.36.78 1.06.78 2.14v3.17c0 .31.21.66.79.55C20.21 21.39 23.5 17.08 23.5 12c0-6.35-5.15-11.5-11.5-11.5z"/></svg>
-          </a>
           <a href="#" aria-label="LinkedIn" class="text-ink-mid hover:text-ink transition-colors">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5a5 5 0 00-5 5v14a5 5 0 005 5h14a5 5 0 005-5V5a5 5 0 00-5-5zM8 19H5V8h3v11zm-1.5-12.3a1.7 1.7 0 110-3.4 1.7 1.7 0 010 3.4zM20 19h-3v-5.6c0-1.4-.5-2.4-1.7-2.4-1 0-1.6.7-1.8 1.3-.1.2-.1.5-.1.8V19h-3V8h3v1.3c.4-.6 1.1-1.5 2.7-1.5 2 0 3.5 1.3 3.5 4.1V19z"/></svg>
           </a>
@@ -1061,7 +953,6 @@
   </footer>
 
   <script>
-    // Reveal on scroll
     (function () {
       var reveals = document.querySelectorAll('.reveal');
       if (!('IntersectionObserver' in window)) {
@@ -1079,7 +970,6 @@
       reveals.forEach(function (r) { io.observe(r); });
     })();
 
-    // Hero parallax
     (function () {
       var orbs = document.querySelectorAll('.hero-orb');
       if (!orbs.length) return;
@@ -1092,24 +982,6 @@
           });
         }
       }, { passive: true });
-    })();
-
-    // Copy code button
-    (function () {
-      var btn = document.querySelector('[data-copy]');
-      if (!btn) return;
-      var pre = document.querySelector('pre.code-block');
-      if (!pre) return;
-      btn.addEventListener('click', function () {
-        var txt = pre.innerText.trim();
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(txt).then(function () {
-            var orig = btn.textContent;
-            btn.textContent = 'Copied';
-            setTimeout(function () { btn.textContent = orig; }, 1500);
-          });
-        }
-      });
     })();
   </script>
 </body>
