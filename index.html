@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
   <title>HelveX — Frontier AI for the next era</title>
-  <meta name="description" content="HelveX builds Ether, Nexus, and Prometheus — three frontier AI models engineered for clarity, depth, and autonomous action. The platform for serious AI work." />
+  <meta name="description" content="HelveX is the AI platform built for the moments intelligence has to land — fast, deep, or autonomous. Three models, one router, one place to ship them." />
   <meta property="og:title" content="HelveX — Frontier AI for the next era" />
-  <meta property="og:description" content="Three frontier AI models. One platform. Built for the people shaping what comes next." />
+  <meta property="og:description" content="Pick the mind for the moment. Ether for speed, Nexus for depth, Prometheus for action." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="HelveX" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -64,7 +64,7 @@
       font-feature-settings: "ss01" on, "cv11" on;
     }
 
-    /* Headlines */
+    /* Type scale */
     .h-display    { font-weight: 900; letter-spacing: -0.045em; line-height: 0.95; }
     .h-section    { font-weight: 800; letter-spacing: -0.035em; line-height: 1.04; }
     .h-eyebrow    { font-size: 11px; letter-spacing: 0.22em; font-weight: 700; text-transform: uppercase; }
@@ -80,7 +80,7 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* Premium buttons */
+    /* Buttons */
     .btn-primary { position: relative; overflow: hidden; }
     .btn-primary::before {
       content: ''; position: absolute; inset: 0;
@@ -97,7 +97,7 @@
     .card { transition: transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s cubic-bezier(0.22,1,0.36,1), border-color 0.3s; }
     .card:hover { transform: translateY(-4px); box-shadow: 0 24px 48px -16px rgba(0,0,0,0.12); }
 
-    /* Reveal on scroll */
+    /* Reveal */
     .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1); }
     .reveal.is-visible { opacity: 1; transform: translateY(0); }
 
@@ -111,53 +111,24 @@
     .hero-orb-1 { background: radial-gradient(circle, #FCD34D 0%, transparent 70%); top: -120px; right: -120px; width: 540px; height: 540px; }
     .hero-orb-2 { background: radial-gradient(circle, #FECACA 0%, transparent 70%); bottom: -180px; left: -180px; width: 640px; height: 640px; animation-delay: -6s; }
 
-    /* Grid background (Vercel-style) */
-    .grid-bg {
-      background-image:
-        linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px);
-      background-size: 64px 64px;
-    }
-    .grid-bg-light {
-      background-image:
-        linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
-      background-size: 48px 48px;
-    }
-    .grid-bg-dark {
-      background-image:
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 64px 64px;
-    }
+    /* Grid backgrounds */
+    .grid-bg       { background-image: linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px); background-size: 64px 64px; }
+    .grid-bg-light { background-image: linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px); background-size: 48px 48px; }
+    .grid-bg-dark  { background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 64px 64px; }
 
-    /* Model section glows */
+    /* Model accents */
     .model-ether      { background: radial-gradient(circle at 18% -10%, rgba(252,211,77,0.22), transparent 55%), #FAFAF7; }
     .model-nexus      { background: radial-gradient(circle at 82% -10%, rgba(220,38,38,0.14), transparent 55%), #FAFAF7; }
     .model-prometheus { background: radial-gradient(circle at 50% -20%, rgba(10,10,10,0.10), transparent 60%), #FAFAF7; }
 
-    /* Pulse ring */
-    @keyframes pulseRing {
-      0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.55); }
-      70%     { box-shadow: 0 0 0 12px rgba(220,38,38,0); }
-    }
+    /* Misc anim */
+    @keyframes pulseRing { 0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.55); } 70% { box-shadow: 0 0 0 12px rgba(220,38,38,0); } }
     .pulse-dot { animation: pulseRing 2s infinite; }
+    @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+    .cursor-blink { animation: blink 1s infinite; }
 
-    /* Marquee */
-    @keyframes marquee {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .marquee-track { animation: marquee 42s linear infinite; }
-    .marquee:hover .marquee-track { animation-play-state: paused; }
-
-    /* Code block (Vercel-style) */
-    .code-block {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 13px;
-      line-height: 1.65;
-      letter-spacing: 0;
-    }
+    /* Code block */
+    .code-block { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; line-height: 1.65; letter-spacing: 0; }
     .code-block .tk-comment  { color: #737373; }
     .code-block .tk-keyword  { color: #FCD34D; }
     .code-block .tk-string   { color: #FECACA; }
@@ -166,65 +137,18 @@
     .code-block .tk-num      { color: #FDBA74; }
     .code-block .tk-comma    { color: #525252; }
 
-    /* Animated hairline */
-    @keyframes hairline {
-      0%   { transform: translateX(-100%); opacity: 0; }
-      35%  { opacity: 1; }
-      100% { transform: translateX(100%); opacity: 0; }
-    }
-    .hairline-anim { position: relative; overflow: hidden; }
-    .hairline-anim::after {
-      content: ''; position: absolute; inset: 0; bottom: auto; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(220,38,38,0.6), transparent);
-      animation: hairline 4s ease-in-out infinite;
-    }
-
-    /* Section divider with mark */
-    .section-mark {
-      display: inline-flex; align-items: center; gap: 10px;
-      font: 700 11px/1 'Inter', sans-serif;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: #DC2626;
-    }
+    /* Section mark */
+    .section-mark { display: inline-flex; align-items: center; gap: 10px; font: 700 11px/1 'Inter', sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: #DC2626; }
     .section-mark::before { content: ''; width: 24px; height: 1px; background: currentColor; }
-
-    /* Spec dots animation */
-    @keyframes specPulse {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
-    }
-    .spec-dot { animation: specPulse 2.4s ease-in-out infinite; }
-
-    /* Typing cursor */
-    @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-    .cursor-blink { animation: blink 1s infinite; }
-
-    /* Hover-glow border (Vercel style) */
-    .glow-border { position: relative; }
-    .glow-border::before {
-      content: ''; position: absolute; inset: -1px; border-radius: inherit;
-      background: linear-gradient(135deg, #DC2626, #FCD34D, #DC2626);
-      opacity: 0; transition: opacity 0.4s; z-index: -1;
-      filter: blur(8px);
-    }
-    .glow-border:hover::before { opacity: 0.4; }
 
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
-      .reveal, .hero-orb, .marquee-track, .pulse-dot, .btn-primary::before, .card,
-      .hairline-anim::after, .spec-dot, .cursor-blink {
-        animation: none !important;
-        transition: none !important;
-        opacity: 1 !important;
-        transform: none !important;
+      .reveal, .hero-orb, .pulse-dot, .btn-primary::before, .card, .cursor-blink {
+        animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important;
       }
     }
 
-    /* Selection */
     ::selection { background: #FCD34D; color: #0A0A0A; }
-
-    /* Fine line scrollbar */
     ::-webkit-scrollbar { width: 10px; height: 10px; }
     ::-webkit-scrollbar-track { background: #FAFAF7; }
     ::-webkit-scrollbar-thumb { background: #D4D4D4; border-radius: 8px; }
@@ -233,60 +157,51 @@
 </head>
 <body class="bg-white text-ink antialiased">
 
-  <!-- ════════════════ ANNOUNCEMENT BAR ════════════════ -->
+  <!-- ════════ ANNOUNCEMENT (single news beat — only here) ════════ -->
   <div class="bg-ink text-white text-xs sm:text-sm">
     <div class="max-w-7xl mx-auto px-6 sm:px-8 h-9 flex items-center justify-center gap-3">
       <span class="hidden sm:inline-flex h-1.5 w-1.5 rounded-full bg-yellow"></span>
       <span class="text-white/80">New —</span>
       <span class="font-medium">Prometheus 2.0 launches with agents that run for hours.</span>
-      <a href="#models" class="ml-2 text-yellow hover:text-white transition-colors font-medium inline-flex items-center gap-1 group">
-        Read more
+      <a href="#research" class="ml-2 text-yellow hover:text-white transition-colors font-medium inline-flex items-center gap-1 group">
+        Read the post
         <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
       </a>
     </div>
   </div>
 
-  <!-- ════════════════ NAV ════════════════ -->
+  <!-- ════════ NAV ════════ -->
   <header class="sticky top-0 z-50 bg-white/85 backdrop-blur-xl border-b border-line">
     <nav class="max-w-7xl mx-auto px-6 sm:px-8 h-16 sm:h-[68px] flex items-center justify-between gap-4">
       <a href="/" class="brand-mark text-xl sm:text-[22px] flex items-center gap-2 flex-shrink-0">
-        <svg class="w-6 h-6 sm:w-[26px] sm:h-[26px]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M4 4h4v16H4V4zm12 0h4v16h-4V4zM8 11h8v2H8v-2z" fill="currentColor"/>
-        </svg>
+        <svg class="w-6 h-6 sm:w-[26px] sm:h-[26px]" viewBox="0 0 24 24" fill="none"><path d="M4 4h4v16H4V4zm12 0h4v16h-4V4zM8 11h8v2H8v-2z" fill="currentColor"/></svg>
         Helve<span class="x">X</span>
       </a>
       <div class="hidden lg:flex items-center gap-1 text-[14px] font-medium text-ink-soft">
-        <a href="#models" class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Models</a>
-        <a href="#platform" class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Platform</a>
-        <a href="#research" class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Research</a>
-        <a href="#enterprise" class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Enterprise</a>
-        <a href="#pricing" class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Pricing</a>
+        <a href="#models"     class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Models</a>
+        <a href="#api"        class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">API</a>
+        <a href="#studio"     class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Studio</a>
+        <a href="#research"   class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Research</a>
+        <a href="#trust"      class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Trust</a>
+        <a href="#pricing"    class="hover:text-ink hover:bg-cream rounded-lg px-3 py-2 transition-colors">Pricing</a>
       </div>
       <div class="flex items-center gap-1 sm:gap-2">
         <a href="#docs" class="hidden md:inline-flex text-[14px] font-medium text-ink-mid hover:text-ink px-3 py-2 transition-colors">Docs</a>
         <a href="/signup.html" class="hidden sm:inline-flex text-[14px] font-medium text-ink-mid hover:text-ink px-3 py-2 transition-colors">Sign in</a>
         <a href="/signup.html" class="btn-primary inline-flex items-center gap-1.5 bg-ink hover:bg-ink-soft text-white text-[13px] font-semibold px-4 py-2.5 rounded-full transition-colors btn-shadow">
           Enter Platform
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
     </nav>
   </header>
 
-  <!-- ════════════════ HERO ════════════════ -->
-  <section class="relative pt-12 sm:pt-20 pb-20 sm:pb-32 overflow-hidden">
+  <!-- ════════ HERO (positioning + live demo) ════════ -->
+  <section class="relative pt-14 sm:pt-24 pb-20 sm:pb-32 overflow-hidden">
     <div class="hero-orb hero-orb-1"></div>
     <div class="hero-orb hero-orb-2"></div>
 
     <div class="relative max-w-6xl mx-auto px-6 sm:px-8">
-
-      <div class="reveal flex justify-center mb-8 sm:mb-10">
-        <a href="#models" class="group inline-flex items-center gap-2.5 bg-cream border border-line rounded-full pl-2 pr-4 py-1 text-xs sm:text-sm hover:border-ink/20 transition-colors">
-          <span class="bg-ink text-yellow text-[10px] tracking-widest font-bold uppercase rounded-full px-2.5 py-1">New</span>
-          <span class="font-medium text-ink-soft">Prometheus 2.0 — agentic intelligence</span>
-          <svg class="w-3 h-3 text-ink-mid group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-        </a>
-      </div>
 
       <h1 class="reveal h-display balance text-center text-[44px] sm:text-7xl lg:text-[104px] mb-6 sm:mb-8">
         Frontier intelligence,<br />
@@ -294,7 +209,7 @@
       </h1>
 
       <p class="reveal pretty text-center text-base sm:text-xl text-ink-mid max-w-2xl mx-auto mb-9 sm:mb-12 leading-relaxed">
-        HelveX builds three frontier AI models — Ether, Nexus, and Prometheus — and the platform that puts them to work. Designed for the people building what comes next.
+        HelveX is the AI platform built for the moments intelligence has to land — fast, deep, or autonomous. Pick a model. Or let the router pick one for you.
       </p>
 
       <div class="reveal flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 mb-16 sm:mb-20">
@@ -307,7 +222,7 @@
         </a>
       </div>
 
-      <!-- Hero showcase: live model selector -->
+      <!-- Live playground card -->
       <div class="reveal max-w-4xl mx-auto">
         <div class="rounded-2xl border border-line bg-white shadow-2xl shadow-ink/5 overflow-hidden">
           <div class="bg-cream/70 border-b border-line px-4 py-3 flex items-center gap-3">
@@ -351,79 +266,57 @@
           </div>
         </div>
       </div>
-
-      <!-- Trust strip -->
-      <div class="reveal mt-16 sm:mt-24">
-        <p class="text-center text-[11px] uppercase tracking-[0.22em] text-ink-light font-bold mb-8">In production at ambitious teams worldwide</p>
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-8 items-center opacity-60">
-          <div class="text-center text-ink-mid font-bold tracking-tight text-base sm:text-lg">SIGMA<span class="text-red">.</span></div>
-          <div class="text-center text-ink-mid font-light italic text-base sm:text-lg">Northstar</div>
-          <div class="text-center text-ink-mid font-extrabold tracking-widest text-xs sm:text-sm">VEKTOR</div>
-          <div class="text-center text-ink-mid font-bold text-base sm:text-lg">◆ Apex</div>
-          <div class="text-center text-ink-mid font-mono text-sm">[lab/studio]</div>
-          <div class="text-center text-ink-mid font-semibold tracking-tight text-base sm:text-lg">Meridian.</div>
-        </div>
-      </div>
     </div>
   </section>
 
-  <!-- ════════════════ STATS ════════════════ -->
+  <!-- ════════ STATS (compact, no narrative) ════════ -->
   <section class="border-y border-line bg-cream/50">
     <div class="max-w-7xl mx-auto px-6 sm:px-8 py-10 sm:py-14 grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12">
       <div class="reveal text-center md:text-left">
         <div class="text-4xl sm:text-5xl font-extrabold tracking-tightest">120<span class="text-red">B</span></div>
-        <div class="text-sm text-ink-mid mt-1.5">tokens served daily</div>
+        <div class="text-sm text-ink-mid mt-1.5">tokens / day</div>
       </div>
       <div class="reveal text-center md:text-left">
-        <div class="text-4xl sm:text-5xl font-extrabold tracking-tightest">3</div>
-        <div class="text-sm text-ink-mid mt-1.5">frontier models</div>
+        <div class="text-4xl sm:text-5xl font-extrabold tracking-tightest">28</div>
+        <div class="text-sm text-ink-mid mt-1.5">native languages</div>
       </div>
       <div class="reveal text-center md:text-left">
         <div class="text-4xl sm:text-5xl font-extrabold tracking-tightest">99.99<span class="text-red">%</span></div>
         <div class="text-sm text-ink-mid mt-1.5">uptime SLA</div>
       </div>
       <div class="reveal text-center md:text-left">
-        <div class="text-4xl sm:text-5xl font-extrabold tracking-tightest">SOC 2</div>
-        <div class="text-sm text-ink-mid mt-1.5">Type II certified</div>
+        <div class="text-4xl sm:text-5xl font-extrabold tracking-tightest">42</div>
+        <div class="text-sm text-ink-mid mt-1.5">countries served</div>
       </div>
     </div>
   </section>
 
-  <!-- ════════════════ MODELS ════════════════ -->
+  <!-- ════════ MODELS (deep dive: specs + use cases inline) ════════ -->
   <section id="models" class="relative py-24 sm:py-36">
     <div class="max-w-7xl mx-auto px-6 sm:px-8">
 
       <div class="max-w-3xl mb-16 sm:mb-24">
-        <p class="reveal section-mark mb-6">Our Models</p>
-        <h2 class="reveal h-section balance text-5xl sm:text-7xl mb-6">Three models.<br /><span class="italic font-serif font-normal">One frontier.</span></h2>
+        <p class="reveal section-mark mb-6">Models</p>
+        <h2 class="reveal h-section balance text-5xl sm:text-7xl mb-6">Pick the mind for the moment.</h2>
         <p class="reveal pretty text-base sm:text-xl text-ink-mid leading-relaxed max-w-2xl">
-          Each model is engineered for a different mode of intelligence. Together, they form a system designed to think, build, and act with you.
+          We built three. Each is tuned for a different shape of work — speed, depth, or action. The router calls one when you don't want to.
         </p>
       </div>
 
-      <!-- Comparison index -->
+      <!-- Model index strip -->
       <div class="reveal mb-12 sm:mb-16 grid grid-cols-3 gap-px bg-line border border-line rounded-2xl overflow-hidden text-[11px] sm:text-sm">
         <a href="#model-ether" class="bg-white px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-3 hover:bg-cream transition-colors group">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <span class="w-2 h-2 rounded-full bg-yellow flex-shrink-0"></span>
-            <span class="font-bold tracking-tight truncate">Ether</span>
-          </div>
+          <div class="flex items-center gap-2.5 min-w-0"><span class="w-2 h-2 rounded-full bg-yellow flex-shrink-0"></span><span class="font-bold tracking-tight truncate">Ether</span></div>
           <span class="text-ink-mid hidden sm:inline">Real-time</span>
           <svg class="w-3 h-3 text-ink-mid group-hover:translate-x-0.5 transition-transform flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
         </a>
         <a href="#model-nexus" class="bg-white px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-3 hover:bg-cream transition-colors group">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <span class="w-2 h-2 rounded-full bg-red flex-shrink-0"></span>
-            <span class="font-bold tracking-tight truncate">Nexus</span>
-          </div>
+          <div class="flex items-center gap-2.5 min-w-0"><span class="w-2 h-2 rounded-full bg-red flex-shrink-0"></span><span class="font-bold tracking-tight truncate">Nexus</span></div>
           <span class="text-ink-mid hidden sm:inline">Reasoning</span>
           <svg class="w-3 h-3 text-ink-mid group-hover:translate-x-0.5 transition-transform flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
         </a>
         <a href="#model-prometheus" class="bg-white px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-3 hover:bg-cream transition-colors group">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <span class="w-2 h-2 rounded-full bg-ink flex-shrink-0"></span>
-            <span class="font-bold tracking-tight truncate">Prometheus</span>
-          </div>
+          <div class="flex items-center gap-2.5 min-w-0"><span class="w-2 h-2 rounded-full bg-ink flex-shrink-0"></span><span class="font-bold tracking-tight truncate">Prometheus</span></div>
           <span class="text-ink-mid hidden sm:inline">Agentic</span>
           <svg class="w-3 h-3 text-ink-mid group-hover:translate-x-0.5 transition-transform flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
         </a>
@@ -436,40 +329,37 @@
             <div class="w-12 h-12 rounded-xl bg-yellow flex items-center justify-center shadow-md shadow-yellow/30">
               <svg class="w-6 h-6 text-ink" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
             </div>
-            <span class="h-eyebrow text-ink-mid">Real-time intelligence</span>
+            <span class="h-eyebrow text-ink-mid">Real-time</span>
           </div>
           <h3 class="text-5xl sm:text-6xl font-extrabold tracking-tightest mb-4">Ether</h3>
           <p class="text-base sm:text-lg text-ink-mid leading-relaxed mb-7 pretty">
-            Lightning-fast, ambient AI engineered for everyday tasks. Drafting, summarizing, translating, conversing — all at the speed of thought.
+            Ambient AI for the work that has to happen now. Tuned to feel invisible — instant, accurate, present-tense.
           </p>
           <a href="/signup.html" class="inline-flex items-center gap-1.5 text-ink font-semibold border-b-2 border-yellow hover:border-ink transition-colors pb-0.5">
             Try Ether <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
           </a>
         </div>
-        <div class="lg:col-span-7 lg:border-l border-line lg:pl-12">
-          <dl class="grid grid-cols-2 gap-x-8 gap-y-6 mb-8">
-            <div>
-              <dt class="h-eyebrow text-ink-light mb-1.5">Speed</dt>
-              <dd class="text-2xl font-bold tracking-tight">Sub-100ms</dd>
-            </div>
-            <div>
-              <dt class="h-eyebrow text-ink-light mb-1.5">Context</dt>
-              <dd class="text-2xl font-bold tracking-tight">200K tokens</dd>
-            </div>
-            <div>
-              <dt class="h-eyebrow text-ink-light mb-1.5">Best for</dt>
-              <dd class="text-base text-ink-soft">Conversation, drafting, summarization</dd>
-            </div>
-            <div>
-              <dt class="h-eyebrow text-ink-light mb-1.5">Modes</dt>
-              <dd class="text-base text-ink-soft">Text · Voice · Image</dd>
-            </div>
+        <div class="lg:col-span-7 lg:border-l border-line lg:pl-12 space-y-8">
+          <dl class="grid grid-cols-2 gap-x-8 gap-y-6">
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">First token</dt><dd class="text-2xl font-bold tracking-tight">Sub-100ms</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Context</dt><dd class="text-2xl font-bold tracking-tight">200K tokens</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Inputs</dt><dd class="text-base text-ink-soft">Text · voice · image</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Pricing</dt><dd class="text-base text-ink-soft">$0.40 / M input</dd></div>
           </dl>
           <div class="space-y-2.5">
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Speed</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width: 96%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">96</span></div>
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Reasoning</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width: 64%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">64</span></div>
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Multimodal</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width: 78%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">78</span></div>
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Cost-efficiency</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width: 92%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">92</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Speed</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width:96%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">96</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Reasoning</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width:64%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">64</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Multimodal</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width:78%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">78</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Cost</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-yellow rounded-full" style="width:92%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">92</span></div>
+          </div>
+          <!-- Use cases (was its own section — now lives here) -->
+          <div class="border-t border-line pt-6">
+            <p class="h-eyebrow text-ink-light mb-4">Where it shines</p>
+            <ul class="space-y-3 text-sm">
+              <li class="flex gap-3"><span class="text-yellow-deep font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">First-line support</span><span class="text-ink-mid"> — resolve tickets at conversational latency.</span></div></li>
+              <li class="flex gap-3"><span class="text-yellow-deep font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">Inbox &amp; calendar</span><span class="text-ink-mid"> — drafting and scheduling that finishes before you blink.</span></div></li>
+              <li class="flex gap-3"><span class="text-yellow-deep font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">Live translation</span><span class="text-ink-mid"> — 28 languages, no perceptible lag in voice or text.</span></div></li>
+            </ul>
           </div>
         </div>
       </article>
@@ -481,40 +371,36 @@
             <div class="w-12 h-12 rounded-xl bg-red flex items-center justify-center shadow-md shadow-red/30">
               <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4M5 5l3 3m8 8l3 3M5 19l3-3m8-8l3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             </div>
-            <span class="h-eyebrow text-ink-mid">Deep reasoning</span>
+            <span class="h-eyebrow text-ink-mid">Reasoning</span>
           </div>
           <h3 class="text-5xl sm:text-6xl font-extrabold tracking-tightest mb-4">Nexus</h3>
           <p class="text-base sm:text-lg text-ink-mid leading-relaxed mb-7 pretty">
-            A reasoning-first model designed to think. Slow down where it matters: research, analysis, multi-step problem solving, scientific work.
+            A model that takes its time. Spends compute where it pays off — long context, careful steps, citations you can audit.
           </p>
           <a href="/signup.html" class="inline-flex items-center gap-1.5 text-ink font-semibold border-b-2 border-red hover:border-ink transition-colors pb-0.5">
             Try Nexus <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
           </a>
         </div>
-        <div class="lg:col-span-7 lg:border-l border-line lg:pl-12">
-          <dl class="grid grid-cols-2 gap-x-8 gap-y-6 mb-8">
-            <div>
-              <dt class="h-eyebrow text-ink-light mb-1.5">Reasoning</dt>
-              <dd class="text-2xl font-bold tracking-tight">Adaptive depth</dd>
-            </div>
-            <div>
-              <dt class="h-eyebrow text-ink-light mb-1.5">Context</dt>
-              <dd class="text-2xl font-bold tracking-tight">1M tokens</dd>
-            </div>
-            <div>
-              <dt class="h-eyebrow text-ink-light mb-1.5">Best for</dt>
-              <dd class="text-base text-ink-soft">Research, analysis, math, science</dd>
-            </div>
-            <div>
-              <dt class="h-eyebrow text-ink-light mb-1.5">Modes</dt>
-              <dd class="text-base text-ink-soft">Reasoning · Citations · Tools</dd>
-            </div>
+        <div class="lg:col-span-7 lg:border-l border-line lg:pl-12 space-y-8">
+          <dl class="grid grid-cols-2 gap-x-8 gap-y-6">
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Thinking</dt><dd class="text-2xl font-bold tracking-tight">Adaptive depth</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Context</dt><dd class="text-2xl font-bold tracking-tight">1M tokens</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Outputs</dt><dd class="text-base text-ink-soft">Citations · tables · charts</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Pricing</dt><dd class="text-base text-ink-soft">$3.00 / M input</dd></div>
           </dl>
           <div class="space-y-2.5">
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Reasoning</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-red rounded-full" style="width: 96%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">96</span></div>
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Accuracy</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-red rounded-full" style="width: 92%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">92</span></div>
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Speed</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-red rounded-full" style="width: 56%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">56</span></div>
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Citations</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-red rounded-full" style="width: 98%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">98</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Reasoning</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-red rounded-full" style="width:96%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">96</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Accuracy</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-red rounded-full" style="width:92%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">92</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Speed</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-red rounded-full" style="width:56%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">56</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Citations</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-red rounded-full" style="width:98%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">98</span></div>
+          </div>
+          <div class="border-t border-line pt-6">
+            <p class="h-eyebrow text-ink-light mb-4">Where it shines</p>
+            <ul class="space-y-3 text-sm">
+              <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">Investment briefs</span><span class="text-ink-mid"> — multi-source diligence with traceable sources.</span></div></li>
+              <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">Scientific review</span><span class="text-ink-mid"> — read the literature, surface the consensus, name the gaps.</span></div></li>
+              <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">Policy &amp; legal</span><span class="text-ink-mid"> — walk through complex regulation, end to end.</span></div></li>
+            </ul>
           </div>
         </div>
       </article>
@@ -526,61 +412,61 @@
             <div class="w-12 h-12 rounded-xl bg-ink flex items-center justify-center shadow-md shadow-ink/30">
               <svg class="w-6 h-6 text-yellow" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7l3-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
             </div>
-            <span class="h-eyebrow text-ink-mid">Agentic action</span>
+            <span class="h-eyebrow text-ink-mid">Agentic</span>
           </div>
           <h3 class="text-5xl sm:text-6xl font-extrabold tracking-tightest mb-4">Prometheus</h3>
           <p class="text-base sm:text-lg text-ink-mid leading-relaxed mb-7 pretty">
-            Agents that take action. Prometheus plans, calls tools, writes code, browses, and ships outcomes — autonomously, end to end.
+            Plans, calls tools, ships outcomes. Designed to keep its head over hours — auditable, pausable, and on-task.
           </p>
           <a href="/signup.html" class="inline-flex items-center gap-1.5 text-ink font-semibold border-b-2 border-ink hover:border-red transition-colors pb-0.5">
             Try Prometheus <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
           </a>
         </div>
-        <div class="lg:col-span-7 lg:border-l border-line lg:pl-12">
-          <dl class="grid grid-cols-2 gap-x-8 gap-y-6 mb-8">
-            <div>
-              <dt class="h-eyebrow text-ink-light mb-1.5">Tool use</dt>
-              <dd class="text-2xl font-bold tracking-tight">200+ integrations</dd>
-            </div>
-            <div>
-              <dt class="h-eyebrow text-ink-light mb-1.5">Horizon</dt>
-              <dd class="text-2xl font-bold tracking-tight">Hours of work</dd>
-            </div>
-            <div>
-              <dt class="h-eyebrow text-ink-light mb-1.5">Best for</dt>
-              <dd class="text-base text-ink-soft">Coding, automation, agentic workflows</dd>
-            </div>
-            <div>
-              <dt class="h-eyebrow text-ink-light mb-1.5">Modes</dt>
-              <dd class="text-base text-ink-soft">Agents · Code · Browser · Files</dd>
-            </div>
+        <div class="lg:col-span-7 lg:border-l border-line lg:pl-12 space-y-8">
+          <dl class="grid grid-cols-2 gap-x-8 gap-y-6">
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Tool catalog</dt><dd class="text-2xl font-bold tracking-tight">200+ integrations</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Run horizon</dt><dd class="text-2xl font-bold tracking-tight">Hours, not turns</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Surfaces</dt><dd class="text-base text-ink-soft">Code · browser · files</dd></div>
+            <div><dt class="h-eyebrow text-ink-light mb-1.5">Pricing</dt><dd class="text-base text-ink-soft">$8.00 / M input</dd></div>
           </dl>
           <div class="space-y-2.5">
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Autonomy</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width: 98%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">98</span></div>
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Tool use</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width: 94%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">94</span></div>
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Reasoning</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width: 88%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">88</span></div>
-            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Code quality</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width: 95%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">95</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Autonomy</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width:98%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">98</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Tool use</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width:94%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">94</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Reasoning</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width:88%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">88</span></div>
+            <div class="flex items-center gap-3"><span class="text-xs text-ink-mid w-24">Code quality</span><div class="flex-1 h-1.5 bg-line rounded-full overflow-hidden"><div class="h-full bg-ink rounded-full" style="width:95%"></div></div><span class="text-xs font-mono text-ink-light w-8 text-right">95</span></div>
+          </div>
+          <div class="border-t border-line pt-6">
+            <p class="h-eyebrow text-ink-light mb-4">Where it shines</p>
+            <ul class="space-y-3 text-sm">
+              <li class="flex gap-3"><span class="text-ink font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">Engineering work</span><span class="text-ink-mid"> — read repos, write changes, run tests, open the PR.</span></div></li>
+              <li class="flex gap-3"><span class="text-ink font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">Operations</span><span class="text-ink-mid"> — multi-step jobs across CRM, ERP, data warehouse, files.</span></div></li>
+              <li class="flex gap-3"><span class="text-ink font-bold flex-shrink-0">→</span><div><span class="font-semibold text-ink">Research agents</span><span class="text-ink-mid"> — full investigations finished while you sleep.</span></div></li>
+            </ul>
           </div>
         </div>
       </article>
+
+      <!-- Router note -->
+      <p class="reveal mt-10 text-center text-sm text-ink-mid max-w-2xl mx-auto pretty">
+        Don't want to choose? Send <span class="font-mono text-ink">"model": "auto"</span> and the router picks the cheapest model that meets your latency and quality target.
+      </p>
     </div>
   </section>
 
-  <!-- ════════════════ DEVELOPER / API SECTION (Vercel-inspired) ════════════════ -->
-  <section id="platform" class="relative py-24 sm:py-36 bg-cream/40 border-y border-line overflow-hidden">
+  <!-- ════════ API (developer-side) ════════ -->
+  <section id="api" class="relative py-24 sm:py-36 bg-cream/40 border-y border-line overflow-hidden">
     <div class="absolute inset-0 grid-bg-light opacity-50"></div>
 
     <div class="relative max-w-7xl mx-auto px-6 sm:px-8">
       <div class="max-w-3xl mb-16 sm:mb-20">
-        <p class="reveal section-mark mb-6">For Developers</p>
-        <h2 class="reveal h-section balance text-5xl sm:text-7xl mb-6">A clean API.<br /><span class="italic font-serif font-normal">Real SDKs.</span> Honest docs.</h2>
+        <p class="reveal section-mark mb-6">API</p>
+        <h2 class="reveal h-section balance text-5xl sm:text-7xl mb-6">Three lines.<br /><span class="italic font-serif font-normal">First call.</span></h2>
         <p class="reveal pretty text-base sm:text-xl text-ink-mid leading-relaxed">
-          Three lines of code to your first call. The same API our team uses internally — typed, streaming-first, and built for production.
+          The same primitives our team uses internally. Typed, streaming, well-behaved under load. No magic — just an API that respects your time.
         </p>
       </div>
 
       <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-        <!-- Code block -->
         <div class="reveal lg:col-span-7 rounded-2xl border border-ink bg-ink overflow-hidden shadow-2xl shadow-ink/20">
           <div class="border-b border-white/10 px-4 py-3 flex items-center gap-3">
             <div class="flex gap-1.5">
@@ -593,7 +479,7 @@
               <span class="text-white/30">·</span>
               <span class="text-white/40">@helvex/sdk</span>
             </div>
-            <button class="text-[10px] text-white/40 hover:text-white/80 font-medium uppercase tracking-widest transition-colors">Copy</button>
+            <button class="text-[10px] text-white/40 hover:text-white/80 font-medium uppercase tracking-widest transition-colors" data-copy>Copy</button>
           </div>
           <pre class="code-block px-5 sm:px-7 py-6 text-white/90 overflow-x-auto"><span class="tk-comment">// Stream a response from Ether — sub-100ms first token</span>
 <span class="tk-keyword">import</span> { helvex } <span class="tk-keyword">from</span> <span class="tk-string">"@helvex/sdk"</span><span class="tk-comma">;</span>
@@ -618,48 +504,38 @@
           </div>
         </div>
 
-        <!-- Right panel: features -->
         <div class="lg:col-span-5 grid sm:grid-cols-2 lg:grid-cols-1 gap-4">
           <div class="reveal rounded-2xl border border-line bg-white p-6">
             <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-lg bg-ink flex items-center justify-center">
-                <svg class="w-4.5 h-4.5 text-yellow" viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
+              <div class="w-9 h-9 rounded-lg bg-ink flex items-center justify-center"><svg class="w-4 h-4 text-yellow" viewBox="0 0 24 24" fill="none"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
               <p class="font-bold tracking-tight">Typed SDKs</p>
             </div>
-            <p class="text-sm text-ink-mid leading-relaxed">TypeScript, Python, Go, Rust — first-party. Streaming, tool calls, structured outputs all typed.</p>
+            <p class="text-sm text-ink-mid leading-relaxed">First-party for TypeScript, Python, Go, and Rust. Streaming, tool calls, structured outputs all typed.</p>
           </div>
           <div class="reveal rounded-2xl border border-line bg-white p-6">
             <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-lg bg-red flex items-center justify-center">
-                <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-              </div>
-              <p class="font-bold tracking-tight">Streaming first</p>
-            </div>
-            <p class="text-sm text-ink-mid leading-relaxed">Token-level streaming as a default. Server-sent events that just work in any runtime.</p>
-          </div>
-          <div class="reveal rounded-2xl border border-line bg-white p-6">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-lg bg-yellow flex items-center justify-center">
-                <svg class="w-4 h-4 text-ink" viewBox="0 0 24 24" fill="none"><path d="M14 6l-4 4-2-2-3 3 5 5 7-7-3-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-              </div>
+              <div class="w-9 h-9 rounded-lg bg-red flex items-center justify-center"><svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none"><path d="M14 6l-4 4-2-2-3 3 5 5 7-7-3-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
               <p class="font-bold tracking-tight">Function calling</p>
             </div>
-            <p class="text-sm text-ink-mid leading-relaxed">Native tools. Bring your APIs, schemas, and code execution. Models call them with confidence.</p>
+            <p class="text-sm text-ink-mid leading-relaxed">Bring your APIs and schemas. Models call them with confidence — and fail noisily when they shouldn't.</p>
           </div>
           <div class="reveal rounded-2xl border border-line bg-white p-6">
             <div class="flex items-center gap-3 mb-3">
-              <div class="w-9 h-9 rounded-lg bg-ink/5 flex items-center justify-center">
-                <svg class="w-4 h-4 text-ink" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
-              <p class="font-bold tracking-tight">Production-ready</p>
+              <div class="w-9 h-9 rounded-lg bg-yellow flex items-center justify-center"><svg class="w-4 h-4 text-ink" viewBox="0 0 24 24" fill="none"><path d="M3 12h6l3-9 3 18 3-9h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <p class="font-bold tracking-tight">Built-in evals</p>
             </div>
-            <p class="text-sm text-ink-mid leading-relaxed">Idempotency keys, retries, observability, rate-limit headers. The boring things, done right.</p>
+            <p class="text-sm text-ink-mid leading-relaxed">Run your test suite against new model versions before they reach production. Diff results, gate releases.</p>
+          </div>
+          <div class="reveal rounded-2xl border border-line bg-white p-6">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-9 h-9 rounded-lg bg-ink/5 flex items-center justify-center"><svg class="w-4 h-4 text-ink" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <p class="font-bold tracking-tight">Idempotency</p>
+            </div>
+            <p class="text-sm text-ink-mid leading-relaxed">Idempotency keys, retry headers, rate-limit hints. The boring things that keep production calm.</p>
           </div>
         </div>
       </div>
 
-      <!-- API endpoints showcase -->
       <div class="reveal mt-12 sm:mt-16 grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px] sm:text-xs font-mono">
         <div class="border border-line bg-white rounded-xl px-3 py-3"><span class="text-yellow-deep font-bold">POST</span> <span class="text-ink-mid">/v1/complete</span></div>
         <div class="border border-line bg-white rounded-xl px-3 py-3"><span class="text-yellow-deep font-bold">POST</span> <span class="text-ink-mid">/v1/agents</span></div>
@@ -669,105 +545,81 @@
     </div>
   </section>
 
-  <!-- ════════════════ PLATFORM CAPABILITIES ════════════════ -->
-  <section class="py-24 sm:py-36">
+  <!-- ════════ STUDIO (operator-side; platform layer above the models — no model-strength overlap) ════════ -->
+  <section id="studio" class="py-24 sm:py-36">
     <div class="max-w-7xl mx-auto px-6 sm:px-8">
       <div class="max-w-3xl mb-16 sm:mb-20">
-        <p class="reveal section-mark mb-6">The Platform</p>
-        <h2 class="reveal h-section balance text-5xl sm:text-7xl mb-6">One platform.<br />Every kind of AI work.</h2>
+        <p class="reveal section-mark mb-6">Studio</p>
+        <h2 class="reveal h-section balance text-5xl sm:text-7xl mb-6">For the people<br /><span class="italic font-serif font-normal">who run them.</span></h2>
         <p class="reveal pretty text-base sm:text-xl text-ink-mid leading-relaxed max-w-2xl">
-          Chat, agents, automations, research, code — running on top of the model that fits the moment.
+          Models are the engine. Studio is the cockpit — where teams design agents, watch traffic, and ship safely.
         </p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-line border border-line rounded-3xl overflow-hidden">
 
-        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors group">
-          <div class="w-10 h-10 rounded-lg bg-ink/5 flex items-center justify-center mb-6 group-hover:bg-ink group-hover:text-yellow transition-colors">
-            <svg class="w-5 h-5 text-ink group-hover:text-yellow transition-colors" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" stroke="currentColor" stroke-width="1.8"/></svg>
+        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
+          <div class="w-10 h-10 rounded-lg bg-ink/5 flex items-center justify-center mb-6">
+            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h12M3 18h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Chat</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Talk to any model. Switch mid-conversation. Long context, files, voice — all natively.</p>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Workflow composer</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Design pipelines visually or in code. Branches, retries, human-in-the-loop, sub-agents. Versioned and diffable.</p>
         </div>
 
-        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors group">
-          <div class="w-10 h-10 rounded-lg bg-red/10 flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-red" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="1.8"/></svg>
-          </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Agents</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Build AI workers that plan, act, and report back. Hours of work, fully delegated.</p>
-        </div>
-
-        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors group">
+        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
           <div class="w-10 h-10 rounded-lg bg-yellow-soft flex items-center justify-center mb-6">
             <svg class="w-5 h-5 text-yellow-deep" viewBox="0 0 24 24" fill="none"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Automation</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Trigger AI on schedules, events, or webhooks. Connect anything. Ship reliable workflows.</p>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Triggers</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Cron, webhook, event, or inbox. Whatever sets things off in your business, Studio listens for it.</p>
         </div>
 
-        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors group">
-          <div class="w-10 h-10 rounded-lg bg-ink/5 flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Workflows</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Compose multi-step pipelines. Branches, retries, human-in-the-loop. Production-grade.</p>
-        </div>
-
-        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors group">
+        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
           <div class="w-10 h-10 rounded-lg bg-red/10 flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-red" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <svg class="w-5 h-5 text-red" viewBox="0 0 24 24" fill="none"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6M14 4l-4 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Research</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Deep multi-source analysis with citations. Run hours of research in minutes.</p>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Tool catalog</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">200+ vetted connectors out of the box — Slack, Linear, Stripe, Salesforce, your own SQL, your own code.</p>
         </div>
 
-        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors group">
+        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
+          <div class="w-10 h-10 rounded-lg bg-ink/5 flex items-center justify-center mb-6">
+            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Memory &amp; retrieval</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Persistent, structured state across sessions. Bring your vectors, or use ours. Scoped per user, team, or agent.</p>
+        </div>
+
+        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
+          <div class="w-10 h-10 rounded-lg bg-yellow flex items-center justify-center mb-6">
+            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Guardrails &amp; evals</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Define policy in plain language. Evaluate agents against your own test bank. Block bad outputs before they ship.</p>
+        </div>
+
+        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors">
           <div class="w-10 h-10 rounded-lg bg-ink flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-yellow" viewBox="0 0 24 24" fill="none"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="w-5 h-5 text-yellow" viewBox="0 0 24 24" fill="none"><path d="M3 3v18h18M7 14l4-4 4 4 5-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Coding</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Read repos, write changes, run tests, open PRs. A real engineer in your stack.</p>
-        </div>
-
-        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors group">
-          <div class="w-10 h-10 rounded-lg bg-ink/5 flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-ink" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v12H4V5zm4 14h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Multimodal</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Images, audio, documents, video. One model interface for every kind of input.</p>
-        </div>
-
-        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors group">
-          <div class="w-10 h-10 rounded-lg bg-yellow-soft flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-yellow-deep" viewBox="0 0 24 24" fill="none"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Memory</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Persistent, structured memory across sessions. Your agents remember what matters.</p>
-        </div>
-
-        <div class="reveal bg-white p-8 sm:p-10 hover:bg-cream transition-colors group">
-          <div class="w-10 h-10 rounded-lg bg-red/10 flex items-center justify-center mb-6">
-            <svg class="w-5 h-5 text-red" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-          </div>
-          <h3 class="text-xl font-bold tracking-tight mb-2">Guardrails</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Policies, evals, and audit trails. Safety as infrastructure, not an afterthought.</p>
+          <h3 class="text-xl font-bold tracking-tight mb-2">Observability</h3>
+          <p class="text-sm text-ink-mid leading-relaxed">Every step traced. Every output replayable. Audit logs that satisfy your security team — and your own debugging.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ════════════════ RESEARCH (Anthropic-inspired) ════════════════ -->
+  <!-- ════════ RESEARCH (Anthropic-style: actual posts, no marketing repeat) ════════ -->
   <section id="research" class="relative py-24 sm:py-36 bg-beige border-y border-line-soft">
     <div class="relative max-w-7xl mx-auto px-6 sm:px-8">
       <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-end mb-14 sm:mb-20">
         <div>
           <p class="reveal section-mark mb-6">Research</p>
-          <h2 class="reveal h-section balance text-5xl sm:text-7xl">Frontier work,<br /><span class="italic font-serif font-normal">in the open.</span></h2>
+          <h2 class="reveal h-section balance text-5xl sm:text-7xl">Methodology,<br /><span class="italic font-serif font-normal">plainly written.</span></h2>
         </div>
         <div>
           <p class="reveal pretty text-base sm:text-xl text-ink-mid leading-relaxed">
-            We publish how our models think, where they fall short, and what we are doing about it. The same standards we apply to our products, applied to our research.
+            We publish how the models think, where they fall short, and what we are doing about it. The same standards we apply to our products, applied to our research.
           </p>
         </div>
       </div>
@@ -818,134 +670,91 @@
 
       <div class="reveal mt-12 sm:mt-16 text-center">
         <a href="#" class="inline-flex items-center gap-1.5 text-sm font-semibold text-ink hover:text-red transition-colors border-b-2 border-ink/20 hover:border-red pb-0.5">
-          See all research
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
+          See all research <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- ════════════════ WHY HELVEX ════════════════ -->
-  <section class="py-24 sm:py-36">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8">
-      <div class="max-w-3xl mb-16 sm:mb-20">
-        <p class="reveal section-mark mb-6">Why HelveX</p>
-        <h2 class="reveal h-section balance text-5xl sm:text-7xl mb-6">Built for the work<br />that actually matters.</h2>
-        <p class="reveal pretty text-base sm:text-xl text-ink-mid leading-relaxed max-w-2xl">
-          Speed, depth, and trust — engineered into every layer.
-        </p>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        <div class="reveal card border border-line rounded-2xl p-8 hover:border-ink/20 bg-white">
-          <div class="text-5xl font-extrabold tracking-tightest mb-4 text-ink">01</div>
-          <h3 class="text-xl font-bold tracking-tight mb-3">Faster, by design</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Sub-100ms responses on Ether. Streaming-first across the stack. No spinning wheels.</p>
-        </div>
-        <div class="reveal card border border-line rounded-2xl p-8 hover:border-ink/20 bg-white">
-          <div class="text-5xl font-extrabold tracking-tightest mb-4 text-red">02</div>
-          <h3 class="text-xl font-bold tracking-tight mb-3">Smarter reasoning</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Nexus thinks in steps with verifiable citations. Answers you can trust enough to act on.</p>
-        </div>
-        <div class="reveal card border border-line rounded-2xl p-8 hover:border-ink/20 bg-white">
-          <div class="text-5xl font-extrabold tracking-tightest mb-4 text-ink">03</div>
-          <h3 class="text-xl font-bold tracking-tight mb-3">Enterprise-grade</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">SOC 2 Type II. EU & US data residency. SSO, audit logs, role-based access. Day one.</p>
-        </div>
-        <div class="reveal card border border-line rounded-2xl p-8 hover:border-ink/20 bg-white">
-          <div class="text-5xl font-extrabold tracking-tightest mb-4 text-yellow-deep">04</div>
-          <h3 class="text-xl font-bold tracking-tight mb-3">Scales with you</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">From your first prototype to a billion-token deployment, on the same API and dashboard.</p>
-        </div>
-        <div class="reveal card border border-line rounded-2xl p-8 hover:border-ink/20 bg-white">
-          <div class="text-5xl font-extrabold tracking-tightest mb-4 text-ink">05</div>
-          <h3 class="text-xl font-bold tracking-tight mb-3">Secure by default</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Your data stays yours. No training on customer inputs. End-to-end encryption.</p>
-        </div>
-        <div class="reveal card border border-line rounded-2xl p-8 hover:border-ink/20 bg-white">
-          <div class="text-5xl font-extrabold tracking-tightest mb-4 text-red">06</div>
-          <h3 class="text-xl font-bold tracking-tight mb-3">99.99% reliable</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Multi-region failover. Real-time status. The infrastructure your business already needed.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════ ENTERPRISE ════════════════ -->
-  <section id="enterprise" class="relative py-24 sm:py-36 bg-ink text-white overflow-hidden">
+  <!-- ════════ TRUST (refocused: compliance + deployment + data — no audience cards) ════════ -->
+  <section id="trust" class="relative py-24 sm:py-36 bg-ink text-white overflow-hidden">
     <div class="absolute inset-0 grid-bg-dark"></div>
     <div class="hero-orb hero-orb-1" style="top: -200px; right: -150px; opacity: 0.18;"></div>
-    <div class="hero-orb hero-orb-2" style="bottom: -200px; left: -150px; opacity: 0.10;"></div>
 
     <div class="relative max-w-7xl mx-auto px-6 sm:px-8">
       <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-end mb-16 sm:mb-20">
         <div>
-          <p class="reveal section-mark text-yellow mb-6">For teams</p>
-          <h2 class="reveal h-section balance text-5xl sm:text-7xl">For the most<br />ambitious teams<br /><span class="italic font-serif font-normal">on Earth.</span></h2>
+          <p class="reveal section-mark text-yellow mb-6">Trust</p>
+          <h2 class="reveal h-section balance text-5xl sm:text-7xl">The hard parts,<br /><span class="italic font-serif font-normal">already solved.</span></h2>
         </div>
         <div>
           <p class="reveal pretty text-base sm:text-xl text-white/70 leading-relaxed">
-            From a single founder shipping their first product to public companies operating across continents — the same platform, the same uncompromising quality.
+            Procurement, security review, and data residency are usually where AI projects stall. We start them on day one, so your rollout doesn't.
           </p>
         </div>
       </div>
 
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-16 sm:mb-20">
-        <div class="reveal border border-white/10 rounded-2xl p-8 hover:border-yellow/40 transition-colors backdrop-blur-sm">
-          <div class="w-12 h-12 rounded-xl bg-yellow flex items-center justify-center mb-6">
-            <svg class="w-6 h-6 text-ink" viewBox="0 0 24 24" fill="none"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <h3 class="text-2xl font-bold tracking-tight mb-3">Developers</h3>
-          <p class="text-sm text-white/60 leading-relaxed mb-6">A clean API, real SDKs, honest docs. Build with the same tools our team uses internally.</p>
-          <ul class="space-y-2 text-sm text-white/70">
-            <li class="flex gap-2"><span class="text-yellow">▸</span> REST + streaming SDKs (TS · Py · Go · Rust)</li>
-            <li class="flex gap-2"><span class="text-yellow">▸</span> First-class function calling & tools</li>
-            <li class="flex gap-2"><span class="text-yellow">▸</span> Sandboxed code execution</li>
+      <!-- Compliance row -->
+      <div class="reveal grid grid-cols-2 sm:grid-cols-4 gap-3 mb-12 sm:mb-16">
+        <div class="border border-white/10 rounded-xl p-5 hover:border-yellow/40 transition-colors">
+          <div class="text-xs font-mono uppercase tracking-widest text-yellow mb-2">Audit</div>
+          <div class="text-lg font-bold tracking-tight">SOC 2 Type II</div>
+        </div>
+        <div class="border border-white/10 rounded-xl p-5 hover:border-yellow/40 transition-colors">
+          <div class="text-xs font-mono uppercase tracking-widest text-yellow mb-2">Standard</div>
+          <div class="text-lg font-bold tracking-tight">ISO 27001</div>
+        </div>
+        <div class="border border-white/10 rounded-xl p-5 hover:border-yellow/40 transition-colors">
+          <div class="text-xs font-mono uppercase tracking-widest text-yellow mb-2">Regulation</div>
+          <div class="text-lg font-bold tracking-tight">GDPR · DPA</div>
+        </div>
+        <div class="border border-white/10 rounded-xl p-5 hover:border-yellow/40 transition-colors">
+          <div class="text-xs font-mono uppercase tracking-widest text-yellow mb-2">Healthcare</div>
+          <div class="text-lg font-bold tracking-tight">HIPAA-ready</div>
+        </div>
+      </div>
+
+      <!-- Trust pillars: deployment + data -->
+      <div class="grid lg:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16">
+        <div class="reveal border border-white/10 rounded-2xl p-8 sm:p-10 backdrop-blur-sm">
+          <p class="h-eyebrow text-yellow mb-5">Deployment</p>
+          <h3 class="text-3xl font-bold tracking-tight mb-5">Run where your data lives.</h3>
+          <ul class="space-y-4 text-sm text-white/70">
+            <li class="flex gap-3"><span class="text-yellow font-bold flex-shrink-0">01</span><div><span class="font-semibold text-white">Multi-tenant cloud</span> — US-East and EU-Central regions, sub-second cross-AZ failover.</div></li>
+            <li class="flex gap-3"><span class="text-yellow font-bold flex-shrink-0">02</span><div><span class="font-semibold text-white">Dedicated capacity</span> — reserved GPUs and isolated routing on Pro and Enterprise.</div></li>
+            <li class="flex gap-3"><span class="text-yellow font-bold flex-shrink-0">03</span><div><span class="font-semibold text-white">Private deployment</span> — your AWS, GCP, or Azure account. VPC peering. Customer-managed keys.</div></li>
+            <li class="flex gap-3"><span class="text-yellow font-bold flex-shrink-0">04</span><div><span class="font-semibold text-white">Air-gapped option</span> — for the regulated environments that need it.</div></li>
           </ul>
         </div>
-        <div class="reveal border border-white/10 rounded-2xl p-8 hover:border-red/50 transition-colors backdrop-blur-sm">
-          <div class="w-12 h-12 rounded-xl bg-red flex items-center justify-center mb-6">
-            <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <h3 class="text-2xl font-bold tracking-tight mb-3">Startups</h3>
-          <p class="text-sm text-white/60 leading-relaxed mb-6">Free credits to start. Generous scaling. Help when you ask. Out of the way otherwise.</p>
-          <ul class="space-y-2 text-sm text-white/70">
-            <li class="flex gap-2"><span class="text-red">▸</span> Up to $25K in HelveX credits</li>
-            <li class="flex gap-2"><span class="text-red">▸</span> 1:1 onboarding for funded teams</li>
-            <li class="flex gap-2"><span class="text-red">▸</span> Direct line to engineering</li>
-          </ul>
-        </div>
-        <div class="reveal border border-white/10 rounded-2xl p-8 hover:border-white/40 transition-colors backdrop-blur-sm">
-          <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center mb-6">
-            <svg class="w-6 h-6 text-ink" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 9h6v6H9z" stroke="currentColor" stroke-width="2"/></svg>
-          </div>
-          <h3 class="text-2xl font-bold tracking-tight mb-3">Enterprise</h3>
-          <p class="text-sm text-white/60 leading-relaxed mb-6">Procurement-friendly contracts. Dedicated capacity. The compliance posture your security team expects.</p>
-          <ul class="space-y-2 text-sm text-white/70">
-            <li class="flex gap-2"><span class="text-white">▸</span> SOC 2 Type II · ISO 27001 · GDPR</li>
-            <li class="flex gap-2"><span class="text-white">▸</span> Private deployments + VPC peering</li>
-            <li class="flex gap-2"><span class="text-white">▸</span> Custom SLAs and dedicated TAM</li>
+        <div class="reveal border border-white/10 rounded-2xl p-8 sm:p-10 backdrop-blur-sm">
+          <p class="h-eyebrow text-red mb-5">Data handling</p>
+          <h3 class="text-3xl font-bold tracking-tight mb-5">Your inputs are not our training set.</h3>
+          <ul class="space-y-4 text-sm text-white/70">
+            <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">01</span><div><span class="font-semibold text-white">Zero training</span> — API and platform inputs are never used to improve models. Ever.</div></li>
+            <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">02</span><div><span class="font-semibold text-white">Zero retention mode</span> — Enterprise can opt into immediate deletion after response.</div></li>
+            <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">03</span><div><span class="font-semibold text-white">Encryption in flight and at rest</span> — TLS 1.3, AES-256, key rotation.</div></li>
+            <li class="flex gap-3"><span class="text-red font-bold flex-shrink-0">04</span><div><span class="font-semibold text-white">Signed DPA</span> — sub-processor list, breach SLAs, deletion guarantees on request.</div></li>
           </ul>
         </div>
       </div>
 
-      <!-- Enterprise stats row -->
+      <!-- Reach row -->
       <div class="reveal grid grid-cols-2 md:grid-cols-4 gap-8 py-10 sm:py-12 border-y border-white/10">
         <div>
           <div class="text-3xl sm:text-4xl font-extrabold tracking-tightest text-white mb-1">300+</div>
-          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">Enterprise customers</div>
+          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">enterprise customers</div>
         </div>
         <div>
-          <div class="text-3xl sm:text-4xl font-extrabold tracking-tightest text-white mb-1">42</div>
-          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">Countries served</div>
+          <div class="text-3xl sm:text-4xl font-extrabold tracking-tightest text-white mb-1">2 regions</div>
+          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">data residency</div>
         </div>
         <div>
-          <div class="text-3xl sm:text-4xl font-extrabold tracking-tightest text-white mb-1">14</div>
-          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">Integrations day-1</div>
+          <div class="text-3xl sm:text-4xl font-extrabold tracking-tightest text-white mb-1">14 day</div>
+          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">avg. security review</div>
         </div>
         <div>
           <div class="text-3xl sm:text-4xl font-extrabold tracking-tightest text-yellow mb-1">$25K</div>
-          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">Free startup credits</div>
+          <div class="text-xs uppercase tracking-widest text-white/50 font-bold">free startup credits</div>
         </div>
       </div>
 
@@ -954,29 +763,28 @@
           Talk to sales
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
         </a>
-        <a href="#pricing" class="text-sm text-white/70 hover:text-white px-4 py-2 transition-colors">See pricing →</a>
+        <a href="#" class="text-sm text-white/70 hover:text-white px-4 py-2 transition-colors">Visit the trust center →</a>
       </div>
     </div>
   </section>
 
-  <!-- ════════════════ CUSTOMER STORIES (OpenAI-inspired) ════════════════ -->
+  <!-- ════════ STORIES (real outcomes — different content from anywhere else) ════════ -->
   <section class="py-24 sm:py-36">
     <div class="max-w-7xl mx-auto px-6 sm:px-8">
       <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-end mb-14 sm:mb-20">
         <div>
-          <p class="reveal section-mark mb-6">Stories</p>
-          <h2 class="reveal h-section balance text-5xl sm:text-7xl">Teams shipping<br /><span class="italic font-serif font-normal">with HelveX.</span></h2>
+          <p class="reveal section-mark mb-6">In production</p>
+          <h2 class="reveal h-section balance text-5xl sm:text-7xl">Outcomes,<br /><span class="italic font-serif font-normal">not demos.</span></h2>
         </div>
         <div>
           <p class="reveal pretty text-base sm:text-xl text-ink-mid leading-relaxed">
-            From research labs to public companies, HelveX is in production at teams that take quality seriously.
+            What teams ship after they integrate. Numbers from the field, not from our marketing department.
           </p>
         </div>
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
 
-        <!-- Story 1 -->
         <a href="#" class="reveal card group block rounded-3xl border border-line overflow-hidden hover:border-ink/20 bg-white">
           <div class="aspect-[16/10] relative bg-gradient-to-br from-ink to-ink-soft overflow-hidden">
             <div class="absolute inset-0 grid-bg-dark"></div>
@@ -994,7 +802,6 @@
           </div>
         </a>
 
-        <!-- Story 2 -->
         <a href="#" class="reveal card group block rounded-3xl border border-line overflow-hidden hover:border-ink/20 bg-white">
           <div class="aspect-[16/10] relative bg-gradient-to-br from-red via-red-deep to-ink overflow-hidden">
             <div class="absolute inset-0" style="background-image: radial-gradient(circle at 70% 30%, rgba(252,211,77,0.30), transparent 50%);"></div>
@@ -1012,7 +819,6 @@
           </div>
         </a>
 
-        <!-- Story 3 -->
         <a href="#" class="reveal card group block rounded-3xl border border-line overflow-hidden hover:border-ink/20 bg-white">
           <div class="aspect-[16/10] relative bg-gradient-to-br from-yellow via-yellow-soft to-cream overflow-hidden">
             <div class="absolute inset-0 grid-bg-light opacity-40"></div>
@@ -1033,14 +839,14 @@
     </div>
   </section>
 
-  <!-- ════════════════ PRICING ════════════════ -->
+  <!-- ════════ PRICING ════════ -->
   <section id="pricing" class="py-24 sm:py-36 bg-cream/40 border-y border-line">
     <div class="max-w-7xl mx-auto px-6 sm:px-8">
       <div class="max-w-3xl mb-14 sm:mb-20 mx-auto text-center">
         <p class="reveal section-mark justify-center mb-6">Pricing</p>
-        <h2 class="reveal h-section balance text-5xl sm:text-7xl mb-6">Simple, scalable<br />pricing.</h2>
+        <h2 class="reveal h-section balance text-5xl sm:text-6xl mb-6">Pay for what you ship.</h2>
         <p class="reveal pretty text-base sm:text-xl text-ink-mid leading-relaxed">
-          Start free. Upgrade when you ship. Negotiate when you scale.
+          Free to start. Per-token API. Seat-based for teams. Custom when scale demands it.
         </p>
       </div>
 
@@ -1048,15 +854,12 @@
         <div class="reveal card border border-line rounded-2xl p-8 bg-white">
           <h3 class="text-xl font-bold tracking-tight mb-1">Starter</h3>
           <p class="text-sm text-ink-mid mb-6">For curious individuals.</p>
-          <div class="mb-6">
-            <span class="text-5xl font-extrabold tracking-tightest">Free</span>
-            <span class="text-ink-mid text-sm ml-1">forever</span>
-          </div>
+          <div class="mb-6"><span class="text-5xl font-extrabold tracking-tightest">Free</span><span class="text-ink-mid text-sm ml-1">forever</span></div>
           <a href="/signup.html" class="block w-full text-center border-2 border-ink/15 hover:border-ink/40 hover:bg-cream text-ink font-semibold py-3 rounded-full text-sm transition-all mb-8">Get started</a>
           <ul class="space-y-3 text-sm text-ink-soft">
-            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Access to Ether</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Limited Nexus reasoning</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Ether + limited Nexus</li>
             <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>3 saved agents</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Studio (single seat)</li>
             <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Community support</li>
           </ul>
         </div>
@@ -1064,65 +867,57 @@
         <div class="reveal card border-2 border-ink rounded-2xl p-8 bg-white relative md:-translate-y-3 shadow-2xl shadow-ink/10">
           <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-red text-white text-[10px] font-bold tracking-[0.18em] uppercase px-3 py-1 rounded-full">Most popular</div>
           <h3 class="text-xl font-bold tracking-tight mb-1">Pro</h3>
-          <p class="text-sm text-ink-mid mb-6">For builders and small teams.</p>
-          <div class="mb-6">
-            <span class="text-5xl font-extrabold tracking-tightest">$24</span>
-            <span class="text-ink-mid text-sm ml-1">/ user / mo</span>
-          </div>
+          <p class="text-sm text-ink-mid mb-6">For teams shipping in production.</p>
+          <div class="mb-6"><span class="text-5xl font-extrabold tracking-tightest">$24</span><span class="text-ink-mid text-sm ml-1">/ seat / mo</span></div>
           <a href="/signup.html" class="btn-primary block w-full text-center bg-ink hover:bg-ink-soft text-white font-semibold py-3 rounded-full text-sm transition-colors mb-8">Start Pro</a>
           <ul class="space-y-3 text-sm text-ink-soft">
-            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>All three models</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Prometheus agents (long horizon)</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited workflows</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>API access + 1M tokens / mo</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>All three models, no caps</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Long-horizon Prometheus agents</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>API + 1M included tokens / mo</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Studio for teams</li>
             <li class="flex gap-2"><svg class="w-4 h-4 text-red mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Email + chat support</li>
           </ul>
         </div>
 
         <div class="reveal card border border-line rounded-2xl p-8 bg-white">
           <h3 class="text-xl font-bold tracking-tight mb-1">Enterprise</h3>
-          <p class="text-sm text-ink-mid mb-6">For organizations at scale.</p>
-          <div class="mb-6">
-            <span class="text-5xl font-extrabold tracking-tightest">Custom</span>
-          </div>
+          <p class="text-sm text-ink-mid mb-6">When the security team is involved.</p>
+          <div class="mb-6"><span class="text-5xl font-extrabold tracking-tightest">Custom</span></div>
           <a href="/signup.html" class="block w-full text-center border-2 border-ink/15 hover:border-ink/40 hover:bg-cream text-ink font-semibold py-3 rounded-full text-sm transition-all mb-8">Contact sales</a>
           <ul class="space-y-3 text-sm text-ink-soft">
-            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Pro</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Dedicated capacity</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>SSO · SOC 2 · DPA</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Dedicated capacity + SLAs</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>SSO · zero-retention · DPA</li>
             <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Private deployments + VPC</li>
-            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Dedicated TAM + custom SLAs</li>
+            <li class="flex gap-2"><svg class="w-4 h-4 text-ink mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Dedicated TAM + onboarding</li>
           </ul>
         </div>
       </div>
-
-      <p class="reveal text-center mt-10 text-xs text-ink-light font-mono">All plans include SOC 2 Type II compliance, EU + US data residency, and 99.99% uptime SLA.</p>
     </div>
   </section>
 
-  <!-- ════════════════ FAQ ════════════════ -->
+  <!-- ════════ FAQ (specific Qs — no positioning repeats) ════════ -->
   <section class="py-24 sm:py-36">
     <div class="max-w-4xl mx-auto px-6 sm:px-8">
       <div class="text-center mb-14 sm:mb-20">
-        <p class="reveal section-mark justify-center mb-6">Questions</p>
-        <h2 class="reveal h-section balance text-5xl sm:text-6xl mb-6">Common questions.<br /><span class="italic font-serif font-normal">Honest answers.</span></h2>
+        <p class="reveal section-mark justify-center mb-6">FAQ</p>
+        <h2 class="reveal h-section balance text-5xl sm:text-6xl mb-6">Specific questions.<br /><span class="italic font-serif font-normal">Specific answers.</span></h2>
       </div>
 
       <div class="divide-y divide-line border-t border-b border-line">
         <details class="reveal group">
           <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 list-none">
-            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">How is HelveX different from other AI providers?</span>
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Can the router pick a model automatically?</span>
             <svg class="w-5 h-5 text-ink-mid flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </summary>
-          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Three frontier models tuned for distinct kinds of work, a single API to route between them, and a platform built for production from day one — including agents that actually finish multi-hour tasks. We focus on the specific moments AI matters: speed when you need it (Ether), depth when you need it (Nexus), action when you need it (Prometheus).</p>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Yes — pass <span class="font-mono text-ink">"model": "auto"</span> and we route per request based on your latency, cost, and quality targets. You can also constrain the choice (e.g. <span class="font-mono text-ink">"prefer": ["nexus","prometheus"]</span>) or pin a model explicitly. Routing decisions are exposed in the response so you can audit them.</p>
         </details>
 
         <details class="reveal group">
           <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 list-none">
-            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Do you train on customer data?</span>
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Do you train on customer inputs?</span>
             <svg class="w-5 h-5 text-ink-mid flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </summary>
-          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Never. Inputs and outputs through the API and platform are not used for training. Enterprise plans include zero-retention mode and signed DPAs. Your data is yours.</p>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Never. Inputs and outputs through the API and Studio are not used for training. Enterprise plans add zero-retention mode (immediate deletion after the response is delivered) and a signed DPA.</p>
         </details>
 
         <details class="reveal group">
@@ -1135,32 +930,32 @@
 
         <details class="reveal group">
           <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 list-none">
-            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">How do agents stay reliable over long horizons?</span>
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">How does Prometheus stay coherent over many hours?</span>
             <svg class="w-5 h-5 text-ink-mid flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </summary>
-          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Prometheus combines structured planning, plan critique, and a memory hierarchy with verifiable checkpoints. Agents can be paused, inspected, and resumed. Audit trails are first-class — every step is traceable and replayable.</p>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Structured planning, plan critique, and a memory hierarchy with verifiable checkpoints. Agents can be paused, inspected, resumed, or replayed. We wrote up the engineering details in the post linked under Research.</p>
         </details>
 
         <details class="reveal group">
           <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 list-none">
-            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Can we self-host or run in our VPC?</span>
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Can we self-host or run inside our cloud account?</span>
             <svg class="w-5 h-5 text-ink-mid flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </summary>
-          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Yes — Enterprise plans support private deployments inside your AWS, GCP, or Azure account, with VPC peering and customer-managed keys. Talk to sales for the architecture review.</p>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Yes — Enterprise supports private deployments inside your AWS, GCP, or Azure account, with VPC peering and customer-managed keys. Air-gapped is available on case-by-case review. Talk to sales for the architecture conversation.</p>
         </details>
 
         <details class="reveal group">
           <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 list-none">
-            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">What happens if a model is down?</span>
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">What's the migration path from another provider?</span>
             <svg class="w-5 h-5 text-ink-mid flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </summary>
-          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Multi-region failover is automatic. Our 99.99% SLA is contractual and credit-backed on Enterprise. Live status, incident postmortems, and a public changelog at <span class="font-mono text-ink">status.helvex.ai</span>.</p>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 pretty">Most teams swap their base URL and headers, run their existing eval suite against our models, and ship. Our SDK ships shims for the common provider shapes so you can A/B test without rewriting prompts. We've migrated teams of 1,000+ engineers in under a sprint.</p>
         </details>
       </div>
     </div>
   </section>
 
-  <!-- ════════════════ FINAL CTA ════════════════ -->
+  <!-- ════════ FINAL CTA (different angle from hero) ════════ -->
   <section class="relative py-24 sm:py-36 overflow-hidden border-y border-line">
     <div class="absolute inset-0 grid-bg opacity-50"></div>
     <div class="hero-orb hero-orb-1" style="left: 5%; top: 0; right: auto; opacity: 0.4;"></div>
@@ -1169,26 +964,26 @@
     <div class="relative max-w-4xl mx-auto px-6 sm:px-8 text-center">
       <p class="reveal section-mark justify-center mb-8">Get started</p>
       <h2 class="reveal h-display balance text-5xl sm:text-7xl lg:text-[112px] mb-6 sm:mb-8">
-        Ready to build<br />
-        <span class="italic font-serif font-normal">what's next?</span>
+        Stop watching.<br />
+        <span class="italic font-serif font-normal">Start shipping.</span>
       </h2>
       <p class="reveal pretty text-base sm:text-xl text-ink-mid max-w-2xl mx-auto mb-10 leading-relaxed">
-        Three frontier models. One platform. Free to try. Join the teams already shipping with HelveX.
+        From your first call to a billion. Same API, same dashboard, same uncompromising standard.
       </p>
       <div class="reveal flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 mb-6">
         <a href="/signup.html" class="btn-primary inline-flex items-center justify-center gap-2 bg-ink hover:bg-ink-soft text-white font-semibold px-8 py-4 rounded-full text-base transition-colors btn-shadow">
           Enter Platform
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
         </a>
-        <a href="#models" class="inline-flex items-center justify-center gap-2 border-2 border-ink/15 hover:border-ink/40 hover:bg-cream bg-white text-ink font-semibold px-8 py-4 rounded-full text-base transition-all">
-          See models
+        <a href="#" class="inline-flex items-center justify-center gap-2 border-2 border-ink/15 hover:border-ink/40 hover:bg-cream bg-white text-ink font-semibold px-8 py-4 rounded-full text-base transition-all">
+          Talk to sales
         </a>
       </div>
       <p class="reveal text-xs text-ink-light font-mono">No credit card required · Cancel anytime</p>
     </div>
   </section>
 
-  <!-- ════════════════ FOOTER ════════════════ -->
+  <!-- ════════ FOOTER ════════ -->
   <footer class="pt-16 sm:pt-20 pb-10 bg-white">
     <div class="max-w-7xl mx-auto px-6 sm:px-8">
       <div class="grid lg:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-12 sm:gap-8 mb-14 sm:mb-16">
@@ -1198,9 +993,8 @@
             Helve<span class="x">X</span>
           </a>
           <p class="text-sm text-ink-mid leading-relaxed max-w-sm mb-6">
-            Three frontier AI models. One platform. Built for the people shaping what comes next.
+            Ether, Nexus, Prometheus — and the platform around them. Designed and built in Switzerland.
           </p>
-          <!-- Newsletter -->
           <form class="flex gap-2 max-w-sm" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed ✓';">
             <input type="email" placeholder="you@company.com" class="flex-1 border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-ink/40 transition-colors" />
             <button type="submit" class="bg-ink hover:bg-ink-soft text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors whitespace-nowrap">Subscribe</button>
@@ -1211,9 +1005,9 @@
           <p class="h-eyebrow text-ink-light mb-4">Product</p>
           <ul class="space-y-2.5 text-sm text-ink-soft">
             <li><a href="#models" class="hover:text-red transition-colors">Models</a></li>
-            <li><a href="#platform" class="hover:text-red transition-colors">Platform</a></li>
+            <li><a href="#api" class="hover:text-red transition-colors">API</a></li>
+            <li><a href="#studio" class="hover:text-red transition-colors">Studio</a></li>
             <li><a href="#pricing" class="hover:text-red transition-colors">Pricing</a></li>
-            <li><a href="#enterprise" class="hover:text-red transition-colors">Enterprise</a></li>
             <li><a href="/signup.html" class="hover:text-red transition-colors">Enter platform</a></li>
           </ul>
         </div>
@@ -1240,11 +1034,11 @@
         <div>
           <p class="h-eyebrow text-ink-light mb-4">Legal</p>
           <ul class="space-y-2.5 text-sm text-ink-soft">
+            <li><a href="#trust" class="hover:text-red transition-colors">Trust center</a></li>
             <li><a href="#" class="hover:text-red transition-colors">Privacy</a></li>
             <li><a href="#" class="hover:text-red transition-colors">Terms</a></li>
             <li><a href="#" class="hover:text-red transition-colors">Security</a></li>
             <li><a href="#" class="hover:text-red transition-colors">DPA</a></li>
-            <li><a href="#" class="hover:text-red transition-colors">Trust center</a></li>
           </ul>
         </div>
       </div>
@@ -1261,7 +1055,6 @@
           <a href="#" aria-label="LinkedIn" class="text-ink-mid hover:text-ink transition-colors">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5a5 5 0 00-5 5v14a5 5 0 005 5h14a5 5 0 005-5V5a5 5 0 00-5-5zM8 19H5V8h3v11zm-1.5-12.3a1.7 1.7 0 110-3.4 1.7 1.7 0 010 3.4zM20 19h-3v-5.6c0-1.4-.5-2.4-1.7-2.4-1 0-1.6.7-1.8 1.3-.1.2-.1.5-.1.8V19h-3V8h3v1.3c.4-.6 1.1-1.5 2.7-1.5 2 0 3.5 1.3 3.5 4.1V19z"/></svg>
           </a>
-          <span class="font-mono tracking-tight text-ink-light">Built in Switzerland</span>
         </div>
       </div>
     </div>
@@ -1286,7 +1079,7 @@
       reveals.forEach(function (r) { io.observe(r); });
     })();
 
-    // Subtle hero parallax
+    // Hero parallax
     (function () {
       var orbs = document.querySelectorAll('.hero-orb');
       if (!orbs.length) return;
@@ -1301,19 +1094,19 @@
       }, { passive: true });
     })();
 
-    // Copy button (code block)
+    // Copy code button
     (function () {
-      var copyBtn = document.querySelector('button[class*="uppercase"]');
-      if (!copyBtn) return;
+      var btn = document.querySelector('[data-copy]');
+      if (!btn) return;
       var pre = document.querySelector('pre.code-block');
       if (!pre) return;
-      copyBtn.addEventListener('click', function () {
+      btn.addEventListener('click', function () {
         var txt = pre.innerText.trim();
         if (navigator.clipboard) {
           navigator.clipboard.writeText(txt).then(function () {
-            var orig = copyBtn.textContent;
-            copyBtn.textContent = 'Copied';
-            setTimeout(function () { copyBtn.textContent = orig; }, 1500);
+            var orig = btn.textContent;
+            btn.textContent = 'Copied';
+            setTimeout(function () { btn.textContent = orig; }, 1500);
           });
         }
       });
