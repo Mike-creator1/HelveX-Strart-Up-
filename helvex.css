@@ -757,15 +757,15 @@
       .stat-tile::after { display: none; }
     }
 
-    /* ─── BRAND LOGO: heavy-duty animation suite ────────────────────────────
-       Five layers running together:
-       (1) ENTRY — dramatic scale + rotation + glow on page load
-       (2) AMBIENT PULSE — strong red drop-shadow that breathes
-       (3) AURA LAYER (::before) — soft red radial glow sitting behind the logo
-       (4) SHEEN SWEEP (::after) — red→white→red gradient slides across the
-           logo silhouette (clipped via -webkit-mask) every 4 s
-       (5) HOVER — strong scale + multi-layer glow + slight tilt
-       All five reduce to nothing under prefers-reduced-motion: reduce.
+    /* ─── BRAND LOGO: cinematic white-reflection animation suite ────────────
+       Layers (all running together):
+       (1) ENTRY — measured scale-in with a soft white reflection that fades
+       (2) AMBIENT — gentle white luminosity that breathes (no colour bloom)
+       (3) HALO (::before) — soft white halo sitting behind the mark
+       (4) SHIMMER (::after) — pure white reflective sweep clipped to the
+           silhouette via -webkit-mask (the hero effect)
+       (5) HOVER — soft scale + crisp white drop-shadow + halo intensifies
+       All layers degrade gracefully under prefers-reduced-motion: reduce.
        ──────────────────────────────────────────────────────────────────── */
     .brand-logo {
       display: inline-block;
@@ -774,8 +774,8 @@
       transform-origin: center;
       animation:
         brand-entry 1.1s cubic-bezier(.22,.85,.35,1) both,
-        brand-pulse 3s ease-in-out 1.4s infinite;
-      transition: transform .35s cubic-bezier(.2,.7,.25,1), filter .35s ease;
+        brand-pulse 5s ease-in-out 1.4s infinite;
+      transition: transform .45s cubic-bezier(.2,.7,.25,1), filter .35s ease;
       will-change: transform, filter;
     }
     .brand-logo img {
@@ -783,22 +783,22 @@
       position: relative;
       z-index: 2;
     }
-    /* AURA layer — soft red radial bloom sitting BEHIND the logo */
+    /* HALO — soft white luminosity sitting BEHIND the logo */
     .brand-logo::before {
       content: '';
       position: absolute;
-      inset: -28%;
+      inset: -22%;
       z-index: 1;
       pointer-events: none;
       background: radial-gradient(closest-side,
-        rgba(220, 38, 38, 0.45),
-        rgba(220, 38, 38, 0.16) 55%,
-        rgba(220, 38, 38, 0) 75%);
-      filter: blur(10px);
+        rgba(255, 255, 255, 0.85),
+        rgba(255, 255, 255, 0.35) 50%,
+        rgba(255, 255, 255, 0)    78%);
+      filter: blur(14px);
       opacity: 0;
-      animation: brand-aura 3s ease-in-out 1.4s infinite;
+      animation: brand-halo 5s ease-in-out 1.4s infinite;
     }
-    /* SHEEN layer — clipped to the logo silhouette via mask */
+    /* SHIMMER — pure white reflective sweep clipped to the silhouette */
     .brand-logo::after {
       content: '';
       position: absolute;
@@ -808,48 +808,46 @@
       -webkit-mask: url('/helvex-logo.png') center / contain no-repeat;
               mask: url('/helvex-logo.png') center / contain no-repeat;
       background: linear-gradient(112deg,
-        transparent 28%,
-        rgba(220, 38, 38, 0.85) 44%,
-        rgba(255, 255, 255, 1)  50%,
-        rgba(220, 38, 38, 0.85) 56%,
-        transparent 72%);
+        rgba(255,255,255,0)   30%,
+        rgba(255,255,255,.45) 44%,
+        rgba(255,255,255,1)   50%,
+        rgba(255,255,255,.45) 56%,
+        rgba(255,255,255,0)   70%);
       background-size: 280% 100%;
       background-position: -190% 0;
       opacity: 0;
-      animation: brand-sheen 4s cubic-bezier(.4,0,.2,1) 1.6s infinite;
+      animation: brand-shimmer 6s cubic-bezier(.4,0,.2,1) 1.8s infinite;
     }
     .brand-logo:hover {
-      transform: scale(1.12) rotate(-2deg);
+      transform: scale(1.08);
       filter:
-        drop-shadow(0 0 18px rgba(220, 38, 38, 0.65))
-        drop-shadow(0 0 36px rgba(220, 38, 38, 0.35));
-      animation-play-state: paused;
+        drop-shadow(0 4px 14px rgba(255, 255, 255, 0.85))
+        drop-shadow(0 0 28px rgba(255, 255, 255, 0.55));
     }
     .brand-logo:hover::before {
       opacity: 1;
       animation: none;
     }
-    .brand-logo:active { transform: scale(0.96); }
+    .brand-logo:active { transform: scale(0.97); }
 
     @keyframes brand-entry {
-      0%   { opacity: 0; transform: rotate(-12deg) scale(.3) translateY(-8px); filter: drop-shadow(0 0 36px rgba(220,38,38,1)); }
-      40%  { opacity: 1; transform: rotate(8deg)  scale(1.18) translateY(0);   filter: drop-shadow(0 0 22px rgba(220,38,38,.85)); }
-      70%  { transform: rotate(-3deg) scale(.96);                              filter: drop-shadow(0 0 12px rgba(220,38,38,.55)); }
-      100% { opacity: 1; transform: rotate(0)     scale(1)    translateY(0);   filter: drop-shadow(0 0 0   rgba(220,38,38,0)); }
+      0%   { opacity: 0; transform: scale(.7) translateY(-6px); filter: drop-shadow(0 0 22px rgba(255,255,255,.95)) drop-shadow(0 8px 24px rgba(10,10,10,.18)); }
+      55%  { opacity: 1; transform: scale(1.05) translateY(0);  filter: drop-shadow(0 0 14px rgba(255,255,255,.65)) drop-shadow(0 6px 18px rgba(10,10,10,.12)); }
+      100% { opacity: 1; transform: scale(1) translateY(0);     filter: drop-shadow(0 0 0  rgba(255,255,255,0))    drop-shadow(0 1px 2px rgba(10,10,10,.06)); }
     }
     @keyframes brand-pulse {
-      0%, 100% { filter: drop-shadow(0 0 0  rgba(220, 38, 38, 0)); }
-      50%      { filter: drop-shadow(0 0 18px rgba(220, 38, 38, .55)); }
+      0%, 100% { filter: drop-shadow(0 1px 2px rgba(10,10,10,.06)); }
+      50%      { filter: drop-shadow(0 0 14px rgba(255,255,255,.7)) drop-shadow(0 2px 6px rgba(10,10,10,.08)); }
     }
-    @keyframes brand-aura {
-      0%, 100% { opacity: 0;   transform: scale(.85); }
-      50%      { opacity: 0.95; transform: scale(1.12); }
+    @keyframes brand-halo {
+      0%, 100% { opacity: 0;    transform: scale(.88); }
+      50%      { opacity: 0.85; transform: scale(1.08); }
     }
-    @keyframes brand-sheen {
-      0%, 8%    { background-position: -190% 0; opacity: 0; }
-      14%       { opacity: 1; }
-      45%       { background-position:  220% 0; opacity: 1; }
-      48%, 100% { background-position:  220% 0; opacity: 0; }
+    @keyframes brand-shimmer {
+      0%, 12%   { background-position: -190% 0; opacity: 0; }
+      18%       { opacity: 1; }
+      48%       { background-position:  220% 0; opacity: 1; }
+      52%, 100% { background-position:  220% 0; opacity: 0; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -864,11 +862,14 @@
     }
 
     /* ════════════════════════════════════════════════════════════════════
-       TECH-GRADE HOMEPAGE — backdrop, glow, glassmorphic, gradients
+       TECH-GRADE HOMEPAGE — luxury-tech, white reflective, cinematic
+       Color philosophy: white as the primary light source, soft pink/yellow
+       only as warm ambient washes, red only as static accent (never glow).
        ════════════════════════════════════════════════════════════════════ */
 
-    /* Aurora mesh — soft pink/yellow/red blobs that paint the body backdrop
-       behind hero, models, and CTA sections. */
+    /* Aurora mesh — soft pink + yellow + cool-silver bloom that drifts behind
+       hero/model/cta sections. The third blob is now silver-white instead of
+       red — it adds the cinematic 'lit-from-behind' feel without aggression. */
     .tech-aurora {
       position: absolute;
       inset: 0;
@@ -882,27 +883,29 @@
       content: '';
       position: absolute;
       border-radius: 9999px;
-      filter: blur(80px);
+      filter: blur(90px);
       mix-blend-mode: multiply;
-      opacity: .55;
+      opacity: .5;
       will-change: transform;
     }
     .tech-aurora::before {
       width: 620px; height: 620px;
       top: -180px; left: -120px;
-      background: radial-gradient(closest-side, rgba(254, 226, 226, .95), rgba(254, 226, 226, 0));
+      background: radial-gradient(closest-side, rgba(254, 226, 226, .85), rgba(254, 226, 226, 0));
       animation: aurora-drift-1 22s ease-in-out infinite;
     }
     .tech-aurora::after {
       width: 540px; height: 540px;
       bottom: -160px; right: -120px;
-      background: radial-gradient(closest-side, rgba(254, 243, 199, .9), rgba(254, 243, 199, 0));
+      background: radial-gradient(closest-side, rgba(254, 243, 199, .8), rgba(254, 243, 199, 0));
       animation: aurora-drift-2 28s ease-in-out infinite;
     }
     .tech-aurora .blob {
-      width: 480px; height: 480px;
+      width: 520px; height: 520px;
       top: 30%; left: 45%;
-      background: radial-gradient(closest-side, rgba(220, 38, 38, .18), rgba(220, 38, 38, 0));
+      background: radial-gradient(closest-side, rgba(244, 244, 244, .95), rgba(244, 244, 244, 0));
+      mix-blend-mode: screen;
+      filter: blur(70px);
       animation: aurora-drift-3 18s ease-in-out infinite;
     }
     @keyframes aurora-drift-1 {
@@ -914,11 +917,11 @@
       50%      { transform: translate(-60px, -40px) scale(1.15); }
     }
     @keyframes aurora-drift-3 {
-      0%, 100% { transform: translate(0, 0) scale(.9); opacity: .35; }
-      50%      { transform: translate(-100px, 50px) scale(1.2); opacity: .55; }
+      0%, 100% { transform: translate(0, 0) scale(.9); opacity: .55; }
+      50%      { transform: translate(-100px, 50px) scale(1.25); opacity: .85; }
     }
 
-    /* Subtle dotted-grid backdrop layered above the aurora */
+    /* Subtle dotted grid backdrop */
     .tech-grid {
       position: absolute;
       inset: 0;
@@ -930,26 +933,97 @@
       z-index: 0;
     }
 
-    /* Glassmorphic card surface — used for premium tile look */
+    /* ─── METALLIC SHINE — the centrepiece reflective sweep ───
+       A diagonal pure-white highlight slides across any element with this
+       class on a 7 s loop. Soft, cinematic, and luxurious. */
+    .metallic-shine {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .metallic-shine::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(115deg,
+        transparent 30%,
+        rgba(255,255,255,.0)  35%,
+        rgba(255,255,255,.45) 48%,
+        rgba(255,255,255,.85) 50%,
+        rgba(255,255,255,.45) 52%,
+        rgba(255,255,255,.0)  65%,
+        transparent 70%);
+      background-size: 260% 100%;
+      background-position: -150% 0;
+      mix-blend-mode: overlay;
+      animation: metallic-shine 7s cubic-bezier(.4,0,.2,1) infinite;
+      z-index: 1;
+    }
+    @keyframes metallic-shine {
+      0%, 14%   { background-position: -150% 0; opacity: 0; }
+      18%       { opacity: 1; }
+      45%       { background-position:  220% 0; opacity: 1; }
+      48%, 100% { background-position:  220% 0; opacity: 0; }
+    }
+
+    /* ─── TECH CARD — glassmorphic with refined white reflection on hover ─ */
     .tech-card {
       position: relative;
-      background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.82));
       border: 1px solid rgba(10,10,10,0.08);
       border-radius: 20px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       box-shadow:
-        0 1px 0 rgba(255,255,255,0.7) inset,
+        0 1px 0 rgba(255,255,255,0.85) inset,
+        0 0 0 1px rgba(255,255,255,0.5) inset,
         0 24px 60px -30px rgba(10,10,10,0.18);
-      transition: transform .35s cubic-bezier(.2,.7,.25,1), box-shadow .35s ease, border-color .35s ease;
+      transition: transform .45s cubic-bezier(.2,.7,.25,1), box-shadow .45s ease, border-color .45s ease;
+      isolation: isolate;
+    }
+    /* Light-from-the-top edge highlight — adds metallic feel */
+    .tech-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 12%; right: 12%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,.95), transparent);
+      pointer-events: none;
+      z-index: 4;
+    }
+    /* Hover white reflection sweep — clean, refined */
+    .tech-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(115deg,
+        transparent 35%,
+        rgba(255,255,255,.55) 48%,
+        rgba(255,255,255,.9)  50%,
+        rgba(255,255,255,.55) 52%,
+        transparent 65%);
+      background-size: 260% 100%;
+      background-position: -150% 0;
+      opacity: 0;
+      mix-blend-mode: overlay;
+      transition: opacity .35s ease;
+      border-radius: inherit;
+      z-index: 2;
     }
     .tech-card:hover {
       transform: translateY(-3px);
-      border-color: rgba(220,38,38,0.25);
+      border-color: rgba(10,10,10,0.14);
       box-shadow:
-        0 1px 0 rgba(255,255,255,0.7) inset,
-        0 36px 80px -28px rgba(220,38,38,0.18),
-        0 0 0 1px rgba(220,38,38,0.08);
+        0 1px 0 rgba(255,255,255,0.95) inset,
+        0 0 0 1px rgba(255,255,255,0.7) inset,
+        0 30px 80px -28px rgba(10,10,10,0.22);
+    }
+    .tech-card:hover::after {
+      opacity: 1;
+      animation: metallic-shine 1.4s cubic-bezier(.4,0,.2,1);
     }
     .tech-card-dark {
       background: linear-gradient(135deg, rgba(20,20,22,0.96), rgba(10,10,10,0.92));
@@ -958,11 +1032,11 @@
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       box-shadow:
-        0 1px 0 rgba(255,255,255,0.05) inset,
+        0 1px 0 rgba(255,255,255,0.06) inset,
         0 30px 70px -28px rgba(0,0,0,0.55);
     }
 
-    /* Soft pink section wash + yellow band variant */
+    /* Soft section washes — pink + yellow ambient (no red glow) */
     .tech-wash-pink {
       background:
         radial-gradient(1200px 600px at 12% 0%, rgba(254,226,226,0.55), transparent 55%),
@@ -971,68 +1045,82 @@
     }
     .tech-wash-soft {
       background:
-        radial-gradient(800px 400px at 50% 0%, rgba(254,226,226,0.35), transparent 60%),
+        radial-gradient(800px 400px at 50% 0%, rgba(254,226,226,0.32), transparent 60%),
         #FFFFFF;
     }
     .tech-wash-blush {
       background:
-        radial-gradient(900px 500px at 80% 20%, rgba(254,226,226,0.65), transparent 55%),
-        radial-gradient(700px 400px at 10% 80%, rgba(254,243,199,0.55), transparent 55%),
-        linear-gradient(180deg, #FFF8F8, #FFFCF4);
+        radial-gradient(900px 500px at 80% 20%, rgba(254,226,226,0.55), transparent 55%),
+        radial-gradient(700px 400px at 10% 80%, rgba(254,243,199,0.5), transparent 55%),
+        linear-gradient(180deg, #FFFAFA, #FFFCF6);
     }
 
-    /* Glowing red dot for "live"/"online" indicators */
+    /* Live dot — kept red as a small accent, but the ring pulse is now
+       soft and silver-tinted instead of an aggressive red flash. */
     .tech-live-dot {
       width: 7px; height: 7px;
       border-radius: 50%;
       background: #DC2626;
-      box-shadow: 0 0 0 0 rgba(220,38,38,0.55);
-      animation: live-dot 1.8s cubic-bezier(.4,0,.2,1) infinite;
+      box-shadow: 0 0 0 0 rgba(255,255,255,0.65);
+      animation: live-dot 2.2s cubic-bezier(.4,0,.2,1) infinite;
     }
     @keyframes live-dot {
-      0%   { box-shadow: 0 0 0 0   rgba(220,38,38,0.55); }
-      70%  { box-shadow: 0 0 0 10px rgba(220,38,38,0);   }
-      100% { box-shadow: 0 0 0 0   rgba(220,38,38,0);    }
+      0%   { box-shadow: 0 0 0 0   rgba(255,255,255,0.85); }
+      70%  { box-shadow: 0 0 0 9px rgba(255,255,255,0);     }
+      100% { box-shadow: 0 0 0 0   rgba(255,255,255,0);     }
     }
 
-    /* Gradient text — pink → red → yellow */
+    /* Headline accent — silver→white→silver shimmer (cinematic, not red) */
     .tech-gradient-text {
-      background: linear-gradient(110deg, #DC2626 0%, #F59E0B 60%, #DC2626 100%);
-      background-size: 200% auto;
+      background: linear-gradient(110deg,
+        #525252 0%,
+        #0A0A0A 30%,
+        #FFFFFF 50%,
+        #0A0A0A 70%,
+        #525252 100%);
+      background-size: 220% auto;
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: gradient-shift 6s ease-in-out infinite;
+      animation: gradient-shift 7s ease-in-out infinite;
     }
     @keyframes gradient-shift {
       0%, 100% { background-position: 0% center; }
       50%      { background-position: 100% center; }
     }
 
-    /* CTA button — darker, with red glow on hover */
+    /* CTA button — refined white reflection on hover (no red ring) */
     .tech-cta-glow {
       position: relative;
       overflow: hidden;
       isolation: isolate;
+      transition: transform .35s ease, box-shadow .45s ease;
     }
     .tech-cta-glow::before {
       content: '';
       position: absolute;
-      inset: -2px;
-      border-radius: 9999px;
-      background: linear-gradient(120deg, #DC2626, #FCD34D, #DC2626);
-      background-size: 200% auto;
-      z-index: -1;
-      opacity: 0;
-      transition: opacity .35s ease;
-      animation: gradient-shift 6s ease-in-out infinite;
+      top: 0; bottom: 0; left: -75%;
+      width: 50%;
+      background: linear-gradient(115deg,
+        transparent 0%,
+        rgba(255,255,255,.55) 45%,
+        rgba(255,255,255,.95) 50%,
+        rgba(255,255,255,.55) 55%,
+        transparent 100%);
+      transform: skewX(-18deg);
+      transition: left .9s cubic-bezier(.4,0,.2,1);
+      pointer-events: none;
+      mix-blend-mode: overlay;
     }
-    .tech-cta-glow:hover::before { opacity: 1; }
+    .tech-cta-glow:hover::before { left: 130%; }
     .tech-cta-glow:hover {
-      box-shadow: 0 14px 40px -10px rgba(220,38,38,0.55);
+      transform: translateY(-1px);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.6) inset,
+        0 18px 40px -10px rgba(10,10,10,0.45);
     }
 
-    /* Eyebrow with corner ticks — premium tech feel */
+    /* Eyebrow — silver dashed lines, no red */
     .tech-eyebrow {
       display: inline-flex;
       align-items: center;
@@ -1047,12 +1135,12 @@
     .tech-eyebrow::before,
     .tech-eyebrow::after {
       content: '';
-      width: 18px;
+      width: 22px;
       height: 1px;
-      background: linear-gradient(to right, transparent, #DC2626, transparent);
+      background: linear-gradient(to right, transparent, rgba(10,10,10,.35), transparent);
     }
 
-    /* Divider with red dot in the middle — section separator */
+    /* Divider — silver line + ink dot (no red glow) */
     .tech-divider {
       display: flex;
       align-items: center;
@@ -1070,47 +1158,49 @@
     .tech-divider .dot {
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: #DC2626;
-      box-shadow: 0 0 12px rgba(220,38,38,0.6);
+      background: #0A0A0A;
+      box-shadow: 0 0 0 3px rgba(10,10,10,.06);
     }
 
-    /* Connector line w/ red glow — used in workflow / process diagrams */
+    /* Connector line — silver gradient, no red bloom */
     .tech-connector {
       position: relative;
-      height: 2px;
-      background: linear-gradient(to right, rgba(220,38,38,0.0), rgba(220,38,38,0.6), rgba(220,38,38,0.0));
+      height: 1px;
+      background: linear-gradient(to right, rgba(10,10,10,0), rgba(10,10,10,.4), rgba(10,10,10,0));
     }
     .tech-connector::after {
       content: '';
       position: absolute;
       top: 50%; transform: translateY(-50%);
       left: 0; right: 0; height: 6px;
-      background: linear-gradient(to right, transparent, rgba(220,38,38,0.25), transparent);
-      filter: blur(4px);
+      background: linear-gradient(to right, transparent, rgba(255,255,255,.6), transparent);
+      filter: blur(3px);
     }
 
-    /* Code-style label / monospace data tag */
+    /* Tag — soft cream fill, ink text (red kept only for static accents) */
     .tech-tag {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       padding: 4px 10px;
       border-radius: 6px;
-      background: rgba(254, 226, 226, 0.45);
-      border: 1px solid rgba(220, 38, 38, 0.18);
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(10, 10, 10, 0.1);
       font-family: ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 10.5px;
       font-weight: 600;
       letter-spacing: 0.04em;
-      color: #991B1B;
+      color: #171717;
+      backdrop-filter: blur(6px);
     }
 
-    /* Reduced motion — kill all aurora drift / gradient shifts */
     @media (prefers-reduced-motion: reduce) {
       .tech-aurora::before,
       .tech-aurora::after,
       .tech-aurora .blob { animation: none; }
       .tech-gradient-text,
-      .tech-cta-glow::before { animation: none; }
+      .metallic-shine::after,
+      .tech-card::after { animation: none; }
+      .tech-cta-glow::before { transition: none; }
       .tech-live-dot { animation: none; }
     }
