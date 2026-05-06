@@ -408,24 +408,97 @@
     </div>
   </section>
 
-  <!-- ════════ COMMITMENTS ════════ -->
+  <!-- ════════ OPEN QUESTIONS — 10 ════════ -->
   <section class="bg-ink text-white py-20 sm:py-28 overflow-hidden relative">
     <div class="absolute inset-0 grid-bg-dark"></div>
     <div class="hero-orb hero-orb-1" style="top: -180px; right: -120px; opacity: 0.15;"></div>
 
-    <div class="relative max-w-5xl mx-auto px-6 sm:px-8">
-      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-        <div>
-          <p class="reveal section-mark text-yellow mb-7">Open questions</p>
-          <h2 class="reveal h-section text-4xl sm:text-5xl balance">What we are still working on.</h2>
+    <div class="relative max-w-6xl mx-auto px-6 sm:px-8">
+      <div class="max-w-3xl mb-14 sm:mb-16">
+        <p class="reveal section-mark text-yellow mb-7">Open questions</p>
+        <h2 class="reveal h-section text-4xl sm:text-5xl mb-6 balance">What we are still working on.</h2>
+        <p class="reveal pretty text-base sm:text-lg text-white/70 leading-relaxed max-w-2xl">
+          The work that's still hard. Each of these is a problem we're spending real research budget on; the ones we figure out first will land in product first.
+        </p>
+      </div>
+
+      <div class="reveal grid md:grid-cols-2 gap-x-10 gap-y-8 sm:gap-y-10">
+        <div class="flex gap-4">
+          <span class="font-mono text-yellow text-xs pt-1 flex-shrink-0">01</span>
+          <div>
+            <h3 class="text-base font-semibold text-white mb-1.5 tracking-tight">Long-horizon autonomy</h3>
+            <p class="text-sm text-white/70 leading-relaxed">Agents that hold their head over a full workday without human nudging — and recover gracefully when the world changes mid-run.</p>
+          </div>
         </div>
-        <div class="reveal text-base sm:text-lg text-white/70 leading-relaxed pretty space-y-5">
-          <p>Long-horizon agents that hold their head over a full workday without human nudging.</p>
-          <p>Evaluations that capture useful work, not just academic benchmarks.</p>
-          <p>Honest refusals — saying no for the right reasons, not for the easy ones.</p>
-          <p>Retrieval that respects permissions and never leaks what it shouldn't.</p>
-          <p>Reasoning we can audit, not just trust.</p>
+        <div class="flex gap-4">
+          <span class="font-mono text-yellow text-xs pt-1 flex-shrink-0">02</span>
+          <div>
+            <h3 class="text-base font-semibold text-white mb-1.5 tracking-tight">Useful-work evaluations</h3>
+            <p class="text-sm text-white/70 leading-relaxed">Benchmarks that capture the messy, multi-tool work people actually do, not just the academic puzzles a model can be fine-tuned to crush.</p>
+          </div>
         </div>
+        <div class="flex gap-4">
+          <span class="font-mono text-yellow text-xs pt-1 flex-shrink-0">03</span>
+          <div>
+            <h3 class="text-base font-semibold text-white mb-1.5 tracking-tight">Honest refusals</h3>
+            <p class="text-sm text-white/70 leading-relaxed">Saying no for the right reasons, not the easy ones. Refusal calibration without over-refusal — a single number we still don't trust ourselves on.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <span class="font-mono text-yellow text-xs pt-1 flex-shrink-0">04</span>
+          <div>
+            <h3 class="text-base font-semibold text-white mb-1.5 tracking-tight">Permission-aware retrieval</h3>
+            <p class="text-sm text-white/70 leading-relaxed">Indexing that respects access controls at every layer and never leaks a document to a teammate who couldn't already see it.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <span class="font-mono text-yellow text-xs pt-1 flex-shrink-0">05</span>
+          <div>
+            <h3 class="text-base font-semibold text-white mb-1.5 tracking-tight">Auditable reasoning</h3>
+            <p class="text-sm text-white/70 leading-relaxed">Reasoning chains we can trust by reading them, not by hoping. Process supervision that survives contact with adversarial prompts.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <span class="font-mono text-yellow text-xs pt-1 flex-shrink-0">06</span>
+          <div>
+            <h3 class="text-base font-semibold text-white mb-1.5 tracking-tight">Multimodal grounding</h3>
+            <p class="text-sm text-white/70 leading-relaxed">Cutting hallucination on charts, slides, and diagrams — the long tail of "the model said X but the chart says Y" failures.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <span class="font-mono text-yellow text-xs pt-1 flex-shrink-0">07</span>
+          <div>
+            <h3 class="text-base font-semibold text-white mb-1.5 tracking-tight">Replayable agent runtimes</h3>
+            <p class="text-sm text-white/70 leading-relaxed">Determinism across retries, branching sub-agents, and partial tool failures, so "what happened in that 4-hour run?" is a one-click question.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <span class="font-mono text-yellow text-xs pt-1 flex-shrink-0">08</span>
+          <div>
+            <h3 class="text-base font-semibold text-white mb-1.5 tracking-tight">Cross-lingual parity</h3>
+            <p class="text-sm text-white/70 leading-relaxed">Closing the quality gap between English and the next 27 languages on reasoning tasks, not just on translation and chat.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <span class="font-mono text-yellow text-xs pt-1 flex-shrink-0">09</span>
+          <div>
+            <h3 class="text-base font-semibold text-white mb-1.5 tracking-tight">Compute-aware routing</h3>
+            <p class="text-sm text-white/70 leading-relaxed">Routing decisions that take cost, latency, and quality targets together — and learn from the outcomes of every prior turn.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <span class="font-mono text-yellow text-xs pt-1 flex-shrink-0">10</span>
+          <div>
+            <h3 class="text-base font-semibold text-white mb-1.5 tracking-tight">Privacy-preserving fine-tuning</h3>
+            <p class="text-sm text-white/70 leading-relaxed">Letting customers shape model behaviour on their data without anything leaving their tenant — and without sacrificing quality.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal mt-14 sm:mt-16 max-w-2xl">
+        <p class="text-sm text-white/60 leading-relaxed pretty">
+          We publish progress on these in <a href="/research" class="text-yellow hover:text-white border-b border-yellow/40 hover:border-white transition-colors">our research log</a>, and fund external work on a few of them through grants. If you have a serious answer to one of these, we want to read it.
+        </p>
       </div>
     </div>
   </section>

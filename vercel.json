@@ -2,5 +2,11 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "buildCommand": null,
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "rewrites": [
+    { "source": "/models", "destination": "/models.html" },
+    { "source": "/workspace", "destination": "/workspace.html" },
+    { "source": "/research", "destination": "/research.html" },
+    { "source": "/updates", "destination": "/updates.html" }
+  ]
 }
