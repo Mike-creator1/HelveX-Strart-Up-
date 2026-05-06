@@ -1559,3 +1559,78 @@
       .trust-tile-shine,
       .trust-pillar-shine { animation: none !important; display: none; }
     }
+
+    /* ─── RESEARCH SECTION · publication cards ─────────────────────────── */
+    .research-card {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.88));
+      border: 1px solid rgba(10,10,10,0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.85) inset,
+        0 24px 60px -28px rgba(10,10,10,0.16);
+      transition: transform .5s cubic-bezier(.22,.7,.25,1), border-color .5s ease, box-shadow .5s ease;
+      isolation: isolate;
+    }
+    .research-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 14%; right: 14%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.95), transparent);
+      pointer-events: none;
+      opacity: .65;
+      transition: opacity .5s ease;
+      z-index: 5;
+    }
+    .research-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(10,10,10,0.14);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.95) inset,
+        0 36px 90px -28px rgba(10,10,10,0.22);
+    }
+    .research-card:hover::before { opacity: 1; }
+
+    /* On-hover white reflection sweep across the whole card */
+    .research-shine {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(115deg,
+        transparent 32%,
+        rgba(255,255,255,0.5)  47%,
+        rgba(255,255,255,0.92) 50%,
+        rgba(255,255,255,0.5)  53%,
+        transparent 68%);
+      background-size: 280% 100%;
+      background-position: -180% 0;
+      opacity: 0;
+      mix-blend-mode: overlay;
+      transition: opacity .35s ease;
+      border-radius: inherit;
+      z-index: 3;
+    }
+    .research-card:hover .research-shine {
+      opacity: 1;
+      animation: metallic-shine 1.6s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* Author avatar dots — small circles that overlap to suggest a team */
+    .research-author-dot {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      box-shadow: 0 1px 2px rgba(10,10,10,0.12);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .research-card,
+      .research-shine { transition: none !important; animation: none !important; }
+    }

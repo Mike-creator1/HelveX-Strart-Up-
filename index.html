@@ -1378,70 +1378,218 @@
     </div>
   </div>
 
-  <!-- ════════ RESEARCH ════════ -->
+  <!-- ════════ RESEARCH — premium publications surface ════════ -->
   <section id="research" class="relative py-24 sm:py-36 tech-wash-blush border-y border-line-soft overflow-hidden">
     <div class="tech-aurora"><div class="blob"></div></div>
     <div class="relative max-w-7xl mx-auto px-6 sm:px-8">
-      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-end mb-14 sm:mb-20">
-        <div>
-          <p class="reveal tech-eyebrow mb-6">Open research · published monthly</p>
+
+      <!-- HEADER ROW -->
+      <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-end mb-12 sm:mb-16">
+        <div class="lg:col-span-7">
+          <div class="reveal inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/70 backdrop-blur border border-line mb-7">
+            <span class="w-1.5 h-1.5 rounded-full bg-red"></span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-mid font-bold">Open research · published monthly</span>
+          </div>
           <h2 class="reveal h-section balance text-5xl sm:text-7xl">Methodology,<br /><span class="italic font-serif font-normal tech-gradient-text">plainly written.</span></h2>
         </div>
-        <div>
-          <p class="reveal pretty text-base sm:text-xl text-ink-mid leading-relaxed">
+        <div class="lg:col-span-5">
+          <p class="reveal pretty text-base sm:text-lg text-ink-mid leading-relaxed mb-6">
             We publish how the models think, where they fall short, and what we are doing about it. The same standards we apply to our products, applied to our research.
           </p>
+          <div class="reveal flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] font-mono uppercase tracking-widest text-ink-light">
+            <span><span class="text-ink font-bold">12</span> publications</span>
+            <span class="text-line">·</span>
+            <span><span class="text-ink font-bold">42K</span> external readers</span>
+            <span class="text-line">·</span>
+            <span>updated <span class="text-ink font-bold">Nov '26</span></span>
+          </div>
         </div>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-6 sm:gap-8">
-        <a href="/research" class="reveal card group block bg-white border border-line rounded-2xl overflow-hidden hover:border-ink/20">
-          <div class="aspect-[4/3] bg-gradient-to-br from-yellow via-yellow-soft to-cream relative overflow-hidden">
-            <div class="absolute inset-0 grid-bg-light opacity-30"></div>
-            <div class="absolute bottom-4 left-4 text-[10px] font-mono uppercase tracking-widest text-ink/60">Fig.01 · attention layers</div>
-          </div>
-          <div class="p-6 sm:p-7">
-            <p class="h-eyebrow text-ink-light mb-3">Paper · Nov 2026</p>
-            <h3 class="text-xl font-bold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors">Adaptive depth: when models should think longer</h3>
-            <p class="text-sm text-ink-mid leading-relaxed mb-4">A study on dynamically allocating compute per token, and the surprising places it pays off.</p>
-            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-ink group-hover:text-red transition-colors">Read the paper <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></span>
-          </div>
-        </a>
+      <!-- META STRIP — latest publications -->
+      <div class="reveal mb-8 sm:mb-10 flex items-center justify-between gap-4 flex-wrap">
+        <p class="text-[11px] font-mono uppercase tracking-[0.22em] text-ink-light">Latest publications · 3 of 12</p>
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-1 rounded-full bg-white/80 backdrop-blur border border-line text-[10px] font-mono uppercase tracking-wider text-ink-soft font-bold">All</span>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider text-ink-light">Papers</span>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider text-ink-light">Engineering</span>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider text-ink-light">Notes</span>
+        </div>
+      </div>
 
-        <a href="/research" class="reveal card group block bg-white border border-line rounded-2xl overflow-hidden hover:border-ink/20">
-          <div class="aspect-[4/3] bg-gradient-to-br from-red-soft via-red/10 to-cream relative overflow-hidden">
-            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 30% 40%, rgba(220,38,38,0.25), transparent 50%);"></div>
-            <div class="absolute bottom-4 left-4 text-[10px] font-mono uppercase tracking-widest text-ink/60">Fig.02 · agent traces</div>
-          </div>
-          <div class="p-6 sm:p-7">
-            <p class="h-eyebrow text-ink-light mb-3">Engineering · Oct 2026</p>
-            <h3 class="text-xl font-bold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors">How Prometheus runs for hours without losing the plot</h3>
-            <p class="text-sm text-ink-mid leading-relaxed mb-4">Memory hierarchies, plan critique, and the engineering behind reliable long-horizon agents.</p>
-            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-ink group-hover:text-red transition-colors">Read the post <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></span>
-          </div>
-        </a>
+      <!-- 3 PUBLICATION CARDS -->
+      <div class="grid md:grid-cols-3 gap-5 sm:gap-6">
 
-        <a href="/research" class="reveal card group block bg-white border border-line rounded-2xl overflow-hidden hover:border-ink/20">
-          <div class="aspect-[4/3] bg-ink relative overflow-hidden">
-            <div class="absolute inset-0 grid-bg-dark opacity-60"></div>
-            <div class="absolute inset-0 flex items-center justify-center">
-              <span class="text-yellow font-serif italic text-3xl">trust</span>
+        <!-- CARD 1 · PAPER — attention layers -->
+        <a href="/research" class="research-card reveal group block">
+          <div class="research-shine"></div>
+          <!-- Visual: stylized attention bar chart -->
+          <div class="relative aspect-[4/3] bg-gradient-to-br from-yellow-soft via-yellow/15 to-cream overflow-hidden">
+            <div class="absolute inset-0" style="background-image:radial-gradient(rgba(10,10,10,0.06) 1px, transparent 1px); background-size: 18px 18px; mask-image:linear-gradient(to bottom, black 0%, transparent 80%); -webkit-mask-image:linear-gradient(to bottom, black 0%, transparent 80%);"></div>
+            <!-- attention bars -->
+            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 320 240" preserveAspectRatio="none" fill="none">
+              <g transform="translate(40 120)">
+                <rect x="0"   y="-32" width="14" height="32" fill="#0A0A0A" fill-opacity=".82"/>
+                <rect x="20"  y="-58" width="14" height="58" fill="#0A0A0A" fill-opacity=".88"/>
+                <rect x="40"  y="-18" width="14" height="18" fill="#0A0A0A" fill-opacity=".55"/>
+                <rect x="60"  y="-72" width="14" height="72" fill="#DC2626" fill-opacity=".75"/>
+                <rect x="80"  y="-44" width="14" height="44" fill="#0A0A0A" fill-opacity=".75"/>
+                <rect x="100" y="-90" width="14" height="90" fill="#DC2626" fill-opacity=".95"/>
+                <rect x="120" y="-26" width="14" height="26" fill="#0A0A0A" fill-opacity=".62"/>
+                <rect x="140" y="-50" width="14" height="50" fill="#0A0A0A" fill-opacity=".82"/>
+                <rect x="160" y="-66" width="14" height="66" fill="#0A0A0A" fill-opacity=".88"/>
+                <rect x="180" y="-22" width="14" height="22" fill="#0A0A0A" fill-opacity=".55"/>
+                <rect x="200" y="-38" width="14" height="38" fill="#0A0A0A" fill-opacity=".7"/>
+                <rect x="220" y="-58" width="14" height="58" fill="#0A0A0A" fill-opacity=".82"/>
+                <line x1="-8" y1="0" x2="244" y2="0" stroke="#0A0A0A" stroke-width="1" stroke-opacity=".25"/>
+              </g>
+            </svg>
+            <div class="absolute bottom-4 left-5 right-5 flex items-end justify-between text-[10px] font-mono uppercase tracking-widest text-ink/55">
+              <span>Fig.01 · attention layers</span>
+              <span class="text-ink/40">depth → tokens</span>
             </div>
-            <div class="absolute bottom-4 left-4 text-[10px] font-mono uppercase tracking-widest text-white/40">Note · safety</div>
           </div>
           <div class="p-6 sm:p-7">
-            <p class="h-eyebrow text-ink-light mb-3">Note · Sep 2026</p>
-            <h3 class="text-xl font-bold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors">Our approach to evaluation, red-teaming, and refusals</h3>
-            <p class="text-sm text-ink-mid leading-relaxed mb-4">A pragmatic framework for measuring what matters — and being honest about what we cannot yet measure.</p>
-            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-ink group-hover:text-red transition-colors">Read the note <svg class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></span>
+            <div class="flex items-center justify-between mb-4 pb-4 border-b border-line-soft">
+              <span class="inline-flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-md bg-ink text-white text-[9.5px] font-mono uppercase tracking-widest font-bold">Paper</span>
+                <span class="font-mono text-[10.5px] uppercase tracking-wider text-ink-light">Nov 2026</span>
+              </span>
+              <span class="font-mono text-[10.5px] text-ink-light">24 pages</span>
+            </div>
+            <h3 class="text-xl font-semibold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors" style="letter-spacing:-0.022em;">Adaptive depth: when models should think longer</h3>
+            <p class="text-sm text-ink-mid leading-relaxed mb-5">A study on dynamically allocating compute per token, and the surprising places it pays off.</p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="research-author-dot" style="background:#171717;"></span>
+                <span class="research-author-dot" style="background:#525252;margin-left:-6px;"></span>
+                <span class="research-author-dot" style="background:#A3A3A3;margin-left:-6px;"></span>
+                <span class="ml-2 text-[10.5px] font-mono uppercase tracking-wider text-ink-light">3 authors · 12 min</span>
+              </div>
+              <span class="inline-flex items-center gap-1 text-xs font-bold text-ink group-hover:text-red transition-colors uppercase tracking-widest" style="letter-spacing:0.16em;font-size:10.5px;">Read<svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></span>
+            </div>
+          </div>
+        </a>
+
+        <!-- CARD 2 · ENGINEERING — agent traces -->
+        <a href="/research" class="research-card reveal group block">
+          <div class="research-shine"></div>
+          <!-- Visual: stylized agent flow / network trace -->
+          <div class="relative aspect-[4/3] bg-gradient-to-br from-red-soft/60 via-red/[.06] to-cream overflow-hidden">
+            <div class="absolute inset-0" style="background-image:radial-gradient(rgba(10,10,10,0.05) 1px, transparent 1px); background-size: 18px 18px; mask-image:linear-gradient(to bottom, black 0%, transparent 80%); -webkit-mask-image:linear-gradient(to bottom, black 0%, transparent 80%);"></div>
+            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 320 240" preserveAspectRatio="xMidYMid meet" fill="none">
+              <!-- connecting lines -->
+              <path d="M50 60 L130 60 L130 120 L210 120 L210 80 L270 80" stroke="#0A0A0A" stroke-width="1.2" stroke-opacity=".35"/>
+              <path d="M50 60 L130 60 L130 170 L240 170" stroke="#DC2626" stroke-width="1.2" stroke-opacity=".75" stroke-dasharray="3 3"/>
+              <path d="M210 120 L210 80" stroke="#0A0A0A" stroke-width="1.2" stroke-opacity=".4"/>
+              <!-- nodes -->
+              <circle cx="50"  cy="60"  r="6" fill="#0A0A0A"/>
+              <circle cx="130" cy="60"  r="5" fill="#0A0A0A" fill-opacity=".75"/>
+              <circle cx="130" cy="120" r="5" fill="#DC2626"/>
+              <circle cx="210" cy="120" r="5" fill="#0A0A0A" fill-opacity=".75"/>
+              <circle cx="210" cy="80"  r="4" fill="#0A0A0A" fill-opacity=".55"/>
+              <circle cx="270" cy="80"  r="6" fill="#0A0A0A"/>
+              <circle cx="130" cy="170" r="5" fill="#DC2626" fill-opacity=".85"/>
+              <circle cx="240" cy="170" r="6" fill="#DC2626"/>
+              <!-- labels -->
+              <text x="50"  y="48"  font-family="ui-monospace, monospace" font-size="9" fill="#0A0A0A" fill-opacity=".6" text-anchor="middle">plan</text>
+              <text x="270" y="68"  font-family="ui-monospace, monospace" font-size="9" fill="#0A0A0A" fill-opacity=".6" text-anchor="middle">act</text>
+              <text x="240" y="190" font-family="ui-monospace, monospace" font-size="9" fill="#DC2626" fill-opacity=".85" text-anchor="middle">retry</text>
+            </svg>
+            <div class="absolute bottom-4 left-5 right-5 flex items-end justify-between text-[10px] font-mono uppercase tracking-widest text-ink/55">
+              <span>Fig.02 · agent traces</span>
+              <span class="text-ink/40">replay · 4 h run</span>
+            </div>
+          </div>
+          <div class="p-6 sm:p-7">
+            <div class="flex items-center justify-between mb-4 pb-4 border-b border-line-soft">
+              <span class="inline-flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-md bg-red text-white text-[9.5px] font-mono uppercase tracking-widest font-bold">Engineering</span>
+                <span class="font-mono text-[10.5px] uppercase tracking-wider text-ink-light">Oct 2026</span>
+              </span>
+              <span class="font-mono text-[10.5px] text-ink-light">8 min read</span>
+            </div>
+            <h3 class="text-xl font-semibold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors" style="letter-spacing:-0.022em;">How Prometheus runs for hours without losing the plot</h3>
+            <p class="text-sm text-ink-mid leading-relaxed mb-5">Memory hierarchies, plan critique, and the engineering behind reliable long-horizon agents.</p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="research-author-dot" style="background:#DC2626;"></span>
+                <span class="research-author-dot" style="background:#171717;margin-left:-6px;"></span>
+                <span class="ml-2 text-[10.5px] font-mono uppercase tracking-wider text-ink-light">2 authors · agents team</span>
+              </div>
+              <span class="inline-flex items-center gap-1 text-xs font-bold text-ink group-hover:text-red transition-colors uppercase tracking-widest" style="letter-spacing:0.16em;font-size:10.5px;">Read<svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></span>
+            </div>
+          </div>
+        </a>
+
+        <!-- CARD 3 · NOTE — safety & evaluation -->
+        <a href="/research" class="research-card reveal group block">
+          <div class="research-shine"></div>
+          <!-- Visual: dark card with constellation of eval markers -->
+          <div class="relative aspect-[4/3] bg-ink overflow-hidden">
+            <div class="absolute inset-0 grid-bg-dark opacity-50"></div>
+            <!-- soft yellow glow -->
+            <div class="absolute -top-20 -right-20 w-56 h-56 rounded-full bg-yellow/10 blur-3xl"></div>
+            <!-- eval points -->
+            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 320 240" preserveAspectRatio="xMidYMid meet" fill="none">
+              <!-- eval grid axes -->
+              <line x1="40" y1="40" x2="40" y2="200" stroke="#FFFFFF" stroke-width="0.6" stroke-opacity=".15"/>
+              <line x1="40" y1="200" x2="280" y2="200" stroke="#FFFFFF" stroke-width="0.6" stroke-opacity=".15"/>
+              <!-- scatter eval points -->
+              <circle cx="80"  cy="170" r="3" fill="#FCD34D" fill-opacity=".7"/>
+              <circle cx="120" cy="120" r="3" fill="#FCD34D" fill-opacity=".85"/>
+              <circle cx="160" cy="90"  r="3.5" fill="#FCD34D"/>
+              <circle cx="200" cy="60"  r="4" fill="#FCD34D"/>
+              <circle cx="240" cy="50"  r="3" fill="#FCD34D" fill-opacity=".55"/>
+              <circle cx="100" cy="150" r="2.5" fill="#FFFFFF" fill-opacity=".4"/>
+              <circle cx="140" cy="100" r="2.5" fill="#FFFFFF" fill-opacity=".4"/>
+              <circle cx="180" cy="80"  r="2.5" fill="#FFFFFF" fill-opacity=".4"/>
+              <circle cx="220" cy="65"  r="2.5" fill="#FFFFFF" fill-opacity=".4"/>
+              <!-- trend curve -->
+              <path d="M50 190 C 100 150, 160 90, 270 50" stroke="#FCD34D" stroke-width="1.4" stroke-opacity=".4" stroke-linecap="round"/>
+              <!-- center label -->
+              <text x="160" y="130" font-family="'Instrument Serif', Georgia, serif" font-size="32" font-style="italic" fill="#FCD34D" fill-opacity=".95" text-anchor="middle">trust</text>
+            </svg>
+            <div class="absolute bottom-4 left-5 right-5 flex items-end justify-between text-[10px] font-mono uppercase tracking-widest text-white/45">
+              <span>Note · safety</span>
+              <span class="text-white/30">eval · 1.2k items</span>
+            </div>
+          </div>
+          <div class="p-6 sm:p-7">
+            <div class="flex items-center justify-between mb-4 pb-4 border-b border-line-soft">
+              <span class="inline-flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-md border border-ink text-ink text-[9.5px] font-mono uppercase tracking-widest font-bold bg-white">Note</span>
+                <span class="font-mono text-[10.5px] uppercase tracking-wider text-ink-light">Sep 2026</span>
+              </span>
+              <span class="font-mono text-[10.5px] text-ink-light">5 min read</span>
+            </div>
+            <h3 class="text-xl font-semibold tracking-tight mb-3 leading-snug group-hover:text-red transition-colors" style="letter-spacing:-0.022em;">Our approach to evaluation, red-teaming, and refusals</h3>
+            <p class="text-sm text-ink-mid leading-relaxed mb-5">A pragmatic framework for measuring what matters — and being honest about what we cannot yet measure.</p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="research-author-dot" style="background:#FCD34D;border-color:#F59E0B;"></span>
+                <span class="ml-2 text-[10.5px] font-mono uppercase tracking-wider text-ink-light">Safety team</span>
+              </div>
+              <span class="inline-flex items-center gap-1 text-xs font-bold text-ink group-hover:text-red transition-colors uppercase tracking-widest" style="letter-spacing:0.16em;font-size:10.5px;">Read<svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></span>
+            </div>
           </div>
         </a>
       </div>
 
-      <div class="reveal mt-12 sm:mt-16 text-center">
-        <a href="/research" class="inline-flex items-center gap-1.5 text-sm font-semibold text-ink hover:text-red transition-colors border-b-2 border-ink/20 hover:border-red pb-0.5">
-          See all research <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-        </a>
+      <!-- BOTTOM CTA STRIP -->
+      <div class="reveal mt-12 sm:mt-16">
+        <div class="relative rounded-2xl border border-line bg-white/85 backdrop-blur-xl px-6 sm:px-8 py-6 sm:py-7 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 sm:gap-6 overflow-hidden">
+          <div class="absolute top-0 left-[12%] right-[12%] h-px bg-gradient-to-r from-transparent via-ink/15 to-transparent"></div>
+          <div class="flex-1">
+            <p class="text-[10px] font-mono uppercase tracking-[0.22em] text-red font-bold mb-2">Open research log</p>
+            <p class="text-base sm:text-lg font-semibold text-ink mb-1 tracking-tight">Twelve papers, posts, and notes — written by the team that ships them.</p>
+            <p class="text-sm text-ink-mid">Filterable by Papers / Engineering / Notes. New entries every month. Subscribe for the monthly digest.</p>
+          </div>
+          <a href="/research" class="tech-cta-glow inline-flex items-center justify-center gap-2 bg-ink hover:bg-ink-soft text-white font-semibold px-6 py-3.5 rounded-full text-sm transition-all whitespace-nowrap">
+            See all research
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
+          </a>
+        </div>
       </div>
     </div>
   </section>
