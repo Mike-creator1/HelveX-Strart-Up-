@@ -32,21 +32,74 @@
     }
 
     /* Buttons */
-    .btn-primary { position: relative; overflow: hidden; }
+    /* PRIMARY BUTTON — refined white shine sweep, more visible than before */
+    .btn-primary { position: relative; overflow: hidden; isolation: isolate; }
     .btn-primary::before {
       content: ''; position: absolute; inset: 0;
-      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
-      transform: translateX(-110%);
-      transition: transform 0.7s cubic-bezier(0.22,1,0.36,1);
+      background: linear-gradient(115deg,
+        transparent 0%,
+        rgba(255,255,255,0.25) 35%,
+        rgba(255,255,255,0.55) 50%,
+        rgba(255,255,255,0.25) 65%,
+        transparent 100%);
+      transform: translateX(-110%) skewX(-12deg);
+      transition: transform 0.85s cubic-bezier(0.22,1,0.36,1);
       pointer-events: none;
+      mix-blend-mode: overlay;
     }
-    .btn-primary:hover::before { transform: translateX(110%); }
+    .btn-primary:hover::before { transform: translateX(115%) skewX(-12deg); }
     .btn-shadow { box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.08); }
-    .btn-shadow:hover { box-shadow: 0 1px 2px rgba(0,0,0,0.08), 0 14px 36px rgba(0,0,0,0.13); }
+    .btn-shadow:hover { box-shadow: 0 1px 2px rgba(0,0,0,0.08), 0 18px 44px -8px rgba(10,10,10,0.18); }
 
-    /* Cards */
-    .card { transition: transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s cubic-bezier(0.22,1,0.36,1), border-color 0.3s; }
-    .card:hover { transform: translateY(-4px); box-shadow: 0 24px 48px -16px rgba(0,0,0,0.12); }
+    /* GLOBAL CARD — every .card now gets a top white hairline + a refined
+       reflection sweep on hover. This upgrade lifts every page that uses the
+       existing .card class without touching the HTML. */
+    .card {
+      position: relative;
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s cubic-bezier(0.22,1,0.36,1), border-color 0.3s;
+      isolation: isolate;
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 14%; right: 14%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,.95), transparent);
+      pointer-events: none;
+      opacity: .6;
+      transition: opacity .35s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.85) inset,
+        0 28px 60px -16px rgba(10,10,10,0.16);
+    }
+    .card:hover::after { opacity: 1; }
+
+    /* SECTION-MARK — kept the red brand colour but upgraded with a subtle
+       silver tail line so it reads as both 'brand accent' and 'tech eyebrow'. */
+    .section-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font: 700 11px/1 'Inter', sans-serif;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: #DC2626;
+    }
+    .section-mark::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, currentColor);
+    }
+    .section-mark::after {
+      content: '';
+      width: 18px;
+      height: 1px;
+      background: linear-gradient(to right, rgba(10,10,10,.25), transparent);
+    }
 
     /* Reveal */
     .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1); }
