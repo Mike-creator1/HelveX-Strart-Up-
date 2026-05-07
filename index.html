@@ -2374,12 +2374,13 @@
 
   <script src="/helvex.js" defer></script>
 
-  <!-- ═══ Cinematic logo morph: HelveX ⇄ AI ═══════════════════
-       Particle system that samples the actual HelveX logo PNG
-       + the word "AI", then morphs between the two states with
-       cinematic easing. Runs in a single canvas, GPU-friendly,
-       intersection-observed (pauses when offscreen), and respects
-       prefers-reduced-motion. No external libraries. -->
+  <!-- ═══ Cinematic neural-network logo morph: HelveX ⇄ AI concepts ═══
+       Particle network that samples the HelveX logo PNG, then morphs
+       through a rotating list of platform concepts (AI Agents, Smart
+       Automation, Enterprise AI, Real-Time AI, etc.) — with smooth
+       neural-link connection lines drawn between nearby particles.
+       Pure canvas, GPU-friendly, intersection-observed, respects
+       prefers-reduced-motion. Zero external libs. -->
   <script>
   (function () {
     'use strict';
@@ -2391,11 +2392,31 @@
 
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var W = 0, H = 0;
-    var helveXPts = [], aiPts = [];
-    var particles = [];
-    var running   = true;
-    var lastTime  = performance.now();
-    var tStart    = lastTime;
+
+    /* Platform concepts the particles morph through between
+       successive HelveX logo states. Cycles two-at-a-time per loop. */
+    var WORDS = [
+      'AI Agents',
+      'Smart Automation',
+      'AI Infrastructure',
+      'Enterprise AI',
+      'Intelligent Workflows',
+      'Real-Time AI',
+      'Secure AI Systems',
+      'Advanced Reasoning',
+      'Scalable AI',
+      'Autonomous Systems',
+      'AI Execution',
+      'Productivity AI',
+      'AI Operations',
+      'AI Platform'
+    ];
+
+    var logoPts      = [];   // sampled from the actual /helvex-logo.png
+    var wordPtsList  = [];   // [pts for WORDS[0], pts for WORDS[1], ...]
+    var particles    = [];
+    var running      = true;
+    var tStart       = performance.now();
 
     /* Sample non-transparent pixels from a source canvas to a
        sparse array of (x, y) target positions, centered on origin. */
@@ -2443,6 +2464,20 @@
     logoImg.crossOrigin = 'anonymous';
     logoImg.src = '/helvex-logo.png';
 
+    /* Compute the largest font size that fits text within max bounds. */
+    function computeFitFontSize(text, family, weight, maxW, maxH) {
+      var probe = document.createElement('canvas').getContext('2d');
+      var fs = Math.min(maxH * 0.92, 220);
+      probe.font = weight + ' ' + fs + 'px ' + family;
+      var w = probe.measureText(text).width;
+      while (w > maxW && fs > 16) {
+        fs -= 4;
+        probe.font = weight + ' ' + fs + 'px ' + family;
+        w = probe.measureText(text).width;
+      }
+      return fs;
+    }
+
     function buildTargets() {
       var rect = stage.getBoundingClientRect();
       W = rect.width; H = rect.height;
@@ -2450,14 +2485,7 @@
       canvas.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      var fontSize = Math.max(72, Math.min(W * 0.32, 200));
-      var aiFont = '700 ' + fontSize + 'px "Cormorant Garamond", Georgia, serif';
-      var aiCanvas = makeTextCanvas('AI', aiFont);
-
-      // Sample AI text
-      aiPts = samplePixels(aiCanvas, 4, 1);
-
-      // Sample HelveX logo PNG (only if loaded). If not yet, use text fallback.
+      // ── Sample HelveX logo PNG ──
       if (logoImg.complete && logoImg.naturalWidth > 0) {
         var logoMaxW = Math.min(W * 0.78, 580);
         var aspect = logoImg.naturalHeight / logoImg.naturalWidth;
@@ -2469,40 +2497,59 @@
         logoCanvas.height = lh;
         var lctx = logoCanvas.getContext('2d');
         lctx.drawImage(logoImg, 0, 0, lw, lh);
-        helveXPts = samplePixels(logoCanvas, 4, 1);
+        logoPts = samplePixels(logoCanvas, 4, 1);
       } else {
         var hxFont = '900 ' + Math.max(40, Math.min(W * 0.14, 92)) + 'px "Inter", system-ui, sans-serif';
         var hxCanvas = makeTextCanvas('HelveX', hxFont);
-        helveXPts = samplePixels(hxCanvas, 3, 1);
+        logoPts = samplePixels(hxCanvas, 3, 1);
       }
 
-      // Equalize lengths so each particle has both a HelveX and AI target
-      var N = Math.max(helveXPts.length, aiPts.length);
-      // Cap for performance — randomly subsample if huge
-      var MAX = (W < 640 ? 1100 : 1700);
-      if (N > MAX) {
-        helveXPts = downsample(helveXPts, MAX);
-        aiPts     = downsample(aiPts,     MAX);
-        N = MAX;
-      } else {
-        helveXPts = padPoints(helveXPts, N);
-        aiPts     = padPoints(aiPts,     N);
+      // ── Sample each platform concept word ──
+      wordPtsList = [];
+      var wordFamily = '"Cormorant Garamond", Georgia, serif';
+      var wordWeight = '600';
+      var maxWordW = W * 0.84;
+      var maxWordH = H * 0.68;
+      for (var w = 0; w < WORDS.length; w++) {
+        var word = WORDS[w];
+        var fs = computeFitFontSize(word, wordFamily, wordWeight, maxWordW, maxWordH);
+        var spec = wordWeight + ' ' + fs + 'px ' + wordFamily;
+        var wc   = makeTextCanvas(word, spec);
+        // Density 3 for short words, 4 for longer ones to keep N balanced
+        var density = (word.length <= 10) ? 3 : 4;
+        wordPtsList.push(samplePixels(wc, density, 1));
       }
 
-      // Initial particle pool (or resize)
+      // ── Equalize point counts (cap for performance) ──
+      var maxLen = logoPts.length;
+      for (var i = 0; i < wordPtsList.length; i++) {
+        if (wordPtsList[i].length > maxLen) maxLen = wordPtsList[i].length;
+      }
+      var MAX = (W < 640 ? 1200 : 1700);
+      if (maxLen > MAX) maxLen = MAX;
+
+      logoPts = (logoPts.length > maxLen) ? downsample(logoPts, maxLen) : padPoints(logoPts, maxLen);
+      for (var k = 0; k < wordPtsList.length; k++) {
+        wordPtsList[k] = (wordPtsList[k].length > maxLen)
+          ? downsample(wordPtsList[k], maxLen)
+          : padPoints(wordPtsList[k], maxLen);
+      }
+
+      // ── Initialize / resize particle pool ──
       if (particles.length === 0) {
-        for (var i = 0; i < N; i++) {
-          particles.push(makeParticle(helveXPts[i], i, N));
+        for (var p = 0; p < maxLen; p++) {
+          particles.push(makeParticle(logoPts[p], p, maxLen));
+        }
+      } else if (particles.length < maxLen) {
+        for (var q = particles.length; q < maxLen; q++) {
+          particles.push(makeParticle(logoPts[q], q, maxLen));
         }
       } else {
-        if (particles.length < N) {
-          for (var j = particles.length; j < N; j++) {
-            particles.push(makeParticle(helveXPts[j], j, N));
-          }
-        } else {
-          particles.length = N;
-        }
+        particles.length = maxLen;
       }
+
+      // Rebuild spatial grid for the neural-link pass
+      rebuildGrid();
     }
 
     function downsample(arr, n) {
@@ -2534,109 +2581,287 @@
       };
     }
 
-    /* Cinematic 6-phase loop, total 9.4s. Each phase has its own
-       easing so the motion reads as: stable → fracture → reform →
-       stable → fracture → reform. */
-    var PHASES = [
-      { name: 'logoStable', dur: 1400 },
-      { name: 'logoToScatter', dur: 1500 },
-      { name: 'scatterToAI',   dur: 1600 },
-      { name: 'aiStable',      dur: 1500 },
-      { name: 'aiToScatter',   dur: 1500 },
-      { name: 'scatterToLogo', dur: 1900 }
-    ];
-    var TOTAL = PHASES.reduce(function (a, p) { return a + p.dur; }, 0);
+    /* ── Cinematic 9-phase loop, ~12.4s total ──
+       Each loop: logo → wordA → wordB → logo. Two new concepts
+       are revealed per loop. The word indices advance by 2 each
+       loop iteration so over 7 loops all 14 concepts have shown.
+       Stable phases are slightly longer than fractures so the
+       reading time of each concept feels intentional. */
+    var PHASE_DURS = [1400, 1100, 1400, 1500, 1100, 1400, 1500, 1300, 1700];
+    var TOTAL = PHASE_DURS.reduce(function (a, b) { return a + b; }, 0);
+    var WORDS_PER_LOOP = 2;
+    /* Phase indices:
+       0 logoStable      |  3 wordAStable    |  6 wordBStable
+       1 logoToScatter   |  4 wordAToScatter |  7 wordBToScatter
+       2 scatterToWordA  |  5 scatterToWordB |  8 scatterToLogo */
 
-    function easeInOutCubic(t) {
-      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    }
     function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
     function easeInQuart(t)  { return t * t * t * t; }
 
     function getPhase(elapsed) {
+      var loopNum = Math.floor(elapsed / TOTAL);
       var t = elapsed % TOTAL;
       var acc = 0;
-      for (var i = 0; i < PHASES.length; i++) {
-        var p = PHASES[i];
-        if (t < acc + p.dur) {
-          return { idx: i, name: p.name, t: (t - acc) / p.dur };
+      for (var i = 0; i < PHASE_DURS.length; i++) {
+        if (t < acc + PHASE_DURS[i]) {
+          return {
+            idx: i,
+            t: (t - acc) / PHASE_DURS[i],
+            elapsed: elapsed,
+            wordA: (loopNum * WORDS_PER_LOOP)     % wordPtsList.length,
+            wordB: (loopNum * WORDS_PER_LOOP + 1) % wordPtsList.length
+          };
         }
-        acc += p.dur;
+        acc += PHASE_DURS[i];
       }
-      return { idx: 0, name: PHASES[0].name, t: 0 };
+      return { idx: 0, t: 0, elapsed: elapsed, wordA: 0, wordB: 1 };
+    }
+
+    /* Resolve the (target, alpha, glow, isWordState) for a given
+       particle index given the current phase. Centralized so both
+       the dot pass AND the neural-link pass use identical math. */
+    function targetFor(i, ph) {
+      var p     = particles[i];
+      var lp    = logoPts[i];
+      var aPts  = wordPtsList[ph.wordA];
+      var bPts  = wordPtsList[ph.wordB];
+      var aP    = aPts[i] || lp;
+      var bP    = bPts[i] || lp;
+      var tx, ty, alpha = 1, glow = 0, inWord = false;
+
+      if (ph.idx === 0) {                            // logoStable
+        tx = lp.x; ty = lp.y;
+        alpha = 1; glow = 0.10;
+      } else if (ph.idx === 1) {                     // logoToScatter
+        var k = easeInQuart(ph.t);
+        tx = lp.x + p.sx * k;
+        ty = lp.y + p.sy * k;
+        alpha = 1 - k * 0.30;
+        glow  = 0.10 + k * 0.50;
+      } else if (ph.idx === 2) {                     // scatterToWordA
+        var k2 = easeOutQuart(ph.t);
+        tx = (lp.x + p.sx) + (aP.x - lp.x - p.sx) * k2;
+        ty = (lp.y + p.sy) + (aP.y - lp.y - p.sy) * k2;
+        alpha = 0.65 + 0.35 * k2;
+        glow  = 0.60 - k2 * 0.35;
+        inWord = ph.t > 0.55;
+      } else if (ph.idx === 3) {                     // wordAStable
+        tx = aP.x; ty = aP.y;
+        alpha = 1;
+        glow  = 0.32 + 0.18 * Math.sin(ph.elapsed * 0.0045 + p.seed * 6);
+        inWord = true;
+      } else if (ph.idx === 4) {                     // wordAToScatter
+        var k3 = easeInQuart(ph.t);
+        tx = aP.x - p.sx * k3 * 0.85;
+        ty = aP.y - p.sy * k3 * 0.85;
+        alpha = 1 - k3 * 0.30;
+        glow  = 0.32 + k3 * 0.40;
+        inWord = true;
+      } else if (ph.idx === 5) {                     // scatterToWordB
+        var k4 = easeOutQuart(ph.t);
+        var sX = aP.x - p.sx * 0.85;
+        var sY = aP.y - p.sy * 0.85;
+        tx = sX + (bP.x - sX) * k4;
+        ty = sY + (bP.y - sY) * k4;
+        alpha = 0.65 + 0.35 * k4;
+        glow  = 0.55 - k4 * 0.30;
+        inWord = ph.t > 0.55;
+      } else if (ph.idx === 6) {                     // wordBStable
+        tx = bP.x; ty = bP.y;
+        alpha = 1;
+        glow  = 0.32 + 0.18 * Math.sin(ph.elapsed * 0.0045 + p.seed * 6 + 1.7);
+        inWord = true;
+      } else if (ph.idx === 7) {                     // wordBToScatter
+        var k5 = easeInQuart(ph.t);
+        tx = bP.x + p.sx * k5;
+        ty = bP.y + p.sy * k5;
+        alpha = 1 - k5 * 0.30;
+        glow  = 0.32 + k5 * 0.40;
+        inWord = true;
+      } else {                                       // 8 scatterToLogo
+        var k6 = easeOutQuart(ph.t);
+        var sX2 = bP.x + p.sx;
+        var sY2 = bP.y + p.sy;
+        tx = sX2 + (lp.x - sX2) * k6;
+        ty = sY2 + (lp.y - sY2) * k6;
+        alpha = 0.65 + 0.35 * k6;
+        glow  = 0.50 - k6 * 0.40;
+        inWord = ph.t < 0.45;
+      }
+
+      return { tx: tx, ty: ty, alpha: alpha, glow: glow, inWord: inWord };
+    }
+
+    /* Stability factor (0 = scattered chaos, 1 = locked into shape).
+       Drives connection-line opacity so the neural mesh appears strong
+       in stable letterforms and dissolves during fracture phases. */
+    function stabilityFor(ph) {
+      switch (ph.idx) {
+        case 0: case 3: case 6: return 1.0;
+        case 1: return 1.0 - easeInQuart(ph.t) * 0.85;
+        case 2: return 0.15 + easeOutQuart(ph.t) * 0.85;
+        case 4: return 1.0 - easeInQuart(ph.t) * 0.85;
+        case 5: return 0.15 + easeOutQuart(ph.t) * 0.85;
+        case 7: return 1.0 - easeInQuart(ph.t) * 0.85;
+        case 8: return 0.15 + easeOutQuart(ph.t) * 0.85;
+      }
+      return 1.0;
+    }
+
+    /* Spatial grid for neural-link rendering. Re-allocated only when
+       canvas size changes; kept as flat arrays for speed. */
+    var GRID_CELL = 30;
+    var grid = [], gridCols = 0, gridRows = 0;
+    function rebuildGrid() {
+      gridCols = Math.ceil(W / GRID_CELL) + 2;
+      gridRows = Math.ceil(H / GRID_CELL) + 2;
+      grid = new Array(gridCols * gridRows);
+      for (var i = 0; i < grid.length; i++) grid[i] = [];
+    }
+
+    /* Draw the connection lines between nearby particles.
+       Uses two alpha bands (close vs medium) to create depth.
+       Total cost: O(N) thanks to grid bucketing. */
+    function drawNeuralLinks(ph, stability) {
+      if (stability < 0.20) return;  // skip during pure chaos
+
+      // Reset grid cells
+      for (var g = 0; g < grid.length; g++) grid[g].length = 0;
+
+      var halfW = W / 2, halfH = H / 2;
+      var cell  = GRID_CELL;
+      var len   = particles.length;
+
+      // Bucket particles
+      for (var i = 0; i < len; i++) {
+        var p  = particles[i];
+        var cx = ((p.x + halfW) / cell) | 0;
+        var cy = ((p.y + halfH) / cell) | 0;
+        if (cx < 0) cx = 0; else if (cx >= gridCols) cx = gridCols - 1;
+        if (cy < 0) cy = 0; else if (cy >= gridRows) cy = gridRows - 1;
+        grid[cy * gridCols + cx].push(p);
+      }
+
+      // Two alpha bands — close and medium connections
+      var closeMax  = 18;
+      var midMax    = 30;
+      var closeMaxSq = closeMax * closeMax;
+      var midMaxSq   = midMax * midMax;
+      var inWord = (ph.idx === 3 || ph.idx === 6 ||
+                    (ph.idx === 2 && ph.t > 0.55) ||
+                    (ph.idx === 5 && ph.t > 0.55) ||
+                    (ph.idx === 4) || (ph.idx === 7));
+      var rA = inWord ? 192 : 14, gA = inWord ? 17 : 14, bA = inWord ? 30 : 14;
+
+      ctx.lineCap = 'round';
+
+      // ── Close band: tighter, higher alpha ──
+      ctx.lineWidth   = 0.7;
+      ctx.strokeStyle = 'rgba(' + rA + ',' + gA + ',' + bA + ',' + (0.30 * stability) + ')';
+      ctx.beginPath();
+      for (var c = 0; c < grid.length; c++) {
+        var bucket = grid[c];
+        if (bucket.length === 0) continue;
+        var col = c % gridCols, row = (c / gridCols) | 0;
+        for (var bi = 0; bi < bucket.length; bi++) {
+          var p1 = bucket[bi];
+          // Same cell + 4 forward neighbors only (avoids duplicate pairs)
+          for (var dx = 0; dx <= 1; dx++) {
+            for (var dy = (dx === 0 ? 0 : -1); dy <= 1; dy++) {
+              var ncol = col + dx, nrow = row + dy;
+              if (ncol < 0 || ncol >= gridCols || nrow < 0 || nrow >= gridRows) continue;
+              var nb = grid[nrow * gridCols + ncol];
+              for (var bj = (dx === 0 && dy === 0 ? bi + 1 : 0); bj < nb.length; bj++) {
+                var p2 = nb[bj];
+                var ddx = p2.x - p1.x;
+                var ddy = p2.y - p1.y;
+                var d2  = ddx * ddx + ddy * ddy;
+                if (d2 < closeMaxSq) {
+                  ctx.moveTo(p1.x, p1.y);
+                  ctx.lineTo(p2.x, p2.y);
+                }
+              }
+            }
+          }
+        }
+      }
+      ctx.stroke();
+
+      // ── Mid band: longer reach, softer alpha ──
+      ctx.lineWidth   = 0.45;
+      ctx.strokeStyle = 'rgba(' + rA + ',' + gA + ',' + bA + ',' + (0.10 * stability) + ')';
+      ctx.beginPath();
+      for (var cc = 0; cc < grid.length; cc++) {
+        var bk = grid[cc];
+        if (bk.length === 0) continue;
+        var col2 = cc % gridCols, row2 = (cc / gridCols) | 0;
+        for (var bi2 = 0; bi2 < bk.length; bi2++) {
+          var q1 = bk[bi2];
+          for (var dx2 = 0; dx2 <= 1; dx2++) {
+            for (var dy2 = (dx2 === 0 ? 0 : -1); dy2 <= 1; dy2++) {
+              var nc2 = col2 + dx2, nr2 = row2 + dy2;
+              if (nc2 < 0 || nc2 >= gridCols || nr2 < 0 || nr2 >= gridRows) continue;
+              var nb2 = grid[nr2 * gridCols + nc2];
+              for (var bj2 = (dx2 === 0 && dy2 === 0 ? bi2 + 1 : 0); bj2 < nb2.length; bj2++) {
+                var q2 = nb2[bj2];
+                var dx3 = q2.x - q1.x, dy3 = q2.y - q1.y;
+                var d3  = dx3 * dx3 + dy3 * dy3;
+                if (d3 >= closeMaxSq && d3 < midMaxSq) {
+                  ctx.moveTo(q1.x, q1.y);
+                  ctx.lineTo(q2.x, q2.y);
+                }
+              }
+            }
+          }
+        }
+      }
+      ctx.stroke();
     }
 
     function render(now) {
       if (!running) return;
       var elapsed = now - tStart;
-      var ph = getPhase(elapsed);
+      var ph        = getPhase(elapsed);
+      var stability = stabilityFor(ph);
 
       ctx.clearRect(0, 0, W, H);
       ctx.save();
       ctx.translate(W / 2, H / 2);
 
+      // Pass 1: update positions + cache visual props so pass 3 doesn't
+      // recompute the phase math twice per particle per frame.
       var len = particles.length;
       for (var i = 0; i < len; i++) {
         var p = particles[i];
-        var hx = helveXPts[i], a = aiPts[i];
-        var tx, ty, alpha = 1, glow = 0;
+        var t = targetFor(i, ph);
+        p.x += (t.tx - p.x) * 0.32;
+        p.y += (t.ty - p.y) * 0.32;
+        p._a = t.alpha;
+        p._g = t.glow;
+        p._w = t.inWord;
+      }
 
-        if (ph.name === 'logoStable') {
-          tx = hx.x; ty = hx.y;
-          alpha = 1; glow = 0.10;
-        } else if (ph.name === 'logoToScatter') {
-          var k = easeInQuart(ph.t);
-          tx = hx.x + p.sx * k;
-          ty = hx.y + p.sy * k;
-          alpha = 1 - k * 0.35;
-          glow  = 0.10 + k * 0.45;
-        } else if (ph.name === 'scatterToAI') {
-          var k2 = easeOutQuart(ph.t);
-          var sxv = hx.x + p.sx;
-          var syv = hx.y + p.sy;
-          tx = sxv + (a.x - sxv) * k2;
-          ty = syv + (a.y - syv) * k2;
-          alpha = 0.65 + 0.35 * k2;
-          glow  = 0.55 - k2 * 0.30;
-        } else if (ph.name === 'aiStable') {
-          tx = a.x; ty = a.y;
-          alpha = 1;
-          glow  = 0.30 + 0.20 * Math.sin(elapsed * 0.005 + p.seed * 6);
-        } else if (ph.name === 'aiToScatter') {
-          var k3 = easeInQuart(ph.t);
-          tx = a.x - p.sx * k3 * 0.85;
-          ty = a.y - p.sy * k3 * 0.85;
-          alpha = 1 - k3 * 0.35;
-          glow  = 0.30 + k3 * 0.40;
-        } else if (ph.name === 'scatterToLogo') {
-          var k4 = easeOutQuart(ph.t);
-          var sxv2 = a.x - p.sx * 0.85;
-          var syv2 = a.y - p.sy * 0.85;
-          tx = sxv2 + (hx.x - sxv2) * k4;
-          ty = syv2 + (hx.y - syv2) * k4;
-          alpha = 0.65 + 0.35 * k4;
-          glow  = 0.45 - k4 * 0.35;
-        }
+      // Pass 2: neural-link mesh (connections), drawn beneath the dots
+      // so the dots always read as the focal points.
+      ctx.shadowBlur  = 0;
+      ctx.shadowColor = 'transparent';
+      drawNeuralLinks(ph, stability);
 
-        // Smooth approach (low-pass filter for refined motion)
-        p.x += (tx - p.x) * 0.32;
-        p.y += (ty - p.y) * 0.32;
+      // Pass 3: dots — with per-particle glow modulating the AI moments.
+      for (var j = 0; j < len; j++) {
+        var pp = particles[j];
+        var rD = pp._w ? 192 : 10, gD = pp._w ? 17 : 10, bD = pp._w ? 30 : 10;
 
-        // Premium look: warm dark ink with red-glow during fracture phases,
-        // and a soft yellow shimmer when in the AI state for "alive" feel.
-        var inAI = ph.name === 'aiStable' || ph.name === 'aiToScatter' || (ph.name === 'scatterToAI' && ph.t > 0.55);
-        var r = inAI ? 192 : 10, g = inAI ? 17 : 10, b = inAI ? 30 : 10;
-
-        if (glow > 0.04) {
-          ctx.shadowBlur  = 8 + glow * 18;
-          ctx.shadowColor = 'rgba(192, 17, 30, ' + Math.min(0.85, glow) + ')';
+        if (pp._g > 0.04) {
+          ctx.shadowBlur  = 8 + pp._g * 22;
+          ctx.shadowColor = 'rgba(192, 17, 30, ' + Math.min(0.85, pp._g) + ')';
         } else {
           ctx.shadowBlur  = 0;
           ctx.shadowColor = 'transparent';
         }
-        ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+        ctx.fillStyle = 'rgba(' + rD + ',' + gD + ',' + bD + ',' + pp._a + ')';
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, 6.2832);
+        ctx.arc(pp.x, pp.y, pp.size, 0, 6.2832);
         ctx.fill();
       }
 
@@ -2645,14 +2870,23 @@
     }
 
     /* Static fallback for prefers-reduced-motion: render the
-       HelveX state once, hold it. */
+       HelveX state once with neural mesh, then hold it. */
     function renderStatic() {
       ctx.clearRect(0, 0, W, H);
       ctx.save();
       ctx.translate(W / 2, H / 2);
-      ctx.fillStyle = 'rgba(10, 10, 10, 1)';
-      for (var i = 0; i < helveXPts.length; i++) {
-        var p = helveXPts[i];
+
+      // Fake particles array from logoPts so neural mesh works
+      particles = logoPts.map(function (lp, i) {
+        return { x: lp.x, y: lp.y, sx: 0, sy: 0, seed: 0, size: 1.2 };
+      });
+      rebuildGrid();
+      drawNeuralLinks({ idx: 0, t: 0 }, 1.0);
+
+      ctx.shadowBlur = 0;
+      ctx.fillStyle  = 'rgba(10, 10, 10, 1)';
+      for (var i = 0; i < logoPts.length; i++) {
+        var p = logoPts[i];
         ctx.beginPath();
         ctx.arc(p.x, p.y, 1.2, 0, 6.2832);
         ctx.fill();
