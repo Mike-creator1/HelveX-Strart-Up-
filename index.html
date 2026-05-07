@@ -2496,8 +2496,6 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       // ── Sample HelveX logo PNG ──
-      // Sparser sampling (density 8) so the filled HX glyph reads as a
-      // clean dotted constellation, not a solid black mass.
       if (logoImg.complete && logoImg.naturalWidth > 0) {
         var logoMaxW = Math.min(W * 0.72, 540);
         var aspect = logoImg.naturalHeight / logoImg.naturalWidth;
@@ -2509,16 +2507,15 @@
         logoCanvas.height = lh;
         var lctx = logoCanvas.getContext('2d');
         lctx.drawImage(logoImg, 0, 0, lw, lh);
-        logoPts = samplePixels(logoCanvas, 8, 1);
+        logoPts = samplePixels(logoCanvas, 5, 1);
       } else {
         var hxFontSize = Math.floor(Math.max(40, Math.min(W * 0.14, 92)));
         var hxFont = '900 ' + hxFontSize + 'px "Inter", system-ui, sans-serif';
         var hxCanvas = makeTextCanvas('HelveX', hxFont);
-        logoPts = samplePixels(hxCanvas, 5, 1);
+        logoPts = samplePixels(hxCanvas, 4, 1);
       }
 
       // ── Sample each platform concept word ──
-      // Density 5 short / 7 long — clean serif outlines, not heavy fills.
       wordPtsList = [];
       var wordFamily = '"Cormorant Garamond", Georgia, serif';
       var wordWeight = '600';
@@ -2529,17 +2526,16 @@
         var fs = computeFitFontSize(word, wordFamily, wordWeight, maxWordW, maxWordH);
         var spec = wordWeight + ' ' + fs + 'px ' + wordFamily;
         var wc   = makeTextCanvas(word, spec);
-        var density = (word.length <= 10) ? 5 : 7;
+        var density = (word.length <= 10) ? 4 : 5;
         wordPtsList.push(samplePixels(wc, density, 1));
       }
 
       // ── Equalize point counts (cap for performance) ──
-      // Lower cap → cleaner constellation, fewer overlapping mesh edges.
       var maxLen = logoPts.length;
       for (var i = 0; i < wordPtsList.length; i++) {
         if (wordPtsList[i].length > maxLen) maxLen = wordPtsList[i].length;
       }
-      var MAX = (W < 640 ? 600 : 900);
+      var MAX = (W < 640 ? 800 : 1200);
       if (maxLen > MAX) maxLen = MAX;
 
       logoPts = (logoPts.length > maxLen) ? downsample(logoPts, maxLen) : padPoints(logoPts, maxLen);
@@ -2594,7 +2590,7 @@
         sy: Math.sin(angle * 2.3 + i * 0.17) * (40 + Math.random() * 100),
         // Per-particle phase offsets keep motion organic
         seed: Math.random(),
-        size: 0.9 + Math.random() * 0.7
+        size: 1.3 + Math.random() * 0.8
       };
     }
 
@@ -2759,7 +2755,7 @@
         grid[cy * gridCols + cx].push(p);
       }
 
-      var maxDist   = 22;
+      var maxDist   = 26;
       var maxDistSq = maxDist * maxDist;
       var inWord = (ph.idx === 3 || ph.idx === 6 ||
                     (ph.idx === 2 && ph.t > 0.55) ||
@@ -2768,8 +2764,8 @@
       var rA = inWord ? 192 : 14, gA = inWord ? 17 : 14, bA = inWord ? 30 : 14;
 
       ctx.lineCap     = 'round';
-      ctx.lineWidth   = 0.5;
-      ctx.strokeStyle = 'rgba(' + rA + ',' + gA + ',' + bA + ',' + (0.13 * stability) + ')';
+      ctx.lineWidth   = 0.7;
+      ctx.strokeStyle = 'rgba(' + rA + ',' + gA + ',' + bA + ',' + (0.22 * stability) + ')';
       ctx.beginPath();
       for (var c = 0; c < grid.length; c++) {
         var bucket = grid[c];
