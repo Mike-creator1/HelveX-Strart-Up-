@@ -2903,16 +2903,24 @@
       io.observe(stage);
     }
 
+    var started = false;
     function start() {
-      buildTargets();
-      if (reduce) {
-        renderStatic();
-      } else {
-        running = true;
-        tStart  = performance.now();
-        requestAnimationFrame(render);
+      if (started) return;
+      started = true;
+      try {
+        buildTargets();
+        if (reduce) {
+          renderStatic();
+        } else {
+          running = true;
+          tStart  = performance.now();
+          requestAnimationFrame(render);
+        }
+        setupVisibility();
+      } catch (err) {
+        // Surface init failures instead of silently leaving a blank canvas.
+        if (window.console && console.error) console.error('hx-morph init failed:', err);
       }
-      setupVisibility();
     }
 
     /* Resize handling — debounced so we don't rebuild on every pixel. */
@@ -2925,16 +2933,19 @@
       }, 120);
     });
 
-    /* Wait for the page's fonts to actually load before sampling
-       text — that's the real source of the intermittent renders.
-       If Cormorant Garamond isn't loaded yet, measureText/fillText
-       falls back to a default font, point counts go out of whack,
-       and the constellation reads as a mess (or nothing at all). */
+    /* Multiple safety nets so start() always runs:
+       1) document.fonts.ready — ideal, fires once webfonts are loaded
+       2) window load        — fires on full page load regardless
+       3) 1500 ms timeout     — last-resort fallback if neither fires */
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(start, start);
-    } else {
-      start();
     }
+    if (document.readyState === 'complete') {
+      start();
+    } else {
+      window.addEventListener('load', start);
+    }
+    setTimeout(start, 1500);
   })();
   </script>
 </body>
