@@ -2576,14 +2576,18 @@
       var fromArr = statePts[st.from];
       var toArr   = statePts[st.to];
       var k = st.k;
-      var inWord = (st.from !== 0) || (st.to !== 0 && k > 0.5);
 
       ctx.clearRect(0, 0, W, H);
       ctx.save();
       ctx.translate(W / 2, H / 2);
 
-      // Subtle red glow for AI states (per particle, breathing)
-      var glow = inWord ? (0.40 + 0.20 * Math.sin(now * 0.003)) : 0;
+      // No per-particle shadow blur — that was making the text read
+      // blurry when dots overlapped. Pure crisp dark dots; the red
+      // AI ambient comes only from the CSS .hx-morph-glow halo
+      // behind the canvas.
+      ctx.shadowBlur  = 0;
+      ctx.shadowColor = 'transparent';
+      ctx.fillStyle   = 'rgba(10, 10, 10, 0.95)';
 
       for (var i = 0; i < N; i++) {
         var fp = fromArr[i], tp = toArr[i];
@@ -2594,14 +2598,6 @@
         p.x += (tx - p.x) * 0.25;
         p.y += (ty - p.y) * 0.25;
 
-        if (glow > 0.04) {
-          ctx.shadowBlur  = 8 + glow * 14;
-          ctx.shadowColor = 'rgba(192, 17, 30, ' + (glow * 0.6) + ')';
-        } else {
-          ctx.shadowBlur  = 0;
-          ctx.shadowColor = 'transparent';
-        }
-        ctx.fillStyle = 'rgba(10, 10, 10, 0.95)';
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, 6.2832);
         ctx.fill();
