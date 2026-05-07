@@ -2422,9 +2422,9 @@
       var off = document.createElement('canvas');
       var oc  = off.getContext('2d');
 
-      // Auto-fit: shrink font until text fits within W*0.92 wide, H*0.86 tall
-      var maxW = Math.max(W * 0.92, 200);
-      var maxH = Math.max(H * 0.86, 110);
+      // Auto-fit: shrink font until text fits within W*0.94 wide, H*0.90 tall
+      var maxW = Math.max(W * 0.94, 200);
+      var maxH = Math.max(H * 0.90, 120);
       var fs = Math.floor(Math.min(maxH * 0.92, 180));
       var spec = fontTemplate.replace('PX', String(fs));
       oc.font = spec;
@@ -2483,12 +2483,12 @@
       canvas.style.height = H + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Sample every state's points. Density 3 (was 2) — still
-      // dense enough for richly filled letterforms but ~half the
-      // points so 60fps is comfortable on mid-range hardware.
+      // Sample every state's points. Density 2 — pixel-pair sampling
+      // gives the richest filled letterforms. Higher cap holds more
+      // particles after downsampling, so the dotted texture is dense.
       statePts = [];
       for (var s = 0; s < STATES.length; s++) {
-        var density = (STATES[s].text.length <= 10) ? 3 : 3;
+        var density = 2;
         statePts.push(buildPointsFor(STATES[s].text, STATES[s].font, density));
       }
 
@@ -2497,8 +2497,8 @@
       for (var i = 0; i < statePts.length; i++) {
         if (statePts[i].length > maxLen) maxLen = statePts[i].length;
       }
-      // Lower cap → smoother RAF loop, no jank during morph
-      var CAP = (W < 640) ? 1800 : 2600;
+      // Cap chosen so 60 fps stays smooth with batched path rendering
+      var CAP = (W < 640) ? 2400 : 3500;
       if (maxLen > CAP) maxLen = CAP;
       if (maxLen < 50)  maxLen = 50;  // safety floor — never zero
       N = maxLen;
@@ -2510,15 +2510,15 @@
 
       // Initialize / resize particle pool. Particles start at the
       // logo state so the first frame already shows the brand.
-      // Dot range (1.9–2.9) tuned for the very dense 2-pixel spacing —
-      // dots overlap heavily into solid filled letterforms.
+      // Dot range (2.0–3.0): slight overlap with 2-pixel spacing
+      // produces solid filled letterforms with rich dotted texture.
       if (particles.length === 0) {
         for (var p = 0; p < N; p++) {
           particles.push({
             x: statePts[0][p].x,
             y: statePts[0][p].y,
             seed: Math.random(),
-            size: 1.9 + Math.random() * 1.0
+            size: 2.0 + Math.random() * 1.0
           });
         }
       } else if (particles.length < N) {
@@ -2527,7 +2527,7 @@
             x: statePts[0][q].x,
             y: statePts[0][q].y,
             seed: Math.random(),
-            size: 1.9 + Math.random() * 1.0
+            size: 2.0 + Math.random() * 1.0
           });
         }
       } else {
