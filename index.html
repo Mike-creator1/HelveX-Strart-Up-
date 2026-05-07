@@ -2419,7 +2419,9 @@
     var tStart       = performance.now();
 
     /* Sample non-transparent pixels from a source canvas to a
-       sparse array of (x, y) target positions, centered on origin. */
+       sparse array of (x, y) target positions, centered on origin.
+       Used for text — sampling fills works fine because letterforms
+       are already thin enough. */
     function samplePixels(src, density, scale) {
       var sw = src.width, sh = src.height;
       var sctx = src.getContext('2d');
@@ -2436,6 +2438,39 @@
           }
         }
       }
+      return pts;
+    }
+
+    /* Edge-only pixel sampling — finds the OUTLINE of filled shapes.
+       A pixel is an edge if it's filled (alpha ≥ threshold) AND at
+       least one cardinal neighbor is empty. This is what we want for
+       the logo PNG: thick H/X strokes turn into clean outlines, not
+       solid blobs of densely packed particles. */
+    function samplePixelsEdge(src, density, scale) {
+      var sw = src.width, sh = src.height;
+      var sctx = src.getContext('2d');
+      var data = sctx.getImageData(0, 0, sw, sh).data;
+      var edges = [];
+      for (var y = 1; y < sh - 1; y++) {
+        for (var x = 1; x < sw - 1; x++) {
+          var i = (y * sw + x) * 4;
+          if (data[i + 3] < 128) continue;
+          var iN = ((y - 1) * sw + x) * 4;
+          var iS = ((y + 1) * sw + x) * 4;
+          var iE = (y * sw + (x + 1)) * 4;
+          var iW = (y * sw + (x - 1)) * 4;
+          if (data[iN + 3] < 128 || data[iS + 3] < 128 ||
+              data[iE + 3] < 128 || data[iW + 3] < 128) {
+            edges.push({
+              x: (x - sw / 2) * scale,
+              y: (y - sh / 2) * scale
+            });
+          }
+        }
+      }
+      // Subsample to the requested density (every Nth edge pixel)
+      var pts = [];
+      for (var k = 0; k < edges.length; k += density) pts.push(edges[k]);
       return pts;
     }
 
@@ -2495,7 +2530,8 @@
       canvas.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // ── Sample HelveX logo PNG ──
+      // ── Sample HelveX logo PNG (edge-only so thick glyphs read as
+      //    clean outlines, not as solid black blocks of particles) ──
       if (logoImg.complete && logoImg.naturalWidth > 0) {
         var logoMaxW = Math.min(W * 0.72, 540);
         var aspect = logoImg.naturalHeight / logoImg.naturalWidth;
@@ -2507,7 +2543,7 @@
         logoCanvas.height = lh;
         var lctx = logoCanvas.getContext('2d');
         lctx.drawImage(logoImg, 0, 0, lw, lh);
-        logoPts = samplePixels(logoCanvas, 5, 1);
+        logoPts = samplePixelsEdge(logoCanvas, 3, 1);
       } else {
         var hxFontSize = Math.floor(Math.max(40, Math.min(W * 0.14, 92)));
         var hxFont = '900 ' + hxFontSize + 'px "Inter", system-ui, sans-serif';
@@ -2515,7 +2551,9 @@
         logoPts = samplePixels(hxCanvas, 4, 1);
       }
 
-      // ── Sample each platform concept word ──
+      // ── Sample each platform concept word (edge-only) ──
+      // Edge sampling keeps thick serif strokes as clean outlines so the
+      // word states match the logo state's wireframe aesthetic.
       wordPtsList = [];
       var wordFamily = '"Cormorant Garamond", Georgia, serif';
       var wordWeight = '600';
@@ -2526,8 +2564,8 @@
         var fs = computeFitFontSize(word, wordFamily, wordWeight, maxWordW, maxWordH);
         var spec = wordWeight + ' ' + fs + 'px ' + wordFamily;
         var wc   = makeTextCanvas(word, spec);
-        var density = (word.length <= 10) ? 4 : 5;
-        wordPtsList.push(samplePixels(wc, density, 1));
+        var density = (word.length <= 10) ? 2 : 3;
+        wordPtsList.push(samplePixelsEdge(wc, density, 1));
       }
 
       // ── Equalize point counts (cap for performance) ──
