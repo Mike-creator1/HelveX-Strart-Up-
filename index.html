@@ -2530,17 +2530,15 @@
       canvas.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // ── Sample "HelveX" wordmark as text (fill sampling).
-      //    Skipping the PNG entirely: edge detection on the PNG was
-      //    intermittently returning empty arrays (likely background
-      //    alpha quirk), and text rendering on a transparent canvas
-      //    always works reliably across browsers. ──
+      // ── Sample "HelveX" wordmark as text ──
+      // Sparser sampling now that there are no lines; particles can
+      // breathe and read as a clean constellation, not a fill.
       var hxFontSize = Math.floor(Math.max(56, Math.min(W * 0.16, 120)));
       var hxFont = '800 ' + hxFontSize + 'px "Inter", system-ui, sans-serif';
       var hxCanvas = makeTextCanvas('HelveX', hxFont);
-      logoPts = samplePixels(hxCanvas, 4, 1);
+      logoPts = samplePixels(hxCanvas, 6, 1);
 
-      // ── Sample each platform concept word (fill sampling) ──
+      // ── Sample each platform concept word ──
       wordPtsList = [];
       var wordFamily = '"Cormorant Garamond", Georgia, serif';
       var wordWeight = '600';
@@ -2551,7 +2549,7 @@
         var fs = computeFitFontSize(word, wordFamily, wordWeight, maxWordW, maxWordH);
         var spec = wordWeight + ' ' + fs + 'px ' + wordFamily;
         var wc   = makeTextCanvas(word, spec);
-        var density = (word.length <= 10) ? 4 : 5;
+        var density = (word.length <= 10) ? 6 : 7;
         wordPtsList.push(samplePixels(wc, density, 1));
       }
 
@@ -2560,7 +2558,7 @@
       for (var i = 0; i < wordPtsList.length; i++) {
         if (wordPtsList[i].length > maxLen) maxLen = wordPtsList[i].length;
       }
-      var MAX = (W < 640 ? 700 : 1100);
+      var MAX = (W < 640 ? 500 : 750);
       if (maxLen > MAX) maxLen = MAX;
 
       logoPts = (logoPts.length > maxLen) ? downsample(logoPts, maxLen) : padPoints(logoPts, maxLen);
@@ -2615,7 +2613,7 @@
         sy: Math.sin(angle * 2.3 + i * 0.17) * (40 + Math.random() * 100),
         // Per-particle phase offsets keep motion organic
         seed: Math.random(),
-        size: 2.0 + Math.random() * 1.0
+        size: 2.2 + Math.random() * 1.1
       };
     }
 
@@ -2820,15 +2818,13 @@
     function render(now) {
       if (!running) return;
       var elapsed = now - tStart;
-      var ph        = getPhase(elapsed);
-      var stability = stabilityFor(ph);
+      var ph = getPhase(elapsed);
 
       ctx.clearRect(0, 0, W, H);
       ctx.save();
       ctx.translate(W / 2, H / 2);
 
-      // Pass 1: update positions + cache visual props so pass 3 doesn't
-      // recompute the phase math twice per particle per frame.
+      // Pass 1: update positions + cache visual props.
       var len = particles.length;
       for (var i = 0; i < len; i++) {
         var p = particles[i];
@@ -2840,16 +2836,10 @@
         p._w = t.inWord;
       }
 
-      // Pass 2: neural-link mesh (connections), drawn beneath the dots
-      // so the dots always read as the focal points.
-      ctx.shadowBlur  = 0;
-      ctx.shadowColor = 'transparent';
-      drawNeuralLinks(ph, stability);
-
-      // Pass 3: dots — always ink-dark for legibility. The red accent
-      // comes from a subtle shadowBlur halo around AI-state dots only,
-      // never from saturating the dot itself. Result reads as a precise
-      // wireframe with a warm red wash, not a red blob.
+      // Pass 2: dots only — no connection lines. Minimal premium
+      // constellation. Dots stay ink-dark for legibility; the red
+      // accent is delivered by a subtle shadowBlur halo around
+      // AI-state dots only, never by saturating the dot itself.
       for (var j = 0; j < len; j++) {
         var pp = particles[j];
 
