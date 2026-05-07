@@ -221,19 +221,15 @@
         </div>
       </div>
 
-      <!-- Trust ribbon — small marquee of customer names below the panel -->
+      <!-- Capability ribbon — what the API actually exposes -->
       <div class="reveal mt-12 sm:mt-14 flex flex-col sm:flex-row sm:items-center justify-center gap-3 sm:gap-6 text-[11px] font-mono uppercase tracking-widest text-ink-light">
-        <span class="text-ink-mid">In production at</span>
+        <span class="text-ink-mid">Available on</span>
         <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5">
-          <span>Helveta Capital</span>
+          <span>Anthropic API</span>
           <span class="text-red/40">·</span>
-          <span>Northwind</span>
+          <span>AWS Bedrock</span>
           <span class="text-red/40">·</span>
-          <span>Lattice Robotics</span>
-          <span class="text-red/40">·</span>
-          <span>Brüggli Industries</span>
-          <span class="text-red/40">·</span>
-          <span>Atelier Group</span>
+          <span>GCP Vertex AI</span>
         </div>
       </div>
     </div>
@@ -251,83 +247,83 @@
       <!-- Heading row -->
       <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-14 sm:mb-16">
         <div>
-          <p class="reveal section-mark mb-6">By the numbers</p>
+          <p class="reveal section-mark mb-6">Specs that matter</p>
           <h2 class="reveal h-section text-3xl sm:text-5xl lg:text-6xl balance">
-            Scale you can trust.<br />
-            <span class="italic font-serif font-normal">Numbers we publish on purpose.</span>
+            Built for builders.<br />
+            <span class="italic font-serif font-normal">No marketing math.</span>
           </h2>
         </div>
         <p class="reveal pretty text-sm sm:text-base text-ink-mid max-w-md leading-relaxed">
-          Live throughput, language reach, platform reliability, and the customer footprint behind every release. Refreshed monthly, shown without fine print.
+          The capabilities the Claude API actually ships: long context, native tool use, three model tiers, and deployment across the major clouds.
         </p>
       </div>
 
-      <!-- Stat tiles -->
+      <!-- Spec tiles — verifiable Claude API capabilities -->
       <div class="reveal stat-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-line border border-line rounded-2xl overflow-hidden shadow-[0_24px_60px_-30px_rgba(10,10,10,0.18)]">
         <div class="stat-tile group bg-white p-7 sm:p-9 transition-all duration-300 hover:bg-cream/50">
           <div class="flex items-start justify-between mb-6">
-            <p class="h-eyebrow text-ink-light">Throughput</p>
-            <span class="text-[10px] font-mono text-emerald-700 inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>live</span>
+            <p class="h-eyebrow text-ink-light">Context window</p>
+            <span class="text-[10px] font-mono text-ink-light">tokens</span>
           </div>
           <p class="text-5xl sm:text-6xl font-extrabold tracking-tightest mb-3 leading-none">
-            <span class="stat-num" data-target="120" data-decimals="0">0</span><span class="text-red">B</span>
+            <span class="stat-num" data-target="1" data-decimals="0">0</span><span class="text-red">M</span>
           </p>
-          <p class="text-sm font-medium text-ink mb-1">tokens · per day</p>
-          <p class="text-[11px] font-mono text-ink-light">+38% vs Q3 2026</p>
+          <p class="text-sm font-medium text-ink mb-1">extended context, on Sonnet</p>
+          <p class="text-[11px] font-mono text-ink-light">200K standard across the family</p>
         </div>
 
         <div class="stat-tile group bg-white p-7 sm:p-9 transition-all duration-300 hover:bg-cream/50">
           <div class="flex items-start justify-between mb-6">
-            <p class="h-eyebrow text-ink-light">Reach</p>
+            <p class="h-eyebrow text-ink-light">Model tiers</p>
+            <span class="text-[10px] font-mono text-ink-light">depth-tuned</span>
+          </div>
+          <p class="text-5xl sm:text-6xl font-extrabold tracking-tightest mb-3 leading-none">
+            <span class="stat-num" data-target="3" data-decimals="0">0</span>
+          </p>
+          <p class="text-sm font-medium text-ink mb-1">Opus · Sonnet · Haiku</p>
+          <p class="text-[11px] font-mono text-ink-light">pick reasoning, balance, or speed</p>
+        </div>
+
+        <div class="stat-tile group bg-white p-7 sm:p-9 transition-all duration-300 hover:bg-cream/50">
+          <div class="flex items-start justify-between mb-6">
+            <p class="h-eyebrow text-ink-light">Tool use</p>
             <span class="text-[10px] font-mono text-ink-light">native</span>
           </div>
           <p class="text-5xl sm:text-6xl font-extrabold tracking-tightest mb-3 leading-none">
-            <span class="stat-num" data-target="28" data-decimals="0">0</span>
+            <span>Tools</span>
           </p>
-          <p class="text-sm font-medium text-ink mb-1">languages, in production</p>
-          <p class="text-[11px] font-mono text-ink-light">14 with native voice</p>
+          <p class="text-sm font-medium text-ink mb-1">function calls, code, vision</p>
+          <p class="text-[11px] font-mono text-ink-light">parallel tools · structured outputs</p>
         </div>
 
         <div class="stat-tile group bg-white p-7 sm:p-9 transition-all duration-300 hover:bg-cream/50">
           <div class="flex items-start justify-between mb-6">
-            <p class="h-eyebrow text-ink-light">Reliability</p>
-            <span class="text-[10px] font-mono text-emerald-700 inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>SLA</span>
+            <p class="h-eyebrow text-ink-light">Deployment</p>
+            <span class="text-[10px] font-mono text-ink-light">first-party</span>
           </div>
           <p class="text-5xl sm:text-6xl font-extrabold tracking-tightest mb-3 leading-none">
-            <span class="stat-num" data-target="99.99" data-decimals="2">0.00</span><span class="text-red">%</span>
+            <span class="stat-num" data-target="3" data-decimals="0">0</span>
           </p>
-          <p class="text-sm font-medium text-ink mb-1">uptime, last 12 months</p>
-          <p class="text-[11px] font-mono text-ink-light">written into Enterprise SLA</p>
-        </div>
-
-        <div class="stat-tile group bg-white p-7 sm:p-9 transition-all duration-300 hover:bg-cream/50">
-          <div class="flex items-start justify-between mb-6">
-            <p class="h-eyebrow text-ink-light">Footprint</p>
-            <span class="text-[10px] font-mono text-ink-light">EU · US · APAC</span>
-          </div>
-          <p class="text-5xl sm:text-6xl font-extrabold tracking-tightest mb-3 leading-none">
-            <span class="stat-num" data-target="42" data-decimals="0">0</span>
-          </p>
-          <p class="text-sm font-medium text-ink mb-1">countries served</p>
-          <p class="text-[11px] font-mono text-ink-light">3 sovereign-cloud regions</p>
+          <p class="text-sm font-medium text-ink mb-1">platforms supported</p>
+          <p class="text-[11px] font-mono text-ink-light">Anthropic API · AWS Bedrock · GCP Vertex</p>
         </div>
       </div>
 
-      <!-- Trust strip -->
+      <!-- Capability strip — what builders get out of the box -->
       <div class="reveal mt-10 sm:mt-14 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8 text-[11px] font-mono uppercase tracking-widest text-ink-light">
-        <span class="text-ink-mid">In production at</span>
+        <span class="text-ink-mid">Out of the box</span>
         <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
-          <span>Helveta Capital</span>
+          <span>Streaming</span>
           <span class="hidden sm:inline text-ink-faint">·</span>
-          <span>Northwind</span>
+          <span>Prompt caching</span>
           <span class="hidden sm:inline text-ink-faint">·</span>
-          <span>Lattice Robotics</span>
+          <span>Batch API</span>
           <span class="hidden sm:inline text-ink-faint">·</span>
-          <span>Brüggli Industries</span>
+          <span>Files API</span>
           <span class="hidden sm:inline text-ink-faint">·</span>
-          <span>Couronne Logistics</span>
+          <span>Vision</span>
           <span class="hidden sm:inline text-ink-faint">·</span>
-          <span>Atelier Group</span>
+          <span>Extended thinking</span>
         </div>
       </div>
     </div>
@@ -1716,7 +1712,7 @@
               all systems operational
             </span>
             <span class="text-white/15">·</span>
-            <span>last audit · Q3 2026</span>
+            <span>encrypted in transit &amp; at rest</span>
             <span class="text-white/15">·</span>
             <a href="/legal" class="text-white/55 hover:text-yellow transition-colors underline-offset-4 hover:underline">view trust center</a>
           </div>
@@ -1876,29 +1872,29 @@
 
       </div>
 
-      <!-- REACH STRIP — premium stat row -->
+      <!-- CAPABILITY STRIP — what the API exposes for builders -->
       <div class="reveal relative rounded-2xl border border-white/10 bg-white/[.025] backdrop-blur-sm overflow-hidden">
         <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
         <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/5">
           <div class="p-7 sm:p-9 relative group hover:bg-white/[.02] transition-colors">
-            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 mb-3">enterprise teams</p>
-            <p class="text-4xl sm:text-5xl font-semibold tracking-tightest text-white" style="letter-spacing:-0.04em;">300<span class="text-yellow">+</span></p>
-            <p class="text-[11px] text-white/40 mt-2 font-mono">across 42 countries</p>
+            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 mb-3">context window</p>
+            <p class="text-4xl sm:text-5xl font-semibold tracking-tightest text-white" style="letter-spacing:-0.04em;">1<span class="text-yellow">M</span></p>
+            <p class="text-[11px] text-white/40 mt-2 font-mono">tokens · Sonnet (extended)</p>
           </div>
           <div class="p-7 sm:p-9 relative group hover:bg-white/[.02] transition-colors">
-            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 mb-3">data residency</p>
-            <p class="text-4xl sm:text-5xl font-semibold tracking-tightest text-white" style="letter-spacing:-0.04em;">3 <span class="text-2xl sm:text-3xl text-white/60">regions</span></p>
-            <p class="text-[11px] text-white/40 mt-2 font-mono">EU · US · APAC</p>
+            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 mb-3">deployment</p>
+            <p class="text-4xl sm:text-5xl font-semibold tracking-tightest text-white" style="letter-spacing:-0.04em;">3 <span class="text-2xl sm:text-3xl text-white/60">platforms</span></p>
+            <p class="text-[11px] text-white/40 mt-2 font-mono">Anthropic · Bedrock · Vertex</p>
           </div>
           <div class="p-7 sm:p-9 relative group hover:bg-white/[.02] transition-colors">
-            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 mb-3">uptime SLA</p>
-            <p class="text-4xl sm:text-5xl font-semibold tracking-tightest text-white" style="letter-spacing:-0.04em;">99.99<span class="text-yellow">%</span></p>
-            <p class="text-[11px] text-white/40 mt-2 font-mono">12-month rolling</p>
+            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 mb-3">tool use</p>
+            <p class="text-4xl sm:text-5xl font-semibold tracking-tightest text-white" style="letter-spacing:-0.04em;">Native</p>
+            <p class="text-[11px] text-white/40 mt-2 font-mono">function calls · parallel tools</p>
           </div>
           <div class="p-7 sm:p-9 relative group hover:bg-white/[.02] transition-colors">
-            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 mb-3">independent audit</p>
-            <p class="text-4xl sm:text-5xl font-semibold tracking-tightest" style="letter-spacing:-0.04em;background:linear-gradient(110deg,#FCD34D 0%,#FFFFFF 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Annual</p>
-            <p class="text-[11px] text-white/40 mt-2 font-mono">+ 2× pen-test / year</p>
+            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 mb-3">cost controls</p>
+            <p class="text-4xl sm:text-5xl font-semibold tracking-tightest" style="letter-spacing:-0.04em;background:linear-gradient(110deg,#FCD34D 0%,#FFFFFF 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Caching</p>
+            <p class="text-[11px] text-white/40 mt-2 font-mono">+ Batch API for offline jobs</p>
           </div>
         </div>
         <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
@@ -1923,14 +1919,14 @@
         </div>
         <div class="lg:col-span-5">
           <p class="reveal pretty text-base sm:text-lg text-ink-mid leading-relaxed mb-6">
-            Six teams running on HelveX in production today. Each picks the model that fits the work, ships outcomes the rest of the org can verify, and keeps the audit trail their compliance team needs.
+            Six common workloads, mapped to the model and tooling that fit them best. Pick the right tier per task, lean on native tool use for the wiring, and keep the work auditable end to end.
           </p>
           <div class="reveal flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] font-mono uppercase tracking-widest text-ink-light">
-            <span><span class="text-ink font-bold">300+</span> teams</span>
+            <span><span class="text-ink font-bold">Opus · Sonnet · Haiku</span></span>
             <span class="text-line">·</span>
-            <span><span class="text-ink font-bold">42</span> countries</span>
+            <span>tools <span class="text-ink font-bold">native</span></span>
             <span class="text-line">·</span>
-            <span>since <span class="text-ink font-bold">2024</span></span>
+            <span>vision <span class="text-ink font-bold">included</span></span>
           </div>
         </div>
       </div>
