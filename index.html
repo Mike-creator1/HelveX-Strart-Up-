@@ -2496,8 +2496,10 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       // ── Sample HelveX logo PNG ──
+      // Sparser sampling (density 8) so the filled HX glyph reads as a
+      // clean dotted constellation, not a solid black mass.
       if (logoImg.complete && logoImg.naturalWidth > 0) {
-        var logoMaxW = Math.min(W * 0.78, 580);
+        var logoMaxW = Math.min(W * 0.72, 540);
         var aspect = logoImg.naturalHeight / logoImg.naturalWidth;
         var lw = logoMaxW;
         var lh = lw * aspect;
@@ -2507,36 +2509,37 @@
         logoCanvas.height = lh;
         var lctx = logoCanvas.getContext('2d');
         lctx.drawImage(logoImg, 0, 0, lw, lh);
-        logoPts = samplePixels(logoCanvas, 4, 1);
+        logoPts = samplePixels(logoCanvas, 8, 1);
       } else {
         var hxFontSize = Math.floor(Math.max(40, Math.min(W * 0.14, 92)));
         var hxFont = '900 ' + hxFontSize + 'px "Inter", system-ui, sans-serif';
         var hxCanvas = makeTextCanvas('HelveX', hxFont);
-        logoPts = samplePixels(hxCanvas, 3, 1);
+        logoPts = samplePixels(hxCanvas, 5, 1);
       }
 
       // ── Sample each platform concept word ──
+      // Density 5 short / 7 long — clean serif outlines, not heavy fills.
       wordPtsList = [];
       var wordFamily = '"Cormorant Garamond", Georgia, serif';
       var wordWeight = '600';
-      var maxWordW = W * 0.84;
-      var maxWordH = H * 0.68;
+      var maxWordW = W * 0.82;
+      var maxWordH = H * 0.62;
       for (var w = 0; w < WORDS.length; w++) {
         var word = WORDS[w];
         var fs = computeFitFontSize(word, wordFamily, wordWeight, maxWordW, maxWordH);
         var spec = wordWeight + ' ' + fs + 'px ' + wordFamily;
         var wc   = makeTextCanvas(word, spec);
-        // Density 3 for short words, 4 for longer ones to keep N balanced
-        var density = (word.length <= 10) ? 3 : 4;
+        var density = (word.length <= 10) ? 5 : 7;
         wordPtsList.push(samplePixels(wc, density, 1));
       }
 
       // ── Equalize point counts (cap for performance) ──
+      // Lower cap → cleaner constellation, fewer overlapping mesh edges.
       var maxLen = logoPts.length;
       for (var i = 0; i < wordPtsList.length; i++) {
         if (wordPtsList[i].length > maxLen) maxLen = wordPtsList[i].length;
       }
-      var MAX = (W < 640 ? 1200 : 1700);
+      var MAX = (W < 640 ? 600 : 900);
       if (maxLen > MAX) maxLen = MAX;
 
       logoPts = (logoPts.length > maxLen) ? downsample(logoPts, maxLen) : padPoints(logoPts, maxLen);
@@ -2591,7 +2594,7 @@
         sy: Math.sin(angle * 2.3 + i * 0.17) * (40 + Math.random() * 100),
         // Per-particle phase offsets keep motion organic
         seed: Math.random(),
-        size: 1.0 + Math.random() * 0.9
+        size: 0.9 + Math.random() * 0.7
       };
     }
 
@@ -2724,7 +2727,7 @@
 
     /* Spatial grid for neural-link rendering. Re-allocated only when
        canvas size changes; kept as flat arrays for speed. */
-    var GRID_CELL = 30;
+    var GRID_CELL = 24;
     var grid = [], gridCols = 0, gridRows = 0;
     function rebuildGrid() {
       gridCols = Math.ceil(W / GRID_CELL) + 2;
@@ -2733,11 +2736,11 @@
       for (var i = 0; i < grid.length; i++) grid[i] = [];
     }
 
-    /* Draw the connection lines between nearby particles.
-       Uses two alpha bands (close vs medium) to create depth.
-       Total cost: O(N) thanks to grid bucketing. */
+    /* Neural-link mesh — drawn between nearby particles.
+       Single thin alpha band keeps the network legible without
+       blacking-out the letterforms. Cost: O(N) via grid bucketing. */
     function drawNeuralLinks(ph, stability) {
-      if (stability < 0.20) return;  // skip during pure chaos
+      if (stability < 0.25) return;  // skip during pure chaos
 
       // Reset grid cells
       for (var g = 0; g < grid.length; g++) grid[g].length = 0;
@@ -2756,22 +2759,17 @@
         grid[cy * gridCols + cx].push(p);
       }
 
-      // Two alpha bands — close and medium connections
-      var closeMax  = 18;
-      var midMax    = 30;
-      var closeMaxSq = closeMax * closeMax;
-      var midMaxSq   = midMax * midMax;
+      var maxDist   = 22;
+      var maxDistSq = maxDist * maxDist;
       var inWord = (ph.idx === 3 || ph.idx === 6 ||
                     (ph.idx === 2 && ph.t > 0.55) ||
                     (ph.idx === 5 && ph.t > 0.55) ||
                     (ph.idx === 4) || (ph.idx === 7));
       var rA = inWord ? 192 : 14, gA = inWord ? 17 : 14, bA = inWord ? 30 : 14;
 
-      ctx.lineCap = 'round';
-
-      // ── Close band: tighter, higher alpha ──
-      ctx.lineWidth   = 0.7;
-      ctx.strokeStyle = 'rgba(' + rA + ',' + gA + ',' + bA + ',' + (0.30 * stability) + ')';
+      ctx.lineCap     = 'round';
+      ctx.lineWidth   = 0.5;
+      ctx.strokeStyle = 'rgba(' + rA + ',' + gA + ',' + bA + ',' + (0.13 * stability) + ')';
       ctx.beginPath();
       for (var c = 0; c < grid.length; c++) {
         var bucket = grid[c];
@@ -2790,39 +2788,9 @@
                 var ddx = p2.x - p1.x;
                 var ddy = p2.y - p1.y;
                 var d2  = ddx * ddx + ddy * ddy;
-                if (d2 < closeMaxSq) {
+                if (d2 < maxDistSq && d2 > 9) {
                   ctx.moveTo(p1.x, p1.y);
                   ctx.lineTo(p2.x, p2.y);
-                }
-              }
-            }
-          }
-        }
-      }
-      ctx.stroke();
-
-      // ── Mid band: longer reach, softer alpha ──
-      ctx.lineWidth   = 0.45;
-      ctx.strokeStyle = 'rgba(' + rA + ',' + gA + ',' + bA + ',' + (0.10 * stability) + ')';
-      ctx.beginPath();
-      for (var cc = 0; cc < grid.length; cc++) {
-        var bk = grid[cc];
-        if (bk.length === 0) continue;
-        var col2 = cc % gridCols, row2 = (cc / gridCols) | 0;
-        for (var bi2 = 0; bi2 < bk.length; bi2++) {
-          var q1 = bk[bi2];
-          for (var dx2 = 0; dx2 <= 1; dx2++) {
-            for (var dy2 = (dx2 === 0 ? 0 : -1); dy2 <= 1; dy2++) {
-              var nc2 = col2 + dx2, nr2 = row2 + dy2;
-              if (nc2 < 0 || nc2 >= gridCols || nr2 < 0 || nr2 >= gridRows) continue;
-              var nb2 = grid[nr2 * gridCols + nc2];
-              for (var bj2 = (dx2 === 0 && dy2 === 0 ? bi2 + 1 : 0); bj2 < nb2.length; bj2++) {
-                var q2 = nb2[bj2];
-                var dx3 = q2.x - q1.x, dy3 = q2.y - q1.y;
-                var d3  = dx3 * dx3 + dy3 * dy3;
-                if (d3 >= closeMaxSq && d3 < midMaxSq) {
-                  ctx.moveTo(q1.x, q1.y);
-                  ctx.lineTo(q2.x, q2.y);
                 }
               }
             }
