@@ -50,6 +50,54 @@
   </script>
 
   <link rel="stylesheet" href="/helvex.css" />
+  <style>
+    /* ═══ Cinematic logo morph stage ═══════════════════════════
+       Hosts a canvas where the HelveX wordmark + logo glyph
+       fragment into particles and reform as "AI", then loop
+       back. Pure CSS for the stage; the canvas handles motion. */
+    .hx-morph-stage {
+      position: relative;
+      width: 100%;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 220px;
+      isolation: isolate;
+    }
+    @media (max-width: 640px) {
+      .hx-morph-stage { height: 160px; max-width: 100%; }
+    }
+    #hx-morph-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 0 14px rgba(192, 17, 30, 0.10));
+    }
+    /* Subtle ambient halo behind the particle field */
+    .hx-morph-glow {
+      position: absolute;
+      inset: 10% 18%;
+      border-radius: 50%;
+      background:
+        radial-gradient(ellipse at center,
+          rgba(192, 17, 30, 0.10) 0%,
+          rgba(192, 17, 30, 0.04) 35%,
+          transparent 70%);
+      filter: blur(28px);
+      z-index: -1;
+      animation: hxMorphHaloPulse 8s cubic-bezier(.4, 0, .2, 1) infinite;
+      pointer-events: none;
+    }
+    @keyframes hxMorphHaloPulse {
+      0%, 100% { opacity: 0.55; transform: scale(1); }
+      50%      { opacity: 0.95; transform: scale(1.08); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hx-morph-glow { animation: none; }
+    }
+  </style>
 
 </head>
 <body class="bg-white text-ink antialiased">
@@ -117,6 +165,12 @@
     <div class="tech-grid"></div>
 
     <div class="relative max-w-6xl mx-auto px-6 sm:px-8">
+
+      <!-- ════════ Cinematic logo morph: HelveX ⇄ AI ════════ -->
+      <div class="reveal relative mx-auto mb-10 sm:mb-12 hx-morph-stage" aria-label="HelveX transforming into AI">
+        <canvas id="hx-morph-canvas" aria-hidden="true"></canvas>
+        <div class="hx-morph-glow" aria-hidden="true"></div>
+      </div>
 
       <!-- Floating status pill -->
       <div class="reveal flex justify-center mb-8 sm:mb-10">
@@ -2319,5 +2373,342 @@
   </footer>
 
   <script src="/helvex.js" defer></script>
+
+  <!-- ═══ Cinematic logo morph: HelveX ⇄ AI ═══════════════════
+       Particle system that samples the actual HelveX logo PNG
+       + the word "AI", then morphs between the two states with
+       cinematic easing. Runs in a single canvas, GPU-friendly,
+       intersection-observed (pauses when offscreen), and respects
+       prefers-reduced-motion. No external libraries. -->
+  <script>
+  (function () {
+    'use strict';
+    var canvas = document.getElementById('hx-morph-canvas');
+    if (!canvas) return;
+    var stage  = canvas.parentElement;
+    var ctx    = canvas.getContext('2d', { alpha: true });
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var W = 0, H = 0;
+    var helveXPts = [], aiPts = [];
+    var particles = [];
+    var running   = true;
+    var lastTime  = performance.now();
+    var tStart    = lastTime;
+
+    /* Sample non-transparent pixels from a source canvas to a
+       sparse array of (x, y) target positions, centered on origin. */
+    function samplePixels(src, density, scale) {
+      var sw = src.width, sh = src.height;
+      var sctx = src.getContext('2d');
+      var data = sctx.getImageData(0, 0, sw, sh).data;
+      var pts = [];
+      for (var y = 0; y < sh; y += density) {
+        for (var x = 0; x < sw; x += density) {
+          var i = (y * sw + x) * 4;
+          if (data[i + 3] > 96) {
+            pts.push({
+              x: (x - sw / 2) * scale,
+              y: (y - sh / 2) * scale
+            });
+          }
+        }
+      }
+      return pts;
+    }
+
+    /* Render text to an offscreen canvas at a given size. */
+    function makeTextCanvas(text, fontSpec) {
+      var off = document.createElement('canvas');
+      var oc  = off.getContext('2d');
+      oc.font = fontSpec;
+      var m  = oc.measureText(text);
+      var fontSize = parseInt(fontSpec.match(/(\d+)px/)[1], 10);
+      var w = Math.ceil(m.width) + 8;
+      var h = Math.ceil(fontSize * 1.4);
+      off.width = w;
+      off.height = h;
+      var c = off.getContext('2d');
+      c.font = fontSpec;
+      c.fillStyle = '#000';
+      c.textBaseline = 'middle';
+      c.fillText(text, 4, h / 2);
+      return off;
+    }
+
+    /* Pre-rendered logo. We draw the user's actual logo PNG and
+       sample its dark pixels so the "HelveX state" is the real mark. */
+    var logoImg = new Image();
+    logoImg.crossOrigin = 'anonymous';
+    logoImg.src = '/helvex-logo.png';
+
+    function buildTargets() {
+      var rect = stage.getBoundingClientRect();
+      W = rect.width; H = rect.height;
+      canvas.width  = W * dpr;
+      canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      var fontSize = Math.max(72, Math.min(W * 0.32, 200));
+      var aiFont = '700 ' + fontSize + 'px "Cormorant Garamond", Georgia, serif';
+      var aiCanvas = makeTextCanvas('AI', aiFont);
+
+      // Sample AI text
+      aiPts = samplePixels(aiCanvas, 4, 1);
+
+      // Sample HelveX logo PNG (only if loaded). If not yet, use text fallback.
+      if (logoImg.complete && logoImg.naturalWidth > 0) {
+        var logoMaxW = Math.min(W * 0.78, 580);
+        var aspect = logoImg.naturalHeight / logoImg.naturalWidth;
+        var lw = logoMaxW;
+        var lh = lw * aspect;
+        if (lh > H * 0.78) { lh = H * 0.78; lw = lh / aspect; }
+        var logoCanvas = document.createElement('canvas');
+        logoCanvas.width  = lw;
+        logoCanvas.height = lh;
+        var lctx = logoCanvas.getContext('2d');
+        lctx.drawImage(logoImg, 0, 0, lw, lh);
+        helveXPts = samplePixels(logoCanvas, 4, 1);
+      } else {
+        var hxFont = '900 ' + Math.max(40, Math.min(W * 0.14, 92)) + 'px "Inter", system-ui, sans-serif';
+        var hxCanvas = makeTextCanvas('HelveX', hxFont);
+        helveXPts = samplePixels(hxCanvas, 3, 1);
+      }
+
+      // Equalize lengths so each particle has both a HelveX and AI target
+      var N = Math.max(helveXPts.length, aiPts.length);
+      // Cap for performance — randomly subsample if huge
+      var MAX = (W < 640 ? 1100 : 1700);
+      if (N > MAX) {
+        helveXPts = downsample(helveXPts, MAX);
+        aiPts     = downsample(aiPts,     MAX);
+        N = MAX;
+      } else {
+        helveXPts = padPoints(helveXPts, N);
+        aiPts     = padPoints(aiPts,     N);
+      }
+
+      // Initial particle pool (or resize)
+      if (particles.length === 0) {
+        for (var i = 0; i < N; i++) {
+          particles.push(makeParticle(helveXPts[i], i, N));
+        }
+      } else {
+        if (particles.length < N) {
+          for (var j = particles.length; j < N; j++) {
+            particles.push(makeParticle(helveXPts[j], j, N));
+          }
+        } else {
+          particles.length = N;
+        }
+      }
+    }
+
+    function downsample(arr, n) {
+      if (arr.length <= n) return arr;
+      var out = [], step = arr.length / n;
+      for (var i = 0; i < n; i++) out.push(arr[Math.floor(i * step)]);
+      return out;
+    }
+    function padPoints(arr, n) {
+      while (arr.length < n) {
+        arr.push({
+          x: arr[Math.floor(Math.random() * arr.length)].x,
+          y: arr[Math.floor(Math.random() * arr.length)].y
+        });
+      }
+      return arr;
+    }
+
+    function makeParticle(start, i, total) {
+      var angle = (i / total) * Math.PI * 2;
+      return {
+        x: start.x, y: start.y,
+        // Each particle gets a unique scatter vector for the chaos phase
+        sx: Math.cos(angle * 3.7 + i * 0.13) * (60 + Math.random() * 140),
+        sy: Math.sin(angle * 2.3 + i * 0.17) * (40 + Math.random() * 100),
+        // Per-particle phase offsets keep motion organic
+        seed: Math.random(),
+        size: 1.0 + Math.random() * 0.9
+      };
+    }
+
+    /* Cinematic 6-phase loop, total 9.4s. Each phase has its own
+       easing so the motion reads as: stable → fracture → reform →
+       stable → fracture → reform. */
+    var PHASES = [
+      { name: 'logoStable', dur: 1400 },
+      { name: 'logoToScatter', dur: 1500 },
+      { name: 'scatterToAI',   dur: 1600 },
+      { name: 'aiStable',      dur: 1500 },
+      { name: 'aiToScatter',   dur: 1500 },
+      { name: 'scatterToLogo', dur: 1900 }
+    ];
+    var TOTAL = PHASES.reduce(function (a, p) { return a + p.dur; }, 0);
+
+    function easeInOutCubic(t) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+    function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+    function easeInQuart(t)  { return t * t * t * t; }
+
+    function getPhase(elapsed) {
+      var t = elapsed % TOTAL;
+      var acc = 0;
+      for (var i = 0; i < PHASES.length; i++) {
+        var p = PHASES[i];
+        if (t < acc + p.dur) {
+          return { idx: i, name: p.name, t: (t - acc) / p.dur };
+        }
+        acc += p.dur;
+      }
+      return { idx: 0, name: PHASES[0].name, t: 0 };
+    }
+
+    function render(now) {
+      if (!running) return;
+      var elapsed = now - tStart;
+      var ph = getPhase(elapsed);
+
+      ctx.clearRect(0, 0, W, H);
+      ctx.save();
+      ctx.translate(W / 2, H / 2);
+
+      var len = particles.length;
+      for (var i = 0; i < len; i++) {
+        var p = particles[i];
+        var hx = helveXPts[i], a = aiPts[i];
+        var tx, ty, alpha = 1, glow = 0;
+
+        if (ph.name === 'logoStable') {
+          tx = hx.x; ty = hx.y;
+          alpha = 1; glow = 0.10;
+        } else if (ph.name === 'logoToScatter') {
+          var k = easeInQuart(ph.t);
+          tx = hx.x + p.sx * k;
+          ty = hx.y + p.sy * k;
+          alpha = 1 - k * 0.35;
+          glow  = 0.10 + k * 0.45;
+        } else if (ph.name === 'scatterToAI') {
+          var k2 = easeOutQuart(ph.t);
+          var sxv = hx.x + p.sx;
+          var syv = hx.y + p.sy;
+          tx = sxv + (a.x - sxv) * k2;
+          ty = syv + (a.y - syv) * k2;
+          alpha = 0.65 + 0.35 * k2;
+          glow  = 0.55 - k2 * 0.30;
+        } else if (ph.name === 'aiStable') {
+          tx = a.x; ty = a.y;
+          alpha = 1;
+          glow  = 0.30 + 0.20 * Math.sin(elapsed * 0.005 + p.seed * 6);
+        } else if (ph.name === 'aiToScatter') {
+          var k3 = easeInQuart(ph.t);
+          tx = a.x - p.sx * k3 * 0.85;
+          ty = a.y - p.sy * k3 * 0.85;
+          alpha = 1 - k3 * 0.35;
+          glow  = 0.30 + k3 * 0.40;
+        } else if (ph.name === 'scatterToLogo') {
+          var k4 = easeOutQuart(ph.t);
+          var sxv2 = a.x - p.sx * 0.85;
+          var syv2 = a.y - p.sy * 0.85;
+          tx = sxv2 + (hx.x - sxv2) * k4;
+          ty = syv2 + (hx.y - syv2) * k4;
+          alpha = 0.65 + 0.35 * k4;
+          glow  = 0.45 - k4 * 0.35;
+        }
+
+        // Smooth approach (low-pass filter for refined motion)
+        p.x += (tx - p.x) * 0.32;
+        p.y += (ty - p.y) * 0.32;
+
+        // Premium look: warm dark ink with red-glow during fracture phases,
+        // and a soft yellow shimmer when in the AI state for "alive" feel.
+        var inAI = ph.name === 'aiStable' || ph.name === 'aiToScatter' || (ph.name === 'scatterToAI' && ph.t > 0.55);
+        var r = inAI ? 192 : 10, g = inAI ? 17 : 10, b = inAI ? 30 : 10;
+
+        if (glow > 0.04) {
+          ctx.shadowBlur  = 8 + glow * 18;
+          ctx.shadowColor = 'rgba(192, 17, 30, ' + Math.min(0.85, glow) + ')';
+        } else {
+          ctx.shadowBlur  = 0;
+          ctx.shadowColor = 'transparent';
+        }
+        ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, 6.2832);
+        ctx.fill();
+      }
+
+      ctx.restore();
+      requestAnimationFrame(render);
+    }
+
+    /* Static fallback for prefers-reduced-motion: render the
+       HelveX state once, hold it. */
+    function renderStatic() {
+      ctx.clearRect(0, 0, W, H);
+      ctx.save();
+      ctx.translate(W / 2, H / 2);
+      ctx.fillStyle = 'rgba(10, 10, 10, 1)';
+      for (var i = 0; i < helveXPts.length; i++) {
+        var p = helveXPts[i];
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.2, 0, 6.2832);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    /* IntersectionObserver — pause when the stage scrolls offscreen,
+       so we don't burn cycles on a tab the user can't see. */
+    function setupVisibility() {
+      if (!('IntersectionObserver' in window)) return;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            if (!running && !reduce) {
+              running = true;
+              tStart  = performance.now() - ((performance.now() - tStart) % TOTAL);
+              requestAnimationFrame(render);
+            }
+          } else {
+            running = false;
+          }
+        });
+      }, { threshold: 0.05 });
+      io.observe(stage);
+    }
+
+    function start() {
+      buildTargets();
+      if (reduce) {
+        renderStatic();
+      } else {
+        running = true;
+        tStart  = performance.now();
+        requestAnimationFrame(render);
+      }
+      setupVisibility();
+    }
+
+    /* Resize handling — debounced so we don't rebuild on every pixel. */
+    var resizeTimer = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        buildTargets();
+        if (reduce) renderStatic();
+      }, 120);
+    });
+
+    if (logoImg.complete && logoImg.naturalWidth > 0) {
+      start();
+    } else {
+      logoImg.addEventListener('load',  start, { once: true });
+      logoImg.addEventListener('error', start, { once: true });
+    }
+  })();
+  </script>
 </body>
 </html>
