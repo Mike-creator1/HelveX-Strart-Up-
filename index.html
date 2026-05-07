@@ -2530,8 +2530,7 @@
       canvas.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // ── Sample HelveX logo PNG (edge-only so thick glyphs read as
-      //    clean outlines, not as solid black blocks of particles) ──
+      // ── Sample HelveX logo PNG (edge-only) ──
       if (logoImg.complete && logoImg.naturalWidth > 0) {
         var logoMaxW = Math.min(W * 0.72, 540);
         var aspect = logoImg.naturalHeight / logoImg.naturalWidth;
@@ -2543,39 +2542,35 @@
         logoCanvas.height = lh;
         var lctx = logoCanvas.getContext('2d');
         lctx.drawImage(logoImg, 0, 0, lw, lh);
-        logoPts = samplePixelsEdge(logoCanvas, 4, 1);
+        logoPts = samplePixelsEdge(logoCanvas, 2, 1);
       } else {
         var hxFontSize = Math.floor(Math.max(40, Math.min(W * 0.14, 92)));
         var hxFont = '900 ' + hxFontSize + 'px "Inter", system-ui, sans-serif';
         var hxCanvas = makeTextCanvas('HelveX', hxFont);
-        logoPts = samplePixelsEdge(hxCanvas, 2, 1);
+        logoPts = samplePixelsEdge(hxCanvas, 1, 1);
       }
 
       // ── Sample each platform concept word (edge-only) ──
-      // Edge sampling keeps thick serif strokes as clean outlines so the
-      // word states match the logo state's wireframe aesthetic.
       wordPtsList = [];
       var wordFamily = '"Cormorant Garamond", Georgia, serif';
       var wordWeight = '600';
-      var maxWordW = W * 0.78;
-      var maxWordH = H * 0.55;
+      var maxWordW = W * 0.80;
+      var maxWordH = H * 0.58;
       for (var w = 0; w < WORDS.length; w++) {
         var word = WORDS[w];
         var fs = computeFitFontSize(word, wordFamily, wordWeight, maxWordW, maxWordH);
         var spec = wordWeight + ' ' + fs + 'px ' + wordFamily;
         var wc   = makeTextCanvas(word, spec);
-        var density = (word.length <= 10) ? 3 : 4;
+        var density = (word.length <= 10) ? 2 : 3;
         wordPtsList.push(samplePixelsEdge(wc, density, 1));
       }
 
       // ── Equalize point counts (cap for performance) ──
-      // Smaller cap keeps the constellation airy; the wireframe reads
-      // as a precise letter outline, not a solid mass.
       var maxLen = logoPts.length;
       for (var i = 0; i < wordPtsList.length; i++) {
         if (wordPtsList[i].length > maxLen) maxLen = wordPtsList[i].length;
       }
-      var MAX = (W < 640 ? 550 : 800);
+      var MAX = (W < 640 ? 850 : 1300);
       if (maxLen > MAX) maxLen = MAX;
 
       logoPts = (logoPts.length > maxLen) ? downsample(logoPts, maxLen) : padPoints(logoPts, maxLen);
@@ -2630,7 +2625,7 @@
         sy: Math.sin(angle * 2.3 + i * 0.17) * (40 + Math.random() * 100),
         // Per-particle phase offsets keep motion organic
         seed: Math.random(),
-        size: 1.5 + Math.random() * 0.8
+        size: 2.0 + Math.random() * 1.0
       };
     }
 
@@ -2795,15 +2790,14 @@
         grid[cy * gridCols + cx].push(p);
       }
 
-      // Tight threshold + low alpha = elegant wireframe, not a red blob.
-      // Lines stay ink-dark for legibility; the red AI accent is delivered
-      // by the halo + dot glow, not by saturating every connection.
-      var maxDist   = 16;
+      // Tight threshold + ink-dark lines = elegant wireframe.
+      // Lines never go red — the red AI accent is delivered by halos.
+      var maxDist   = 18;
       var maxDistSq = maxDist * maxDist;
 
       ctx.lineCap     = 'round';
-      ctx.lineWidth   = 0.55;
-      ctx.strokeStyle = 'rgba(14, 14, 14, ' + (0.10 * stability) + ')';
+      ctx.lineWidth   = 0.75;
+      ctx.strokeStyle = 'rgba(14, 14, 14, ' + (0.20 * stability) + ')';
       ctx.beginPath();
       for (var c = 0; c < grid.length; c++) {
         var bucket = grid[c];
