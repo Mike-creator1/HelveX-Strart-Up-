@@ -70,10 +70,10 @@
       html += '</div>';
     });
     html += '<div class="hx-sidebar-foot">';
-    html += '<div class="hx-user-card">';
-    html += '<div class="hx-user-avatar">AM</div>';
-    html += '<div class="hx-user-meta"><div class="hx-user-name">Alex Müller</div><div class="hx-user-email">alex@northwind.ch</div></div>';
-    html += '<a href="/" class="hx-user-action" title="Sign out">' + svg('logout') + '</a>';
+    html += '<div class="hx-user-card" id="hx-user-card">';
+    html += '<div class="hx-user-avatar" id="hx-user-avatar">·</div>';
+    html += '<div class="hx-user-meta"><div class="hx-user-name" id="hx-user-name">Loading…</div><div class="hx-user-email" id="hx-user-email">&nbsp;</div></div>';
+    html += '<button type="button" class="hx-user-action" title="Sign out" data-action="signout" aria-label="Sign out">' + svg('logout') + '</button>';
     html += '</div>';
     html += '</div>';
     return html;
@@ -86,6 +86,41 @@
       + '</button>'
       + '<a href="/" class="hx-sidebar-brand" style="margin:0;padding:0;"><img src="/helvex-logo.png" alt="HelveX" style="height:32px;" /></a>'
       + '<div style="width:38px"></div>';
+  }
+
+  function loadAuthScript() {
+    if (window.HX && window.HX.auth) return;
+    if (document.querySelector('script[data-hx-auth]')) return;
+    var s = document.createElement('script');
+    s.src = '/auth.js';
+    s.setAttribute('data-hx-auth', '1');
+    document.head.appendChild(s);
+  }
+
+  function initials(first, last, email) {
+    var a = (first || '').trim();
+    var b = (last || '').trim();
+    if (a || b) return ((a[0] || '') + (b[0] || '')).toUpperCase();
+    var e = (email || '').trim();
+    return e ? e[0].toUpperCase() : '·';
+  }
+
+  function hydrateUserCard() {
+    var sb = window.HX && window.HX.supabase;
+    if (!sb) return;
+    sb.auth.getUser().then(function (res) {
+      var user = res && res.data ? res.data.user : null;
+      if (!user) return;
+      var meta = user.user_metadata || {};
+      var nameEl = document.getElementById('hx-user-name');
+      var mailEl = document.getElementById('hx-user-email');
+      var avEl   = document.getElementById('hx-user-avatar');
+      var fullName = (meta.first_name || '').trim() + ' ' + (meta.last_name || '').trim();
+      fullName = fullName.trim() || (user.email ? user.email.split('@')[0] : 'Account');
+      if (nameEl) nameEl.textContent = fullName;
+      if (mailEl) mailEl.textContent = user.email || '';
+      if (avEl)   avEl.textContent   = initials(meta.first_name, meta.last_name, user.email);
+    });
   }
 
   function injectShell() {
@@ -114,6 +149,11 @@
         sidebar.classList.remove('open');
       });
     }
+
+    // Boot Supabase auth (session guard, signout, user hydration)
+    loadAuthScript();
+    if (window.HX && window.HX.auth) hydrateUserCard();
+    else document.addEventListener('hx:auth-ready', hydrateUserCard, { once: true });
   }
 
   if (document.readyState === 'loading') {
