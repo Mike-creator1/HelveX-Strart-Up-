@@ -1,504 +1,173 @@
 <!DOCTYPE html>
-<html lang="en" translate="no" class="notranslate">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="google" content="notranslate" />
-  <title>CreateX — Overview</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script>
-    window.SUPABASE_URL  = 'https://ikbdhxobdjlwirydhxym.supabase.co';
-    window.SUPABASE_ANON = 'sb_publishable_chzlbY97SlQx_Apf4zqrTQ_mdwWhmyE';
-    (function initSB(t){
-      t=t||0;var lib=window.supabase;
-      if(lib&&typeof lib.createClient==='function'){
-        try{window.sb=lib.createClient(window.SUPABASE_URL,window.SUPABASE_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});document.dispatchEvent(new Event('sb:ready'));}catch(e){console.error(e);}return;
-      }
-      if(t>80){console.warn('Supabase SDK failed');return;}
-      setTimeout(function(){initSB(t+1);},40);
-    })();
-  </script>
+  <title>Dashboard — HelveX</title>
+  <meta name="description" content="HelveX client portal — overview of your services, credits, projects, and recent activity." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet" />
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    :root{--bg:#05070b;--panel:#0d1118;--line:rgba(255,255,255,.09);--text:#f0f4ff;--muted:rgba(255,255,255,.55);--soft:rgba(255,255,255,.36);--cyan:#18d7ff;--blue:#4c7dff;--violet:#7c3dff;--green:#39f58a}
-    html{scroll-behavior:smooth}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
-    .font-serif{font-family:'Playfair Display',Georgia,serif}
-
-    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes shimmer{from{background-position:0% center}to{background-position:-220% center}}
-    @keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)}}
-    @keyframes glowDrift{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(14px,-10px,0) scale(1.05)}}
-
-    /* Background */
-    .bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.055) 1px,transparent 1px);background-size:28px 28px;opacity:.55}
-    .glow{position:fixed;border-radius:999px;filter:blur(90px);pointer-events:none;z-index:0;animation:glowDrift 14s ease-in-out infinite}
-    .glow.c{width:480px;height:480px;background:#18d7ff;top:-16%;left:-10%;opacity:.08}
-    .glow.v{width:400px;height:400px;background:#7c3dff;right:-10%;bottom:8%;opacity:.10;animation-delay:-5s}
-    .glow.g{width:280px;height:280px;background:#39f58a;left:48%;top:22%;opacity:.05;animation-delay:-8s}
-
-    /* Gradient text */
-    .gradient-text{background:linear-gradient(120deg,#fff 0%,#18d7ff 30%,#7c3dff 58%,#39f58a 80%,#fff 100%);background-size:260% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 8s linear infinite}
-
-    /* Buttons */
-    .btn-primary{background:linear-gradient(135deg,#19c9ff 0%,#4d7dff 48%,#7c3dff 100%);background-size:190% auto;color:#fff;font-weight:800;border-radius:999px;transition:all .26s ease;cursor:pointer;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;box-shadow:0 14px 40px rgba(45,141,255,.22),inset 0 1px 0 rgba(255,255,255,.2);font-family:inherit;letter-spacing:-.01em}
-    .btn-primary:hover{background-position:right center;transform:translateY(-2px);box-shadow:0 20px 56px rgba(45,141,255,.32)}
-    .btn-outline{border:1px solid rgba(24,215,255,.2);color:rgba(255,255,255,.75);background:linear-gradient(135deg,rgba(24,215,255,.07),rgba(124,61,255,.04));border-radius:999px;transition:all .22s ease;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:700;font-family:inherit;letter-spacing:-.01em}
-    .btn-outline:hover{border-color:rgba(57,245,138,.34);color:#fff;background:linear-gradient(135deg,rgba(24,215,255,.11),rgba(57,245,138,.07));transform:translateY(-2px)}
-    .btn-ghost{background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:13px;font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:color .18s;text-decoration:none;font-weight:700}
-    .btn-ghost:hover{color:#fff}
-
-    /* Cards */
-    .card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.024));border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 70px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.06)}
-    .card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 10% 0%,rgba(24,215,255,.11),transparent 28%),radial-gradient(circle at 100% 22%,rgba(124,61,255,.10),transparent 32%);pointer-events:none}
-    .card>*{position:relative;z-index:1}
-    .card-hover{transition:transform .24s ease,border-color .24s ease,box-shadow .24s ease}
-    .card-hover:hover{transform:translateY(-3px);border-color:rgba(24,215,255,.2);box-shadow:0 28px 80px rgba(0,0,0,.38),0 0 0 1px rgba(24,215,255,.04) inset}
-
-    /* App shell */
-    .app-shell{display:grid;grid-template-columns:252px 1fr;min-height:100vh}
-
-    /* Sidebar base styles (cx-sb-* from sidebar.js override inner content) */
-    .sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;background:rgba(7,9,16,.97);border-right:1px solid rgba(255,255,255,.07);padding:20px 12px;display:flex;flex-direction:column;gap:2px;backdrop-filter:blur(24px)}
-
-    /* Main area */
-    .main-area{display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
-    .topbar{position:sticky;top:0;z-index:50;height:62px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 28px;background:rgba(5,7,11,.85);border-bottom:1px solid rgba(255,255,255,.07);backdrop-filter:blur(24px)}
-    .topbar-left{display:flex;align-items:center;gap:10px}
-    .topbar-title{font-size:15px;font-weight:800;color:#fff;letter-spacing:-.01em}
-    .topbar-right{display:flex;align-items:center;gap:14px}
-    .topbar-user{font-size:12px;font-weight:700;color:rgba(255,255,255,.5)}
-    .main-content{padding:30px 28px 80px;flex:1}
-    .online-dot{width:7px;height:7px;border-radius:50%;background:#39f58a;box-shadow:0 0 0 3px rgba(57,245,138,.14);animation:pulseDot 2.4s infinite;display:inline-block;flex-shrink:0}
-
-    /* Welcome hero */
-    .welcome-grid{display:grid;grid-template-columns:1fr 360px;gap:20px;align-items:start;margin-bottom:28px}
-    .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;border:1px solid rgba(57,245,138,.22);background:rgba(57,245,138,.08);color:#88ffc0;font-size:11px;font-weight:800;margin-bottom:18px;letter-spacing:.01em}
-    .hero-title{font-size:38px;font-weight:900;line-height:1.07;margin-bottom:12px;letter-spacing:-.028em}
-    .hero-sub{font-size:14.5px;color:var(--muted);line-height:1.7;font-weight:600;max-width:560px;margin-bottom:24px}
-    .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
-
-    /* Status panel */
-    .status-panel{padding:20px}
-    .status-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
-    .status-panel-label{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.65);font-size:12px;font-weight:800;letter-spacing:.01em}
-    .status-panel-val{font-size:36px;font-weight:950;color:#fff;line-height:1;letter-spacing:-.04em}
-    .status-rows{display:grid;gap:8px}
-    .status-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid rgba(255,255,255,.07);border-radius:9px;background:rgba(255,255,255,.03)}
-    .status-row-name{font-size:12px;color:rgba(255,255,255,.6);font-weight:700;display:flex;align-items:center;gap:7px}
-    .pill-green{font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;color:#91ffc7;border:1px solid rgba(57,245,138,.22);background:rgba(57,245,138,.08);padding:4px 8px;border-radius:999px;white-space:nowrap}
-    .pill-cyan{font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;color:#65efff;border:1px solid rgba(24,215,255,.22);background:rgba(24,215,255,.08);padding:4px 8px;border-radius:999px;white-space:nowrap}
-    .status-footer{display:flex;align-items:center;gap:7px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);font-size:11px;color:rgba(255,255,255,.4);font-weight:700}
-
-    /* Metrics row */
-    .metrics-row{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:24px}
-    .metric-card{padding:16px 14px;border-radius:12px}
-    .metric-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;color:#65efff;background:rgba(24,215,255,.08);border:1px solid rgba(24,215,255,.14)}
-    .metric-label{font-size:10px;font-weight:900;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
-    .metric-value{font-size:30px;font-weight:950;color:#fff;line-height:1;letter-spacing:-.04em}
-    .metric-sub{font-size:11px;color:rgba(255,255,255,.36);margin-top:5px;font-weight:600;line-height:1.4}
-
-    /* Section heading */
-    .section-head{margin-bottom:16px}
-    .section-head h2{font-size:17px;font-weight:900;letter-spacing:-.012em;color:#fff}
-    .section-head p{font-size:12.5px;color:rgba(255,255,255,.44);font-weight:600;margin-top:3px}
-
-    /* Module grid */
-    .module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
-    .module-card{padding:22px;display:flex;flex-direction:column;gap:10px;min-height:168px}
-    .module-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:2px}
-    .module-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .module-icon.cyan{color:#65efff;background:rgba(24,215,255,.10);border:1px solid rgba(24,215,255,.18)}
-    .module-icon.violet{color:#b489ff;background:rgba(124,61,255,.10);border:1px solid rgba(124,61,255,.18)}
-    .module-icon.green{color:#6dffa7;background:rgba(57,245,138,.10);border:1px solid rgba(57,245,138,.18)}
-    .module-icon.blue{color:#85aaff;background:rgba(76,125,255,.10);border:1px solid rgba(76,125,255,.18)}
-    .module-badge-new{font-size:8.5px;font-weight:900;background:rgba(57,245,138,.10);color:#6dffa7;border:1px solid rgba(57,245,138,.2);border-radius:999px;padding:3px 7px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;align-self:flex-start}
-    .module-badge-live{font-size:8.5px;font-weight:900;background:rgba(24,215,255,.08);color:#65efff;border:1px solid rgba(24,215,255,.18);border-radius:999px;padding:3px 7px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;align-self:flex-start}
-    .module-name{font-size:15px;font-weight:850;letter-spacing:-.012em;color:#fff}
-    .module-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.58;font-weight:600;flex:1}
-    .module-action{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:rgba(255,255,255,.55);text-decoration:none;transition:color .18s;align-self:flex-start;margin-top:auto}
-    .module-action:hover{color:#18d7ff}
-    .module-action svg{transition:transform .18s}
-    .module-action:hover svg{transform:translateX(3px)}
-
-    /* Bottom grid */
-    .bottom-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:16px}
-    .plan-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
-    .plan-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(135deg,#19c9ff,#7c3dff);box-shadow:0 16px 40px rgba(45,141,255,.22);flex-shrink:0}
-    .plan-title{font-size:20px;font-weight:850;line-height:1.1;margin-bottom:5px;font-family:'Playfair Display',serif;letter-spacing:-.02em}
-    .plan-desc{font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.6;font-weight:600}
-    .plan-line{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.07)}
-    .plan-line:last-child{border-bottom:0}
-    .plan-line span{font-size:11.5px;color:rgba(255,255,255,.42);font-weight:800;text-transform:uppercase;letter-spacing:.05em}
-    .plan-line strong{font-size:13.5px;color:#fff;font-weight:900;text-align:right}
-    .activity-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
-    .activity-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#04100a;background:linear-gradient(135deg,#18d7ff,#39f58a);box-shadow:0 16px 40px rgba(57,245,138,.18);flex-shrink:0}
-    .step-list{display:grid;gap:10px}
-    .step-item{display:flex;gap:12px;padding:13px;border-radius:11px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}
-    .step-dot{width:8px;height:8px;border-radius:999px;background:#39f58a;box-shadow:0 0 0 4px rgba(57,245,138,.1);flex-shrink:0;margin-top:5px}
-    .step-item strong{display:block;font-size:13px;font-weight:800;margin-bottom:3px;color:#fff}
-    .step-item span{font-size:12px;color:rgba(255,255,255,.45);font-weight:600;line-height:1.5}
-
-    /* Animations */
-    .anim{animation:fadeUp .5s ease both}
-    .d1{animation-delay:.04s}.d2{animation-delay:.10s}.d3{animation-delay:.17s}.d4{animation-delay:.24s}.d5{animation-delay:.32s}.d6{animation-delay:.40s}
-
-    /* Responsive */
-    @media(max-width:1200px){.metrics-row{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:1060px){.app-shell{grid-template-columns:1fr}.sidebar{display:none}.module-grid{grid-template-columns:repeat(2,1fr)}.welcome-grid{grid-template-columns:1fr}.bottom-grid{grid-template-columns:1fr}}
-    @media(max-width:640px){.module-grid{grid-template-columns:1fr}.metrics-row{grid-template-columns:repeat(2,1fr)}.main-content{padding:20px 16px 60px}}
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
 </head>
-<body>
-<div class="bg-grid"></div>
-<div class="glow c"></div><div class="glow v"></div><div class="glow g"></div>
+<body data-active="dashboard">
 
-<div class="app-shell">
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
 
-  <!-- SIDEBAR (populated by sidebar.js) -->
-  <nav class="sidebar" id="app-sidebar"></nav>
-
-  <!-- MAIN -->
-  <div class="main-area" style="position:relative;z-index:1">
-
-    <!-- Topbar -->
-    <header class="topbar">
-      <div class="topbar-left">
-        <span class="online-dot"></span>
-        <span class="topbar-title">Overview</span>
-      </div>
-    </header>
-
-    <main class="main-content">
-
-      <!-- 1. Welcome hero -->
-      <section class="welcome-grid anim d1">
-
-        <!-- Left -->
-        <div>
-          <div class="hero-eyebrow">
-            <span class="online-dot" style="width:6px;height:6px"></span>
-            AI workspace active
+        <div class="hx-page-head">
+          <div>
+            <h1>Welcome back, Alex.</h1>
+            <p class="sub">Here's what's open across your engagements right now.</p>
           </div>
-          <h1 class="font-serif hero-title">
-            Welcome back, <span class="gradient-text" id="user-name">there</span>.
-          </h1>
-          <p class="hero-sub">
-            Your CreateX AI workspace is ready. Build, launch, automate, and manage AI products from one command center.
-          </p>
-          <div class="hero-actions">
-            <a href="model-builder.html" class="btn-primary" style="padding:12px 22px;font-size:13px">
-              Create AI Model
-              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          <div class="hx-page-actions">
+            <a href="/services.html" class="hx-btn hx-btn-secondary">Browse services</a>
+            <a href="/buy-credits.html" class="hx-btn hx-btn-primary">
+              Buy credits
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
-            <a href="agents.html" class="btn-outline" style="padding:12px 22px;font-size:13px">Launch AI Agent</a>
           </div>
         </div>
 
-        <!-- Right: Platform status -->
-        <aside class="card status-panel anim d2">
-          <div class="status-panel-head">
-            <span class="status-panel-label">
-              <span class="online-dot" style="width:6px;height:6px"></span>
-              Platform Status
-            </span>
-            <span class="status-panel-val">100%</span>
+        <div class="hx-grid hx-grid-4">
+          <div class="hx-stat">
+            <p class="hx-stat-label">Credits</p>
+            <p class="hx-stat-value">2,400 <span class="suffix">cr</span></p>
+            <p class="hx-stat-meta">Refilled · 02 May 2026</p>
           </div>
-          <div class="status-rows">
-            <div class="status-row"><span class="status-row-name"><svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>Model Builder</span><span class="pill-green">Online</span></div>
-            <div class="status-row"><span class="status-row-name"><svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>Agent Builder</span><span class="pill-green">Live</span></div>
-            <div class="status-row"><span class="status-row-name"><svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>Website Builder</span><span class="pill-green">Live</span></div>
-            <div class="status-row"><span class="status-row-name"><svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>App Builder</span><span class="pill-green">Live</span></div>
-            <div class="status-row"><span class="status-row-name"><svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>Workflow Builder</span><span class="pill-cyan">Ready</span></div>
-            <div class="status-row"><span class="status-row-name"><svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>AI Template Hub</span><span class="pill-green">Live</span></div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Active projects</p>
+            <p class="hx-stat-value">3</p>
+            <p class="hx-stat-meta">2 in build · 1 in review</p>
           </div>
-          <div class="status-footer">
-            <span class="online-dot" style="width:5px;height:5px;animation-delay:.4s"></span>
-            All systems operational
+          <div class="hx-stat">
+            <p class="hx-stat-label">Subscription</p>
+            <p class="hx-stat-value" style="font-size:24px;">Growth</p>
+            <p class="hx-stat-meta">Renews 14 May · monthly</p>
           </div>
-        </aside>
-      </section>
-
-      <!-- 2. Metrics -->
-      <div class="metrics-row anim d2">
-
-        <div class="card metric-card card-hover">
-          <div class="metric-icon">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Open invoices</p>
+            <p class="hx-stat-value">0</p>
+            <p class="hx-stat-meta">All settled</p>
           </div>
-          <div class="metric-label">AI Models</div>
-          <div class="metric-value" id="stat-models">0</div>
-          <div class="metric-sub">models created</div>
         </div>
 
-        <div class="card metric-card card-hover">
-          <div class="metric-icon" style="color:#b489ff;background:rgba(124,61,255,.08);border-color:rgba(124,61,255,.16)">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
-          </div>
-          <div class="metric-label">Agents</div>
-          <div class="metric-value" id="stat-agents">0</div>
-          <div class="metric-sub">agents deployed</div>
+        <div class="hx-section-head">
+          <h2>Active engagements</h2>
+          <a href="/projects.html">View all →</a>
         </div>
+        <table class="hx-table">
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Practice</th>
+              <th>Owner</th>
+              <th>Stage</th>
+              <th class="right">Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Inbox triage agent · cycle 02</strong></td>
+              <td>AI Automation</td>
+              <td>L. Schmid</td>
+              <td><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot"></span>In build</span></td>
+              <td class="right" style="color:var(--hx-text-mid);">2h ago</td>
+            </tr>
+            <tr>
+              <td><strong>Sales CRM rebuild</strong></td>
+              <td>Digital Services</td>
+              <td>M. Keller</td>
+              <td><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot"></span>In build</span></td>
+              <td class="right" style="color:var(--hx-text-mid);">1d ago</td>
+            </tr>
+            <tr>
+              <td><strong>AI strategy roadmap</strong></td>
+              <td>Consulting</td>
+              <td>L. Schmid</td>
+              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>In review</span></td>
+              <td class="right" style="color:var(--hx-text-mid);">3d ago</td>
+            </tr>
+          </tbody>
+        </table>
 
-        <div class="card metric-card card-hover">
-          <div class="metric-icon" style="color:#6dffa7;background:rgba(57,245,138,.08);border-color:rgba(57,245,138,.16)">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
-          </div>
-          <div class="metric-label">Workflows</div>
-          <div class="metric-value" id="stat-workflows">0</div>
-          <div class="metric-sub">workflows run</div>
-        </div>
+        <div class="hx-grid hx-grid-2" style="margin-top:32px;">
 
-        <div class="card metric-card card-hover">
-          <div class="metric-icon" style="color:#85aaff;background:rgba(76,125,255,.08);border-color:rgba(76,125,255,.16)">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
-          </div>
-          <div class="metric-label">Websites</div>
-          <div class="metric-value" id="stat-websites">0</div>
-          <div class="metric-sub">sites published</div>
-        </div>
-
-        <div class="card metric-card card-hover">
-          <div class="metric-icon" style="color:#ffb86c;background:rgba(255,184,108,.08);border-color:rgba(255,184,108,.16)">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-          </div>
-          <div class="metric-label">Apps</div>
-          <div class="metric-value" id="stat-apps">0</div>
-          <div class="metric-sub">apps created</div>
-        </div>
-
-        <div class="card metric-card card-hover">
-          <div class="metric-icon" style="color:#ff79c6;background:rgba(255,121,198,.08);border-color:rgba(255,121,198,.16)">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-          </div>
-          <div class="metric-label">Messages</div>
-          <div class="metric-value" id="stat-messages">0</div>
-          <div class="metric-sub">messages processed</div>
-        </div>
-
-      </div>
-
-      <!-- 3. Module grid -->
-      <div class="section-head anim d3">
-        <h2>Start Building</h2>
-        <p>Select a module to build and deploy your next AI product</p>
-      </div>
-      <div class="module-grid anim d3">
-
-        <div class="card module-card card-hover">
-          <div class="module-card-head">
-            <div class="module-icon cyan">
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+          <div class="hx-card">
+            <div class="hx-card-head">
+              <div>
+                <p class="hx-card-eyebrow">Request work</p>
+                <h3>Start a new engagement.</h3>
+              </div>
             </div>
-            <span class="module-badge-new">New</span>
-          </div>
-          <div class="module-name">Model Builder</div>
-          <div class="module-desc">Train, fine-tune, and deploy custom AI models on your own data without writing a single line of code.</div>
-          <a href="model-builder.html" class="module-action">
-            Open module
-            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-          </a>
-        </div>
-
-        <div class="card module-card card-hover">
-          <div class="module-card-head">
-            <div class="module-icon violet">
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
-            </div>
-            <span class="module-badge-live">Live</span>
-          </div>
-          <div class="module-name">Agent Builder</div>
-          <div class="module-desc">Design multi-step AI agents that reason, plan, and execute tasks autonomously across tools and APIs.</div>
-          <a href="agents.html" class="module-action">
-            Open module
-            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-          </a>
-        </div>
-
-        <div class="card module-card card-hover">
-          <div class="module-card-head">
-            <div class="module-icon blue">
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
-            </div>
-            <span class="module-badge-live">Live</span>
-          </div>
-          <div class="module-name">Website Builder</div>
-          <div class="module-desc">Generate production-ready websites from a text description. Full HTML, CSS, and JavaScript — no code required.</div>
-          <a href="website-builder.html" class="module-action">
-            Open module
-            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-          </a>
-        </div>
-
-        <div class="card module-card card-hover">
-          <div class="module-card-head">
-            <div class="module-icon green">
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-            </div>
-            <span class="module-badge-live">Live</span>
-          </div>
-          <div class="module-name">App Builder</div>
-          <div class="module-desc">Build and export fully functional mobile and web applications with AI. Describe your app and ship in minutes.</div>
-          <a href="app-builder.html" class="module-action">
-            Open module
-            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-          </a>
-        </div>
-
-        <div class="card module-card card-hover">
-          <div class="module-card-head">
-            <div class="module-icon cyan">
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
-            </div>
-            <span class="module-badge-new">New</span>
-          </div>
-          <div class="module-name">Workflow Builder</div>
-          <div class="module-desc">Automate complex business processes by chaining AI actions, conditions, and integrations into visual workflows.</div>
-          <a href="workflow-builder.html" class="module-action">
-            Open module
-            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-          </a>
-        </div>
-
-        <div class="card module-card card-hover">
-          <div class="module-card-head">
-            <div class="module-icon violet">
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-            </div>
-            <span class="module-badge-live">Live</span>
-          </div>
-          <div class="module-name">AI Template Hub</div>
-          <div class="module-desc">Browse a curated library of ready-to-use AI templates for websites, apps, agents, workflows, content, code, and more. One click to deploy.</div>
-          <a href="templates.html" class="module-action">
-            Open module
-            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-          </a>
-        </div>
-
-      </div>
-
-      <!-- 4. Bottom grid -->
-      <div class="bottom-grid anim d5">
-
-        <!-- Plan card -->
-        <div class="card" style="padding:24px">
-          <div class="plan-head">
-            <div class="plan-icon">
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-            </div>
-            <div>
-              <div class="plan-title">Your Plan</div>
-              <div class="plan-desc">Current limits and usage. Upgrade to unlock higher capacity and priority access.</div>
+            <p class="desc">Pick a service category, describe the goal, and a senior engineer will scope it within one business day.</p>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:18px;">
+              <a href="/services.html" class="hx-service-tile" style="padding:14px;">
+                <div class="hx-service-tile-icon yellow" style="width:32px;height:32px;margin-bottom:10px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 11h.01M15 11h.01"/><path d="M12 7V3"/></svg>
+                </div>
+                <h3 style="font-size:13px; margin:0;">AI &amp; Automation</h3>
+                <p style="font-size:11.5px;margin:6px 0 0;color:var(--hx-text-dim);">7 services</p>
+              </a>
+              <a href="/services.html" class="hx-service-tile" style="padding:14px;">
+                <div class="hx-service-tile-icon red" style="width:32px;height:32px;margin-bottom:10px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </div>
+                <h3 style="font-size:13px; margin:0;">Digital Services</h3>
+                <p style="font-size:11.5px;margin:6px 0 0;color:var(--hx-text-dim);">7 services</p>
+              </a>
+              <a href="/services.html" class="hx-service-tile" style="padding:14px;">
+                <div class="hx-service-tile-icon emerald" style="width:32px;height:32px;margin-bottom:10px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 17V11M11 17V7M16 17v-9M21 17v-5"/></svg>
+                </div>
+                <h3 style="font-size:13px; margin:0;">Consulting</h3>
+                <p style="font-size:11.5px;margin:6px 0 0;color:var(--hx-text-dim);">5 services</p>
+              </a>
             </div>
           </div>
-          <div class="plan-line"><span>Plan</span><strong id="plan-name">Free</strong></div>
-          <div class="plan-line"><span>Credits remaining</span><strong id="plan-credits">—</strong></div>
-          <div class="plan-line"><span>Monthly credits</span><strong id="plan-monthly">—</strong></div>
-          <div class="plan-line"><span>Status</span><strong id="plan-status">Active</strong></div>
-          <a href="billing.html" class="btn-outline" style="margin-top:20px;padding:12px 22px;font-size:12.5px">
-            Manage plan
-            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-          </a>
+
+          <div class="hx-card">
+            <div class="hx-card-head">
+              <div>
+                <p class="hx-card-eyebrow">Recent activity</p>
+                <h3>Last 7 days.</h3>
+              </div>
+            </div>
+            <ul style="list-style:none;padding:0;margin:0;">
+              <li style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--hx-line);">
+                <span class="hx-badge hx-badge-emerald" style="margin-top:2px;flex-shrink:0;"><span class="hx-badge-dot"></span>Shipped</span>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13.5px;color:var(--hx-text);margin-bottom:2px;">Cycle 01 brief delivered for <strong>Inbox triage agent</strong></div>
+                  <div style="font-size:11.5px;color:var(--hx-text-dim);font-family:'JetBrains Mono',monospace;">02 MAY · 09:14</div>
+                </div>
+              </li>
+              <li style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--hx-line);">
+                <span class="hx-badge hx-badge-yellow" style="margin-top:2px;flex-shrink:0;"><span class="hx-badge-dot"></span>Update</span>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13.5px;color:var(--hx-text);margin-bottom:2px;"><strong>Sales CRM rebuild</strong> — staging deploy ready for review</div>
+                  <div style="font-size:11.5px;color:var(--hx-text-dim);font-family:'JetBrains Mono',monospace;">01 MAY · 16:42</div>
+                </div>
+              </li>
+              <li style="display:flex;gap:12px;padding:12px 0;">
+                <span class="hx-badge hx-badge-neutral" style="margin-top:2px;flex-shrink:0;"><span class="hx-badge-dot"></span>Billing</span>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:13.5px;color:var(--hx-text);margin-bottom:2px;">Invoice <strong>HVX-0142</strong> paid</div>
+                  <div style="font-size:11.5px;color:var(--hx-text-dim);font-family:'JetBrains Mono',monospace;">29 APR · 11:08</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
         </div>
 
-        <!-- Next steps -->
-        <div class="card" style="padding:24px">
-          <div class="activity-head">
-            <div class="activity-icon">
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            </div>
-            <div>
-              <div class="plan-title">Next Steps</div>
-              <div class="plan-desc">Recommended actions to get the most out of your workspace.</div>
-            </div>
-          </div>
-          <div class="step-list" id="next-steps">
-            <div class="step-item"><div class="step-dot"></div><div><strong>Build your first AI model</strong><span>Open Model Builder, describe what you want, and train it on your data.</span></div></div>
-            <div class="step-item"><div class="step-dot" style="background:#18d7ff;box-shadow:0 0 0 4px rgba(24,215,255,.1)"></div><div><strong>Deploy an AI agent</strong><span>Design a multi-step agent that handles tasks automatically, around the clock.</span></div></div>
-            <div class="step-item"><div class="step-dot" style="background:#7c3dff;box-shadow:0 0 0 4px rgba(124,61,255,.12)"></div><div><strong>Explore the Marketplace</strong><span>Browse pre-built AI templates and deploy them to your workspace in seconds.</span></div></div>
-          </div>
-        </div>
-
-      </div>
-
-    </main>
+      </main>
+    </div>
   </div>
-</div>
 
-<script>
-/* ── stat counters from localStorage ── */
-function loadStats() {
-  function lsLen(key) {
-    try { var v = localStorage.getItem(key); if (!v) return 0; var a = JSON.parse(v); return Array.isArray(a) ? a.length : (a && typeof a === 'object' ? Object.keys(a).length : 0); } catch (e) { return 0; }
-  }
-  function animCount(id, target) {
-    var el = document.getElementById(id); if (!el) return;
-    if (!target) { el.textContent = '0'; return; }
-    var cur = 0, step = Math.ceil(target / 28);
-    var t = setInterval(function () { cur = Math.min(cur + step, target); el.textContent = cur; if (cur >= target) clearInterval(t); }, 28);
-  }
-  animCount('stat-agents',   lsLen('createx_agents'));
-  animCount('stat-websites', lsLen('createx_websites'));
-  animCount('stat-apps',     lsLen('createx_apps'));
-  animCount('stat-messages', lsLen('createx_content'));
-  /* new keys — start at 0 until those modules populate them */
-  animCount('stat-models',    lsLen('createx_models'));
-  animCount('stat-workflows', lsLen('createx_workflows'));
-}
-
-/* ── auth + plan loader ── */
-function waitSB(cb, t) {
-  if (window.sb) return cb();
-  if ((t = t || 0) > 80) return cb();
-  setTimeout(function () { waitSB(cb, t + 1); }, 40);
-}
-
-waitSB(async function () {
-  if (!window.sb) return;
-  var res = await window.sb.auth.getSession().catch(function () { return {}; });
-  var session = res && res.data && res.data.session;
-  if (!session || !session.user) { window.location.href = 'index.html'; return; }
-
-  var u = session.user;
-  var meta = u.user_metadata || {};
-  var displayName = meta.full_name || meta.name || (u.email ? u.email.split('@')[0] : 'there');
-
-  var nameEl = document.getElementById('user-name');
-  if (nameEl) nameEl.textContent = displayName;
-  var topbarEl = document.getElementById('topbar-user');
-  if (topbarEl) topbarEl.textContent = displayName;
-
-  /* load plan from Supabase */
-  try {
-    var planRes = await window.sb.rpc('get_user_stats', { p_user_id: u.id });
-    if (planRes && planRes.data) {
-      var d = planRes.data;
-      var pn = document.getElementById('plan-name');
-      var pc = document.getElementById('plan-credits');
-      var pm = document.getElementById('plan-monthly');
-      var ps = document.getElementById('plan-status');
-      if (pn) pn.textContent = (d.plan || 'free').charAt(0).toUpperCase() + (d.plan || 'free').slice(1);
-      if (pc) pc.textContent = (d.balance !== undefined ? d.balance : '—');
-      if (pm) pm.textContent = (d.plan_credits || '—');
-      if (ps) ps.textContent = d.subscription_status || 'Active';
-    }
-  } catch (e) {}
-
-  window.sb.auth.onAuthStateChange(function (_e, s) {
-    if (!s || !s.user) window.location.href = 'index.html';
-  });
-});
-
-async function handleSignOut() {
-  try { if (window.sb) await window.sb.auth.signOut(); } catch (e) {}
-  window.location.href = 'index.html';
-}
-
-document.addEventListener('DOMContentLoaded', loadStats);
-</script>
-<script src="sidebar.js"></script>
+  <script src="/platform.js"></script>
 </body>
 </html>

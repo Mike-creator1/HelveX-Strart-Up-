@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buy credits — HelveX</title>
+  <meta name="description" content="Top up your HelveX credits. One-time packs, no commitment." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+</head>
+<body data-active="credits">
+
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
+
+        <div class="hx-page-head">
+          <div>
+            <h1>Buy credits.</h1>
+            <p class="sub">One-time top-up packs. Credits stack on top of your monthly subscription and never expire while your account is active.</p>
+          </div>
+          <div class="hx-page-actions">
+            <a href="/credits.html" class="hx-btn hx-btn-secondary">Back to balance</a>
+          </div>
+        </div>
+
+        <!-- Packs -->
+        <div class="hx-grid hx-grid-3">
+          <div class="hx-price-card">
+            <p class="hx-price-name">Starter pack</p>
+            <div class="hx-price-amount">CHF 600 <span class="per">· 500 cr</span></div>
+            <p class="hx-price-desc">Quick top-up for small fixes, integrations, or a one-week consulting sprint.</p>
+            <ul class="hx-price-features">
+              <li>500 credits, never expire</li>
+              <li>Stacks on subscription balance</li>
+              <li>Same-day activation</li>
+            </ul>
+            <button class="hx-btn hx-btn-secondary" style="width:100%;justify-content:center;">Choose pack</button>
+          </div>
+
+          <div class="hx-price-card featured">
+            <span class="tag">Most picked</span>
+            <p class="hx-price-name">Standard pack</p>
+            <div class="hx-price-amount">CHF 1,200 <span class="per">· 1,000 cr</span></div>
+            <p class="hx-price-desc">Funds a full medium-sized engagement — e.g. an internal copilot or a CRM rebuild cycle.</p>
+            <ul class="hx-price-features">
+              <li>1,000 credits, never expire</li>
+              <li>Priority queue on briefs</li>
+              <li>Stacks on subscription balance</li>
+              <li>Same-day activation</li>
+            </ul>
+            <button class="hx-btn hx-btn-primary" style="width:100%;justify-content:center;">Choose pack</button>
+          </div>
+
+          <div class="hx-price-card">
+            <p class="hx-price-name">Scale pack</p>
+            <div class="hx-price-amount">CHF 2,500 <span class="per">· 2,500 cr</span></div>
+            <p class="hx-price-desc">Best per-credit rate. Ideal if you've got two or three parallel projects in the next quarter.</p>
+            <ul class="hx-price-features">
+              <li>2,500 credits, never expire</li>
+              <li>~17 % discount vs hourly</li>
+              <li>Priority queue on briefs</li>
+              <li>Quarterly review with lead engineer</li>
+            </ul>
+            <button class="hx-btn hx-btn-secondary" style="width:100%;justify-content:center;">Choose pack</button>
+          </div>
+        </div>
+
+        <!-- Custom amount -->
+        <div class="hx-section-head">
+          <h2>Custom amount</h2>
+          <span class="meta">For finance-approved budgets</span>
+        </div>
+        <div class="hx-card">
+          <p class="desc" style="margin-bottom:20px;">Pre-approved budget to spend? Enter the amount and we'll generate a quote and an invoice your finance team can pay by bank transfer.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="hx-field">
+              <label>Credit amount</label>
+              <input type="number" placeholder="5000" min="500" step="100" />
+              <div class="help">Minimum 500 cr. Volume discounts kick in at 5,000 cr.</div>
+            </div>
+            <div class="hx-field">
+              <label>Estimated cost (CHF)</label>
+              <input type="text" value="CHF 5,000" disabled style="opacity:0.6;" />
+              <div class="help">Auto-calculated. Final invoice may apply volume discount.</div>
+            </div>
+          </div>
+          <div class="hx-field">
+            <label>PO / cost-centre reference (optional)</label>
+            <input type="text" placeholder="e.g. PO-2026-0142" />
+          </div>
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <button class="hx-btn hx-btn-primary">Request quote</button>
+            <button class="hx-btn hx-btn-ghost">Cancel</button>
+          </div>
+        </div>
+
+        <!-- Payment summary placeholder -->
+        <div class="hx-section-head">
+          <h2>Billing summary</h2>
+          <span class="meta">Preview</span>
+        </div>
+        <div class="hx-card">
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--hx-line);">
+            <span style="color:var(--hx-text-mid);">Selected pack</span>
+            <strong>—</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--hx-line);">
+            <span style="color:var(--hx-text-mid);">Subtotal</span>
+            <strong>CHF 0.00</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--hx-line);">
+            <span style="color:var(--hx-text-mid);">VAT (8.1 %)</span>
+            <strong>CHF 0.00</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:14px 0 4px;font-size:18px;">
+            <span style="color:var(--hx-text);">Total today</span>
+            <strong style="color:var(--hx-yellow);">CHF 0.00</strong>
+          </div>
+          <p style="font-size:12px;color:var(--hx-text-dim);margin:14px 0 0;">Pick a pack above to populate this summary. Card payments are handled by our PCI-compliant provider — HelveX never stores your card details.</p>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/platform.js"></script>
+</body>
+</html>

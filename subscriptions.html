@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subscriptions — HelveX</title>
+  <meta name="description" content="Manage your HelveX subscription, billing cycle, and renewal." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+</head>
+<body data-active="subscriptions">
+
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
+
+        <div class="hx-page-head">
+          <div>
+            <h1>Subscriptions.</h1>
+            <p class="sub">Your active HelveX plan, renewal, and upgrade options. Changing tier takes effect on the next billing cycle.</p>
+          </div>
+          <div class="hx-page-actions">
+            <a href="/pricing.html" class="hx-btn hx-btn-secondary">Compare plans</a>
+            <a href="/pricing.html" class="hx-btn hx-btn-primary">Change plan</a>
+          </div>
+        </div>
+
+        <!-- Active subscription card -->
+        <div class="hx-card" style="margin-bottom:24px;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+            <div>
+              <p class="hx-card-eyebrow">Active subscription</p>
+              <h3 style="font-size:28px;font-weight:600;letter-spacing:-0.02em;margin:0 0 6px;">Growth · monthly</h3>
+              <p class="desc">CHF 3,400 per month · 4,000 credits · 3 concurrent projects · priority queue</p>
+            </div>
+            <div style="text-align:right;">
+              <span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Active</span>
+              <p style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--hx-text-dim);margin:10px 0 0;letter-spacing:0.12em;">Started 14 Jan 2026</p>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:24px;padding-top:24px;border-top:1px solid var(--hx-line);">
+            <div>
+              <p class="hx-stat-label">Next charge</p>
+              <p style="font-size:18px;font-weight:600;margin:8px 0 0;">CHF 3,400</p>
+              <p class="hx-stat-meta">14 May 2026</p>
+            </div>
+            <div>
+              <p class="hx-stat-label">Billing cycle</p>
+              <p style="font-size:18px;font-weight:600;margin:8px 0 0;">Monthly</p>
+              <p class="hx-stat-meta">14th of each month</p>
+            </div>
+            <div>
+              <p class="hx-stat-label">Payment method</p>
+              <p style="font-size:18px;font-weight:600;margin:8px 0 0;">Visa ·· 4421</p>
+              <p class="hx-stat-meta">Expires 09 / 2027</p>
+            </div>
+            <div>
+              <p class="hx-stat-label">Status</p>
+              <p style="font-size:18px;font-weight:600;margin:8px 0 0;color:var(--hx-emerald);">Healthy</p>
+              <p class="hx-stat-meta">No outstanding invoices</p>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:24px;flex-wrap:wrap;">
+            <a href="/billing.html" class="hx-btn hx-btn-secondary">Manage payment method</a>
+            <a href="/pricing.html" class="hx-btn hx-btn-secondary">Switch to annual (save 16 %)</a>
+            <button class="hx-btn hx-btn-ghost">Pause subscription</button>
+            <button class="hx-btn hx-btn-ghost" style="color:#FCA5A5;">Cancel</button>
+          </div>
+        </div>
+
+        <!-- Upgrade prompt -->
+        <div class="hx-grid hx-grid-2">
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Upgrade</p>
+            <h3>Move to Scale</h3>
+            <p class="desc">8,000 credits / month, unlimited active projects, named lead engineer, monthly executive readout, SSO &amp; audit logs.</p>
+            <p style="margin:18px 0 0;font-size:24px;font-weight:600;color:var(--hx-text);">CHF 6,400 / month</p>
+            <p style="font-size:12px;color:var(--hx-text-dim);margin:6px 0 0;">+ CHF 3,000 vs Growth · pro-rated immediately</p>
+            <a href="/pricing.html" class="hx-card-link">See full comparison →</a>
+          </div>
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Downgrade</p>
+            <h3>Move to Starter</h3>
+            <p class="desc">2,000 credits / month, one active project, standard queue. Suits clients without an active backlog.</p>
+            <p style="margin:18px 0 0;font-size:24px;font-weight:600;color:var(--hx-text);">CHF 1,800 / month</p>
+            <p style="font-size:12px;color:var(--hx-text-dim);margin:6px 0 0;">Effective on next renewal · 14 May 2026</p>
+            <a href="/pricing.html" class="hx-card-link">Compare plans →</a>
+          </div>
+        </div>
+
+        <!-- History -->
+        <div class="hx-section-head">
+          <h2>Subscription history</h2>
+          <span class="meta">Last 12 months</span>
+        </div>
+        <table class="hx-table">
+          <thead>
+            <tr>
+              <th>Plan</th>
+              <th>Period</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th class="right">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Growth · monthly</strong></td><td>14 Apr — 13 May 2026</td><td>CHF 3,400</td><td><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot"></span>Current</span></td><td class="right"><a href="/invoices.html" style="color:var(--hx-yellow);font-weight:600;">View</a></td></tr>
+            <tr><td><strong>Growth · monthly</strong></td><td>14 Mar — 13 Apr 2026</td><td>CHF 3,400</td><td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Paid</span></td><td class="right"><a href="/invoices.html" style="color:var(--hx-yellow);font-weight:600;">View</a></td></tr>
+            <tr><td><strong>Growth · monthly</strong></td><td>14 Feb — 13 Mar 2026</td><td>CHF 3,400</td><td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Paid</span></td><td class="right"><a href="/invoices.html" style="color:var(--hx-yellow);font-weight:600;">View</a></td></tr>
+            <tr><td><strong>Starter · monthly</strong></td><td>14 Jan — 13 Feb 2026</td><td>CHF 1,800</td><td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Paid</span></td><td class="right"><a href="/invoices.html" style="color:var(--hx-yellow);font-weight:600;">View</a></td></tr>
+          </tbody>
+        </table>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/platform.js"></script>
+</body>
+</html>

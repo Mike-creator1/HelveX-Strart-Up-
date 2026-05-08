@@ -1,857 +1,206 @@
 <!DOCTYPE html>
-<html lang="en" translate="no" class="notranslate">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="google" content="notranslate" />
-  <title>CreateX — Get Started</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    if (window.tailwind) {
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              neon: '#00E5FF', 'neon-v': '#9D5CFF', 'neon-g': '#00FFA3',
-              dark: '#04040D', 'dark-card': '#08081A',
-            },
-            fontFamily: {
-              serif: ['Playfair Display', 'Georgia', 'serif'],
-              sans: ['Inter', '-apple-system', 'sans-serif'],
-            },
-          },
-        },
-      };
-    }
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script>
-    window.SUPABASE_URL  = 'https://ikbdhxobdjlwirydhxym.supabase.co';
-    window.SUPABASE_ANON = 'sb_publishable_chzlbY97SlQx_Apf4zqrTQ_mdwWhmyE';
-    (function initSB(tries){
-      tries = tries || 0;
-      var lib = window.supabase;
-      if (lib && typeof lib.createClient === 'function') {
-        try {
-          window.sb = lib.createClient(window.SUPABASE_URL, window.SUPABASE_ANON, {
-            auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-          });
-          document.dispatchEvent(new Event('sb:ready'));
-        } catch (err) { console.error('Supabase init failed:', err); }
-        return;
-      }
-      if (tries > 80) { console.warn('Supabase SDK failed to load'); return; }
-      setTimeout(function(){ initSB(tries + 1); }, 40);
-    })();
-  </script>
+  <title>HelveX — Sign in</title>
+  <meta name="description" content="Sign in to your HelveX client portal — manage services, projects, credits, and billing." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet" />
-  <script src="lang/en.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <style>
-    :root{--neon:#00E5FF;--neon-v:#9D5CFF;--neon-g:#00FFA3;}
-    *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{height:100%;}
-    body{font-family:'Inter',sans-serif;background:#04040D;color:#fff;-webkit-font-smoothing:antialiased;letter-spacing:-.003em;}
-    .font-serif{font-family:'Playfair Display',Georgia,serif;}
-
-    @keyframes shimmer{from{background-position:0% center;}to{background-position:-200% center;}}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
-    @keyframes pulseDot{0%,100%{opacity:1;}50%{opacity:.3;}}
-    @keyframes liveBlink{
-      0%,100%{box-shadow:0 0 0 0 rgba(0,255,163,.55),0 0 8px rgba(0,255,163,.7);}
-      50%{box-shadow:0 0 0 5px rgba(0,255,163,0),0 0 14px rgba(0,255,163,.95);}
+    :root {
+      --hx-bg: #07070C;
+      --hx-surface: #0E0E16;
+      --hx-surface-2: #15151F;
+      --hx-line: rgba(255,255,255,0.08);
+      --hx-line-strong: rgba(255,255,255,0.16);
+      --hx-text: #F5F5F7;
+      --hx-text-mid: rgba(245,245,247,0.62);
+      --hx-text-dim: rgba(245,245,247,0.38);
+      --hx-yellow: #FCD34D;
+      --hx-yellow-deep: #F59E0B;
+      --hx-red: #DC2626;
     }
-    @keyframes neonCtaPulse{
-      0%,100%{box-shadow:0 0 0 1px rgba(0,229,255,.1) inset,0 14px 34px rgba(0,180,216,.18),0 0 28px rgba(0,229,255,.14);}
-      50%{box-shadow:0 0 0 1px rgba(0,229,255,.2) inset,0 18px 42px rgba(0,180,216,.28),0 0 40px rgba(0,229,255,.22);}
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; min-height: 100vh; background: var(--hx-bg); color: var(--hx-text); font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    body {
+      background:
+        radial-gradient(ellipse 800px 600px at 20% 0%, rgba(252,211,77,0.06), transparent 60%),
+        radial-gradient(ellipse 700px 500px at 90% 100%, rgba(220,38,38,0.05), transparent 65%),
+        var(--hx-bg);
     }
-    @keyframes neonCtaSweep{0%,45%{left:-70%;opacity:0;}56%{opacity:1;}74%,100%{left:126%;opacity:0;}}
-
-    .gradient-text{
-      background:linear-gradient(120deg,#00E5FF 0%,#9D5CFF 35%,#00E5FF 65%,#9D5CFF 100%);
-      background-size:250% auto;
-      -webkit-background-clip:text;background-clip:text;
-      -webkit-text-fill-color:transparent;
-      animation:shimmer 5s linear infinite;
-    }
-
-    .btn-gold{
-      position:relative;
-      background:linear-gradient(135deg,#00B8D9 0%,#7C3AED 50%,#00B8D9 100%);
-      background-size:200% auto;color:#fff;font-weight:700;
-      border-radius:100px;transition:all .3s cubic-bezier(.4,0,.2,1);cursor:pointer;border:none;
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      box-shadow:0 6px 24px rgba(0,184,217,.28),inset 0 1px 0 rgba(255,255,255,.18);
-      letter-spacing:-.005em;
-    }
-    .btn-gold:hover{background-position:right center;transform:translateY(-2px);
-      box-shadow:0 16px 48px rgba(0,184,217,.48),0 0 60px rgba(124,58,237,.2),inset 0 1px 0 rgba(255,255,255,.25);}
-    .btn-gold:active{transform:translateY(0);}
-    .btn-gold svg{transition:transform .25s;}
-    .btn-gold:hover svg{transform:translateX(3px);}
-
-    .form-input{
-      width:100%;background:rgba(0,229,255,.03);
-      border:1px solid rgba(0,229,255,.1);color:#fff;
-      border-radius:12px;padding:14px 16px;font-size:14.5px;
-      font-family:'Inter',sans-serif;outline:none;
-      transition:border-color .22s ease,background .22s ease,box-shadow .22s ease;display:block;
-      letter-spacing:-.002em;
-    }
-    .form-input:hover{background:rgba(0,229,255,.05);border-color:rgba(0,229,255,.18);}
-    .form-input:focus{border-color:rgba(0,229,255,.5);background:rgba(0,229,255,.04);
-      box-shadow:0 0 0 4px rgba(0,229,255,.07),0 6px 18px rgba(0,229,255,.05);}
-    .form-input::placeholder{color:rgba(255,255,255,.22);}
-
-    .form-label{display:block;font-size:10.5px;font-weight:600;color:rgba(0,229,255,.45);
-      text-transform:uppercase;letter-spacing:.09em;margin-bottom:9px;}
-
-    .orb{display:none;}
-    .auth-wrap,.auth-wrap > div{background:transparent !important;}
-    .dot-grid{
-      position:fixed !important;
-      inset:0 !important;
-      width:100vw;
-      height:100vh;
-      pointer-events:none;
-      z-index:0;
-      overflow:hidden;
-      -webkit-mask-image:radial-gradient(ellipse 90% 85% at 50% 45%,#000 18%,rgba(0,0,0,.65) 62%,transparent 100%);
-      mask-image:radial-gradient(ellipse 90% 85% at 50% 45%,#000 18%,rgba(0,0,0,.65) 62%,transparent 100%);
-    }
-    .dot-grid .dot{
-      position:absolute;
-      width:2px;height:2px;border-radius:50%;
-      background:rgba(225,225,240,.9);
-      box-shadow:
-        0 0 2px rgba(220,220,235,.35),
-        0 0 5px rgba(210,210,230,.12);
-      transform:translate(-50%,-50%);
-      opacity:.55;
-    }
-
-    @keyframes cloudSweep{
-      0%   {transform:translate3d(-70%,-8%,0) scale(1);}
-      50%  {transform:translate3d(60%,6%,0) scale(1.1);}
-      100% {transform:translate3d(-70%,-8%,0) scale(1);}
-    }
-    @keyframes cloudSweepB{
-      0%   {transform:translate3d(65%,10%,0) scale(1.05);}
-      50%  {transform:translate3d(-60%,-12%,0) scale(.95);}
-      100% {transform:translate3d(65%,10%,0) scale(1.05);}
-    }
-    .dot-grid::before,
-    .dot-grid::after{
-      content:"";
-      position:absolute;
-      top:-30%;
-      left:-25%;
-      width:80%;
-      height:160%;
-      pointer-events:none;
-      will-change:transform;
-      border-radius:50%;
-      z-index:2;
-    }
-    .dot-grid::before{
-      background:radial-gradient(ellipse 50% 50% at center,
-        #000 0%,
-        rgba(0,0,0,.60) 40%,
-        rgba(0,0,0,.25) 65%,
-        transparent 88%);
-      filter:blur(30px);
-      animation:cloudSweep 13s ease-in-out infinite;
-    }
-    .dot-grid::after{
-      background:radial-gradient(ellipse 50% 55% at center,
-        #000 0%,
-        rgba(0,0,0,.55) 42%,
-        rgba(0,0,0,.20) 68%,
-        transparent 88%);
-      filter:blur(38px);
-      animation:cloudSweepB 17s ease-in-out infinite;
-    }
-
-    .auth-wrap{min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:5;}
-    @media(min-width:1024px){
-      .auth-wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(420px,.95fr);}
-    }
-
-    .tab-btn{flex:1;padding:13px 10px;border-radius:12px;font-size:13px;font-weight:700;
-      transition:all .3s cubic-bezier(.4,0,.2,1);cursor:pointer;border:1px solid transparent;background:none;
-      letter-spacing:-.002em;}
-    .tab-active{background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(157,92,255,.1));color:#00E5FF;
-      border-color:rgba(0,229,255,.28);
-      box-shadow:0 4px 14px rgba(0,229,255,.12),inset 0 1px 0 rgba(0,229,255,.15);}
-    .tab-inactive{color:rgba(255,255,255,.35);}
-    .tab-inactive:hover{color:rgba(255,255,255,.65);}
-
-    .stat-card{flex:1;padding:20px 18px;border-radius:16px;
-      background:linear-gradient(180deg,rgba(0,229,255,.03),rgba(0,229,255,.008));
-      border:1px solid rgba(0,229,255,.1);
-      transition:border-color .3s,transform .3s;
-      position:relative;overflow:hidden;}
-    .stat-card:hover{border-color:rgba(0,229,255,.25);transform:translateY(-2px);}
-    .stat-card::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(0,229,255,.35),transparent);}
-
-    .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:100px;
-      border:1px solid rgba(0,229,255,.1);background:rgba(0,229,255,.025);
-      font-size:10.5px;color:rgba(255,255,255,.55);font-weight:500;letter-spacing:.015em;
-      transition:border-color .25s,color .25s,background .25s;}
-    .chip:hover{border-color:rgba(0,229,255,.3);color:rgba(255,255,255,.9);background:rgba(0,229,255,.05);}
-
-    .form-card{
-      background:linear-gradient(180deg,rgba(0,229,255,.022),rgba(157,92,255,.008));
-      border:1px solid rgba(0,229,255,.12);
-      border-radius:26px;
-      padding:30px 30px 28px;
-      box-shadow:0 28px 80px rgba(0,0,0,.55),0 0 40px rgba(0,229,255,.04),inset 0 1px 0 rgba(0,229,255,.06);
-      position:relative;
-      overflow:hidden;
-    }
-    .form-card::before{content:"";position:absolute;left:24px;right:24px;top:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(0,229,255,.5),rgba(157,92,255,.4),transparent);}
-    @media(max-width:640px){.form-card{padding:26px 22px;border-radius:18px;}}
-
-    .live-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border-radius:100px;
-      background:rgba(0,255,163,.06);border:1px solid rgba(0,255,163,.22);
-      font-size:11px;font-weight:500;color:rgba(255,255,255,.82);letter-spacing:.01em;}
-    .live-dot{width:7px;height:7px;border-radius:50%;background:#00FFA3;box-shadow:0 0 8px rgba(0,255,163,.7);animation:liveBlink 2s infinite;}
-
-    .mini-divider{height:1px;width:100%;
-      background:linear-gradient(90deg,transparent 0%,rgba(0,229,255,.18) 50%,transparent 100%);}
-
-    .trust-badge{display:flex;align-items:center;gap:5px;font-size:10px;color:rgba(255,255,255,.28);font-weight:500;letter-spacing:.02em;}
-
-    .top-actions{position:fixed;top:16px;right:18px;z-index:200;display:flex;align-items:center;gap:16px;}
-    .top-pricing-btn{position:relative;height:48px;display:inline-flex;align-items:center;justify-content:center;padding:0 22px;border-radius:12px;
-      border:1px solid rgba(0,229,255,.4);background:linear-gradient(135deg,rgba(0,180,216,.3),rgba(124,58,237,.2) 48%,rgba(0,229,255,.15));
-      color:#00E5FF;text-decoration:none;font-size:12px;font-weight:900;letter-spacing:.11em;text-transform:uppercase;
-      box-shadow:0 0 0 1px rgba(0,229,255,.08) inset,0 14px 34px rgba(0,180,216,.16),0 0 24px rgba(0,229,255,.12);
-      transition:border-color .2s,color .2s,background .2s,transform .2s,box-shadow .2s;white-space:nowrap;overflow:hidden;
-      animation:neonCtaPulse 2.45s ease-in-out infinite;}
-    .top-pricing-btn::before{content:"";position:absolute;top:-40%;bottom:-40%;left:-70%;width:48%;transform:rotate(18deg);
-      background:linear-gradient(90deg,transparent,rgba(0,229,255,.35),transparent);animation:neonCtaSweep 3.2s ease-in-out infinite;pointer-events:none;}
-    .top-pricing-btn:hover{border-color:rgba(0,229,255,.65);color:#fff;background:linear-gradient(135deg,rgba(0,180,216,.42),rgba(124,58,237,.3) 48%,rgba(0,229,255,.2));transform:translateY(-2px);box-shadow:0 0 0 1px rgba(0,229,255,.15) inset,0 18px 42px rgba(0,180,216,.24),0 0 36px rgba(0,229,255,.2);}
-
-    .hero-kicker-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
-    .hero-metric-row{display:flex;gap:12px;margin-bottom:22px;max-width:620px;}
-    .conversion-strip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:24px;}
-    .conversion-pill{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:100px;
-      border:1px solid rgba(0,229,255,.18);background:rgba(0,229,255,.05);
-      color:rgba(255,255,255,.72);font-size:11px;font-weight:650;letter-spacing:.012em;}
-    .execution-rail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:620px;margin:-6px 0 18px;}
-    .execution-step{position:relative;border:1px solid rgba(0,229,255,.09);background:rgba(0,229,255,.02);
-      border-radius:14px;padding:13px 14px 12px;overflow:hidden;}
-    .execution-step::before{content:"";position:absolute;left:14px;right:14px;top:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(0,229,255,.4),transparent);}
-    .execution-step b{display:block;color:rgba(0,229,255,.7);font-size:10px;letter-spacing:.12em;margin-bottom:7px;}
-    .execution-step strong{display:block;color:rgba(255,255,255,.85);font-size:12.5px;font-weight:750;letter-spacing:-.006em;}
-    .execution-step span{display:block;color:rgba(255,255,255,.34);font-size:11px;line-height:1.35;margin-top:3px;}
-    .form-eyebrow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;}
-    .form-eyebrow span,.form-eyebrow a{font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:750;color:rgba(0,229,255,.65);}
-    .form-eyebrow a{text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:color .2s,border-color .2s;}
-    .form-eyebrow a:hover{color:#00E5FF;}
-    .form-eyebrow em{font-style:normal;font-size:11px;color:rgba(255,255,255,.32);font-weight:600;}
-    .auth-value-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px;}
-    .auth-value-bar span{border:1px solid rgba(0,229,255,.08);border-radius:10px;padding:9px 8px;
-      background:rgba(0,229,255,.02);text-align:center;font-size:10.5px;color:rgba(255,255,255,.42);font-weight:650;}
-    @media(min-width:1024px){
-      .auth-form-panel{align-items:flex-start !important;padding-top:clamp(150px,19vh,190px) !important;}
-    }
-    .card-seal{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;
-      border:1px solid rgba(0,229,255,.14);background:rgba(0,229,255,.04);border-radius:14px;padding:11px 12px;}
-    .card-seal strong{display:block;color:rgba(255,255,255,.75);font-size:12px;font-weight:750;}
-    .card-seal span{display:block;color:rgba(255,255,255,.34);font-size:10.5px;margin-top:2px;}
-    .card-seal mark{background:transparent;color:#00E5FF;font-size:10px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;white-space:nowrap;}
-    @media(max-width:520px){
-      .auth-value-bar,.execution-rail{grid-template-columns:1fr;}
-      .hero-metric-row{flex-direction:column;}
-      .top-actions{top:12px;right:12px;gap:10px;}
-      .top-pricing-btn{height:40px;padding:0 14px;font-size:10px;letter-spacing:.075em;border-radius:10px;}
-    }
-
-    .anim{animation:fadeUp .6s ease both;}
-    .d1{animation-delay:.05s;}.d2{animation-delay:.13s;}.d3{animation-delay:.22s;}.d4{animation-delay:.32s;}.d5{animation-delay:.42s;}
+    a { color: inherit; }
+    .auth-shell { min-height: 100vh; display: grid; grid-template-columns: 1fr; }
+    @media (min-width: 1024px) { .auth-shell { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+    .auth-side { display: none; padding: 56px; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--hx-line); position: relative; overflow: hidden; }
+    @media (min-width: 1024px) { .auth-side { display: flex; } }
+    .auth-side::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(252,211,77,0.04), transparent 60%); pointer-events: none; }
+    .auth-main { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 24px; min-height: 100vh; }
+    @media (min-width: 1024px) { .auth-main { padding: 56px; } }
+    .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand img { height: 56px; width: auto; }
+    .auth-card { width: 100%; max-width: 440px; }
+    .auth-card h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.12; margin: 0 0 12px; color: var(--hx-text); }
+    .auth-card h1 em { font-style: italic; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; background: linear-gradient(110deg, #FCD34D 0%, #FFFFFF 60%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .auth-card .muted { color: var(--hx-text-mid); font-size: 14.5px; line-height: 1.55; margin: 0 0 32px; }
+    .tabs { display: flex; gap: 4px; padding: 4px; background: var(--hx-surface); border: 1px solid var(--hx-line); border-radius: 9999px; margin-bottom: 24px; }
+    .tab { flex: 1; padding: 10px 16px; font-size: 13px; font-weight: 600; color: var(--hx-text-mid); background: transparent; border: none; border-radius: 9999px; cursor: pointer; transition: color 0.18s, background 0.18s; }
+    .tab.active { background: var(--hx-text); color: var(--hx-bg); }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 12px; font-weight: 600; color: var(--hx-text-mid); margin-bottom: 8px; letter-spacing: 0.01em; }
+    .field input { width: 100%; padding: 13px 16px; background: var(--hx-surface); border: 1px solid var(--hx-line); border-radius: 12px; color: var(--hx-text); font-size: 14.5px; font-family: inherit; transition: border 0.18s, background 0.18s; }
+    .field input:focus { outline: none; border-color: var(--hx-yellow); background: var(--hx-surface-2); }
+    .field input::placeholder { color: var(--hx-text-dim); }
+    .row { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 20px; font-size: 12.5px; color: var(--hx-text-mid); }
+    .row a { color: var(--hx-yellow); text-decoration: none; }
+    .row a:hover { color: #fff; }
+    .checkbox { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+    .checkbox input { width: 14px; height: 14px; accent-color: var(--hx-yellow); }
+    .btn-primary { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px 20px; background: var(--hx-text); color: var(--hx-bg); font-weight: 700; font-size: 14px; border: none; border-radius: 9999px; cursor: pointer; transition: background 0.18s; font-family: inherit; }
+    .btn-primary:hover { background: var(--hx-yellow); }
+    .btn-secondary { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 13px 20px; background: var(--hx-surface); color: var(--hx-text); font-weight: 600; font-size: 14px; border: 1px solid var(--hx-line); border-radius: 9999px; cursor: pointer; transition: border-color 0.18s, background 0.18s; margin-bottom: 12px; font-family: inherit; }
+    .btn-secondary:hover { border-color: var(--hx-line-strong); background: var(--hx-surface-2); }
+    .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; font-size: 11px; color: var(--hx-text-dim); text-transform: uppercase; letter-spacing: 0.18em; font-weight: 600; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--hx-line); }
+    .switch { text-align: center; font-size: 13px; color: var(--hx-text-mid); margin-top: 28px; }
+    .switch a { color: var(--hx-yellow); font-weight: 600; text-decoration: none; }
+    .form-section { display: none; }
+    .form-section.active { display: block; }
+    .side-quote { max-width: 460px; position: relative; z-index: 1; }
+    .side-quote .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.22em; color: var(--hx-yellow); font-weight: 700; margin-bottom: 28px; }
+    .side-quote .eyebrow::before { content: ''; width: 6px; height: 6px; background: var(--hx-yellow); border-radius: 50%; box-shadow: 0 0 8px var(--hx-yellow); }
+    .side-quote h2 { font-size: 40px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.05; color: var(--hx-text); margin: 0 0 24px; }
+    .side-quote h2 em { font-style: italic; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; color: var(--hx-text-mid); }
+    .side-quote p { font-size: 15.5px; color: var(--hx-text-mid); line-height: 1.7; margin: 0 0 32px; }
+    .side-list { list-style: none; padding: 0; margin: 0; }
+    .side-list li { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-top: 1px solid var(--hx-line); font-size: 14px; color: var(--hx-text); }
+    .side-list li:last-child { border-bottom: 1px solid var(--hx-line); }
+    .side-list .num { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: var(--hx-yellow); font-weight: 700; min-width: 28px; padding-top: 2px; }
+    .side-foot { display: flex; align-items: center; justify-content: space-between; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--hx-text-dim); margin-top: 48px; position: relative; z-index: 1; }
+    .side-foot a { color: var(--hx-text-mid); text-decoration: none; }
+    .side-foot a:hover { color: var(--hx-yellow); }
   </style>
 </head>
 <body>
 
-<!-- Top actions: pricing CTA + language selector -->
-<div class="top-actions">
-  <div id="lang-host"></div>
-  <a href="pricing.html" class="top-pricing-btn" data-i18n="auth_free">Start free →</a>
-</div>
+  <div class="auth-shell">
 
-
-<div class="auth-wrap">
-
-  <!-- ─────── LEFT PANEL ─────── -->
-  <div class="hidden lg:flex flex-col justify-between relative overflow-hidden"
-       style="padding:44px clamp(42px,5vw,76px) 38px;background:#04040D;min-height:100vh;">
-    <div class="absolute inset-0 dot-grid" style="opacity:.9;"></div>
-    <div class="orb" style="display:block;width:500px;height:500px;background:#00E5FF;top:-15%;left:-20%;opacity:.07;filter:blur(90px);border-radius:50%;position:absolute;pointer-events:none;"></div>
-    <div class="orb" style="display:block;width:350px;height:350px;background:#9D5CFF;bottom:5%;right:-10%;opacity:.08;filter:blur(90px);border-radius:50%;position:absolute;pointer-events:none;"></div>
-
-    <!-- Top row: Logo -->
-    <div class="relative flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <svg style="filter:drop-shadow(0 0 10px rgba(0,229,255,.55));" width="36" height="36" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="34" height="34" rx="9" fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.28)" stroke-width="1"/>
-          <path d="M10 10.5L24 23.5M24 10.5L10 23.5" stroke="url(#xgl)" stroke-width="2.8" stroke-linecap="round"/>
-          <defs><linearGradient id="xgl" x1="10" y1="10" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00E5FF"/><stop offset="100%" stop-color="#9D5CFF"/></linearGradient></defs>
-        </svg>
-        <div>
-          <div style="font-size:15px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.01em;">CreateX</div>
-          <div style="font-size:10px;font-weight:500;color:#00E5FF;letter-spacing:.22em;margin-top:3px;">AI Platform</div>
-        </div>
+    <aside class="auth-side">
+      <a href="/" class="brand"><img src="/helvex-logo.png" alt="HelveX" /></a>
+      <div class="side-quote">
+        <span class="eyebrow">Client portal</span>
+        <h2>One workspace.<br /><em>One senior engineer.</em></h2>
+        <p>HelveX clients run their AI services, manage credits and billing, track active engagements, and request new work — all from a single portal.</p>
+        <ul class="side-list">
+          <li><span class="num">01</span><span>Browse and request services across AI automation, digital, and consulting.</span></li>
+          <li><span class="num">02</span><span>Manage subscriptions, credits, and invoices in one place.</span></li>
+          <li><span class="num">03</span><span>Track every active project with the engineer who owns it.</span></li>
+        </ul>
       </div>
-    </div>
-
-    <!-- Marketing -->
-    <div class="relative" style="max-width:660px;margin-top:18px;">
-      <div class="hero-kicker-row anim d1">
-        <div style="display:inline-flex;align-items:center;gap:8px;padding:8px 15px;border-radius:100px;
-             border:1px solid rgba(0,229,255,.24);background:linear-gradient(135deg,rgba(0,229,255,.1),rgba(157,92,255,.05));
-             color:#00E5FF;font-size:11px;font-weight:650;letter-spacing:.035em;text-transform:uppercase;">
-          <span style="width:7px;height:7px;border-radius:50%;background:#00E5FF;box-shadow:0 0 8px rgba(0,229,255,.8);animation:pulseDot 2s infinite;flex-shrink:0;"></span>
-          <span data-i18n="auth_tag">CreateX · Switzerland · Fully Automated</span>
-        </div>
-        <div class="live-pill">
-          <span class="live-dot"></span>
-          <span data-i18n="auth_status">All systems online</span>
-        </div>
+      <div class="side-foot">
+        <span>© HelveX AG 2026</span>
+        <a href="/legal">Trust center</a>
       </div>
+    </aside>
 
-      <h2 class="font-serif anim d2" style="font-size:clamp(56px,5.35vw,78px);font-weight:900;line-height:.96;margin-bottom:22px;letter-spacing:-.034em;">
-        <span data-i18n="auth_hero_line1">AI applies to Swiss jobs</span><br/>
-        <span data-i18n="auth_hero_line2">while you sleep</span><br/>
-        <span class="gradient-text" data-i18n="auth_hero_line3">and gets you interviews.</span>
-      </h2>
-      <p class="anim d2" data-i18n="auth_hero_p" style="font-size:17px;color:rgba(255,255,255,.56);line-height:1.65;max-width:590px;margin-bottom:22px;">
-        Stop burning nights on job forms. Build your profile once and let CreateX find roles, tailor applications, and send them for you — 24/7.
-      </p>
+    <main class="auth-main">
+      <div class="auth-card">
 
-      <div class="conversion-strip anim d3">
-        <span class="conversion-pill">
-          <svg width="12" height="12" fill="none" stroke="#00FFA3" viewBox="0 0 24 24" stroke-width="2.2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-          </svg>
-          <span data-i18n="auth_marketing">Built for ambitious professionals. Engineered for measurable results.</span>
-        </span>
-      </div>
+        <a href="/" class="brand" style="margin-bottom:32px;">
+          <img src="/helvex-logo.png" alt="HelveX" style="height:48px;" />
+        </a>
 
-      <div class="execution-rail anim d3">
-        <div class="execution-step">
-          <b>01</b>
-          <strong data-i18n="auth_flow_1_h">Profile calibrated</strong>
-          <span data-i18n="auth_flow_1_p">CV, skills, salary, cities</span>
+        <div class="tabs">
+          <button type="button" class="tab active" data-tab="signin">Sign in</button>
+          <button type="button" class="tab" data-tab="signup">Create account</button>
         </div>
-        <div class="execution-step">
-          <b>02</b>
-          <strong data-i18n="auth_flow_2_h">AI targets roles</strong>
-          <span data-i18n="auth_flow_2_p">Swiss matches only</span>
-        </div>
-        <div class="execution-step">
-          <b>03</b>
-          <strong data-i18n="auth_flow_3_h">Applications sent</strong>
-          <span data-i18n="auth_flow_3_p">Tailored, tracked, 24/7</span>
-        </div>
-      </div>
 
-      <!-- Stats -->
-      <div class="hero-metric-row anim d3">
-        <div class="stat-card">
-          <div style="font-size:34px;font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1;">500<span style="color:#00E5FF;text-shadow:0 0 12px rgba(0,229,255,.6);">+</span></div>
-          <div data-i18n="auth_stat_apps" style="font-size:10px;color:rgba(255,255,255,.38);margin-top:8px;text-transform:uppercase;letter-spacing:.09em;font-weight:500;">Daily Apps</div>
-        </div>
-        <div class="stat-card">
-          <div style="font-size:34px;font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1;">10<span style="color:#9D5CFF;text-shadow:0 0 12px rgba(157,92,255,.6);">×</span></div>
-          <div data-i18n="auth_stat_faster" style="font-size:10px;color:rgba(255,255,255,.38);margin-top:8px;text-transform:uppercase;letter-spacing:.09em;font-weight:500;">Faster</div>
-        </div>
-        <div class="stat-card">
-          <div style="font-size:34px;font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1;">40<span style="color:#00FFA3;text-shadow:0 0 12px rgba(0,255,163,.6);">+</span></div>
-          <div data-i18n="auth_stat_countries" style="font-size:10px;color:rgba(255,255,255,.38);margin-top:8px;text-transform:uppercase;letter-spacing:.09em;font-weight:500;">Countries</div>
-        </div>
-      </div>
+        <form class="form-section active" id="form-signin" onsubmit="event.preventDefault(); window.location.href='/dashboard';">
+          <h1>Welcome back to <em>HelveX.</em></h1>
+          <p class="muted">Sign in to your client portal to manage services, credits, and billing.</p>
 
-      <!-- Testimonial carousel -->
-      <div id="tm-carousel" class="anim d4"
-           style="padding:22px 24px 20px;border-radius:18px;background:linear-gradient(180deg,rgba(0,229,255,.028),rgba(157,92,255,.01));border:1px solid rgba(0,229,255,.1);position:relative;overflow:hidden;max-width:620px;box-shadow:0 0 30px rgba(0,229,255,.04);">
-        <div id="tm-viewport" style="overflow:hidden;">
-          <div id="tm-track"
-               style="display:flex;transition:transform .9s cubic-bezier(.65,0,.35,1);will-change:transform;">
+          <div class="field">
+            <label for="signin-email">Work email</label>
+            <input type="email" id="signin-email" placeholder="you@company.com" required autocomplete="email" />
           </div>
-        </div>
-        <!-- Dots indicator -->
-        <div id="tm-dots" style="display:flex;gap:5px;margin-top:20px;position:relative;"></div>
-      </div>
-
-      <!-- Trust chips -->
-      <div class="anim d5" style="margin-top:18px;display:flex;flex-wrap:wrap;gap:8px;position:relative;max-width:620px;">
-        <span class="chip">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" stroke-width="2.2" style="flex-shrink:0;opacity:.8;">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/>
-          </svg>
-          <span data-i18n="auth_badge_gdpr">GDPR Compliant</span>
-        </span>
-        <span class="chip">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" stroke-width="2.2" style="flex-shrink:0;opacity:.8;">
-            <rect x="4" y="10" width="16" height="11" rx="2" stroke-linejoin="round"/>
-            <path d="M8 10V7a4 4 0 018 0v3" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span data-i18n="auth_badge_enc">256-bit Encryption</span>
-        </span>
-        <span class="chip">
-          <span style="width:12px;height:9px;border-radius:1.5px;background:linear-gradient(135deg,#00E5FF,#9D5CFF);position:relative;flex-shrink:0;display:inline-block;box-shadow:0 0 6px rgba(0,229,255,.5);">
-            <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px;font-weight:800;line-height:1;">+</span>
-          </span>
-          <span data-i18n="auth_badge_swiss">Swiss Hosted</span>
-        </span>
-        <span class="chip">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" stroke-width="2.2" style="flex-shrink:0;opacity:.8;">
-            <circle cx="12" cy="12" r="9"/>
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8.5 12.5l2.5 2.5 4.5-5"/>
-          </svg>
-          <span data-i18n="auth_badge_iso">ISO 27001</span>
-        </span>
-      </div>
-
-    </div>
-
-    <!-- Footer -->
-    <div style="font-size:11px;color:rgba(255,255,255,.25);position:relative;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-weight:500;letter-spacing:.01em;">
-      <span style="display:inline-flex;align-items:center;gap:8px;">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#00FFA3" stroke-width="2.2" style="filter:drop-shadow(0 0 6px rgba(0,255,163,.5));flex-shrink:0;">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-        </svg>
-        <span>Trusted by professionals across 40+ countries</span>
-      </span>
-    </div>
-  </div>
-
-  <!-- ─────── RIGHT PANEL: FORM ─────── -->
-  <div class="auth-form-panel" style="display:flex;align-items:center;justify-content:center;
-       padding:48px 24px;background:#04040D;min-height:100vh;">
-    <div style="width:100%;max-width:470px;">
-
-      <!-- Mobile logo -->
-      <div class="flex lg:hidden items-center justify-center gap-3" style="margin-bottom:32px;">
-        <svg style="filter:drop-shadow(0 0 10px rgba(0,229,255,.55));" width="28" height="28" viewBox="0 0 34 34" fill="none">
-          <rect width="34" height="34" rx="9" fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.28)" stroke-width="1"/>
-          <path d="M10 10.5L24 23.5M24 10.5L10 23.5" stroke="url(#xgm2)" stroke-width="2.8" stroke-linecap="round"/>
-          <defs><linearGradient id="xgm2" x1="10" y1="10" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00E5FF"/><stop offset="100%" stop-color="#9D5CFF"/></linearGradient></defs>
-        </svg>
-        <div>
-          <div style="font-size:14px;font-weight:600;color:#fff;line-height:1;letter-spacing:-.01em;">CreateX</div>
-          <div style="font-size:10px;font-weight:500;color:#00E5FF;letter-spacing:.22em;margin-top:2px;">AI Platform</div>
-        </div>
-      </div>
-
-      <!-- Premium form card -->
-      <div class="form-card anim d1">
-
-        <!-- Tabs -->
-        <div style="display:flex;background:rgba(255,255,255,.04);border-radius:12px;
-             padding:4px;border:1px solid rgba(255,255,255,.07);margin-bottom:24px;">
-          <button id="tab-su" class="tab-btn tab-active" onclick="switchTab('su')">Create Account</button>
-          <button id="tab-si" class="tab-btn tab-inactive" onclick="switchTab('si')">Sign In</button>
-        </div>
-
-        <!-- Heading -->
-        <div class="anim d2" style="margin-bottom:22px;">
-          <h1 id="auth-title" class="font-serif" style="font-size:34px;font-weight:900;line-height:1.05;margin-bottom:10px;letter-spacing:-.028em;">
-            Create your account
-          </h1>
-          <p id="auth-sub" style="font-size:14px;color:rgba(255,255,255,.45);line-height:1.6;letter-spacing:-.002em;">
-            Start your automated job search in Switzerland today.
-          </p>
-        </div>
-
-        <div class="card-seal anim d2">
-          <div>
-            <strong data-i18n="auth_panel_h">Launch the AI job engine</strong>
-            <span data-i18n="auth_panel_p">Email verification first. Password setup after signup.</span>
+          <div class="field">
+            <label for="signin-password">Password</label>
+            <input type="password" id="signin-password" placeholder="••••••••" required autocomplete="current-password" />
           </div>
-          <mark data-i18n="auth_panel_badge">Private beta</mark>
-        </div>
+          <div class="row">
+            <label class="checkbox"><input type="checkbox" /> Keep me signed in</label>
+            <a href="#">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn-primary">
+            Sign in
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
 
-        <!-- SIGN UP FORM -->
-        <form id="form-su" class="anim d3" onsubmit="handleAuth(event,'su')">
-          <div style="margin-bottom:14px;">
-            <label class="form-label" data-i18n="auth_label_name">Full Name</label>
-            <input type="text" class="form-input" data-i18n-placeholder="auth_ph_name" placeholder="e.g. Marco Rossi" autocomplete="name" required />
-          </div>
-          <div style="margin-bottom:14px;">
-            <label class="form-label" data-i18n="auth_label_email">Email Address</label>
-            <input id="su-email" type="email" class="form-input" data-i18n-placeholder="auth_ph_email" placeholder="you@example.com" autocomplete="email" required />
-          </div>
-          <div style="margin-bottom:24px;">
-            <label class="form-label" data-i18n="auth_label_pass">Password</label>
-            <div style="position:relative;">
-              <input id="su-pass" type="password" class="form-input" data-i18n-placeholder="auth_ph_pass_new" placeholder="Min. 8 characters" style="padding-right:46px;" autocomplete="new-password" required />
-              <button type="button" onclick="togglePwd('su-pass',this)" aria-label="Show password"
-                      style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
-                             background:none;border:none;color:rgba(255,255,255,.32);cursor:pointer;line-height:0;padding:6px;border-radius:6px;transition:color .2s;">
-                <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <button type="submit" class="btn-gold" style="width:100%;padding:17px;font-size:15.5px;">
-            <span data-i18n="auth_btn_create">Create Account</span>
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
+          <div class="divider">or continue with</div>
+          <button type="button" class="btn-secondary" onclick="window.location.href='/dashboard';">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#FBBC05" d="M5.27 14.32A6.7 6.7 0 0 1 5 12c0-.81.13-1.6.36-2.34l-3.5-2.7A11.94 11.94 0 0 0 0 12c0 1.85.42 3.6 1.16 5.16l4.11-2.84z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.36.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.7 0 3.99 2.47 2.18 6.07l3.5 2.7C6.55 6.5 9.04 4.75 12 4.75z"/><path fill="#34A853" d="M12 19.25c-2.96 0-5.45-1.75-6.32-4.07l-3.5 2.7C3.99 21.53 7.7 24 12 24c3.24 0 5.95-1.19 7.92-3.13l-3.74-2.94c-1.05.66-2.39 1.07-4.18 1.07z"/><path fill="#4285F4" d="M23.49 12c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.28 1.4-1.13 2.6-2.39 3.42l3.74 2.94c2.18-2.04 3.67-5.05 3.67-8.6z"/></svg>
+            Continue with Google
           </button>
         </form>
 
-        <!-- SIGN IN FORM -->
-        <form id="form-si" class="anim d3" style="display:none;" onsubmit="handleAuth(event,'si')">
-          <div style="margin-bottom:14px;">
-            <label class="form-label" data-i18n="auth_label_email">Email Address</label>
-            <input id="si-email" type="email" class="form-input" data-i18n-placeholder="auth_ph_email" placeholder="you@example.com" autocomplete="email" required />
+        <form class="form-section" id="form-signup" onsubmit="event.preventDefault(); window.location.href='/dashboard';">
+          <h1>Create your <em>HelveX account.</em></h1>
+          <p class="muted">A real client portal — services, credits, billing, projects in one place.</p>
+
+          <div class="field">
+            <label for="signup-name">Full name</label>
+            <input type="text" id="signup-name" placeholder="Alex Müller" required autocomplete="name" />
           </div>
-          <div style="margin-bottom:10px;">
-            <label class="form-label" data-i18n="auth_label_pass">Password</label>
-            <div style="position:relative;">
-              <input id="si-pass" type="password" class="form-input" data-i18n-placeholder="auth_ph_pass" placeholder="Your password" style="padding-right:46px;" autocomplete="current-password" />
-              <button type="button" onclick="togglePwd('si-pass',this)" aria-label="Show password"
-                      style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
-                             background:none;border:none;color:rgba(255,255,255,.32);cursor:pointer;line-height:0;padding:6px;border-radius:6px;transition:color .2s;">
-                <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                </svg>
-              </button>
-            </div>
+          <div class="field">
+            <label for="signup-company">Company</label>
+            <input type="text" id="signup-company" placeholder="Your company" autocomplete="organization" />
           </div>
-          <div style="text-align:right;margin-bottom:22px;">
-            <a href="#" onclick="handleForgot(event)" style="font-size:12px;color:rgba(0,229,255,.55);text-decoration:none;font-weight:500;transition:color .2s;" onmouseover="this.style.color='#00E5FF'" onmouseout="this.style.color='rgba(0,229,255,.55)'" data-i18n="auth_forgot">Forgot password?</a>
+          <div class="field">
+            <label for="signup-email">Work email</label>
+            <input type="email" id="signup-email" placeholder="you@company.com" required autocomplete="email" />
           </div>
-          <button type="submit" class="btn-gold" style="width:100%;padding:17px;font-size:15.5px;">
-            <span data-i18n="auth_btn_signin">Sign In</span>
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
+          <div class="field">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" placeholder="At least 10 characters" required minlength="10" autocomplete="new-password" />
+          </div>
+          <div class="row">
+            <label class="checkbox" style="font-size:12px;line-height:1.5;align-items:flex-start;">
+              <input type="checkbox" required style="margin-top:2px;" />
+              <span>I agree to the <a href="/terms">Terms</a> and <a href="/privacy">Privacy policy</a>.</span>
+            </label>
+          </div>
+          <button type="submit" class="btn-primary">
+            Create account
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <div class="divider">or continue with</div>
+          <button type="button" class="btn-secondary" onclick="window.location.href='/dashboard';">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#FBBC05" d="M5.27 14.32A6.7 6.7 0 0 1 5 12c0-.81.13-1.6.36-2.34l-3.5-2.7A11.94 11.94 0 0 0 0 12c0 1.85.42 3.6 1.16 5.16l4.11-2.84z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.36.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.7 0 3.99 2.47 2.18 6.07l3.5 2.7C6.55 6.5 9.04 4.75 12 4.75z"/><path fill="#34A853" d="M12 19.25c-2.96 0-5.45-1.75-6.32-4.07l-3.5 2.7C3.99 21.53 7.7 24 12 24c3.24 0 5.95-1.19 7.92-3.13l-3.74-2.94c-1.05.66-2.39 1.07-4.18 1.07z"/><path fill="#4285F4" d="M23.49 12c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.28 1.4-1.13 2.6-2.39 3.42l3.74 2.94c2.18-2.04 3.67-5.05 3.67-8.6z"/></svg>
+            Continue with Google
           </button>
         </form>
 
+        <p class="switch">
+          Need help? <a href="/support">Contact support</a>
+        </p>
       </div>
+    </main>
 
-      <!-- Fine print (outside card) -->
-      <p class="anim d4" style="font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-top:18px;line-height:1.65;">
-        <span data-i18n="auth_legal">By continuing you agree to our</span>
-        <a href="#" style="color:rgba(0,229,255,.55);text-decoration:none;"><span data-i18n="auth_terms">Terms</span></a>
-        <span data-i18n="auth_and">and</span>
-        <a href="#" style="color:rgba(0,229,255,.55);text-decoration:none;"><span data-i18n="auth_privacy">Privacy Policy</span></a>
-      </p>
-
-    </div>
   </div>
-</div>
 
-<script>
-  let currentTab = 'su';
-
-  function switchTab(t) {
-    currentTab = t;
-    const isSU = t === 'su';
-    document.getElementById('tab-su').className = 'tab-btn ' + (isSU ? 'tab-active' : 'tab-inactive');
-    document.getElementById('tab-si').className = 'tab-btn ' + (isSU ? 'tab-inactive' : 'tab-active');
-    document.getElementById('form-su').style.display = isSU ? 'block' : 'none';
-    document.getElementById('form-si').style.display = isSU ? 'none' : 'block';
-    const T = (typeof ssaiT === 'function') ? ssaiT : (k => ({ auth_title_create:'Create your account', auth_title_signin:'Welcome back', auth_sub_create:'Start your automated job search in Switzerland today.', auth_sub_signin:'Sign in to manage your AI job search.', auth_tab_create:'Create Account', auth_tab_signin:'Sign In' })[k] || k);
-    document.getElementById('auth-title').textContent = T(isSU ? 'auth_title_create' : 'auth_title_signin');
-    document.getElementById('auth-sub').textContent   = T(isSU ? 'auth_sub_create'   : 'auth_sub_signin');
-    document.getElementById('tab-su').textContent     = T('auth_tab_create');
-    document.getElementById('tab-si').textContent     = T('auth_tab_signin');
-  }
-
-  async function handleAuth(e, type) {
-    e.preventDefault();
-    const email = document.getElementById(type + '-email').value.trim();
-    const nameEl = type === 'su' ? e.target.querySelector('input[autocomplete="name"]') : null;
-    const fullName = nameEl ? nameEl.value.trim() : '';
-    const btn = e.target.querySelector('button[type="submit"]');
-    const authError = (error, fallback) => {
-      if (!error) return fallback || 'Authentication error';
-      const parts = [error.message || error.error_description || error.error || fallback || 'Authentication error'];
-      if (error.status) parts.push('Status: ' + error.status);
-      if (error.code) parts.push('Code: ' + error.code);
-      return parts.filter(Boolean).join('\n');
-    };
-    const reportAuthError = (method, error, fallback) => {
-      const message = authError(error, fallback);
-      console.error('Supabase auth error:', { method, message: error && error.message, status: error && error.status, code: error && error.code, error });
-    };
-    const isSupabaseMailerFailure = (error) => {
-      const message = String((error && error.message) || '').toLowerCase();
-      const status = String((error && error.status) || '');
-      const code = String((error && error.code) || '');
-      return status === '500' && code === 'unexpected_failure' && (message.includes('magic link email') || message.includes('confirmation email') || message.includes('email'));
-    };
-    const logAuthError = (method, error) => {
-      console.error('Supabase auth error:', { method, message: error && error.message, status: error && error.status, code: error && error.code, error });
-    };
-    if (btn) { btn.disabled = true; btn.style.opacity = '.7'; btn.style.cursor = 'wait'; }
-    try {
-      const go = () => { window.location.href = 'verify.html?email=' + encodeURIComponent(email) + '&mode=' + type; };
-      if (type === 'si') {
-        if (!window.sb) { console.error('Supabase client unavailable.'); return; }
-        const { error } = await window.sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
-        if (error) {
-          if (isSupabaseMailerFailure(error)) { logAuthError('signInWithOtp:signin', error); go(); } else { reportAuthError('signInWithOtp:signin', error); }
-          return;
-        }
-        go();
-      } else {
-        if (!window.sb) { console.error('Supabase client unavailable.'); return; }
-        const { error } = await window.sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true, data: { full_name: fullName, name: fullName } } });
-        if (error) {
-          if (isSupabaseMailerFailure(error)) { logAuthError('signInWithOtp:signup', error); go(); } else { reportAuthError('signInWithOtp:signup', error); }
-          return;
-        }
-        go();
-      }
-    } catch (err) {
-      reportAuthError('handleAuth', err);
-    } finally {
-      if (btn) { btn.disabled = false; btn.style.opacity = ''; btn.style.cursor = ''; }
-    }
-  }
-
-  function togglePwd(id, btn) {
-    const inp = document.getElementById(id);
-    inp.type = inp.type === 'password' ? 'text' : 'password';
-    btn.style.color = inp.type === 'text' ? '#00E5FF' : 'rgba(255,255,255,.32)';
-  }
-
-  async function handleForgot(e) {
-    e.preventDefault();
-    const email = document.getElementById('si-email').value.trim();
-    if (!email) return;
-    if (!window.sb) { console.error('Supabase client unavailable.'); return; }
-    const reportAuthError = (method, error) => console.error('Supabase auth error:', { method, message: error && error.message, status: error && error.status, code: error && error.code, error });
-    try {
-      const { error } = await window.sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
-      if (error) { reportAuthError('signInWithOtp:forgot', error); return; }
-      window.location.href = 'verify.html?email=' + encodeURIComponent(email) + '&mode=reset';
-    } catch (err) {
-      reportAuthError('handleForgot', err);
-    }
-  }
-
-  /* Session sync — if the user is already authenticated, move on */
-  (function(){
-    const SESSION_REDIRECT = 'dashboard.html';
-    function maybeRedirect(session){
-      if (!session || !session.user) return;
-      if (location.pathname.endsWith('verify.html') || location.pathname.endsWith(SESSION_REDIRECT)) return;
-      location.href = SESSION_REDIRECT;
-    }
-    function waitForSB(cb, tries){
-      if (window.sb) return cb();
-      if ((tries = (tries||0)) > 40) return;
-      setTimeout(()=>waitForSB(cb, tries+1), 75);
-    }
-    document.addEventListener('DOMContentLoaded', ()=>{
-      waitForSB(async ()=>{
-        try {
-          const { data } = await window.sb.auth.getSession();
-          maybeRedirect(data && data.session);
-        } catch(_) {}
-        window.sb.auth.onAuthStateChange((_evt, session)=>maybeRedirect(session));
+  <script>
+    document.querySelectorAll('.tab').forEach(function (t) {
+      t.addEventListener('click', function () {
+        document.querySelectorAll('.tab').forEach(function (x) { x.classList.remove('active'); });
+        document.querySelectorAll('.form-section').forEach(function (x) { x.classList.remove('active'); });
+        t.classList.add('active');
+        document.getElementById('form-' + t.dataset.tab).classList.add('active');
       });
     });
-  })();
+  </script>
 
-  document.addEventListener('ssai:lang', () => switchTab(currentTab));
-</script>
-
-<script>window.SSAI_LANGS={en:'English',el:'GR',de:'Deutsch',fr:'Français',it:'Italiano',es:'Español',pt:'Português',zh:'中文',ko:'한국어'};window.SSAI_FLAGS={en:'gb',el:'gr',de:'de',fr:'fr',it:'it',es:'es',pt:'pt',zh:'cn',ko:'kr'};</script>
-<script src="lang-widget.js?v=6"></script>
-<script>initLang('lang-host');</script>
-<script>
-(function(){
-  var L={en:'English',el:'GR',de:'Deutsch',fr:'Français',it:'Italiano',es:'Español',pt:'Português',zh:'中文',ko:'한국어'};
-  var F={en:'gb',el:'gr',de:'de',fr:'fr',it:'it',es:'es',pt:'pt',zh:'cn',ko:'kr'};
-  function patchDD(){
-    var dd=document.getElementById('ssai-dd');
-    if(!dd)return;
-    var cur=(typeof SSAI_LANG!=='undefined'?SSAI_LANG:localStorage.getItem('ssai_lang')||'en');
-    dd.innerHTML=Object.entries(L).map(function(p){
-      var c=p[0],n=p[1],a=(c===cur),flag=F[c]||'';
-      return '<button data-lang-opt="'+c+'" onclick="ssaiSetLang(\''+c+'\')" style="display:flex;align-items:center;width:100%;text-align:left;padding:6px 11px;font-size:12.5px;color:'+(a?'#C4A55A':'rgba(255,255,255,.62)')+';background:'+(a?'rgba(196,165,90,.09)':'none')+';border:none;cursor:pointer;font-family:Inter,sans-serif;border-radius:6px;line-height:1.5;font-weight:'+(a?600:400)+'" onmouseover="this.style.background=\'rgba(196,165,90,.09)\';this.style.color=\'#fff\'" onmouseout="this.style.background=(this.dataset.langOpt===ssaiGetLang()?\'rgba(196,165,90,.09)\':\'\'  );this.style.color=(this.dataset.langOpt===ssaiGetLang()?\'#C4A55A\':\'rgba(255,255,255,.62)\')"><img src="https://flagcdn.com/w40/'+flag+'.png" style="height:14px;width:auto;margin-right:9px;flex-shrink:0;border-radius:2px;" alt=""/>'+n+'</button>';
-    }).join('');
-  }
-  setTimeout(patchDD,0);
-  document.addEventListener('ssai:lang',patchDD);
-})();
-</script>
-
-<script>
-(function(){
-  const host = document.querySelector('.dot-grid');
-  if(!host) return;
-  const GAP = 30;
-  const JITTER = 7;
-  function rand(min,max){ return Math.random()*(max-min)+min; }
-  function build(){
-    host.innerHTML = '';
-    const w = window.innerWidth, h = window.innerHeight;
-    const cols = Math.ceil(w / GAP) + 2;
-    const rows = Math.ceil(h / GAP) + 2;
-    const frag = document.createDocumentFragment();
-    for(let y = 0; y < rows; y++){
-      for(let x = 0; x < cols; x++){
-        if(Math.random() < 0.12) continue;
-        const d = document.createElement('span');
-        d.className = 'dot';
-        const jx = (Math.random()-0.5) * JITTER*2;
-        const jy = (Math.random()-0.5) * JITTER*2;
-        d.style.left = (x * GAP + jx) + 'px';
-        d.style.top  = (y * GAP + jy) + 'px';
-        const dur = rand(12, 22);
-        const oMin = rand(.01, .04);
-        const oMax = rand(.08, .20);
-        d.style.setProperty('--dur',  dur.toFixed(1) + 's');
-        d.style.setProperty('--o-min', oMin.toFixed(3));
-        d.style.setProperty('--o-max', oMax.toFixed(3));
-        d.style.animationDelay = (-rand(0, dur)).toFixed(2) + 's';
-        frag.appendChild(d);
-      }
-    }
-    host.appendChild(frag);
-  }
-  build();
-  let t; window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(build,150);});
-})();
-</script>
-
-<script>
-(function(){
-  const track = document.getElementById('tm-track');
-  const dotsWrap = document.getElementById('tm-dots');
-  const carousel = document.getElementById('tm-carousel');
-  if(!track || !carousel) return;
-
-  const TESTIMONIALS = [
-    {q:"In 2 weeks the AI sent 87 applications. I got 11 responses and landed a role in Geneva. Best investment for my career.", n:"Andrei P.", r:"Data Analyst · Romania → Geneva", a:"A"},
-    {q:"I signed up on Sunday. By Friday I had 3 interviews in Zurich. This platform completely changed my job hunt.", n:"Sofia M.", r:"UX Designer · Italy → Zurich", a:"S"},
-    {q:"No more endless copy-pasting. The AI handles every cover letter and application. I just review and approve.", n:"Tomás R.", r:"Full-Stack Dev · Portugal → Basel", a:"T"},
-    {q:"Received 18 qualified responses in my first month. Ended up choosing between two offers in Bern.", n:"Emma L.", r:"Marketing Lead · France → Bern", a:"E"},
-    {q:"The level of personalization blew me away. Every application feels hand-crafted. Worth every franc.", n:"Karim H.", r:"Product Manager · Germany → Geneva", a:"K"},
-    {q:"I was skeptical at first. After 3 weeks I had signed a contract with a Zürich fintech. Simply incredible.", n:"Nadia K.", r:"Finance Analyst · Greece → Zurich", a:"N"},
-    {q:"Clean, professional, and it actually works. My response rate went from 2% to over 20% with the AI.", n:"Lucas D.", r:"DevOps Engineer · Belgium → Lausanne", a:"L"},
-    {q:"Writes four languages natively in my applications. Recruiters have repeatedly praised my profile.", n:"Maria V.", r:"HR Specialist · Spain → Geneva", a:"M"},
-    {q:"I saved more than 40 hours per week. The automation is flawless and the AI understands the Swiss market.", n:"Daniele F.", r:"Sales Director · Italy → Lugano", a:"D"},
-    {q:"Landed my dream role at a Swiss pharma company. The AI did in 10 days what I couldn't do in 6 months.", n:"Julia S.", r:"Biotech Researcher · Poland → Basel", a:"J"},
-    {q:"Professional, premium, and genuinely intelligent. Every application was perfectly tailored to each posting.", n:"Rafael G.", r:"Civil Engineer · Brazil → Zurich", a:"R"},
-    {q:"The dashboard is beautiful and the results speak for themselves. 9 interviews in my first 30 days.", n:"Isabel C.", r:"Brand Manager · Portugal → Geneva", a:"I"},
-    {q:"Got recruited by a top-tier consulting firm in Zurich. I only reviewed messages — the AI did the rest.", n:"Marco B.", r:"Consultant · Italy → Zurich", a:"M"},
-    {q:"Honestly the best career tool I've used. It found niche roles I would have never discovered myself.", n:"Elena T.", r:"Legal Counsel · Romania → Bern", a:"E"},
-    {q:"Worth 10× the price. From first login to signed offer in 5 weeks. Perfect Swiss fit, remote-friendly.", n:"Pavel N.", r:"Cybersecurity Lead · Czechia → Zug", a:"P"},
-    {q:"Five interviews in my first ten days. I didn't believe automation could be this precise and human.", n:"Mikael O.", r:"Mechanical Engineer · Finland → Zurich", a:"M"},
-    {q:"The Swiss job market felt impossible until this. Now I have a signed contract in Lausanne. Life-changing.", n:"Catalina V.", r:"Project Manager · Spain → Lausanne", a:"C"},
-    {q:"Every single application was context-aware, relevant, and polished. No generic templates whatsoever.", n:"Henrique A.", r:"Data Scientist · Portugal → Zurich", a:"H"},
-    {q:"Clearly designed by people who respect time. Setup took 15 minutes and I was landing interviews that week.", n:"Olivia R.", r:"Content Strategist · UK → Geneva", a:"O"},
-    {q:"The writing quality is outstanding. Every cover letter reads like it came from a native Swiss professional.", n:"Thomas W.", r:"Architect · Austria → Zurich", a:"T"},
-    {q:"After months of manual applications with zero results, this brought me 7 interviews in two weeks.", n:"Francesca P.", r:"Financial Advisor · Italy → Lugano", a:"F"},
-    {q:"Precise. Elegant. Effective. Three words I genuinely mean. Signed with a Swiss SaaS company last Monday.", n:"Liam K.", r:"Backend Engineer · Ireland → Zurich", a:"L"},
-    {q:"It handled rejection follow-ups, scheduling, and even personalized thank-you notes. Felt like a real assistant.", n:"Valentina S.", r:"Account Executive · Argentina → Geneva", a:"V"},
-    {q:"The quality jump versus doing this manually is enormous. My recruiter called my profile 'exceptionally polished'.", n:"Matteo C.", r:"ML Engineer · Italy → Lausanne", a:"M"},
-    {q:"I secured a senior role that pays 35% more than my previous salary. The AI targeted roles I would have ignored.", n:"Zara H.", r:"Operations Lead · Pakistan → Basel", a:"Z"},
-    {q:"Incredible ROI. One good offer paid for three years of the platform. And I got four offers in total.", n:"Giorgos D.", r:"Pre-Sales Engineer · Greece → Bern", a:"G"},
-    {q:"The onboarding was so refined it actually felt luxurious. And the results matched the presentation.", n:"Louise M.", r:"UX Researcher · France → Zurich", a:"L"},
-    {q:"I couldn't justify a headhunter's fee. This gave me the same quality outcome at a fraction of the cost.", n:"Benjamin R.", r:"Product Designer · Canada → Geneva", a:"B"},
-    {q:"Seriously intelligent matching. I was offered a role I hadn't even considered — and it's now my dream job.", n:"Aisha N.", r:"Compliance Officer · Morocco → Geneva", a:"A"},
-    {q:"What impressed me most was the consistency. Every day the AI worked exactly as advertised. No drama.", n:"Robert F.", r:"QA Lead · Romania → Zurich", a:"R"},
-    {q:"From 0 responses in 3 months manually, to 14 responses in 3 weeks automated. I'm a customer for life.", n:"Priya S.", r:"Business Analyst · India → Basel", a:"P"},
-    {q:"Elegant, discreet, premium. And most importantly: it actually delivers Swiss interviews.", n:"Nicolas V.", r:"CFO · Belgium → Zug", a:"N"},
-    {q:"Signed with a Geneva private bank. The AI wrote a cover letter so sharp the CEO quoted it in the interview.", n:"Camille B.", r:"Investment Associate · France → Geneva", a:"C"},
-    {q:"I was ready to give up on Switzerland. Two months later I'm signing a lease in Zurich. Genuinely grateful.", n:"Stefan H.", r:"Civil Engineer · Germany → Zurich", a:"S"},
-    {q:"Responsive, refined, and relentlessly effective. It's like having a full-time career strategist working 24/7.", n:"Aleksandar I.", r:"Data Engineer · Serbia → Basel", a:"A"},
-    {q:"The 7-figure pharma company I joined was on my no-chance list. The AI got me in anyway. Unreal.", n:"Bianca R.", r:"Regulatory Affairs · Romania → Basel", a:"B"},
-    {q:"My time-to-interview dropped from 6 weeks to 4 days. The momentum completely changed my confidence.", n:"Samuel J.", r:"Frontend Engineer · Netherlands → Zurich", a:"S"},
-    {q:"This product respects your time and your career. It's rare to feel both served and empowered at once.", n:"Clara D.", r:"Communications Lead · Germany → Bern", a:"C"},
-    {q:"I tested it for two weeks expecting to cancel. Instead I ended up with three offers and a new apartment in Zug.", n:"Ivan P.", r:"SRE · Ukraine → Zug", a:"I"},
-    {q:"The Swiss labour market requires precision. This tool delivers it at a level I didn't think was possible.", n:"Melina K.", r:"Corporate Lawyer · Greece → Geneva", a:"M"},
-    {q:"I hired a coach for 4 months — useless. Tried this for 2 weeks — signed offer. Speaks for itself.", n:"Daniel W.", r:"Supply Chain Manager · Poland → Basel", a:"D"},
-    {q:"The multilingual writing is truly native-level. German, French, Italian, English — flawless every time.", n:"Noemi L.", r:"Translator → Project Manager · Italy → Lausanne", a:"N"},
-    {q:"I doubled my interview volume while cutting my application time by 95%. The math here is absurdly good.", n:"Mateus A.", r:"Software Architect · Brazil → Geneva", a:"M"},
-    {q:"Polished, ethical, and quietly confident. Exactly the energy you want representing your candidacy.", n:"Léa F.", r:"Marketing Director · France → Zurich", a:"L"},
-    {q:"Got my Swiss work permit faster than my friends who moved 2 years ago. The AI targeted permit-ready roles.", n:"Oskar V.", r:"Electrical Engineer · Hungary → Zug", a:"O"},
-    {q:"A week in, I had more interview callbacks than my last 6 months combined. Still slightly in disbelief.", n:"Simone C.", r:"Hospitality Manager · Italy → Geneva", a:"S"},
-    {q:"I finally felt like someone was in my corner, working relentlessly. Except it's software — and it's better.", n:"Alessandro T.", r:"Sales Engineer · Italy → Zurich", a:"A"},
-    {q:"Signed, sealed, delivered — a senior role in Basel pharma I would have never applied to on my own.", n:"Yasmin B.", r:"Clinical Researcher · Egypt → Basel", a:"Y"},
-    {q:"This is what premium software looks like: invisible effort, visible results. Worth every single franc.", n:"Pierre L.", r:"Private Equity Analyst · France → Geneva", a:"P"},
-    {q:"Landed in Zurich 9 weeks after signing up. The entire process was smoother than I had any right to expect.", n:"Naomi S.", r:"Growth Lead · Israel → Zurich", a:"N"}
-  ];
-
-  const buildSlide = t => `
-    <div style="min-width:100%;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;">
-      <p style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.75;font-style:italic;margin:0;min-height:96px;letter-spacing:-.002em;">
-        &ldquo;${t.q}&rdquo;
-      </p>
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,rgba(0,229,255,.25),rgba(157,92,255,.15));
-             border:1px solid rgba(0,229,255,.3);display:flex;align-items:center;justify-content:center;
-             font-size:13px;font-weight:700;color:#00E5FF;flex-shrink:0;letter-spacing:-.01em;">${t.a}</div>
-        <div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:2px;">
-          <div style="font-size:13px;font-weight:600;color:#fff;line-height:1.2;letter-spacing:-.005em;">${t.n}</div>
-          <div style="font-size:11px;color:rgba(255,255,255,.36);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.01em;">${t.r}</div>
-        </div>
-        <div style="color:#00E5FF;font-size:12px;letter-spacing:1px;flex-shrink:0;text-shadow:0 0 8px rgba(0,229,255,.6);">★★★★★</div>
-      </div>
-    </div>`;
-
-  const N = TESTIMONIALS.length;
-  track.innerHTML = TESTIMONIALS.map(buildSlide).join('') + buildSlide(TESTIMONIALS[0]);
-
-  const dotCount = Math.min(N, 10);
-  const dotStep  = N / dotCount;
-  dotsWrap.innerHTML = Array.from({length:dotCount}).map((_,i)=>`
-    <span data-tm-dot="${i}" style="width:14px;height:2px;border-radius:2px;background:rgba(255,255,255,.12);transition:background .4s;"></span>`
-  ).join('');
-
-  const TRANS = 'transform .9s cubic-bezier(.65,0,.35,1)';
-  track.style.transition = TRANS;
-
-  let idx = 0;
-  function paintDots(){
-    const activeDot = Math.floor((idx % N) / dotStep);
-    dotsWrap.querySelectorAll('[data-tm-dot]').forEach((el,i)=>{
-      el.style.background = (i === activeDot) ? 'rgba(0,229,255,.85)' : 'rgba(255,255,255,.12)';
-    });
-  }
-  function go(n){
-    idx = n;
-    track.style.transition = TRANS;
-    track.style.transform = `translateX(-${idx * 100}%)`;
-    paintDots();
-  }
-  paintDots();
-
-  track.addEventListener('transitionend',(e)=>{
-    if(e.propertyName !== 'transform') return;
-    if(idx === N){
-      track.style.transition = 'none';
-      idx = 0;
-      track.style.transform = 'translateX(0%)';
-      void track.offsetWidth;
-      track.style.transition = TRANS;
-    }
-  });
-
-  let timer = setInterval(()=>go(idx + 1), 5000);
-  carousel.addEventListener('mouseenter',()=>{clearInterval(timer);});
-  carousel.addEventListener('mouseleave',()=>{timer=setInterval(()=>go(idx + 1),5000);});
-})();
-</script>
 </body>
 </html>

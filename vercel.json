@@ -28,6 +28,23 @@
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/terms", "destination": "/terms.html" },
     { "source": "/security-page", "destination": "/security-page.html" },
-    { "source": "/dpa", "destination": "/dpa.html" }
+    { "source": "/dpa", "destination": "/dpa.html" },
+
+    { "source": "/signup", "destination": "/signup.html" },
+    { "source": "/login", "destination": "/signup.html" },
+    { "source": "/sign-in", "destination": "/signup.html" },
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+    { "source": "/services", "destination": "/services.html" },
+    { "source": "/projects", "destination": "/projects.html" },
+    { "source": "/credits", "destination": "/credits.html" },
+    { "source": "/buy-credits", "destination": "/buy-credits.html" },
+    { "source": "/pricing", "destination": "/pricing.html" },
+    { "source": "/subscriptions", "destination": "/subscriptions.html" },
+    { "source": "/billing", "destination": "/billing.html" },
+    { "source": "/invoices", "destination": "/invoices.html" },
+    { "source": "/orders", "destination": "/orders.html" },
+    { "source": "/support", "destination": "/support.html" },
+    { "source": "/settings", "destination": "/settings.html" },
+    { "source": "/profile", "destination": "/profile.html" }
   ]
 }

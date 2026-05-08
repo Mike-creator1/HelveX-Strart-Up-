@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orders — HelveX</title>
+  <meta name="description" content="HelveX orders — every credit pack, subscription change, and project commitment in one history." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+</head>
+<body data-active="orders">
+
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
+
+        <div class="hx-page-head">
+          <div>
+            <h1>Orders.</h1>
+            <p class="sub">Every commitment your account has made — credit packs, plan changes, and project briefs accepted into delivery.</p>
+          </div>
+          <div class="hx-page-actions">
+            <a href="/invoices.html" class="hx-btn hx-btn-secondary">View invoices</a>
+            <a href="/buy-credits.html" class="hx-btn hx-btn-primary">New top-up</a>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="hx-grid hx-grid-3">
+          <div class="hx-stat">
+            <p class="hx-stat-label">Orders YTD</p>
+            <p class="hx-stat-value">7</p>
+            <p class="hx-stat-meta">2 packs · 4 cycles · 1 plan change</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">In progress</p>
+            <p class="hx-stat-value">2</p>
+            <p class="hx-stat-meta">Both on schedule</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Total committed</p>
+            <p class="hx-stat-value">CHF 17,300</p>
+            <p class="hx-stat-meta">Year to date</p>
+          </div>
+        </div>
+
+        <!-- Orders table -->
+        <div class="hx-section-head">
+          <h2>Order history</h2>
+          <span class="meta">7 records</span>
+        </div>
+        <table class="hx-table">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Detail</th>
+              <th>Amount</th>
+              <th class="right">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>ORD-0214</strong></td>
+              <td style="color:var(--hx-text-mid);">02 May 2026</td>
+              <td><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot"></span>Project</span></td>
+              <td>Inbox triage agent · cycle 02</td>
+              <td>1,200 cr</td>
+              <td class="right"><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot"></span>In build</span></td>
+            </tr>
+            <tr>
+              <td><strong>ORD-0212</strong></td>
+              <td style="color:var(--hx-text-mid);">28 Apr 2026</td>
+              <td><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot"></span>Project</span></td>
+              <td>Sales CRM rebuild · cycle 03</td>
+              <td>1,400 cr</td>
+              <td class="right"><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot"></span>In build</span></td>
+            </tr>
+            <tr>
+              <td><strong>ORD-0205</strong></td>
+              <td style="color:var(--hx-text-mid);">22 Apr 2026</td>
+              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Project</span></td>
+              <td>Operations dashboard · final ship</td>
+              <td>600 cr</td>
+              <td class="right"><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Shipped</span></td>
+            </tr>
+            <tr>
+              <td><strong>ORD-0198</strong></td>
+              <td style="color:var(--hx-text-mid);">02 Apr 2026</td>
+              <td><span class="hx-badge hx-badge-neutral"><span class="hx-badge-dot"></span>Top-up</span></td>
+              <td>Scale pack · 2,500 cr</td>
+              <td>CHF 2,500.00</td>
+              <td class="right"><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Fulfilled</span></td>
+            </tr>
+            <tr>
+              <td><strong>ORD-0184</strong></td>
+              <td style="color:var(--hx-text-mid);">14 Feb 2026</td>
+              <td><span class="hx-badge hx-badge-neutral"><span class="hx-badge-dot"></span>Plan change</span></td>
+              <td>Starter → Growth (monthly)</td>
+              <td>CHF 1,600 / mo Δ</td>
+              <td class="right"><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Active</span></td>
+            </tr>
+            <tr>
+              <td><strong>ORD-0162</strong></td>
+              <td style="color:var(--hx-text-mid);">02 Feb 2026</td>
+              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Project</span></td>
+              <td>Lead-scoring pipeline · final ship</td>
+              <td>1,800 cr</td>
+              <td class="right"><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Shipped</span></td>
+            </tr>
+            <tr>
+              <td><strong>ORD-0144</strong></td>
+              <td style="color:var(--hx-text-mid);">14 Jan 2026</td>
+              <td><span class="hx-badge hx-badge-neutral"><span class="hx-badge-dot"></span>Subscription</span></td>
+              <td>Starter plan · activation</td>
+              <td>CHF 1,800.00</td>
+              <td class="right"><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Active</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/platform.js"></script>
+</body>
+</html>
