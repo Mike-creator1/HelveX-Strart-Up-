@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard — HelveX</title>
-  <meta name="description" content="HelveX client portal — overview of your services, credits, projects, and recent activity." />
+  <title>Overview — HelveX</title>
+  <meta name="description" content="HelveX client portal — your workspace overview." />
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
 </head>
 <body data-active="dashboard">
@@ -21,147 +21,87 @@
 
         <div class="hx-page-head">
           <div>
-            <h1>Welcome back, Alex.</h1>
-            <p class="sub">Here's what's open across your engagements right now.</p>
+            <h1 id="hx-greeting">Welcome to HelveX.</h1>
+            <p class="sub">Browse services, choose a plan, and request your first engagement.</p>
           </div>
           <div class="hx-page-actions">
             <a href="/services.html" class="hx-btn hx-btn-secondary">Browse services</a>
-            <a href="/buy-credits.html" class="hx-btn hx-btn-primary">
-              Buy credits
-              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <a href="/pricing.html" class="hx-btn hx-btn-primary">
+              Choose a plan
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </div>
         </div>
 
+        <!-- Status row — every value reads from real account state. -->
         <div class="hx-grid hx-grid-4">
           <div class="hx-stat">
             <p class="hx-stat-label">Credits</p>
-            <p class="hx-stat-value">2,400 <span class="suffix">cr</span></p>
-            <p class="hx-stat-meta">Refilled · 02 May 2026</p>
+            <p class="hx-stat-value hx-mono" id="hx-stat-credits">0</p>
+            <p class="hx-stat-meta" id="hx-stat-credits-meta">No active subscription</p>
           </div>
           <div class="hx-stat">
             <p class="hx-stat-label">Active projects</p>
-            <p class="hx-stat-value">3</p>
-            <p class="hx-stat-meta">2 in build · 1 in review</p>
+            <p class="hx-stat-value hx-mono" id="hx-stat-projects">0</p>
+            <p class="hx-stat-meta">Nothing in flight</p>
           </div>
           <div class="hx-stat">
             <p class="hx-stat-label">Subscription</p>
-            <p class="hx-stat-value" style="font-size:24px;">Growth</p>
-            <p class="hx-stat-meta">Renews 14 May · monthly</p>
+            <p class="hx-stat-value" id="hx-stat-plan" style="font-size:18px;">None</p>
+            <p class="hx-stat-meta" id="hx-stat-plan-meta">Pick a plan to get started</p>
           </div>
           <div class="hx-stat">
             <p class="hx-stat-label">Open invoices</p>
-            <p class="hx-stat-value">0</p>
-            <p class="hx-stat-meta">All settled</p>
+            <p class="hx-stat-value hx-mono" id="hx-stat-invoices">0</p>
+            <p class="hx-stat-meta">Nothing due</p>
           </div>
         </div>
 
+        <!-- Active engagements — empty state for now. -->
         <div class="hx-section-head">
           <h2>Active engagements</h2>
-          <a href="/projects.html">View all →</a>
         </div>
-        <table class="hx-table">
-          <thead>
-            <tr>
-              <th>Project</th>
-              <th>Practice</th>
-              <th>Owner</th>
-              <th>Stage</th>
-              <th class="right">Updated</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Inbox triage agent · cycle 02</strong></td>
-              <td>AI Automation</td>
-              <td>L. Schmid</td>
-              <td><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot"></span>In build</span></td>
-              <td class="right" style="color:var(--hx-text-mid);">2h ago</td>
-            </tr>
-            <tr>
-              <td><strong>Sales CRM rebuild</strong></td>
-              <td>Digital Services</td>
-              <td>M. Keller</td>
-              <td><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot"></span>In build</span></td>
-              <td class="right" style="color:var(--hx-text-mid);">1d ago</td>
-            </tr>
-            <tr>
-              <td><strong>AI strategy roadmap</strong></td>
-              <td>Consulting</td>
-              <td>L. Schmid</td>
-              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>In review</span></td>
-              <td class="right" style="color:var(--hx-text-mid);">3d ago</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="hx-grid hx-grid-2" style="margin-top:32px;">
-
-          <div class="hx-card">
-            <div class="hx-card-head">
-              <div>
-                <p class="hx-card-eyebrow">Request work</p>
-                <h3>Start a new engagement.</h3>
-              </div>
-            </div>
-            <p class="desc">Pick a service category, describe the goal, and a senior engineer will scope it within one business day.</p>
-            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:18px;">
-              <a href="/services.html" class="hx-service-tile" style="padding:14px;">
-                <div class="hx-service-tile-icon yellow" style="width:32px;height:32px;margin-bottom:10px;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 11h.01M15 11h.01"/><path d="M12 7V3"/></svg>
-                </div>
-                <h3 style="font-size:13px; margin:0;">AI &amp; Automation</h3>
-                <p style="font-size:11.5px;margin:6px 0 0;color:var(--hx-text-dim);">7 services</p>
-              </a>
-              <a href="/services.html" class="hx-service-tile" style="padding:14px;">
-                <div class="hx-service-tile-icon red" style="width:32px;height:32px;margin-bottom:10px;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                </div>
-                <h3 style="font-size:13px; margin:0;">Digital Services</h3>
-                <p style="font-size:11.5px;margin:6px 0 0;color:var(--hx-text-dim);">7 services</p>
-              </a>
-              <a href="/services.html" class="hx-service-tile" style="padding:14px;">
-                <div class="hx-service-tile-icon emerald" style="width:32px;height:32px;margin-bottom:10px;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 17V11M11 17V7M16 17v-9M21 17v-5"/></svg>
-                </div>
-                <h3 style="font-size:13px; margin:0;">Consulting</h3>
-                <p style="font-size:11.5px;margin:6px 0 0;color:var(--hx-text-dim);">5 services</p>
-              </a>
-            </div>
+        <div class="hx-empty">
+          <div class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 7a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            </svg>
           </div>
+          <h3>No active projects</h3>
+          <p>Once you request an engagement, it will appear here with its current stage and owner.</p>
+          <a href="/services.html" class="hx-btn hx-btn-primary">Request an engagement</a>
+        </div>
 
-          <div class="hx-card">
-            <div class="hx-card-head">
-              <div>
-                <p class="hx-card-eyebrow">Recent activity</p>
-                <h3>Last 7 days.</h3>
-              </div>
+        <!-- Practice areas (real product info, not simulated activity). -->
+        <div class="hx-section-head">
+          <h2>Practice areas</h2>
+          <a href="/services.html">View all services</a>
+        </div>
+        <div class="hx-grid hx-grid-3">
+          <a href="/services.html#ai" class="hx-service-tile">
+            <div class="hx-service-tile-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 11h.01M15 11h.01"/><path d="M12 7V3"/></svg>
             </div>
-            <ul style="list-style:none;padding:0;margin:0;">
-              <li style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--hx-line);">
-                <span class="hx-badge hx-badge-emerald" style="margin-top:2px;flex-shrink:0;"><span class="hx-badge-dot"></span>Shipped</span>
-                <div style="flex:1;min-width:0;">
-                  <div style="font-size:13.5px;color:var(--hx-text);margin-bottom:2px;">Cycle 01 brief delivered for <strong>Inbox triage agent</strong></div>
-                  <div style="font-size:11.5px;color:var(--hx-text-dim);font-family:'JetBrains Mono',monospace;">02 MAY · 09:14</div>
-                </div>
-              </li>
-              <li style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--hx-line);">
-                <span class="hx-badge hx-badge-yellow" style="margin-top:2px;flex-shrink:0;"><span class="hx-badge-dot"></span>Update</span>
-                <div style="flex:1;min-width:0;">
-                  <div style="font-size:13.5px;color:var(--hx-text);margin-bottom:2px;"><strong>Sales CRM rebuild</strong> — staging deploy ready for review</div>
-                  <div style="font-size:11.5px;color:var(--hx-text-dim);font-family:'JetBrains Mono',monospace;">01 MAY · 16:42</div>
-                </div>
-              </li>
-              <li style="display:flex;gap:12px;padding:12px 0;">
-                <span class="hx-badge hx-badge-neutral" style="margin-top:2px;flex-shrink:0;"><span class="hx-badge-dot"></span>Billing</span>
-                <div style="flex:1;min-width:0;">
-                  <div style="font-size:13.5px;color:var(--hx-text);margin-bottom:2px;">Invoice <strong>HVX-0142</strong> paid</div>
-                  <div style="font-size:11.5px;color:var(--hx-text-dim);font-family:'JetBrains Mono',monospace;">29 APR · 11:08</div>
-                </div>
-              </li>
-            </ul>
-          </div>
-
+            <h3>AI &amp; Automation</h3>
+            <p>Custom agents, workflow automation, document &amp; inbox triage, internal copilots.</p>
+            <div class="meta"><span>7 services</span><span>From 800 cr</span></div>
+          </a>
+          <a href="/services.html#digital" class="hx-service-tile">
+            <div class="hx-service-tile-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <h3>Digital Services</h3>
+            <p>Web apps, dashboards, CRM rebuilds, e-commerce, integrations, and internal tools.</p>
+            <div class="meta"><span>7 services</span><span>From 1,200 cr</span></div>
+          </a>
+          <a href="/services.html#consulting" class="hx-service-tile">
+            <div class="hx-service-tile-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 17V11M11 17V7M16 17v-9M21 17v-5"/></svg>
+            </div>
+            <h3>Consulting</h3>
+            <p>AI strategy roadmaps, technical due diligence, architecture reviews, fractional leads.</p>
+            <div class="meta"><span>5 services</span><span>From 600 cr</span></div>
+          </a>
         </div>
 
       </main>
@@ -169,5 +109,25 @@
   </div>
 
   <script src="/platform.js"></script>
+  <script>
+    /* Personalise greeting from the real signed-in user (no fake names). */
+    (function () {
+      function whenAuthReady(fn) {
+        if (window.HX && window.HX.auth) { fn(); return; }
+        document.addEventListener('hx:auth-ready', fn, { once: true });
+      }
+      whenAuthReady(function () {
+        window.HX.supabase.auth.getUser().then(function (res) {
+          var user = res && res.data ? res.data.user : null;
+          if (!user) return;
+          var first = (user.user_metadata && user.user_metadata.first_name) || '';
+          if (first) {
+            var el = document.getElementById('hx-greeting');
+            if (el) el.textContent = 'Welcome back, ' + first + '.';
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

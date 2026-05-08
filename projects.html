@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
 </head>
 <body data-active="projects">
@@ -22,7 +22,7 @@
         <div class="hx-page-head">
           <div>
             <h1>Projects.</h1>
-            <p class="sub">Every engagement you have running with HelveX. Click into a row to see the cycle brief, current owner, and delivery checkpoints.</p>
+            <p class="sub">Every engagement you have running with HelveX. Click into a row to see its cycle brief, current owner, and delivery checkpoints.</p>
           </div>
           <div class="hx-page-actions">
             <a href="/services.html" class="hx-btn hx-btn-secondary">Browse services</a>
@@ -30,118 +30,42 @@
           </div>
         </div>
 
-        <!-- Stats summary -->
         <div class="hx-grid hx-grid-4">
           <div class="hx-stat">
             <p class="hx-stat-label">Active</p>
-            <p class="hx-stat-value">3</p>
-            <p class="hx-stat-meta">2 in build · 1 in review</p>
+            <p class="hx-stat-value hx-mono">0</p>
+            <p class="hx-stat-meta">No projects in flight</p>
           </div>
           <div class="hx-stat">
             <p class="hx-stat-label">In review</p>
-            <p class="hx-stat-value">1</p>
+            <p class="hx-stat-value hx-mono">0</p>
             <p class="hx-stat-meta">Awaiting your sign-off</p>
           </div>
           <div class="hx-stat">
-            <p class="hx-stat-label">Shipped (90d)</p>
-            <p class="hx-stat-value">4</p>
-            <p class="hx-stat-meta">All on time</p>
+            <p class="hx-stat-label">Shipped</p>
+            <p class="hx-stat-value hx-mono">0</p>
+            <p class="hx-stat-meta">All-time</p>
           </div>
           <div class="hx-stat">
             <p class="hx-stat-label">Avg delivery</p>
-            <p class="hx-stat-value">11<span class="suffix"> d</span></p>
+            <p class="hx-stat-value" style="font-size:18px;color:var(--hx-text-dim);">—</p>
             <p class="hx-stat-meta">Brief → first ship</p>
           </div>
         </div>
 
         <div class="hx-section-head">
           <h2>Active engagements</h2>
-          <span class="meta">3 open</span>
         </div>
-        <table class="hx-table">
-          <thead>
-            <tr>
-              <th>Project</th>
-              <th>Practice</th>
-              <th>Owner</th>
-              <th>Stage</th>
-              <th>Cycle</th>
-              <th class="right">Updated</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Inbox triage agent</strong><div style="color:var(--hx-text-dim);font-size:12px;margin-top:2px;">Auto-route incoming sales mail by intent</div></td>
-              <td>AI Automation</td>
-              <td>L. Schmid</td>
-              <td><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot"></span>In build</span></td>
-              <td>02 / 03</td>
-              <td class="right" style="color:var(--hx-text-mid);">2h ago</td>
-            </tr>
-            <tr>
-              <td><strong>Sales CRM rebuild</strong><div style="color:var(--hx-text-dim);font-size:12px;margin-top:2px;">Replace legacy CRM with typed pipeline app</div></td>
-              <td>Digital Services</td>
-              <td>M. Keller</td>
-              <td><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot"></span>In build</span></td>
-              <td>03 / 04</td>
-              <td class="right" style="color:var(--hx-text-mid);">1d ago</td>
-            </tr>
-            <tr>
-              <td><strong>AI strategy roadmap</strong><div style="color:var(--hx-text-dim);font-size:12px;margin-top:2px;">12-month roadmap with scored use-cases</div></td>
-              <td>Consulting</td>
-              <td>L. Schmid</td>
-              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>In review</span></td>
-              <td>02 / 02</td>
-              <td class="right" style="color:var(--hx-text-mid);">3d ago</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="hx-section-head">
-          <h2>Recently shipped</h2>
-          <span class="meta">Last 90 days</span>
+        <div class="hx-empty">
+          <div class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 7a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            </svg>
+          </div>
+          <h3>No active projects yet</h3>
+          <p>Send us a brief from any service in the catalog and a senior engineer will scope it within one business day.</p>
+          <a href="/services.html" class="hx-btn hx-btn-primary">Browse services</a>
         </div>
-        <table class="hx-table">
-          <thead>
-            <tr>
-              <th>Project</th>
-              <th>Practice</th>
-              <th>Owner</th>
-              <th>Outcome</th>
-              <th class="right">Shipped</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Operations dashboard v2</strong></td>
-              <td>Digital Services</td>
-              <td>M. Keller</td>
-              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Shipped</span></td>
-              <td class="right" style="color:var(--hx-text-mid);">22 Apr 2026</td>
-            </tr>
-            <tr>
-              <td><strong>Lead-scoring pipeline</strong></td>
-              <td>AI Automation</td>
-              <td>R. Berger</td>
-              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Shipped</span></td>
-              <td class="right" style="color:var(--hx-text-mid);">04 Apr 2026</td>
-            </tr>
-            <tr>
-              <td><strong>Vendor selection sprint</strong></td>
-              <td>Consulting</td>
-              <td>L. Schmid</td>
-              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Shipped</span></td>
-              <td class="right" style="color:var(--hx-text-mid);">28 Mar 2026</td>
-            </tr>
-            <tr>
-              <td><strong>Marketing site refresh</strong></td>
-              <td>Digital Services</td>
-              <td>A. Frei</td>
-              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Shipped</span></td>
-              <td class="right" style="color:var(--hx-text-mid);">14 Mar 2026</td>
-            </tr>
-          </tbody>
-        </table>
 
       </main>
     </div>

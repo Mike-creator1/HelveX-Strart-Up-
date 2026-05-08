@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
 </head>
 <body data-active="credits">
@@ -22,93 +22,83 @@
         <div class="hx-page-head">
           <div>
             <h1>Credits.</h1>
-            <p class="sub">Credits are how you fund engagements at HelveX. Each service has a transparent credit cost. They never expire while your subscription is active.</p>
+            <p class="sub">Credits fund engagements at HelveX. Each service has a transparent credit cost. They never expire while your subscription is active.</p>
           </div>
           <div class="hx-page-actions">
             <a href="/pricing.html" class="hx-btn hx-btn-secondary">View plans</a>
             <a href="/buy-credits.html" class="hx-btn hx-btn-primary">
               Buy credits
-              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </div>
         </div>
 
-        <!-- Balance card -->
-        <div class="hx-card" style="margin-bottom:24px;">
+        <div class="hx-card">
           <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;">
             <div>
               <p class="hx-card-eyebrow">Current balance</p>
-              <div style="font-size:56px;font-weight:600;letter-spacing:-0.03em;line-height:1;color:var(--hx-text);">2,400 <span style="color:var(--hx-text-mid);font-weight:500;">cr</span></div>
-              <p style="margin:14px 0 0;color:var(--hx-text-mid);font-size:13.5px;">Last refilled 02 May 2026 · enough for ~1 medium build engagement</p>
+              <div class="hx-mono" style="font-size:44px;font-weight:600;letter-spacing:-0.025em;line-height:1;color:var(--hx-text);">0 <span style="color:var(--hx-text-dim);font-weight:500;font-size:0.55em;letter-spacing:0;">cr</span></div>
+              <p style="margin:12px 0 0;color:var(--hx-text-mid);font-size:13px;">No credits yet. Pick a plan or top up to start engagements.</p>
             </div>
-            <div style="display:flex;gap:24px;">
+            <div style="display:flex;gap:24px;flex-wrap:wrap;">
               <div>
-                <p class="hx-stat-label">Spent (30d)</p>
-                <p style="font-size:24px;font-weight:600;margin:6px 0 0;color:var(--hx-text);">1,800 cr</p>
+                <p class="hx-stat-label">Spent (30 d)</p>
+                <p class="hx-mono" style="font-size:18px;font-weight:600;margin:6px 0 0;color:var(--hx-text);">0</p>
               </div>
               <div>
                 <p class="hx-stat-label">Held in projects</p>
-                <p style="font-size:24px;font-weight:600;margin:6px 0 0;color:var(--hx-text);">600 cr</p>
+                <p class="hx-mono" style="font-size:18px;font-weight:600;margin:6px 0 0;color:var(--hx-text);">0</p>
               </div>
               <div>
                 <p class="hx-stat-label">Renews</p>
-                <p style="font-size:24px;font-weight:600;margin:6px 0 0;color:var(--hx-text);">14 May</p>
+                <p style="font-size:18px;font-weight:600;margin:6px 0 0;color:var(--hx-text-dim);">—</p>
               </div>
             </div>
           </div>
-          <div style="margin-top:24px;height:8px;background:var(--hx-surface-2);border-radius:9999px;overflow:hidden;border:1px solid var(--hx-line);">
-            <div style="height:100%;width:60%;background:linear-gradient(90deg,var(--hx-yellow),var(--hx-yellow-deep));border-radius:9999px;"></div>
-          </div>
-          <p style="margin:10px 0 0;font-size:12px;color:var(--hx-text-dim);font-family:'JetBrains Mono',monospace;letter-spacing:0.12em;">2,400 of 4,000 cr remaining · resets monthly on Growth plan</p>
         </div>
 
-        <!-- Quick actions -->
+        <div class="hx-section-head">
+          <h2>Top up packs</h2>
+          <a href="/buy-credits.html">All packs</a>
+        </div>
         <div class="hx-grid hx-grid-3">
           <div class="hx-card">
             <p class="hx-card-eyebrow">Pack</p>
-            <h3>Top up 1,000 cr</h3>
-            <p class="desc">One-time pack. No commitment. Credits stack on top of your monthly allowance.</p>
-            <p style="margin:18px 0 0;font-size:24px;font-weight:600;color:var(--hx-text);">CHF 1,200</p>
-            <a href="/buy-credits.html" class="hx-card-link">Top up →</a>
+            <h3>500 credits</h3>
+            <p class="desc">Quick top-up. Stacks on your monthly allowance and never expires.</p>
+            <p class="hx-mono" style="margin:18px 0 0;font-size:20px;font-weight:600;color:var(--hx-text);">CHF 600</p>
+            <a href="/buy-credits.html" class="hx-card-link">Top up</a>
           </div>
           <div class="hx-card">
             <p class="hx-card-eyebrow">Pack</p>
-            <h3>Top up 2,500 cr</h3>
-            <p class="desc">Best value pack. ~17 % discount vs hourly. Most clients choose this for quarterly work.</p>
-            <p style="margin:18px 0 0;font-size:24px;font-weight:600;color:var(--hx-text);">CHF 2,500</p>
-            <a href="/buy-credits.html" class="hx-card-link">Top up →</a>
+            <h3>1,000 credits</h3>
+            <p class="desc">Funds a full medium-sized engagement — internal copilot, CRM rebuild cycle, etc.</p>
+            <p class="hx-mono" style="margin:18px 0 0;font-size:20px;font-weight:600;color:var(--hx-text);">CHF 1,200</p>
+            <a href="/buy-credits.html" class="hx-card-link">Top up</a>
           </div>
           <div class="hx-card">
             <p class="hx-card-eyebrow">Subscription</p>
-            <h3>Upgrade plan</h3>
-            <p class="desc">Move to Scale to unlock 8,000 cr / month, priority delivery, and a named lead engineer.</p>
-            <p style="margin:18px 0 0;font-size:24px;font-weight:600;color:var(--hx-text);">CHF 6,400 / mo</p>
-            <a href="/pricing.html" class="hx-card-link">Compare →</a>
+            <h3>Pick a plan</h3>
+            <p class="desc">Plans include a monthly credit allowance, priority delivery, and a senior engineer.</p>
+            <p class="hx-mono" style="margin:18px 0 0;font-size:20px;font-weight:600;color:var(--hx-text);">From CHF 1,800 / mo</p>
+            <a href="/pricing.html" class="hx-card-link">Compare plans</a>
           </div>
         </div>
 
-        <!-- Recent activity -->
         <div class="hx-section-head">
-          <h2>Recent credit activity</h2>
-          <a href="/orders.html">All transactions →</a>
+          <h2>Credit activity</h2>
+          <a href="/orders.html">All transactions</a>
         </div>
-        <table class="hx-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Reference</th>
-              <th>Description</th>
-              <th class="right">Change</th>
-              <th class="right">Balance</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td style="color:var(--hx-text-mid);">02 May 2026</td><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--hx-text-mid);">REF-1042</code></td><td>Monthly refill — Growth plan</td><td class="right" style="color:var(--hx-emerald);font-weight:600;">+ 4,000 cr</td><td class="right">2,400 cr</td></tr>
-            <tr><td style="color:var(--hx-text-mid);">28 Apr 2026</td><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--hx-text-mid);">PRJ-0089</code></td><td>Inbox triage agent · cycle 02</td><td class="right" style="color:#DC2626;font-weight:600;">− 1,200 cr</td><td class="right">−1,600 cr</td></tr>
-            <tr><td style="color:var(--hx-text-mid);">22 Apr 2026</td><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--hx-text-mid);">PRJ-0084</code></td><td>Operations dashboard — final ship</td><td class="right" style="color:#DC2626;font-weight:600;">− 600 cr</td><td class="right">−400 cr</td></tr>
-            <tr><td style="color:var(--hx-text-mid);">02 Apr 2026</td><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--hx-text-mid);">REF-1031</code></td><td>Monthly refill — Growth plan</td><td class="right" style="color:var(--hx-emerald);font-weight:600;">+ 4,000 cr</td><td class="right">200 cr</td></tr>
-          </tbody>
-        </table>
+        <div class="hx-empty">
+          <div class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5h4a1.5 1.5 0 0 1 0 3h-2a1.5 1.5 0 0 0 0 3h4"/>
+            </svg>
+          </div>
+          <h3>No credit activity yet</h3>
+          <p>Top-ups, monthly refills, and project spend will show up here once you start.</p>
+          <a href="/buy-credits.html" class="hx-btn hx-btn-secondary">Buy credits</a>
+        </div>
 
       </main>
     </div>

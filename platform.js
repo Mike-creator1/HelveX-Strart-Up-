@@ -18,7 +18,7 @@
     {
       label: 'Billing',
       items: [
-        { id: 'credits',       href: '/credits.html',       label: 'Credits',       icon: 'coin', badge: '2,400' },
+        { id: 'credits',       href: '/credits.html',       label: 'Credits',       icon: 'coin' },
         { id: 'pricing',       href: '/pricing.html',       label: 'Pricing',       icon: 'tag' },
         { id: 'subscriptions', href: '/subscriptions.html', label: 'Subscriptions', icon: 'refresh' },
         { id: 'invoices',      href: '/invoices.html',      label: 'Invoices',      icon: 'doc' },
@@ -124,9 +124,6 @@
     html +=   '<span class="hx-cmdk-text">Search…</span>';
     html +=   '<span class="hx-cmdk-kbd">⌘K</span>';
     html += '</button>';
-    html += '<div class="hx-topbar-actions">';
-    html +=   '<button type="button" class="hx-icon-btn" aria-label="Notifications" title="Notifications">' + svg('bell', { sw: 1.7 }) + '</button>';
-    html += '</div>';
     return html;
   }
 

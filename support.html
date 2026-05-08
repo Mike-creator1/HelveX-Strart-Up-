@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Support — HelveX</title>
-  <meta name="description" content="HelveX support — open a request, browse known answers, or talk to your engineer." />
+  <meta name="description" content="HelveX support — open a request, brief us on a project, or talk to your engineer." />
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
 </head>
 <body data-active="support">
@@ -25,41 +25,18 @@
             <p class="sub">Open a request, brief us on a new project, or message your delivery engineer directly. Replies are written by humans, not bots.</p>
           </div>
           <div class="hx-page-actions">
-            <a href="mailto:hello@helvex.ch" class="hx-btn hx-btn-secondary">hello@helvex.ch</a>
+            <a href="mailto:support@swissupport.com" class="hx-btn hx-btn-secondary">support@swissupport.com</a>
           </div>
         </div>
 
-        <!-- Channel cards -->
-        <div class="hx-grid hx-grid-3">
-          <div class="hx-card">
-            <p class="hx-card-eyebrow">Channel</p>
-            <h3>Open a request</h3>
-            <p class="desc">For new project briefs, scope changes, or anything that needs a written record. Senior engineer reply within 1 business day.</p>
-            <p style="margin:18px 0 0;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--hx-text-dim);letter-spacing:0.12em;">↓ FORM BELOW</p>
-          </div>
-          <div class="hx-card">
-            <p class="hx-card-eyebrow">Channel</p>
-            <h3>Slack channel</h3>
-            <p class="desc">Real-time chat with your delivery team. Available on Growth and Scale plans. Quiet hours respected.</p>
-            <a href="#" class="hx-card-link">Open Slack →</a>
-          </div>
-          <div class="hx-card">
-            <p class="hx-card-eyebrow">Channel</p>
-            <h3>Book a strategy call</h3>
-            <p class="desc">30 minutes with a senior engineer. Free for active accounts. Use this when a written brief won't do justice to the problem.</p>
-            <a href="#" class="hx-card-link">Pick a time →</a>
-          </div>
-        </div>
-
-        <!-- Open ticket form -->
         <div class="hx-section-head">
-          <h2>Open a new request</h2>
+          <h2>Open a request</h2>
           <span class="meta">Reply within 1 business day</span>
         </div>
         <div class="hx-card">
           <div class="hx-field">
             <label>Subject</label>
-            <input type="text" placeholder="e.g. Scope change for inbox triage agent" />
+            <input type="text" placeholder="Briefly describe what you need" />
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
             <div class="hx-field">
@@ -67,7 +44,7 @@
               <select>
                 <option>New project brief</option>
                 <option>Scope change on existing project</option>
-                <option>Bug or production issue</option>
+                <option>Production issue</option>
                 <option>Billing question</option>
                 <option>General question</option>
               </select>
@@ -82,18 +59,9 @@
             </div>
           </div>
           <div class="hx-field">
-            <label>Related project (optional)</label>
-            <select>
-              <option>—</option>
-              <option>Inbox triage agent</option>
-              <option>Sales CRM rebuild</option>
-              <option>AI strategy roadmap</option>
-            </select>
-          </div>
-          <div class="hx-field">
             <label>What do you need?</label>
             <textarea placeholder="Describe the goal, the constraint, the deadline. Don't worry about a perfect spec — write what's true."></textarea>
-            <div class="help">Markdown supported. Drop links freely. We'll write the scope back to you in plain language.</div>
+            <div class="help">Markdown supported. We'll write the scope back to you in plain language.</div>
           </div>
           <div style="display:flex;gap:8px;margin-top:8px;">
             <button class="hx-btn hx-btn-primary">Submit request</button>
@@ -101,40 +69,17 @@
           </div>
         </div>
 
-        <!-- Open tickets -->
-        <div class="hx-section-head">
-          <h2>Your open requests</h2>
-          <span class="meta">2 open</span>
-        </div>
-        <table class="hx-table">
-          <thead>
-            <tr>
-              <th>Reference</th>
-              <th>Subject</th>
-              <th>Type</th>
-              <th>Status</th>
-              <th class="right">Updated</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>SUP-0312</strong></td><td>Question on cycle 03 scope for CRM rebuild</td><td>Scope change</td><td><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot"></span>Awaiting you</span></td><td class="right" style="color:var(--hx-text-mid);">3h ago</td></tr>
-            <tr><td><strong>SUP-0309</strong></td><td>Add Slack notification on agent failure</td><td>Bug / production</td><td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>In progress</span></td><td class="right" style="color:var(--hx-text-mid);">1d ago</td></tr>
-          </tbody>
-        </table>
-
-        <!-- FAQs -->
         <div class="hx-section-head">
           <h2>Common questions</h2>
-          <span class="meta">Self-serve</span>
         </div>
         <div class="hx-grid hx-grid-2">
           <div class="hx-card">
             <h3>How do credits work?</h3>
-            <p class="desc">One credit ≈ one unit of senior engineering output. Each service has a transparent cost — listed on its page. Credits never expire while your subscription is active.</p>
+            <p class="desc">One credit ≈ one unit of senior engineering output. Each service has a transparent credit cost listed on its page. Credits never expire while your subscription is active.</p>
           </div>
           <div class="hx-card">
             <h3>Can I pause my subscription?</h3>
-            <p class="desc">Yes. Pause for up to 90 days from the Subscriptions page. Your unused credits stay; the monthly charge stops. Active projects keep delivering.</p>
+            <p class="desc">Yes. You can pause for up to 90 days from the Subscriptions page. Your unused credits stay; the monthly charge stops. Active projects keep delivering.</p>
           </div>
           <div class="hx-card">
             <h3>Who actually does the work?</h3>

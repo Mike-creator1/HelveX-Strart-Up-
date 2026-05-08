@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
 </head>
 <body data-active="invoices">
@@ -25,123 +25,46 @@
             <p class="sub">Every charge in one place. PDFs are accounting-ready, with VAT, your billing details, and a per-line breakdown.</p>
           </div>
           <div class="hx-page-actions">
-            <a href="/billing.html" class="hx-btn hx-btn-secondary">Update billing details</a>
-            <button class="hx-btn hx-btn-primary">Download all (CSV)</button>
+            <a href="/billing.html" class="hx-btn hx-btn-secondary">Billing details</a>
           </div>
         </div>
 
-        <!-- Stats -->
         <div class="hx-grid hx-grid-4">
           <div class="hx-stat">
             <p class="hx-stat-label">Total paid (YTD)</p>
-            <p class="hx-stat-value">CHF 14,800</p>
-            <p class="hx-stat-meta">4 invoices</p>
+            <p class="hx-stat-value hx-mono">0</p>
+            <p class="hx-stat-meta">No invoices yet</p>
           </div>
           <div class="hx-stat">
             <p class="hx-stat-label">Outstanding</p>
-            <p class="hx-stat-value" style="color:var(--hx-emerald);">0</p>
+            <p class="hx-stat-value hx-mono">0</p>
             <p class="hx-stat-meta">All settled</p>
           </div>
           <div class="hx-stat">
             <p class="hx-stat-label">Last invoice</p>
-            <p class="hx-stat-value" style="font-size:24px;">14 Apr</p>
-            <p class="hx-stat-meta">CHF 3,400 · paid</p>
+            <p class="hx-stat-value" style="font-size:18px;color:var(--hx-text-dim);">—</p>
+            <p class="hx-stat-meta">No history</p>
           </div>
           <div class="hx-stat">
             <p class="hx-stat-label">Next invoice</p>
-            <p class="hx-stat-value" style="font-size:24px;">14 May</p>
-            <p class="hx-stat-meta">CHF 3,400 · scheduled</p>
+            <p class="hx-stat-value" style="font-size:18px;color:var(--hx-text-dim);">—</p>
+            <p class="hx-stat-meta">No active subscription</p>
           </div>
         </div>
 
-        <!-- Filters -->
         <div class="hx-section-head">
           <h2>All invoices</h2>
-          <span class="meta">5 records</span>
         </div>
-        <div class="hx-card" style="padding:16px;margin-bottom:16px;">
-          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
-            <div style="display:flex;gap:6px;">
-              <button class="hx-btn hx-btn-secondary" style="padding:7px 14px;font-size:12.5px;">All</button>
-              <button class="hx-btn hx-btn-ghost" style="padding:7px 14px;font-size:12.5px;">Paid</button>
-              <button class="hx-btn hx-btn-ghost" style="padding:7px 14px;font-size:12.5px;">Open</button>
-              <button class="hx-btn hx-btn-ghost" style="padding:7px 14px;font-size:12.5px;">Scheduled</button>
-            </div>
-            <div style="margin-left:auto;display:flex;gap:8px;">
-              <select style="background:var(--hx-surface-2);border:1px solid var(--hx-line);color:var(--hx-text);padding:8px 12px;border-radius:8px;font-size:12.5px;font-family:inherit;">
-                <option>All time</option>
-                <option>Last 30 days</option>
-                <option>Last 90 days</option>
-                <option>This year</option>
-              </select>
-              <input type="search" placeholder="Search invoice ID…" style="background:var(--hx-surface-2);border:1px solid var(--hx-line);color:var(--hx-text);padding:8px 12px;border-radius:8px;font-size:12.5px;font-family:inherit;width:220px;" />
-            </div>
+        <div class="hx-empty">
+          <div class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/>
+            </svg>
           </div>
+          <h3>No invoices yet</h3>
+          <p>Once you choose a plan or buy a credit pack, your invoices will appear here.</p>
+          <a href="/pricing.html" class="hx-btn hx-btn-primary">Choose a plan</a>
         </div>
-
-        <!-- Invoices table -->
-        <table class="hx-table">
-          <thead>
-            <tr>
-              <th>Invoice</th>
-              <th>Issued</th>
-              <th>Description</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th class="right">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>HVX-0146</strong></td>
-              <td style="color:var(--hx-text-mid);">14 May 2026</td>
-              <td>Growth plan · monthly subscription</td>
-              <td>CHF 3,400.00</td>
-              <td><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot"></span>Scheduled</span></td>
-              <td class="right" style="color:var(--hx-text-dim);">—</td>
-            </tr>
-            <tr>
-              <td><strong>HVX-0145</strong></td>
-              <td style="color:var(--hx-text-mid);">14 Apr 2026</td>
-              <td>Growth plan · monthly subscription</td>
-              <td>CHF 3,400.00</td>
-              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Paid</span></td>
-              <td class="right"><a style="color:var(--hx-text);font-weight:500;text-decoration:underline;text-underline-offset:2px;cursor:pointer;">Download</a></td>
-            </tr>
-            <tr>
-              <td><strong>HVX-0143</strong></td>
-              <td style="color:var(--hx-text-mid);">02 Apr 2026</td>
-              <td>Top-up · 2,500 cr Scale pack</td>
-              <td>CHF 2,500.00</td>
-              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Paid</span></td>
-              <td class="right"><a style="color:var(--hx-text);font-weight:500;text-decoration:underline;text-underline-offset:2px;cursor:pointer;">Download</a></td>
-            </tr>
-            <tr>
-              <td><strong>HVX-0142</strong></td>
-              <td style="color:var(--hx-text-mid);">14 Mar 2026</td>
-              <td>Growth plan · monthly subscription</td>
-              <td>CHF 3,400.00</td>
-              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Paid</span></td>
-              <td class="right"><a style="color:var(--hx-text);font-weight:500;text-decoration:underline;text-underline-offset:2px;cursor:pointer;">Download</a></td>
-            </tr>
-            <tr>
-              <td><strong>HVX-0138</strong></td>
-              <td style="color:var(--hx-text-mid);">14 Feb 2026</td>
-              <td>Growth plan · monthly subscription</td>
-              <td>CHF 3,400.00</td>
-              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Paid</span></td>
-              <td class="right"><a style="color:var(--hx-text);font-weight:500;text-decoration:underline;text-underline-offset:2px;cursor:pointer;">Download</a></td>
-            </tr>
-            <tr>
-              <td><strong>HVX-0131</strong></td>
-              <td style="color:var(--hx-text-mid);">14 Jan 2026</td>
-              <td>Starter plan · monthly subscription</td>
-              <td>CHF 1,800.00</td>
-              <td><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Paid</span></td>
-              <td class="right"><a style="color:var(--hx-text);font-weight:500;text-decoration:underline;text-underline-offset:2px;cursor:pointer;">Download</a></td>
-            </tr>
-          </tbody>
-        </table>
 
       </main>
     </div>
