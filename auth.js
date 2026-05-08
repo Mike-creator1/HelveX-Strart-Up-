@@ -9,7 +9,6 @@
 
   var SUPABASE_URL = 'https://yjmpallrtpeinpdilptj.supabase.co';
   var SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_vx5tD4mUizuspej5-g3XlQ_PnbjXSeR';
-  var OTP_FN_URL = SUPABASE_URL + '/functions/v1/auth-otp';
 
   // Public pages that should never trigger an auth redirect.
   var PUBLIC_PATHS = [
@@ -43,62 +42,84 @@
     var HX = (window.HX = window.HX || {});
     HX.supabase = sb;
 
-    /* ---------- helpers ---------- */
-    function callOtp(action, payload) {
-      return fetch(OTP_FN_URL, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'apikey': SUPABASE_PUBLISHABLE_KEY,
-          'authorization': 'Bearer ' + SUPABASE_PUBLISHABLE_KEY
-        },
-        body: JSON.stringify(Object.assign({
-          action: action,
-          origin: window.location.origin
-        }, payload || {}))
-      }).then(function (r) {
-        return r.json().then(function (body) { return { status: r.status, body: body }; });
-      });
-    }
+    /* ---------- helpers ----------
+       All flows go through Supabase JS directly. That means the OTP that
+       Supabase mails out is the SAME token that verifyOtp checks against —
+       no second code generated anywhere. The OTP length (6 digits) is set
+       at the project level under Authentication → Providers → Email. */
 
     function clean(s) { return String(s || '').trim().toLowerCase(); }
 
+    // Normalises Supabase native { data, error } responses into a uniform
+    // shape that the existing pages already understand:
+    //   - 200 + body  → success
+    //   - non-200 + body.error  → error
+    function asResponse(supabaseResult) {
+      var err = supabaseResult && supabaseResult.error;
+      if (err) {
+        var status = err.status || (typeof err.code === 'number' ? err.code : 400);
+        return { status: status, body: { error: errorCode(err) } };
+      }
+      return { status: 200, body: { ok: true, data: supabaseResult && supabaseResult.data } };
+    }
+
+    function errorCode(err) {
+      var raw = (err && err.message) ? String(err.message).toLowerCase() : '';
+      if (/already\s*registered|user\s*already/.test(raw)) return 'user_already_exists';
+      if (/email\s*not\s*confirmed/.test(raw))             return 'email_not_confirmed';
+      if (/invalid\s*login\s*credentials/.test(raw))       return 'invalid_credentials';
+      if (/expired/.test(raw))                              return 'expired';
+      if (/token|otp/.test(raw) && /invalid|incorrect/.test(raw)) return 'mismatch';
+      if (/rate\s*limit/.test(raw))                         return 'too_many_attempts';
+      if (/password.*at\s*least|password.*characters/.test(raw)) return 'password_too_short';
+      if (/email.*invalid/.test(raw))                       return 'invalid_email';
+      return raw || 'unknown_error';
+    }
+
     HX.auth = {
-      // ─── Signup: hands over to the auth-otp Edge Function which creates
-      // the user (unconfirmed) and emails a 6-digit code.
+      // Send the signup confirmation email. Supabase generates the OTP,
+      // stores its hash, and emails it via the "Confirm signup" template.
       signUp: function (email, password, meta) {
-        return callOtp('send-signup', {
-          email: clean(email), password: password, meta: meta || {}
-        });
+        return sb.auth.signUp({
+          email: clean(email),
+          password: password,
+          options: {
+            data: meta || {},
+            emailRedirectTo: window.location.origin + '/verify?email=' +
+              encodeURIComponent(clean(email))
+          }
+        }).then(asResponse);
       },
 
-      // ─── Verify the 6-digit signup code via Edge Function and hydrate
-      // the resulting Supabase session into the local client.
+      // Verify the 6-digit code from the signup email. Returns the session
+      // when successful — Supabase JS automatically persists it.
       verifySignup: function (email, code) {
-        return callOtp('verify-signup', { email: clean(email), code: String(code || '') })
-          .then(function (res) {
-            if (res.status !== 200 || !res.body || !res.body.session) return res;
-            return sb.auth.setSession({
-              access_token: res.body.session.access_token,
-              refresh_token: res.body.session.refresh_token
-            }).then(function () { return res; });
-          });
+        return sb.auth.verifyOtp({
+          email: clean(email),
+          token: String(code || '').replace(/\D+/g, ''),
+          type: 'signup'
+        }).then(asResponse);
       },
 
-      // ─── Re-issue a signup code for the same email.
+      // Resend the signup confirmation OTP through Supabase.
       resendSignup: function (email) {
-        // For UX we ask the operator to re-enter their password before we
-        // issue a new code. Calling /signup again from the UI handles that.
-        // The OTP fn rotates active codes automatically.
-        return Promise.resolve({ status: 200, body: { sent: true, hint: 'use_signup_form' } });
+        var clean_email = clean(email);
+        return sb.auth.resend({
+          type: 'signup',
+          email: clean_email,
+          options: {
+            emailRedirectTo: window.location.origin + '/verify?email=' +
+              encodeURIComponent(clean_email)
+          }
+        }).then(asResponse);
       },
 
-      // ─── Email + password sign-in (after verification has completed)
+      // Email + password sign-in (after verification has completed).
       signInPassword: function (email, password) {
         return sb.auth.signInWithPassword({ email: clean(email), password: password });
       },
 
-      // ─── Social sign-in (Google / Apple / GitHub)
+      // Social sign-in (Google / Apple / GitHub).
       signInOAuth: function (provider) {
         return sb.auth.signInWithOAuth({
           provider: provider,
@@ -106,26 +127,28 @@
         });
       },
 
-      // ─── Send a 6-digit password-reset code
+      // Send the 6-digit password-reset code via Supabase.
       requestPasswordReset: function (email) {
-        return callOtp('send-recovery', { email: clean(email) });
+        var clean_email = clean(email);
+        return sb.auth.resetPasswordForEmail(clean_email, {
+          redirectTo: window.location.origin + '/reset-password?email=' +
+            encodeURIComponent(clean_email)
+        }).then(asResponse);
       },
 
-      // ─── Verify a 6-digit recovery code → returns a recovery session
+      // Verify the 6-digit recovery code; success establishes a session
+      // that lets us call updateUser({ password }).
       verifyRecovery: function (email, code) {
-        return callOtp('verify-recovery', { email: clean(email), code: String(code || '') })
-          .then(function (res) {
-            if (res.status !== 200 || !res.body || !res.body.session) return res;
-            return sb.auth.setSession({
-              access_token: res.body.session.access_token,
-              refresh_token: res.body.session.refresh_token
-            }).then(function () { return res; });
-          });
+        return sb.auth.verifyOtp({
+          email: clean(email),
+          token: String(code || '').replace(/\D+/g, ''),
+          type: 'recovery'
+        }).then(asResponse);
       },
 
-      // ─── Set new password for the currently authenticated user
+      // Set the new password for the currently authenticated (recovery) user.
       updatePassword: function (newPassword) {
-        return sb.auth.updateUser({ password: newPassword });
+        return sb.auth.updateUser({ password: newPassword }).then(asResponse);
       },
 
       session: function () { return sb.auth.getSession(); },

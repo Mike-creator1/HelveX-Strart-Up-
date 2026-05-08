@@ -267,12 +267,7 @@
               setBusy(btn, false);
               return;
             }
-            var via = (res.body && res.body.via) || '';
-            var delivered = !!(res.body && res.body.delivered);
-            var qs = '?email=' + encodeURIComponent(email)
-              + '&delivered=' + (delivered ? '1' : '0')
-              + (via ? '&via=' + encodeURIComponent(via) : '');
-            window.location.href = '/verify' + qs;
+            window.location.href = '/verify?email=' + encodeURIComponent(email);
           } catch (err) {
             showError('signup-error', (err && err.message) || 'Could not create account.');
             setBusy(btn, false);

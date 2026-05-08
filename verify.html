@@ -88,8 +88,6 @@
     (function () {
       var qp = new URLSearchParams(location.search);
       var email = (qp.get('email') || '').trim().toLowerCase();
-      var via = (qp.get('via') || '').trim();
-      var delivered = qp.get('delivered') !== '0';
 
       // Render the email pill (if we have an email)
       function renderEmailPill() {
@@ -121,19 +119,9 @@
             window.location.replace('/signup');
             return;
           }
-          // Surface delivery state so the user knows what to look for.
           var info = document.getElementById('verify-info');
-          var err  = document.getElementById('verify-error');
-          if (!delivered) {
-            err.textContent = 'We couldn\'t send the verification email right now (the project email service may be rate-limited). Please try again in a few minutes — or contact support.';
-            err.classList.add('show');
-          } else if (via === 'supabase') {
-            info.textContent = 'Check your inbox: tap the verification link in the email, or paste the 6-digit code below.';
-            info.classList.add('show');
-          } else if (via === 'resend') {
-            info.textContent = 'Check your inbox for a 6-digit HelveX code and enter it below.';
-            info.classList.add('show');
-          }
+          info.textContent = 'Check your inbox for the 6-digit HelveX verification code, or click the secure link in the same email.';
+          info.classList.add('show');
         });
       });
 
