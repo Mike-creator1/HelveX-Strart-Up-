@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Keys — HelveX</title>
+  <meta name="description" content="HelveX API keys — programmatic access to your deployments, workflows, and models." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+</head>
+<body data-active="api-keys">
+
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
+
+        <div class="hx-page-head">
+          <div>
+            <h1>API Keys.</h1>
+            <p class="sub">Programmatic access to your HelveX deployments, workflows, and models. Keys are scoped per project, rotatable on demand, and revocable instantly.</p>
+          </div>
+          <div class="hx-page-actions">
+            <a href="/support.html" class="hx-btn hx-btn-secondary">Read API docs</a>
+            <button class="hx-btn hx-btn-primary" disabled>Create API key</button>
+          </div>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Your keys</h2>
+          <span class="meta">0 active · 0 revoked</span>
+        </div>
+        <div class="hx-empty">
+          <div class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          </div>
+          <h3>No API keys yet</h3>
+          <p>API keys unlock programmatic access to your deployments. They're issued the moment your first agent ships — not before — so there's nothing to secrete or rotate today.</p>
+          <a href="/services.html" class="hx-btn hx-btn-secondary">Browse services</a>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>How keys work</h2>
+        </div>
+        <div class="hx-grid hx-grid-3">
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Scope</p>
+            <h3>Project-scoped</h3>
+            <p class="desc">Each key is bound to one project. Revoke a key without affecting the rest of your workspace.</p>
+          </div>
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Rotation</p>
+            <h3>Rotate any time</h3>
+            <p class="desc">Issue a new key, run both side-by-side during a grace window, then deactivate the old one. Zero downtime.</p>
+          </div>
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Audit</p>
+            <h3>Every call logged</h3>
+            <p class="desc">Per-key usage shows up in <a href="/logs.html" style="color:var(--hx-text);text-decoration:underline;">Logs</a> with trace IDs and tied to the key fingerprint.</p>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/platform.js"></script>
+</body>
+</html>

@@ -1,58 +1,137 @@
 <!DOCTYPE html>
-<html lang="en" translate="no" class="notranslate">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="google" content="notranslate" />
-  <title>CreateX - Secure SSL Payment</title>
+  <title>Security — HelveX</title>
+  <meta name="description" content="HelveX security — two-factor, sessions, audit log, and the controls that protect your workspace." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@800;900&display=swap" rel="stylesheet" />
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{min-height:100%;overflow-x:hidden}
-    body{font-family:Inter,-apple-system,sans-serif;background:#09090B;color:#fff;-webkit-font-smoothing:antialiased}
-    .font-serif{font-family:"Playfair Display",Georgia,serif}
-    .orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none}
-    .page{min-height:100vh;display:grid;place-items:center;padding:72px 20px;position:relative}
-    .card{width:min(760px,100%);border:1px solid rgba(196,165,90,.22);border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));box-shadow:0 26px 80px rgba(0,0,0,.48),0 0 0 1px rgba(255,255,255,.035) inset;padding:36px;position:relative;overflow:hidden}
-    .card:before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#C4A55A,transparent)}
-    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:100px;border:1px solid rgba(196,165,90,.24);background:rgba(196,165,90,.07);color:#E2C66E;font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px}
-    h1{font-size:46px;line-height:1.05;margin-bottom:14px}
-    p{color:rgba(255,255,255,.56);font-size:16px;line-height:1.72;margin-bottom:22px;max-width:620px}
-    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:26px 0}
-    .item{border:1px solid rgba(255,255,255,.075);background:rgba(255,255,255,.03);border-radius:8px;padding:14px;min-height:122px}
-    .icon{width:28px;height:28px;border-radius:8px;background:rgba(196,165,90,.14);border:1px solid rgba(196,165,90,.28);color:#E2C66E;display:grid;place-items:center;font-size:14px;font-weight:900;margin-bottom:12px}
-    .item strong{display:block;font-size:13px;margin-bottom:6px}
-    .item span{display:block;color:rgba(255,255,255,.48);font-size:13px;line-height:1.5}
-    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
-    a{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:100px;padding:13px 20px;font-weight:850;font-size:13px}
-    .gold{background:linear-gradient(135deg,#C4A55A,#D8BE70,#C4A55A);color:#08080A;box-shadow:0 16px 46px rgba(196,165,90,.22)}
-    .ghost{border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.74);background:rgba(255,255,255,.03)}
-    .mini-brand{position:fixed;top:18px;left:22px;z-index:120;display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff}.mini-brand img{width:38px;height:38px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(24,215,255,.3))}.mini-brand strong{display:block;font-size:14px;line-height:1;font-weight:850}.mini-brand small{display:block;margin-top:4px;color:#18d7ff;font-size:9px;letter-spacing:.18em;font-weight:900;text-transform:uppercase}
-    @media(max-width:720px){.grid{grid-template-columns:1fr}h1{font-size:38px}.card{padding:28px}}
-  </style>
-<script src="lang/en.js"></script></head>
-<body><a href="landing.html" class="mini-brand"><img src="createx-logo.svg" alt="CreateX" /><span><strong>CreateX</strong><small>AI Agent</small></span></a><div id="lang-host" style="position:fixed;top:18px;right:22px;z-index:120"></div>
-  <div class="orb" style="width:520px;height:520px;background:#C4A55A;top:-18%;left:-12%;opacity:.08"></div>
-  <div class="orb" style="width:360px;height:360px;background:#3B82F6;bottom:-10%;right:-12%;opacity:.055"></div>
-  <div style="position:fixed;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:30px 30px;pointer-events:none;opacity:.7"></div>
-  <main class="page">
-    <section class="card">
-      <div class="eyebrow">SSL checkout</div>
-      <h1 class="font-serif">Secure payment, built for trust.</h1>
-      <p>Checkout is designed to be clean, encrypted, and confidence-first. Payment is processed through Stripe, browser communication uses SSL protection, card data is protected, and the selected plan is shown clearly before activation.</p>
-      <div class="grid">
-        <div class="item"><div class="icon">✓</div><strong>SSL encrypted</strong><span>Checkout runs through protected browser communication before payment is submitted.</span></div>
-        <div class="item"><div class="icon">✓</div><strong>Stripe payment</strong><span>Payment processing is handled by Stripe checkout infrastructure.</span></div>
-        <div class="item"><div class="icon">✓</div><strong>Card data protected</strong><span>The flow avoids unnecessary sensitive details and keeps payment data protected.</span></div>
-        <div class="item"><div class="icon">✓</div><strong>Clear activation</strong><span>The selected plan and total price are shown before the plan is activated.</span></div>
-      </div>
-      <div class="actions">
-        <a class="gold" href="pricing.html">Back to pricing</a>
-        <a class="ghost" href="checkout.html?plan=Pro&price=89">View checkout</a>
-      </div>
-    </section>
-  </main>
-<script src="lang-widget.js?v=6"></script><script>initLang('lang-host');</script></body>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+</head>
+<body data-active="security">
+
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
+
+        <div class="hx-page-head">
+          <div>
+            <h1>Security.</h1>
+            <p class="sub">Two-factor authentication, active sessions, audit log, and the controls that protect your workspace and your data.</p>
+          </div>
+          <div class="hx-page-actions">
+            <a href="/profile.html" class="hx-btn hx-btn-secondary">Profile</a>
+            <a href="/support.html" class="hx-btn hx-btn-primary">Report a security issue</a>
+          </div>
+        </div>
+
+        <div class="hx-grid hx-grid-4">
+          <div class="hx-stat">
+            <p class="hx-stat-label">Two-factor</p>
+            <p class="hx-stat-value" style="font-size:18px;color:var(--hx-text-dim);">Not configured</p>
+            <p class="hx-stat-meta">Recommended</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Active sessions</p>
+            <p class="hx-stat-value hx-mono">1</p>
+            <p class="hx-stat-meta">This browser</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Region</p>
+            <p class="hx-stat-value" style="font-size:18px;">EU-CH-1</p>
+            <p class="hx-stat-meta">Data stays in Switzerland</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">SSO</p>
+            <p class="hx-stat-value" style="font-size:18px;color:var(--hx-text-dim);">—</p>
+            <p class="hx-stat-meta">Scale plan</p>
+          </div>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Authentication</h2>
+        </div>
+        <div class="hx-grid hx-grid-2">
+          <div class="hx-card">
+            <div class="hx-card-head">
+              <div>
+                <p class="hx-card-eyebrow">Two-factor</p>
+                <h3>Authenticator app (TOTP)</h3>
+              </div>
+              <span class="hx-badge hx-badge-neutral">Off</span>
+            </div>
+            <p class="desc">Bind a 6-digit code from an authenticator app to every sign-in. Strongly recommended — phishable factors like SMS are not supported.</p>
+            <a href="/support.html" class="hx-card-link">Enable 2FA</a>
+          </div>
+
+          <div class="hx-card">
+            <div class="hx-card-head">
+              <div>
+                <p class="hx-card-eyebrow">Recovery</p>
+                <h3>Recovery codes</h3>
+              </div>
+              <span class="hx-badge hx-badge-neutral">Not generated</span>
+            </div>
+            <p class="desc">Eight one-time codes that work when your authenticator is lost. Stored hashed — even we can't read them. Generated when you enable 2FA.</p>
+            <a href="/support.html" class="hx-card-link">Generate codes</a>
+          </div>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Active sessions</h2>
+          <span class="meta">1 device</span>
+        </div>
+        <div class="hx-empty">
+          <div class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3>Just this browser</h3>
+          <p>Sign-ins from new devices are flagged in <a href="/activity.html" style="color:var(--hx-text);text-decoration:underline;">Activity</a> with IP, region, and timestamp. Sign out of every other session at any time.</p>
+          <button class="hx-btn hx-btn-secondary" disabled>Sign out other sessions</button>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Workspace controls</h2>
+        </div>
+        <div class="hx-grid hx-grid-3">
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Data residency</p>
+            <h3>Swiss-only</h3>
+            <p class="desc">All data — prompts, embeddings, logs, model weights — stays in EU-CH-1. No US, no UK, no shadow replication.</p>
+          </div>
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Encryption</p>
+            <h3>At rest &amp; in transit</h3>
+            <p class="desc">AES-256 at rest, TLS 1.3 in transit, per-tenant KMS envelope keys. Decryption never crosses the region boundary.</p>
+          </div>
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Audit</p>
+            <h3>Every action logged</h3>
+            <p class="desc">Sign-ins, key rotations, project briefs, plan changes — all recorded with actor, IP, and timestamp in <a href="/activity.html" style="color:var(--hx-text);text-decoration:underline;">Activity</a>.</p>
+          </div>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Best practices</h2>
+        </div>
+        <div class="hx-card">
+          <ul style="margin:0;padding:0;list-style:none;">
+            <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--hx-line);"><span class="hx-mono" style="color:var(--hx-text-dim);min-width:24px;">01</span><span>Enable 2FA before you brief your first project — it locks the workspace before there's anything worth stealing.</span></li>
+            <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--hx-line);"><span class="hx-mono" style="color:var(--hx-text-dim);min-width:24px;">02</span><span>Rotate API keys on a schedule, not just when something goes wrong. Every key change is zero-downtime.</span></li>
+            <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--hx-line);"><span class="hx-mono" style="color:var(--hx-text-dim);min-width:24px;">03</span><span>Use scoped integrations — give a connector only the permissions the workflow needs, never workspace-wide.</span></li>
+            <li style="display:flex;gap:10px;padding:8px 0;"><span class="hx-mono" style="color:var(--hx-text-dim);min-width:24px;">04</span><span>Review <a href="/activity.html" style="color:var(--hx-text);text-decoration:underline;">Activity</a> after onboarding new members. Trust and verify.</span></li>
+          </ul>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/platform.js"></script>
+</body>
 </html>

@@ -10,9 +10,34 @@
     {
       label: 'Workspace',
       items: [
-        { id: 'dashboard',     href: '/dashboard.html',     label: 'Overview',     icon: 'home' },
-        { id: 'projects',      href: '/projects.html',      label: 'Projects',     icon: 'folder' },
-        { id: 'services',      href: '/services.html',      label: 'Services',     icon: 'grid' }
+        { id: 'dashboard', href: '/dashboard.html', label: 'Overview', icon: 'home' },
+        { id: 'projects',  href: '/projects.html',  label: 'Projects', icon: 'folder' },
+        { id: 'services',  href: '/services.html',  label: 'Services', icon: 'grid' }
+      ]
+    },
+    {
+      label: 'AI',
+      items: [
+        { id: 'models',      href: '/models.html',      label: 'Models',      icon: 'cpu' },
+        { id: 'workflows',   href: '/workflows.html',   label: 'Workflows',   icon: 'zap' },
+        { id: 'deployments', href: '/deployments.html', label: 'Deployments', icon: 'cloud' }
+      ]
+    },
+    {
+      label: 'Observability',
+      items: [
+        { id: 'activity',   href: '/activity.html',   label: 'Activity',   icon: 'pulse' },
+        { id: 'usage',      href: '/usage.html',      label: 'Usage',      icon: 'chart' },
+        { id: 'logs',       href: '/logs.html',       label: 'Logs',       icon: 'terminal' },
+        { id: 'monitoring', href: '/monitoring.html', label: 'Monitoring', icon: 'heart' }
+      ]
+    },
+    {
+      label: 'Developer',
+      items: [
+        { id: 'api-keys',     href: '/api-keys.html',     label: 'API Keys',     icon: 'key' },
+        { id: 'integrations', href: '/integrations.html', label: 'Integrations', icon: 'plug' },
+        { id: 'domains',      href: '/domains.html',      label: 'Domains',      icon: 'globe' }
       ]
     },
     {
@@ -22,37 +47,48 @@
         { id: 'pricing',       href: '/pricing.html',       label: 'Pricing',       icon: 'tag' },
         { id: 'subscriptions', href: '/subscriptions.html', label: 'Subscriptions', icon: 'refresh' },
         { id: 'invoices',      href: '/invoices.html',      label: 'Invoices',      icon: 'doc' },
-        { id: 'orders',        href: '/orders.html',        label: 'Orders',        icon: 'box' },
         { id: 'billing',       href: '/billing.html',       label: 'Billing',       icon: 'card' }
       ]
     },
     {
       label: 'Account',
       items: [
-        { id: 'profile',       href: '/profile.html',       label: 'Profile',  icon: 'user' },
-        { id: 'settings',      href: '/settings.html',      label: 'Settings', icon: 'cog'  },
-        { id: 'support',       href: '/support.html',       label: 'Support',  icon: 'help' }
+        { id: 'profile',  href: '/profile.html',  label: 'Profile',  icon: 'user'   },
+        { id: 'team',     href: '/team.html',     label: 'Team',     icon: 'users'  },
+        { id: 'security', href: '/security.html', label: 'Security', icon: 'shield' },
+        { id: 'settings', href: '/settings.html', label: 'Settings', icon: 'cog'    },
+        { id: 'support',  href: '/support.html',  label: 'Support',  icon: 'help'   }
       ]
     }
   ];
 
   var ICONS = {
-    home:    '<path d="M3 12l9-9 9 9M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/>',
-    folder:  '<path d="M3 7a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
-    grid:    '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
-    coin:    '<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5h4a1.5 1.5 0 0 1 0 3h-2a1.5 1.5 0 0 0 0 3h4"/>',
-    tag:     '<path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.5"/>',
-    refresh: '<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>',
-    doc:     '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/>',
-    box:     '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
-    card:    '<rect x="2" y="6" width="20" height="14" rx="2"/><line x1="2" y1="11" x2="22" y2="11"/><line x1="6" y1="16" x2="10" y2="16"/>',
-    user:    '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
-    cog:     '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
-    help:    '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
-    logout:  '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
-    chev:    '<polyline points="6 9 12 15 18 9"/>',
-    search:  '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
-    bell:    '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
+    home:     '<path d="M3 12l9-9 9 9M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/>',
+    folder:   '<path d="M3 7a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+    grid:     '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+    cpu:      '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>',
+    zap:      '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+    cloud:    '<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>',
+    pulse:    '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+    chart:    '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/>',
+    terminal: '<polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>',
+    heart:    '<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+    key:      '<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>',
+    plug:     '<path d="M9 2v4M15 2v4M5.25 6h13.5l-1.41 14.22A2 2 0 0 1 15.35 22h-6.7a2 2 0 0 1-1.99-1.78L5.25 6z"/>',
+    globe:    '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+    coin:     '<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5h4a1.5 1.5 0 0 1 0 3h-2a1.5 1.5 0 0 0 0 3h4"/>',
+    tag:      '<path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.5"/>',
+    refresh:  '<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>',
+    doc:      '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/>',
+    card:     '<rect x="2" y="6" width="20" height="14" rx="2"/><line x1="2" y1="11" x2="22" y2="11"/><line x1="6" y1="16" x2="10" y2="16"/>',
+    user:     '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    users:    '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    shield:   '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    cog:      '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+    help:     '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+    logout:   '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+    chev:     '<polyline points="6 9 12 15 18 9"/>',
+    search:   '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>'
   };
 
   function svg(name, opts) {
@@ -77,8 +113,7 @@
     html +=   '<img src="/helvex-logo.png" alt="HelveX" />';
     html += '</a>';
 
-    // Workspace switcher (HelveX-signature)
-    html += '<button type="button" class="hx-workspace" id="hx-workspace-btn" title="Switch workspace (coming soon)">';
+    html += '<button type="button" class="hx-workspace" id="hx-workspace-btn" title="Workspace">';
     html +=   '<span class="hx-workspace-avatar" id="hx-workspace-avatar">·</span>';
     html +=   '<span class="hx-workspace-name" id="hx-workspace-name">Loading…</span>';
     html +=   '<span class="hx-workspace-chev">' + svg('chev', { sw: 1.8 }) + '</span>';
@@ -96,7 +131,7 @@
     });
 
     html += '<div class="hx-sidebar-foot">';
-    html +=   '<div class="hx-user-card" id="hx-user-card" title="Account menu">';
+    html +=   '<div class="hx-user-card" id="hx-user-card" title="Account">';
     html +=     '<div class="hx-user-avatar" id="hx-user-avatar">·</div>';
     html +=     '<div class="hx-user-meta">';
     html +=       '<div class="hx-user-name" id="hx-user-name">Loading…</div>';
@@ -112,7 +147,7 @@
     var pageLabel = activeItem ? activeItem.label : 'Platform';
     var html = '';
     html += '<button type="button" class="hx-menu-toggle" aria-label="Open menu" id="hx-menu-toggle">';
-    html +=   svg('home', { sw: 2 }).replace(ICONS.home, '<path d="M3 6h18M3 12h18M3 18h18"/>');
+    html +=   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>';
     html += '</button>';
     html += '<nav class="hx-breadcrumb" aria-label="Breadcrumb">';
     html +=   '<a href="/dashboard.html" id="hx-crumb-workspace">Workspace</a>';
@@ -160,7 +195,6 @@
       if (mailEl) mailEl.textContent = user.email || '';
       if (avEl)   avEl.textContent   = initials(meta.first_name, meta.last_name, user.email);
 
-      // Hydrate workspace pill from company metadata, fallback to email domain.
       var wsName = (meta.company || '').trim();
       if (!wsName && user.email) {
         var domain = user.email.split('@')[1] || '';
@@ -185,12 +219,9 @@
     var topbar = document.querySelector('.hx-topbar');
     if (topbar) topbar.innerHTML = buildTopbar(activeItem);
 
-    // Mobile menu toggle
     var toggle = document.getElementById('hx-menu-toggle');
     if (toggle && sidebar) {
-      toggle.addEventListener('click', function () {
-        sidebar.classList.toggle('open');
-      });
+      toggle.addEventListener('click', function () { sidebar.classList.toggle('open'); });
     }
     if (sidebar) {
       document.addEventListener('click', function (e) {
@@ -201,20 +232,15 @@
       });
     }
 
-    // Cmd-K affordance: focus a future command palette (placeholder for now)
-    var cmdk = document.getElementById('hx-cmdk');
-    if (cmdk) {
-      cmdk.addEventListener('click', function () { /* hook into command palette here */ });
-    }
     document.addEventListener('keydown', function (e) {
       var meta = e.metaKey || e.ctrlKey;
       if (meta && (e.key === 'k' || e.key === 'K')) {
         e.preventDefault();
+        var cmdk = document.getElementById('hx-cmdk');
         if (cmdk) cmdk.focus();
       }
     });
 
-    // Boot Supabase auth (session guard + signout binding)
     loadAuthScript();
     if (window.HX && window.HX.auth) hydrateUser();
     else document.addEventListener('hx:auth-ready', hydrateUser, { once: true });

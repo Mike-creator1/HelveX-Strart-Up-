@@ -48,6 +48,17 @@
     { "source": "/orders", "destination": "/orders.html" },
     { "source": "/support", "destination": "/support.html" },
     { "source": "/settings", "destination": "/settings.html" },
-    { "source": "/profile", "destination": "/profile.html" }
+    { "source": "/profile", "destination": "/profile.html" },
+
+    { "source": "/deployments", "destination": "/deployments.html" },
+    { "source": "/activity", "destination": "/activity.html" },
+    { "source": "/usage", "destination": "/usage.html" },
+    { "source": "/logs", "destination": "/logs.html" },
+    { "source": "/monitoring", "destination": "/monitoring.html" },
+    { "source": "/api-keys", "destination": "/api-keys.html" },
+    { "source": "/integrations", "destination": "/integrations.html" },
+    { "source": "/domains", "destination": "/domains.html" },
+    { "source": "/team", "destination": "/team.html" },
+    { "source": "/security", "destination": "/security.html" }
   ]
 }

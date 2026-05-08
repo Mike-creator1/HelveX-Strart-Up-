@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team — HelveX</title>
+  <meta name="description" content="HelveX team — invite collaborators, scope roles, audit who shipped what." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+</head>
+<body data-active="team">
+
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
+
+        <div class="hx-page-head">
+          <div>
+            <h1>Team.</h1>
+            <p class="sub">Invite collaborators to your HelveX workspace, scope what they can see and ship, and keep an audit trail of every action.</p>
+          </div>
+          <div class="hx-page-actions">
+            <a href="/pricing.html" class="hx-btn hx-btn-secondary">View plans</a>
+            <button class="hx-btn hx-btn-primary" disabled title="Available on the Scale plan">Invite member</button>
+          </div>
+        </div>
+
+        <div class="hx-grid hx-grid-4">
+          <div class="hx-stat">
+            <p class="hx-stat-label">Members</p>
+            <p class="hx-stat-value hx-mono">1</p>
+            <p class="hx-stat-meta">You · owner</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Pending invites</p>
+            <p class="hx-stat-value hx-mono">0</p>
+            <p class="hx-stat-meta">None</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Roles</p>
+            <p class="hx-stat-value" style="font-size:18px;">3</p>
+            <p class="hx-stat-meta">Owner · Admin · Member</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">SSO</p>
+            <p class="hx-stat-value" style="font-size:18px;color:var(--hx-text-dim);">—</p>
+            <p class="hx-stat-meta">Available on Scale</p>
+          </div>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Members</h2>
+          <span class="meta">1 active</span>
+        </div>
+        <div class="hx-empty">
+          <div class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3>It's just you for now</h3>
+          <p>Multi-seat workspaces, role-based access control, and SCIM-provisioned SSO arrive on the Scale plan. Until then, your workspace is single-tenant and locked to your account.</p>
+          <a href="/pricing.html" class="hx-btn hx-btn-secondary">Compare plans</a>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Roles</h2>
+          <span class="meta">Available when team is enabled</span>
+        </div>
+        <div class="hx-grid hx-grid-3">
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Owner</p>
+            <h3>Full control</h3>
+            <p class="desc">Billing, plan changes, member management, project deletion, API key issuance. One per workspace.</p>
+          </div>
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Admin</p>
+            <h3>Operate everything</h3>
+            <p class="desc">Brief projects, manage deployments, rotate keys, view billing — but cannot change the plan or remove the owner.</p>
+          </div>
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Member</p>
+            <h3>Build &amp; ship</h3>
+            <p class="desc">Brief projects, view their own deployments, read shared logs. No access to billing or member management.</p>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/platform.js"></script>
+</body>
+</html>

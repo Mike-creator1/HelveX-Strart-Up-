@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Activity — HelveX</title>
+  <meta name="description" content="HelveX activity — every event across your workspace in one timeline." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+</head>
+<body data-active="activity">
+
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
+
+        <div class="hx-page-head">
+          <div>
+            <h1>Activity.</h1>
+            <p class="sub">Every event across your HelveX workspace — sign-ins, project briefs, deployments, scope changes, billing — in one chronological feed.</p>
+          </div>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Recent activity</h2>
+          <span class="meta">All events</span>
+        </div>
+        <div class="hx-empty">
+          <div class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h3>No activity yet</h3>
+          <p>Once you brief a project, deploy an agent, or change a plan, every action will be logged here with actor, timestamp, and trace ID.</p>
+          <a href="/services.html" class="hx-btn hx-btn-secondary">Browse services</a>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/platform.js"></script>
+</body>
+</html>

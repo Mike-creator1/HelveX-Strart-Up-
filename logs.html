@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logs — HelveX</title>
+  <meta name="description" content="HelveX runtime logs — every model call, tool invocation, and workflow step, streamed and searchable." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+</head>
+<body data-active="logs">
+
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
+
+        <div class="hx-page-head">
+          <div>
+            <h1>Logs.</h1>
+            <p class="sub">Every model call, tool invocation, and workflow step — streamed in real time, searchable by trace ID, and retained for 30 days on every plan.</p>
+          </div>
+          <div class="hx-page-actions">
+            <a href="/monitoring.html" class="hx-btn hx-btn-secondary">Monitoring</a>
+            <a href="/usage.html" class="hx-btn hx-btn-secondary">Usage</a>
+          </div>
+        </div>
+
+        <div class="hx-grid hx-grid-4">
+          <div class="hx-stat">
+            <p class="hx-stat-label">Streaming</p>
+            <p class="hx-stat-value" style="font-size:18px;color:var(--hx-text-dim);">Idle</p>
+            <p class="hx-stat-meta">No active deployments</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Events (24 h)</p>
+            <p class="hx-stat-value hx-mono">0</p>
+            <p class="hx-stat-meta">Across all sources</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Retention</p>
+            <p class="hx-stat-value" style="font-size:18px;">30 d</p>
+            <p class="hx-stat-meta">Plan default</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Region</p>
+            <p class="hx-stat-value" style="font-size:18px;">EU-CH-1</p>
+            <p class="hx-stat-meta">Logs stay in Switzerland</p>
+          </div>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Live stream</h2>
+          <span class="meta">All sources · all severities</span>
+        </div>
+        <div class="hx-empty">
+          <div class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          </div>
+          <h3>No log events yet</h3>
+          <p>When a workflow runs or an agent handles a request, structured log lines will appear here with trace ID, model, latency, and status — searchable and exportable.</p>
+          <a href="/services.html" class="hx-btn hx-btn-secondary">Browse services</a>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/platform.js"></script>
+</body>
+</html>

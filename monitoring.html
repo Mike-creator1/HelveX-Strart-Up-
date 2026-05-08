@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitoring — HelveX</title>
+  <meta name="description" content="HelveX monitoring — uptime, latency, and error rate across every deployment." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+</head>
+<body data-active="monitoring">
+
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
+
+        <div class="hx-page-head">
+          <div>
+            <h1>Monitoring.</h1>
+            <p class="sub">Uptime, latency percentiles, and error rate for every HelveX deployment. Alerts route to email or Slack and trigger an on-call rotation when you're on Scale.</p>
+          </div>
+          <div class="hx-page-actions">
+            <a href="/logs.html" class="hx-btn hx-btn-secondary">View logs</a>
+            <a href="/support.html" class="hx-btn hx-btn-primary">Configure alerts</a>
+          </div>
+        </div>
+
+        <div class="hx-grid hx-grid-4">
+          <div class="hx-stat">
+            <p class="hx-stat-label">Health</p>
+            <p class="hx-stat-value" style="font-size:18px;color:var(--hx-text-dim);">—</p>
+            <p class="hx-stat-meta">No deployments</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Uptime (30 d)</p>
+            <p class="hx-stat-value" style="font-size:18px;color:var(--hx-text-dim);">—</p>
+            <p class="hx-stat-meta">No data</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">p95 latency</p>
+            <p class="hx-stat-value" style="font-size:18px;color:var(--hx-text-dim);">—</p>
+            <p class="hx-stat-meta">No data</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Error rate (24 h)</p>
+            <p class="hx-stat-value hx-mono">0<span class="suffix">%</span></p>
+            <p class="hx-stat-meta">No data</p>
+          </div>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Service health</h2>
+        </div>
+        <div class="hx-empty">
+          <div class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <h3>Nothing to monitor yet</h3>
+          <p>Once an agent or workflow ships, this view shows live uptime, p50/p95/p99 latency, error budgets, and active alerts per deployment.</p>
+          <a href="/services.html" class="hx-btn hx-btn-secondary">Browse services</a>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/platform.js"></script>
+</body>
+</html>

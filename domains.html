@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Domains — HelveX</title>
+  <meta name="description" content="HelveX domains — custom endpoints for your agents and copilots, with managed TLS." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+</head>
+<body data-active="domains">
+
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
+
+        <div class="hx-page-head">
+          <div>
+            <h1>Domains.</h1>
+            <p class="sub">Custom endpoints for your agents and copilots — under your subdomain, with managed TLS, automatic renewal, and DNS verified before any traffic flows.</p>
+          </div>
+          <div class="hx-page-actions">
+            <a href="/deployments.html" class="hx-btn hx-btn-secondary">View deployments</a>
+            <a href="/support.html" class="hx-btn hx-btn-primary">Add a domain</a>
+          </div>
+        </div>
+
+        <div class="hx-grid hx-grid-4">
+          <div class="hx-stat">
+            <p class="hx-stat-label">Domains</p>
+            <p class="hx-stat-value hx-mono">0</p>
+            <p class="hx-stat-meta">Verified · pointing here</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">TLS certs</p>
+            <p class="hx-stat-value hx-mono">0</p>
+            <p class="hx-stat-meta">Auto-renewed</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Default endpoint</p>
+            <p class="hx-stat-value" style="font-size:13px;font-family:var(--hx-mono);">helvex.app</p>
+            <p class="hx-stat-meta">Pre-issued per project</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Region</p>
+            <p class="hx-stat-value" style="font-size:18px;">EU-CH-1</p>
+            <p class="hx-stat-meta">Swiss-resident traffic</p>
+          </div>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Custom domains</h2>
+        </div>
+        <div class="hx-empty">
+          <div class="icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <h3>No custom domains yet</h3>
+          <p>Every project ships on a HelveX-managed endpoint by default. Add a custom domain — like <span class="hx-mono">copilot.yourcompany.com</span> — and we'll verify DNS, issue TLS, and pin routing to your region.</p>
+          <a href="/support.html" class="hx-btn hx-btn-secondary">Brief a domain</a>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/platform.js"></script>
+</body>
+</html>
