@@ -225,6 +225,7 @@
               var msg = (err === 'expired') ? 'This code has expired. Request a new one to continue.'
                       : (err === 'mismatch' || err === 'no_code' || err === 'invalid_code_format') ? 'Incorrect code. Double-check the digits and try again.'
                       : (err === 'too_many_attempts') ? 'Too many attempts. Request a new code.'
+                      : (err === 'password_required_to_sign_in') ? 'Your sign-up session expired. Please start over from the create-account screen.'
                       : 'That code did not work.';
               showAlert('verify-error', msg);
               setBusy(btn, false);

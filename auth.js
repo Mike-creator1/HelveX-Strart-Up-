@@ -65,37 +65,67 @@
       });
     }
 
+    // Pending-signup credentials live in sessionStorage so /verify can
+    // hydrate them without forcing the user to retype their password.
+    var PENDING_KEY = 'helvex.pending_signup';
+    function rememberPendingSignup(email, password) {
+      try {
+        sessionStorage.setItem(PENDING_KEY, JSON.stringify({ email: clean(email), password: password, ts: Date.now() }));
+      } catch (_) {}
+    }
+    function readPendingSignup(email) {
+      try {
+        var raw = sessionStorage.getItem(PENDING_KEY);
+        if (!raw) return null;
+        var obj = JSON.parse(raw);
+        if (!obj || clean(obj.email) !== clean(email)) return null;
+        if (Date.now() - (obj.ts || 0) > 30 * 60 * 1000) return null; // 30 min
+        return obj;
+      } catch (_) { return null; }
+    }
+    function clearPendingSignup() {
+      try { sessionStorage.removeItem(PENDING_KEY); } catch (_) {}
+    }
+
     HX.auth = {
       // ─── Signup: create user (admin) + email a HelveX 6-digit code via Resend
       signUp: function (email, password, meta) {
+        var clean_email = clean(email);
+        rememberPendingSignup(clean_email, password); // remember for /verify
         return callOtp('send-signup', {
-          email: clean(email), password: password, meta: meta || {}
+          email: clean_email, password: password, meta: meta || {}
         });
       },
 
-      // ─── Verify the 6-digit signup code; on success, hydrate the session
-      // returned by the Edge Function into the local Supabase JS client.
+      // ─── Verify the 6-digit signup code; the password is read from
+      // sessionStorage (saved during signUp) so the Edge Function can
+      // sign the user in immediately after confirmation.
       verifySignup: function (email, code) {
+        var clean_email = clean(email);
+        var pending = readPendingSignup(clean_email);
+        var clean_code = String(code || '').replace(/\D+/g, '').slice(0, 6);
         return callOtp('verify-signup', {
-          email: clean(email),
-          token: String(code || '').replace(/\D+/g, '').slice(0, 6),
-          code:  String(code || '').replace(/\D+/g, '').slice(0, 6)
+          email: clean_email,
+          code: clean_code,
+          password: pending && pending.password ? pending.password : ''
         }).then(function (res) {
-          if (res.status !== 200 || !res.body || !res.body.session) return res;
-          return sb.auth.setSession({
-            access_token:  res.body.session.access_token,
-            refresh_token: res.body.session.refresh_token
-          }).then(function () { return res; });
+          if (res.status === 200 && res.body && res.body.session) {
+            clearPendingSignup();
+            return sb.auth.setSession({
+              access_token:  res.body.session.access_token,
+              refresh_token: res.body.session.refresh_token
+            }).then(function () { return res; });
+          }
+          return res;
         });
       },
 
       // ─── Resend the signup OTP for the same email
-      resendSignup: function (email, password, meta) {
-        return callOtp('send-signup', {
-          email: clean(email),
-          password: password || '',
-          meta: meta || {}
-        });
+      resendSignup: function (email) {
+        var clean_email = clean(email);
+        var pending = readPendingSignup(clean_email);
+        if (!pending) return Promise.resolve({ status: 400, body: { error: 'pending_expired' } });
+        return callOtp('send-signup', { email: clean_email, password: pending.password, meta: {} });
       },
 
       // ─── Email + password sign-in (after verification has completed)
@@ -116,22 +146,33 @@
         return callOtp('send-recovery', { email: clean(email) });
       },
 
-      // ─── Verify the 6-digit recovery code → returns a recovery session
+      // ─── Verify the 6-digit recovery code → returns a one-shot recovery_token
+      // that the page passes to setNewPasswordWithRecoveryToken().
       verifyRecovery: function (email, code) {
         return callOtp('verify-recovery', {
           email: clean(email),
-          token: String(code || '').replace(/\D+/g, '').slice(0, 6),
           code:  String(code || '').replace(/\D+/g, '').slice(0, 6)
-        }).then(function (res) {
-          if (res.status !== 200 || !res.body || !res.body.session) return res;
-          return sb.auth.setSession({
-            access_token:  res.body.session.access_token,
-            refresh_token: res.body.session.refresh_token
-          }).then(function () { return res; });
         });
       },
 
-      // ─── Set new password for the currently authenticated user
+      // ─── Trade a recovery_token + new password for an authenticated session.
+      setNewPasswordWithRecoveryToken: function (email, recoveryToken, newPassword) {
+        return callOtp('set-new-password', {
+          email: clean(email),
+          recovery_token: String(recoveryToken || ''),
+          new_password:   String(newPassword || '')
+        }).then(function (res) {
+          if (res.status === 200 && res.body && res.body.session) {
+            return sb.auth.setSession({
+              access_token:  res.body.session.access_token,
+              refresh_token: res.body.session.refresh_token
+            }).then(function () { return res; });
+          }
+          return res;
+        });
+      },
+
+      // ─── (Legacy helper kept for backward compat — direct profile updates only)
       updatePassword: function (newPassword) {
         return sb.auth.updateUser({ password: newPassword });
       },
