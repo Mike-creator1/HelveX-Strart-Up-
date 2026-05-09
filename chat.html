@@ -550,9 +550,9 @@
           });
           if (state.sending) {
             html += '<div class="hx-msg is-assistant">' +
-              '<div class="hx-msg-avatar">A</div>' +
+              '<div class="hx-msg-avatar">H</div>' +
               '<div class="hx-msg-body">' +
-                '<div class="hx-msg-meta"><strong>Assistant</strong><span class="dot"></span><span>thinking…</span></div>' +
+                '<div class="hx-msg-meta"><strong>HelveX</strong><span class="dot"></span><span>thinking…</span></div>' +
                 '<div class="hx-typing"><span></span><span></span><span></span></div>' +
               '</div>' +
             '</div>';
@@ -580,8 +580,8 @@
 
         function renderMessage(m, idx) {
           var i = state.messages.indexOf(m);
-          var initials = m.role === 'assistant' ? 'A' : 'U';
-          var label = m.role === 'assistant' ? 'Assistant' : 'You';
+          var initials = m.role === 'assistant' ? 'H' : 'U';
+          var label = m.role === 'assistant' ? 'HelveX' : 'You';
           var meta = '<strong>' + label + '</strong>';
           if (m.role === 'assistant' && m.model) meta += '<span class="dot"></span><span class="hx-mono" style="text-transform:capitalize;">' + escape(m.model) + '</span>';
           if (m.role === 'assistant' && m.latency_ms) meta += '<span class="dot"></span><span class="hx-mono">' + m.latency_ms + ' ms</span>';
