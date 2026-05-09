@@ -258,22 +258,98 @@
       border-top: 1px solid var(--hx-line);
       background: var(--hx-surface);
       padding: 14px 24px 18px;
+      position: relative;
     }
     .hx-chat-compose-inner {
       max-width: 760px; margin: 0 auto;
       display: flex; flex-direction: column; gap: 8px;
     }
     .hx-chat-input-row {
-      display: flex; align-items: flex-end; gap: 8px;
+      display: flex; flex-direction: column; gap: 8px;
       background: var(--hx-surface);
       border: 1px solid var(--hx-line);
       border-radius: var(--hx-r-lg);
-      padding: 10px 10px 10px 14px;
+      padding: 10px 12px;
       transition: border-color 0.12s, box-shadow 0.12s;
     }
     .hx-chat-input-row:focus-within {
       border-color: var(--hx-text);
       box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+    }
+    .hx-chat-input-row.is-drag-over {
+      border-color: var(--hx-text);
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
+      background: var(--hx-bg-2);
+    }
+
+    /* Attachment chips bar (above the textarea, only visible when populated) */
+    .hx-chat-attach-bar {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin: 0;
+    }
+    .hx-chat-attach-bar:empty { display: none; }
+    .hx-attach-chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--hx-bg-2);
+      border: 1px solid var(--hx-line);
+      border-radius: var(--hx-r-sm);
+      padding: 5px 8px 5px 5px;
+      font-size: 12.5px; color: var(--hx-text-mid);
+      max-width: 240px;
+      position: relative;
+    }
+    .hx-attach-chip-thumb {
+      width: 28px; height: 28px;
+      border-radius: 4px;
+      background: var(--hx-surface);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 1px solid var(--hx-line);
+    }
+    .hx-attach-chip-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hx-attach-chip-thumb svg { width: 14px; height: 14px; color: var(--hx-text-dim); }
+    .hx-attach-chip-name {
+      font-weight: 500; color: var(--hx-text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 150px;
+    }
+    .hx-attach-chip-meta { color: var(--hx-text-faint); font-size: 11px; }
+    .hx-attach-chip-x {
+      width: 18px; height: 18px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; border: none; cursor: pointer;
+      color: var(--hx-text-dim);
+      border-radius: 3px;
+      transition: background 0.12s, color 0.12s;
+      padding: 0;
+    }
+    .hx-attach-chip-x:hover { background: var(--hx-line); color: var(--hx-text); }
+    .hx-attach-chip-x svg { width: 11px; height: 11px; }
+    .hx-attach-chip.is-uploading {
+      position: relative;
+      overflow: hidden;
+    }
+    .hx-attach-chip.is-uploading::after {
+      content: ''; position: absolute; left: 0; bottom: 0; height: 2px;
+      width: 100%;
+      background: linear-gradient(90deg, transparent, var(--hx-text), transparent);
+      background-size: 200% 100%;
+      animation: hx-attach-progress 1.2s linear infinite;
+    }
+    @keyframes hx-attach-progress {
+      0%   { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+    .hx-attach-chip.is-error {
+      border-color: rgba(220, 38, 38, 0.3);
+      background: var(--hx-red-soft);
+      color: var(--hx-red);
+    }
+
+    /* Bottom row of the composer: attach + textarea + mic + send */
+    .hx-chat-input-bar {
+      display: flex; align-items: flex-end; gap: 6px;
     }
     .hx-chat-textarea {
       flex: 1;
@@ -283,9 +359,72 @@
       font: inherit; font-size: 14px; line-height: 1.55;
       color: var(--hx-text);
       max-height: 200px; min-height: 22px;
-      padding: 4px 0;
+      padding: 6px 0;
     }
     .hx-chat-textarea::placeholder { color: var(--hx-text-faint); }
+
+    /* Round icon buttons inside the composer (attach + mic) */
+    .hx-chat-tool-btn {
+      width: 32px; height: 32px;
+      flex-shrink: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      color: var(--hx-text-mid);
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+      padding: 0;
+    }
+    .hx-chat-tool-btn:hover { background: var(--hx-bg-2); color: var(--hx-text); border-color: var(--hx-line); }
+    .hx-chat-tool-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .hx-chat-tool-btn svg { width: 16px; height: 16px; }
+    .hx-chat-tool-btn.is-active {
+      background: var(--hx-text); color: #FFF; border-color: var(--hx-text);
+    }
+    .hx-chat-tool-btn.is-active::before {
+      content: ''; position: absolute; width: 32px; height: 32px;
+      border-radius: 8px;
+      box-shadow: 0 0 0 0 rgba(0,0,0,0.0);
+      animation: hx-mic-pulse 1.6s ease-out infinite;
+      pointer-events: none;
+    }
+    @keyframes hx-mic-pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(0,0,0,0.4); }
+      100% { box-shadow: 0 0 0 8px rgba(0,0,0,0.0); }
+    }
+
+    /* Attachments rendered inside a message bubble */
+    .hx-msg-attachments {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 8px;
+    }
+    .hx-msg-attach-img {
+      max-width: min(320px, 100%);
+      max-height: 240px;
+      border-radius: var(--hx-r-sm);
+      border: 1px solid var(--hx-line);
+      background: var(--hx-bg-2);
+      cursor: zoom-in;
+      display: block;
+    }
+    .hx-msg-attach-file {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 10px;
+      background: var(--hx-bg-2);
+      border: 1px solid var(--hx-line);
+      border-radius: var(--hx-r-sm);
+      font-size: 13px;
+      color: var(--hx-text);
+      text-decoration: none;
+      max-width: 280px;
+    }
+    .hx-msg-attach-file:hover { background: var(--hx-surface); }
+    .hx-msg-attach-file svg { width: 14px; height: 14px; color: var(--hx-text-mid); flex-shrink: 0; }
+    .hx-msg-attach-file .hx-msg-attach-name {
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .hx-msg-attach-file .hx-msg-attach-meta { color: var(--hx-text-dim); font-size: 11.5px; }
     .hx-chat-send {
       width: 32px; height: 32px;
       display: inline-flex; align-items: center; justify-content: center;
@@ -372,17 +511,42 @@
 
           <div class="hx-chat-compose">
             <div class="hx-chat-compose-inner">
-              <div class="hx-chat-input-row">
-                <textarea
-                  id="hx-c-input"
-                  class="hx-chat-textarea"
-                  placeholder="Ask anything…"
-                  rows="1"
-                  autocomplete="off"
-                  spellcheck="true"></textarea>
-                <button class="hx-chat-send" id="hx-c-send" type="button" disabled aria-label="Send">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                </button>
+              <div class="hx-chat-input-row" id="hx-c-input-row">
+                <div class="hx-chat-attach-bar" id="hx-c-attach-bar"></div>
+                <div class="hx-chat-input-bar">
+                  <button
+                    class="hx-chat-tool-btn"
+                    id="hx-c-attach"
+                    type="button"
+                    aria-label="Attach files"
+                    title="Attach an image or document">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                  </button>
+                  <input
+                    type="file"
+                    id="hx-c-file"
+                    multiple
+                    accept="image/png,image/jpeg,image/gif,image/webp,image/heic,application/pdf,text/plain,text/markdown,text/csv"
+                    style="display:none;" />
+                  <textarea
+                    id="hx-c-input"
+                    class="hx-chat-textarea"
+                    placeholder="Ask anything…"
+                    rows="1"
+                    autocomplete="off"
+                    spellcheck="true"></textarea>
+                  <button
+                    class="hx-chat-tool-btn"
+                    id="hx-c-mic"
+                    type="button"
+                    aria-label="Voice input"
+                    title="Voice input">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                  </button>
+                  <button class="hx-chat-send" id="hx-c-send" type="button" disabled aria-label="Send">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  </button>
+                </div>
               </div>
               <div class="hx-chat-foot">
                 <span class="hx-mono" id="hx-c-trace" style="display:none;">—</span>
@@ -443,7 +607,47 @@
         sending: false,        // request in flight, no first delta yet
         streaming: false,      // first delta received, actively streaming
         msgChannel: null,
+        attachments: [],       // composer's pending attachments
       };
+
+      // ─── Attachment / upload limits ──────────────────────────────
+      var ATTACH_LIMITS = {
+        maxFiles:   5,
+        maxBytes:   10 * 1024 * 1024,           // 10 MB per file
+        accepted:   /^(image\/(png|jpe?g|gif|webp|heic)|application\/pdf|text\/(plain|markdown|csv))$/i,
+      };
+      // Cache of signed URLs for storage paths so we don't re-sign on
+      // every render of historical attachments.
+      var signedUrlCache = Object.create(null);
+
+      function fmtBytes(n) {
+        if (!n && n !== 0) return '';
+        if (n < 1024) return n + ' B';
+        if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+        return (n / 1024 / 1024).toFixed(1) + ' MB';
+      }
+
+      function readFileAsBase64(file) {
+        return new Promise(function (resolve, reject) {
+          var r = new FileReader();
+          r.onload  = function () {
+            var s = String(r.result || '');
+            var idx = s.indexOf(',');
+            resolve(idx >= 0 ? s.slice(idx + 1) : s);
+          };
+          r.onerror = function () { reject(r.error || new Error('read failed')); };
+          r.readAsDataURL(file);
+        });
+      }
+
+      function readFileAsText(file) {
+        return new Promise(function (resolve, reject) {
+          var r = new FileReader();
+          r.onload  = function () { resolve(String(r.result || '')); };
+          r.onerror = function () { reject(r.error || new Error('read failed')); };
+          r.readAsText(file);
+        });
+      }
 
       whenAuthReady(function () {
         var sb = window.HX.supabase;
@@ -593,14 +797,44 @@
               if (act === 'regenerate') regenerate(idx);
             });
           });
+          // Lazy-load signed URLs for any attachment thumbnails / file links
+          hydrateAttachmentLinks(thread);
           // Scroll to bottom
           thread.scrollTop = thread.scrollHeight;
+        }
+
+        function renderAttachmentsForMsg(atts) {
+          if (!atts || !atts.length) return '';
+          var html = '<div class="hx-msg-attachments">';
+          for (var i = 0; i < atts.length; i++) {
+            var a = atts[i] || {};
+            var kind = a.kind || (a.media_type && a.media_type.indexOf('image/') === 0 ? 'image' : 'file');
+            if (kind === 'image') {
+              var src = a._objectURL || (a.storage_path && signedUrlCache[a.storage_path]) || '';
+              html += '<img class="hx-msg-attach-img" alt="' + escape(a.name || 'image') + '"' +
+                (src ? ' src="' + escape(src) + '"' : '') +
+                (a.storage_path ? ' data-storage-path="' + escape(a.storage_path) + '"' : '') +
+                ' loading="lazy">';
+            } else {
+              var icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+              html += '<a class="hx-msg-attach-file"' +
+                (a.storage_path ? ' data-storage-path="' + escape(a.storage_path) + '"' : '') +
+                ' target="_blank" rel="noopener">' +
+                icon +
+                '<span class="hx-msg-attach-name">' + escape(a.name || 'file') + '</span>' +
+                '<span class="hx-msg-attach-meta">' + escape(fmtBytes(a.size)) + '</span>' +
+              '</a>';
+            }
+          }
+          html += '</div>';
+          return html;
         }
 
         function renderMessage(m) {
           var i = state.messages.indexOf(m);
           var isAssist = m.role === 'assistant';
           var meta = isAssist ? '<strong>Helix</strong>' : '';
+          var atts = Array.isArray(m.attachments) ? m.attachments : [];
 
           var actions = '';
           if (isAssist && m.content && !m.__error && !m.__streaming) {
@@ -616,13 +850,49 @@
             '</div>';
           }
 
+          var contentHtml = '';
+          if (m.content) contentHtml = '<div class="hx-msg-content">' + escape(m.content) + '</div>';
+          else if (!atts.length) contentHtml = '<div class="hx-msg-content"></div>';
+
           return '<div class="hx-msg ' + (isAssist ? 'is-assistant' : 'is-user') + (m.__error ? ' hx-msg-error' : '') + '" data-msg-key="' + escape(m.id) + '">' +
             '<div class="hx-msg-body">' +
               (meta ? '<div class="hx-msg-meta">' + meta + '</div>' : '') +
-              '<div class="hx-msg-content">' + escape(m.content || '') + '</div>' +
+              renderAttachmentsForMsg(atts) +
+              contentHtml +
               actions +
             '</div>' +
           '</div>';
+        }
+
+        // After a renderThread call, walk image/file attachments that need a
+        // signed URL and resolve them lazily. The DOM elements were rendered
+        // with data-storage-path; we set src/href once we have the URL.
+        function hydrateAttachmentLinks(root) {
+          var imgs  = root.querySelectorAll('img.hx-msg-attach-img[data-storage-path]');
+          var files = root.querySelectorAll('a.hx-msg-attach-file[data-storage-path]');
+          var paths = {};
+          imgs.forEach(function (n)  { var p = n.getAttribute('data-storage-path'); if (p) paths[p] = true; });
+          files.forEach(function (n) { var p = n.getAttribute('data-storage-path'); if (p) paths[p] = true; });
+          Object.keys(paths).forEach(function (p) {
+            if (signedUrlCache[p]) {
+              applyUrl(root, p, signedUrlCache[p]);
+              return;
+            }
+            sb.storage.from('chat-uploads').createSignedUrl(p, 3600).then(function (r) {
+              if (r && r.data && r.data.signedUrl) {
+                signedUrlCache[p] = r.data.signedUrl;
+                applyUrl(root, p, r.data.signedUrl);
+              }
+            }).catch(function () {});
+          });
+        }
+        function applyUrl(root, path, url) {
+          root.querySelectorAll('img.hx-msg-attach-img[data-storage-path="' + path + '"]').forEach(function (n) {
+            if (!n.getAttribute('src')) n.setAttribute('src', url);
+          });
+          root.querySelectorAll('a.hx-msg-attach-file[data-storage-path="' + path + '"]').forEach(function (n) {
+            n.setAttribute('href', url);
+          });
         }
 
         // ─── New conversation ────────────────────────────────
@@ -654,25 +924,101 @@
             if (!lastUser) return;
             text = lastUser.content;
           }
-          if (!text) return;
+
+          // Capture and freeze the current attachments — anything in the
+          // composer right now belongs to THIS turn.
+          var readyAttachs = state.attachments.filter(function (a) { return a.status === 'ready'; });
+
+          if (!text && !readyAttachs.length) return;
 
           if (!state.conversation) await newConversation();
 
+          // Build the content for the current user turn. Single string when
+          // there's just text, or an array of content blocks when we have
+          // images / pdfs / inlined text files.
+          var currentContent = text;
+          if (readyAttachs.length) {
+            var blocks = [];
+            // Text-file contents inlined first so the model has them as
+            // context before images/docs.
+            readyAttachs.forEach(function (a) {
+              if (a.kind === 'file' && typeof a.text_content === 'string') {
+                blocks.push({ type: 'text', text: 'File: ' + a.name + '\n---\n' + a.text_content });
+              }
+            });
+            // Images
+            readyAttachs.forEach(function (a) {
+              if (a.kind === 'image' && a.base64) {
+                blocks.push({
+                  type: 'image',
+                  source: { type: 'base64', media_type: a.media_type, data: a.base64 },
+                });
+              }
+            });
+            // PDFs
+            readyAttachs.forEach(function (a) {
+              if (a.kind === 'document' && a.base64) {
+                blocks.push({
+                  type: 'document',
+                  source: { type: 'base64', media_type: a.media_type, data: a.base64 },
+                });
+              }
+            });
+            blocks.push({ type: 'text', text: text || 'Please describe these attachments.' });
+            currentContent = blocks;
+          }
+
+          // Mirror copy of attachments for persistence + UI render of the
+          // optimistic bubble (keeps the in-memory _objectURL alive).
+          var persistAttachs = readyAttachs.map(function (a) {
+            return {
+              kind:         a.kind,
+              name:         a.name,
+              media_type:   a.media_type,
+              size:         a.size,
+              storage_path: a.storage_path,
+            };
+          });
+          var displayAttachs = readyAttachs.map(function (a) {
+            return {
+              kind:         a.kind,
+              name:         a.name,
+              media_type:   a.media_type,
+              size:         a.size,
+              storage_path: a.storage_path,
+              _objectURL:   a._objectURL,    // for immediate thumbnail
+            };
+          });
+
+          // Composer reset (chips disappear immediately on send)
           $('hx-c-input').value = '';
           autoSize($('hx-c-input'));
+          // Don't revoke object URLs yet — the optimistic message still uses
+          // them for the thumbnail. They'll be GC'd on page unload.
+          state.attachments = [];
+          renderAttachmentBar();
+          refreshSendDisabled();
 
           // Optimistic user message + typing indicator
           var userOptId = 'opt-u-' + Date.now();
           state.messages.push({
-            id: userOptId, role: 'user', content: text,
+            id: userOptId, role: 'user',
+            content: text,
+            attachments: displayAttachs,
             created_at: new Date().toISOString(), __optimistic: true,
           });
           state.sending = true;
           renderThread();
 
+          // Build the array we send to the model. Past turns are sent as
+          // their plain text content (history attachments are stored but
+          // not re-uploaded into the model context this round).
           var send_msgs = state.messages
             .filter(function (m) { return !m.__optimistic ? true : (m.role === 'user'); })
-            .map(function (m) { return { role: m.role, content: m.content }; });
+            .map(function (m) {
+              if (m.id === userOptId) return { role: m.role, content: currentContent };
+              return { role: m.role, content: m.content || '' };
+            });
 
           var t0 = Date.now();
           var traceCell = $('hx-c-trace');
@@ -750,6 +1096,7 @@
                 conversation_id: state.conversation.id,
                 system:          HELIX_SYSTEM,
                 messages:        send_msgs,
+                user_attachments: persistAttachs,
                 max_tokens:      2048,
                 stream:          true,
               }),
@@ -873,10 +1220,232 @@
           el.style.height = 'auto';
           el.style.height = Math.min(200, el.scrollHeight) + 'px';
         }
-        var inputEl = $('hx-c-input');
-        var sendBtn = $('hx-c-send');
+        var inputEl   = $('hx-c-input');
+        var sendBtn   = $('hx-c-send');
+        var attachBtn = $('hx-c-attach');
+        var fileInput = $('hx-c-file');
+        var micBtn    = $('hx-c-mic');
+        var inputRow  = $('hx-c-input-row');
+        var attachBar = $('hx-c-attach-bar');
+
+        function refreshSendDisabled() {
+          var hasText = !!inputEl.value.trim();
+          var hasReady = state.attachments.some(function (a) { return a.status === 'ready'; });
+          var hasUploading = state.attachments.some(function (a) { return a.status === 'uploading'; });
+          sendBtn.disabled = (!hasText && !hasReady) || hasUploading || state.sending || state.streaming;
+        }
+
+        // ─── Voice input via Web Speech API ──────────────────
+        var SpeechRecog = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecog) {
+          micBtn.disabled = true;
+          micBtn.title = 'Voice input is not supported in this browser';
+        }
+        var recognizer = null;
+        var recogBaseText = '';
+
+        function startVoice() {
+          if (!SpeechRecog || recognizer) return;
+          recognizer = new SpeechRecog();
+          recognizer.continuous     = true;
+          recognizer.interimResults = true;
+          try { recognizer.lang = navigator.language || 'en-US'; } catch (e) { /* ignore */ }
+          recogBaseText = inputEl.value;
+
+          recognizer.onresult = function (e) {
+            var interim = '';
+            var finalChunk = '';
+            for (var i = e.resultIndex; i < e.results.length; i++) {
+              var r = e.results[i];
+              if (r.isFinal) finalChunk += r[0].transcript;
+              else           interim    += r[0].transcript;
+            }
+            if (finalChunk) {
+              recogBaseText = (recogBaseText ? recogBaseText.replace(/\s+$/, '') + ' ' : '') + finalChunk.trim();
+            }
+            inputEl.value = (recogBaseText + (interim ? ' ' + interim.trim() : '')).trim();
+            autoSize(inputEl);
+            refreshSendDisabled();
+          };
+          recognizer.onerror = function () { stopVoice(); };
+          recognizer.onend   = function () {
+            recognizer = null;
+            micBtn.classList.remove('is-active');
+          };
+          try { recognizer.start(); } catch (err) { recognizer = null; return; }
+          micBtn.classList.add('is-active');
+        }
+        function stopVoice() {
+          if (!recognizer) return;
+          try { recognizer.stop(); } catch (e) { /* ignore */ }
+          recognizer = null;
+          micBtn.classList.remove('is-active');
+        }
+        function toggleVoice() {
+          if (recognizer) stopVoice(); else startVoice();
+        }
+
+        // ─── Attachment management ───────────────────────────
+        function renderAttachmentBar() {
+          if (!state.attachments.length) { attachBar.innerHTML = ''; return; }
+          var html = '';
+          state.attachments.forEach(function (a) {
+            var thumb;
+            if (a.media_type && a.media_type.indexOf('image/') === 0 && a._objectURL) {
+              thumb = '<span class="hx-attach-chip-thumb"><img src="' + a._objectURL + '" alt=""></span>';
+            } else if (a.media_type === 'application/pdf') {
+              thumb = '<span class="hx-attach-chip-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>';
+            } else {
+              thumb = '<span class="hx-attach-chip-thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>';
+            }
+            var status = a.status === 'uploading' ? ' is-uploading'
+                       : a.status === 'error'     ? ' is-error'
+                       : '';
+            html += '<span class="hx-attach-chip' + status + '" data-id="' + escape(a.id) + '">' +
+              thumb +
+              '<span class="hx-attach-chip-name">' + escape(a.name || 'file') + '</span>' +
+              '<span class="hx-attach-chip-meta">' + escape(fmtBytes(a.size)) + '</span>' +
+              '<button class="hx-attach-chip-x" type="button" data-rm="' + escape(a.id) + '" aria-label="Remove">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+              '</button>' +
+            '</span>';
+          });
+          attachBar.innerHTML = html;
+          attachBar.querySelectorAll('button[data-rm]').forEach(function (b) {
+            b.addEventListener('click', function () { removeAttachment(b.getAttribute('data-rm')); });
+          });
+        }
+
+        function removeAttachment(id) {
+          var idx = state.attachments.findIndex(function (a) { return a.id === id; });
+          if (idx < 0) return;
+          var a = state.attachments[idx];
+          if (a._objectURL) { try { URL.revokeObjectURL(a._objectURL); } catch (e) {} }
+          state.attachments.splice(idx, 1);
+          renderAttachmentBar();
+          refreshSendDisabled();
+          // Best-effort delete from Storage if it had been uploaded.
+          if (a.storage_path) {
+            sb.storage.from('chat-uploads').remove([a.storage_path]).catch(function () {});
+          }
+        }
+
+        function clearAttachments() {
+          for (var i = 0; i < state.attachments.length; i++) {
+            var a = state.attachments[i];
+            if (a._objectURL) { try { URL.revokeObjectURL(a._objectURL); } catch (e) {} }
+          }
+          state.attachments = [];
+          renderAttachmentBar();
+        }
+
+        async function handleFiles(fileList) {
+          if (!fileList || !fileList.length) return;
+          var u = (await sb.auth.getUser()).data.user;
+          if (!u) return;
+
+          // Make sure we have a conversation so storage paths are scoped to it.
+          if (!state.conversation) await newConversation();
+
+          for (var i = 0; i < fileList.length; i++) {
+            if (state.attachments.length >= ATTACH_LIMITS.maxFiles) break;
+            var f = fileList[i];
+            if (!f) continue;
+            if (!ATTACH_LIMITS.accepted.test(f.type || '')) continue;
+            if (f.size > ATTACH_LIMITS.maxBytes) continue;
+
+            var id = 'att-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+            var item = {
+              id:         id,
+              file:       f,
+              name:       f.name,
+              size:       f.size,
+              media_type: f.type,
+              status:     'uploading',
+              kind:       (f.type.indexOf('image/') === 0)         ? 'image'
+                         : (f.type === 'application/pdf')          ? 'document'
+                         : 'file',
+              base64:     null,
+              text_content: null,
+              storage_path: null,
+              _objectURL: f.type.indexOf('image/') === 0 ? URL.createObjectURL(f) : null,
+            };
+            state.attachments.push(item);
+            renderAttachmentBar();
+            refreshSendDisabled();
+
+            // Upload + read in parallel.
+            (function (it) {
+              var convId = state.conversation.id;
+              var safeName = (it.name || 'file').replace(/[^\w.\-]+/g, '_').slice(0, 80);
+              var path = u.id + '/' + convId + '/' + Date.now() + '-' + safeName;
+
+              var uploadP = sb.storage.from('chat-uploads').upload(path, it.file, {
+                upsert: false, contentType: it.media_type,
+              });
+              var inlineP = (it.kind === 'file' && /^text\//i.test(it.media_type))
+                  ? readFileAsText(it.file).then(function (t) { it.text_content = t.slice(0, 200_000); })
+                  : readFileAsBase64(it.file).then(function (b) { it.base64 = b; });
+
+              Promise.all([uploadP, inlineP]).then(function (results) {
+                var up = results[0];
+                if (up && up.error) {
+                  it.status = 'error';
+                  it.error  = up.error.message || 'upload failed';
+                } else {
+                  it.storage_path = path;
+                  it.status = 'ready';
+                }
+                renderAttachmentBar();
+                refreshSendDisabled();
+              }).catch(function (err) {
+                it.status = 'error';
+                it.error  = (err && err.message) || 'upload failed';
+                renderAttachmentBar();
+                refreshSendDisabled();
+              });
+            })(item);
+          }
+        }
+
+        // File picker + drag-drop on the composer
+        attachBtn.addEventListener('click', function () { fileInput.click(); });
+        fileInput.addEventListener('change', function (e) {
+          handleFiles(e.target.files);
+          fileInput.value = '';
+        });
+        ['dragenter','dragover'].forEach(function (ev) {
+          inputRow.addEventListener(ev, function (e) {
+            if (!e.dataTransfer || !e.dataTransfer.types || e.dataTransfer.types.indexOf('Files') < 0) return;
+            e.preventDefault();
+            inputRow.classList.add('is-drag-over');
+          });
+        });
+        ['dragleave','dragend'].forEach(function (ev) {
+          inputRow.addEventListener(ev, function () { inputRow.classList.remove('is-drag-over'); });
+        });
+        inputRow.addEventListener('drop', function (e) {
+          if (!e.dataTransfer || !e.dataTransfer.files || !e.dataTransfer.files.length) return;
+          e.preventDefault();
+          inputRow.classList.remove('is-drag-over');
+          handleFiles(e.dataTransfer.files);
+        });
+
+        // Paste images straight from the clipboard
+        inputEl.addEventListener('paste', function (e) {
+          if (!e.clipboardData || !e.clipboardData.files || !e.clipboardData.files.length) return;
+          var imgs = [];
+          for (var i = 0; i < e.clipboardData.files.length; i++) {
+            var f = e.clipboardData.files[i];
+            if (f && f.type && f.type.indexOf('image/') === 0) imgs.push(f);
+          }
+          if (imgs.length) { e.preventDefault(); handleFiles(imgs); }
+        });
+
+        micBtn.addEventListener('click', toggleVoice);
+
         inputEl.addEventListener('input', function () {
-          sendBtn.disabled = !inputEl.value.trim();
+          refreshSendDisabled();
           autoSize(inputEl);
         });
         inputEl.addEventListener('keydown', function (e) {
