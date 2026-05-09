@@ -4,12 +4,101 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Models — HelveX</title>
-  <meta name="description" content="HelveX foundation models — Ether, Nexus, Prometheus." />
+  <meta name="description" content="HelveX models — Ether, Nexus, Prometheus." />
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
+  <style>
+    /* Model card — quieter, more product-page than dashboard */
+    .hx-model-card {
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line);
+      border-radius: var(--hx-r-lg);
+      padding: 22px 22px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .hx-model-card:hover { border-color: var(--hx-line-strong); }
+    .hx-model-card.is-featured { border-color: var(--hx-text); }
+
+    .hx-model-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--hx-r);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--hx-bg-2);
+      border: 1px solid var(--hx-line);
+      color: var(--hx-text);
+    }
+    .hx-model-mark.yellow {
+      background: var(--hx-yellow-soft);
+      border-color: rgba(252, 211, 77, 0.4);
+      color: var(--hx-yellow-deep);
+    }
+    .hx-model-mark.red {
+      background: var(--hx-red-soft);
+      border-color: rgba(220, 38, 38, 0.22);
+      color: var(--hx-red);
+    }
+
+    .hx-model-name {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-size: 30px;
+      letter-spacing: -0.015em;
+      line-height: 1.05;
+      color: var(--hx-text);
+      margin: 0;
+    }
+    .hx-model-tag {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--hx-text-dim);
+      margin: 0;
+    }
+    .hx-model-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--hx-text-mid);
+      margin: 0;
+    }
+    .hx-model-suited {
+      font-size: 12.5px;
+      color: var(--hx-text-dim);
+      padding-top: 14px;
+      border-top: 1px solid var(--hx-line);
+      margin: 0;
+    }
+    .hx-model-suited strong {
+      color: var(--hx-text);
+      font-weight: 500;
+      display: block;
+      margin-bottom: 4px;
+      letter-spacing: -0.005em;
+    }
+    .hx-model-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--hx-text);
+      border-bottom: 1px solid transparent;
+      padding-bottom: 1px;
+      transition: border-color 0.12s, gap 0.12s;
+      align-self: flex-start;
+    }
+    .hx-model-cta:hover { border-color: var(--hx-text); gap: 6px; }
+    .hx-model-cta::after { content: '→'; font-weight: 400; }
+  </style>
 </head>
 <body data-active="models">
 
@@ -22,78 +111,71 @@
         <div class="hx-page-head">
           <div>
             <h1>Models.</h1>
-            <p class="sub">The foundation models HelveX deploys behind your engagements. Pick the right tier for the workload — every model is private, region-pinned, and fully evaluated before it ships.</p>
+            <p class="sub">Three foundation models. Pick the one that matches the work.</p>
           </div>
           <div class="hx-page-actions">
-            <a href="/services.html" class="hx-btn hx-btn-secondary">Browse services</a>
+            <a href="/api-keys.html" class="hx-btn hx-btn-secondary">API keys</a>
             <a href="/support.html" class="hx-btn hx-btn-primary">Get a recommendation</a>
           </div>
         </div>
 
         <div class="hx-grid hx-grid-3">
 
-          <div class="hx-card">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-              <div class="hx-service-tile-icon" style="margin:0;width:32px;height:32px;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18"/></svg>
-              </div>
-              <span class="hx-badge hx-badge-neutral">Default</span>
+          <article class="hx-model-card">
+            <div class="hx-model-mark">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18"/></svg>
             </div>
-            <h3>Ether</h3>
-            <p class="desc">Fast, general-purpose model. The right pick for inbox triage, document classification, internal copilots, and the majority of agents we deploy.</p>
-            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0;font-size:12px;">
-              <div><div style="color:var(--hx-text-dim);margin-bottom:2px;">Context</div><div class="hx-mono" style="font-weight:600;">128K tokens</div></div>
-              <div><div style="color:var(--hx-text-dim);margin-bottom:2px;">Latency</div><div class="hx-mono" style="font-weight:600;">~280 ms p50</div></div>
-              <div><div style="color:var(--hx-text-dim);margin-bottom:2px;">Region</div><div class="hx-mono" style="font-weight:600;">EU-CH-1</div></div>
-              <div><div style="color:var(--hx-text-dim);margin-bottom:2px;">Cost</div><div class="hx-mono" style="font-weight:600;">1× base</div></div>
+            <div>
+              <p class="hx-model-tag">General</p>
+              <h2 class="hx-model-name">Ether</h2>
             </div>
-            <a href="/services.html" class="hx-card-link">Use Ether</a>
-          </div>
+            <p class="hx-model-desc">Fast, balanced, low-latency. The default choice for everyday AI work — classification, drafting, summarisation, and most agents.</p>
+            <p class="hx-model-suited">
+              <strong>Best for</strong>
+              Inbox triage · document classification · internal copilots
+            </p>
+            <a href="/api-keys.html" class="hx-model-cta">Use Ether</a>
+          </article>
 
-          <div class="hx-card" style="border-color:var(--hx-text);">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-              <div class="hx-service-tile-icon yellow" style="margin:0;width:32px;height:32px;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-              </div>
-              <span class="hx-badge hx-badge-yellow">Reasoning</span>
+          <article class="hx-model-card is-featured">
+            <div class="hx-model-mark yellow">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
             </div>
-            <h3>Nexus</h3>
-            <p class="desc">Long-context reasoning model for multi-step planning, structured extraction from long documents, and agentic workflows that chain tools.</p>
-            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0;font-size:12px;">
-              <div><div style="color:var(--hx-text-dim);margin-bottom:2px;">Context</div><div class="hx-mono" style="font-weight:600;">1M tokens</div></div>
-              <div><div style="color:var(--hx-text-dim);margin-bottom:2px;">Latency</div><div class="hx-mono" style="font-weight:600;">~1.4 s p50</div></div>
-              <div><div style="color:var(--hx-text-dim);margin-bottom:2px;">Region</div><div class="hx-mono" style="font-weight:600;">EU-CH-1</div></div>
-              <div><div style="color:var(--hx-text-dim);margin-bottom:2px;">Cost</div><div class="hx-mono" style="font-weight:600;">3× base</div></div>
+            <div>
+              <p class="hx-model-tag">Reasoning</p>
+              <h2 class="hx-model-name">Nexus</h2>
             </div>
-            <a href="/services.html" class="hx-card-link">Use Nexus</a>
-          </div>
+            <p class="hx-model-desc">Deeper, longer-context model for multi-step thinking, structured extraction across long documents, and agents that chain tools together.</p>
+            <p class="hx-model-suited">
+              <strong>Best for</strong>
+              Long-document reasoning · multi-step agents · structured extraction
+            </p>
+            <a href="/api-keys.html" class="hx-model-cta">Use Nexus</a>
+          </article>
 
-          <div class="hx-card">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-              <div class="hx-service-tile-icon red" style="margin:0;width:32px;height:32px;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 22h20L12 2z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              </div>
-              <span class="hx-badge hx-badge-red">Specialist</span>
+          <article class="hx-model-card">
+            <div class="hx-model-mark red">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 22h20L12 2z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
-            <h3>Prometheus</h3>
-            <p class="desc">Domain-tuned variants for regulated workloads — finance, legal, healthcare. Comes with hardened eval suites and human-in-the-loop hooks by default.</p>
-            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0;font-size:12px;">
-              <div><div style="color:var(--hx-text-dim);margin-bottom:2px;">Context</div><div class="hx-mono" style="font-weight:600;">256K tokens</div></div>
-              <div><div style="color:var(--hx-text-dim);margin-bottom:2px;">Latency</div><div class="hx-mono" style="font-weight:600;">~900 ms p50</div></div>
-              <div><div style="color:var(--hx-text-dim);margin-bottom:2px;">Region</div><div class="hx-mono" style="font-weight:600;">EU-CH-1 / VPC</div></div>
-              <div><div style="color:var(--hx-text-dim);margin-bottom:2px;">Cost</div><div class="hx-mono" style="font-weight:600;">5× base</div></div>
+            <div>
+              <p class="hx-model-tag">Specialist</p>
+              <h2 class="hx-model-name">Prometheus</h2>
             </div>
-            <a href="/support.html" class="hx-card-link">Talk to a specialist</a>
-          </div>
+            <p class="hx-model-desc">Domain-tuned for regulated work where accuracy and review trails matter more than raw speed. Built with human-in-the-loop hooks ready out of the box.</p>
+            <p class="hx-model-suited">
+              <strong>Best for</strong>
+              Finance · legal · healthcare workflows
+            </p>
+            <a href="/support.html" class="hx-model-cta">Talk to us</a>
+          </article>
 
         </div>
 
         <div class="hx-section-head">
-          <h2>How model selection works</h2>
+          <h2>Choosing a model</h2>
         </div>
         <div class="hx-card">
-          <p class="desc" style="margin-bottom:14px;">When you brief a project, a senior engineer chooses the right model for your workload based on cost, latency, context length, and the regulatory profile of your data. You see the choice in the project brief before delivery starts — and you can request a different tier any time.</p>
-          <p class="desc" style="margin:0;">All models are hosted in HelveX's EU-CH-1 region by default. Private VPC and on-prem deployment are available on the Scale plan.</p>
+          <p class="desc" style="margin:0;">Start with <strong style="color:var(--hx-text);font-weight:500;">Ether</strong> for most things. Move to <strong style="color:var(--hx-text);font-weight:500;">Nexus</strong> when the work needs longer context or multi-step reasoning. Reach for <strong style="color:var(--hx-text);font-weight:500;">Prometheus</strong> when the workload is regulated or accuracy needs to be verifiable. You can switch models on any project at any time.</p>
         </div>
 
       </main>
