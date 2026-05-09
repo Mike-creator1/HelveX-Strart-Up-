@@ -446,6 +446,47 @@
     .hx-chat-foot a { color: var(--hx-text); border-bottom: 1px solid transparent; padding-bottom: 1px; }
     .hx-chat-foot a:hover { border-color: var(--hx-text); }
 
+    /* Voice input — listening pill + transient error banner */
+    .hx-voice-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11.5px; color: var(--hx-red);
+      padding: 2px 10px;
+      background: var(--hx-red-soft);
+      border-radius: 999px;
+      border: 1px solid rgba(220, 38, 38, 0.22);
+    }
+    .hx-voice-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--hx-red);
+      animation: hx-voice-pulse 1.2s ease-out infinite;
+    }
+    @keyframes hx-voice-pulse {
+      0%, 100% { opacity: 0.55; transform: scale(1); }
+      50%      { opacity: 1;    transform: scale(1.25); }
+    }
+    .hx-voice-error {
+      font-size: 11.5px;
+      color: var(--hx-red);
+      background: var(--hx-red-soft);
+      border: 1px solid rgba(220, 38, 38, 0.22);
+      border-radius: 999px;
+      padding: 2px 10px;
+      transition: opacity 0.25s ease-out;
+    }
+    /* Mic active state — solid red ring, not the same neutral pulse the
+       other tool buttons use. Makes it obvious the mic is hot. */
+    .hx-chat-tool-btn.is-recording {
+      background: var(--hx-red); color: #FFF;
+      border-color: var(--hx-red);
+      box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.55);
+      animation: hx-mic-recording 1.4s ease-out infinite;
+    }
+    @keyframes hx-mic-recording {
+      0%   { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.55); }
+      70%  { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);  }
+      100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);     }
+    }
+
     /* Mobile thread tweaks */
     @media (max-width: 700px) {
       .hx-chat-thread-inner, .hx-chat-compose-inner { padding: 0 16px; }
@@ -549,6 +590,10 @@
                 </div>
               </div>
               <div class="hx-chat-foot">
+                <span id="hx-c-listening" class="hx-voice-status" style="display:none;" aria-live="polite">
+                  <span class="hx-voice-dot"></span><span>Listening…</span>
+                </span>
+                <span id="hx-c-voice-err" class="hx-voice-error" style="display:none;" aria-live="polite"></span>
                 <span class="hx-mono" id="hx-c-trace" style="display:none;">—</span>
                 <span style="margin-left:auto;">Press Enter to send · Shift+Enter for new line</span>
               </div>
@@ -913,6 +958,9 @@
         // ─── Send message (SSE streaming) ────────────────────
         async function send(retryFromIdx) {
           if (state.sending || state.streaming) return;
+          // Stop any active voice transcription so it can't keep dictating
+          // into a new turn after the user has hit send.
+          if (recognizer) stopVoice();
           var text = $('hx-c-input').value.trim();
 
           // Regenerate path: replay the last user message
@@ -1237,52 +1285,179 @@
 
         // ─── Voice input via Web Speech API ──────────────────
         var SpeechRecog = window.SpeechRecognition || window.webkitSpeechRecognition;
+        var listeningEl = $('hx-c-listening');
+        var voiceErrEl  = $('hx-c-voice-err');
+        var voiceErrTimer = null;
+
         if (!SpeechRecog) {
           micBtn.disabled = true;
-          micBtn.title = 'Voice input is not supported in this browser';
+          micBtn.title    = 'Voice input is not supported in this browser. Try Chrome, Edge, or Safari.';
+        } else if (!window.isSecureContext) {
+          micBtn.disabled = true;
+          micBtn.title    = 'Voice input requires a secure (HTTPS) page.';
+        } else {
+          micBtn.title    = 'Voice input — click and speak';
         }
-        var recognizer = null;
+
+        var recognizer    = null;
         var recogBaseText = '';
+        var voiceStarting = false;     // guard against double-clicks while permission prompt is open
 
-        function startVoice() {
-          if (!SpeechRecog || recognizer) return;
-          recognizer = new SpeechRecog();
-          recognizer.continuous     = true;
-          recognizer.interimResults = true;
-          try { recognizer.lang = navigator.language || 'en-US'; } catch (e) { /* ignore */ }
-          recogBaseText = inputEl.value;
-
-          recognizer.onresult = function (e) {
-            var interim = '';
-            var finalChunk = '';
-            for (var i = e.resultIndex; i < e.results.length; i++) {
-              var r = e.results[i];
-              if (r.isFinal) finalChunk += r[0].transcript;
-              else           interim    += r[0].transcript;
-            }
-            if (finalChunk) {
-              recogBaseText = (recogBaseText ? recogBaseText.replace(/\s+$/, '') + ' ' : '') + finalChunk.trim();
-            }
-            inputEl.value = (recogBaseText + (interim ? ' ' + interim.trim() : '')).trim();
-            autoSize(inputEl);
-            refreshSendDisabled();
-          };
-          recognizer.onerror = function () { stopVoice(); };
-          recognizer.onend   = function () {
-            recognizer = null;
-            micBtn.classList.remove('is-active');
-          };
-          try { recognizer.start(); } catch (err) { recognizer = null; return; }
-          micBtn.classList.add('is-active');
+        function setListeningState(on) {
+          if (on) {
+            micBtn.classList.add('is-recording');
+            micBtn.setAttribute('aria-pressed', 'true');
+            if (listeningEl) listeningEl.style.display = '';
+          } else {
+            micBtn.classList.remove('is-recording');
+            micBtn.setAttribute('aria-pressed', 'false');
+            if (listeningEl) listeningEl.style.display = 'none';
+          }
         }
-        function stopVoice() {
-          if (!recognizer) return;
-          try { recognizer.stop(); } catch (e) { /* ignore */ }
+
+        function showVoiceError(msg) {
+          if (!voiceErrEl) { try { console.warn('[voice]', msg); } catch (e) {} return; }
+          voiceErrEl.textContent = msg;
+          voiceErrEl.style.display = '';
+          voiceErrEl.style.opacity = '1';
+          if (voiceErrTimer) clearTimeout(voiceErrTimer);
+          voiceErrTimer = setTimeout(function () {
+            voiceErrEl.style.opacity = '0';
+            setTimeout(function () { voiceErrEl.style.display = 'none'; }, 250);
+          }, 5000);
+        }
+
+        function clearVoiceError() {
+          if (!voiceErrEl) return;
+          if (voiceErrTimer) { clearTimeout(voiceErrTimer); voiceErrTimer = null; }
+          voiceErrEl.style.display = 'none';
+          voiceErrEl.textContent = '';
+        }
+
+        // Surface the OS / browser microphone permission prompt explicitly
+        // so the user gets a real dialog instead of a silently-failing
+        // SpeechRecognition.start(). On grant we immediately stop the
+        // tracks because SpeechRecognition opens its own audio pipeline.
+        async function ensureMicrophonePermission() {
+          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            // Older browser without MediaDevices — fall back to letting
+            // SpeechRecognition.start() trigger its own permission UI.
+            return true;
+          }
+          try {
+            var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach(function (t) { try { t.stop(); } catch (e) { /* ignore */ } });
+            return true;
+          } catch (err) {
+            var name = (err && err.name) || '';
+            if (name === 'NotAllowedError' || name === 'PermissionDeniedError') {
+              showVoiceError('Microphone permission was denied. Enable it for this site in your browser settings.');
+            } else if (name === 'NotFoundError' || name === 'OverconstrainedError') {
+              showVoiceError('No microphone was found on this device.');
+            } else if (name === 'NotReadableError') {
+              showVoiceError('The microphone is busy in another application. Close it and try again.');
+            } else if (name === 'SecurityError') {
+              showVoiceError('Microphone access blocked by browser security policy.');
+            } else {
+              showVoiceError('Could not access the microphone: ' + (err && (err.message || name) || 'unknown error'));
+            }
+            return false;
+          }
+        }
+
+        async function startVoice() {
+          if (!SpeechRecog || recognizer || voiceStarting) return;
+          voiceStarting = true;
+          clearVoiceError();
+          try {
+            var ok = await ensureMicrophonePermission();
+            if (!ok) return;
+
+            recognizer = new SpeechRecog();
+            try { recognizer.continuous     = true;  } catch (e) { /* iOS Safari may reject */ }
+            try { recognizer.interimResults = true;  } catch (e) {}
+            try { recognizer.maxAlternatives = 1;    } catch (e) {}
+            try { recognizer.lang = navigator.language || 'en-US'; } catch (e) {}
+            recogBaseText = inputEl.value;
+
+            recognizer.onstart = function () {
+              setListeningState(true);
+            };
+            recognizer.onresult = function (e) {
+              var interim = '';
+              var finalChunk = '';
+              for (var i = e.resultIndex; i < e.results.length; i++) {
+                var r = e.results[i];
+                if (r.isFinal) finalChunk += r[0].transcript;
+                else           interim    += r[0].transcript;
+              }
+              if (finalChunk) {
+                recogBaseText = (recogBaseText ? recogBaseText.replace(/\s+$/, '') + ' ' : '')
+                              + finalChunk.trim();
+              }
+              inputEl.value = (recogBaseText + (interim ? ' ' + interim.trim() : '')).trim();
+              autoSize(inputEl);
+              refreshSendDisabled();
+            };
+            recognizer.onerror = function (e) {
+              var code = e && e.error;
+              var msg = '';
+              switch (code) {
+                case 'not-allowed':
+                case 'service-not-allowed':
+                  msg = 'Microphone permission was denied.';
+                  break;
+                case 'no-speech':
+                  msg = "I didn't hear anything — try again.";
+                  break;
+                case 'audio-capture':
+                  msg = 'No microphone was detected on this device.';
+                  break;
+                case 'network':
+                  msg = 'Voice transcription needs a network connection.';
+                  break;
+                case 'aborted':
+                  msg = '';   // user-initiated stop, no banner
+                  break;
+                default:
+                  msg = 'Voice input failed' + (code ? ': ' + code : '.');
+              }
+              if (msg) showVoiceError(msg);
+              cleanupRecognizer();
+            };
+            recognizer.onend = function () {
+              cleanupRecognizer();
+            };
+
+            try {
+              recognizer.start();
+            } catch (err) {
+              cleanupRecognizer();
+              showVoiceError('Could not start voice input: ' + (err && err.message || 'unknown error'));
+              return;
+            }
+            // Some browsers fire onstart asynchronously; reflect the active
+            // state immediately so the click feels responsive.
+            setListeningState(true);
+          } finally {
+            voiceStarting = false;
+          }
+        }
+
+        function cleanupRecognizer() {
           recognizer = null;
-          micBtn.classList.remove('is-active');
+          setListeningState(false);
         }
+
+        function stopVoice() {
+          if (!recognizer) { setListeningState(false); return; }
+          // Use stop() to keep any final transcript; abort() drops it.
+          try { recognizer.stop(); } catch (e) { try { recognizer.abort(); } catch (e2) {} }
+          // onend will cleanupRecognizer() and clear UI.
+        }
+
         function toggleVoice() {
-          if (recognizer) stopVoice(); else startVoice();
+          if (recognizer || voiceStarting) stopVoice(); else startVoice();
         }
 
         // ─── Attachment management ───────────────────────────
