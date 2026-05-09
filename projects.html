@@ -177,6 +177,17 @@
         var sb = window.HX.supabase;
         var host = $('hx-projects-host');
 
+        // Auto-open the new-project form when arriving via ?new=1 (used by
+        // CTAs from /services, /workflows, /deployments, /dashboard).
+        try {
+          var qs = new URLSearchParams(window.location.search);
+          if (qs.get('new') === '1') {
+            setTimeout(function () { openForm(); }, 0);
+            // Clean the URL so a refresh doesn't re-trigger
+            try { history.replaceState(null, document.title, window.location.pathname); } catch (e) {}
+          }
+        } catch (e) { /* ignore */ }
+
         async function refresh() {
           var r = await sb.from('projects').select('*').order('created_at', { ascending: false });
           if (r.error) {
