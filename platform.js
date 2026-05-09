@@ -109,14 +109,23 @@
 
   function buildSidebar(activeId) {
     var html = '';
-    html += '<a href="/dashboard.html" class="hx-sidebar-brand">';
+    html += '<a href="/dashboard.html" class="hx-sidebar-brand" aria-label="HelveX dashboard">';
     html +=   '<img src="/helvex-logo.png" alt="HelveX" />';
     html += '</a>';
 
     html += '<button type="button" class="hx-workspace" id="hx-workspace-btn" title="Workspace">';
     html +=   '<span class="hx-workspace-avatar" id="hx-workspace-avatar">·</span>';
-    html +=   '<span class="hx-workspace-name" id="hx-workspace-name">Loading…</span>';
-    html +=   '<span class="hx-workspace-chev">' + svg('chev', { sw: 1.8 }) + '</span>';
+    html +=   '<span class="hx-workspace-info">';
+    html +=     '<span class="hx-workspace-name" id="hx-workspace-name">Loading…</span>';
+    html +=     '<span class="hx-workspace-plan" id="hx-workspace-plan">Free</span>';
+    html +=   '</span>';
+    html +=   '<svg class="hx-workspace-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="8 9 12 5 16 9"/><polyline points="8 15 12 19 16 15"/></svg>';
+    html += '</button>';
+
+    html += '<button type="button" class="hx-sidebar-find" id="hx-sidebar-find" aria-label="Search">';
+    html +=   svg('search', { sw: 1.8 });
+    html +=   '<span class="hx-sidebar-find-text">Find…</span>';
+    html +=   '<span class="hx-sidebar-find-kbd">⌘K</span>';
     html += '</button>';
 
     NAV_GROUPS.forEach(function (group) {
@@ -232,12 +241,19 @@
       });
     }
 
+    // Sidebar "Find…" button + topbar Cmd+K + keyboard shortcut all
+    // focus the same affordance (no actual command palette yet).
+    var sidebarFind = document.getElementById('hx-sidebar-find');
+    function focusCmdK() {
+      var cmdk = document.getElementById('hx-cmdk');
+      if (cmdk) cmdk.focus();
+    }
+    if (sidebarFind) sidebarFind.addEventListener('click', focusCmdK);
     document.addEventListener('keydown', function (e) {
       var meta = e.metaKey || e.ctrlKey;
       if (meta && (e.key === 'k' || e.key === 'K')) {
         e.preventDefault();
-        var cmdk = document.getElementById('hx-cmdk');
-        if (cmdk) cmdk.focus();
+        focusCmdK();
       }
     });
 
