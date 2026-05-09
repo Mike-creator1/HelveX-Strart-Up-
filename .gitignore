@@ -11,3 +11,6 @@ node_modules/
 .claude/
 
 .vercel
+.set-secret.mjs
+.gh-pubkey.json
+node_modules/
