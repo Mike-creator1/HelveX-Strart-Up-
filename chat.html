@@ -958,9 +958,9 @@
         // ─── Send message (SSE streaming) ────────────────────
         async function send(retryFromIdx) {
           if (state.sending || state.streaming) return;
-          // Stop any active voice transcription so it can't keep dictating
+          // Stop any active voice recording so it can't keep dictating
           // into a new turn after the user has hit send.
-          if (recognizer) stopVoice();
+          if (typeof voiceState !== 'undefined' && voiceState !== 'idle') stopVoice();
           var text = $('hx-c-input').value.trim();
 
           // Regenerate path: replay the last user message
@@ -1280,39 +1280,66 @@
           var hasText = !!inputEl.value.trim();
           var hasReady = state.attachments.some(function (a) { return a.status === 'ready'; });
           var hasUploading = state.attachments.some(function (a) { return a.status === 'uploading'; });
-          sendBtn.disabled = (!hasText && !hasReady) || hasUploading || state.sending || state.streaming;
+          var voiceBusy =
+            (typeof voiceState !== 'undefined') &&
+            (voiceState === 'recording' || voiceState === 'starting' || voiceState === 'transcribing');
+          sendBtn.disabled = (!hasText && !hasReady) || hasUploading || state.sending || state.streaming || voiceBusy;
         }
 
-        // ─── Voice input via Web Speech API ──────────────────
-        var SpeechRecog = window.SpeechRecognition || window.webkitSpeechRecognition;
-        var listeningEl = $('hx-c-listening');
-        var voiceErrEl  = $('hx-c-voice-err');
+        // ─── Voice input — MediaRecorder + backend transcription ───
+        // Records audio with MediaRecorder, ships the blob to our
+        // /functions/v1/transcribe Edge Function which forwards to
+        // Whisper (Groq or OpenAI). The browser's built-in
+        // SpeechRecognition is unusable in production because Chrome's
+        // engine routes through Google STT and silently fails with
+        // `network` errors on common hosts.
+        var listeningEl  = $('hx-c-listening');
+        var voiceErrEl   = $('hx-c-voice-err');
         var voiceErrTimer = null;
 
-        if (!SpeechRecog) {
+        var hasMediaRecorder = !!(window.MediaRecorder
+                              && navigator.mediaDevices
+                              && navigator.mediaDevices.getUserMedia);
+
+        if (!hasMediaRecorder) {
           micBtn.disabled = true;
-          micBtn.title    = 'Voice input is not supported in this browser. Try Chrome, Edge, or Safari.';
+          micBtn.title    = 'Voice input is not supported in this browser.';
         } else if (!window.isSecureContext) {
           micBtn.disabled = true;
           micBtn.title    = 'Voice input requires a secure (HTTPS) page.';
         } else {
-          micBtn.title    = 'Voice input — click and speak';
+          micBtn.title    = 'Voice input — click to record';
         }
 
-        var recognizer    = null;
-        var recogBaseText = '';
-        var voiceStarting = false;     // guard against double-clicks while permission prompt is open
+        var mediaRecorder = null;     // active MediaRecorder during a session
+        var audioChunks   = [];       // collected Blobs from ondataavailable
+        var micStream     = null;     // MediaStream for the open mic
+        var voiceState    = 'idle';   // 'idle' | 'starting' | 'recording' | 'transcribing'
+        var recordingMime = '';       // negotiated MIME type
 
-        function setListeningState(on) {
-          if (on) {
+        function setVoiceState(next) {
+          voiceState = next;
+          if (next === 'recording') {
             micBtn.classList.add('is-recording');
             micBtn.setAttribute('aria-pressed', 'true');
-            if (listeningEl) listeningEl.style.display = '';
+            if (listeningEl) {
+              listeningEl.style.display = '';
+              listeningEl.querySelector('span:last-child').textContent = 'Listening…';
+            }
+          } else if (next === 'transcribing') {
+            micBtn.classList.remove('is-recording');
+            micBtn.setAttribute('aria-pressed', 'false');
+            if (listeningEl) {
+              listeningEl.style.display = '';
+              listeningEl.querySelector('span:last-child').textContent = 'Transcribing…';
+            }
           } else {
+            // idle / starting
             micBtn.classList.remove('is-recording');
             micBtn.setAttribute('aria-pressed', 'false');
             if (listeningEl) listeningEl.style.display = 'none';
           }
+          refreshSendDisabled();
         }
 
         function showVoiceError(msg) {
@@ -1324,9 +1351,8 @@
           voiceErrTimer = setTimeout(function () {
             voiceErrEl.style.opacity = '0';
             setTimeout(function () { voiceErrEl.style.display = 'none'; }, 250);
-          }, 5000);
+          }, 6000);
         }
-
         function clearVoiceError() {
           if (!voiceErrEl) return;
           if (voiceErrTimer) { clearTimeout(voiceErrTimer); voiceErrTimer = null; }
@@ -1334,130 +1360,207 @@
           voiceErrEl.textContent = '';
         }
 
-        // Surface the OS / browser microphone permission prompt explicitly
-        // so the user gets a real dialog instead of a silently-failing
-        // SpeechRecognition.start(). On grant we immediately stop the
-        // tracks because SpeechRecognition opens its own audio pipeline.
-        async function ensureMicrophonePermission() {
-          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            // Older browser without MediaDevices — fall back to letting
-            // SpeechRecognition.start() trigger its own permission UI.
-            return true;
+        function pickRecordingMime() {
+          var candidates = [
+            'audio/webm;codecs=opus',
+            'audio/webm',
+            'audio/mp4',
+            'audio/ogg;codecs=opus',
+            'audio/ogg',
+          ];
+          if (!window.MediaRecorder || !MediaRecorder.isTypeSupported) return '';
+          for (var i = 0; i < candidates.length; i++) {
+            try { if (MediaRecorder.isTypeSupported(candidates[i])) return candidates[i]; }
+            catch (e) { /* ignore */ }
           }
+          return '';
+        }
+
+        function extForMime(m) {
+          if (!m) return 'webm';
+          if (m.indexOf('mp4') !== -1) return 'm4a';
+          if (m.indexOf('ogg') !== -1) return 'ogg';
+          return 'webm';
+        }
+
+        function cleanupMicStream() {
+          if (micStream) {
+            try { micStream.getTracks().forEach(function (t) { try { t.stop(); } catch (e) {} }); }
+            catch (e) {}
+            micStream = null;
+          }
+        }
+
+        function insertTranscript(text) {
+          if (!text) return;
+          var t = String(text).trim();
+          if (!t) return;
+          var cur = inputEl.value;
+          inputEl.value = (cur ? cur.replace(/\s+$/, '') + ' ' : '') + t;
+          autoSize(inputEl);
+          refreshSendDisabled();
+          inputEl.focus();
+          try { inputEl.selectionStart = inputEl.selectionEnd = inputEl.value.length; }
+          catch (e) {}
+        }
+
+        async function startVoice() {
+          if (!hasMediaRecorder)            return;
+          if (voiceState !== 'idle')        return;
+          clearVoiceError();
+          setVoiceState('starting');
+
+          // Real OS/browser permission prompt
           try {
-            var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            stream.getTracks().forEach(function (t) { try { t.stop(); } catch (e) { /* ignore */ } });
-            return true;
+            micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
           } catch (err) {
+            setVoiceState('idle');
             var name = (err && err.name) || '';
             if (name === 'NotAllowedError' || name === 'PermissionDeniedError') {
               showVoiceError('Microphone permission was denied. Enable it for this site in your browser settings.');
             } else if (name === 'NotFoundError' || name === 'OverconstrainedError') {
               showVoiceError('No microphone was found on this device.');
             } else if (name === 'NotReadableError') {
-              showVoiceError('The microphone is busy in another application. Close it and try again.');
+              showVoiceError('The microphone is busy in another application.');
             } else if (name === 'SecurityError') {
               showVoiceError('Microphone access blocked by browser security policy.');
             } else {
               showVoiceError('Could not access the microphone: ' + (err && (err.message || name) || 'unknown error'));
             }
-            return false;
+            return;
           }
-        }
 
-        async function startVoice() {
-          if (!SpeechRecog || recognizer || voiceStarting) return;
-          voiceStarting = true;
-          clearVoiceError();
+          recordingMime = pickRecordingMime();
+          audioChunks = [];
+
           try {
-            var ok = await ensureMicrophonePermission();
-            if (!ok) return;
-
-            recognizer = new SpeechRecog();
-            try { recognizer.continuous     = true;  } catch (e) { /* iOS Safari may reject */ }
-            try { recognizer.interimResults = true;  } catch (e) {}
-            try { recognizer.maxAlternatives = 1;    } catch (e) {}
-            try { recognizer.lang = navigator.language || 'en-US'; } catch (e) {}
-            recogBaseText = inputEl.value;
-
-            recognizer.onstart = function () {
-              setListeningState(true);
-            };
-            recognizer.onresult = function (e) {
-              var interim = '';
-              var finalChunk = '';
-              for (var i = e.resultIndex; i < e.results.length; i++) {
-                var r = e.results[i];
-                if (r.isFinal) finalChunk += r[0].transcript;
-                else           interim    += r[0].transcript;
-              }
-              if (finalChunk) {
-                recogBaseText = (recogBaseText ? recogBaseText.replace(/\s+$/, '') + ' ' : '')
-                              + finalChunk.trim();
-              }
-              inputEl.value = (recogBaseText + (interim ? ' ' + interim.trim() : '')).trim();
-              autoSize(inputEl);
-              refreshSendDisabled();
-            };
-            recognizer.onerror = function (e) {
-              var code = e && e.error;
-              var msg = '';
-              switch (code) {
-                case 'not-allowed':
-                case 'service-not-allowed':
-                  msg = 'Microphone permission was denied.';
-                  break;
-                case 'no-speech':
-                  msg = "I didn't hear anything — try again.";
-                  break;
-                case 'audio-capture':
-                  msg = 'No microphone was detected on this device.';
-                  break;
-                case 'network':
-                  msg = 'Voice transcription needs a network connection.';
-                  break;
-                case 'aborted':
-                  msg = '';   // user-initiated stop, no banner
-                  break;
-                default:
-                  msg = 'Voice input failed' + (code ? ': ' + code : '.');
-              }
-              if (msg) showVoiceError(msg);
-              cleanupRecognizer();
-            };
-            recognizer.onend = function () {
-              cleanupRecognizer();
-            };
-
-            try {
-              recognizer.start();
-            } catch (err) {
-              cleanupRecognizer();
-              showVoiceError('Could not start voice input: ' + (err && err.message || 'unknown error'));
+            mediaRecorder = recordingMime
+              ? new MediaRecorder(micStream, { mimeType: recordingMime })
+              : new MediaRecorder(micStream);
+          } catch (err) {
+            try { mediaRecorder = new MediaRecorder(micStream); recordingMime = ''; }
+            catch (err2) {
+              cleanupMicStream();
+              setVoiceState('idle');
+              showVoiceError('Recording is not supported by this browser.');
               return;
             }
-            // Some browsers fire onstart asynchronously; reflect the active
-            // state immediately so the click feels responsive.
-            setListeningState(true);
-          } finally {
-            voiceStarting = false;
           }
+
+          mediaRecorder.ondataavailable = function (e) {
+            if (e && e.data && e.data.size > 0) audioChunks.push(e.data);
+          };
+          mediaRecorder.onerror = function () {
+            showVoiceError('Recording error.');
+            try { mediaRecorder.stop(); } catch (e) {}
+          };
+          mediaRecorder.onstop = function () {
+            // Build the blob, free the mic, fire transcription
+            var blob;
+            try {
+              blob = new Blob(audioChunks, { type: recordingMime || 'audio/webm' });
+            } catch (e) {
+              blob = null;
+            }
+            audioChunks = [];
+            cleanupMicStream();
+            mediaRecorder = null;
+
+            if (!blob || blob.size < 1024) {
+              setVoiceState('idle');
+              showVoiceError('Recording was too short.');
+              return;
+            }
+
+            transcribeAudio(blob).catch(function (err) {
+              setVoiceState('idle');
+              showVoiceError(err && err.message ? err.message : 'Transcription failed.');
+            });
+          };
+
+          try {
+            mediaRecorder.start(250);     // collect chunks every 250ms
+          } catch (err) {
+            cleanupMicStream();
+            mediaRecorder = null;
+            setVoiceState('idle');
+            showVoiceError('Could not start recording: ' + (err && err.message || 'unknown error'));
+            return;
+          }
+          setVoiceState('recording');
         }
 
-        function cleanupRecognizer() {
-          recognizer = null;
-          setListeningState(false);
+        async function transcribeAudio(blob) {
+          setVoiceState('transcribing');
+          var sess = (await sb.auth.getSession()).data.session;
+          if (!sess || !sess.access_token) {
+            setVoiceState('idle');
+            throw new Error('Not signed in.');
+          }
+
+          var fd = new FormData();
+          var ext = extForMime(recordingMime);
+          fd.append('audio', blob, 'recording.' + ext);
+          // Send the user's preferred language as a hint to Whisper.
+          // navigator.language is e.g. "el-GR" or "en-US"; send the
+          // 2-letter prefix.
+          var lang = (navigator.language || '').slice(0, 2);
+          if (lang) fd.append('language', lang);
+
+          var resp;
+          try {
+            resp = await fetch(PROJECT_URL + '/functions/v1/transcribe', {
+              method: 'POST',
+              headers: { Authorization: 'Bearer ' + sess.access_token },
+              body: fd,
+            });
+          } catch (err) {
+            setVoiceState('idle');
+            throw new Error('Network error during transcription.');
+          }
+
+          if (!resp.ok) {
+            var errBody = null;
+            try { errBody = await resp.json(); } catch (e) { /* ignore */ }
+            setVoiceState('idle');
+            if (resp.status === 503 && errBody && errBody.error === 'transcription_unconfigured') {
+              throw new Error('Voice transcription is not configured yet. Ask the workspace admin to set GROQ_API_KEY or OPENAI_API_KEY.');
+            }
+            throw new Error((errBody && (errBody.hint || errBody.message || errBody.error)) || ('Transcription failed (HTTP ' + resp.status + ').'));
+          }
+
+          var data = await resp.json().catch(function () { return null; });
+          var text = data && typeof data.text === 'string' ? data.text : '';
+          setVoiceState('idle');
+          if (!text.trim()) {
+            showVoiceError("I didn't catch any speech. Try again.");
+            return;
+          }
+          insertTranscript(text);
         }
 
         function stopVoice() {
-          if (!recognizer) { setListeningState(false); return; }
-          // Use stop() to keep any final transcript; abort() drops it.
-          try { recognizer.stop(); } catch (e) { try { recognizer.abort(); } catch (e2) {} }
-          // onend will cleanupRecognizer() and clear UI.
+          // Idempotent stop; transitions through transcribing on its own.
+          if (voiceState === 'recording' && mediaRecorder) {
+            try { mediaRecorder.stop(); } catch (e) {
+              try { cleanupMicStream(); } catch (e2) {}
+              mediaRecorder = null;
+              setVoiceState('idle');
+            }
+          } else if (voiceState === 'starting') {
+            // getUserMedia in flight — best we can do is mark intent;
+            // the start() will see the state change and bail.
+            cleanupMicStream();
+            setVoiceState('idle');
+          }
+          // 'transcribing' has no cancel — the upload is in flight.
+          // 'idle' is a no-op.
         }
 
         function toggleVoice() {
-          if (recognizer || voiceStarting) stopVoice(); else startVoice();
+          if (voiceState === 'idle')      startVoice();
+          else if (voiceState === 'recording' || voiceState === 'starting') stopVoice();
+          // 'transcribing' clicks are ignored
         }
 
         // ─── Attachment management ───────────────────────────
