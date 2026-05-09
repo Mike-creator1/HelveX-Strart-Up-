@@ -227,7 +227,12 @@
       // Unauthenticated user on a protected page → bounce to /signup
       if (!session && !isPublic) {
         window.location.replace('/signup');
+        return;
       }
+      // Routing decision made, page is staying — let pages reveal smoothly
+      // without a flash of unstyled content during the ~200 ms session check.
+      document.documentElement.classList.add('hx-stayed');
+      document.dispatchEvent(new CustomEvent('hx:auth-checked', { detail: { session: session } }));
     });
 
     // Wire the sidebar logout button (rendered by platform.js)

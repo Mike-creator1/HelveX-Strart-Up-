@@ -10,6 +10,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/auth.css" />
+  <style>
+    /* Pre-render veil — hides the form during the ~200 ms session check so
+       already-authenticated users never see a flash before being redirected
+       to the dashboard. Matches Vercel's smooth auth-page transition. */
+    .auth-shell { opacity: 0; transition: opacity 0.22s ease; }
+    html.hx-stayed .auth-shell { opacity: 1; }
+  </style>
+  <script>
+    // Failsafe — reveal after 1.5 s if the session check stalls for any reason
+    // (offline / CDN failure / SDK didn't load).
+    setTimeout(function () { document.documentElement.classList.add('hx-stayed'); }, 1500);
+  </script>
 </head>
 <body>
 
