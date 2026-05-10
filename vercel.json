@@ -39,6 +39,7 @@
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/chat", "destination": "/chat.html" },
     { "source": "/services", "destination": "/services.html" },
+    { "source": "/consulting", "destination": "/consulting.html" },
     { "source": "/projects", "destination": "/projects.html" },
     { "source": "/credits", "destination": "/credits.html" },
     { "source": "/buy-credits", "destination": "/buy-credits.html" },

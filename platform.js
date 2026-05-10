@@ -10,10 +10,11 @@
     {
       label: 'Workspace',
       items: [
-        { id: 'dashboard', href: '/dashboard.html', label: 'Overview', icon: 'home' },
-        { id: 'chat',      href: '/chat.html',      label: 'Chat',     icon: 'chat' },
-        { id: 'projects',  href: '/projects.html',  label: 'Projects', icon: 'folder' },
-        { id: 'services',  href: '/services.html',  label: 'Services', icon: 'grid' }
+        { id: 'dashboard',  href: '/dashboard.html',  label: 'Overview',   icon: 'home' },
+        { id: 'chat',       href: '/chat.html',       label: 'Chat',       icon: 'chat' },
+        { id: 'projects',   href: '/projects.html',   label: 'Projects',   icon: 'folder' },
+        { id: 'services',   href: '/services.html',   label: 'Services',   icon: 'grid' },
+        { id: 'consulting', href: '/consulting.html', label: 'Consulting', icon: 'briefcase' }
       ]
     },
     {
@@ -68,6 +69,7 @@
     chat:     '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
     folder:   '<path d="M3 7a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
     grid:     '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+    briefcase:'<rect x="2.5" y="7.5" width="19" height="13" rx="2"/><path d="M16 21V5.5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2V21"/><line x1="2.5" y1="13" x2="21.5" y2="13"/>',
     cpu:      '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>',
     zap:      '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
     cloud:    '<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>',
