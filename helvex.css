@@ -3091,3 +3091,230 @@
       .reveal { filter: none !important; }
     }
 
+    /* ═══════════════════════════════════════════════════════════
+       PREMIUM HX SYSTEM · v7  (HTML-coupled, high-specificity)
+       Custom .hx-* classes used directly in the markup so Tailwind
+       can't drown them out. Visible, premium, dramatic.
+       ═══════════════════════════════════════════════════════════ */
+
+    /* ─── HERO TYPOGRAPHY · larger, more confident ─────────── */
+    .hx-hero-title {
+      font-size: clamp(48px, 8.4vw, 124px) !important;
+      line-height: 0.93 !important;
+      letter-spacing: -0.062em !important;
+      font-weight: 600 !important;
+      color: #0A0A0A !important;
+    }
+    @media (min-width: 1024px) {
+      .hx-hero-title { letter-spacing: -0.068em !important; }
+    }
+    .hx-hero-sub {
+      font-size: clamp(16px, 1.4vw, 21px) !important;
+      line-height: 1.55 !important;
+      color: #404044 !important;
+      max-width: 56ch !important;
+    }
+
+    /* ─── PILL · refined glass chrome with halo ────────────── */
+    .hx-pill {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 18px 6px 6px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.80) 100%);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 1px solid rgba(15,15,16,0.08);
+      border-radius: 999px;
+      color: #18181b;
+      text-decoration: none;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,1) inset,
+        0 1px 3px rgba(15,15,16,0.04),
+        0 14px 32px -10px rgba(15,15,16,0.14),
+        0 30px 60px -20px rgba(220,38,38,0.10);
+      transition:
+        transform 0.4s var(--hx-ease-out),
+        box-shadow 0.4s var(--hx-ease-out),
+        border-color 0.3s ease;
+    }
+    .hx-pill:hover {
+      transform: translateY(-2px);
+      border-color: rgba(220, 38, 38, 0.28);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,1) inset,
+        0 2px 6px rgba(15,15,16,0.06),
+        0 22px 50px -14px rgba(15,15,16,0.18),
+        0 44px 90px -24px rgba(220,38,38,0.20);
+    }
+    .hx-pill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 11px;
+      background: linear-gradient(135deg, rgba(220,38,38,0.14), rgba(252,211,77,0.10));
+      color: #991B1B;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      border: 1px solid rgba(220,38,38,0.18);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.7) inset;
+    }
+    .hx-pill-copy {
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      color: #18181b;
+    }
+    .hx-pill-arrow {
+      width: 13px;
+      height: 13px;
+      color: #A3A3A3;
+      transition: transform 0.3s var(--hx-ease-out), color 0.3s ease;
+    }
+    .hx-pill:hover .hx-pill-arrow {
+      color: #DC2626;
+      transform: translateX(3px);
+    }
+
+    /* ─── BUTTONS · the centrepiece upgrade ───────────────── */
+    .hx-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 17px 30px;
+      border-radius: 999px;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+      text-decoration: none;
+      cursor: pointer;
+      isolation: isolate;
+      overflow: hidden;
+      transition:
+        transform 0.36s var(--hx-ease-out),
+        box-shadow 0.36s var(--hx-ease-out),
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        color 0.25s ease;
+      will-change: transform;
+    }
+    .hx-btn-label { position: relative; z-index: 2; }
+    .hx-btn-arrow {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      transition: transform 0.36s var(--hx-ease-out);
+    }
+    .hx-btn-arrow svg { width: 100%; height: 100%; }
+    .hx-btn:hover .hx-btn-arrow { transform: translateX(5px); }
+    .hx-btn:active { transform: translateY(0) !important; transition-duration: 0.1s !important; }
+
+    /* Primary — black metal pill with red→gold halo */
+    .hx-btn-primary {
+      background: linear-gradient(135deg, #18181b 0%, #0A0A0A 50%, #18181b 100%);
+      color: #FFFFFF;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.10) inset,
+        0 -2px 6px rgba(255,255,255,0.04) inset,
+        0 2px 4px rgba(15,15,16,0.25),
+        0 14px 32px -8px rgba(15,15,16,0.45),
+        0 28px 70px -18px rgba(220,38,38,0.20);
+    }
+    .hx-btn-primary::before {
+      /* travelling white shine */
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(115deg,
+        transparent 0%,
+        rgba(255,255,255,0.28) 40%,
+        rgba(255,255,255,0.55) 50%,
+        rgba(255,255,255,0.28) 60%,
+        transparent 100%);
+      transform: translateX(-110%) skewX(-12deg);
+      transition: transform 0.85s var(--hx-ease-out);
+      pointer-events: none;
+      z-index: 1;
+      mix-blend-mode: overlay;
+    }
+    .hx-btn-primary::after {
+      /* red→gold halo that blooms on hover */
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(220,38,38,0.65), rgba(252,211,77,0.45));
+      filter: blur(22px);
+      opacity: 0;
+      transition: opacity 0.5s var(--hx-ease-out);
+      z-index: -1;
+      pointer-events: none;
+    }
+    .hx-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.14) inset,
+        0 -2px 8px rgba(255,255,255,0.06) inset,
+        0 4px 8px rgba(15,15,16,0.30),
+        0 22px 44px -10px rgba(15,15,16,0.55),
+        0 44px 100px -22px rgba(220,38,38,0.35),
+        0 0 0 1px rgba(252,211,77,0.18);
+    }
+    .hx-btn-primary:hover::before { transform: translateX(115%) skewX(-12deg); }
+    .hx-btn-primary:hover::after  { opacity: 1; }
+
+    /* Ghost — frosted glass pill with subtle brand outline on hover */
+    .hx-btn-ghost {
+      background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.78) 100%);
+      backdrop-filter: saturate(160%) blur(16px);
+      -webkit-backdrop-filter: saturate(160%) blur(16px);
+      color: #0A0A0A;
+      border: 1px solid rgba(15,15,16,0.10);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,1) inset,
+        0 1px 2px rgba(15,15,16,0.04),
+        0 10px 24px -10px rgba(15,15,16,0.16);
+    }
+    .hx-btn-ghost:hover {
+      transform: translateY(-2px);
+      border-color: rgba(220, 38, 38, 0.30);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,1) inset,
+        0 2px 6px rgba(15,15,16,0.06),
+        0 20px 44px -14px rgba(220,38,38,0.22),
+        0 36px 80px -24px rgba(15,15,16,0.10);
+    }
+
+    /* ─── HERO CTA spacing context ─────────────────────────── */
+    .hx-hero-cta { gap: 14px; }
+    @media (min-width: 640px) {
+      .hx-hero-cta { gap: 18px; }
+    }
+
+    /* ─── MOBILE refinement for the new HX system ──────────── */
+    @media (max-width: 640px) {
+      .hx-btn { padding: 15px 26px; font-size: 14.5px; width: 100%; }
+      .hx-btn-arrow { width: 13px; height: 13px; }
+      .hx-pill { padding: 5px 14px 5px 5px; }
+      .hx-pill-tag { padding: 4px 9px; font-size: 9.5px; }
+      .hx-pill-copy { font-size: 11.5px; }
+      .hx-hero-title { letter-spacing: -0.05em !important; line-height: 0.96 !important; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hx-btn::before, .hx-btn::after { transition: none !important; opacity: 0 !important; transform: none !important; }
+      .hx-pill, .hx-btn { transition: none !important; transform: none !important; }
+    }
+
