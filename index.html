@@ -1117,14 +1117,14 @@
       var stride = density * SCALE;
       var rowW = logicalW * SCALE;
       var pts = [];
-      // Alpha threshold 70 — captures the antialiased edge pixels too,
-      // so every dot lands on solid letter mass *and* a one-pixel
-      // outer ring on the glyph contour. With the bigger 2.4 px dots
-      // that ring fuses with the body into one continuous black form.
+      // Alpha threshold 150 — strict. Only solid letter cores get a
+      // dot; the antialiased fringe is dropped. With the 3× super-
+      // sample this gives ultra-crisp letter edges and lets every dot
+      // sit on real letter mass instead of on a hazy outline halo.
       for (var y = 0; y < logicalH * SCALE; y += stride) {
         for (var x = 0; x < logicalW * SCALE; x += stride) {
           var i = (y * rowW + x) * 4;
-          if (data[i + 3] > 70) {
+          if (data[i + 3] > 150) {
             pts.push({
               x: (x / SCALE - logicalW / 2),
               y: (y / SCALE - logicalH / 2)
@@ -1162,14 +1162,16 @@
       canvas.style.height = H + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Sample every state's points + store the resolved font spec on
-       // each STATE so render() can switch to clean fillText during
-      // the hold phase.
+      // Sample every state's points. Density 3 → 3 px between dot
+      // centres. Paired with a 1.2 px dot radius this leaves a clean
+       // ~0.6 px gap between every neighbouring dot, so the dotted
+       // pattern reads as discrete dots (halftone aesthetic) instead
+       // of an overlapping ink blob. With Inter 900 strokes (~25 px
+       // wide), each stroke still holds ~8 dots across — solid letter
+       // body, visible dotted texture, clean edges.
       statePts = [];
       for (var s = 0; s < STATES.length; s++) {
-        var result = buildPointsFor(STATES[s].text, STATES[s].font, 2);
-        statePts.push(result.pts);
-        STATES[s]._spec = result.spec;
+        statePts.push(buildPointsFor(STATES[s].text, STATES[s].font, 3).pts);
       }
 
       // Equalize lengths
@@ -1264,21 +1266,12 @@
 
     var running = true;
 
-    /* Uniform dot — used only during the morph transition (the hold
-       phase renders solid antialiased text instead). 1.7 px balances
-       visibility of the motion with a clean particle texture. */
-    var DOT = 1.7;
-
-    function drawSolidText(stateIndex) {
-      var state = STATES[stateIndex];
-      ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-      ctx.font = state._spec;
-      ctx.textBaseline = 'middle';
-      ctx.textAlign = 'center';
-      if ('textRendering' in ctx) { ctx.textRendering = 'geometricPrecision'; }
-      try { ctx.letterSpacing = '-0.02em'; } catch (e) { /* unsupported */ }
-      ctx.fillText(state.text, 0, 0);
-    }
+    /* Uniform dot — 1.2 px radius. With 3 px sample spacing the dots
+       form a clean halftone pattern: each one is a discrete circle
+       with a ~0.6 px gap to its neighbour, but Inter 900's thick
+       strokes still hold 8+ dots across so letterforms read as solid
+       black mass with a visible dotted texture. */
+    var DOT = 1.2;
 
     function render(now) {
       if (!running) return;
@@ -1292,21 +1285,9 @@
       ctx.save();
       ctx.translate(W / 2, H / 2);
 
-      // HOLD PHASE — render the text as crisp, antialiased solid
-      // typography using the same font spec the dots were sampled
-      // from. Crystal clear, perfectly readable. The dot effect is
-      // reserved for the transition between states, which is where
-      // the build-up motion actually lives.
-      if (!isMorph) {
-        drawSolidText(st.from);
-        ctx.restore();
-        requestAnimationFrame(render);
-        return;
-      }
-
-      // MORPH PHASE — particles fly between source and target letter
-      // shapes. Pure black, full alpha, no opacity tricks. Lerp 0.22
-      // locks shapes in decisively.
+      // Dot-based rendering for both hold and morph. Pure black, full
+      // alpha throughout — no opacity tricks. The motion between
+      // states relies on positional interpolation, not on fading.
       ctx.shadowBlur  = 0;
       ctx.shadowColor = 'transparent';
       ctx.fillStyle   = 'rgba(0, 0, 0, 1)';
@@ -1316,11 +1297,14 @@
         var p  = particles[i];
         var fp = fromArr[i], tp = toArr[i];
 
-        var offset = (p.seed - 0.5) * 0.20;  // -0.10 … +0.10
-        var localK = (k - 0.5) / (1 - Math.abs(offset)) + 0.5 + offset * 0.5;
-        if (localK < 0) localK = 0;
-        if (localK > 1) localK = 1;
-        localK = easeInOut(localK);
+        var localK = k;
+        if (isMorph) {
+          var offset = (p.seed - 0.5) * 0.20;  // -0.10 … +0.10
+          localK = (k - 0.5) / (1 - Math.abs(offset)) + 0.5 + offset * 0.5;
+          if (localK < 0) localK = 0;
+          if (localK > 1) localK = 1;
+          localK = easeInOut(localK);
+        }
 
         var tx = fp.x + (tp.x - fp.x) * localK;
         var ty = fp.y + (tp.y - fp.y) * localK;
@@ -1345,7 +1329,16 @@
       ctx.clearRect(0, 0, W, H);
       ctx.save();
       ctx.translate(W / 2, H / 2);
-      drawSolidText(0);
+      ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+      var pts = statePts[0];
+      ctx.beginPath();
+      for (var i = 0; i < pts.length; i++) {
+        var ax = Math.round(pts[i].x * 2) / 2;
+        var ay = Math.round(pts[i].y * 2) / 2;
+        ctx.moveTo(ax + DOT, ay);
+        ctx.arc(ax, ay, DOT, 0, 6.2832);
+      }
+      ctx.fill();
       ctx.restore();
     }
 
