@@ -58,14 +58,14 @@
     .hx-morph-stage {
       position: relative;
       width: 100%;
-      max-width: 880px;
+      max-width: 1120px;
       margin-left: auto;
       margin-right: auto;
-      height: 260px;
+      height: 300px;
       isolation: isolate;
     }
     @media (max-width: 640px) {
-      .hx-morph-stage { height: 180px; max-width: 100%; }
+      .hx-morph-stage { height: 200px; max-width: 100%; }
     }
     #hx-morph-canvas {
       position: absolute;
@@ -1077,9 +1077,9 @@
        stroke read as bold/solid. Locking the size to one value makes
        every word render at the same visual weight. */
     function findUniversalFontSize() {
-      var maxW = Math.max(W * 0.95, 220);
-      var maxH = Math.max(H * 0.90, 140);
-      var maxFs = Math.floor(Math.min(maxH * 0.92, 210));
+      var maxW = Math.max(W * 0.98, 220);
+      var maxH = Math.max(H * 0.94, 140);
+      var maxFs = Math.floor(Math.min(maxH * 0.96, 280));
 
       var off = document.createElement('canvas');
       var oc  = off.getContext('2d');
