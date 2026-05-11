@@ -1068,50 +1068,18 @@
        letterforms have crisp anti-aliased edges, then maps back to
        logical coordinates — the dotted texture reads as clean type,
        not jagged pixels. */
-    /* Compute a single universal font size that makes every state fit
-       inside the canvas. Without this, short words like "AI Agents"
-       would auto-fit to a giant 210 px font while long words like
-       "Intelligent Workflows" would shrink to ~130 px — and the dot
-       grid is uniform, so the same dots inside a thicker stroke read
-       as halftone-textured, while the same dots inside a thinner
-       stroke read as bold/solid. Locking the size to one value makes
-       every word render at the same visual weight. */
-    function findUniversalFontSize() {
-      var maxW = Math.max(W * 0.98, 220);
-      var maxH = Math.max(H * 0.94, 140);
-      var maxFs = Math.floor(Math.min(maxH * 0.96, 280));
-
-      var off = document.createElement('canvas');
-      var oc  = off.getContext('2d');
-      try { oc.letterSpacing = '-0.02em'; } catch (e) { /* unsupported */ }
-
-      var widest = 0;
-      for (var s = 0; s < STATES.length; s++) {
-        var spec = STATES[s].font.replace('PX', String(maxFs));
-        oc.font = spec;
-        var w = oc.measureText(STATES[s].text).width;
-        if (w > widest) widest = w;
-      }
-      if (widest <= maxW) return maxFs;
-      return Math.max(20, Math.floor(maxFs * maxW / widest));
-    }
-
-    var UNIVERSAL_FS = 0;
-
-    function buildPointsFor(text, fontTemplate, density) {
-      /* 3× internal raster — supersampling at 3× then sampling the
-         alpha map at our logical density gives ultra-crisp glyph
-         outlines. Combined with a strict alpha threshold, every dot
-         we keep lies on a solid letter core, not on the antialiased
-         fringe. This is the difference between a clean printed-screen
-         look and a fuzzy outlined-letter look. */
+    /* Each state auto-fits its own font size so every word fills the
+       canvas at the same visual scale — short words ("HelveX") and
+       long words ("Intelligent Workflows") both span the full width.
+       To keep the dot weight uniform across states (no halftone vs
+       solid mismatch), the dot radius and sampling density are scaled
+       proportionally to the font size in build() below. */
+    function buildPointsFor(text, fontTemplate, baseDensity, fontSize) {
       var SCALE = 3;
       var off = document.createElement('canvas');
       var oc  = off.getContext('2d');
 
-      // Universal font size — every state shares the same fs so the
-      // dot-grid-to-stroke ratio is constant. No per-word auto-fit.
-      var fs = UNIVERSAL_FS;
+      var fs = fontSize;
       var spec = fontTemplate.replace('PX', String(fs));
       oc.font = spec;
       var textW = oc.measureText(text).width;
@@ -1135,7 +1103,7 @@
       c.fillText(text, 12, logicalH / 2);
 
       var data = c.getImageData(0, 0, logicalW * SCALE, logicalH * SCALE).data;
-      var stride = density * SCALE;
+      var stride = baseDensity * SCALE;
       var rowW = logicalW * SCALE;
       var pts = [];
       // Alpha threshold 150 — strict. Only solid letter cores get a
@@ -1182,22 +1150,54 @@
       canvas.style.width  = W + 'px';
       canvas.style.height = H + 'px';
 
-      // Lock the font size once per build — every state will be sampled
-      // at this exact pixel size, so the dot-grid-to-stroke ratio is
-      // identical across short words and long words.
-      UNIVERSAL_FS = findUniversalFontSize();
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Sample every state's points. Density 3 → 3 px between dot
-      // centres. Paired with a 1.2 px dot radius this leaves a clean
-       // ~0.6 px gap between every neighbouring dot, so the dotted
-       // pattern reads as discrete dots (halftone aesthetic) instead
-       // of an overlapping ink blob. With Inter 900 strokes (~25 px
-       // wide), each stroke still holds ~8 dots across — solid letter
-       // body, visible dotted texture, clean edges.
-      statePts = [];
+      /* Per-state auto-fit: each word picks the largest font size that
+         fills the canvas width. Short words ("HelveX") get a bigger
+         font so they visually occupy the same space as long words
+         ("Intelligent Workflows"). Dot radius and sampling density
+         are then scaled proportionally per state, so the ratio of
+         dots-per-stroke stays identical and every word reads at the
+         same visual weight. */
+      var maxW = Math.max(W * 0.96, 220);
+      var maxH = Math.max(H * 0.92, 140);
+      var maxFs = Math.floor(Math.min(maxH * 0.94, 300));
+
+      var measureCanvas = document.createElement('canvas');
+      var measureCtx    = measureCanvas.getContext('2d');
+      try { measureCtx.letterSpacing = '-0.02em'; } catch (e) {}
+
+      // 1) Decide each state's auto-fit font size.
+      var fsPerState = [];
+      var smallestFs = Infinity;
       for (var s = 0; s < STATES.length; s++) {
-        statePts.push(buildPointsFor(STATES[s].text, STATES[s].font, 3).pts);
+        var fs = maxFs;
+        var spec = STATES[s].font.replace('PX', String(fs));
+        measureCtx.font = spec;
+        var w = measureCtx.measureText(STATES[s].text).width;
+        if (w > maxW) {
+          fs = Math.max(20, Math.floor(maxFs * maxW / w));
+        }
+        fsPerState.push(fs);
+        if (fs < smallestFs) smallestFs = fs;
+      }
+
+      /* 2) Reference font size = smallest of the bunch. The longest
+         word uses this size at density 3. Larger-font states scale
+         density and dot radius UP proportionally so the per-stroke
+         dot count stays roughly constant. */
+      var REF_FS    = smallestFs;
+      var REF_DOT   = 1.7;   // dot radius for the reference state
+      var REF_GRID  = 3;     // sampling spacing for the reference state
+
+      DOT_BY_STATE = [];
+      statePts    = [];
+      for (var sx = 0; sx < STATES.length; sx++) {
+        var scale = fsPerState[sx] / REF_FS;
+        var grid  = Math.max(2, Math.round(REF_GRID * scale));
+        var dot   = REF_DOT * scale;
+        DOT_BY_STATE.push(dot);
+        statePts.push(buildPointsFor(STATES[sx].text, STATES[sx].font, grid, fsPerState[sx]).pts);
       }
 
       // Equalize lengths
@@ -1316,11 +1316,12 @@
        used to show up after 5–6 minutes of continuous playback. */
     var lastHoldFrame = -1;
 
-    /* Uniform dot — 1.7 px radius on a 3 px grid. Dots overlap by
-       ~0.4 px each side, so the strokes read as bold ink-black mass
-       while the halftone texture remains visible at the letter
-       contours. */
-    var DOT = 1.7;
+    /* DOT_BY_STATE holds the per-state dot radius. The active value is
+       interpolated between from/to states during a morph so the dot
+       size grows or shrinks alongside the letterforms — every word
+       reads with the same visual stroke-weight regardless of how
+       many characters it contains. */
+    var DOT_BY_STATE = [];
 
     function render(now) {
       if (!running) return;
@@ -1352,6 +1353,12 @@
       ctx.shadowBlur  = 0;
       ctx.shadowColor = 'transparent';
       ctx.fillStyle   = 'rgba(0, 0, 0, 1)';
+
+      // Active dot radius — interpolated from/to during a morph, locked
+      // to the current state during hold.
+      var dotFrom = DOT_BY_STATE[st.from] || 1.7;
+      var dotTo   = DOT_BY_STATE[st.to]   || 1.7;
+      var DOT     = isMorph ? (dotFrom + (dotTo - dotFrom) * k) : dotFrom;
 
       ctx.beginPath();
       for (var i = 0; i < N; i++) {
@@ -1397,6 +1404,7 @@
       ctx.translate(W / 2, H / 2);
       ctx.fillStyle = 'rgba(0, 0, 0, 1)';
       var pts = statePts[0];
+      var DOT = DOT_BY_STATE[0] || 1.7;
       ctx.beginPath();
       for (var i = 0; i < pts.length; i++) {
         var ax = Math.round(pts[i].x * 2) / 2;
