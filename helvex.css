@@ -2477,3 +2477,311 @@
       .stagger > .reveal { transition: none !important; transform: none !important; }
     }
 
+    /* ═══════════════════════════════════════════════════════════
+       PREMIUM POLISH LAYER · v5  (VISIBLE upgrades)
+       Same colours, same logo, same content, same structure.
+       What changes: depth, motion physics, typographic finesse,
+       glassmorphic chrome, choreographed reveals, micro-interactions.
+       ═══════════════════════════════════════════════════════════ */
+
+    /* — Branded text selection across the whole site. */
+    ::selection { background: rgba(220, 38, 38, 0.20); color: #0A0A0A; }
+
+    /* — Custom thin elegant scrollbar (WebKit). */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #D4D4D4, #A3A3A3);
+      border-radius: 999px;
+      border: 2px solid #FFFFFF;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #A3A3A3, #525252); }
+
+    /* — Subtle ambient grain over the cream/blush hero washes only.
+         Adds the kind of analogue depth premium brands use. */
+    .tech-wash-blush::after,
+    .tech-wash-pink::after,
+    .tech-wash-soft::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(rgba(15, 15, 16, 0.025) 1px, transparent 1px);
+      background-size: 3px 3px;
+      pointer-events: none;
+      opacity: 0.55;
+      z-index: 0;
+      mix-blend-mode: multiply;
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────────
+       Bigger entrance: refined gradient on the italic accent,
+       a soft underline glow under the wordmark on hover-of-section,
+       and gentler vertical rhythm between pill → headline → sub. */
+    .tech-gradient-text {
+      background: linear-gradient(110deg, #DC2626 0%, #EA580C 32%, #F59E0B 66%, #DC2626 100%) !important;
+      background-size: 200% 100% !important;
+      -webkit-background-clip: text !important;
+              background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      animation: hxGradientShift 14s ease-in-out infinite;
+    }
+    @keyframes hxGradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50%      { background-position: 100% 50%; }
+    }
+
+    /* Hero status pill — deeper chrome, lifted hover. */
+    .reveal .group.inline-flex.items-center.gap-3.pl-2.pr-4.py-1\.5 {
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.95) inset,
+        0 1px 3px rgba(15,15,16,0.05),
+        0 10px 28px -10px rgba(15,15,16,0.12);
+      transition: transform 0.4s var(--hx-ease-out), box-shadow 0.4s var(--hx-ease-out), border-color 0.3s ease;
+    }
+    .reveal .group.inline-flex.items-center.gap-3.pl-2.pr-4.py-1\.5:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,1) inset,
+        0 2px 6px rgba(15,15,16,0.06),
+        0 18px 40px -12px rgba(220,38,38,0.18);
+    }
+
+    /* ─── PRIMARY CTA (tech-cta-glow) — visibly more premium ──
+       Adds a soft red halo bloom, deeper press, smoother gradient
+       sweep, and a chevron arrow that travels on hover. */
+    .tech-cta-glow {
+      position: relative;
+      background: linear-gradient(135deg, #18181b 0%, #0A0A0A 50%, #1a1a1f 100%) !important;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.08) inset,
+        0 1px 3px rgba(15,15,16,0.20),
+        0 14px 36px -10px rgba(15,15,16,0.45),
+        0 0 0 0 rgba(220,38,38,0.0) !important;
+      transition:
+        transform 0.36s var(--hx-ease-out),
+        box-shadow 0.36s var(--hx-ease-out),
+        background 0.4s ease !important;
+    }
+    .tech-cta-glow::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(220,38,38,0.55), rgba(252,211,77,0.35));
+      filter: blur(20px);
+      opacity: 0;
+      transition: opacity 0.5s var(--hx-ease-out);
+      z-index: -1;
+      pointer-events: none;
+    }
+    .tech-cta-glow:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.10) inset,
+        0 2px 6px rgba(15,15,16,0.25),
+        0 24px 50px -12px rgba(15,15,16,0.55),
+        0 0 0 1px rgba(220,38,38,0.20) !important;
+    }
+    .tech-cta-glow:hover::after { opacity: 1; }
+    .tech-cta-glow:active { transform: translateY(0); transition-duration: 0.1s; }
+    .tech-cta-glow svg { transition: transform 0.32s var(--hx-ease-out); }
+    .tech-cta-glow:hover svg { transform: translateX(4px); }
+
+    /* ─── SECONDARY CTA (white pill border) — refined glass ─── */
+    a.inline-flex.items-center.justify-center.gap-2.border.border-ink\/15 {
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.78)) !important;
+      backdrop-filter: blur(14px) saturate(140%);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.95) inset,
+        0 1px 2px rgba(15,15,16,0.04),
+        0 12px 28px -10px rgba(15,15,16,0.12);
+      transition:
+        transform 0.36s var(--hx-ease-out),
+        box-shadow 0.36s var(--hx-ease-out),
+        border-color 0.3s ease;
+    }
+    a.inline-flex.items-center.justify-center.gap-2.border.border-ink\/15:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,1) inset,
+        0 2px 6px rgba(15,15,16,0.06),
+        0 18px 40px -12px rgba(15,15,16,0.18);
+    }
+    a.inline-flex.items-center.justify-center.gap-2.border.border-ink\/15 svg {
+      transition: transform 0.32s var(--hx-ease-out);
+    }
+    a.inline-flex.items-center.justify-center.gap-2.border.border-ink\/15:hover svg {
+      transform: translateX(3px);
+    }
+
+    /* ─── HERO ENGAGEMENT-BRIEF CARD — deeper cinematic depth ─── */
+    .metallic-shine {
+      box-shadow:
+        0 1px 0 rgba(255,255,255,1) inset,
+        0 2px 6px rgba(15,15,16,0.05),
+        0 24px 60px -20px rgba(15,15,16,0.18),
+        0 50px 120px -30px rgba(15,15,16,0.16) !important;
+      transition: transform 0.7s var(--hx-ease-out), box-shadow 0.7s var(--hx-ease-out);
+    }
+    .metallic-shine:hover {
+      transform: translateY(-3px);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,1) inset,
+        0 4px 10px rgba(15,15,16,0.06),
+        0 36px 80px -22px rgba(15,15,16,0.22),
+        0 60px 140px -34px rgba(15,15,16,0.20) !important;
+    }
+
+    /* ─── CARDS · stronger lift and ambient glow on hover ───── */
+    .card { border-radius: 22px; }
+    .card:hover {
+      transform: translateY(-6px) !important;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.95) inset,
+        0 2px 8px rgba(15,15,16,0.06),
+        0 24px 50px -14px rgba(15,15,16,0.14),
+        0 48px 100px -28px rgba(220,38,38,0.10) !important;
+    }
+
+    /* ─── SECTION HEADINGS — slightly tighter optical tracking
+         on the very large display sizes for a more confident feel. */
+    .h-display { letter-spacing: -0.058em; font-weight: 600; }
+    .h-section { letter-spacing: -0.04em; font-weight: 600; }
+    @media (min-width: 1024px) {
+      .h-display { letter-spacing: -0.062em; }
+    }
+
+    /* — Italic accent (Instrument Serif) gets a subtle drop-shadow
+         so it visually separates from the sans-serif neighbour. */
+    .italic.font-serif {
+      text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+    }
+
+    /* ─── SECTION TRANSITIONS — soft gradient fade between
+         alternating washes for a continuous editorial feel. */
+    section + section { position: relative; }
+    section + section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right,
+        transparent 0%,
+        rgba(15, 15, 16, 0.05) 20%,
+        rgba(15, 15, 16, 0.10) 50%,
+        rgba(15, 15, 16, 0.05) 80%,
+        transparent 100%);
+      pointer-events: none;
+      z-index: 5;
+    }
+    /* Dark sections get a white-tinted divider instead. */
+    section.bg-ink + section::before,
+    section + section.bg-ink::before {
+      background: linear-gradient(to right,
+        transparent 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        transparent 100%);
+    }
+
+    /* ─── SECTION-MARK · taller stroke, brighter brand tint ─── */
+    .section-mark::before { width: 40px; }
+    .section-mark::after  { width: 22px; opacity: 0.45; }
+
+    /* ─── REVEAL · stronger entrance distance + slight scale.
+         Makes the scroll-in feel more cinematic without
+         changing the timing. */
+    .reveal { transform: translateY(36px) scale(0.985); }
+    .reveal.is-visible { transform: translateY(0) scale(1); }
+
+    /* ─── LINKS · subtle underline-grow on inline links ──── */
+    p a:not([class]),
+    .prose a {
+      position: relative;
+      color: inherit;
+      background-image: linear-gradient(currentColor, currentColor);
+      background-repeat: no-repeat;
+      background-size: 100% 1px;
+      background-position: 0 100%;
+      transition: background-size 0.35s var(--hx-ease-out);
+    }
+    p a:not([class]):hover,
+    .prose a:hover { background-size: 100% 2px; }
+
+    /* ─── NAV LINKS · live indicator + smoother underline ─── */
+    nav.main-nav a,
+    nav[class*="main-nav"] a,
+    header nav a {
+      position: relative;
+      transition: color 0.25s ease;
+    }
+    header nav a::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background: #DC2626;
+      border-radius: 999px;
+      transform: translateX(-50%);
+      transition: width 0.32s var(--hx-ease-out);
+    }
+    header nav a:hover::after { width: 22px; }
+    header nav a.is-current::after,
+    header nav a[aria-current="page"]::after { width: 22px; }
+
+    /* ─── PILLS / BADGES with red-soft background get a soft glow. */
+    .bg-red-soft\/40,
+    .bg-red-soft {
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.55) inset,
+        0 0 24px -8px rgba(220, 38, 38, 0.35);
+    }
+
+    /* ─── LIVE DOT (existing) — slight halo for prominence ─── */
+    .tech-live-dot {
+      box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6);
+      animation: hxLivePulse 2.4s cubic-bezier(0.22,1,0.36,1) infinite;
+    }
+    @keyframes hxLivePulse {
+      0%   { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.55); }
+      70%  { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+    }
+
+    /* ─── HORIZONTAL DIVIDER UPGRADE — softer gradient line. */
+    hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right,
+        transparent,
+        rgba(15, 15, 16, 0.10) 20%,
+        rgba(15, 15, 16, 0.12) 50%,
+        rgba(15, 15, 16, 0.10) 80%,
+        transparent);
+    }
+
+    /* ─── MOBILE POLISH ──────────────────────────────────────
+         Tighter vertical rhythm, slightly larger touch targets,
+         softer card radii so the visual cadence stays elegant. */
+    @media (max-width: 640px) {
+      .h-display { letter-spacing: -0.05em; }
+      .tech-cta-glow,
+      a.inline-flex.items-center.justify-center.gap-2.border.border-ink\/15 {
+        padding-top: 14px !important;
+        padding-bottom: 14px !important;
+        font-size: 15px !important;
+      }
+      .card { border-radius: 20px; }
+      .reveal { transform: translateY(24px) scale(0.99); }
+    }
+
+    /* ─── REDUCED MOTION respect for the new motion. */
+    @media (prefers-reduced-motion: reduce) {
+      .tech-gradient-text,
+      .tech-live-dot { animation: none !important; }
+      .reveal { transform: none !important; }
+    }
+
