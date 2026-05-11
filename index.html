@@ -1056,9 +1056,15 @@
     var particles = [];
     var N = 0;
 
+    /* Resolved font spec is stored back onto each state by build() so
+       the render loop can call ctx.fillText with the exact sized font
+       that was used to sample the dots. This keeps the hold-phase
+       solid text in perfect pixel alignment with the dots that
+       morph into it. */
+
     /* Render text to an offscreen canvas with auto-fit font sizing,
        then sample its dark pixels to a sparse list of (x,y) targets
-       centered on origin. Internally rasterises at 2× so the sampled
+       centered on origin. Internally rasterises at 3× so the sampled
        letterforms have crisp anti-aliased edges, then maps back to
        logical coordinates — the dotted texture reads as clean type,
        not jagged pixels. */
@@ -1126,7 +1132,11 @@
           }
         }
       }
-      return pts;
+      // Return both the sample points and the resolved font spec so
+      // render() can call fillText with the exact same sized font
+      // and keep the hold-phase solid render perfectly aligned with
+      // where the dots will land.
+      return { pts: pts, spec: spec };
     }
 
     function downsample(arr, n) {
@@ -1152,14 +1162,14 @@
       canvas.style.height = H + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Sample every state's points. Density 2 → 2 px centre-to-centre
-      // spacing. Paired with a 1.4 px dot radius the dots overlap by
-      // ~0.8 px so italic strokes fill in completely and read as solid
-      // typography, not a broken dotty outline. The strokes of even
-      // the thinnest italic serif glyphs now hold ≥ 3 dots across.
+      // Sample every state's points + store the resolved font spec on
+       // each STATE so render() can switch to clean fillText during
+      // the hold phase.
       statePts = [];
       for (var s = 0; s < STATES.length; s++) {
-        statePts.push(buildPointsFor(STATES[s].text, STATES[s].font, 2));
+        var result = buildPointsFor(STATES[s].text, STATES[s].font, 2);
+        statePts.push(result.pts);
+        STATES[s]._spec = result.spec;
       }
 
       // Equalize lengths
@@ -1254,13 +1264,21 @@
 
     var running = true;
 
-    /* Uniform dot — 2.4 px radius paired with 2-px sampling spacing.
-       At this size every dot overlaps its four neighbours by ~0.8 px
-       on each side, so the strokes fuse into solid pure-black ink
-       instead of a half-toned dotted field. This is the difference
-       between letters that read as "gray pattern" and letters that
-       read as fully solid black. */
-    var DOT = 2.4;
+    /* Uniform dot — used only during the morph transition (the hold
+       phase renders solid antialiased text instead). 1.7 px balances
+       visibility of the motion with a clean particle texture. */
+    var DOT = 1.7;
+
+    function drawSolidText(stateIndex) {
+      var state = STATES[stateIndex];
+      ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+      ctx.font = state._spec;
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'center';
+      if ('textRendering' in ctx) { ctx.textRendering = 'geometricPrecision'; }
+      try { ctx.letterSpacing = '-0.02em'; } catch (e) { /* unsupported */ }
+      ctx.fillText(state.text, 0, 0);
+    }
 
     function render(now) {
       if (!running) return;
@@ -1274,37 +1292,35 @@
       ctx.save();
       ctx.translate(W / 2, H / 2);
 
-      // Full ink throughout. The mid-morph dip is removed entirely;
-      // the transition relies on motion alone, never opacity. The
-      // letters never visibly fade — they only shift between shapes.
-      var alpha = 1.0;
+      // HOLD PHASE — render the text as crisp, antialiased solid
+      // typography using the same font spec the dots were sampled
+      // from. Crystal clear, perfectly readable. The dot effect is
+      // reserved for the transition between states, which is where
+      // the build-up motion actually lives.
+      if (!isMorph) {
+        drawSolidText(st.from);
+        ctx.restore();
+        requestAnimationFrame(render);
+        return;
+      }
 
+      // MORPH PHASE — particles fly between source and target letter
+      // shapes. Pure black, full alpha, no opacity tricks. Lerp 0.22
+      // locks shapes in decisively.
       ctx.shadowBlur  = 0;
       ctx.shadowColor = 'transparent';
-      // Pure black — maximum contrast against the cream-blush hero
-      // wash. Reads as a serious, decisive AI brand mark.
-      ctx.fillStyle   = 'rgba(0, 0, 0, ' + alpha + ')';
+      ctx.fillStyle   = 'rgba(0, 0, 0, 1)';
 
-      // Single batched path — every particle joins one Path2D and is
-      // filled in a single sub-pixel-accurate stroke. Per-particle
-      // `seed` adds a small ±10% offset to the morph window so the
-      // transition reads as a calm wave instead of a synchronous
-      // snap, but kept tight enough that mid-morph never gets messy.
-      // Lerp 0.18 — soft enough to suppress jitter, snappy enough
-      // that the letterform locks into shape decisively.
       ctx.beginPath();
       for (var i = 0; i < N; i++) {
         var p  = particles[i];
         var fp = fromArr[i], tp = toArr[i];
 
-        var localK = k;
-        if (isMorph) {
-          var offset = (p.seed - 0.5) * 0.20;  // -0.10 … +0.10
-          localK = (k - 0.5) / (1 - Math.abs(offset)) + 0.5 + offset * 0.5;
-          if (localK < 0) localK = 0;
-          if (localK > 1) localK = 1;
-          localK = easeInOut(localK);
-        }
+        var offset = (p.seed - 0.5) * 0.20;  // -0.10 … +0.10
+        var localK = (k - 0.5) / (1 - Math.abs(offset)) + 0.5 + offset * 0.5;
+        if (localK < 0) localK = 0;
+        if (localK > 1) localK = 1;
+        localK = easeInOut(localK);
 
         var tx = fp.x + (tp.x - fp.x) * localK;
         var ty = fp.y + (tp.y - fp.y) * localK;
@@ -1329,16 +1345,7 @@
       ctx.clearRect(0, 0, W, H);
       ctx.save();
       ctx.translate(W / 2, H / 2);
-      ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-      var pts = statePts[0];
-      ctx.beginPath();
-      for (var i = 0; i < pts.length; i++) {
-        var ax = Math.round(pts[i].x * 2) / 2;
-        var ay = Math.round(pts[i].y * 2) / 2;
-        ctx.moveTo(ax + DOT, ay);
-        ctx.arc(ax, ay, DOT, 0, 6.2832);
-      }
-      ctx.fill();
+      drawSolidText(0);
       ctx.restore();
     }
 
