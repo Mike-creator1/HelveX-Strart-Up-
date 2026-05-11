@@ -58,14 +58,14 @@
     .hx-morph-stage {
       position: relative;
       width: 100%;
-      max-width: 720px;
+      max-width: 880px;
       margin-left: auto;
       margin-right: auto;
-      height: 220px;
+      height: 260px;
       isolation: isolate;
     }
     @media (max-width: 640px) {
-      .hx-morph-stage { height: 160px; max-width: 100%; }
+      .hx-morph-stage { height: 180px; max-width: 100%; }
     }
     #hx-morph-canvas {
       position: absolute;
@@ -73,7 +73,12 @@
       width: 100%;
       height: 100%;
       display: block;
-      filter: drop-shadow(0 0 14px rgba(192, 17, 30, 0.10));
+      /* Premium dual-layer glow: tight crisp red rim + soft warm bloom.
+         GPU-accelerated, no runtime cost in the canvas loop. */
+      filter:
+        drop-shadow(0 0 0.8px rgba(10, 10, 10, 0.35))
+        drop-shadow(0 0 10px rgba(220, 38, 38, 0.18))
+        drop-shadow(0 0 32px rgba(220, 38, 38, 0.10));
     }
     /* Subtle ambient halo behind the particle field */
     .hx-morph-glow {
@@ -1034,16 +1039,16 @@
        Instrument Serif italic is already loaded by the page <head>,
        so renderings stay crisp instead of falling back to Georgia. */
     var STATES = [
-      { text: 'HelveX',                font: '700 PXpx "Inter", system-ui, sans-serif' },
-      { text: 'AI Agents',             font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'Smart Automation',      font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'AI Infrastructure',     font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'Enterprise AI',         font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'Intelligent Workflows', font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'Advanced Reasoning',    font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'Autonomous Systems',    font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'AI Execution',          font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'AI Platform',           font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' }
+      { text: 'HelveX',                font: '800 PXpx "Inter", system-ui, sans-serif' },
+      { text: 'AI Agents',             font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'Smart Automation',      font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'AI Infrastructure',     font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'Enterprise AI',         font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'Intelligent Workflows', font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'Advanced Reasoning',    font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'Autonomous Systems',    font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'AI Execution',          font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'AI Platform',           font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' }
     ];
 
     var W = 0, H = 0;
@@ -1062,16 +1067,18 @@
       var off = document.createElement('canvas');
       var oc  = off.getContext('2d');
 
-      // Auto-fit: shrink font until text fits within W*0.94 wide, H*0.90 tall.
-      // Italic serifs need a touch more vertical room than upright sans.
-      var maxW = Math.max(W * 0.94, 200);
-      var maxH = Math.max(H * 0.86, 120);
-      var fs = Math.floor(Math.min(maxH * 0.88, 170));
+      // Auto-fit: fill the canvas. Larger maximum + minimum spec keeps
+      // the wordmark commanding even for long phrases. Italic serifs
+      // still need a touch more vertical room than upright sans, so
+      // the H ratio sits at 0.92.
+      var maxW = Math.max(W * 0.96, 220);
+      var maxH = Math.max(H * 0.92, 140);
+      var fs = Math.floor(Math.min(maxH * 0.94, 220));
       var spec = fontTemplate.replace('PX', String(fs));
       oc.font = spec;
       var textW = oc.measureText(text).width;
-      while (textW > maxW && fs > 18) {
-        fs -= 3;
+      while (textW > maxW && fs > 20) {
+        fs -= 2;
         spec = fontTemplate.replace('PX', String(fs));
         oc.font = spec;
         textW = oc.measureText(text).width;
@@ -1136,12 +1143,12 @@
       canvas.style.height = H + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Sample every state's points. Density 3 — slightly sparser
-      // sampling than before, but the 2× internal raster keeps edges
-      // sharp. Fewer, cleaner dots > more, jittery dots.
+      // Sample every state's points. Density 2 with 2× raster = rich,
+      // crisply-edged dot field that reads as solid letterforms while
+      // still keeping the dotted character of the effect.
       statePts = [];
       for (var s = 0; s < STATES.length; s++) {
-        statePts.push(buildPointsFor(STATES[s].text, STATES[s].font, 3));
+        statePts.push(buildPointsFor(STATES[s].text, STATES[s].font, 2));
       }
 
       // Equalize lengths
@@ -1149,9 +1156,9 @@
       for (var i = 0; i < statePts.length; i++) {
         if (statePts[i].length > maxLen) maxLen = statePts[i].length;
       }
-      // Lower cap = cleaner texture. Each dot now reads as type, not
-      // noise. 60fps headroom preserved.
-      var CAP = (W < 640) ? 1500 : 2200;
+      // Higher cap on desktop = richer letterforms while staying inside
+      // the 60 fps budget thanks to the single batched Path2D fill.
+      var CAP = (W < 640) ? 2400 : 3800;
       if (maxLen > CAP) maxLen = CAP;
       if (maxLen < 50)  maxLen = 50;  // safety floor — never zero
       N = maxLen;
@@ -1235,11 +1242,11 @@
 
     var running = true;
 
-    /* Uniform dot — 1.5 px reads as sharp typography at retina,
-       2 px on standard displays. The size is paired with the dot
-       spacing so filled letterforms still look solid without the
-       overlap-induced fuzz of the old size-randomised dots. */
-    var DOT = 1.5;
+    /* Uniform dot — 1.9 px paired with 2-px sampling spacing gives
+       just enough overlap to render filled, ink-solid letterforms.
+       The CSS drop-shadow on the canvas adds the premium red bloom
+       without any per-frame shadow cost. */
+    var DOT = 1.9;
 
     function render(now) {
       if (!running) return;
@@ -1253,13 +1260,13 @@
       ctx.save();
       ctx.translate(W / 2, H / 2);
 
-      // Gentle alpha dip mid-morph — keeps presence (0.55 floor,
-      // not 0.30) so the in-flight phase still reads as type in
-      // motion rather than a strobe. Held states sit at full ink.
-      var alpha = 0.95;
+      // Subtle alpha dip mid-morph — keeps strong presence (0.78
+      // floor) so the in-flight phase still reads as crisp type in
+      // motion, never a faded blink. Held states sit at full ink.
+      var alpha = 1.0;
       if (isMorph) {
         var dip = 1 - Math.abs(k - 0.5) * 2;  // 0 at edges, 1 at midpoint
-        alpha = 0.95 - 0.40 * dip;
+        alpha = 1.0 - 0.22 * dip;
       }
 
       ctx.shadowBlur  = 0;
