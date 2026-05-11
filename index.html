@@ -1111,14 +1111,14 @@
       var stride = density * SCALE;
       var rowW = logicalW * SCALE;
       var pts = [];
-      // Alpha threshold 100 — Inter Black has thick uniform strokes,
-      // and we want to capture every solid pixel of them. The 3× raster
-      // keeps edges crisp even at this looser threshold; the result is
-      // maximum stroke fill with no perceptible AA fringe noise.
+      // Alpha threshold 70 — captures the antialiased edge pixels too,
+      // so every dot lands on solid letter mass *and* a one-pixel
+      // outer ring on the glyph contour. With the bigger 2.4 px dots
+      // that ring fuses with the body into one continuous black form.
       for (var y = 0; y < logicalH * SCALE; y += stride) {
         for (var x = 0; x < logicalW * SCALE; x += stride) {
           var i = (y * rowW + x) * 4;
-          if (data[i + 3] > 100) {
+          if (data[i + 3] > 70) {
             pts.push({
               x: (x / SCALE - logicalW / 2),
               y: (y / SCALE - logicalH / 2)
@@ -1254,13 +1254,13 @@
 
     var running = true;
 
-    /* Uniform dot — 1.85 px radius paired with 2-px sampling spacing.
-       Inter Black (900) strokes are ~22 px wide at 210 px font; with
-       this dot size and density, each stroke holds 10+ overlapping
-       dots and renders as deep, unbroken ink-black mass. The dotted
-       texture is still visible around the contours but the body of
-       every letter is solid black. */
-    var DOT = 1.85;
+    /* Uniform dot — 2.4 px radius paired with 2-px sampling spacing.
+       At this size every dot overlaps its four neighbours by ~0.8 px
+       on each side, so the strokes fuse into solid pure-black ink
+       instead of a half-toned dotted field. This is the difference
+       between letters that read as "gray pattern" and letters that
+       read as fully solid black. */
+    var DOT = 2.4;
 
     function render(now) {
       if (!running) return;
@@ -1274,14 +1274,10 @@
       ctx.save();
       ctx.translate(W / 2, H / 2);
 
-      // Hold-phase ink stays at full 1.0; mid-morph dip is barely
-      // perceptible (0.92 floor) so the type never visibly fades even
-      // during the transition. Maximum darkness, maximum contrast.
+      // Full ink throughout. The mid-morph dip is removed entirely;
+      // the transition relies on motion alone, never opacity. The
+      // letters never visibly fade — they only shift between shapes.
       var alpha = 1.0;
-      if (isMorph) {
-        var dip = 1 - Math.abs(k - 0.5) * 2;  // 0 at edges, 1 at midpoint
-        alpha = 1.0 - 0.08 * dip;
-      }
 
       ctx.shadowBlur  = 0;
       ctx.shadowColor = 'transparent';
