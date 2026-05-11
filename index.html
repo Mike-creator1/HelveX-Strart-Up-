@@ -1039,17 +1039,21 @@
        Curated list — fewer states, sharper editorial rhythm. The
        Instrument Serif italic is already loaded by the page <head>,
        so renderings stay crisp instead of falling back to Georgia. */
+    /* Instrument Serif only ships weight 400 in italic, so the previous
+       `italic 600` was a synthesised faux-bold — the browser stretched
+       the strokes and the dotted result came out broken and uneven.
+       Locked to italic 400 = real glyphs, clean strokes. */
     var STATES = [
       { text: 'HelveX',                font: '800 PXpx "Inter", system-ui, sans-serif' },
-      { text: 'AI Agents',             font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'Smart Automation',      font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'AI Infrastructure',     font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'Enterprise AI',         font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'Intelligent Workflows', font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'Advanced Reasoning',    font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'Autonomous Systems',    font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'AI Execution',          font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' },
-      { text: 'AI Platform',           font: 'italic 600 PXpx "Instrument Serif", Georgia, serif' }
+      { text: 'AI Agents',             font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'Smart Automation',      font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'AI Infrastructure',     font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'Enterprise AI',         font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'Intelligent Workflows', font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'Advanced Reasoning',    font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'Autonomous Systems',    font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'AI Execution',          font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' },
+      { text: 'AI Platform',           font: 'italic 400 PXpx "Instrument Serif", Georgia, serif' }
     ];
 
     var W = 0, H = 0;
@@ -1104,15 +1108,15 @@
       var stride = density * SCALE;
       var rowW = logicalW * SCALE;
       var pts = [];
-      // Sample on a regular grid; alpha ≥ ~63% counts as a target. The
-      // raised threshold drops the soft anti-aliased halo around every
-      // glyph so only the solid letter cores get sampled — the dotted
-      // letterforms read with sharp, well-defined edges instead of a
-      // fuzzy fringe.
+      // Alpha threshold 96 — keeps the full stroke (including stroke
+      // ends, serif tips, and the inner curves of italic glyphs) so
+      // letters render whole and intense, not broken/dotty. We rely
+      // on the 2× internal raster to keep edges crisp at this lower
+      // threshold instead of clipping the antialiased fringe.
       for (var y = 0; y < logicalH * SCALE; y += stride) {
         for (var x = 0; x < logicalW * SCALE; x += stride) {
           var i = (y * rowW + x) * 4;
-          if (data[i + 3] > 160) {
+          if (data[i + 3] > 96) {
             pts.push({
               x: (x / SCALE - logicalW / 2),
               y: (y / SCALE - logicalH / 2)
@@ -1146,14 +1150,14 @@
       canvas.style.height = H + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Sample every state's points. Density 3 → 3 px between dot
-      // centres in logical space. Paired with a 1.1 px dot radius
-      // this leaves a clean ~0.8 px gap between every dot, so every
-      // letter reads as a printed dotted pattern instead of a blurry
-      // overlapping blob field.
+      // Sample every state's points. Density 2 → 2 px centre-to-centre
+      // spacing. Paired with a 1.4 px dot radius the dots overlap by
+      // ~0.8 px so italic strokes fill in completely and read as solid
+      // typography, not a broken dotty outline. The strokes of even
+      // the thinnest italic serif glyphs now hold ≥ 3 dots across.
       statePts = [];
       for (var s = 0; s < STATES.length; s++) {
-        statePts.push(buildPointsFor(STATES[s].text, STATES[s].font, 3));
+        statePts.push(buildPointsFor(STATES[s].text, STATES[s].font, 2));
       }
 
       // Equalize lengths
@@ -1161,10 +1165,10 @@
       for (var i = 0; i < statePts.length; i++) {
         if (statePts[i].length > maxLen) maxLen = statePts[i].length;
       }
-      // Lower cap — wider dot spacing means fewer dots are needed for
-      // a fully-formed letter. The result is crisp, readable type
-      // with plenty of 60 fps headroom.
-      var CAP = (W < 640) ? 1800 : 2800;
+      // Cap raised — denser sampling needs more particles. Still
+      // within the 60 fps budget thanks to the single batched Path2D
+      // fill: one beginPath + one fill per frame regardless of N.
+      var CAP = (W < 640) ? 2600 : 4000;
       if (maxLen > CAP) maxLen = CAP;
       if (maxLen < 50)  maxLen = 50;  // safety floor — never zero
       N = maxLen;
@@ -1248,11 +1252,13 @@
 
     var running = true;
 
-    /* Uniform dot — 1.1 px radius paired with 3-px sampling spacing.
-       Every dot is a clean, discrete circle with a clear gap to its
-       neighbour, so the letterforms render as crisp dotted typography
-       instead of an overlap-fuzzy ink blob. Maximum legibility. */
-    var DOT = 1.1;
+    /* Uniform dot — 1.4 px radius paired with 2-px sampling spacing.
+       Each italic stroke holds three or four overlapping dots across
+       its width, which renders the letter as a solid, ink-intense
+       form. The overlap is small enough that the dotted character of
+       the effect still reads at full size; tight enough that no
+       letter ever looks broken or perforated. */
+    var DOT = 1.4;
 
     function render(now) {
       if (!running) return;
