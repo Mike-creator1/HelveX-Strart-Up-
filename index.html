@@ -1322,20 +1322,25 @@
         var p  = particles[i];
         var fp = fromArr[i], tp = toArr[i];
 
-        var localK = k;
+        var tx, ty;
         if (isMorph) {
           var offset = (p.seed - 0.5) * 0.20;  // -0.10 … +0.10
-          localK = (k - 0.5) / (1 - Math.abs(offset)) + 0.5 + offset * 0.5;
+          var localK = (k - 0.5) / (1 - Math.abs(offset)) + 0.5 + offset * 0.5;
           if (localK < 0) localK = 0;
           if (localK > 1) localK = 1;
           localK = easeInOut(localK);
+
+          tx = fp.x + (tp.x - fp.x) * localK;
+          ty = fp.y + (tp.y - fp.y) * localK;
+          p.x += (tx - p.x) * 0.22;
+          p.y += (ty - p.y) * 0.22;
+        } else {
+          // HOLD — snap every particle to its exact target. No lerping,
+          // no transient drift, no half-pixel doubling. The letter
+          // renders pixel-locked on the sampled grid every frame.
+          p.x = fp.x;
+          p.y = fp.y;
         }
-
-        var tx = fp.x + (tp.x - fp.x) * localK;
-        var ty = fp.y + (tp.y - fp.y) * localK;
-
-        p.x += (tx - p.x) * 0.22;
-        p.y += (ty - p.y) * 0.22;
 
         // Sub-pixel-snap to half-pixel grid for crisper arcs on
         // non-retina screens.
