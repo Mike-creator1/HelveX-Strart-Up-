@@ -993,31 +993,36 @@ body {
   color: var(--hx-text-mid);
 }
 
-/* ── TABS — softer pill, refined active state ─────────────── */
+/* ── TABS — larger refined segmented control ─────────────── */
 .tabs {
   background: var(--hx-bg-2) !important;
-  border-color: var(--hx-line-soft) !important;
-  border-radius: 10px !important;
-  padding: 4px !important;
-  margin-bottom: 30px !important;
+  border: 1px solid var(--hx-line) !important;
+  border-radius: 14px !important;
+  padding: 5px !important;
+  margin-bottom: 34px !important;
+  box-shadow: 0 1px 2px rgba(15, 15, 16, 0.03) inset;
+  gap: 4px !important;
 }
 .tab {
-  padding: 10px 14px !important;
-  border-radius: 7px !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  letter-spacing: -0.005em !important;
+  padding: 13px 18px !important;
+  border-radius: 10px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--hx-text-mid) !important;
   transition:
-    color 0.25s var(--hx-ease),
-    background 0.25s var(--hx-ease),
-    box-shadow 0.25s var(--hx-ease) !important;
+    color 0.28s var(--hx-ease),
+    background 0.28s var(--hx-ease),
+    box-shadow 0.28s var(--hx-ease) !important;
 }
+.tab:hover { color: var(--hx-text) !important; }
 .tab.active {
   background: var(--hx-surface) !important;
+  color: var(--hx-text) !important;
   box-shadow:
-    0 1px 0 rgba(255,255,255,1) inset,
-    0 1px 2px rgba(15, 15, 16, 0.06),
-    0 4px 12px -4px rgba(15, 15, 16, 0.08) !important;
+    0 1px 0 rgba(255, 255, 255, 1) inset,
+    0 1px 2px rgba(15, 15, 16, 0.07),
+    0 6px 16px -4px rgba(15, 15, 16, 0.10) !important;
 }
 
 /* ── INPUTS — refined chrome, subtle inner highlight ───────── */
