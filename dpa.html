@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
   <title>Data Processing Addendum — HelveX</title>
-  <meta name="description" content="HelveX AG Data Processing Addendum, implementing Article 28 GDPR and equivalent provisions of the Swiss FADP / nFADP, with annexes." />
+  <meta name="description" content="HelveX AG Data Processing Addendum: the Article 28 GDPR processor terms that govern HelveX's processing of personal data on behalf of Customers using the HelveX AI builder, including annexes covering processing details, technical and organisational measures, sub-processor categories, and SCC references." />
   <meta property="og:title" content="Data Processing Addendum — HelveX" />
-  <meta property="og:description" content="HelveX AG Data Processing Addendum, implementing Article 28 GDPR and equivalent provisions of the Swiss FADP / nFADP, with annexes." />
+  <meta property="og:description" content="HelveX AG Data Processing Addendum: the Article 28 GDPR processor terms that govern HelveX's processing of personal data on behalf of Customers using the HelveX AI builder, including annexes covering processing details, technical and organisational measures, sub-processor categories, and SCC references." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="HelveX" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -83,36 +83,38 @@
     <aside class="hx-legal-toc" aria-label="On this page">
       <p class="hx-legal-toc-mark">On this page</p>
       <ul class="hx-legal-toc-list">
-        <li><a href="#s1">1. Definitions</a></li>
-        <li><a href="#s2">2. Subject matter, duration, nature, purpose</a></li>
+        <li><a href="#s1">1. Preamble and application</a></li>
+        <li><a href="#s2">2. Definitions</a></li>
         <li><a href="#s3">3. Roles and responsibilities</a></li>
-        <li><a href="#s4">4. Processor obligations</a></li>
-        <li><a href="#s5">5. Sub-processors</a></li>
-        <li><a href="#s6">6. Confidentiality of personnel</a></li>
-        <li><a href="#s7">7. Data Subject rights</a></li>
-        <li><a href="#s8">8. Personal Data Breach</a></li>
-        <li><a href="#s9">9. DPIA and prior consultation</a></li>
-        <li><a href="#s10">10. International transfers</a></li>
-        <li><a href="#s11">11. Audits</a></li>
-        <li><a href="#s12">12. Deletion and return</a></li>
-        <li><a href="#s13">13. Special Categories</a></li>
-        <li><a href="#s14">14. Liability</a></li>
-        <li><a href="#s15">15. Term</a></li>
-        <li><a href="#s16">16. Governing law</a></li>
-        <li><a href="#s17">17. Order of precedence</a></li>
-        <li><a href="#s18">18. Annexes</a></li>
+        <li><a href="#s4">4. Subject matter, duration, nature, purpose</a></li>
+        <li><a href="#s5">5. Processor obligations</a></li>
+        <li><a href="#s6">6. Sub-processors</a></li>
+        <li><a href="#s7">7. AI model providers as Sub-processors</a></li>
+        <li><a href="#s8">8. Confidentiality of personnel</a></li>
+        <li><a href="#s9">9. Data Subject rights — assistance</a></li>
+        <li><a href="#s10">10. Personal Data Breach</a></li>
+        <li><a href="#s11">11. DPIA and prior consultation assistance</a></li>
+        <li><a href="#s12">12. International transfers</a></li>
+        <li><a href="#s13">13. Security measures</a></li>
+        <li><a href="#s14">14. Audit rights</a></li>
+        <li><a href="#s15">15. Return and deletion of Personal Data</a></li>
+        <li><a href="#s16">16. Special categories of Personal Data</a></li>
+        <li><a href="#s17">17. Children's Personal Data</a></li>
+        <li><a href="#s18">18. Liability</a></li>
+        <li><a href="#s19">19. Order of precedence, term, governing law</a></li>
+        <li><a href="#s20">20. Annexes</a></li>
       </ul>
     </aside>
 
     <main class="hx-legal-main">
 
       <div class="hx-legal-hero">
-        <p class="hx-legal-eyebrow"><span class="hx-legal-eyebrow-dot"></span>Legal &middot; DPA</p>
+        <p class="hx-legal-eyebrow"><span class="hx-legal-eyebrow-dot"></span>Legal &middot; Data Processing Addendum</p>
         <h1 class="hx-legal-title">Data Processing Addendum</h1>
-        <p class="hx-legal-lede">This Data Processing Addendum ("DPA") forms part of the Terms of Service between HelveX AG ("Processor") and Customer ("Controller") and applies whenever HelveX processes Personal Data on behalf of Customer in the course of providing the Services. It implements Article 28 of the GDPR and equivalent provisions of the Swiss FADP / nFADP.</p>
+        <p class="hx-legal-lede">This Data Processing Addendum (the "DPA") forms part of the agreement between HelveX AG ("HelveX") and the Customer for the use of the HelveX AI builder, the Hosted Services, the APIs, and the surrounding services (the "Services"), and implements Article 28 GDPR and substantially equivalent provisions of the Swiss FADP / nFADP and the UK GDPR. The DPA governs HelveX's processing of Personal Data on behalf of the Customer in connection with the Services.</p>
         <div class="hx-legal-meta">
-          <span class="hx-legal-meta-item"><span class="hx-legal-meta-key">Effective</span>April 2026</span>
-          <span class="hx-legal-meta-item"><span class="hx-legal-meta-key">Last updated</span>April 2026</span>
+          <span class="hx-legal-meta-item"><span class="hx-legal-meta-key">Effective</span>May 2026</span>
+          <span class="hx-legal-meta-item"><span class="hx-legal-meta-key">Last updated</span>May 2026</span>
           <span class="hx-legal-meta-item"><span class="hx-legal-meta-key">Version</span>1.0</span>
           <span class="hx-legal-meta-item"><span class="hx-legal-meta-key">Governing law</span>Switzerland</span>
         </div>
@@ -120,335 +122,465 @@
 
       <section class="hx-legal-section" id="s1">
         <span class="hx-legal-section-num">&sect; 01</span>
-        <h2>Definitions</h2>
-        <p>Unless otherwise defined in this DPA, capitalised terms have the meanings given to them in the Terms of Service. The following GDPR-aligned terms have the meanings set out below; where the Swiss FADP / nFADP applies, equivalent Swiss-law definitions apply mutatis mutandis.</p>
-        <dl>
-          <dt>Adequacy Decision</dt>
-          <dd>A decision adopted by the European Commission under Article 45 GDPR (or, in the case of Swiss FADP, by the Federal Council) determining that a third country, a territory, or a specified sector ensures an adequate level of protection of Personal Data.</dd>
-          <dt>Applicable Data Protection Law</dt>
-          <dd>The GDPR (Regulation (EU) 2016/679), the UK GDPR and the UK Data Protection Act 2018, the Swiss FADP and nFADP, the California CCPA / CPRA, and any other data-protection law of general application to the Processing of Personal Data under the Terms.</dd>
-          <dt>Controller</dt>
-          <dd>The natural or legal person which, alone or jointly with others, determines the purposes and means of the Processing of Personal Data. In this DPA, the Controller is the Customer.</dd>
-          <dt>Data Subject</dt>
-          <dd>An identified or identifiable natural person to whom Personal Data relates.</dd>
-          <dt>Personal Data</dt>
-          <dd>Any information relating to an identified or identifiable natural person that forms part of the Customer Content Processed under the Terms.</dd>
-          <dt>Personal Data Breach</dt>
-          <dd>A breach of security leading to the accidental or unlawful destruction, loss, alteration, unauthorised disclosure of, or access to, Personal Data transmitted, stored, or otherwise Processed.</dd>
-          <dt>Processing</dt>
-          <dd>Any operation or set of operations performed on Personal Data, whether or not by automated means, including collection, recording, organisation, structuring, storage, adaptation, retrieval, consultation, use, disclosure, transmission, dissemination, restriction, erasure, or destruction.</dd>
-          <dt>Processor</dt>
-          <dd>A natural or legal person which Processes Personal Data on behalf of the Controller. In this DPA, the Processor is HelveX AG.</dd>
-          <dt>Special Categories of Personal Data</dt>
-          <dd>Personal Data revealing racial or ethnic origin, political opinions, religious or philosophical beliefs, trade-union membership; genetic data; biometric data Processed for the purpose of uniquely identifying a natural person; data concerning health; data concerning a natural person's sex life or sexual orientation; or comparable categories under other Applicable Data Protection Law.</dd>
-          <dt>Standard Contractual Clauses (SCCs)</dt>
-          <dd>The standard contractual clauses for the transfer of Personal Data to third countries pursuant to Regulation (EU) 2016/679, adopted by the European Commission as Commission Implementing Decision (EU) 2021/914 of 4 June 2021.</dd>
-          <dt>Sub-processor</dt>
-          <dd>A natural or legal person engaged by HelveX (or its affiliate) to Process Personal Data on behalf of Customer in connection with the Services.</dd>
-          <dt>Supervisory Authority</dt>
-          <dd>An independent public authority established by a Member State under Article 51 GDPR, the Swiss Federal Data Protection and Information Commissioner (FDPIC), or any equivalent authority under Applicable Data Protection Law.</dd>
-        </dl>
+        <h2>Preamble and application</h2>
+        <p>This DPA forms an integral part of the Terms of Service published at <a href="/terms">/terms</a> and any Order Form executed between HelveX and the Customer. By accepting the Terms of Service or by executing an Order Form, the Customer agrees to this DPA. Where the Customer has executed a separate written data-processing agreement with HelveX, that separate agreement prevails to the extent of any conflict.</p>
+        <p>This DPA applies whenever HelveX processes Personal Data on behalf of the Customer in connection with the Services. In particular, the DPA governs HelveX's processing of (i) Personal Data of End Users that flows through Generated Applications the Customer builds and deploys on HelveX, and (ii) Personal Data the Customer provides to HelveX as a Builder Input, regardless of whether that Personal Data concerns the Customer's own personnel, the Customer's customers, or any third party. The DPA implements Article 28 GDPR and equivalent provisions of the Swiss FADP / nFADP and the UK GDPR.</p>
+        <p>The DPA does not govern HelveX's processing of Customer account data, billing data, support correspondence, and telemetry generated by the Customer's use of the Builder for HelveX's own purposes (security, fraud prevention, abuse detection, billing reconciliation, service operation, and aggregated product improvement). For such processing HelveX is an independent Controller and the <a href="/privacy">Privacy Policy</a> governs.</p>
       </section>
 
       <section class="hx-legal-section" id="s2">
         <span class="hx-legal-section-num">&sect; 02</span>
-        <h2>Subject matter, duration, nature, and purpose of Processing</h2>
-        <p>The subject matter, duration, nature, and purpose of the Processing, together with the types of Personal Data and categories of Data Subjects, are specified in <strong>Annex I (Processing Details)</strong> to this DPA. The Processing relates to the provision of the Services as defined in the Terms; HelveX Processes Personal Data only to the extent and for the time necessary to provide those Services in accordance with the Controller's documented instructions.</p>
-        <p>The Controller's documented instructions for the Processing of Personal Data are set out in this DPA, in the Terms, in any Order Form, and in any additional written instructions issued by the Controller from time to time consistent with the Services. The Controller agrees that the configuration of its tenant (including retention settings, access controls, and integration choices) constitutes documented instructions for the corresponding Processing.</p>
+        <h2>Definitions</h2>
+        <p>For the purpose of this DPA, the following terms have the meanings given below. Capitalised terms not defined here have the meaning given in the Terms of Service.</p>
+        <dl>
+          <dt>"Applicable Data Protection Law"</dt>
+          <dd>All laws and regulations applicable to the processing of Personal Data under this DPA, including the GDPR, the Swiss FADP / nFADP, the UK GDPR, the CCPA / CPRA, and equivalent regimes.</dd>
+          <dt>"Builder Personal Data"</dt>
+          <dd>Personal Data that the Customer provides to HelveX or that is generated about the Customer's own use of the Builder, including Personal Data embedded in Builder Inputs, AI Output, project metadata, and project state, but excluding the Customer account data, billing data, support correspondence, and HelveX-controlled telemetry described in §1.</dd>
+          <dt>"Controller"</dt>
+          <dd>The natural or legal person which alone or jointly with others determines the purposes and means of the processing of Personal Data, as defined by the GDPR.</dd>
+          <dt>"Data Subject"</dt>
+          <dd>An identified or identifiable natural person to whom Personal Data relates.</dd>
+          <dt>"Generated Application Personal Data"</dt>
+          <dd>Personal Data of End Users that is collected by or flows through a Generated Application that the Customer builds and operates using the Services.</dd>
+          <dt>"Personal Data"</dt>
+          <dd>Any information relating to an identified or identifiable natural person processed by HelveX on the Customer's behalf in connection with the Services. Where Applicable Data Protection Law uses a different defined term (for example, "Personal Information" under the CCPA / CPRA), that term is treated as substantially equivalent for the purposes of this DPA.</dd>
+          <dt>"Personal Data Breach"</dt>
+          <dd>A breach of security leading to the accidental or unlawful destruction, loss, alteration, unauthorised disclosure of, or access to, Personal Data transmitted, stored, or otherwise processed by HelveX in connection with the Services.</dd>
+          <dt>"Processor"</dt>
+          <dd>A natural or legal person which processes Personal Data on behalf of the Controller, as defined by the GDPR.</dd>
+          <dt>"Processing"</dt>
+          <dd>Any operation or set of operations performed on Personal Data, as defined by the GDPR.</dd>
+          <dt>"Restricted Transfer"</dt>
+          <dd>A transfer of Personal Data subject to a cross-border transfer requirement under Applicable Data Protection Law, including transfers from the EEA, Switzerland, or the United Kingdom to a third country not benefiting from an adequacy decision.</dd>
+          <dt>"SCCs"</dt>
+          <dd>The Standard Contractual Clauses approved by the European Commission in Implementing Decision (EU) 2021/914 of 4 June 2021, as may be amended or replaced.</dd>
+          <dt>"Sub-processor"</dt>
+          <dd>A third party engaged by HelveX to process Personal Data on HelveX's behalf in support of the Services.</dd>
+          <dt>"Swiss Addendum"</dt>
+          <dd>The addendum published by the Swiss FDPIC for the application of the SCCs to transfers from Switzerland.</dd>
+          <dt>"UK IDTA"</dt>
+          <dd>The International Data Transfer Addendum to the EU Commission Standard Contractual Clauses published by the UK Information Commissioner's Office, as may be amended or replaced.</dd>
+        </dl>
       </section>
 
       <section class="hx-legal-section" id="s3">
         <span class="hx-legal-section-num">&sect; 03</span>
         <h2>Roles and responsibilities</h2>
-        <p>The parties agree that, with respect to Personal Data Processed in the course of providing the Services, the Customer is the Controller and HelveX is the Processor. Where the Customer is itself a Processor on behalf of a third-party Controller, HelveX acts as a Sub-processor and references in this DPA to the Customer's instructions include those instructions that the Customer is required to receive from and pass on by the relevant Controller.</p>
-        <h3>Ancillary Processing</h3>
-        <p>HelveX additionally Processes a limited set of Personal Data as an <strong>Independent Controller</strong> for purposes that arise from the operation of the Services rather than from the Customer's instructions. These ancillary purposes include: (a) account administration (managing Users' authentication credentials, billing contacts); (b) security operations (detection and prevention of fraud, abuse, and unauthorised access); (c) billing and accounting (in accordance with Swiss commercial-code retention requirements); (d) legal compliance (responses to lawful requests from competent authorities); and (e) limited aggregated analytics on platform usage for service improvement. HelveX's role and responsibilities as an Independent Controller for these purposes are governed by HelveX's Privacy Policy and not by this DPA.</p>
-        <h3>Allocation of compliance roles</h3>
-        <p>The Controller is responsible for determining the purposes and means of the Processing and for the lawfulness of the underlying Processing (including the existence of a lawful basis under Article 6 GDPR, compliance with notice obligations to Data Subjects, and compliance with Article 9 GDPR where Special Categories are involved). HelveX, as Processor, is responsible for Processing Personal Data only on the Controller's documented instructions and for implementing the technical and organisational measures set out in Annex II.</p>
+        <p>The Parties acknowledge and agree the following allocation of roles.</p>
+        <p><strong>With respect to Generated Application Personal Data</strong>, the Customer is the Controller and HelveX is the Processor. The Customer determines the purposes and means of the processing performed by the Customer's Generated Application; HelveX provides the underlying hosting, storage, networking, and platform services on the Customer's documented instructions, and processes Generated Application Personal Data only as required to provide those services.</p>
+        <p><strong>With respect to Builder Personal Data</strong>, the Customer is the Controller and HelveX is the Processor. The Customer determines the purposes and means of submitting Personal Data to the Builder as a Builder Input or of generating Personal Data through use of the Builder; HelveX processes such Personal Data only as required to provide the Builder Services.</p>
+        <p><strong>With respect to Customer account data, billing data, support correspondence, and HelveX-controlled telemetry</strong>, HelveX is an independent Controller and the Privacy Policy governs. The Customer represents that it has the necessary lawful basis to disclose to HelveX such Personal Data of its own personnel as is required to administer the contract (for example, the names and email addresses of authorised users, billing contacts, and security contacts) and has provided those persons with any required disclosures.</p>
+        <p>The Customer's documented instructions to HelveX for HelveX's processing as a Processor are the Terms of Service, this DPA, the Order Form, the configuration the Customer applies in the Builder (including chosen processing region, chosen retention configuration, chosen sub-processor scope under enterprise terms), and any further written instructions the Customer issues from time to time. HelveX will inform the Customer if, in HelveX's opinion, an instruction infringes Applicable Data Protection Law.</p>
       </section>
 
       <section class="hx-legal-section" id="s4">
         <span class="hx-legal-section-num">&sect; 04</span>
-        <h2>Processor obligations</h2>
-        <p>HelveX, in its capacity as Processor, undertakes to comply with each of the following obligations.</p>
-        <h3>Documented instructions</h3>
-        <p>HelveX will Process Personal Data only on the documented instructions of the Controller, including with regard to transfers of Personal Data to a third country or an international organisation, except where required to do so by applicable law to which HelveX is subject. In that event, HelveX will inform the Controller of the legal requirement before Processing, unless that law prohibits such information on important grounds of public interest.</p>
-        <h3>No purpose beyond Service delivery</h3>
-        <p>HelveX will not Process Personal Data for any purpose other than providing the Services in accordance with the Terms and this DPA. In particular, HelveX will not use Customer Content (including Personal Data within Customer Content) to train, fine-tune, or otherwise improve the base capabilities of HelveX's models.</p>
-        <div class="hx-legal-callout">
-          <span class="hx-legal-callout-mark">Commitment</span>
-          <p><strong>HelveX does not use Customer Content (including any Personal Data within Customer Content) to train HelveX base models.</strong> This is a binding contractual commitment under this DPA, operationalised through technical controls that prevent Customer Content from being routed to training pipelines.</p>
-        </div>
-        <h3>Personnel confidentiality</h3>
-        <p>HelveX will ensure that persons authorised to Process Personal Data have committed themselves to confidentiality or are under an appropriate statutory obligation of confidentiality.</p>
-        <h3>Security of Processing</h3>
-        <p>HelveX will implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk, taking into account the state of the art, the costs of implementation, and the nature, scope, context, and purposes of Processing as well as the risk of varying likelihood and severity to the rights and freedoms of natural persons. The specific measures are set out in <strong>Annex II (Technical and Organisational Measures)</strong>.</p>
-        <h3>Assistance with Data Subject rights</h3>
-        <p>HelveX will, taking into account the nature of the Processing, assist the Controller by appropriate technical and organisational measures, insofar as this is possible, for the fulfilment of the Controller's obligation to respond to requests for exercising Data Subjects' rights as set out in Articles 12 to 23 GDPR. The assistance is described in Section 7 of this DPA.</p>
-        <h3>Assistance with compliance obligations</h3>
-        <p>HelveX will assist the Controller in ensuring compliance with the Controller's obligations under Articles 32 to 36 GDPR (security of Processing, notification of Personal Data Breach, communication of Personal Data Breach to Data Subjects, data protection impact assessments, and prior consultation), taking into account the nature of Processing and the information available to HelveX.</p>
-        <h3>Information for Controller compliance demonstration</h3>
-        <p>HelveX will make available to the Controller all information necessary to demonstrate compliance with the obligations laid down in Article 28 GDPR and allow for and contribute to audits, including inspections, conducted by the Controller or an auditor mandated by the Controller, as further set out in Section 11 of this DPA.</p>
+        <h2>Subject matter, duration, nature, purpose of processing</h2>
+        <p>The subject matter, duration, nature, and purpose of the processing carried out by HelveX as Processor, the categories of Data Subject, the categories of Personal Data, and the operations carried out are set out in <strong>Annex I</strong> of this DPA. The Parties acknowledge that Annex I is descriptive of the processing typical of the Services and that the actual scope of processing for any given Customer is determined by the Customer's configuration and use of the Services.</p>
       </section>
 
       <section class="hx-legal-section" id="s5">
         <span class="hx-legal-section-num">&sect; 05</span>
-        <h2>Sub-processors</h2>
-        <p>The Controller hereby authorises HelveX to engage Sub-processors for the Processing of Personal Data on behalf of the Controller, subject to the conditions in this Section 5. This authorisation is a general written authorisation within the meaning of Article 28(2) GDPR.</p>
-        <h3>Current Sub-processors</h3>
-        <p>The current list of authorised Sub-processors is set out in <strong>Annex III (Authorised Sub-processors)</strong>. The list identifies Sub-processors by category, region, and purpose; the specific entity name within each category is available to the Controller under mutual non-disclosure agreement from <strong>trust@helvex.ai</strong>.</p>
-        <h3>Notice of changes</h3>
-        <p>HelveX will provide the Controller with at least <strong>30 days' advance notice</strong> of any intended change in the Sub-processor list affecting Processing of the Controller's Personal Data, including the addition of a new Sub-processor or a change in the category of an existing Sub-processor. Notice will be delivered through the Controller's designated administrative contact and through the Trust Center.</p>
-        <h3>Right to object</h3>
-        <p>The Controller may object to the proposed change on reasonable grounds related to the protection of Personal Data, by written notice to HelveX within the 30-day notice period. On receipt of an objection, HelveX will use commercially reasonable efforts to make available a reasonable alternative that addresses the Controller's concerns. If no such alternative is available within sixty (60) days of the objection, the Controller may, as its sole and exclusive remedy, terminate the affected portion of the Services for cause with a prorated refund of any prepaid, unused fees attributable to the affected portion.</p>
-        <h3>Sub-processor obligations</h3>
-        <p>HelveX will impose on each Sub-processor, by written contract, data-protection obligations that provide a level of protection for Personal Data equivalent to those imposed on HelveX under this DPA, in particular providing sufficient guarantees to implement appropriate technical and organisational measures.</p>
-        <h3>Liability for Sub-processors</h3>
-        <p>Where a Sub-processor fails to fulfil its data-protection obligations, HelveX remains fully liable to the Controller for the performance of the Sub-processor's obligations.</p>
+        <h2>Processor obligations</h2>
+        <p>HelveX undertakes that, as Processor, HelveX will:</p>
+        <ul>
+          <li>process Personal Data only on documented instructions from the Customer, including with regard to Restricted Transfers, unless required to process Personal Data by a law to which HelveX is subject (in which case HelveX will inform the Customer of that legal requirement before processing, unless the law prohibits such information on important grounds of public interest);</li>
+          <li>ensure that persons authorised to process Personal Data have committed themselves to confidentiality or are under an appropriate statutory obligation of confidentiality;</li>
+          <li>implement the technical and organisational measures required by Article 32 GDPR, described at a high level at <a href="/security-page">/security-page</a> and in <strong>Annex II</strong>;</li>
+          <li>respect the conditions for engaging Sub-processors set out in §6 and §7;</li>
+          <li>taking into account the nature of the processing, assist the Customer by appropriate technical and organisational measures, insofar as this is possible, for the fulfilment of the Customer's obligation to respond to requests for exercising the Data Subject's rights under Chapter III GDPR;</li>
+          <li>assist the Customer in ensuring compliance with the obligations pursuant to Articles 32 to 36 GDPR taking into account the nature of processing and the information available to HelveX;</li>
+          <li>at the choice of the Customer, delete or return all the Personal Data to the Customer after the end of the provision of services relating to processing, and delete existing copies unless Applicable Data Protection Law requires storage of the Personal Data;</li>
+          <li>make available to the Customer all information necessary to demonstrate compliance with the obligations laid down in Article 28 GDPR and allow for and contribute to audits, including inspections, conducted by the Customer or another auditor mandated by the Customer, subject to §14.</li>
+        </ul>
       </section>
 
       <section class="hx-legal-section" id="s6">
         <span class="hx-legal-section-num">&sect; 06</span>
-        <h2>Confidentiality of personnel</h2>
-        <p>HelveX ensures that persons authorised to Process Personal Data are bound by appropriate confidentiality undertakings. All HelveX staff and contractors with access to Personal Data are bound by written confidentiality agreements that survive termination of their engagement with HelveX. Confidentiality undertakings cover both the existence and the content of Customer Personal Data, and are reinforced by mandatory training on data-protection responsibilities at onboarding and annually thereafter.</p>
+        <h2>Sub-processors</h2>
+        <p>The Customer grants HelveX general prior authorisation to engage Sub-processors in the categories listed in <strong>Annex III</strong>, subject to the conditions set out in this §6. The current list of specific Sub-processor identities is made available to authorised Customer representatives under MNDA via <strong>trust@helvex.ai</strong>; the list is also reflected on the <a href="/trust-center">Trust Center</a> page to the extent disclosure-able publicly.</p>
+        <p><strong>Advance notice.</strong> HelveX gives the Customer at least thirty (30) days' advance notice before adding a new Sub-processor in a material category or replacing one of HelveX's primary cloud providers, primary foundation-model providers, or primary payment processor. The notice is delivered to the account-billing contact by email and is also posted on the Trust Center. For non-material changes (replacement of a regional support tooling vendor, addition of an additional region of an existing Sub-processor in an already-authorised category), HelveX may give shorter notice consistent with operational needs.</p>
+        <p><strong>Right to object.</strong> The Customer may, on reasonable grounds related to data protection, object to a proposed Sub-processor within fifteen (15) days of HelveX's notice. The Parties will work in good faith to find an alternative arrangement (for example, processing in a different region, use of a different Sub-processor, or scoping changes that avoid use of the objected-to Sub-processor for the Customer's data). If the Parties are unable to find an acceptable arrangement within thirty (30) days of the objection, the Customer may terminate the affected portion of the Services for cause and receive a pro rata refund of any prepaid fees attributable to the unused portion.</p>
+        <p><strong>Flow-down obligations.</strong> HelveX engages each Sub-processor under a written contract that imposes data-protection obligations no less protective than those HelveX owes to the Customer under this DPA, including obligations covering confidentiality, security, breach notification, sub-processor management, international transfers, and audit. HelveX remains fully responsible to the Customer for the performance of each Sub-processor's obligations.</p>
       </section>
 
       <section class="hx-legal-section" id="s7">
         <span class="hx-legal-section-num">&sect; 07</span>
-        <h2>Data Subject rights</h2>
-        <p>HelveX, taking into account the nature of the Processing, assists the Controller by appropriate technical and organisational measures, insofar as this is possible, in responding to requests from Data Subjects exercising their rights under Applicable Data Protection Law, including the rights of access, rectification, erasure, restriction of Processing, data portability, objection, and the right not to be subject to automated decision-making.</p>
-        <h3>Assistance modalities</h3>
-        <p>The principal means by which HelveX assists the Controller are: (a) self-service capabilities within the workspace and through the API by which the Controller can retrieve, export, rectify, restrict, or delete Personal Data on a Data-Subject-specific basis; (b) tenant-level data export tools enabling structured retrieval of Personal Data in machine-readable format; (c) audit logging that enables the Controller to verify and demonstrate fulfilment of Data Subject requests; and (d) where the foregoing self-service capabilities are insufficient, manual assistance from HelveX upon Controller's reasonable request, at no additional charge for assistance directly responsive to Data Subject rights.</p>
-        <h3>Direct requests from Data Subjects</h3>
-        <p>If HelveX receives a request directly from a Data Subject whose Personal Data HelveX Processes on behalf of the Controller, HelveX will (a) not respond to the request itself except to acknowledge receipt and direct the Data Subject to the Controller, unless required to do so by applicable law; (b) promptly notify the Controller of the request, including any deadline by which the Controller must respond under Applicable Data Protection Law; and (c) cooperate with the Controller's response.</p>
+        <h2>AI model providers as Sub-processors</h2>
+        <p>The Services rely in part on third-party foundation model providers ("Model Providers") to produce AI Output in response to Builder Inputs. Where a Builder Input contains Personal Data and is routed through the Services to a Model Provider for the purpose of generating AI Output, the Model Provider acts as a Sub-processor with respect to that Personal Data.</p>
+        <p>HelveX selects Model Providers that meet HelveX's data-protection due-diligence criteria, which include the following minimum requirements. The Model Provider must (i) contractually commit not to use Customer prompts or the corresponding AI Output to train any model, by default; (ii) commit to retention of prompt and output content at the inference layer for no longer than is needed to deliver and log the request (with operational logs subject to short and defined retention); (iii) provide security commitments substantially equivalent to those HelveX owes the Customer under this DPA; (iv) flow back breach-notification obligations on a timeline consistent with HelveX's onward obligations to the Customer; and (v) accept appropriate cross-border transfer terms (the SCCs as a sub-processor or substantially equivalent terms).</p>
+        <p>The list of currently engaged Model Providers, the regions in which each operates, and the categorical use case for which each is engaged, is made available to authorised Customer representatives under MNDA via <strong>trust@helvex.ai</strong>. On enterprise terms, Customers may enable an <strong>approved-providers-only</strong> mode that restricts routing of the Customer's prompts to a Customer-nominated subset of approved Model Providers; Customer prompts that would otherwise be routed outside that subset are rejected.</p>
+        <div class="hx-legal-callout">
+          <p><strong>HelveX contractually requires foundation-model Sub-processors to commit to no-training on Customer prompts and AI Output.</strong> Where a Model Provider materially changes its terms to permit such training, HelveX will discontinue use of that Model Provider for Customer prompts unless and until the Customer opts in to the change in writing.</p>
+        </div>
       </section>
 
       <section class="hx-legal-section" id="s8">
         <span class="hx-legal-section-num">&sect; 08</span>
-        <h2>Personal Data Breach</h2>
-        <p>HelveX maintains an incident-response programme designed to detect, investigate, and contain Personal Data Breaches in a timely manner. The programme is described in detail on the Security page (Section 11) and in the Trust Center (Section 10).</p>
-        <h3>Notification</h3>
-        <p>HelveX will notify the Controller of a Personal Data Breach affecting Personal Data Processed on behalf of the Controller <strong>without undue delay and in any event within 72 hours of confirmation</strong> of the breach. Notification is delivered through the Controller's designated administrative contact (and through any additional channels specified in the Order Form).</p>
-        <div class="hx-legal-callout">
-          <span class="hx-legal-callout-mark">Commitment</span>
-          <p>HelveX commits to notify the Controller of a confirmed Personal Data Breach affecting Personal Data Processed on behalf of the Controller <strong>within 72 hours</strong>, consistent with GDPR Article 33.</p>
-        </div>
-        <h3>Content of notification</h3>
-        <p>The notification will, to the extent of the information then available to HelveX and consistent with Article 33(3) GDPR, describe: (a) the nature of the Personal Data Breach, including, where possible, the categories and approximate number of Data Subjects concerned and the categories and approximate number of Personal Data records concerned; (b) the name and contact details of HelveX's point of contact for further information; (c) the likely consequences of the Personal Data Breach; and (d) the measures taken or proposed to be taken by HelveX to address the Personal Data Breach, including, where appropriate, measures to mitigate its possible adverse effects.</p>
-        <h3>Ongoing updates</h3>
-        <p>Where the information cannot be provided at the same time, HelveX will provide updates as new information becomes available. HelveX will preserve evidence relating to the Personal Data Breach and cooperate with the Controller's investigation, supervisory-authority engagement, and Data Subject communications as reasonably required.</p>
-        <h3>No admission</h3>
-        <p>HelveX's notification of a Personal Data Breach is not an admission of fault or liability and is made for the purposes of supporting the Controller's compliance with Articles 33 and 34 GDPR and equivalent provisions.</p>
+        <h2>Confidentiality of personnel</h2>
+        <p>HelveX ensures that all personnel with access to Personal Data are bound by written confidentiality obligations as a condition of their employment or engagement, and that those obligations survive the end of the employment or engagement. HelveX restricts access to Personal Data to those personnel who need such access to perform their function under this DPA, in line with the least-privilege controls described in <a href="/security-page">/security-page</a>.</p>
+        <p>HelveX provides data-protection training to all personnel on onboarding and refreshes the training annually. Personnel in roles with privileged access to Personal Data receive role-specific training on the additional obligations applicable to their role, including secure-handling, incident-reporting, and forensic-preservation duties.</p>
       </section>
 
       <section class="hx-legal-section" id="s9">
         <span class="hx-legal-section-num">&sect; 09</span>
-        <h2>DPIA and prior consultation</h2>
-        <p>HelveX provides reasonable assistance to the Controller, taking into account the nature of the Processing and the information available to HelveX, in carrying out a data protection impact assessment under Article 35 GDPR and in conducting prior consultation with the Supervisory Authority under Article 36 GDPR, where the Controller determines that such an assessment or consultation is required.</p>
-        <h3>Materials available</h3>
-        <p>To support DPIA exercises, HelveX makes available: this DPA together with its annexes; the Privacy Policy; the Security page; the Trust Center; the model cards for each production model; and, on reasonable request and under MNDA, the current SOC 2 Type II report, ISO 27001 statement of applicability, and penetration-test summary. These materials are intended to provide the information the Controller needs to characterise the Processing for DPIA purposes.</p>
-        <h3>Cost</h3>
-        <p>DPIA assistance directly responsive to the Controller's good-faith DPIA exercise is provided at no additional charge. Where the Controller requests bespoke materials or extensive engagement beyond reasonable assistance, the parties will agree on reasonable charges in advance.</p>
+        <h2>Data Subject rights — assistance</h2>
+        <p>HelveX, taking into account the nature of the processing, assists the Customer by appropriate technical and organisational measures, insofar as is possible, for the fulfilment of the Customer's obligation to respond to requests for exercising the Data Subject's rights under Articles 12 to 22 GDPR and equivalent provisions of other Applicable Data Protection Law.</p>
+        <p>The Builder includes tooling within the Customer's workspace that the Customer can use, on its own initiative, to locate, export, rectify, and delete Personal Data within the Customer's projects and within Generated Applications the Customer has built. The tooling includes search across project data, export in standard formats, in-place edit functions, and deletion functions with audit logging. The Customer is the primary actor with respect to Data Subject requests addressed to data held within the Customer's Generated Applications.</p>
+        <p>Where a Data Subject submits a request directly to HelveX in connection with the Customer's data, HelveX promptly refers the request to the Customer and does not respond substantively except as the Customer instructs or as Applicable Data Protection Law requires HelveX to respond. HelveX may charge for assistance that goes materially beyond standard support; routine assistance is included within the Services.</p>
       </section>
 
       <section class="hx-legal-section" id="s10">
         <span class="hx-legal-section-num">&sect; 10</span>
-        <h2>International transfers</h2>
-        <p>HelveX may transfer Personal Data outside the European Economic Area, the United Kingdom, or Switzerland only in accordance with this section.</p>
-        <h3>Mechanisms</h3>
-        <p>Each transfer of Personal Data to a third country relies on one of the following mechanisms: (a) an Adequacy Decision applicable to the destination country; (b) the Standard Contractual Clauses, supplemented by any required addendum (UK Addendum / IDTA for UK-origin data, Swiss Addendum for Swiss-origin data); or (c) a derogation under Article 49 GDPR for occasional, non-systematic transfers where strictly applicable.</p>
-        <h3>SCC Modules</h3>
-        <p>The applicable Modules of the Standard Contractual Clauses for transfers under this DPA are: <strong>Module Two (Controller to Processor)</strong> where the Controller is established in the EEA and Personal Data is transferred to HelveX as Processor in a third country; and <strong>Module Three (Processor to Sub-processor)</strong> where HelveX engages a Sub-processor in a third country. The selection of Modules, the parties' identities, and the data-transfer-specific information are set out in <strong>Annex IV (SCCs Reference)</strong>.</p>
-        <h3>Supplementary measures</h3>
-        <p>HelveX has assessed the laws of importing countries and implemented supplementary measures where the assessment identified residual risk. These measures include AES-256 encryption at rest with HSM-backed key management; TLS 1.3 encryption in transit; segregation of administrative access; pseudonymisation where feasible; and contractual commitments to challenge unlawful disclosure requests. The assessment is updated when material changes in importing-country law come to HelveX's attention.</p>
-        <h3>Swiss Addendum</h3>
-        <p>For Personal Data originating in Switzerland and subject to the Swiss FADP / nFADP, the Standard Contractual Clauses are supplemented by the Swiss Addendum recognised by the Swiss Federal Data Protection and Information Commissioner. References in the SCCs to GDPR are deemed to refer also to the relevant provisions of the Swiss FADP / nFADP; references to the supervisory authority and to courts are deemed to refer also to the Swiss FDPIC and Swiss courts as appropriate.</p>
+        <h2>Personal Data Breach</h2>
+        <p>HelveX notifies the Customer of a Personal Data Breach affecting the Customer's Personal Data without undue delay and in any event within <strong>seventy-two (72) hours</strong> of HelveX's confirmation of the breach.</p>
+        <p>The notification is delivered to the account-billing contact and to any additional security contacts the Customer has nominated, by email. The notification describes, in line with Article 33(3) GDPR: (i) the nature of the Personal Data Breach, including, where possible, the categories and approximate number of Data Subjects concerned and the categories and approximate number of personal-data records concerned; (ii) the name and contact details of the data protection officer or other contact point where more information can be obtained; (iii) the likely consequences of the Personal Data Breach; and (iv) the measures taken or proposed to be taken by HelveX to address the Personal Data Breach, including, where appropriate, measures to mitigate its possible adverse effects.</p>
+        <p>Where it is not possible to provide all of the above information at the same time as the initial notification, HelveX provides the information in phases without further undue delay. HelveX cooperates with the Customer and provides reasonable assistance to the Customer in the Customer's onward obligation to notify supervisory authorities and (where applicable) Data Subjects in accordance with Articles 33 and 34 GDPR. The Customer remains responsible for any onward notification to supervisory authorities and to its own Data Subjects.</p>
+        <p>HelveX maintains and provides on request a documented record of each Personal Data Breach, including the facts, its effects, and the remedial action taken, sufficient to demonstrate compliance with Article 33(5) GDPR.</p>
       </section>
 
       <section class="hx-legal-section" id="s11">
         <span class="hx-legal-section-num">&sect; 11</span>
-        <h2>Audits</h2>
-        <p>HelveX makes available to the Controller all information necessary to demonstrate compliance with the obligations of Article 28 GDPR and allows for and contributes to audits, including inspections, conducted by the Controller or an auditor mandated by the Controller, subject to the conditions in this Section 11.</p>
-        <h3>Standard audit pathway</h3>
-        <p>HelveX's standard audit pathway is to make available, under MNDA, the most recent <strong>SOC 2 Type II report</strong>, <strong>ISO 27001 certificate and statement of applicability</strong>, and a summary of the most recent independent <strong>penetration test</strong>. These reports cover the controls relevant to the Controller's audit interests and are produced by independent third parties qualified to attest to those controls. The Controller agrees that, absent specific concerns not addressed by these reports, the standard audit pathway satisfies HelveX's audit obligations under Article 28(3)(h) GDPR.</p>
-        <h3>Additional audits</h3>
-        <p>Where the Controller has specific concerns not addressed by the standard audit pathway, the Controller may, no more than once per twelve-month period (or more often where required by Applicable Data Protection Law or in connection with a Personal Data Breach affecting the Controller), conduct an additional audit. Audits will be conducted (a) with reasonable advance notice (at least thirty (30) days); (b) during HelveX's business hours; (c) under appropriate confidentiality protections; (d) by an independent third-party auditor mutually acceptable to the parties; and (e) in a manner that does not unreasonably interfere with HelveX's business operations or those of other customers.</p>
-        <h3>Cost</h3>
-        <p>The Controller bears its own costs of any audit beyond the standard audit pathway. Where the audit results in a finding of HelveX's material non-compliance with this DPA, HelveX will reimburse the Controller's reasonable audit costs and remediate the non-compliance.</p>
-        <h3>Scope limitations</h3>
-        <p>Audits do not extend to: (a) data of other HelveX customers; (b) confidential information of HelveX not relevant to the Controller's audit interests; (c) HelveX's source code (HelveX may make summary information available where necessary to demonstrate compliance); or (d) information that would compromise the security of the platform.</p>
+        <h2>DPIA and prior consultation assistance</h2>
+        <p>HelveX provides the Customer with reasonable assistance, taking into account the nature of the processing and the information available to HelveX, with the Customer's obligation to carry out Data Protection Impact Assessments under Article 35 GDPR and to undertake prior consultations with supervisory authorities under Article 36 GDPR where the Customer's processing requires them.</p>
+        <p>Assistance typically takes the form of: documentation describing the nature, scope, and purpose of HelveX's processing as Processor; the technical and organisational measures HelveX implements; the categories of Sub-processor engaged; the transfer-impact assessments HelveX has produced; and responses to reasonable written questions from the Customer's data protection officer or equivalent function.</p>
       </section>
 
       <section class="hx-legal-section" id="s12">
         <span class="hx-legal-section-num">&sect; 12</span>
-        <h2>Deletion and return of Personal Data</h2>
-        <p>On termination or expiration of the Terms (or the relevant portion of the Services giving rise to the Processing), HelveX will, at the Controller's election, delete or return all Personal Data to the Controller.</p>
-        <h3>Process</h3>
-        <p>For thirty (30) days following termination, the Controller may export Personal Data through the workspace or the API. After the export window, HelveX will delete Personal Data from active production systems within thirty (30) days. Personal Data persisting in backups will be deleted in accordance with the backup-retention cycle (default 30 days); during the residual backup window, the data remains encrypted and inaccessible to ordinary access paths.</p>
-        <h3>Legal retention</h3>
-        <p>HelveX retains copies of Personal Data only to the extent and for the period required by applicable law (in particular, retention of accounting records under Article 958f of the Swiss Code of Obligations). Where the Controller is not the entity to which such legal retention obligations apply directly, the retention is limited to information genuinely required for HelveX's own compliance, not as a general archive of Personal Data.</p>
-        <h3>Confirmation</h3>
-        <p>On Controller's request, HelveX will provide written confirmation of deletion of Personal Data, identifying the categories of Personal Data deleted, the date(s) of deletion, and any residual retention with the legal basis therefor.</p>
+        <h2>International transfers</h2>
+        <p>The Parties acknowledge that the operation of the Services may require Restricted Transfers of Personal Data. To address such transfers, the Parties agree the following.</p>
+        <p><strong>SCCs incorporated.</strong> The SCCs are incorporated into this DPA by reference and form part of it. The applicable Modules are Module 2 (Controller to Processor) where HelveX is the data importer of Personal Data for which the Customer is the Controller, and Module 3 (Processor to Sub-processor) where HelveX engages a Sub-processor that is a data importer of Personal Data for which the Customer is the Controller. The Parties' choices in the SCCs are as set out in <strong>Annex IV</strong>.</p>
+        <p><strong>Swiss Addendum.</strong> Where the SCCs apply to a Restricted Transfer of Personal Data originating in Switzerland, the Swiss Addendum published by the Swiss FDPIC is incorporated by reference and forms part of this DPA. References in the SCCs to Member State law are read as references to Swiss law where required by the Swiss Addendum; the supervisory authority is the Swiss FDPIC; and Swiss law governs the SCCs where the data subjects are habitually resident in Switzerland.</p>
+        <p><strong>UK IDTA.</strong> Where the SCCs apply to a Restricted Transfer of Personal Data originating in the United Kingdom, the UK International Data Transfer Addendum is incorporated by reference and forms part of this DPA, configured in accordance with <strong>Annex IV</strong>.</p>
+        <p><strong>Adequacy decisions.</strong> Where the recipient of a Restricted Transfer is located in a country that benefits from an adequacy decision under Applicable Data Protection Law (for example, where the EU Commission has decided that the country ensures an adequate level of protection), the transfer relies on the adequacy decision and the SCCs apply on a subsidiary basis to the extent the recipient is not within the scope of the adequacy decision.</p>
+        <p><strong>Supplementary measures.</strong> HelveX implements supplementary technical and organisational measures over the contractual transfer mechanism, including: encryption in transit and at rest as described in <a href="/security-page">/security-page</a> and Annex II; access controls implementing least-privilege and multi-factor authentication for personnel; logging of administrative access to support after-the-fact review; data minimisation in cross-border flows; documented Transfer Impact Assessments by category of recipient, available to authorised Customer representatives under MNDA via <strong>trust@helvex.ai</strong>; and, on enterprise terms, optional regional pinning that confines processing of the Customer's data to a Customer-nominated region.</p>
       </section>
 
       <section class="hx-legal-section" id="s13">
         <span class="hx-legal-section-num">&sect; 13</span>
-        <h2>Special Categories of Personal Data</h2>
-        <p>The Services are not specifically designed for the Processing of Special Categories of Personal Data and the parties do not contemplate, at the outset of the engagement, that the Customer will submit Special Categories to the Services. If the Controller intends to Process Special Categories using the Services, the Controller represents and warrants that such Processing complies with Article 9 GDPR (in particular, that the Controller has a lawful basis under Article 9(2) for Processing the Special Categories) and with any equivalent provision of Applicable Data Protection Law.</p>
-        <p>Where the Controller submits Special Categories, the Controller is responsible for ensuring that the configuration of the tenant is appropriate to the additional risk (including stronger access controls, more restrictive retention, and consideration of the zero-retention posture for inference traffic). HelveX makes available the technical capabilities to support these measures; the Controller is responsible for selecting and configuring them.</p>
+        <h2>Security measures (technical and organisational)</h2>
+        <p>HelveX implements and maintains the technical and organisational measures required by Article 32 GDPR to ensure a level of security appropriate to the risk, taking into account the state of the art, the costs of implementation, the nature, scope, context, and purposes of the processing, and the risks for the rights and freedoms of natural persons. The current measures are described at a high level at <a href="/security-page">/security-page</a> and are summarised by category in <strong>Annex II</strong>. HelveX may update the measures from time to time without diminishing the overall level of protection.</p>
       </section>
 
       <section class="hx-legal-section" id="s14">
         <span class="hx-legal-section-num">&sect; 14</span>
-        <h2>Liability</h2>
-        <p>The liability of the parties under this DPA is governed by the limitation of liability provisions in the Terms (Section 14 of the Terms of Service). Without limiting the foregoing, nothing in this DPA limits or excludes a Data Subject's rights under Article 82 GDPR or equivalent law to compensation from a controller or processor for damage suffered as a result of an infringement of Applicable Data Protection Law.</p>
-        <p>Where Article 82 GDPR or equivalent law renders a party liable to a Data Subject for damages, the parties' allocation of responsibility as between themselves is determined by the limitation of liability and indemnification provisions of the Terms, subject to the mandatory provisions of Applicable Data Protection Law.</p>
+        <h2>Audit rights</h2>
+        <p>The Customer may audit HelveX's compliance with this DPA in accordance with this §14.</p>
+        <p><strong>Frequency.</strong> The Customer may exercise an audit right once per annual period, save where additional audits are required by Applicable Data Protection Law, by a supervisory authority, or following a Personal Data Breach materially affecting the Customer's Personal Data.</p>
+        <p><strong>Auditor.</strong> The audit may be conducted by the Customer or by a mutually-agreed independent third-party auditor bound by written confidentiality obligations no less protective than those between the Parties. HelveX may reasonably object to a proposed third-party auditor that is a HelveX competitor.</p>
+        <p><strong>Scope and conduct.</strong> The scope of the audit is limited to the matters relevant to HelveX's compliance with this DPA. The Customer provides reasonable advance written notice (no less than thirty (30) days, save in emergency), the audit is conducted during HelveX's normal business hours, and the audit must not disrupt HelveX's operations or the use of the Services by other Customers. The Customer's auditors comply with HelveX's reasonable site-security, confidentiality, and data-handling procedures.</p>
+        <p><strong>Satisfaction by documentary review.</strong> HelveX may satisfy the audit obligation in the first instance by providing then-current independent attestation reports against the frameworks named in <a href="/security-page">/security-page</a> where such reports exist; where they do not yet exist, by providing the then-current control-mapping documents, gap-assessment outputs, and the planned attestation timeline; penetration-test summaries; the latest business-continuity test report; and written responses to the Customer's reasonable written questions. Such documentary materials are made available to authorised Customer representatives under MNDA via <strong>trust@helvex.ai</strong>. Where the Customer can reasonably demonstrate that documentary review is insufficient for the Customer's compliance obligations, an on-site or remote interactive audit will be conducted in accordance with this §14.</p>
+        <p><strong>Cost allocation.</strong> Each Party bears its own costs of audit. The Customer reimburses HelveX's reasonable time for assistance that materially exceeds the standard cooperation thresholds set out in the Order Form, at HelveX's then-current professional-services rates.</p>
       </section>
 
       <section class="hx-legal-section" id="s15">
         <span class="hx-legal-section-num">&sect; 15</span>
-        <h2>Term</h2>
-        <p>This DPA enters into force on the Effective Date of the Terms (or, where executed separately, the Effective Date of this DPA) and remains in force for the duration of the Terms. Provisions of this DPA that by their nature should survive termination (including those concerning deletion and return of Personal Data, confidentiality, audit support relating to historic Processing, and liability) survive termination of the Terms.</p>
+        <h2>Return and deletion of Personal Data</h2>
+        <p>Within thirty (30) days of termination or expiry of the Services, HelveX, at the Customer's election made in writing within that period, returns the Personal Data to the Customer or deletes it from primary storage. The Customer's standard export tooling within the Builder is available to assist with return. Where the Customer does not communicate an election within the period, HelveX deletes the Personal Data.</p>
+        <p>HelveX deletes existing copies of the Personal Data save for copies that HelveX is required to retain by Applicable Data Protection Law or by other applicable law, including the Swiss accounting and tax retention obligations referred to in the Privacy Policy. Such retained copies are subject to the same confidentiality and security obligations as the original Personal Data and are deleted at the end of the statutory retention period.</p>
+        <p>Backups containing Personal Data are not separately deleted at the moment of termination; instead, they are purged according to the rolling backup-retention schedule described in §11 of the Privacy Policy (rotation cycle not exceeding ninety (90) days). During the backup-retention window, backups remain encrypted, access-controlled, and used only for disaster-recovery purposes.</p>
+        <p>HelveX provides a written confirmation of deletion on request.</p>
       </section>
 
       <section class="hx-legal-section" id="s16">
         <span class="hx-legal-section-num">&sect; 16</span>
-        <h2>Governing law</h2>
-        <p>This DPA is governed by the laws of Switzerland, harmonised with the GDPR for EU/EEA Personal Data and with the UK GDPR for UK Personal Data, and applied in conjunction with the Swiss FADP / nFADP for Personal Data originating in Switzerland. The substantive obligations imposed by Article 28 GDPR and equivalent provisions of Applicable Data Protection Law apply as mandatory provisions, regardless of the parties' choice of law, where such law would otherwise apply.</p>
-        <p>Disputes arising out of or in connection with this DPA are subject to the dispute-resolution provisions of the Terms (Section 19 of the Terms of Service).</p>
+        <h2>Special categories of Personal Data</h2>
+        <p>The Customer warrants that it will not provide to HelveX as a Builder Input, and will not configure a Generated Application to collect, store, or process, any Personal Data falling within the special categories listed in Article 9 GDPR (health data, biometric data processed for the purpose of uniquely identifying a natural person, genetic data, data revealing racial or ethnic origin, political opinions, religious or philosophical beliefs, trade-union membership, and data concerning a natural person's sex life or sexual orientation) or any criminal-conviction data under Article 10 GDPR, without prior written agreement with HelveX. The prior written agreement must specify the lawful basis on which the Customer relies, the additional technical and organisational safeguards that will apply, and any additional contractual terms.</p>
+        <p>If, despite the warranty above, the Customer's Generated Application processes special-category Personal Data, the Customer remains the Controller of such data, the Customer remains responsible for identifying and documenting the lawful basis for the processing, and HelveX's processing as Processor remains governed by the standard terms of this DPA.</p>
       </section>
 
       <section class="hx-legal-section" id="s17">
         <span class="hx-legal-section-num">&sect; 17</span>
-        <h2>Order of precedence</h2>
-        <p>In the event of conflict between this DPA, the Standard Contractual Clauses (where applicable), the Terms, and any Order Form, the order of precedence is: (1) the Standard Contractual Clauses (as to matters within their scope, where applicable); (2) this DPA; (3) the Terms; (4) the Order Form. The Order Form takes precedence over the Terms only as to those matters that the Order Form expressly addresses. Any provision in any document that purports to alter the substantive content of the Standard Contractual Clauses is void.</p>
+        <h2>Children's Personal Data</h2>
+        <p>The Customer is responsible for compliance with the rules applicable to Personal Data of children under Article 8 GDPR, COPPA, the UK Age Appropriate Design Code, and substantially equivalent regimes, with respect to any End User Personal Data of children processed through the Customer's Generated Applications. The Customer is responsible for obtaining verifiable parental consent where required, for designing the Customer's Generated Application appropriately for the age group concerned, and for honouring any heightened obligations imposed by Applicable Data Protection Law on the processing of children's Personal Data.</p>
+        <p>HelveX provides documentation and reasonable processor-side assistance to support such compliance but does not assume the Controller role with respect to End User children's Personal Data and does not, by providing such assistance, accept any of the Customer's controller-side obligations.</p>
       </section>
 
       <section class="hx-legal-section" id="s18">
         <span class="hx-legal-section-num">&sect; 18</span>
+        <h2>Liability</h2>
+        <p>Each Party's liability arising out of or related to this DPA is subject to the limitation of liability set out in the Terms of Service, except as expressly provided in this DPA or as required by Applicable Data Protection Law. Nothing in this DPA limits Data Subjects' rights under Article 82 GDPR or excludes either Party's liability that cannot be excluded or limited under Applicable Data Protection Law.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s19">
+        <span class="hx-legal-section-num">&sect; 19</span>
+        <h2>Order of precedence, term, governing law</h2>
+        <p><strong>Order of precedence.</strong> In the event of any conflict between this DPA, the SCCs, the Terms of Service, the Order Form, and the Privacy Policy, the following order of precedence applies: (i) the SCCs (where they apply to a Restricted Transfer); (ii) this DPA; (iii) the Terms of Service; (iv) the Order Form (except to the extent the Order Form expressly states that it overrides a specific provision of the Terms of Service or this DPA, in which case that express override prevails for the scope of the override only).</p>
+        <p><strong>Term.</strong> This DPA is effective from the effective date of the Customer's agreement with HelveX and continues for the duration of the provision of the Services to the Customer, save for those provisions that by their nature survive termination (including obligations relating to confidentiality, return and deletion of Personal Data, post-termination breach notification with respect to retained back-ups, audit assistance with respect to processing carried out during the term, and liability for processing carried out during the term).</p>
+        <p><strong>Governing law.</strong> Swiss law governs this DPA, harmonised with the GDPR for Personal Data originating in the EEA, harmonised with the Swiss FADP / nFADP for Personal Data originating in Switzerland, and harmonised with the UK GDPR for Personal Data originating in the United Kingdom. The provisions of the SCCs governing the law of the SCCs apply to the SCCs themselves where incorporated. Disputes arising out of or related to this DPA are subject to the dispute-resolution provisions of the Terms of Service, save where Applicable Data Protection Law confers competence on a specific forum (for example, the courts of the Data Subject's habitual residence under Clause 18 of the SCCs).</p>
+      </section>
+
+      <section class="hx-legal-section" id="s20">
+        <span class="hx-legal-section-num">&sect; 20</span>
         <h2>Annexes</h2>
-        <p>The following Annexes form part of this DPA.</p>
 
-        <h3>Annex I &mdash; Processing Details</h3>
-        <p><strong>Subject matter.</strong> The Processing of Personal Data contained within Customer Content for the purpose of providing the Services as defined in the Terms.</p>
-        <p><strong>Duration.</strong> For the term of the Terms, plus any post-termination period strictly necessary for return or deletion of Personal Data (typically 30 days, subject to backup retention).</p>
-        <p><strong>Nature and purpose of Processing.</strong> Collection, storage, structuring, retrieval, transmission, organisation, adaptation, and erasure of Personal Data for the purpose of delivering model inference (Ether, Nexus, Prometheus), workspace surfaces (Chat, Projects, Agents, Knowledge, Spaces, History), and managed engagement services to the Controller.</p>
-        <p><strong>Categories of Data Subjects.</strong></p>
-        <ul>
-          <li>The Controller's Users (employees, contractors, agents authorised to use the Services on behalf of the Controller).</li>
-          <li>The Controller's end users and customers whose Personal Data is submitted to the Services by the Controller.</li>
-          <li>Subjects of any content uploaded to the Services by the Controller or its Users.</li>
-        </ul>
-        <p><strong>Types of Personal Data.</strong></p>
+        <h3>Annex I — Processing Details</h3>
+        <p>The following table sets out the matters required by Annex I.B of the SCCs and equivalent provisions of Applicable Data Protection Law.</p>
         <table class="hx-legal-table">
           <thead>
-            <tr><th>Category</th><th>Examples</th></tr>
+            <tr>
+              <th>Item</th>
+              <th>Description</th>
+            </tr>
           </thead>
           <tbody>
-            <tr><td>Identifiers</td><td>Name, email address, account identifier, IP address, device identifier.</td></tr>
-            <tr><td>Contact information</td><td>Business address, phone number, professional contact details.</td></tr>
-            <tr><td>Authentication data</td><td>Hashed passwords, MFA tokens, SSO assertions.</td></tr>
-            <tr><td>Professional information</td><td>Job title, employer, professional history (where included in Customer Content).</td></tr>
-            <tr><td>Usage data</td><td>Telemetry, audit logs, error reports, session metadata.</td></tr>
-            <tr><td>Content data</td><td>Any Personal Data contained within prompts, completions, files, or other Customer Content submitted by the Controller.</td></tr>
-            <tr><td>Special Categories (where submitted)</td><td>Only where the Controller affirmatively submits Special Categories and has a lawful basis under Article 9 GDPR.</td></tr>
+            <tr>
+              <td>Subject matter</td>
+              <td>Processing of Personal Data by HelveX as Processor in connection with the provision of the HelveX AI builder, the Hosted Services, the APIs, and the surrounding services to the Customer.</td>
+            </tr>
+            <tr>
+              <td>Duration</td>
+              <td>The duration of the Customer's subscription to the Services, plus the post-termination periods set out in §15 and in §11 of the Privacy Policy.</td>
+            </tr>
+            <tr>
+              <td>Nature</td>
+              <td>Collection, recording, organisation, structuring, storage, adaptation, retrieval, consultation, use, disclosure by transmission, dissemination, alignment, combination, restriction, erasure, and destruction, as required to provide the Services.</td>
+            </tr>
+            <tr>
+              <td>Purpose</td>
+              <td>Provision of the HelveX AI builder; generation of AI Output in response to Customer prompts; hosting of Generated Applications; operation of the Customer's Generated Applications including the processing of End User Personal Data the Customer's application collects; provision of supporting services including authentication, telemetry, monitoring, and support; security and abuse prevention; and processing required for HelveX to comply with Applicable Data Protection Law and other applicable law.</td>
+            </tr>
+            <tr>
+              <td>Categories of Data Subjects</td>
+              <td>The Customer's personnel and authorised collaborators; End Users of the Customer's Generated Applications; the Customer's customers, partners, suppliers, and other third parties whose Personal Data the Customer chooses to process via the Services; and any other natural persons whose Personal Data is included in Builder Inputs or in Generated Application Personal Data.</td>
+            </tr>
+            <tr>
+              <td>Categories of Personal Data</td>
+              <td>Identifiers (name, email, account identifier, IP address, device identifier); profile attributes the Customer's application collects; transaction records the Customer's application generates; communications between End Users and the Customer's application; uploaded content the Customer or End Users provide; configuration data including OAuth grants and webhook endpoints; usage data within the Customer's application; and any other Personal Data the Customer determines to process via the Services.</td>
+            </tr>
+            <tr>
+              <td>Sensitive categories</td>
+              <td>None, unless expressly agreed in writing per §16.</td>
+            </tr>
+            <tr>
+              <td>Frequency of transfer</td>
+              <td>Continuous, in line with the operation of the Services.</td>
+            </tr>
+            <tr>
+              <td>Retention</td>
+              <td>As set out in §11 of the Privacy Policy and in §15 of this DPA.</td>
+            </tr>
           </tbody>
         </table>
 
-        <h3>Annex II &mdash; Technical and Organisational Measures</h3>
-        <p>HelveX implements the following Technical and Organisational Measures, which together constitute the security of Processing required by Article 32 GDPR. Detailed descriptions are set out on the Security page and in the Trust Center.</p>
+        <h3>Annex II — Technical and Organisational Measures</h3>
+        <p>The following table summarises the technical and organisational measures HelveX implements in accordance with Article 32 GDPR. The detailed description is set out at <a href="/security-page">/security-page</a>.</p>
         <table class="hx-legal-table">
           <thead>
-            <tr><th>Category</th><th>Measure</th></tr>
+            <tr>
+              <th>Category</th>
+              <th>Measure</th>
+              <th>Reference</th>
+            </tr>
           </thead>
           <tbody>
-            <tr><td>Pseudonymisation</td><td>Where feasible, Personal Data is pseudonymised in telemetry and analytics datasets, with re-identification keys segregated from the data and subject to separate access controls.</td></tr>
-            <tr><td>Encryption at rest</td><td>AES-256-GCM at the storage layer for object storage, database volumes, and snapshot/backup volumes; TDE at the database layer; HSM-backed key management; customer-managed encryption keys (CMK) available for enterprise tenants.</td></tr>
-            <tr><td>Encryption in transit</td><td>TLS 1.3 for all external connections; mutual TLS with certificate pinning for internal service-to-service communications.</td></tr>
-            <tr><td>Confidentiality (access control)</td><td>RBAC within tenants; SSO via SAML 2.0 and OIDC; SCIM 2.0 provisioning; MFA mandatory for HelveX staff and enforced by tenant policy for Customers; just-in-time elevation for production access; quarterly access reviews.</td></tr>
-            <tr><td>Integrity</td><td>Append-only audit logging with tamper-evident integrity checks; immutable infrastructure pattern preventing in-place modification of production workloads; cryptographic build attestation on software artifacts.</td></tr>
-            <tr><td>Availability and resilience</td><td>Active-active deployment across availability zones; warm-standby in secondary region; RPO &le; 1 hour and RTO &le; 4 hours at the workspace control-plane level; continuous PITR backups with geo-replicated copies.</td></tr>
-            <tr><td>Testing of effectiveness</td><td>Continuous SCA, SAST, and image scanning; nightly DAST against staging; annual independent third-party penetration testing; annual SOC 2 Type II examination; annual ISO 27001 surveillance.</td></tr>
-            <tr><td>Network security</td><td>Zero-trust architecture; network segmentation between security zones; managed WAF on public surfaces; cloud-native DDoS protection; private connectivity (AWS PrivateLink, GCP Private Service Connect) for enterprise.</td></tr>
-            <tr><td>Physical security</td><td>Delegated to underlying cloud providers (AWS, GCP, Azure) operating certified data-centre facilities; HelveX corporate premises subject to physical-access controls proportionate to data sensitivity.</td></tr>
-            <tr><td>Personnel security</td><td>Pre-employment screening (where lawful); written confidentiality agreements; mandatory onboarding and annual security training; least-privilege internal access with quarterly reviews.</td></tr>
-            <tr><td>Incident response</td><td>24/7 monitoring with SIEM; classified incident response programme; 72-hour Personal Data Breach notification commitment; written post-mortems for S1 and S2 incidents.</td></tr>
-            <tr><td>Governance</td><td>CISO with executive sponsorship; Security Steering Committee meeting monthly; documented information-security management system aligned to ISO/IEC 27001:2022; ongoing risk register reviewed quarterly.</td></tr>
-            <tr><td>AI-specific measures</td><td>Input sanitisation; context isolation between system prompts, user inputs, and tool outputs; output classification for harmful-content categories; rate limiting and abuse monitoring; model-weight provenance and signed deployment artifacts.</td></tr>
+            <tr>
+              <td>Encryption</td>
+              <td>TLS 1.3 in transit; AES-256-GCM at rest; HSM-backed key management; periodic key rotation; per-tenant key separation on enterprise terms.</td>
+              <td>Security §2</td>
+            </tr>
+            <tr>
+              <td>Pseudonymisation</td>
+              <td>Where appropriate, identifiers are tokenised; logs use stable opaque identifiers in place of personal-data fields where the underlying personal data is not required for the log's purpose.</td>
+              <td>Security §9</td>
+            </tr>
+            <tr>
+              <td>Access control</td>
+              <td>RBAC with least-privilege defaults; mandatory MFA for personnel; just-in-time elevation for production access; quarterly access reviews; automated de-provisioning on separation.</td>
+              <td>Security §3</td>
+            </tr>
+            <tr>
+              <td>Integrity</td>
+              <td>Tamper-evident logging; signed builds; SBOM generation; configuration drift detection and reconciliation; immutable infrastructure with redeploy-rather-than-mutate semantics.</td>
+              <td>Security §5, §6, §9</td>
+            </tr>
+            <tr>
+              <td>Availability</td>
+              <td>Geo-replicated backups; point-in-time recovery; multi-region failover for the control plane; quarterly DR tabletops; annual full-failover technical exercises.</td>
+              <td>Security §13</td>
+            </tr>
+            <tr>
+              <td>Resilience</td>
+              <td>Zero-trust segmentation between control plane, data plane, and customer plane; WAF and DDoS mitigation at public ingress; resource quotas to bound the blast radius of any single tenant's load.</td>
+              <td>Security §4, §8</td>
+            </tr>
+            <tr>
+              <td>Testing and assurance</td>
+              <td>SAST and SCA on every build; DAST against staging; weekly internal infrastructure scanning; annual third-party penetration testing; documented severity-based remediation SLAs.</td>
+              <td>Security §6, §10</td>
+            </tr>
+            <tr>
+              <td>Sandboxing</td>
+              <td>Generated Application previews execute in isolated sandboxes with no privileged host access, ephemeral filesystems, resource limits, and restricted network egress.</td>
+              <td>Security §7.3</td>
+            </tr>
+            <tr>
+              <td>AI safety</td>
+              <td>Prompt-injection defences; output safety filtering; rate limiting and anomaly detection; model-supply-chain integrity verification; training-data hygiene for HelveX-developed models.</td>
+              <td>Security §7</td>
+            </tr>
+            <tr>
+              <td>Incident response</td>
+              <td>24/7 on-call rotation; severity-classified escalation; documented playbooks; commitment to Customer notification within seventy-two (72) hours of confirmed Personal Data Breach.</td>
+              <td>Security §12; DPA §10</td>
+            </tr>
+            <tr>
+              <td>Governance</td>
+              <td>CISO ownership; quarterly executive reporting; annual programme review; documented control mapping against SOC 2, ISO/IEC 27001, NIST CSF, and OWASP ASVS.</td>
+              <td>Security §1, §17</td>
+            </tr>
+            <tr>
+              <td>Personnel</td>
+              <td>Pre-employment background checks where lawful; written confidentiality agreements; onboarding and annual refresher training; role-specific training for engineers and operations.</td>
+              <td>Security §11</td>
+            </tr>
           </tbody>
         </table>
 
-        <h3>Annex III &mdash; Authorised Sub-processors</h3>
-        <p>HelveX engages the following categories of Sub-processors. Specific entity names within each category are disclosed to Customers under MNDA from <strong>trust@helvex.ai</strong>; the list is updated on the Trust Center page in accordance with the 30-day advance-notice obligation in Section 5.</p>
+        <h3>Annex III — Authorised Sub-processor Categories</h3>
+        <p>The Customer authorises HelveX to engage Sub-processors in the categories listed below. The current list of specific Sub-processor identities, regions, and assigned scope is made available to authorised Customer representatives under MNDA via <strong>trust@helvex.ai</strong>.</p>
         <table class="hx-legal-table">
           <thead>
-            <tr><th>Category</th><th>Provider type</th><th>Region</th><th>Purpose</th></tr>
+            <tr>
+              <th>Category</th>
+              <th>Provider type</th>
+              <th>Region</th>
+              <th>Purpose</th>
+            </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Cloud infrastructure</td>
-              <td>Amazon Web Services (AWS)</td>
-              <td>Primary: eu-central-1 (Frankfurt). Optional on enterprise: us-east-1 (N. Virginia), ap-southeast-1 (Singapore).</td>
-              <td>Compute, storage, networking, key management, managed databases for the Platform.</td>
+              <td>Cloud infrastructure — primary</td>
+              <td>Amazon Web Services</td>
+              <td>eu-central-1 (Frankfurt) and us-east-1 (N. Virginia) as primary; ap-southeast-1 (Singapore) for Customers electing APAC processing.</td>
+              <td>Compute, storage, networking, key management, observability for the platform and the Hosted Services.</td>
             </tr>
             <tr>
-              <td>Cloud infrastructure</td>
-              <td>Google Cloud Platform (GCP)</td>
-              <td>Primary: europe-west6 (Zurich). Optional on enterprise: us-central1 (Iowa).</td>
-              <td>Compute, storage, BigQuery analytics, Cloud KMS for the Platform.</td>
+              <td>Cloud infrastructure — primary</td>
+              <td>Google Cloud Platform</td>
+              <td>europe-west6 (Zurich) and us-central1 (Iowa); additional regions on Customer election.</td>
+              <td>Compute, storage, networking, key management, observability for the platform and the Hosted Services.</td>
             </tr>
             <tr>
-              <td>Cloud infrastructure</td>
-              <td>Microsoft Azure (opt-in)</td>
-              <td>Customer-selected region in Switzerland or EU.</td>
-              <td>Enterprise deployments with strategic preference for Azure.</td>
+              <td>Cloud infrastructure — opt-in</td>
+              <td>Microsoft Azure</td>
+              <td>Switzerland North and other regions on enterprise opt-in.</td>
+              <td>Compute, storage, networking for enterprise Customers with sovereignty or regional-pinning requirements that require Azure.</td>
             </tr>
             <tr>
-              <td>Transactional email delivery</td>
-              <td>Single email-delivery provider</td>
-              <td>EU/US (per provider operations).</td>
-              <td>Account verification, password reset, security notifications.</td>
-            </tr>
-            <tr>
-              <td>Session telemetry</td>
-              <td>Single telemetry provider</td>
-              <td>EU.</td>
-              <td>Pseudonymised performance and usage telemetry, excluding Customer Content.</td>
-            </tr>
-            <tr>
-              <td>Error monitoring</td>
-              <td>Single error-monitoring provider</td>
-              <td>EU/US (per provider operations).</td>
-              <td>Application error reports, with Customer Content scrubbed at SDK level.</td>
+              <td>Foundation model providers</td>
+              <td>Third-party AI model providers</td>
+              <td>EU, US, and other regions per the provider; selectable via approved-providers-only mode on enterprise terms.</td>
+              <td>Generation of AI Output in response to Customer prompts where the prompt is routed to a third-party model. Specific provider identities under MNDA via trust@helvex.ai.</td>
             </tr>
             <tr>
               <td>Payment processing</td>
-              <td>Single PCI-DSS-compliant payment processor</td>
-              <td>EU/US (per provider operations).</td>
-              <td>Card and bank payments. HelveX never stores raw card numbers.</td>
+              <td>Stripe</td>
+              <td>Global, with regional payment-method routing.</td>
+              <td>Authorisation, capture, and settlement of card and bank payments; subscription billing management; tax calculation where applicable.</td>
+            </tr>
+            <tr>
+              <td>Transactional email</td>
+              <td>Transactional email provider</td>
+              <td>EU and US.</td>
+              <td>Delivery of authentication, billing, security, and support emails to Customer contacts. Specific provider identity under MNDA.</td>
+            </tr>
+            <tr>
+              <td>Error monitoring</td>
+              <td>Error-monitoring provider</td>
+              <td>EU and US.</td>
+              <td>Capture and aggregation of runtime error traces and exceptions for the Builder and the Hosted Services. Specific provider identity under MNDA.</td>
             </tr>
             <tr>
               <td>Customer support tooling</td>
-              <td>Single support-platform provider</td>
-              <td>EU.</td>
-              <td>Support ticketing where Customer chooses to share tickets.</td>
+              <td>Support-platform provider</td>
+              <td>EU and US.</td>
+              <td>Management of Customer support tickets, knowledge base, and Customer correspondence. Specific provider identity under MNDA.</td>
+            </tr>
+            <tr>
+              <td>First-party analytics</td>
+              <td>Analytics tooling</td>
+              <td>EU and US.</td>
+              <td>First-party measurement of product usage for service-improvement purposes (no third-party advertising, no cross-context behavioural advertising). Specific tooling identity under MNDA.</td>
             </tr>
           </tbody>
         </table>
+        <p>Specific Sub-processor identities are available to authorised Customer representatives under MNDA via <strong>trust@helvex.ai</strong>. HelveX maintains a Customer-facing list on the Trust Center for the disclosure-able subset.</p>
 
-        <h3>Annex IV &mdash; SCCs Reference</h3>
-        <p><strong>Applicable instrument.</strong> The Standard Contractual Clauses for the transfer of personal data to third countries pursuant to Regulation (EU) 2016/679, adopted by the European Commission as Commission Implementing Decision (EU) 2021/914 of 4 June 2021, available at the EUR-Lex official portal.</p>
-        <p><strong>Modules.</strong> Module Two (Controller to Processor) applies where the Controller is established in the EEA and HelveX, as Processor, processes Personal Data outside the EEA. Module Three (Processor to Sub-processor) applies where HelveX, as Processor, engages a Sub-processor located outside the EEA.</p>
-        <p><strong>Optional Clauses.</strong> Clause 7 (Docking clause) is included. Clause 11(a) (Option) is not selected; the parties rely on the basic Clause 11 redress mechanism. Clause 17 (Governing law): the law of Switzerland is selected to the extent permitted by the SCCs; failing that, the law of Ireland applies as a Member State of the European Union that allows for third-party beneficiary rights. Clause 18 (Choice of forum and jurisdiction): Zurich, Switzerland, with the courts of Ireland as alternative forum where Swiss courts cannot exercise jurisdiction.</p>
-        <p><strong>UK Addendum.</strong> For transfers of Personal Data from the United Kingdom, the parties adopt the International Data Transfer Addendum to the EU Commission Standard Contractual Clauses issued by the UK Information Commissioner's Office under Section 119A of the UK Data Protection Act 2018, as in force on the Effective Date.</p>
-        <p><strong>Swiss Addendum.</strong> For transfers of Personal Data originating in Switzerland under the Swiss FADP / nFADP, the parties adopt the Swiss Addendum as recognised by the Swiss FDPIC. References in the SCCs to GDPR are read as also references to the Swiss FADP / nFADP; references to the Supervisory Authority and to courts include the Swiss FDPIC and Swiss courts as appropriate.</p>
-        <p><strong>Annex I to the SCCs (Data exporter / Data importer).</strong> The Controller is the Data Exporter and HelveX (or its relevant affiliate) is the Data Importer. Categories of Data Subjects, types of Personal Data, frequency of transfer, nature and purpose of Processing, duration, and onward-transfer details are as set out in Annex I to this DPA.</p>
-        <p><strong>Annex II to the SCCs (TOMs).</strong> The technical and organisational measures applied by the Data Importer are as set out in Annex II to this DPA.</p>
-        <p><strong>Annex III to the SCCs (Sub-processors).</strong> The list of authorised Sub-processors is as set out in Annex III to this DPA.</p>
+        <h3>Annex IV — Standard Contractual Clauses Reference</h3>
+        <p>The following parameters apply to the SCCs and to the supplementary cross-border instruments incorporated into this DPA by reference under §12.</p>
+        <table class="hx-legal-table">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Instrument</td>
+              <td>Commission Implementing Decision (EU) 2021/914 of 4 June 2021 on standard contractual clauses for the transfer of personal data to third countries pursuant to Regulation (EU) 2016/679, as may be amended or replaced.</td>
+            </tr>
+            <tr>
+              <td>Applicable Modules</td>
+              <td>Module 2 (Controller to Processor) where HelveX is the data importer of Personal Data for which the Customer is the Controller. Module 3 (Processor to Sub-processor) where HelveX engages a Sub-processor that is a data importer of Personal Data for which the Customer is the Controller.</td>
+            </tr>
+            <tr>
+              <td>Clause 7 — Docking</td>
+              <td>Not used as standard; available where the Parties expressly agree in writing to add a further data exporter or importer.</td>
+            </tr>
+            <tr>
+              <td>Clause 9 — Use of Sub-processors</td>
+              <td>Option 2 (General written authorisation). The thirty (30)-day advance notice period and the right to object set out in §6 apply.</td>
+            </tr>
+            <tr>
+              <td>Clause 11 — Redress</td>
+              <td>The optional language permitting independent dispute resolution is not adopted; Data Subject redress through supervisory authorities and courts is preserved.</td>
+            </tr>
+            <tr>
+              <td>Clause 17 — Governing law</td>
+              <td>Swiss law where the Swiss Addendum applies; Irish law for SCCs governing transfers from the EEA otherwise; English law for SCCs governing transfers from the UK where supplemented by the UK IDTA.</td>
+            </tr>
+            <tr>
+              <td>Clause 18 — Choice of forum and jurisdiction</td>
+              <td>Courts of Switzerland (Zurich) where the Swiss Addendum applies; courts of Ireland for EEA transfers otherwise; courts of England and Wales for UK transfers; in each case without prejudice to Data Subjects' rights under Clause 18(c).</td>
+            </tr>
+            <tr>
+              <td>Annex I.A (Parties)</td>
+              <td>Customer as data exporter; HelveX AG as data importer for Module 2. For Module 3, HelveX AG as data exporter and the relevant Sub-processor as data importer.</td>
+            </tr>
+            <tr>
+              <td>Annex I.B (Description of transfer)</td>
+              <td>As set out in Annex I of this DPA.</td>
+            </tr>
+            <tr>
+              <td>Annex I.C (Competent supervisory authority)</td>
+              <td>The supervisory authority of the EEA Member State of the data exporter's establishment; for Switzerland, the Swiss FDPIC; for the UK, the ICO.</td>
+            </tr>
+            <tr>
+              <td>Annex II (TOMs)</td>
+              <td>As set out in Annex II of this DPA and as detailed at /security-page.</td>
+            </tr>
+            <tr>
+              <td>Annex III (Sub-processors)</td>
+              <td>As set out in Annex III of this DPA. The current list of specific Sub-processor identities is available under MNDA via trust@helvex.ai.</td>
+            </tr>
+            <tr>
+              <td>Swiss Addendum</td>
+              <td>The addendum published by the Swiss FDPIC dated 27 August 2021, as may be amended, is incorporated by reference for Restricted Transfers of Personal Data originating in Switzerland.</td>
+            </tr>
+            <tr>
+              <td>UK IDTA</td>
+              <td>The International Data Transfer Addendum to the EU Commission Standard Contractual Clauses published by the UK ICO and laid before Parliament on 2 February 2022, as may be amended, is incorporated by reference for Restricted Transfers of Personal Data originating in the United Kingdom.</td>
+            </tr>
+          </tbody>
+        </table>
       </section>
 
       <div class="hx-legal-footnote">
-        <p><strong>HelveX AG</strong> &middot; Zurich, Switzerland &middot; <strong>Contact:</strong> dpo@helvex.ai &middot; legal@helvex.ai</p>
+        <p><strong>HelveX AG</strong> &middot; Zurich, Switzerland &middot; <strong>DPO:</strong> dpo@helvex.ai &middot; <strong>Trust:</strong> trust@helvex.ai &middot; <strong>Legal:</strong> legal@helvex.ai</p>
         <p>This document supersedes all prior versions. For prior versions, contact legal@helvex.ai.</p>
       </div>
 
