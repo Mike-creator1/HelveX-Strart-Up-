@@ -2613,8 +2613,6 @@ body {
 
 /* ════════════════════════════════════════════════════════════
    v13 — pull everything to the very top
-   Outer padding-top and inner gap go to near-zero so the logo
-   touches the top edge and the content stacks immediately.
    ════════════════════════════════════════════════════════════ */
 @media (min-width: 921px) {
   .auth-shell.split .auth-side {
@@ -2625,6 +2623,34 @@ body {
   }
   .auth-shell.split .side-brand {
     margin-bottom: clamp(2px, 0.4vh, 6px) !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   v14 — absolute-top anchor + tighter logo footprint
+   Zeroes the remaining top spacing AND shrinks the logo so
+   the content stack moves up significantly. The logo stays
+   visible but with less vertical footprint.
+   ════════════════════════════════════════════════════════════ */
+@media (min-width: 921px) {
+  .auth-shell.split .auth-side {
+    padding-top: 0 !important;
+  }
+  .auth-shell.split .side-brand {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .auth-shell.split .side-brand img {
+    height: clamp(56px, 6.5vh, 76px) !important;
+    margin: 0 !important;
+    display: block;
+  }
+  .auth-shell.split .side-content {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+  .auth-shell.split .side-eyebrow {
+    margin-top: 0 !important;
   }
 }
 
