@@ -2569,6 +2569,37 @@ body {
 }
 
 /* ════════════════════════════════════════════════════════════
+   v11 — push logo to the top-left corner + lift the content
+   The user wants the logo anchored tightly in the top-left and
+   the editorial block to sit immediately under it (no big gap).
+   Tightens the outer padding and drops the inner gap to a hair.
+   ════════════════════════════════════════════════════════════ */
+@media (min-width: 921px) {
+  /* Outer padding — pull tighter to the top-left corner */
+  .auth-shell.split .auth-side {
+    padding: clamp(16px, 2.4vh, 32px) clamp(28px, 3.2vw, 56px) clamp(20px, 2.6vh, 36px) !important;
+    align-items: stretch !important;
+  }
+
+  /* Brand — left-anchored, no margin under it */
+  .auth-shell.split .side-brand {
+    align-self: flex-start !important;
+    margin: 0 !important;
+  }
+
+  /* Content — sits immediately below the logo, still centered horizontally */
+  .auth-shell.split .side-content {
+    padding: clamp(12px, 1.6vh, 24px) 0 0 !important;
+    align-self: center;
+  }
+
+  /* Footer — span full width, normal flow */
+  .auth-shell.split .side-foot {
+    align-self: stretch !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
    v8 — scale up the right-panel auth card
    Bigger surface + larger inputs + bigger button + bumped
    typography. Stays inside 100vh.
