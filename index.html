@@ -800,9 +800,9 @@
     }
     .luxe-bar-val.is-soft { color: rgba(236,236,238,0.5); font-weight: 500; }
 
-    /* ─── Spec rows (no divider — clean flow into callout) ───── */
+    /* ─── Spec rows (last element of the card body) ──────────── */
     .luxe-card-specs {
-      margin: 0 0 16px;
+      margin: 0;
       display: flex; flex-direction: column; gap: 9px;
     }
     .luxe-card-specs > div { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
@@ -822,27 +822,6 @@
       margin: 0;
     }
     .luxe-card-specs dd.is-strong { color: #FAFAFA; font-weight: 700; }
-
-    /* ─── Callout strip (final element, no margin-bottom) ────── */
-    .luxe-card-callout {
-      display: flex; align-items: center; justify-content: space-between; gap: 10px;
-      padding: 11px 14px; border-radius: 12px;
-      background: linear-gradient(120deg, var(--accent-soft), transparent 70%);
-      border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
-      margin-top: auto;
-    }
-    .luxe-callout-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 9.5px; letter-spacing: 0.20em;
-      text-transform: uppercase; font-weight: 700;
-      color: var(--accent-text);
-    }
-    .luxe-callout-val {
-      font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 12px; font-weight: 700;
-      color: var(--accent-text);
-      letter-spacing: 0.02em;
-    }
 
     /* ─── Prometheus (graphite) — distinct surface treatment ───
        Slightly darker, near-black base, cool silver hairline rim,
@@ -1010,11 +989,6 @@
               <div><dt>Caching</dt><dd>Prompt caching</dd></div>
               <div><dt>Best for</dt><dd>Real-time · batch</dd></div>
             </dl>
-
-            <div class="luxe-card-callout">
-              <span class="luxe-callout-label">Lowest cost in family</span>
-              <span class="luxe-callout-val">$ tier</span>
-            </div>
           </div>
         </article>
 
@@ -1051,11 +1025,6 @@
               <div><dt>Tool use</dt><dd>Parallel · structured</dd></div>
               <div><dt>Best for</dt><dd>Most production work</dd></div>
             </dl>
-
-            <div class="luxe-card-callout">
-              <span class="luxe-callout-label">Default workhorse</span>
-              <span class="luxe-callout-val">recommended</span>
-            </div>
           </div>
         </article>
 
@@ -1092,11 +1061,6 @@
               <div><dt>Web search</dt><dd>Native tool</dd></div>
               <div><dt>Best for</dt><dd>Agents · analysis · code</dd></div>
             </dl>
-
-            <div class="luxe-card-callout">
-              <span class="luxe-callout-label">Strongest reasoning</span>
-              <span class="luxe-callout-val">in family</span>
-            </div>
           </div>
         </article>
       </div>
