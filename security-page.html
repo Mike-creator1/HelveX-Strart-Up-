@@ -4,42 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
   <title>Security — HelveX</title>
-  <meta name="description" content="How HelveX protects your work — encryption, access control, network, audit logging, compliance, and vulnerability management." />
+  <meta name="description" content="The architecture, controls, and operational practices HelveX applies across the platform, the three models, the workspace, and managed engagements." />
   <meta property="og:title" content="Security — HelveX" />
-  <meta property="og:description" content="How HelveX protects your work — encryption, access control, network, audit logging, compliance, and vulnerability management." />
+  <meta property="og:description" content="The architecture, controls, and operational practices HelveX applies across the platform, the three models, the workspace, and managed engagements." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="HelveX" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="theme-color" content="#FFFFFF" />
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            ink: '#0A0A0A', 'ink-soft': '#171717', 'ink-mid': '#525252', 'ink-light': '#A3A3A3', 'ink-faint': '#D4D4D4',
-            line: '#E5E5E5', 'line-soft': '#F0EFEC', cream: '#FAFAF7', beige: '#F4EFE6', 'beige-warm': '#EDE5D6',
-            red: '#DC2626', 'red-deep': '#991B1B', 'red-soft': '#FEE2E2',
-            yellow: '#FCD34D', 'yellow-deep': '#F59E0B', 'yellow-soft': '#FEF3C7',
-          },
-          fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'], serif: ['"Instrument Serif"', 'Georgia', 'serif'] },
-        },
-      },
-    };
+    tailwind.config = { theme: { extend: { colors: { ink: '#0A0A0A', 'ink-soft': '#171717', 'ink-mid': '#525252', 'ink-light': '#A3A3A3', 'ink-faint': '#D4D4D4', line: '#E5E5E5', 'line-soft': '#F0EFEC', cream: '#FAFAF7', beige: '#F4EFE6', red: '#DC2626', 'red-deep': '#991B1B', 'red-soft': '#FEE2E2', yellow: '#FCD34D', 'yellow-deep': '#F59E0B', 'yellow-soft': '#FEF3C7' }, fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'], serif: ['"Instrument Serif"', 'Georgia', 'serif'] } } } };
   </script>
-
   <link rel="stylesheet" href="/helvex.css" />
-
 </head>
-<body class="bg-white text-ink antialiased">
+<body class="hx-legal-page antialiased">
 
-  <!-- Premium .hx-header styles live in /helvex.css so every page that loads the shared stylesheet gets them automatically. -->
   <header class="hx-header">
     <nav class="max-w-[1520px] mx-auto pl-4 pr-5 sm:pl-6 sm:pr-8 flex items-center justify-between gap-4">
       <div class="flex items-center gap-5 lg:gap-8">
@@ -95,99 +78,276 @@
     </nav>
   </header>
 
-  <!-- ════════ MOBILE MENU DRAWER ════════ -->
-  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Site navigation">
-    <div class="mobile-menu-backdrop" data-close></div>
-    <div class="mobile-menu-panel">
-      <div class="mobile-menu-header">
-        <a href="/" class="brand-mark text-xl flex items-center gap-2">
-          <span class="brand-logo"><img src="/helvex-logo.png" alt="HelveX" class="h-16 w-auto" /></span>
-        </a>
-        <button type="button" class="mobile-menu-close" data-close aria-label="Close menu">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6l-12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
+  <div class="hx-legal-shell">
+
+    <aside class="hx-legal-toc" aria-label="On this page">
+      <p class="hx-legal-toc-mark">On this page</p>
+      <ul class="hx-legal-toc-list">
+        <li><a href="#s1">1. Security framework</a></li>
+        <li><a href="#s2">2. Encryption</a></li>
+        <li><a href="#s3">3. Access controls</a></li>
+        <li><a href="#s4">4. Network security</a></li>
+        <li><a href="#s5">5. Infrastructure security</a></li>
+        <li><a href="#s6">6. Application security</a></li>
+        <li><a href="#s7">7. Operational security</a></li>
+        <li><a href="#s8">8. Vulnerability management</a></li>
+        <li><a href="#s9">9. Personnel security</a></li>
+        <li><a href="#s10">10. AI-specific security</a></li>
+        <li><a href="#s11">11. Incident response</a></li>
+        <li><a href="#s12">12. Business continuity</a></li>
+        <li><a href="#s13">13. Shared responsibility model</a></li>
+        <li><a href="#s14">14. Reporting a vulnerability</a></li>
+        <li><a href="#s15">15. Audits and reports</a></li>
+      </ul>
+    </aside>
+
+    <main class="hx-legal-main">
+
+      <div class="hx-legal-hero">
+        <p class="hx-legal-eyebrow"><span class="hx-legal-eyebrow-dot"></span>Legal &middot; Security</p>
+        <h1 class="hx-legal-title">Security</h1>
+        <p class="hx-legal-lede">Security is foundational, not optional. This page describes the architecture, controls, and operational practices we apply across the HelveX platform, the three models, the workspace, and managed engagements.</p>
+        <div class="hx-legal-meta">
+          <span class="hx-legal-meta-item"><span class="hx-legal-meta-key">Effective</span>April 2026</span>
+          <span class="hx-legal-meta-item"><span class="hx-legal-meta-key">Last updated</span>April 2026</span>
+          <span class="hx-legal-meta-item"><span class="hx-legal-meta-key">Version</span>1.0</span>
+          <span class="hx-legal-meta-item"><span class="hx-legal-meta-key">Governing law</span>Switzerland</span>
+        </div>
       </div>
-      <nav class="mobile-menu-nav" aria-label="Main">
-        <a href="/" class="mobile-menu-link">Home</a>
-        <details class="mobile-menu-services">
-          <summary class="mobile-menu-link" style="list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-            <span>Services</span>
-            <svg class="w-4 h-4 text-ink-light transition-transform" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </summary>
-          <div class="pl-4 mt-1 mb-2 space-y-0.5 border-l border-line">
-            <a href="/ai-automation.html" class="mobile-menu-link">AI &amp; Automation</a>
-            <a href="/business-consulting.html" class="mobile-menu-link">Business Consulting</a>
-            <a href="/digital-services.html" class="mobile-menu-link">Digital Services</a>
-            <a href="/growth-marketing.html" class="mobile-menu-link">Growth &amp; Marketing</a>
-            <a href="/enterprise.html" class="mobile-menu-link">Enterprise</a>
-          </div>
-        </details>
-        <a href="/models" class="mobile-menu-link">Models</a>
-        <a href="/workspace" class="mobile-menu-link">Workspace</a>
-        <a href="/research" class="mobile-menu-link">Research</a>
-        <a href="/customer-stories" class="mobile-menu-link">Customers</a>
-        <a href="/resources" class="mobile-menu-link">Resources</a>
-      </nav>
-      <div class="mobile-menu-cta">
-        <a href="/signup.html" class="primary">
-          Try HeliX
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
-        <a href="/signup.html" class="secondary">Sign in</a>
+
+      <section class="hx-legal-section" id="s1">
+        <span class="hx-legal-section-num">&sect; 01</span>
+        <h2>Security framework</h2>
+        <p>HelveX's security programme is governed by a single, documented security framework that aligns to the AICPA Trust Services Criteria (the basis for our SOC 2 Type II attestation), the ISO/IEC 27001:2022 information-security management system standard (against which HelveX is certified), and the NIST Cybersecurity Framework version 2.0 as a structural reference. We treat security as a continuous discipline, not a quarterly project, and we measure ourselves against the standards above on a continuous basis.</p>
+        <h3>Guiding principles</h3>
+        <p>Five principles guide every security decision at HelveX. <strong>Defense in depth</strong>: no single control is the perimeter; we layer controls so that the failure of any one is contained by those around it. <strong>Least privilege</strong>: every identity, human or service, receives only the permissions strictly required for its function, and elevation is exceptional and time-bound. <strong>Encryption everywhere</strong>: Customer Content is encrypted in transit and at rest, with keys protected in hardware. <strong>Replayable audit</strong>: every consequential action is logged with actor, timestamp, and outcome; logs are immutable from the application tier and exportable to customer SIEM. <strong>Your-cloud option</strong>: customers whose risk tolerance requires that Customer Content never leave their own cloud tenancy can deploy HelveX inside their own AWS or GCP environment under a managed-services arrangement.</p>
+        <h3>Programme governance</h3>
+        <p>The security programme is owned by a Chief Information Security Officer reporting to the Chief Executive Officer, with an independent reporting line to the Board on material security matters. A Security Steering Committee, comprising leadership from engineering, operations, legal, and product, meets monthly to review the risk register, incident summaries, programme-level metrics, and upcoming changes that may affect the security posture. Quarterly, the committee reviews the programme against the prior quarter's commitments and against industry threat intelligence.</p>
+        <h3>Certifications</h3>
+        <p>HelveX maintains an annual SOC 2 Type II examination performed by an independent firm of certified public accountants against the AICPA Trust Services Criteria across the Security, Availability, and Confidentiality categories. HelveX is certified to ISO/IEC 27001:2022 covering the in-scope services as set out in the Trust Center. The corresponding artifacts are available to customers and prospective customers under MNDA through <strong>trust@helvex.ai</strong>.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s2">
+        <span class="hx-legal-section-num">&sect; 02</span>
+        <h2>Encryption</h2>
+        <p>HelveX applies modern, industry-standard encryption across all Customer Content and all administrative data. Encryption is not optional and cannot be disabled by Customers for performance or convenience reasons.</p>
+        <h3>Encryption at rest</h3>
+        <p>Customer Content is encrypted at rest using AES-256 in Galois/Counter Mode (AES-256-GCM) at the storage layer for object storage, database volumes, and snapshot/backup volumes. Database storage additionally applies Transparent Data Encryption (TDE) so that disk-level access does not yield plaintext data without the corresponding key. Search and index structures derived from Customer Content are encrypted with the same algorithms as the underlying data.</p>
+        <h3>Encryption in transit</h3>
+        <p>All network traffic terminating at HelveX endpoints is encrypted using TLS 1.3 by default; TLS 1.2 is supported as a fallback for legacy clients and is deprecated. We support modern cipher suites only; null ciphers, RC4, MD5-based MACs, and other deprecated cryptographic primitives are not accepted. HSTS is enforced on all production domains.</p>
+        <h3>Certificate pinning and mTLS</h3>
+        <p>Internal service-to-service communications use mutual TLS with certificate pinning, so that a compromise of the public PKI does not yield an avenue into the internal service mesh. Workload identities are issued through a SPIFFE-compliant identity authority and rotated frequently.</p>
+        <h3>Key management</h3>
+        <p>Encryption keys are managed in cloud-provider hardware security modules (AWS KMS with FIPS 140-2 Level 3 validated HSMs; GCP Cloud KMS with comparable assurances). Master keys are never exported in plaintext outside the HSM boundary. Customer-managed encryption keys (CMK) are available for enterprise tenants who require cryptographic separation from HelveX-managed key material; in that configuration, if the Customer revokes HelveX's key-access principal, HelveX cannot decrypt the Customer's data.</p>
+        <h3>Key rotation</h3>
+        <p>Encryption keys are rotated on a defined schedule (90 days for data-encryption keys; longer for key-encryption keys, but with limits well below cryptographic best-practice thresholds). Incident-driven rotation is performed without delay when a key may have been compromised. The rotation lifecycle is one of the controls evaluated annually under SOC 2 Type II.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s3">
+        <span class="hx-legal-section-num">&sect; 03</span>
+        <h2>Access controls</h2>
+        <p>Access to HelveX systems is governed by a single, unified identity-and-authorisation programme that applies equally to HelveX staff, contractors, integration partners, and Customer administrators acting on their own tenants.</p>
+        <h3>Role-based access control</h3>
+        <p>Within the HelveX workspace, Customer administrators assign Users to roles. Roles encode the resources a User may access and the actions they may perform. HelveX ships a set of standard roles (Owner, Admin, Member, Auditor, Read-Only) sufficient for most organisations and supports custom roles for enterprise deployments. Roles can be scoped to specific Projects, Agents, Knowledge bases, or Spaces, permitting administrators to enforce least privilege within a tenant.</p>
+        <h3>Single sign-on</h3>
+        <p>The platform supports SAML 2.0 and OpenID Connect for federated authentication. Enterprise tenants can require SSO for all members, disabling local password authentication entirely. Just-in-time provisioning creates User accounts on first SSO login according to attribute mappings the administrator defines. SCIM 2.0 integration is available for tenants requiring directory-driven lifecycle management (provisioning on hire, attribute updates on role change, de-provisioning on departure).</p>
+        <h3>Multi-factor authentication</h3>
+        <p>Multi-factor authentication is mandatory for all HelveX staff accessing internal systems. For Customer-facing tenants, MFA is enabled by default and can be enforced for all members through tenant-level policy. Supported factors include TOTP authenticator apps, WebAuthn / FIDO2 hardware tokens, and platform authenticators (Touch ID, Face ID, Windows Hello). SMS-based MFA is supported only as a fallback and is not recommended.</p>
+        <h3>Just-in-time production access</h3>
+        <p>HelveX staff do not have standing access to production systems handling Customer Content. Access is granted through a just-in-time elevation workflow: the engineer requests time-bound access citing a specific operational need (an open incident, a customer-authorised support request, a scheduled change); the request is reviewed by a peer or manager; access is granted for a bounded window (typically four hours); and the elevation is logged with full context.</p>
+        <h3>Access reviews</h3>
+        <p>Customer administrators have visibility into all Users, roles, and assignments within their tenant through the workspace and through audit-log export. HelveX conducts internal quarterly access reviews covering all staff and contractor entitlements; reviewers are independent of the access requester and must positively reaffirm each entitlement or the entitlement is automatically revoked at the end of the review window. Access reviews are one of the controls evaluated annually under SOC 2 Type II.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s4">
+        <span class="hx-legal-section-num">&sect; 04</span>
+        <h2>Network security</h2>
+        <p>HelveX operates a zero-trust network architecture: no service trusts another service merely because they are on the same network segment. Every request, internal or external, is authenticated and authorised on its merits.</p>
+        <h3>Segmentation</h3>
+        <p>The production environment is segmented into multiple security zones (front-end, application, data, key-management, control-plane). Movement between zones is governed by explicit policy and inspected at the segment boundary. Compromise of one zone does not implicitly grant access to others.</p>
+        <h3>Web application firewall</h3>
+        <p>Public-facing surfaces are protected by a managed web application firewall (WAF) that filters traffic for well-known attack patterns (SQL injection, cross-site scripting, path traversal, command injection), enforces rate limits, and provides protection against high-volume application-layer attacks. The WAF rule set is reviewed quarterly and updated continuously in response to threat intelligence.</p>
+        <h3>DDoS protection</h3>
+        <p>DDoS protection is layered: cloud-provider-native protections at the edge of the network absorb volumetric attacks; application-layer protections at the WAF and load-balancer tier absorb application-layer attacks. HelveX has playbooks for both opportunistic and targeted DDoS scenarios; the playbooks are exercised in quarterly tabletop drills.</p>
+        <h3>Private connectivity</h3>
+        <p>For enterprise Customers requiring private connectivity between their VPC and HelveX, we support AWS PrivateLink and GCP Private Service Connect. In private-connectivity configurations, traffic between Customer and HelveX traverses cloud-provider private networks and does not transit the public internet.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s5">
+        <span class="hx-legal-section-num">&sect; 05</span>
+        <h2>Infrastructure security</h2>
+        <p>HelveX operates on primary cloud-infrastructure providers (AWS and GCP) chosen for their breadth of certifications, mature security tooling, and proven operational track record. Azure is available as an opt-in for enterprise Customers with strategic preference for that platform.</p>
+        <h3>Hardened base images</h3>
+        <p>All compute workloads run on hardened base images derived from a single, centrally maintained baseline. Hardening includes removal of unnecessary packages and services, configuration alignment to CIS benchmarks where applicable, mandatory access controls, and the installation of an endpoint detection and response (EDR) agent. New base images are published on a defined cadence (at minimum monthly) and as needed in response to critical vulnerabilities.</p>
+        <h3>Automated patching</h3>
+        <p>Operating systems and runtime components are patched on a defined schedule with the following maximum lag: critical-severity CVEs are patched within 24 hours of a vendor patch becoming available; high-severity within seven days; medium-severity within thirty days; low-severity in the next regular cycle. The patching pipeline is automated, with manual approval only for changes affecting tenants with custom service-level commitments.</p>
+        <h3>Immutable infrastructure</h3>
+        <p>Production infrastructure is immutable: changes are applied by rebuilding rather than modifying in place. This eliminates configuration drift, makes rollback trivial, and ensures that running infrastructure matches the version-controlled definition. The immutable-infrastructure pattern is supported by infrastructure-as-code tooling, with all changes peer-reviewed and policy-checked before apply.</p>
+        <h3>Configuration management</h3>
+        <p>All production configuration is version-controlled, peer-reviewed, and policy-checked. Sensitive configuration (secrets, credentials, signing keys) is stored in a dedicated secrets manager with audit logging, automatic rotation, and access controls separate from the general configuration store.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s6">
+        <span class="hx-legal-section-num">&sect; 06</span>
+        <h2>Application security</h2>
+        <p>HelveX develops the platform under a secure software-development lifecycle (Secure SDLC) that embeds security review at every stage from design through deployment.</p>
+        <h3>Mandatory code review</h3>
+        <p>Every change to the platform is reviewed by at least one engineer other than the author before merge. Sensitive changes (authentication, authorisation, cryptography, payment processing) require review by an engineer with the relevant subject-matter expertise. Code review serves both correctness and security purposes; review checklists include security-relevant items by default.</p>
+        <h3>Dependency scanning</h3>
+        <p>Software composition analysis (SCA) runs on every code change and on a continuous schedule against deployed artifacts, identifying known vulnerabilities in third-party dependencies. The pipeline supports automated PRs to upgrade dependencies to non-vulnerable versions and, for cases where automated upgrade is not feasible, alerts the maintainer.</p>
+        <h3>Static analysis (SAST)</h3>
+        <p>Static application security testing runs on every pull request before merge. Findings are triaged according to severity; critical and high-severity findings block merge until resolved or accepted with documented justification. The SAST tooling is configured to detect language-specific anti-patterns alongside generic CWE categories.</p>
+        <h3>Dynamic analysis (DAST)</h3>
+        <p>Dynamic application security testing runs nightly against staging environments. DAST exercises the running application from the perspective of an authenticated and unauthenticated attacker and reports findings into the same vulnerability-management pipeline as SAST and SCA.</p>
+        <h3>Threat modelling</h3>
+        <p>Architecture-level changes (new services, changes to trust boundaries, changes to authentication or authorisation, introduction of new data flows) require a threat-modelling exercise before implementation. The output of the threat-modelling exercise is captured in design documentation and used to inform subsequent code review and testing.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s7">
+        <span class="hx-legal-section-num">&sect; 07</span>
+        <h2>Operational security</h2>
+        <p>Operating a security programme requires continuous discipline. This section describes the operational practices that turn the policies above into reality day after day.</p>
+        <h3>Centralised logging</h3>
+        <p>All security-relevant logs are centralised in a dedicated logging environment with read-only retention semantics. Logs from the platform application tier, the underlying infrastructure, the identity provider, the WAF, the EDR, and the cloud-provider audit logs are correlated in a single SIEM. The SIEM is monitored 24/7 by HelveX's security operations function.</p>
+        <h3>24/7 monitoring</h3>
+        <p>The security operations function is staffed 24/7 with on-call coverage by qualified engineers. Detection rules are tuned continuously to balance alert fidelity against detection coverage. Suspected security events are triaged within minutes of detection; confirmed events follow the incident-response process described in Section 11.</p>
+        <h3>Immutable audit trail</h3>
+        <p>Audit logs are append-only from the perspective of the application tier and are protected by tamper-evident integrity checks. Logs are replicated to a write-once-read-many store and to a geographically separate region within the same legal jurisdiction. Log retention defaults to 13 months and is configurable upward for enterprise Customers.</p>
+        <h3>Change management</h3>
+        <p>Production changes follow a documented change-management process: every change is captured in a ticket, peer-reviewed, automatically tested, and deployed through a controlled pipeline. Emergency changes (urgent fixes that must bypass the normal cadence) follow an abbreviated process with mandatory after-action review.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s8">
+        <span class="hx-legal-section-num">&sect; 08</span>
+        <h2>Vulnerability management</h2>
+        <p>HelveX operates a continuous vulnerability-management programme covering the platform, the workspace, the corporate environment, and the third-party software supply chain.</p>
+        <h3>Internal scanning</h3>
+        <p>Software composition analysis runs on every code change and continuously against deployed artifacts. Container image scanning runs on every image build and continuously against deployed images. Infrastructure-as-code scanning runs on every change to platform configuration. Web-application scanning runs nightly against staging. Findings are routed into a single vulnerability-management pipeline with severity-based prioritisation.</p>
+        <h3>Third-party penetration testing</h3>
+        <p>HelveX engages an independent specialist firm to conduct a full-scope penetration test of the platform annually. The scope includes the public web surface, the authenticated workspace, the model inference API, and the underlying control plane. The annual test is supplemented by targeted assessments commissioned for major releases or architectural changes. A summary of the most recent annual penetration test is available to Customers under MNDA from <strong>trust@helvex.ai</strong>.</p>
+        <h3>Coordinated disclosure</h3>
+        <p>HelveX operates a coordinated disclosure programme for external security researchers. Reports may be submitted to <strong>security@helvex.ai</strong>. We acknowledge substantive reports within five business days, agree on a coordinated disclosure timeline of up to 90 days, and credit researchers in our security advisory when they request acknowledgment. We extend safe-harbour treatment to good-faith research conducted within the scope of our disclosure policy.</p>
+        <h3>Remediation SLAs</h3>
+        <p>Confirmed vulnerabilities are remediated according to the following service-level commitments measured from confirmation: <strong>Critical: 24 hours</strong>; <strong>High: 7 days</strong>; <strong>Medium: 30 days</strong>; <strong>Low: next regular cycle</strong>. Where a remediation cannot be completed within the SLA, the Chief Information Security Officer approves a documented exception with a compensating control and a revised target date.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s9">
+        <span class="hx-legal-section-num">&sect; 09</span>
+        <h2>Personnel security</h2>
+        <p>People are part of every security model. HelveX's personnel security practices are designed to ensure that those who staff the platform are appropriately vetted, trained, and supervised.</p>
+        <h3>Pre-employment screening</h3>
+        <p>Where lawful in the candidate's jurisdiction, HelveX conducts pre-employment background checks proportionate to the role. Background checks for staff with production access include verification of identity, education and employment history, and a check of criminal records to the extent permitted. Findings are reviewed in accordance with the principle of relevance and proportionality.</p>
+        <h3>Confidentiality agreements</h3>
+        <p>All staff and contractors with access to HelveX systems or Customer Content are bound by written confidentiality agreements. Confidentiality obligations survive termination of the employment or contractor relationship.</p>
+        <h3>Security training</h3>
+        <p>All staff complete mandatory security training as part of onboarding within their first thirty days. Training is refreshed annually and includes additional role-specific modules for engineering, customer-facing, and finance roles. Training completion is tracked and is one of the controls evaluated annually under SOC 2 Type II.</p>
+        <h3>Separation</h3>
+        <p>On separation (voluntary or involuntary), staff access is revoked immediately, hardware is returned, and post-separation obligations (confidentiality, non-solicitation as applicable) are reaffirmed. The lifecycle is tracked in the human-resources information system and verified against access-control records on a continuous basis.</p>
+        <h3>Least privilege</h3>
+        <p>Internal access for staff follows the same principle of least privilege applied to Customer Users: staff receive only the access strictly required for their function, and elevation to broader access is exceptional, time-bound, and logged.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s10">
+        <span class="hx-legal-section-num">&sect; 10</span>
+        <h2>AI-specific security</h2>
+        <p>HelveX develops and operates large language models, and the security programme reflects the AI-specific threats that come with that. This section describes the controls we have built to address those threats.</p>
+        <h3>Prompt-injection defences</h3>
+        <p>Prompt injection is the dominant class of practical AI-security failures: an attacker who can place untrusted content into a model's context window may be able to redirect the model's behaviour. HelveX layers defences at multiple points in the inference path: input sanitisation at the API surface; context isolation between system prompts, user inputs, and tool outputs; output classification to detect and flag suspected injection-driven outputs; and rate limiting and behavioural anomaly detection on agent workloads. Customers building agentic systems on Prometheus receive developer-facing guidance and tooling to mitigate prompt injection in their own application layer.</p>
+        <h3>Output filtering</h3>
+        <p>Outputs are classified at inference time for the presence of harmful content categories (illegal content, content endangering minors, weapons-of-mass-destruction guidance, targeted harassment, intimate imagery without consent, and other categories defined in the Acceptable Use Policy). Classifications are used to enforce safety policies, to surface flags to Customer administrators, and as input to abuse-monitoring systems. We additionally apply PII-detection classifiers to Outputs where the Customer has indicated, through tenant configuration, that PII should be flagged or redacted before return.</p>
+        <h3>Rate limiting and abuse monitoring</h3>
+        <p>Rate limits apply at multiple levels: per-API-key, per-User, per-tenant, and globally. Abuse-monitoring systems detect anomalous usage patterns (sudden volume changes, unusual content distribution, generation of large volumes of similar suspect Outputs). Abuse-monitoring is conducted at the tenant level on aggregated, pseudonymised signals; HelveX does not read Customer Content for any purpose other than the specific operational needs of providing the Services.</p>
+        <h3>Model deprecation security review</h3>
+        <p>Each model deprecation is preceded by a security review of the successor model, ensuring that the successor's safety classifiers, abuse-monitoring signals, and defence-in-depth measures are at least as strong as the deprecated model's. Customers receive at least 180 days' advance notice of model deprecations, as described in the Trust Center.</p>
+        <h3>Supply-chain integrity</h3>
+        <p>Model weights are produced in HelveX's own training infrastructure (or, for selected fine-tunes, in audited training infrastructure operated by trusted partners). Weights are signed at production time; the inference path verifies the signature before loading weights into a running model. Provenance is maintained from training input through deployed inference, supporting both security investigation and AI-governance disclosures.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s11">
+        <span class="hx-legal-section-num">&sect; 11</span>
+        <h2>Incident response</h2>
+        <p>HelveX's incident-response programme is described in detail in the Trust Center, Section 10. This section summarises the operational mechanics most relevant to the Customer.</p>
+        <h3>Detection sources</h3>
+        <p>Detection sources include automated monitoring of platform health and security telemetry, automated alerts on anomalous authentication and data-access patterns, third-party threat intelligence, reports from HelveX engineers, and reports from Customers. Each detection source feeds a single incident-management system.</p>
+        <h3>Classification</h3>
+        <p>Incidents are classified by severity (S1 critical, S2 high, S3 medium, S4 low) based on a documented decision matrix considering affected systems, number of tenants impacted, type and volume of Customer Content potentially involved, and regulatory implications. Classification is reassessed continuously as the incident evolves.</p>
+        <h3>Escalation</h3>
+        <p>S1 and S2 incidents are escalated within minutes to the on-call incident commander, who assembles a response team and engages legal, communications, and executive sponsors as appropriate. S3 and S4 incidents are managed by the security operations function with periodic escalation reviews.</p>
+        <h3>Customer notification</h3>
+        <p>For incidents that constitute a Personal Data Breach affecting Customer Content (as defined under GDPR Article 4(12)), HelveX notifies the affected Customer's designated contacts <strong>without undue delay and in any event within 72 hours of confirmation</strong>, consistent with GDPR Article 33. For high-severity incidents (S1) regardless of breach status, our internal policy is to provide first notification within four hours of confirmation.</p>
+        <div class="hx-legal-callout">
+          <span class="hx-legal-callout-mark">Commitment</span>
+          <p>HelveX will notify Customers of confirmed Personal Data Breaches affecting their Customer Content <strong>within 72 hours</strong> of confirmation, with intermediate updates as the investigation progresses.</p>
+        </div>
+        <h3>Forensics and disclosure</h3>
+        <p>For S1 and S2 incidents, HelveX preserves forensic evidence (logs, memory snapshots, file-system state) for the duration of the investigation and produces a written post-mortem covering timeline, root cause, contributing factors, and remediation actions. Summaries of S1 and S2 post-mortems are available to affected Customers on request through their account team.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s12">
+        <span class="hx-legal-section-num">&sect; 12</span>
+        <h2>Business continuity and disaster recovery</h2>
+        <p>HelveX's business-continuity and disaster-recovery programme is engineered to keep the platform running through individual component failures, cloud-zone failures, and regional failures, and to restore service rapidly in the unlikely event of a catastrophic loss.</p>
+        <h3>Targets</h3>
+        <p>HelveX commits to the following targets at the workspace control-plane level: <strong>Recovery Point Objective (RPO) &le; 1 hour</strong>, meaning that the maximum loss of in-flight state in a recovery is bounded to the most recent one-hour window; <strong>Recovery Time Objective (RTO) &le; 4 hours</strong>, meaning that the workspace control plane will be restored to operational status within four hours of a declared disaster.</p>
+        <h3>Backup strategy</h3>
+        <p>Customer Content datastores are backed up continuously via point-in-time recovery (PITR) in the underlying cloud-provider managed services, with backups encrypted using customer-isolated keys and replicated to a geographically distinct region within the same legal jurisdiction. Backup integrity is verified through automated restore tests on a documented cadence; restoration to a verified-good state is exercised quarterly.</p>
+        <h3>Multi-region failover</h3>
+        <p>The platform control plane operates active-active across multiple availability zones within each region, providing automatic failover at the zone level. For region-level failures, the control plane is deployed in a warm-standby configuration in a secondary region within the same legal jurisdiction. Failover to the secondary region is a manual decision following a documented runbook; the runbook is exercised in quarterly tabletop drills and in annual live-failover tests.</p>
+        <h3>Tabletop and live exercises</h3>
+        <p>HelveX conducts quarterly tabletop exercises covering business-continuity scenarios (regional outage, key-management failure, supply-chain incident, large-scale customer-impacting incident) and annual live-failover exercises in non-production environments. Lessons learned are integrated into runbooks and operational tooling.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s13">
+        <span class="hx-legal-section-num">&sect; 13</span>
+        <h2>Shared responsibility model</h2>
+        <p>Cloud and AI platforms operate under a shared-responsibility model. Security is a joint product of the platform provider's controls and the Customer's controls. This section makes the boundary explicit.</p>
+        <h3>What HelveX secures</h3>
+        <p>HelveX is responsible for the security of the platform: the physical security of the underlying cloud-provider infrastructure (delegated to AWS, GCP, and their certified facilities); the operational security of the platform control plane, including patching, configuration management, vulnerability remediation, and identity-system hardening; the security of the model inference path, including model-weight provenance, supply-chain integrity, and inference-time abuse monitoring; the encryption of Customer Content at rest and in transit; the maintenance of certifications and audit programmes; and the continuous monitoring and incident response of the platform itself.</p>
+        <h3>What the Customer secures</h3>
+        <p>The Customer is responsible for the security in the platform: the choice of which content is uploaded to the platform; the configuration of access controls, including role assignments, SSO enforcement, MFA enforcement, and audit-review cadence within the tenant; the security of the Customer's own end users' credentials and devices; the policies governing the use of HelveX Outputs in the Customer's own products and decision processes; the appropriate disclosures the Customer must make to its own data subjects under applicable law; and the security of any systems the Customer integrates with HelveX through outbound webhooks, API integrations, or agent tools.</p>
+        <h3>Your-cloud deployments</h3>
+        <p>For your-cloud deployments, the boundary shifts: the Customer becomes responsible for the operational security of the underlying infrastructure (because the Customer owns it), while HelveX retains responsibility for the platform software running on top. The exact boundary in a your-cloud deployment is documented in the deployment-specific runbook produced during onboarding.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s14">
+        <span class="hx-legal-section-num">&sect; 14</span>
+        <h2>Reporting a vulnerability</h2>
+        <p>HelveX welcomes reports of suspected vulnerabilities from security researchers, Customers, and members of the public.</p>
+        <h3>How to report</h3>
+        <p>Submit reports to <strong>security@helvex.ai</strong>. A PGP public key for encrypted submissions is available on request to the same address. Reports should include sufficient detail to reproduce the issue, including the affected URL or endpoint, a description of the vulnerability, the impact, and any proof-of-concept material.</p>
+        <h3>What to expect</h3>
+        <p>We acknowledge substantive reports within five business days. We triage the report, assess severity, and agree a coordinated disclosure timeline of up to 90 days. We provide updates to the reporter at meaningful milestones. We credit reporters in our security advisory when the reporter requests acknowledgment.</p>
+        <h3>Scope</h3>
+        <p>The coordinated disclosure programme covers production properties at helvex.ai, the authenticated workspace and API surfaces, and the marketing site. It does not cover third-party services we use (which have their own disclosure programmes), social-engineering attacks on HelveX staff, denial-of-service attacks, or physical attacks on HelveX premises.</p>
+        <h3>Safe harbour</h3>
+        <p>HelveX will not pursue legal action against researchers conducting good-faith research within the scope of this policy, including activities that would otherwise breach the Acceptable Use Policy or anti-circumvention law, provided the researcher: limits testing to accounts they own; does not access, modify, or destroy data they do not own; does not degrade the experience of other users; and complies with the coordinated disclosure timeline.</p>
+      </section>
+
+      <section class="hx-legal-section" id="s15">
+        <span class="hx-legal-section-num">&sect; 15</span>
+        <h2>Audits and reports</h2>
+        <p>HelveX maintains an active audit programme and makes the resulting artifacts available to Customers under appropriate confidentiality protections.</p>
+        <h3>Annual SOC 2 Type II</h3>
+        <p>HelveX undergoes an annual SOC 2 Type II examination against the AICPA Trust Services Criteria for Security, Availability, and Confidentiality. The examination evaluates the design and operating effectiveness of controls over a continuous twelve-month observation period and is performed by an independent firm of certified public accountants. The current report is available to Customers and prospective Customers under MNDA.</p>
+        <h3>Annual ISO 27001 surveillance</h3>
+        <p>HelveX is certified to ISO/IEC 27001:2022. Surveillance audits are performed annually and a recertification audit is performed every three years. The current certificate, the statement of applicability, and surveillance-audit summaries are available to Customers under MNDA.</p>
+        <h3>Annual penetration test</h3>
+        <p>HelveX engages an independent specialist firm to conduct a full-scope penetration test annually. A summary of the most recent test, redacted to protect specific control details, is available to Customers under MNDA.</p>
+        <h3>DPIA support</h3>
+        <p>For Customers required to conduct a Data Protection Impact Assessment under GDPR Article 35 or equivalent law, HelveX provides reasonable assistance by supplying information about its processing activities, security measures, and subprocessor arrangements. This material is made available through the Trust Center and through the Data Processing Addendum.</p>
+        <h3>How to request</h3>
+        <p>Requests for the artifacts listed above should be directed to <strong>trust@helvex.ai</strong>. We acknowledge substantive requests within two business days and deliver requested artifacts, under MNDA, within ten business days of MNDA execution.</p>
+      </section>
+
+      <div class="hx-legal-footnote">
+        <p><strong>HelveX AG</strong> &middot; Zurich, Switzerland &middot; <strong>Contact:</strong> security@helvex.ai &middot; trust@helvex.ai</p>
+        <p>This document supersedes all prior versions. For prior versions, contact legal@helvex.ai.</p>
       </div>
-      <div class="mobile-menu-meta">Built in Switzerland</div>
-    </div>
+
+    </main>
+
   </div>
 
-  <!-- ════════ HERO ════════ -->
-  <section class="relative pt-14 sm:pt-24 pb-12 sm:pb-16 overflow-hidden">
-    <div class="hero-orb hero-orb-2" style="opacity: 0.3;"></div>
-    <div class="relative max-w-5xl mx-auto px-6 sm:px-8">
-      <p class="reveal section-mark mb-7">Security</p>
-      <h1 class="reveal h-display balance text-[44px] sm:text-7xl mb-6">
-        How we protect<br />
-        <span class="italic font-serif font-normal tech-gradient-text">the work.</span>
-      </h1>
-      <p class="reveal pretty text-base sm:text-xl text-ink-mid max-w-2xl leading-relaxed">Encrypted in transit and at rest, region-pinned, single-tenant data plane available, audit logs to your SIEM. SOC 2 Type II and ISO 27001 in place. Penetration tests twice a year by an independent firm.</p>
-    </div>
-  </section>
-
-  <section class="py-16 sm:py-24">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8">
-      <div class="reveal max-w-3xl mb-12"><p class="section-mark mb-5">The shape</p><h2 class="text-2xl sm:text-4xl font-extrabold tracking-tightest mb-5 balance">Six layers, all measurable.</h2></div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div class="reveal rounded-xl border border-line bg-white p-5"><p class="font-semibold text-ink text-sm mb-1.5">Encryption</p><p class="text-xs text-ink-mid leading-relaxed">TLS 1.3 in transit, AES-256 at rest, customer-managed keys for Enterprise.</p></div><div class="reveal rounded-xl border border-line bg-white p-5"><p class="font-semibold text-ink text-sm mb-1.5">Access control</p><p class="text-xs text-ink-mid leading-relaxed">SSO via SAML / OIDC, SCIM provisioning, role-based access at every surface.</p></div><div class="reveal rounded-xl border border-line bg-white p-5"><p class="font-semibold text-ink text-sm mb-1.5">Network</p><p class="text-xs text-ink-mid leading-relaxed">VPC isolation, IP allow-list, private connectivity over PrivateLink for Enterprise.</p></div><div class="reveal rounded-xl border border-line bg-white p-5"><p class="font-semibold text-ink text-sm mb-1.5">Audit logging</p><p class="text-xs text-ink-mid leading-relaxed">Per-action logs exported to S3, GCS, or Splunk-compatible SIEMs.</p></div><div class="reveal rounded-xl border border-line bg-white p-5"><p class="font-semibold text-ink text-sm mb-1.5">Compliance</p><p class="text-xs text-ink-mid leading-relaxed">SOC 2 Type II · ISO 27001 · ISO 27701 · GDPR · CCPA · HIPAA-ready.</p></div><div class="reveal rounded-xl border border-line bg-white p-5"><p class="font-semibold text-ink text-sm mb-1.5">Vulnerability mgmt</p><p class="text-xs text-ink-mid leading-relaxed">Continuous scanning, two external pen-tests per year, public bug bounty.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="relative tech-wash-soft border-y border-line py-16 sm:py-20 overflow-hidden">
-    <div class="max-w-4xl mx-auto px-6 sm:px-8">
-      <div class="reveal mb-8"><p class="section-mark mb-5">Reporting a vulnerability</p><h2 class="text-2xl sm:text-3xl font-extrabold tracking-tightest mb-3 balance">We read every report. We pay for the ones that matter.</h2></div>
-      <p class="reveal text-base text-ink-mid leading-relaxed pretty mb-6">Email <a href="mailto:security@helvex.ai" class="text-ink underline hover:text-red transition-colors">security@helvex.ai</a> with reproduction steps and the impact. Acknowledgement within 24 h. Triage within 72 h. Fixes for high-severity findings ship within five business days.</p>
-      <p class="reveal text-base text-ink-mid leading-relaxed pretty mb-6">Our public bug bounty pays from CHF 100 to CHF 25,000 depending on severity. Safe-harbour applies as long as you stick to the rules of engagement (no real customer data, no DoS, no social engineering of staff).</p>
-      <a href="mailto:security@helvex.ai?subject=HelveX%20-%20Vulnerability%20report" class="reveal btn-primary inline-flex items-center gap-2 bg-ink hover:bg-ink-soft text-white text-sm font-semibold px-6 py-3.5 rounded-full transition-colors btn-shadow">Email security@helvex.ai <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
-    </div>
-  </section>
-
-  <!-- ════════ CTA ════════ -->
-  <section class="border-t border-line py-16 sm:py-20 bg-cream/40">
-    <div class="max-w-3xl mx-auto px-6 sm:px-8 text-center">
-      <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="mailto:security@helvex.ai" class="btn-primary inline-flex items-center gap-2 bg-ink hover:bg-ink-soft text-white text-sm font-semibold px-6 py-3.5 rounded-full transition-colors btn-shadow">
-          Email security@helvex.ai
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-        </a>
-        <a href="/trust-center" class="inline-flex items-center gap-2 border border-line hover:border-ink text-ink text-sm font-semibold px-6 py-3.5 rounded-full transition-colors">Visit the Trust center</a>
-      </div>
-    </div>
-  </section>
-  <!-- ════════════════════════════════════════════════════════════
-       PREMIUM FOOTER — luxe obsidian edition
-       Deep dark stage with ambient mesh, signature aurora rims,
-       refined column hierarchy, premium glass subscribe form,
-       trust ribbon with badges, glass social chips.
-       ════════════════════════════════════════════════════════════ -->
   <footer class="hx-footer">
     <div class="hx-footer-bg" aria-hidden="true">
       <div class="hx-footer-grid"></div>
@@ -198,10 +358,8 @@
 
     <div class="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 sm:pt-28 pb-10">
 
-      <!-- Top row: brand + 4 columns -->
       <div class="hx-footer-top">
 
-        <!-- Brand column -->
         <div class="hx-footer-brand-col">
           <a href="/" class="hx-footer-brand">
             <span class="hx-footer-brand-halo" aria-hidden="true"></span>
@@ -221,7 +379,6 @@
           </form>
         </div>
 
-        <!-- Product -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#F5C863"></span>Product</p>
           <ul>
@@ -233,7 +390,6 @@
           </ul>
         </div>
 
-        <!-- Company -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#DC2626"></span>Company</p>
           <ul>
@@ -245,7 +401,6 @@
           </ul>
         </div>
 
-        <!-- Resources -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#F0B852"></span>Resources</p>
           <ul>
@@ -260,7 +415,6 @@
           </ul>
         </div>
 
-        <!-- Legal -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#D4D4D8"></span>Legal</p>
           <ul>
@@ -274,7 +428,6 @@
 
       </div>
 
-      <!-- Trust ribbon: signature → certifications → live status -->
       <div class="hx-footer-trust">
         <span class="hx-footer-trust-item">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="hx-footer-trust-flag"><rect width="24" height="24" rx="3" fill="#DC2626"/><rect x="10" y="5" width="4" height="14" fill="#FFFFFF"/><rect x="5" y="10" width="14" height="4" fill="#FFFFFF"/></svg>
@@ -291,7 +444,6 @@
         <span class="hx-footer-trust-item hx-footer-trust-mono">v 2.4 · Cycle 12</span>
       </div>
 
-      <!-- Bottom row: copyright + socials -->
       <div class="hx-footer-bottom">
         <p class="hx-footer-copy">© 2026 HelveX AG · Zurich, Switzerland · All rights reserved.</p>
         <div class="hx-footer-social">
