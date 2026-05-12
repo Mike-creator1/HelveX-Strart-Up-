@@ -364,6 +364,28 @@
       letter-spacing: -0.005em;
     }
     .hx-footer-form input::placeholder { color: rgba(236,236,238,0.32); }
+
+    /* Kill ALL native focus rings + Firefox :invalid red box-shadow on the
+       footer subscribe input. The visual focus state belongs to the
+       wrapper .hx-footer-form-row, not the input itself. Without these
+       overrides Firefox paints a red box-shadow on the required type=email
+       input the moment it's focused while empty, which reads as a broken
+       red rectangle inside the dark glass pill. */
+    .hx-footer-form input,
+    .hx-footer-form input:focus,
+    .hx-footer-form input:focus-visible,
+    .hx-footer-form input:invalid,
+    .hx-footer-form input:-moz-ui-invalid,
+    .hx-footer-form input:required {
+      outline: none !important;
+      box-shadow: none !important;
+      -webkit-box-shadow: none !important;
+    }
+    .hx-footer-form-row,
+    .hx-footer-form-row:focus-within {
+      outline: none !important;
+    }
+    .hx-footer-form *:focus-visible { outline: none !important; }
     .hx-footer-form button {
       position: relative;
       display: inline-flex; align-items: center; gap: 7px;
