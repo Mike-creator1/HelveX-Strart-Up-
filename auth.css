@@ -2598,7 +2598,6 @@ body {
 
 /* ════════════════════════════════════════════════════════════
    v12 — lift the whole composition further up
-   Tighter outer padding-top, hair-thin gap under the logo.
    ════════════════════════════════════════════════════════════ */
 @media (min-width: 921px) {
   .auth-shell.split .auth-side {
@@ -2609,6 +2608,23 @@ body {
   }
   .auth-shell.split .side-brand img {
     margin-top: 0 !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   v13 — pull everything to the very top
+   Outer padding-top and inner gap go to near-zero so the logo
+   touches the top edge and the content stacks immediately.
+   ════════════════════════════════════════════════════════════ */
+@media (min-width: 921px) {
+  .auth-shell.split .auth-side {
+    padding-top: clamp(0px, 0.4vh, 8px) !important;
+  }
+  .auth-shell.split .side-content {
+    padding-top: 0 !important;
+  }
+  .auth-shell.split .side-brand {
+    margin-bottom: clamp(2px, 0.4vh, 6px) !important;
   }
 }
 
