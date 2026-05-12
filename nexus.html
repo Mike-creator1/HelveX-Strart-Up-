@@ -27,12 +27,14 @@
   <!-- Per-page accent: Nexus is the reasoning tier -->
   <style>
     .hx-doc-page {
-      --accent: #E94B5A;
-      --accent-text: #FF7884;
-      --accent-glow: rgba(233,75,90,0.24);
-      --accent-shadow: rgba(233,75,90,0.20);
-      --accent-from: #FF7884;
-      --accent-to: #C0111E;
+      --accent: #DC2626;
+      --accent-text: #991B1B;
+      --accent-bg: #FEE2E2;
+      --accent-glow: rgba(220,38,38,0.24);
+      --accent-shadow: rgba(220,38,38,0.16);
+      --accent-from: #991B1B;
+      --accent-mid: #DC2626;
+      --accent-to: #7F1D1D;
     }
   </style>
 </head>
@@ -54,10 +56,6 @@
             </button>
             <div class="nav-dropdown-menu absolute top-full left-0 pt-2 invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all duration-200 z-50">
               <div class="w-72 bg-white border border-line rounded-2xl shadow-[0_24px_60px_-20px_rgba(10,10,10,0.18)] p-2.5">
-                <a href="/updates" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-cream/60 transition-colors mb-1">
-                  <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-yellow to-red flex items-center justify-center mt-0.5"><svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></span>
-                  <span class="flex-1"><span class="block text-[13px] font-bold text-ink leading-tight">Workspace Refresh Updates</span><span class="block text-[11px] text-ink-mid mt-0.5">Flagship · monthly cadence</span></span>
-                </a>
                 <a href="/ai-automation.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-cream/60 transition-colors">
                   <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-yellow flex items-center justify-center"><svg class="w-3.5 h-3.5 text-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 11h.01M15 11h.01"/><path d="M12 7V3"/></svg></span>
                   <span class="flex-1"><span class="block text-[13px] font-semibold text-ink">AI &amp; Automation</span><span class="block text-[11px] text-ink-mid">Agents that handle the work</span></span>
@@ -84,7 +82,6 @@
           <a href="/models" class="nav-link">Models</a>
           <a href="/workspace" class="nav-link">Workspace</a>
           <a href="/research" class="nav-link">Research</a>
-          <a href="/updates" class="nav-link">Updates</a>
           <a href="/customer-stories" class="nav-link">Customers</a>
           <a href="/resources" class="nav-link">Resources</a>
         </div>
@@ -301,18 +298,18 @@
         <p class="hx-doc-section-desc">Ether is the front door. Nexus is the workhorse. Prometheus is the depth tier. One workspace runs all three with a single set of credentials.</p>
 
         <div class="hx-doc-family">
-          <a href="/ether" class="hx-doc-family-card block" style="--c:#F5C863; --c-text:rgba(236,236,238,0.55); text-decoration:none;">
+          <a href="/ether" class="hx-doc-family-card block" style="--c:#F59E0B; --c-text:#B45309; text-decoration:none;">
             <p class="hx-doc-family-mark"><span class="hx-doc-family-mark-dot"></span>Real-time tier</p>
             <h3 class="hx-doc-family-name">Ether</h3>
             <p class="hx-doc-family-tagline">Streaming-first. Lowest cost. The model for volume and latency-bound workloads.</p>
           </a>
-          <div class="hx-doc-family-card" data-active style="--c:#E94B5A; --c-text:#FF7884; --c-bg:rgba(233,75,90,0.15); --c-border:rgba(233,75,90,0.35);">
+          <div class="hx-doc-family-card" data-active style="--c:#DC2626; --c-text:#991B1B; --c-bg:#FEE2E2; --c-border:rgba(220,38,38,0.35);">
             <span class="hx-doc-family-active-tag"><span class="hx-doc-family-active-tag-dot"></span>You are here</span>
             <p class="hx-doc-family-mark"><span class="hx-doc-family-mark-dot"></span>Reasoning tier</p>
             <h3 class="hx-doc-family-name">Nexus</h3>
             <p class="hx-doc-family-tagline">Balanced workhorse. Longest context, strongest production reasoning, Citations on demand.</p>
           </div>
-          <a href="/prometheus" class="hx-doc-family-card block" style="--c:#D4D4D8; --c-text:rgba(236,236,238,0.55); text-decoration:none;">
+          <a href="/prometheus" class="hx-doc-family-card block" style="--c:#0A0A0A; --c-text:#171717; text-decoration:none;">
             <p class="hx-doc-family-mark"><span class="hx-doc-family-mark-dot"></span>Frontier tier</p>
             <h3 class="hx-doc-family-name">Prometheus</h3>
             <p class="hx-doc-family-tagline">Deepest reasoning, agentic, computer use, chained tools. The depth model for complex work.</p>
@@ -377,7 +374,6 @@
             <li><a href="/nexus"><span class="hx-footer-link-title">Nexus</span><span class="hx-footer-link-desc">Balanced reasoning, longest context</span></a></li>
             <li><a href="/prometheus"><span class="hx-footer-link-title">Prometheus</span><span class="hx-footer-link-desc">Deepest reasoning, agentic, computer use</span></a></li>
             <li><a href="/workspace"><span class="hx-footer-link-title">Workspace</span><span class="hx-footer-link-desc">Six surfaces, one operating layer</span></a></li>
-            <li><a href="/updates"><span class="hx-footer-link-title">Updates</span><span class="hx-footer-link-desc">Monthly Workspace Refresh notes</span></a></li>
           </ul>
         </div>
 
