@@ -2313,3 +2313,67 @@ body {
   .auth-shell.split .side-headline { font-size: 34px !important; }
   .auth-shell.split .side-sub { display: none !important; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   v5 — CENTRED COMPOSITION on the left panel
+   The whole left column reads as a single centered editorial
+   block. Logo, eyebrow, headline, subtitle, and the feature
+   list all align on a centered axis; the feature rows keep
+   their internal icon-left / body-right structure but the
+   group itself is centred and constrained to a comfortable
+   reading width. Footer row stays edge-to-edge.
+   ════════════════════════════════════════════════════════════ */
+.auth-shell.split .auth-side {
+  align-items: center;
+  text-align: center;
+}
+.auth-shell.split .side-brand {
+  align-self: center;
+}
+.auth-shell.split .side-content {
+  width: 100%;
+  max-width: 520px;
+  align-items: center;
+}
+.auth-shell.split .side-eyebrow {
+  align-self: center;
+}
+.auth-shell.split .side-headline {
+  text-align: center;
+}
+.auth-shell.split .side-sub {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 44ch;
+}
+
+/* Features — the list itself is centred as a group; rows keep
+   icon-left / text-left internal alignment so the copy still
+   reads naturally. Width is constrained so the longest line
+   anchors the centre. */
+.auth-shell.split .side-features {
+  width: 100%;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.auth-shell.split .side-features li {
+  text-align: left;
+}
+
+/* Footer — stretch edge-to-edge so © left / TRUST CENTER right
+   keeps its meta-strip framing. Not centred. */
+.auth-shell.split .side-foot {
+  align-self: stretch;
+  text-align: left;
+}
+
+/* Mobile collapse — keep centring intact when the layout
+   collapses to a single column at <= 920 px. */
+@media (max-width: 920px) {
+  .auth-shell.split .auth-side {
+    align-items: center;
+    text-align: center;
+  }
+  .auth-shell.split .side-features { display: flex; }
+}
