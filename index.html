@@ -134,11 +134,203 @@
 <body class="bg-white text-ink antialiased">
 
   <!-- ════════ NAV ════════ -->
-  <header class="sticky top-0 z-50 bg-white/85 backdrop-blur-xl border-b border-line">
-    <nav class="max-w-7xl mx-auto px-6 sm:px-8 h-24 sm:h-28 flex items-center justify-between gap-4">
-      <div class="flex items-center gap-6 lg:gap-10">
-        <a href="/" class="brand-mark text-xl sm:text-[22px] flex items-center gap-2 flex-shrink-0">
-          <span class="brand-logo"><img src="/helvex-logo.png" alt="HelveX" class="h-16 sm:h-20 w-auto" /></span>
+  <!-- ════════════════════════════════════════════════════════════
+       PREMIUM HEADER — scoped polish layer
+       Multi-layer glass background, hairline rims top + bottom,
+       animated underline indicators on nav links, refined brand
+       mark with live status pill, premium gradient CTA with inner
+       highlight + outer glow + shimmer hover.
+       ════════════════════════════════════════════════════════════ -->
+  <style>
+    .hx-header {
+      position: sticky; top: 0; z-index: 50;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.92) 100%);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: none;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.7) inset,
+        0 1px 2px rgba(10,10,10,0.02),
+        0 8px 24px -16px rgba(10,10,10,0.08);
+      isolation: isolate;
+    }
+    /* Top hairline — faint warm thread */
+    .hx-header::before {
+      content: ""; position: absolute; inset: 0 0 auto 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(220,38,38,0.18), rgba(245,158,11,0.16), rgba(220,38,38,0.14), transparent);
+      z-index: 4; pointer-events: none;
+    }
+    /* Bottom hairline — refined ink line */
+    .hx-header::after {
+      content: ""; position: absolute; inset: auto 0 0 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(10,10,10,0.10), transparent);
+      z-index: 4; pointer-events: none;
+    }
+
+    .hx-header > nav {
+      height: 72px;
+      position: relative; z-index: 1;
+    }
+    @media (min-width: 640px) { .hx-header > nav { height: 80px; } }
+
+    /* Brand logo — tightened for premium feel */
+    .hx-header .brand-logo img { height: 44px; }
+    @media (min-width: 640px) { .hx-header .brand-logo img { height: 52px; } }
+
+    /* Live status pill (desktop only) — anchored next to the brand */
+    .hx-status-pill {
+      display: none;
+      align-items: center; gap: 7px;
+      padding: 4px 10px 4px 9px;
+      border-radius: 999px;
+      background: rgba(220,38,38,0.05);
+      border: 1px solid rgba(220,38,38,0.18);
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5px; line-height: 1;
+      font-weight: 700; letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #991B1B;
+    }
+    .hx-status-pill-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: #DC2626;
+      box-shadow: 0 0 6px rgba(220,38,38,0.7);
+      animation: hxHeaderPulse 2.2s ease-in-out infinite;
+    }
+    @keyframes hxHeaderPulse {
+      0%, 100% { opacity: 1;   transform: scale(1); }
+      50%      { opacity: .50; transform: scale(0.80); }
+    }
+    @media (min-width: 1024px) { .hx-status-pill { display: inline-flex; } }
+
+    /* Nav links — animated underline indicator */
+    .hx-header .nav-link {
+      position: relative;
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13.5px; font-weight: 500;
+      letter-spacing: -0.005em;
+      color: #525252;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color .25s ease;
+    }
+    .hx-header .nav-link::after {
+      content: ""; position: absolute;
+      bottom: 1px; left: 14px; right: 14px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #DC2626, rgba(245,158,11,0.6), #DC2626, transparent);
+      opacity: 0;
+      transform: scaleX(0.4);
+      transform-origin: center;
+      transition: opacity .3s ease, transform .3s cubic-bezier(.22,1,.36,1);
+    }
+    .hx-header .nav-link:hover { color: #0A0A0A; }
+    .hx-header .nav-link:hover::after,
+    .hx-header .nav-link.is-active::after { opacity: 1; transform: scaleX(1); }
+    .hx-header .nav-link.is-active { color: #0A0A0A; font-weight: 600; }
+
+    /* Dropdown menu — premium glass panel */
+    .hx-header .nav-dropdown-menu > div {
+      border-radius: 18px;
+      border: 1px solid #ECECEC;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.8) inset,
+        0 32px 80px -16px rgba(10,10,10,0.20),
+        0 0 0 1px rgba(10,10,10,0.03);
+    }
+
+    /* Sign in — minimal but refined */
+    .hx-header .hx-signin {
+      font-family: 'Inter', sans-serif;
+      font-size: 13.5px; font-weight: 500;
+      color: #525252;
+      padding: 9px 14px;
+      border-radius: 999px;
+      transition: color .25s ease, background .25s ease;
+    }
+    .hx-header .hx-signin:hover { color: #0A0A0A; background: rgba(10,10,10,0.04); }
+
+    /* Enter Platform — premium gradient CTA */
+    .hx-header .btn-primary {
+      position: relative;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #1F1F23 0%, #0A0A0A 100%);
+      color: #FFFFFF !important;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.005em;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.20) inset,
+        0 -1px 0 rgba(0,0,0,0.4) inset,
+        0 4px 12px -4px rgba(10,10,10,0.40),
+        0 8px 24px -10px rgba(220,38,38,0.18);
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease;
+    }
+    .hx-header .btn-primary::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.16) 50%, transparent 70%);
+      transform: translateX(-120%);
+      transition: transform .85s cubic-bezier(.22,1,.36,1);
+      z-index: 1;
+    }
+    .hx-header .btn-primary > * { position: relative; z-index: 2; }
+    .hx-header .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.20) inset,
+        0 -1px 0 rgba(0,0,0,0.4) inset,
+        0 6px 16px -4px rgba(10,10,10,0.45),
+        0 14px 36px -10px rgba(220,38,38,0.35);
+    }
+    .hx-header .btn-primary:hover::before { transform: translateX(120%); }
+    .hx-header .btn-primary svg { width: 13px; height: 13px; transition: transform .3s ease; }
+    .hx-header .btn-primary:hover svg { transform: translateX(2px); }
+
+    /* Mobile menu trigger — refined */
+    .hx-header .mobile-menu-trigger {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 10px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: #0A0A0A;
+      transition: background .25s ease, border-color .25s ease;
+    }
+    .hx-header .mobile-menu-trigger:hover {
+      background: rgba(10,10,10,0.04);
+      border-color: #ECECEC;
+    }
+    .hx-header .mobile-menu-trigger svg { width: 18px; height: 18px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hx-status-pill-dot,
+      .hx-header .nav-link::after,
+      .hx-header .btn-primary,
+      .hx-header .btn-primary::before { animation: none !important; transition: none !important; }
+    }
+  </style>
+
+  <header class="hx-header">
+    <nav class="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-5 lg:gap-8">
+        <a href="/" class="brand-mark flex items-center gap-3 flex-shrink-0">
+          <span class="brand-logo"><img src="/helvex-logo.png" alt="HelveX" class="w-auto" /></span>
+          <span class="hx-status-pill">
+            <span class="hx-status-pill-dot"></span>
+            Live
+          </span>
         </a>
         <div class="hidden lg:flex items-center gap-1" id="nav-main">
           <a href="/" class="nav-link is-active">Home</a>
@@ -185,10 +377,10 @@
         <button type="button" class="mobile-menu-trigger lg:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
           <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
-        <a href="/signup.html" class="hidden sm:inline-flex text-[14px] font-medium text-ink-mid hover:text-ink px-3 py-2 transition-colors">Sign in</a>
-        <a href="/signup.html" class="btn-primary inline-flex items-center gap-1.5 bg-ink hover:bg-ink-soft text-white text-[13px] font-semibold px-4 py-2.5 rounded-full transition-colors btn-shadow">
-          Enter Platform
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <a href="/signup.html" class="hx-signin hidden sm:inline-flex">Sign in</a>
+        <a href="/signup.html" class="btn-primary">
+          <span>Enter Platform</span>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
     </nav>  </header>
