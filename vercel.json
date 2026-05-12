@@ -24,7 +24,6 @@
     { "source": "/best-practices", "destination": "/best-practices.html" },
     { "source": "/customer-stories", "destination": "/customer-stories.html" },
     { "source": "/help-center", "destination": "/help-center.html" },
-    { "source": "/community", "destination": "/community.html" },
     { "source": "/status", "destination": "/status.html" },
     { "source": "/trust-center", "destination": "/trust-center.html" },
     { "source": "/privacy", "destination": "/privacy.html" },

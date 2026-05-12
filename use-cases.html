@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
   <title>Use cases — HelveX</title>
-  <meta name="description" content="What teams use HelveX for. Six categories that account for the majority of platform traffic today." />
+  <meta name="description" content="Patterns we ship most often. Common shapes of work that land in production, each paired with the model usually picked for it." />
   <meta property="og:title" content="Use cases — HelveX" />
-  <meta property="og:description" content="What teams use HelveX for. Six categories that account for the majority of platform traffic today." />
+  <meta property="og:description" content="Production shapes, generic patterns, model-paired." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="HelveX" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -19,27 +19,26 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            ink: '#0A0A0A', 'ink-soft': '#171717', 'ink-mid': '#525252', 'ink-light': '#A3A3A3', 'ink-faint': '#D4D4D4',
-            line: '#E5E5E5', 'line-soft': '#F0EFEC', cream: '#FAFAF7', beige: '#F4EFE6', 'beige-warm': '#EDE5D6',
-            red: '#DC2626', 'red-deep': '#991B1B', 'red-soft': '#FEE2E2',
-            yellow: '#FCD34D', 'yellow-deep': '#F59E0B', 'yellow-soft': '#FEF3C7',
-          },
-          fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'], serif: ['"Instrument Serif"', 'Georgia', 'serif'] },
-        },
-      },
-    };
+    tailwind.config = { theme: { extend: { colors: { ink: '#0A0A0A', 'ink-soft': '#171717', 'ink-mid': '#525252', 'ink-light': '#A3A3A3', 'ink-faint': '#D4D4D4', line: '#E5E5E5', 'line-soft': '#F0EFEC', cream: '#FAFAF7', beige: '#F4EFE6', red: '#DC2626', 'red-deep': '#991B1B', 'red-soft': '#FEE2E2', yellow: '#FCD34D', 'yellow-deep': '#F59E0B', 'yellow-soft': '#FEF3C7' }, fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'], serif: ['"Instrument Serif"', 'Georgia', 'serif'] } } } };
   </script>
 
   <link rel="stylesheet" href="/helvex.css" />
 
+  <style>
+    .hx-doc-page {
+      --accent: #F59E0B;
+      --accent-text: #B45309;
+      --accent-bg: #FEF3C7;
+      --accent-glow: rgba(245,158,11,0.26);
+      --accent-shadow: rgba(245,158,11,0.16);
+      --accent-from: #B45309;
+      --accent-mid: #F0B852;
+      --accent-to: #92400E;
+    }
+  </style>
 </head>
-<body class="bg-white text-ink antialiased">
+<body class="hx-doc-page antialiased">
 
-  <!-- Premium .hx-header styles live in /helvex.css so every page that loads the shared stylesheet gets them automatically. -->
   <header class="hx-header">
     <nav class="max-w-[1520px] mx-auto pl-4 pr-5 sm:pl-6 sm:pr-8 flex items-center justify-between gap-4">
       <div class="flex items-center gap-5 lg:gap-8">
@@ -95,158 +94,151 @@
     </nav>
   </header>
 
-  <!-- ════════ MOBILE MENU DRAWER ════════ -->
-  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Site navigation">
-    <div class="mobile-menu-backdrop" data-close></div>
-    <div class="mobile-menu-panel">
-      <div class="mobile-menu-header">
-        <a href="/" class="brand-mark text-xl flex items-center gap-2">
-          <span class="brand-logo"><img src="/helvex-logo.png" alt="HelveX" class="h-16 w-auto" /></span>
-        </a>
-        <button type="button" class="mobile-menu-close" data-close aria-label="Close menu">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6l-12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <nav class="mobile-menu-nav" aria-label="Main">
-        <a href="/" class="mobile-menu-link">Home</a>
-        <details class="mobile-menu-services">
-          <summary class="mobile-menu-link" style="list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-            <span>Services</span>
-            <svg class="w-4 h-4 text-ink-light transition-transform" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </summary>
-          <div class="pl-4 mt-1 mb-2 space-y-0.5 border-l border-line">
-            <a href="/ai-automation.html" class="mobile-menu-link">AI &amp; Automation</a>
-            <a href="/business-consulting.html" class="mobile-menu-link">Business Consulting</a>
-            <a href="/digital-services.html" class="mobile-menu-link">Digital Services</a>
-            <a href="/growth-marketing.html" class="mobile-menu-link">Growth &amp; Marketing</a>
-            <a href="/enterprise.html" class="mobile-menu-link">Enterprise</a>
-          </div>
-        </details>
-        <a href="/models" class="mobile-menu-link">Models</a>
-        <a href="/workspace" class="mobile-menu-link">Workspace</a>
-        <a href="/research" class="mobile-menu-link">Research</a>
-        <a href="/customer-stories" class="mobile-menu-link">Customers</a>
-        <a href="/resources" class="mobile-menu-link">Resources</a>
-      </nav>
-      <div class="mobile-menu-cta">
-        <a href="/signup.html" class="primary">
-          Try HeliX
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
-        <a href="/signup.html" class="secondary">Sign in</a>
-      </div>
-      <div class="mobile-menu-meta">Built in Switzerland</div>
-    </div>
+  <div class="hx-doc-bg" aria-hidden="true">
+    <div class="hx-doc-bg-grid"></div>
+    <div class="hx-doc-bg-glow hx-doc-bg-glow-1"></div>
+    <div class="hx-doc-bg-glow hx-doc-bg-glow-2"></div>
   </div>
 
-  <!-- ════════ HERO ════════ -->
-  <section class="relative pt-14 sm:pt-24 pb-12 sm:pb-16 overflow-hidden">
-    <div class="hero-orb hero-orb-2" style="opacity: 0.3;"></div>
-    <div class="relative max-w-5xl mx-auto px-6 sm:px-8">
-      <p class="reveal section-mark mb-7">Use cases</p>
-      <h1 class="reveal h-display balance text-[44px] sm:text-7xl mb-6">
-        What teams<br />
-        <span class="italic font-serif font-normal tech-gradient-text">use it for.</span>
-      </h1>
-      <p class="reveal pretty text-base sm:text-xl text-ink-mid max-w-2xl leading-relaxed">Six categories that account for the majority of HelveX traffic today. Most customers run several at once across different Spaces.</p>
-    </div>
-  </section>
+  <main class="hx-doc-wrap">
 
-  <section class="py-16 sm:py-24">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-      <div class="reveal rounded-2xl border border-line bg-white p-6 sm:p-7"><h3 class="text-lg font-bold tracking-tight mb-2.5">Knowledge work</h3><p class="text-sm text-ink-mid leading-relaxed mb-3">Briefs, memos, reports, synthesis across long context. Teams use Nexus when the answer needs to defend itself with citations.</p><p class="text-xs font-mono text-ink-light">Best model: Nexus</p></div><div class="reveal rounded-2xl border border-line bg-white p-6 sm:p-7"><h3 class="text-lg font-bold tracking-tight mb-2.5">Customer support</h3><p class="text-sm text-ink-mid leading-relaxed mb-3">First-line replies, ticket triage, hand-off to humans on the hard ones. Ether is fast enough that the AI feels invisible.</p><p class="text-xs font-mono text-ink-light">Best model: Ether</p></div><div class="reveal rounded-2xl border border-line bg-white p-6 sm:p-7"><h3 class="text-lg font-bold tracking-tight mb-2.5">Operations & back-office</h3><p class="text-sm text-ink-mid leading-relaxed mb-3">Multi-step jobs across the documents and tools your team already uses, with approval gates on the irreversible.</p><p class="text-xs font-mono text-ink-light">Best model: Prometheus</p></div><div class="reveal rounded-2xl border border-line bg-white p-6 sm:p-7"><h3 class="text-lg font-bold tracking-tight mb-2.5">Research & analysis</h3><p class="text-sm text-ink-mid leading-relaxed mb-3">Investment briefs, scientific review, regulatory walk-through. Long context with traceable citations.</p><p class="text-xs font-mono text-ink-light">Best model: Nexus</p></div><div class="reveal rounded-2xl border border-line bg-white p-6 sm:p-7"><h3 class="text-lg font-bold tracking-tight mb-2.5">Engineering & code</h3><p class="text-sm text-ink-mid leading-relaxed mb-3">Repo-wide refactors, code review passes, test generation. Prometheus reads, edits, runs, and proposes.</p><p class="text-xs font-mono text-ink-light">Best model: Prometheus</p></div><div class="reveal rounded-2xl border border-line bg-white p-6 sm:p-7"><h3 class="text-lg font-bold tracking-tight mb-2.5">Voice & translation</h3><p class="text-sm text-ink-mid leading-relaxed mb-3">Live translation in 14 languages, dictation, captioning. Ether's streaming-first audio path keeps the lag invisible.</p><p class="text-xs font-mono text-ink-light">Best model: Ether</p></div>
-    </div>
-  </section>
-
-  <!-- ════════ COMMON PATTERNS ════════ -->
-  <section class="py-20 sm:py-28 border-t border-line bg-cream/40">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8">
-      <div class="reveal max-w-3xl mb-14 sm:mb-16">
-        <p class="section-mark mb-5">Common patterns</p>
-        <h2 class="h-section text-3xl sm:text-5xl mb-5 balance">The shapes we ship most often.</h2>
-        <p class="pretty text-base sm:text-lg text-ink-mid leading-relaxed">
-          Below the work category sits the actual shape of the workflow — the trigger, the tools, the gates. These six patterns account for the majority of the agents and workspaces we stand up in a first engagement.
+    <section class="hx-doc-hero">
+      <div class="hx-doc-hero-inner">
+        <p class="hx-doc-eyebrow">
+          <span class="hx-doc-eyebrow-dot"></span>
+          Resources · Use cases
         </p>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-yellow-deep mb-3">Pattern 01</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Customer support agents.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed mb-3">Inbound ticket comes in, the agent classifies the intent, drafts a reply grounded in the runbook, and hands off to a human on anything unfamiliar. Approval gate before any outbound message.</p>
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light">Best paired with: Ether</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-red mb-3">Pattern 02</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">RAG over company knowledge.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed mb-3">A search and answer surface across the wiki, the drive, the ticket archive — permissions follow the source. Every claim cites the page it came from. The kind of thing every team builds eventually.</p>
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light">Best paired with: Nexus</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink mb-3">Pattern 03</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Sales / CRM enrichment.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed mb-3">A new lead lands in the CRM, the agent fills in firmographics, finds the latest funding round, drafts the first reply, and writes the account brief. The rep starts from a populated record.</p>
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light">Best paired with: Prometheus</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-red-deep mb-3">Pattern 04</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Internal assistants.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed mb-3">A Slack-or-Teams-resident assistant that the whole team uses. Connected to the docs, the calendar, the policies. Knows the difference between a question it can answer and one it should escalate.</p>
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light">Best paired with: Nexus</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-yellow-deep mb-3">Pattern 05</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Document Q&amp;A.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed mb-3">A reader for a long, structured document — a contract, a filing, a report. Asks return passages, not paraphrase. The citation is the answer; the paraphrase is the helper.</p>
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light">Best paired with: Nexus</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink mb-3">Pattern 06</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Scheduled agent runs.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed mb-3">An agent that wakes on a cron, reads its queue, plans the work, executes inside the approval gates, and writes a summary post for the morning. Replayable trace on every run.</p>
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light">Best paired with: Prometheus</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════ WHAT GOOD LOOKS LIKE ════════ -->
-  <section class="py-20 sm:py-28 bg-white border-t border-line">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8">
-      <div class="reveal max-w-3xl mb-14 sm:mb-16">
-        <p class="section-mark mb-5">What good looks like</p>
-        <h2 class="h-section text-3xl sm:text-5xl mb-5 balance">Three properties of a use case that lasted.</h2>
-        <p class="pretty text-base sm:text-lg text-ink-mid leading-relaxed">
-          The patterns above can ship in a week. The ones that are still running a year later share three properties. If a workflow does not have all three by the end of the build cycle, we send it back for another pass before we hand it over.
+        <h1 class="hx-doc-title">
+          Use cases
+          <span class="hx-doc-title-italic">Patterns we ship most often.</span>
+        </h1>
+        <p class="hx-doc-lede">
+          Common shapes of work that land in production. Each pattern names a typical workflow and the model most often paired with it. No customer names — these are the engagement shapes, not specific clients.
         </p>
-      </div>
-
-      <div class="grid sm:grid-cols-3 gap-5 sm:gap-6">
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-red mb-3">Property 01</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Production-grade.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Failure modes are catalogued, retries are bounded, and irreversible steps have approval gates. The agent runs without supervision because it knows when to stop.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-yellow-deep mb-3">Property 02</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Replayable.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Every run leaves a trace someone can scroll through six months later. The prompt, the tool calls, the inputs and outputs, the decisions at each gate — all on record, all explorable.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink mb-3">Property 03</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Owned by the client.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">The prompt, the eval set, the runbook, and the code live in your repo. No lock-in, no DSL we hold the keys to. When the model changes, your team can rerun the eval and make the call.</p>
+        <div class="hx-doc-chips">
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Production shapes</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Generic patterns</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Model-paired</span>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════════════════════════════════════════════════════════
-       PREMIUM FOOTER — luxe obsidian edition
-       Deep dark stage with ambient mesh, signature aurora rims,
-       refined column hierarchy, premium glass subscribe form,
-       trust ribbon with badges, glass social chips.
-       ════════════════════════════════════════════════════════════ -->
+    <!-- COMMON PATTERNS -->
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">Common patterns</p>
+        <h2 class="hx-doc-section-title">Six shapes <span class="hx-doc-section-italic">we keep shipping.</span></h2>
+        <p class="hx-doc-section-desc">The patterns that show up most often in the engagement queue. Each has its default model and a one-line description of where it earns its keep.</p>
+
+        <div class="hx-doc-grid hx-doc-grid-3">
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Support</span>
+            <h3 class="hx-doc-card-title">Customer support agents</h3>
+            <p class="hx-doc-card-body">First-line classifier and draft-reply assistant with a human approval gate. Best paired with Ether for latency.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">RAG</span>
+            <h3 class="hx-doc-card-title">RAG over company knowledge</h3>
+            <p class="hx-doc-card-body">Wikis, docs, contracts grounded with citations. Best paired with Nexus for long context.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Sales</span>
+            <h3 class="hx-doc-card-title">Sales / CRM enrichment</h3>
+            <p class="hx-doc-card-body">Inbound enrichment, account summaries, outreach drafts. Best paired with Nexus for cited reasoning.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Internal</span>
+            <h3 class="hx-doc-card-title">Internal assistants</h3>
+            <p class="hx-doc-card-body">Workspace-wide assistants for legal, HR, finance, ops. Best paired with Nexus inside your tenant.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Docs</span>
+            <h3 class="hx-doc-card-title">Document Q&amp;A</h3>
+            <p class="hx-doc-card-body">Contracts, regulatory filings, research reports. Best paired with Nexus for retrieval-grounded answers.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Agents</span>
+            <h3 class="hx-doc-card-title">Scheduled agent runs</h3>
+            <p class="hx-doc-card-body">Overnight or cron-triggered runs — digests, enrichments, reports. Best paired with Prometheus for chained tools.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT GOOD LOOKS LIKE -->
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">What good looks like</p>
+        <h2 class="hx-doc-section-title">Three qualities, <span class="hx-doc-section-italic">in every shipped surface.</span></h2>
+        <p class="hx-doc-section-desc">The traits that separate a production agent from a demo. Each engagement is graded against these.</p>
+
+        <div class="hx-doc-grid hx-doc-grid-3">
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Quality</span>
+            <h3 class="hx-doc-card-title">Production-grade</h3>
+            <p class="hx-doc-card-body">Eval set kept current, failure modes documented, replay path wired up. Not a demo — a surface someone depends on by Monday.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Audit</span>
+            <h3 class="hx-doc-card-title">Replayable</h3>
+            <p class="hx-doc-card-body">Every agent run leaves a trace. Inputs, plan, tool calls, outputs — all replayable from the workspace, weeks later.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Ownership</span>
+            <h3 class="hx-doc-card-title">Owned by the client</h3>
+            <p class="hx-doc-card-body">Code, prompts, evals, runbooks — handed over at the end. No black boxes, no lock-in, no consultant tax.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANTI-PATTERNS -->
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">Anti-patterns to avoid</p>
+        <h2 class="hx-doc-section-title">Four shapes <span class="hx-doc-section-italic">we don't ship.</span></h2>
+        <p class="hx-doc-section-desc">The patterns that look like value and aren't. Worth recognising before you start.</p>
+
+        <ol class="hx-doc-list">
+          <li>
+            <span class="hx-doc-list-num">01</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Treating the chat as the product</h3>
+              <p class="hx-doc-list-desc">A chat box wrapped around a model is the demo, not the surface. The product is the workflow around it — retrieval, approvals, audit, integrations.</p>
+            </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">02</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Skipping the model picker</h3>
+              <p class="hx-doc-list-desc">Defaulting every call to the same model wastes either cost or quality. Picking on purpose — latency, depth, or action — is the single highest-leverage decision.</p>
+            </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">03</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Building without citations</h3>
+              <p class="hx-doc-list-desc">If an answer can't be traced back to its evidence, it isn't auditable. Citations aren't a feature; they're how a RAG system earns its keep.</p>
+            </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">04</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Skipping approval gates on writes</h3>
+              <p class="hx-doc-list-desc">Anything irreversible — sending email, posting a comment, mutating CRM data — needs a human in the loop. The first time the agent makes a mistake, the gate pays for itself.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="hx-doc-closing">
+      <span class="hx-doc-closing-mark">End of overview</span>
+      <p>Patterns are the starting point. The engagement is where the work actually happens.</p>
+    </section>
+
+  </main>
+
   <footer class="hx-footer">
     <div class="hx-footer-bg" aria-hidden="true">
       <div class="hx-footer-grid"></div>
@@ -257,10 +249,8 @@
 
     <div class="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 sm:pt-28 pb-10">
 
-      <!-- Top row: brand + 4 columns -->
       <div class="hx-footer-top">
 
-        <!-- Brand column -->
         <div class="hx-footer-brand-col">
           <a href="/" class="hx-footer-brand">
             <span class="hx-footer-brand-halo" aria-hidden="true"></span>
@@ -280,7 +270,6 @@
           </form>
         </div>
 
-        <!-- Product -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#F5C863"></span>Product</p>
           <ul>
@@ -292,7 +281,6 @@
           </ul>
         </div>
 
-        <!-- Company -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#DC2626"></span>Company</p>
           <ul>
@@ -304,7 +292,6 @@
           </ul>
         </div>
 
-        <!-- Resources -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#F0B852"></span>Resources</p>
           <ul>
@@ -316,11 +303,9 @@
             <li><a href="/best-practices"><span class="hx-footer-link-title">Best practices</span><span class="hx-footer-link-desc">Engineering principles, anti-patterns</span></a></li>
             <li><a href="/customer-stories"><span class="hx-footer-link-title">Customer stories</span><span class="hx-footer-link-desc">Engagement shapes and outcomes</span></a></li>
             <li><a href="/help-center"><span class="hx-footer-link-title">Help center</span><span class="hx-footer-link-desc">Docs, FAQs, and how-tos</span></a></li>
-            <li><a href="/community"><span class="hx-footer-link-title">Community</span><span class="hx-footer-link-desc">Forum, Discord, GitHub</span></a></li>
           </ul>
         </div>
 
-        <!-- Legal -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#D4D4D8"></span>Legal</p>
           <ul>
@@ -334,7 +319,6 @@
 
       </div>
 
-      <!-- Trust ribbon: signature → certifications → live status -->
       <div class="hx-footer-trust">
         <span class="hx-footer-trust-item">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="hx-footer-trust-flag"><rect width="24" height="24" rx="3" fill="#DC2626"/><rect x="10" y="5" width="4" height="14" fill="#FFFFFF"/><rect x="5" y="10" width="14" height="4" fill="#FFFFFF"/></svg>
@@ -351,7 +335,6 @@
         <span class="hx-footer-trust-item hx-footer-trust-mono">v 2.4 · Cycle 12</span>
       </div>
 
-      <!-- Bottom row: copyright + socials -->
       <div class="hx-footer-bottom">
         <p class="hx-footer-copy">© 2026 HelveX AG · Zurich, Switzerland · All rights reserved.</p>
         <div class="hx-footer-social">

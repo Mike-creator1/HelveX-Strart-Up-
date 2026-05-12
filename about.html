@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
   <title>About — HelveX</title>
-  <meta name="description" content="Who we are, who we hire, how to reach press, and how to use the HelveX brand. Designed and built in Switzerland." />
+  <meta name="description" content="HelveX is the AI platform we wanted to use ourselves. Three frontier models, the workspace around them, and senior engineers who own every engagement end-to-end. Built in Zurich, deployed worldwide." />
   <meta property="og:title" content="About — HelveX" />
-  <meta property="og:description" content="Who we are, who we hire, how to reach press, and how to use the HelveX brand." />
+  <meta property="og:description" content="Built in Switzerland, 2024. Three frontier models, six workspace surfaces, senior engineers end-to-end." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="HelveX" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -19,42 +19,27 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            ink: '#0A0A0A',
-            'ink-soft': '#171717',
-            'ink-mid': '#525252',
-            'ink-light': '#A3A3A3',
-            'ink-faint': '#D4D4D4',
-            line: '#E5E5E5',
-            'line-soft': '#F0EFEC',
-            cream: '#FAFAF7',
-            beige: '#F4EFE6',
-            'beige-warm': '#EDE5D6',
-            red: '#DC2626',
-            'red-deep': '#991B1B',
-            'red-soft': '#FEE2E2',
-            yellow: '#FCD34D',
-            'yellow-deep': '#F59E0B',
-            'yellow-soft': '#FEF3C7',
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-            serif: ['"Instrument Serif"', 'Georgia', 'serif'],
-          },
-        },
-      },
-    };
+    tailwind.config = { theme: { extend: { colors: { ink: '#0A0A0A', 'ink-soft': '#171717', 'ink-mid': '#525252', 'ink-light': '#A3A3A3', 'ink-faint': '#D4D4D4', line: '#E5E5E5', 'line-soft': '#F0EFEC', cream: '#FAFAF7', beige: '#F4EFE6', red: '#DC2626', 'red-deep': '#991B1B', 'red-soft': '#FEE2E2', yellow: '#FCD34D', 'yellow-deep': '#F59E0B', 'yellow-soft': '#FEF3C7' }, fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'], serif: ['"Instrument Serif"', 'Georgia', 'serif'] } } } };
   </script>
 
   <link rel="stylesheet" href="/helvex.css" />
 
+  <!-- Per-page accent: Company tier (red) -->
+  <style>
+    .hx-doc-page {
+      --accent: #DC2626;
+      --accent-text: #991B1B;
+      --accent-bg: #FEE2E2;
+      --accent-glow: rgba(220,38,38,0.22);
+      --accent-shadow: rgba(220,38,38,0.16);
+      --accent-from: #991B1B;
+      --accent-mid: #DC2626;
+      --accent-to: #7F1D1D;
+    }
+  </style>
 </head>
-<body class="bg-white text-ink antialiased">
+<body class="hx-doc-page antialiased">
 
-  <!-- Premium .hx-header styles live in /helvex.css so every page that loads the shared stylesheet gets them automatically. -->
   <header class="hx-header">
     <nav class="max-w-[1520px] mx-auto pl-4 pr-5 sm:pl-6 sm:pr-8 flex items-center justify-between gap-4">
       <div class="flex items-center gap-5 lg:gap-8">
@@ -110,325 +95,150 @@
     </nav>
   </header>
 
-  <!-- ════════ MOBILE MENU DRAWER ════════ -->
-  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Site navigation">
-    <div class="mobile-menu-backdrop" data-close></div>
-    <div class="mobile-menu-panel">
-      <div class="mobile-menu-header">
-        <a href="/" class="brand-mark text-xl flex items-center gap-2">
-          <span class="brand-logo"><img src="/helvex-logo.png" alt="HelveX" class="h-16 w-auto" /></span>
-        </a>
-        <button type="button" class="mobile-menu-close" data-close aria-label="Close menu">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6l-12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <nav class="mobile-menu-nav" aria-label="Main">
-        <a href="/" class="mobile-menu-link">Home</a>
-        <details class="mobile-menu-services">
-          <summary class="mobile-menu-link" style="list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-            <span>Services</span>
-            <svg class="w-4 h-4 text-ink-light transition-transform" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </summary>
-          <div class="pl-4 mt-1 mb-2 space-y-0.5 border-l border-line">
-            <a href="/ai-automation.html" class="mobile-menu-link">AI &amp; Automation</a>
-            <a href="/business-consulting.html" class="mobile-menu-link">Business Consulting</a>
-            <a href="/digital-services.html" class="mobile-menu-link">Digital Services</a>
-            <a href="/growth-marketing.html" class="mobile-menu-link">Growth &amp; Marketing</a>
-            <a href="/enterprise.html" class="mobile-menu-link">Enterprise</a>
-          </div>
-        </details>
-        <a href="/models" class="mobile-menu-link">Models</a>
-        <a href="/workspace" class="mobile-menu-link">Workspace</a>
-        <a href="/research" class="mobile-menu-link">Research</a>
-        <a href="/customer-stories" class="mobile-menu-link">Customers</a>
-        <a href="/resources" class="mobile-menu-link">Resources</a>
-      </nav>
-      <div class="mobile-menu-cta">
-        <a href="/signup.html" class="primary">
-          Try HeliX
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
-        <a href="/signup.html" class="secondary">Sign in</a>
-      </div>
-      <div class="mobile-menu-meta">Built in Switzerland</div>
-    </div>
+  <!-- Ambient backdrop -->
+  <div class="hx-doc-bg" aria-hidden="true">
+    <div class="hx-doc-bg-grid"></div>
+    <div class="hx-doc-bg-glow hx-doc-bg-glow-1"></div>
+    <div class="hx-doc-bg-glow hx-doc-bg-glow-2"></div>
   </div>
 
-  <!-- ════════ HERO ════════ -->
-  <section id="about" class="relative pt-14 sm:pt-24 pb-12 sm:pb-16 overflow-hidden scroll-mt-24">
-    <div class="hero-orb hero-orb-1" style="opacity: 0.35;"></div>
+  <main class="hx-doc-wrap">
 
-    <div class="relative max-w-5xl mx-auto px-6 sm:px-8">
-      <p class="reveal section-mark mb-7">About HelveX</p>
-      <h1 class="reveal h-display balance text-[44px] sm:text-7xl mb-6">
-        Built in Switzerland.<br />
-        <span class="italic font-serif font-normal tech-gradient-text">For the work that matters.</span>
-      </h1>
-      <p class="reveal pretty text-base sm:text-xl text-ink-mid max-w-2xl leading-relaxed">
-        HelveX is the AI platform we wanted to use ourselves. Three frontier models — Ether, Nexus, Prometheus — and the workspace, knowledge, and trust layer around them. We are a small, senior team based in Zurich, with research in EU-Central and engineering across the globe.
-      </p>
-
-      <!-- Section nav chips -->
-      <div class="reveal flex flex-wrap items-center gap-2 sm:gap-2.5 text-[12px] mt-10">
-        <a href="#about" class="bg-ink text-white rounded-full px-3.5 py-1.5 font-semibold">About</a>
-        <a href="#careers" class="bg-white border border-line text-ink-soft hover:border-ink rounded-full px-3.5 py-1.5 font-medium transition-colors">Careers</a>
-        <a href="#press" class="bg-white border border-line text-ink-soft hover:border-ink rounded-full px-3.5 py-1.5 font-medium transition-colors">Press</a>
-        <a href="#brand" class="bg-white border border-line text-ink-soft hover:border-ink rounded-full px-3.5 py-1.5 font-medium transition-colors">Brand</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════ COMPANY FACTS ════════ -->
-  <section class="pb-20 sm:pb-28">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8">
-      <div class="reveal grid grid-cols-2 lg:grid-cols-4 gap-px bg-line border border-line rounded-2xl overflow-hidden">
-        <div class="bg-white p-6 sm:p-7">
-          <p class="text-4xl sm:text-5xl font-extrabold tracking-tightest text-ink mb-1.5">2024</p>
-          <p class="text-xs text-ink-mid leading-snug">Founded in<br />Zurich, Switzerland</p>
-        </div>
-        <div class="bg-white p-6 sm:p-7">
-          <p class="text-4xl sm:text-5xl font-extrabold tracking-tightest text-red mb-1.5">3</p>
-          <p class="text-xs text-ink-mid leading-snug">Frontier models<br />in production</p>
-        </div>
-        <div class="bg-white p-6 sm:p-7">
-          <p class="text-4xl sm:text-5xl font-extrabold tracking-tightest text-yellow-deep mb-1.5">28</p>
-          <p class="text-xs text-ink-mid leading-snug">Languages<br />supported natively</p>
-        </div>
-        <div class="bg-white p-6 sm:p-7">
-          <p class="text-4xl sm:text-5xl font-extrabold tracking-tightest text-ink mb-1.5">EU&nbsp;·&nbsp;US&nbsp;·&nbsp;APAC</p>
-          <p class="text-xs text-ink-mid leading-snug">Regions<br />we serve</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════ STORY ════════ -->
-  <section class="relative tech-wash-soft border-y border-line py-20 sm:py-28 overflow-hidden">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8 grid lg:grid-cols-12 gap-10 lg:gap-16">
-      <div class="lg:col-span-5">
-        <p class="reveal section-mark mb-5">The story</p>
-        <h2 class="reveal h-section text-3xl sm:text-5xl mb-5 balance">Three minds. One frontier.</h2>
-      </div>
-      <div class="lg:col-span-7 space-y-5 text-base sm:text-lg text-ink-mid leading-relaxed pretty">
-        <p class="reveal">
-          We started HelveX because the first generation of AI products treated intelligence as a single setting on a single model. That works for demos. It does not work for the kind of work that has to land — the brief that goes to the board, the agent that runs while you sleep, the support reply that ships in under a second.
+    <!-- ════════ HERO ════════ -->
+    <section class="hx-doc-hero">
+      <div class="hx-doc-hero-inner">
+        <p class="hx-doc-eyebrow">
+          <span class="hx-doc-eyebrow-dot"></span>
+          Company · About
         </p>
-        <p class="reveal">
-          So we built three. <span class="font-semibold text-ink">Ether</span> for the work that has to feel instant. <span class="font-semibold text-ink">Nexus</span> for the work that has to be right and well-sourced. <span class="font-semibold text-ink">Prometheus</span> for the work that has to actually go and do the thing. A router picks one when you don't want to choose, and you can override the router on any turn.
+        <h1 class="hx-doc-title">
+          About HelveX
+          <span class="hx-doc-title-italic">Built in Switzerland, 2024.</span>
+        </h1>
+        <p class="hx-doc-lede">
+          HelveX is the AI platform we wanted to use ourselves. Three frontier models, the workspace around them, and senior engineers who own every engagement end-to-end. Built in Zurich, deployed worldwide.
         </p>
-        <p class="reveal">
-          Around that, we built the workspace, the knowledge surface, and the trust layer that turn a model into something a team can rely on. Replayable agent runs, citation-grade retrieval, residency in your region, and a refusal calibration we measure as carefully as the capability.
-        </p>
-        <p class="reveal">
-          We are based in Zurich, with research in EU-Central and engineering across three continents. We hire senior, we ship every week, and we publish methodology — including what didn't work — on the <a href="/research" class="text-ink underline hover:text-red transition-colors">Research</a> page.
-        </p>
+        <div class="hx-doc-chips">
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Founded 2024</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Zurich, Switzerland</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>3 frontier models</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>6 workspace surfaces</span>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════ LEADERSHIP / VALUES ════════ -->
-  <section class="py-20 sm:py-28">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8">
-      <div class="reveal max-w-3xl mb-14 sm:mb-16">
-        <p class="section-mark mb-5">How we operate</p>
-        <h2 class="h-section text-3xl sm:text-5xl mb-5 balance">Four working principles.</h2>
-        <p class="pretty text-base sm:text-lg text-ink-mid leading-relaxed">
-          We don't have a mission statement on the wall. We have four operating principles that show up in every code review, every research write-up, and every customer conversation.
-        </p>
-      </div>
+    <!-- ════════ AT A GLANCE ════════ -->
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">At a glance</p>
+        <h2 class="hx-doc-section-title">A company, <span class="hx-doc-section-italic">in four readings.</span></h2>
+        <p class="hx-doc-section-desc">No biography, no slogans. The four facts that show up in every conversation about who we are and what we ship.</p>
 
-      <div class="grid sm:grid-cols-2 gap-5 sm:gap-6">
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light mb-3">01</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Ship work, not slogans.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">A real change in the product beats a real change in the marketing site. Every claim on this site is something we can show in the workspace.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light mb-3">02</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Disagree with evidence.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">We argue from data, written specs, and reproducible experiments. Strongly held opinions are welcome — they need to survive a numbered eval.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light mb-3">03</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Trust is technical.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">We treat security, residency, refusal calibration, and audit logs as engineering problems with measurable answers, not as marketing categories.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light mb-3">04</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Senior, small, calm.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">We hire people who have shipped before, give them the room to do it again, and protect deep work from meeting culture. Headcount is a last resort, not a goal.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════ CAREERS ════════ -->
-  <section id="careers" class="relative tech-wash-soft border-y border-line py-20 sm:py-28 overflow-hidden scroll-mt-24">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8 grid lg:grid-cols-12 gap-10 lg:gap-16">
-      <div class="lg:col-span-5">
-        <p class="reveal section-mark mb-5">Careers</p>
-        <h2 class="reveal h-section text-3xl sm:text-5xl mb-5 balance">We hire senior. We hire rarely.</h2>
-        <p class="reveal pretty text-base sm:text-lg text-ink-mid leading-relaxed mb-8">
-          A small, calm, senior team is the only thing we have found that consistently ships frontier work. We post roles when we have a real seat — not to fill a pipeline.
-        </p>
-        <a href="mailto:careers@helvex.ai?subject=HelveX%20-%20Career%20interest" class="btn-primary inline-flex items-center gap-2 bg-ink hover:bg-ink-soft text-white text-sm font-semibold px-6 py-3.5 rounded-full transition-colors btn-shadow">
-          Email careers@helvex.ai
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-        </a>
-      </div>
-      <div class="lg:col-span-7 space-y-px border-y border-line">
-        <div class="reveal flex items-center justify-between py-5 gap-4">
-          <div>
-            <p class="font-semibold text-ink mb-1">Research scientist · long-horizon agents</p>
-            <p class="text-sm text-ink-mid">Zurich · on-site or hybrid</p>
+        <div class="hx-doc-grid hx-doc-grid-4">
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Year</span>
+            <h3 class="hx-doc-card-title">Founded 2024</h3>
+            <p class="hx-doc-card-body">A late entry on purpose. The frontier moved fast enough that arriving in 2024 meant building on a stable enough foundation to ship serious work.</p>
           </div>
-          <a href="mailto:careers@helvex.ai?subject=HelveX%20-%20Research%20scientist%20%C2%B7%20long-horizon%20agents" class="text-sm font-semibold text-ink hover:text-red transition-colors inline-flex items-center gap-1 flex-shrink-0">Apply <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
-        </div>
-        <div class="reveal flex items-center justify-between py-5 gap-4 border-t border-line">
-          <div>
-            <p class="font-semibold text-ink mb-1">Senior platform engineer · agent runtime</p>
-            <p class="text-sm text-ink-mid">Zurich · remote (EU)</p>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Place</span>
+            <h3 class="hx-doc-card-title">Zurich, Switzerland</h3>
+            <p class="hx-doc-card-body">Headquartered in Zurich. Swiss data norms, EU adjacency, engineering culture that values precision over noise. The label on the box.</p>
           </div>
-          <a href="mailto:careers@helvex.ai?subject=HelveX%20-%20Senior%20platform%20engineer%20%C2%B7%20agent%20runtime" class="text-sm font-semibold text-ink hover:text-red transition-colors inline-flex items-center gap-1 flex-shrink-0">Apply <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
-        </div>
-        <div class="reveal flex items-center justify-between py-5 gap-4 border-t border-line">
-          <div>
-            <p class="font-semibold text-ink mb-1">Member of technical staff · evaluation</p>
-            <p class="text-sm text-ink-mid">Zurich · on-site preferred</p>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Models</span>
+            <h3 class="hx-doc-card-title">Ether · Nexus · Prometheus</h3>
+            <p class="hx-doc-card-body">Three frontier models, one runtime. Ether for real-time, Nexus for reasoning and long context, Prometheus for agentic depth and computer use.</p>
           </div>
-          <a href="mailto:careers@helvex.ai?subject=HelveX%20-%20Member%20of%20technical%20staff%20%C2%B7%20evaluation" class="text-sm font-semibold text-ink hover:text-red transition-colors inline-flex items-center gap-1 flex-shrink-0">Apply <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
-        </div>
-        <div class="reveal flex items-center justify-between py-5 gap-4 border-t border-line">
-          <div>
-            <p class="font-semibold text-ink mb-1">Forward-deployed engineer</p>
-            <p class="text-sm text-ink-mid">London · New York · Zurich</p>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Workspace</span>
+            <h3 class="hx-doc-card-title">Six surfaces</h3>
+            <p class="hx-doc-card-body">Chat, Projects, Agents, Knowledge, Spaces, History. The operating layer around the models — not a chat window with extra tabs.</p>
           </div>
-          <a href="mailto:careers@helvex.ai?subject=HelveX%20-%20Forward-deployed%20engineer" class="text-sm font-semibold text-ink hover:text-red transition-colors inline-flex items-center gap-1 flex-shrink-0">Apply <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════ PRESS ════════ -->
-  <section id="press" class="py-20 sm:py-28 scroll-mt-24">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8 grid lg:grid-cols-12 gap-10 lg:gap-16">
-      <div class="lg:col-span-5">
-        <p class="reveal section-mark mb-5">Press</p>
-        <h2 class="reveal h-section text-3xl sm:text-5xl mb-5 balance">For journalists and analysts.</h2>
-        <p class="reveal pretty text-base sm:text-lg text-ink-mid leading-relaxed mb-8">
-          We respond to media enquiries within one business day. For background calls, demos, or interviews with the founding team, write to press — please include the publication, the angle, and the deadline.
-        </p>
-        <a href="mailto:press@helvex.ai?subject=HelveX%20-%20Media%20enquiry" class="btn-primary inline-flex items-center gap-2 bg-ink hover:bg-ink-soft text-white text-sm font-semibold px-6 py-3.5 rounded-full transition-colors btn-shadow">
-          Email press@helvex.ai
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-        </a>
-      </div>
-      <div class="lg:col-span-7 grid sm:grid-cols-2 gap-5">
-        <div class="reveal rounded-2xl border border-line bg-white p-6">
-          <p class="h-eyebrow text-ink-light mb-3">Recent coverage</p>
-          <p class="text-sm font-semibold text-ink mb-1.5 leading-snug">"HelveX brings Swiss precision to enterprise AI"</p>
-          <p class="text-xs text-ink-mid">Financial Times · Oct 2026</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-6">
-          <p class="h-eyebrow text-ink-light mb-3">Recent coverage</p>
-          <p class="text-sm font-semibold text-ink mb-1.5 leading-snug">"Three models, one workspace, audited end to end"</p>
-          <p class="text-xs text-ink-mid">The Information · Sep 2026</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-6">
-          <p class="h-eyebrow text-ink-light mb-3">Recent coverage</p>
-          <p class="text-sm font-semibold text-ink mb-1.5 leading-snug">"Inside Prometheus 2.0 — agents that finish the workday"</p>
-          <p class="text-xs text-ink-mid">NZZ · Nov 2026</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-6">
-          <p class="h-eyebrow text-ink-light mb-3">Press kit</p>
-          <p class="text-sm text-ink-mid leading-relaxed mb-3">Logos, bios, product screenshots, fact sheet.</p>
-          <a href="mailto:press@helvex.ai?subject=HelveX%20-%20Press%20kit%20request" class="text-sm font-semibold text-ink hover:text-red transition-colors inline-flex items-center gap-1">Request press kit <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- ════════ HOW WE ENGAGE ════════ -->
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">How we engage</p>
+        <h2 class="hx-doc-section-title">Four phases, <span class="hx-doc-section-italic">in order.</span></h2>
+        <p class="hx-doc-section-desc">Every engagement runs the same arc. The names of the phases never change, the durations sometimes do.</p>
 
-  <!-- ════════ BRAND ════════ -->
-  <section id="brand" class="border-t border-line bg-ink text-white py-20 sm:py-28 relative overflow-hidden scroll-mt-24">
-    <div class="absolute inset-0 grid-bg-dark opacity-50"></div>
-    <div class="relative max-w-6xl mx-auto px-6 sm:px-8 grid lg:grid-cols-12 gap-10 lg:gap-16">
-      <div class="lg:col-span-5">
-        <p class="reveal section-mark text-yellow mb-5">Brand</p>
-        <h2 class="reveal h-section text-3xl sm:text-5xl mb-5 balance">How to write us, draw us, name us.</h2>
-        <p class="reveal pretty text-base text-white/70 leading-relaxed mb-8">
-          A few rules so the brand stays consistent wherever it shows up.
-        </p>
-        <a href="mailto:brand@helvex.ai?subject=HelveX%20-%20Brand%20asset%20request" class="inline-flex items-center gap-2 border border-yellow/40 hover:border-yellow text-yellow text-sm font-semibold px-6 py-3.5 rounded-full transition-colors">
-          Request brand assets
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-        </a>
+        <ol class="hx-doc-list">
+          <li>
+            <span class="hx-doc-list-num">01</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Scope</h3>
+              <p class="hx-doc-list-desc">One or two weeks. The brief gets written down. Constraints surface early — data residency, latency targets, approval gates, who signs off. Nothing gets built until the brief is signed.</p>
+            </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">02</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Architect</h3>
+              <p class="hx-doc-list-desc">One or two weeks. Model routing, retrieval shape, eval design, tool definitions, identity and audit logging. The runbook gets drafted in the same week.</p>
+            </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">03</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Build</h3>
+              <p class="hx-doc-list-desc">Four to six weeks. Senior engineer ships weekly. Replayable agent traces from day one. Customer team in the loop on every iteration; nothing dropped over the wall.</p>
+            </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">04</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Operate</h3>
+              <p class="hx-doc-list-desc">Monthly retainer. Workspace Refresh meeting once a month — cost, failure review, roadmap pick, doc update. The same engineer keeps the relationship.</p>
+            </div>
+          </li>
+        </ol>
       </div>
-      <div class="lg:col-span-7 space-y-6">
-        <div class="reveal rounded-2xl border border-white/15 p-6">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-yellow mb-3">Wordmark</p>
-          <p class="text-2xl font-bold mb-3">Helve<span class="text-red">X</span></p>
-          <p class="text-sm text-white/70 leading-relaxed">Always written as one word. Capital H, lowercase elve, capital X. The X carries the brand colour — never substituted, never lowercased.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-white/15 p-6">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-yellow mb-3">Pronunciation</p>
-          <p class="text-base font-semibold mb-2">/ˈhɛl.vɛks/ &nbsp;·&nbsp; <span class="font-normal text-white/70">HEL-veks</span></p>
-          <p class="text-sm text-white/70 leading-relaxed">Two syllables, even stress. From <span class="italic">Helvetia</span>, the Latin name for Switzerland.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-white/15 p-6">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-yellow mb-3">Models</p>
-          <p class="text-sm text-white/70 leading-relaxed mb-3">Three names, one frontier. Always title-case, never plural-ise:</p>
-          <ul class="text-sm text-white/80 space-y-1.5">
-            <li><span class="font-semibold text-white">Ether</span> — real-time</li>
-            <li><span class="font-semibold text-white">Nexus</span> — reasoning</li>
-            <li><span class="font-semibold text-white">Prometheus</span> — agentic</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════ HOW WE ENGAGE ════════ -->
-  <section class="py-20 sm:py-28">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8">
-      <div class="reveal max-w-3xl mb-14 sm:mb-16">
-        <p class="section-mark mb-5">How we engage</p>
-        <h2 class="h-section text-3xl sm:text-5xl mb-5 balance">Scope, architect, build, operate.</h2>
-        <p class="pretty text-base sm:text-lg text-ink-mid leading-relaxed">
-          Every engagement follows the same four-step shape. A senior engineer owns it end to end, and a written brief lands on your desk before any code does. Six to ten weeks for the first cycle, then a flat monthly retainer in operate-mode if you want us to keep the lights on.
-        </p>
-      </div>
+    <!-- ════════ PRINCIPLES ════════ -->
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">Principles</p>
+        <h2 class="hx-doc-section-title">What we won't compromise.</h2>
+        <p class="hx-doc-section-desc">Four working principles that show up in every engagement, written down so the next team doesn't have to ask.</p>
 
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-red mb-3">01 · Scope</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Written brief first.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">We define the problem, the data sources, the constraints, and the success bar in plain English. Fixed price and fixed timeline come back inside one week — no metering, no surprises.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-yellow-deep mb-3">02 · Architect</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Pick the model. Map the agent.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">We choose Ether, Nexus, or Prometheus per task, draw the agent graph, and mark every irreversible step with an approval gate. Citations, replay budget, and refusal calibration are designed in, not bolted on.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink mb-3">03 · Build</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Ship every week.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Code lands in your repo from week one and runs in your AWS or GCP tenant. We pair on the eval set, write the runbook beside the code, and the senior engineer who scoped the work is the same one shipping it.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-red mb-3">04 · Operate</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">A monthly Workspace Refresh.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Flat monthly retainer. We tune prompts as models change, add tools as the work changes, and hand back a written cycle report. No lock-in — the IP, the code, and the eval sets are yours from day one.</p>
+        <div class="hx-doc-grid hx-doc-grid-4">
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">People</span>
+            <h3 class="hx-doc-card-title">Senior engineer per engagement</h3>
+            <p class="hx-doc-card-body">One named senior on every project, end to end. No hand-offs to a junior bench, no offshored back room. The person you brief is the person who ships.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Process</span>
+            <h3 class="hx-doc-card-title">Written brief before code</h3>
+            <p class="hx-doc-card-body">Scope, constraints, success criteria — all in writing before a single line of code. The brief is the contract; the code is the implementation.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Output</span>
+            <h3 class="hx-doc-card-title">Citations or it didn't happen</h3>
+            <p class="hx-doc-card-body">RAG answers cite their sources. Agent runs ship a replayable trace. If an output can't be traced back to its evidence, it isn't shipped.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Posture</span>
+            <h3 class="hx-doc-card-title">Your cloud, your data</h3>
+            <p class="hx-doc-card-body">Enterprise plans run inside your AWS or GCP tenant. Data residency, customer-managed keys, SIEM export — defaults, not upsell tiers.</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════════════════════════════════════════════════════════
-       PREMIUM FOOTER — luxe obsidian edition
-       Deep dark stage with ambient mesh, signature aurora rims,
-       refined column hierarchy, premium glass subscribe form,
-       trust ribbon with badges, glass social chips.
-       ════════════════════════════════════════════════════════════ -->
+    <!-- ════════ CLOSING ════════ -->
+    <section class="hx-doc-closing">
+      <span class="hx-doc-closing-mark">End of overview</span>
+      <p>We are senior people, finishing what we start. The work is the proof.</p>
+    </section>
+
+  </main>
+
   <footer class="hx-footer">
     <div class="hx-footer-bg" aria-hidden="true">
       <div class="hx-footer-grid"></div>
@@ -439,10 +249,8 @@
 
     <div class="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 sm:pt-28 pb-10">
 
-      <!-- Top row: brand + 4 columns -->
       <div class="hx-footer-top">
 
-        <!-- Brand column -->
         <div class="hx-footer-brand-col">
           <a href="/" class="hx-footer-brand">
             <span class="hx-footer-brand-halo" aria-hidden="true"></span>
@@ -462,7 +270,6 @@
           </form>
         </div>
 
-        <!-- Product -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#F5C863"></span>Product</p>
           <ul>
@@ -474,7 +281,6 @@
           </ul>
         </div>
 
-        <!-- Company -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#DC2626"></span>Company</p>
           <ul>
@@ -486,7 +292,6 @@
           </ul>
         </div>
 
-        <!-- Resources -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#F0B852"></span>Resources</p>
           <ul>
@@ -498,11 +303,9 @@
             <li><a href="/best-practices"><span class="hx-footer-link-title">Best practices</span><span class="hx-footer-link-desc">Engineering principles, anti-patterns</span></a></li>
             <li><a href="/customer-stories"><span class="hx-footer-link-title">Customer stories</span><span class="hx-footer-link-desc">Engagement shapes and outcomes</span></a></li>
             <li><a href="/help-center"><span class="hx-footer-link-title">Help center</span><span class="hx-footer-link-desc">Docs, FAQs, and how-tos</span></a></li>
-            <li><a href="/community"><span class="hx-footer-link-title">Community</span><span class="hx-footer-link-desc">Forum, Discord, GitHub</span></a></li>
           </ul>
         </div>
 
-        <!-- Legal -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#D4D4D8"></span>Legal</p>
           <ul>
@@ -516,7 +319,6 @@
 
       </div>
 
-      <!-- Trust ribbon: signature → certifications → live status -->
       <div class="hx-footer-trust">
         <span class="hx-footer-trust-item">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="hx-footer-trust-flag"><rect width="24" height="24" rx="3" fill="#DC2626"/><rect x="10" y="5" width="4" height="14" fill="#FFFFFF"/><rect x="5" y="10" width="14" height="4" fill="#FFFFFF"/></svg>
@@ -533,7 +335,6 @@
         <span class="hx-footer-trust-item hx-footer-trust-mono">v 2.4 · Cycle 12</span>
       </div>
 
-      <!-- Bottom row: copyright + socials -->
       <div class="hx-footer-bottom">
         <p class="hx-footer-copy">© 2026 HelveX AG · Zurich, Switzerland · All rights reserved.</p>
         <div class="hx-footer-social">

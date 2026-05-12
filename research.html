@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
   <title>Research — HelveX</title>
-  <meta name="description" content="Research at HelveX — methodology, plainly written. Papers, engineering posts, and notes on reasoning, agents, evaluation, safety, and retrieval." />
+  <meta name="description" content="HelveX research — methodology, evals, open notes. Reasoning, retrieval grounding, evaluation, agentic systems. We publish what works, including what didn't." />
   <meta property="og:title" content="Research — HelveX" />
-  <meta property="og:description" content="Pick the mind for the moment. Ether for speed, Nexus for depth, Prometheus for action." />
+  <meta property="og:description" content="Reasoning, retrieval, evaluation, agentic systems — and how we publish methodology." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="HelveX" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -19,42 +19,27 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            ink: '#0A0A0A',
-            'ink-soft': '#171717',
-            'ink-mid': '#525252',
-            'ink-light': '#A3A3A3',
-            'ink-faint': '#D4D4D4',
-            line: '#E5E5E5',
-            'line-soft': '#F0EFEC',
-            cream: '#FAFAF7',
-            beige: '#F4EFE6',
-            'beige-warm': '#EDE5D6',
-            red: '#DC2626',
-            'red-deep': '#991B1B',
-            'red-soft': '#FEE2E2',
-            yellow: '#FCD34D',
-            'yellow-deep': '#F59E0B',
-            'yellow-soft': '#FEF3C7',
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-            serif: ['"Instrument Serif"', 'Georgia', 'serif'],
-          },
-        },
-      },
-    };
+    tailwind.config = { theme: { extend: { colors: { ink: '#0A0A0A', 'ink-soft': '#171717', 'ink-mid': '#525252', 'ink-light': '#A3A3A3', 'ink-faint': '#D4D4D4', line: '#E5E5E5', 'line-soft': '#F0EFEC', cream: '#FAFAF7', beige: '#F4EFE6', red: '#DC2626', 'red-deep': '#991B1B', 'red-soft': '#FEE2E2', yellow: '#FCD34D', 'yellow-deep': '#F59E0B', 'yellow-soft': '#FEF3C7' }, fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'], serif: ['"Instrument Serif"', 'Georgia', 'serif'] } } } };
   </script>
 
   <link rel="stylesheet" href="/helvex.css" />
 
+  <!-- Per-page accent: Company tier (red) -->
+  <style>
+    .hx-doc-page {
+      --accent: #DC2626;
+      --accent-text: #991B1B;
+      --accent-bg: #FEE2E2;
+      --accent-glow: rgba(220,38,38,0.22);
+      --accent-shadow: rgba(220,38,38,0.16);
+      --accent-from: #991B1B;
+      --accent-mid: #DC2626;
+      --accent-to: #7F1D1D;
+    }
+  </style>
 </head>
-<body class="bg-white text-ink antialiased">
+<body class="hx-doc-page antialiased">
 
-  <!-- Premium .hx-header styles live in /helvex.css so every page that loads the shared stylesheet gets them automatically. -->
   <header class="hx-header">
     <nav class="max-w-[1520px] mx-auto pl-4 pr-5 sm:pl-6 sm:pr-8 flex items-center justify-between gap-4">
       <div class="flex items-center gap-5 lg:gap-8">
@@ -110,298 +95,154 @@
     </nav>
   </header>
 
-  <!-- ════════ MOBILE MENU DRAWER ════════ -->
-  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Site navigation">
-    <div class="mobile-menu-backdrop" data-close></div>
-    <div class="mobile-menu-panel">
-      <div class="mobile-menu-header">
-        <a href="/" class="brand-mark text-xl flex items-center gap-2">
-          <span class="brand-logo"><img src="/helvex-logo.png" alt="HelveX" class="h-16 w-auto" /></span>
-        </a>
-        <button type="button" class="mobile-menu-close" data-close aria-label="Close menu">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6l-12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <nav class="mobile-menu-nav" aria-label="Main">
-        <a href="/" class="mobile-menu-link">Home</a>
-        <details class="mobile-menu-services">
-          <summary class="mobile-menu-link" style="list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-            <span>Services</span>
-            <svg class="w-4 h-4 text-ink-light transition-transform" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </summary>
-          <div class="pl-4 mt-1 mb-2 space-y-0.5 border-l border-line">
-            <a href="/ai-automation.html" class="mobile-menu-link">AI &amp; Automation</a>
-            <a href="/business-consulting.html" class="mobile-menu-link">Business Consulting</a>
-            <a href="/digital-services.html" class="mobile-menu-link">Digital Services</a>
-            <a href="/growth-marketing.html" class="mobile-menu-link">Growth &amp; Marketing</a>
-            <a href="/enterprise.html" class="mobile-menu-link">Enterprise</a>
-          </div>
-        </details>
-        <a href="/models" class="mobile-menu-link">Models</a>
-        <a href="/workspace" class="mobile-menu-link">Workspace</a>
-        <a href="/research" class="mobile-menu-link">Research</a>
-        <a href="/customer-stories" class="mobile-menu-link">Customers</a>
-        <a href="/resources" class="mobile-menu-link">Resources</a>
-      </nav>
-      <div class="mobile-menu-cta">
-        <a href="/signup.html" class="primary">
-          Try HeliX
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
-        <a href="/signup.html" class="secondary">Sign in</a>
-      </div>
-      <div class="mobile-menu-meta">Built in Switzerland</div>
-    </div>
+  <div class="hx-doc-bg" aria-hidden="true">
+    <div class="hx-doc-bg-grid"></div>
+    <div class="hx-doc-bg-glow hx-doc-bg-glow-1"></div>
+    <div class="hx-doc-bg-glow hx-doc-bg-glow-2"></div>
   </div>
-  <!-- ════════ HERO ════════ -->
-  <section class="relative pt-14 sm:pt-24 pb-16 sm:pb-24 overflow-hidden tech-wash-blush border-b border-line-soft">
-    <div class="tech-aurora"><div class="blob"></div></div>
 
-    <div class="relative max-w-5xl mx-auto px-6 sm:px-8 text-center">
-      <p class="reveal section-mark justify-center mb-7">Research at HelveX</p>
-      <h1 class="reveal h-display balance text-[44px] sm:text-7xl lg:text-[88px] mb-6">
-        How we think<br />
-        <span class="italic font-serif font-normal tech-gradient-text">about intelligence.</span>
-      </h1>
-      <p class="reveal pretty text-base sm:text-xl text-ink-mid max-w-2xl mx-auto leading-relaxed mb-10">
-        Our research direction, written plainly. The principles we work from, the experiments running this quarter, the ideas we are betting on, and the open problems we have not solved yet.
-      </p>
+  <main class="hx-doc-wrap">
 
-      <!-- Quick navigation chips into each section -->
-      <div class="reveal flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 text-[12px]">
-        <a href="#principles" class="bg-white/80 hover:bg-white border border-line text-ink-soft hover:text-ink rounded-full px-3.5 py-1.5 font-medium transition-colors">Principles</a>
-        <a href="#how-we-work" class="bg-white/80 hover:bg-white border border-line text-ink-soft hover:text-ink rounded-full px-3.5 py-1.5 font-medium transition-colors">How we work</a>
-        <a href="#areas" class="bg-white/80 hover:bg-white border border-line text-ink-soft hover:text-ink rounded-full px-3.5 py-1.5 font-medium transition-colors">Areas</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════ PRINCIPLES — research philosophy ════════ -->
-  <section id="principles" class="py-20 sm:py-28 scroll-mt-24">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8">
-      <div class="reveal max-w-3xl mb-14 sm:mb-16">
-        <p class="section-mark mb-5">Principles</p>
-        <h2 class="h-section text-3xl sm:text-5xl mb-5 balance">What we believe about AI.</h2>
-        <p class="pretty text-base sm:text-lg text-ink-mid leading-relaxed">
-          Four ideas shape every research decision we make. They are not slogans — they are the lens we use when we choose what to work on, how to evaluate it, and what we are willing to ship.
+    <section class="hx-doc-hero">
+      <div class="hx-doc-hero-inner">
+        <p class="hx-doc-eyebrow">
+          <span class="hx-doc-eyebrow-dot"></span>
+          Company · Research
         </p>
-      </div>
-
-      <div class="grid sm:grid-cols-2 gap-5 sm:gap-6">
-        <div class="reveal rounded-2xl border border-line bg-white p-7 sm:p-9">
-          <div class="flex items-baseline gap-4 mb-5">
-            <span class="font-mono text-[11px] tracking-widest uppercase text-red">Principle 01</span>
-          </div>
-          <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tightest mb-3">Capability with character.</h3>
-          <p class="text-base text-ink-mid leading-relaxed pretty">
-            A model that is more capable should be more honest, more careful, and more useful — not just bigger. We measure character at the same level of seriousness as raw capability, and we will not ship a smarter model that is harder to live with.
-          </p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7 sm:p-9">
-          <div class="flex items-baseline gap-4 mb-5">
-            <span class="font-mono text-[11px] tracking-widest uppercase text-yellow-deep">Principle 02</span>
-          </div>
-          <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tightest mb-3">Honesty over fluency.</h3>
-          <p class="text-base text-ink-mid leading-relaxed pretty">
-            A confident wrong answer is more harmful than a careful uncertain one. We invest in retrieval grounding, citation traceability, and calibrated uncertainty so that every claim a model makes can be checked, and so that it knows when it should not make one.
-          </p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7 sm:p-9">
-          <div class="flex items-baseline gap-4 mb-5">
-            <span class="font-mono text-[11px] tracking-widest uppercase text-ink">Principle 03</span>
-          </div>
-          <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tightest mb-3">Useful work, not benchmarks.</h3>
-          <p class="text-base text-ink-mid leading-relaxed pretty">
-            Most public benchmarks reward a narrow definition of "smart." We evaluate on tasks that mirror what our customers actually do — multi-tool agent runs, long-context analysis, real documents — and publish where the public scores do and do not match real-world quality.
-          </p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7 sm:p-9">
-          <div class="flex items-baseline gap-4 mb-5">
-            <span class="font-mono text-[11px] tracking-widest uppercase text-red-deep">Principle 04</span>
-          </div>
-          <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tightest mb-3">Auditable by default.</h3>
-          <p class="text-base text-ink-mid leading-relaxed pretty">
-            A model people can trust is a model whose work people can read. Every long agent run leaves a replayable trace. Every cited claim links back to the passage. Trust is built by making the inside of the system legible, not by promising it from the outside.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════ HOW WE WORK — methodology ════════ -->
-  <section id="how-we-work" class="py-20 sm:py-28 bg-cream/40 border-y border-line scroll-mt-24">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8">
-      <div class="reveal max-w-3xl mb-14 sm:mb-16">
-        <p class="section-mark mb-5">How we work</p>
-        <h2 class="h-section text-3xl sm:text-5xl mb-5 balance">From experiment to product.</h2>
-        <p class="pretty text-base sm:text-lg text-ink-mid leading-relaxed">
-          Our research lifecycle is short, repeatable, and on-record. Five stages, every project, no exceptions. The point is not the diagram — it's the discipline.
+        <h1 class="hx-doc-title">
+          Research
+          <span class="hx-doc-title-italic">Methodology, evals, open notes.</span>
+        </h1>
+        <p class="hx-doc-lede">
+          Our research arm investigates what makes frontier AI useful in production — reasoning, retrieval grounding, evaluation, agentic systems. We publish methodology, including what didn't work.
         </p>
-      </div>
-
-      <ol class="space-y-px">
-        <li class="reveal flex flex-col sm:flex-row gap-5 sm:gap-10 py-7 sm:py-8 border-b border-line">
-          <div class="sm:w-44 flex-shrink-0">
-            <span class="font-mono text-[11px] tracking-widest uppercase text-ink-light">Stage 01</span>
-            <p class="text-2xl sm:text-3xl font-extrabold tracking-tightest mt-1">Hypothesis</p>
-          </div>
-          <div class="flex-1">
-            <p class="text-base text-ink-mid leading-relaxed pretty mb-3">
-              Every project starts with one written sentence: the claim we are trying to test, the population it should hold for, and the precise way we will know if we are wrong. The sentence lives in the project root and gets updated as the work progresses.
-            </p>
-            <p class="text-xs font-mono text-ink-light"><span class="text-ink-soft">Output:</span> a hypothesis doc · 1 page · reviewed weekly</p>
-          </div>
-        </li>
-        <li class="reveal flex flex-col sm:flex-row gap-5 sm:gap-10 py-7 sm:py-8 border-b border-line">
-          <div class="sm:w-44 flex-shrink-0">
-            <span class="font-mono text-[11px] tracking-widest uppercase text-ink-light">Stage 02</span>
-            <p class="text-2xl sm:text-3xl font-extrabold tracking-tightest mt-1">Experiment</p>
-          </div>
-          <div class="flex-1">
-            <p class="text-base text-ink-mid leading-relaxed pretty mb-3">
-              We design the smallest experiment that can falsify the hypothesis. Pre-registered eval set, frozen baseline, single variable changed. If a result is going to be reported, the experiment that produced it must be reproducible by another team member from the spec alone.
-            </p>
-            <p class="text-xs font-mono text-ink-light"><span class="text-ink-soft">Output:</span> a runnable repo · pre-registered eval · weekly results log</p>
-          </div>
-        </li>
-        <li class="reveal flex flex-col sm:flex-row gap-5 sm:gap-10 py-7 sm:py-8 border-b border-line">
-          <div class="sm:w-44 flex-shrink-0">
-            <span class="font-mono text-[11px] tracking-widest uppercase text-ink-light">Stage 03</span>
-            <p class="text-2xl sm:text-3xl font-extrabold tracking-tightest mt-1">Build</p>
-          </div>
-          <div class="flex-1">
-            <p class="text-base text-ink-mid leading-relaxed pretty mb-3">
-              If the experiment supports the hypothesis, the next step is a real implementation behind a feature flag. Engineering and research sit in the same room from this point on. The goal is to get the change in front of internal users so the failure modes show up early.
-            </p>
-            <p class="text-xs font-mono text-ink-light"><span class="text-ink-soft">Output:</span> a flagged build · internal canary · failure mode log</p>
-          </div>
-        </li>
-        <li class="reveal flex flex-col sm:flex-row gap-5 sm:gap-10 py-7 sm:py-8 border-b border-line">
-          <div class="sm:w-44 flex-shrink-0">
-            <span class="font-mono text-[11px] tracking-widest uppercase text-ink-light">Stage 04</span>
-            <p class="text-2xl sm:text-3xl font-extrabold tracking-tightest mt-1">Measure</p>
-          </div>
-          <div class="flex-1">
-            <p class="text-base text-ink-mid leading-relaxed pretty mb-3">
-              Before anything ships, we measure the change against the eval that was registered in stage two — and against a separate held-out set chosen by a colleague who was not on the project. We do not move forward on improvements that show up only on the eval we designed for ourselves.
-            </p>
-            <p class="text-xs font-mono text-ink-light"><span class="text-ink-soft">Output:</span> a written eval report · holdout numbers · safety review</p>
-          </div>
-        </li>
-        <li class="reveal flex flex-col sm:flex-row gap-5 sm:gap-10 py-7 sm:py-8">
-          <div class="sm:w-44 flex-shrink-0">
-            <span class="font-mono text-[11px] tracking-widest uppercase text-ink-light">Stage 05</span>
-            <p class="text-2xl sm:text-3xl font-extrabold tracking-tightest mt-1">Publish</p>
-          </div>
-          <div class="flex-1">
-            <p class="text-base text-ink-mid leading-relaxed pretty mb-3">
-              Whether the project shipped or didn't, we write up what happened. Successful work becomes a paper or an engineering post; work that failed becomes a note. Either way, the result lives on this page so anyone can read what we tried and why.
-            </p>
-            <p class="text-xs font-mono text-ink-light"><span class="text-ink-soft">Output:</span> a written record of the work and what we learned.</p>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- ════════ RESEARCH AREAS ════════ -->
-  <section id="areas" class="py-20 sm:py-28 bg-cream/40 border-y border-line scroll-mt-24">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8">
-      <div class="max-w-3xl mb-12 sm:mb-16">
-        <p class="reveal section-mark mb-7">Areas of focus</p>
-        <h2 class="reveal h-section balance text-4xl sm:text-5xl mb-5">Where we spend the budget.</h2>
-        <p class="reveal pretty text-base sm:text-lg text-ink-mid leading-relaxed">
-          Six concentrations across the team. The list isn't exhaustive — it's where we believe progress on the next two years of AI most depends on careful, well-instrumented research.
-        </p>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="reveal card border border-line rounded-2xl p-7 bg-white hover:border-ink/20">
-          <div class="text-4xl font-extrabold tracking-tightest mb-3 text-ink">01</div>
-          <h3 class="text-lg font-bold tracking-tight mb-3">Reasoning</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">How models allocate thought, when they should slow down, and what makes a chain of reasoning trustworthy enough to act on.</p>
-        </div>
-        <div class="reveal card border border-line rounded-2xl p-7 bg-white hover:border-ink/20">
-          <div class="text-4xl font-extrabold tracking-tightest mb-3 text-red">02</div>
-          <h3 class="text-lg font-bold tracking-tight mb-3">Long-horizon agents</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Memory hierarchies, plan critique, deterministic replay — the engineering of agents that hold their head over hours of work.</p>
-        </div>
-        <div class="reveal card border border-line rounded-2xl p-7 bg-white hover:border-ink/20">
-          <div class="text-4xl font-extrabold tracking-tightest mb-3 text-yellow-deep">03</div>
-          <h3 class="text-lg font-bold tracking-tight mb-3">Evaluation</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Measuring what matters. Benchmarks that map to actual outcomes, and the honest limits of what current evaluations can claim.</p>
-        </div>
-        <div class="reveal card border border-line rounded-2xl p-7 bg-white hover:border-ink/20">
-          <div class="text-4xl font-extrabold tracking-tightest mb-3 text-ink">04</div>
-          <h3 class="text-lg font-bold tracking-tight mb-3">Safety &amp; alignment</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Refusals, red-teaming, failure mode taxonomies, and the engineering of guardrails that don't degrade the model into unhelpfulness.</p>
-        </div>
-        <div class="reveal card border border-line rounded-2xl p-7 bg-white hover:border-ink/20">
-          <div class="text-4xl font-extrabold tracking-tightest mb-3 text-red">05</div>
-          <h3 class="text-lg font-bold tracking-tight mb-3">Multimodal grounding</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Reading documents, charts, diagrams, scans, and audio with the same reliability as well-formatted text. The hard half of "multimodal."</p>
-        </div>
-        <div class="reveal card border border-line rounded-2xl p-7 bg-white hover:border-ink/20">
-          <div class="text-4xl font-extrabold tracking-tightest mb-3 text-yellow-deep">06</div>
-          <h3 class="text-lg font-bold tracking-tight mb-3">Retrieval &amp; citation</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Hybrid search, permission-aware retrieval, and how to make every claim traceable to the source it came from.</p>
+        <div class="hx-doc-chips">
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Reasoning</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Retrieval</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Evaluation</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Agentic systems</span>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════ HOW WE PUBLISH — sharing methodology ════════ -->
-  <section class="py-20 sm:py-28">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8">
-      <div class="reveal max-w-3xl mb-14 sm:mb-16">
-        <p class="section-mark mb-5">How we publish</p>
-        <h2 class="h-section text-3xl sm:text-5xl mb-5 balance">Read what worked. And what didn't.</h2>
-        <p class="pretty text-base sm:text-lg text-ink-mid leading-relaxed">
-          Most AI labs publish wins. We publish the cycle. A direction that didn't pan out, an eval that was misleading, a refusal that was over-tuned — those write-ups are as much a part of this page as the papers that landed.
-        </p>
-      </div>
+    <!-- FOCUS AREAS -->
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">Focus areas</p>
+        <h2 class="hx-doc-section-title">What we work on, <span class="hx-doc-section-italic">and why.</span></h2>
+        <p class="hx-doc-section-desc">Four research directions, each tied to a real production problem. We don't chase benchmarks for their own sake.</p>
 
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-red mb-3">01</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">We publish the negatives.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">If an experiment doesn't move the eval, the write-up goes up anyway. The note explains what we tried, what we expected, what we found, and what we'd change before trying it again.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-yellow-deep mb-3">02</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Evals we trust are open.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">When an internal eval matters enough to ship behind, we open-source the eval set and the harness. If we wouldn't let a customer reproduce the number, we don't quote the number.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink mb-3">03</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">No benchmark theater.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">We don't run named-competitor head-to-heads. Public benchmarks reward optimisation for the benchmark, not for the work. We write about what our own models do well and what they still get wrong.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-red-deep mb-3">04</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Plain English, every time.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Every research write-up has a one-paragraph abstract anyone in the company can read without losing the plot. If we can't explain what we did in plain English, we don't understand it yet.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-yellow-deep mb-3">05</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Safety reviews on record.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Every release-tier experiment goes through a written safety review before it ships. The review is dated, signed, and lives next to the eval report. Reviewer questions are answered in writing, not in a meeting.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink mb-3">06</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Models change. We say so.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">When Ether, Nexus, or Prometheus moves, we publish a written note on what improved, what regressed, and what we held back. No silent upgrades to the model your agent is pinned to.</p>
+        <div class="hx-doc-grid hx-doc-grid-4">
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Reasoning</span>
+            <h3 class="hx-doc-card-title">Reasoning</h3>
+            <p class="hx-doc-card-body">Where chain-of-thought helps, where it doesn't, and how to route between fast and deep models without making the user wait for either.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Retrieval</span>
+            <h3 class="hx-doc-card-title">Retrieval &amp; Citations</h3>
+            <p class="hx-doc-card-body">Grounded answers with traceable sources. Chunking strategies, re-ranking, citation rendering, and the eval design that catches hallucinated cites.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Evaluation</span>
+            <h3 class="hx-doc-card-title">Evaluation</h3>
+            <p class="hx-doc-card-body">Eval sets that survive contact with production. Real prompts, real failure modes, and the discipline of running them weekly instead of once.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Agentic</span>
+            <h3 class="hx-doc-card-title">Agentic systems</h3>
+            <p class="hx-doc-card-body">Tool use, planning, approval gates, replayable traces. The shape of an agent that fails safely and can be audited after the fact.</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════════════════════════════════════════════════════════
-       PREMIUM FOOTER — luxe obsidian edition
-       Deep dark stage with ambient mesh, signature aurora rims,
-       refined column hierarchy, premium glass subscribe form,
-       trust ribbon with badges, glass social chips.
-       ════════════════════════════════════════════════════════════ -->
+    <!-- METHODOLOGY -->
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">Methodology</p>
+        <h2 class="hx-doc-section-title">Five steps, <span class="hx-doc-section-italic">every project.</span></h2>
+        <p class="hx-doc-section-desc">The same arc every research thread runs through. Written down so each thread is comparable to the last.</p>
+
+        <ol class="hx-doc-list">
+          <li>
+            <span class="hx-doc-list-num">01</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Hypothesis</h3>
+              <p class="hx-doc-list-desc">A single sentence stating what we expect to be true, and the production decision the answer would change. If neither exists, we don't start.</p>
+            </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">02</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Eval design</h3>
+              <p class="hx-doc-list-desc">The dataset, the metric, the human grader rubric — all written before the first prompt is run. Pre-registration prevents post-hoc storytelling.</p>
+            </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">03</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Implementation</h3>
+              <p class="hx-doc-list-desc">Code, prompts, retrieval pipelines, agent harnesses. Reproducible from a single commit. No magic numbers, no missing config.</p>
+            </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">04</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Open notes</h3>
+              <p class="hx-doc-list-desc">Plain-English write-up: what we tried, what worked, what didn't, what we'd do next. Published whether the result is positive, negative, or boring.</p>
+            </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">05</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Production handoff</h3>
+              <p class="hx-doc-list-desc">Findings flow into the model router, the workspace defaults, or the engagement playbook. Research that doesn't ship doesn't matter.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- HOW WE PUBLISH -->
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">How we publish</p>
+        <h2 class="hx-doc-section-title">Plain English, <span class="hx-doc-section-italic">no theater.</span></h2>
+        <p class="hx-doc-section-desc">Four publishing rules that keep the notes useful and the benchmarks honest.</p>
+
+        <div class="hx-doc-grid hx-doc-grid-4">
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Failures</span>
+            <h3 class="hx-doc-card-title">Negative results</h3>
+            <p class="hx-doc-card-body">If a hypothesis fails, the note still ships. Negative results save the next team months. They're often the most valuable thing on the page.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Data</span>
+            <h3 class="hx-doc-card-title">Open evals</h3>
+            <p class="hx-doc-card-body">Eval sets and grader rubrics published alongside the result. If you can't see the test, the score doesn't mean anything.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Hygiene</span>
+            <h3 class="hx-doc-card-title">No benchmark theater</h3>
+            <p class="hx-doc-card-body">We don't cherry-pick the eval set that flatters the result. If a number moves, the methodology section explains why — including caveats.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Voice</span>
+            <h3 class="hx-doc-card-title">Plain-English abstracts</h3>
+            <p class="hx-doc-card-body">Every paper opens with a paragraph an engineer outside the field can read. If we can't summarise it without jargon, we don't understand it yet.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hx-doc-closing">
+      <span class="hx-doc-closing-mark">End of overview</span>
+      <p>Research that doesn't ship doesn't matter. We publish what helps the work.</p>
+    </section>
+
+  </main>
+
   <footer class="hx-footer">
     <div class="hx-footer-bg" aria-hidden="true">
       <div class="hx-footer-grid"></div>
@@ -412,10 +253,8 @@
 
     <div class="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 sm:pt-28 pb-10">
 
-      <!-- Top row: brand + 4 columns -->
       <div class="hx-footer-top">
 
-        <!-- Brand column -->
         <div class="hx-footer-brand-col">
           <a href="/" class="hx-footer-brand">
             <span class="hx-footer-brand-halo" aria-hidden="true"></span>
@@ -435,7 +274,6 @@
           </form>
         </div>
 
-        <!-- Product -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#F5C863"></span>Product</p>
           <ul>
@@ -447,7 +285,6 @@
           </ul>
         </div>
 
-        <!-- Company -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#DC2626"></span>Company</p>
           <ul>
@@ -459,7 +296,6 @@
           </ul>
         </div>
 
-        <!-- Resources -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#F0B852"></span>Resources</p>
           <ul>
@@ -471,11 +307,9 @@
             <li><a href="/best-practices"><span class="hx-footer-link-title">Best practices</span><span class="hx-footer-link-desc">Engineering principles, anti-patterns</span></a></li>
             <li><a href="/customer-stories"><span class="hx-footer-link-title">Customer stories</span><span class="hx-footer-link-desc">Engagement shapes and outcomes</span></a></li>
             <li><a href="/help-center"><span class="hx-footer-link-title">Help center</span><span class="hx-footer-link-desc">Docs, FAQs, and how-tos</span></a></li>
-            <li><a href="/community"><span class="hx-footer-link-title">Community</span><span class="hx-footer-link-desc">Forum, Discord, GitHub</span></a></li>
           </ul>
         </div>
 
-        <!-- Legal -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#D4D4D8"></span>Legal</p>
           <ul>
@@ -489,7 +323,6 @@
 
       </div>
 
-      <!-- Trust ribbon: signature → certifications → live status -->
       <div class="hx-footer-trust">
         <span class="hx-footer-trust-item">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="hx-footer-trust-flag"><rect width="24" height="24" rx="3" fill="#DC2626"/><rect x="10" y="5" width="4" height="14" fill="#FFFFFF"/><rect x="5" y="10" width="14" height="4" fill="#FFFFFF"/></svg>
@@ -506,7 +339,6 @@
         <span class="hx-footer-trust-item hx-footer-trust-mono">v 2.4 · Cycle 12</span>
       </div>
 
-      <!-- Bottom row: copyright + socials -->
       <div class="hx-footer-bottom">
         <p class="hx-footer-copy">© 2026 HelveX AG · Zurich, Switzerland · All rights reserved.</p>
         <div class="hx-footer-social">

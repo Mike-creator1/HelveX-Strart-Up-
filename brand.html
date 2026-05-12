@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
   <title>Brand — HelveX</title>
-  <meta name="description" content="How to write us, draw us, and name us. The HelveX wordmark, pronunciation, and brand rules." />
+  <meta name="description" content="The HelveX brand system — wordmark, palette, typography, voice." />
   <meta property="og:title" content="Brand — HelveX" />
-  <meta property="og:description" content="How to write us, draw us, and name us. The HelveX wordmark, pronunciation, and brand rules." />
+  <meta property="og:description" content="Wordmark, palette, typography, voice. The visual system used on this site." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="HelveX" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -19,27 +19,26 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            ink: '#0A0A0A', 'ink-soft': '#171717', 'ink-mid': '#525252', 'ink-light': '#A3A3A3', 'ink-faint': '#D4D4D4',
-            line: '#E5E5E5', 'line-soft': '#F0EFEC', cream: '#FAFAF7', beige: '#F4EFE6', 'beige-warm': '#EDE5D6',
-            red: '#DC2626', 'red-deep': '#991B1B', 'red-soft': '#FEE2E2',
-            yellow: '#FCD34D', 'yellow-deep': '#F59E0B', 'yellow-soft': '#FEF3C7',
-          },
-          fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'], serif: ['"Instrument Serif"', 'Georgia', 'serif'] },
-        },
-      },
-    };
+    tailwind.config = { theme: { extend: { colors: { ink: '#0A0A0A', 'ink-soft': '#171717', 'ink-mid': '#525252', 'ink-light': '#A3A3A3', 'ink-faint': '#D4D4D4', line: '#E5E5E5', 'line-soft': '#F0EFEC', cream: '#FAFAF7', beige: '#F4EFE6', red: '#DC2626', 'red-deep': '#991B1B', 'red-soft': '#FEE2E2', yellow: '#FCD34D', 'yellow-deep': '#F59E0B', 'yellow-soft': '#FEF3C7' }, fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'], serif: ['"Instrument Serif"', 'Georgia', 'serif'] } } } };
   </script>
 
   <link rel="stylesheet" href="/helvex.css" />
 
+  <style>
+    .hx-doc-page {
+      --accent: #0A0A0A;
+      --accent-text: #171717;
+      --accent-bg: #F4F4F5;
+      --accent-glow: rgba(10,10,10,0.16);
+      --accent-shadow: rgba(10,10,10,0.10);
+      --accent-from: #525252;
+      --accent-mid: #171717;
+      --accent-to: #0A0A0A;
+    }
+  </style>
 </head>
-<body class="bg-white text-ink antialiased">
+<body class="hx-doc-page antialiased">
 
-  <!-- Premium .hx-header styles live in /helvex.css so every page that loads the shared stylesheet gets them automatically. -->
   <header class="hx-header">
     <nav class="max-w-[1520px] mx-auto pl-4 pr-5 sm:pl-6 sm:pr-8 flex items-center justify-between gap-4">
       <div class="flex items-center gap-5 lg:gap-8">
@@ -95,217 +94,185 @@
     </nav>
   </header>
 
-  <!-- ════════ MOBILE MENU DRAWER ════════ -->
-  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Site navigation">
-    <div class="mobile-menu-backdrop" data-close></div>
-    <div class="mobile-menu-panel">
-      <div class="mobile-menu-header">
-        <a href="/" class="brand-mark text-xl flex items-center gap-2">
-          <span class="brand-logo"><img src="/helvex-logo.png" alt="HelveX" class="h-16 w-auto" /></span>
-        </a>
-        <button type="button" class="mobile-menu-close" data-close aria-label="Close menu">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6l-12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <nav class="mobile-menu-nav" aria-label="Main">
-        <a href="/" class="mobile-menu-link">Home</a>
-        <details class="mobile-menu-services">
-          <summary class="mobile-menu-link" style="list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-            <span>Services</span>
-            <svg class="w-4 h-4 text-ink-light transition-transform" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </summary>
-          <div class="pl-4 mt-1 mb-2 space-y-0.5 border-l border-line">
-            <a href="/ai-automation.html" class="mobile-menu-link">AI &amp; Automation</a>
-            <a href="/business-consulting.html" class="mobile-menu-link">Business Consulting</a>
-            <a href="/digital-services.html" class="mobile-menu-link">Digital Services</a>
-            <a href="/growth-marketing.html" class="mobile-menu-link">Growth &amp; Marketing</a>
-            <a href="/enterprise.html" class="mobile-menu-link">Enterprise</a>
-          </div>
-        </details>
-        <a href="/models" class="mobile-menu-link">Models</a>
-        <a href="/workspace" class="mobile-menu-link">Workspace</a>
-        <a href="/research" class="mobile-menu-link">Research</a>
-        <a href="/customer-stories" class="mobile-menu-link">Customers</a>
-        <a href="/resources" class="mobile-menu-link">Resources</a>
-      </nav>
-      <div class="mobile-menu-cta">
-        <a href="/signup.html" class="primary">
-          Try HeliX
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
-        <a href="/signup.html" class="secondary">Sign in</a>
-      </div>
-      <div class="mobile-menu-meta">Built in Switzerland</div>
-    </div>
+  <div class="hx-doc-bg" aria-hidden="true">
+    <div class="hx-doc-bg-grid"></div>
+    <div class="hx-doc-bg-glow hx-doc-bg-glow-1"></div>
+    <div class="hx-doc-bg-glow hx-doc-bg-glow-2"></div>
   </div>
 
-  <!-- ════════ HERO ════════ -->
-  <section class="relative pt-14 sm:pt-24 pb-12 sm:pb-16 overflow-hidden">
-    <div class="hero-orb hero-orb-2" style="opacity: 0.3;"></div>
-    <div class="relative max-w-5xl mx-auto px-6 sm:px-8">
-      <p class="reveal section-mark mb-7">Brand</p>
-      <h1 class="reveal h-display balance text-[44px] sm:text-7xl mb-6">
-        How to write us,<br />
-        <span class="italic font-serif font-normal tech-gradient-text">draw us, name us.</span>
-      </h1>
-      <p class="reveal pretty text-base sm:text-xl text-ink-mid max-w-2xl leading-relaxed">A few rules so the brand stays consistent wherever it shows up. Ask brand@helvex.ai if anything is unclear.</p>
-    </div>
-  </section>
+  <main class="hx-doc-wrap">
 
-  <section class="py-16 sm:py-24">
-    <div class="max-w-5xl mx-auto px-6 sm:px-8 space-y-6">
-      <div class="reveal rounded-2xl border border-line bg-white p-7">
-        <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light mb-3">Wordmark</p>
-        <p class="text-4xl font-bold mb-3">Helve<span class="text-red">X</span></p>
-        <p class="text-sm text-ink-mid leading-relaxed">Always written as one word. Capital H, lowercase elve, capital X. The X carries the brand colour — never substituted, never lowercased, never recoloured to match a partner's palette.</p>
+    <section class="hx-doc-hero">
+      <div class="hx-doc-hero-inner">
+        <p class="hx-doc-eyebrow">
+          <span class="hx-doc-eyebrow-dot"></span>
+          Company · Brand
+        </p>
+        <h1 class="hx-doc-title">
+          Brand
+          <span class="hx-doc-title-italic">Wordmark, palette, voice.</span>
+        </h1>
+        <p class="hx-doc-lede">
+          The visual system we use on this site. Reproduce it when you write about HelveX and you'll match what shows up everywhere else.
+        </p>
+        <div class="hx-doc-chips">
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Wordmark</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Palette</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Typography</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Voice</span>
+        </div>
       </div>
-      <div class="reveal rounded-2xl border border-line bg-white p-7">
-        <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light mb-3">Pronunciation</p>
-        <p class="text-base font-semibold mb-2">/ˈhɛl.vɛks/ &nbsp;·&nbsp; <span class="font-normal text-ink-mid">HEL-veks</span></p>
-        <p class="text-sm text-ink-mid leading-relaxed">Two syllables, even stress. From <span class="italic">Helvetia</span>, the Latin name for Switzerland.</p>
+    </section>
+
+    <!-- WORDMARK -->
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">Wordmark</p>
+        <h2 class="hx-doc-section-title">The mark, <span class="hx-doc-section-italic">and how it speaks.</span></h2>
+        <p class="hx-doc-section-desc">Two halves of the wordmark system — the visual mark and the voice that travels with it.</p>
+
+        <div class="hx-doc-grid">
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Logo</span>
+            <h3 class="hx-doc-card-title">HX mark with HELVEX TECH caption</h3>
+            <p class="hx-doc-card-body">The HX monogram is the primary mark, paired with a HELVEX TECH wordmark in small caps. Minimum padding is sixteen pixels on every side. Never recolor, never stretch, never crop the caption.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Voice</span>
+            <h3 class="hx-doc-card-title">Methodical, plain English</h3>
+            <p class="hx-doc-card-body">Calm sentences, technical when needed, no AI hyperbole. The wordmark sets the visual register; the voice keeps the writing on register. Match both or match neither.</p>
+          </div>
+        </div>
       </div>
-      <div class="reveal rounded-2xl border border-line bg-white p-7">
-        <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light mb-3">Models</p>
-        <p class="text-sm text-ink-mid leading-relaxed mb-3">Three names, one frontier. Always title-case, never plural-ised.</p>
-        <ul class="text-sm text-ink space-y-1.5">
-          <li><span class="font-semibold">Ether</span> — real-time</li>
-          <li><span class="font-semibold">Nexus</span> — reasoning</li>
-          <li><span class="font-semibold">Prometheus</span> — agentic</li>
+    </section>
+
+    <!-- PALETTE -->
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">Palette</p>
+        <h2 class="hx-doc-section-title">Eight colors, <span class="hx-doc-section-italic">no exceptions.</span></h2>
+        <p class="hx-doc-section-desc">The full production palette. Anything outside these eight values is not a HelveX color.</p>
+
+        <ul class="hx-doc-specs">
+          <li>
+            <span class="hx-doc-specs-key">Ink</span>
+            <span class="hx-doc-specs-val"><em>#0A0A0A</em> — primary text, deep shadows, the wordmark default.</span>
+          </li>
+          <li>
+            <span class="hx-doc-specs-key">Ink-soft</span>
+            <span class="hx-doc-specs-val"><em>#171717</em> — hovered states, secondary headings, dense surfaces.</span>
+          </li>
+          <li>
+            <span class="hx-doc-specs-key">Ink-mid</span>
+            <span class="hx-doc-specs-val"><em>#525252</em> — body copy at a softer weight; captions and meta text.</span>
+          </li>
+          <li>
+            <span class="hx-doc-specs-key">Red</span>
+            <span class="hx-doc-specs-val"><em>#DC2626</em> — the Swiss red. Used for Nexus accents, Company-tier eyebrows, the brand pulse.</span>
+          </li>
+          <li>
+            <span class="hx-doc-specs-key">Red-deep</span>
+            <span class="hx-doc-specs-val"><em>#991B1B</em> — accent text against red surfaces; pressed states.</span>
+          </li>
+          <li>
+            <span class="hx-doc-specs-key">Amber</span>
+            <span class="hx-doc-specs-val"><em>#F59E0B</em> — Ether and Resources tier. The warm gold pulse.</span>
+          </li>
+          <li>
+            <span class="hx-doc-specs-key">Amber-soft</span>
+            <span class="hx-doc-specs-val"><em>#FEF3C7</em> — background fills inside amber-accented cards and eyebrows.</span>
+          </li>
+          <li>
+            <span class="hx-doc-specs-key">Cream</span>
+            <span class="hx-doc-specs-val"><em>#FAFAF7</em> — the off-white page surface. Never plain #FFFFFF.</span>
+          </li>
         </ul>
       </div>
-      <div class="reveal rounded-2xl border border-line bg-white p-7">
-        <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light mb-3">Colour</p>
-        <p class="text-sm text-ink-mid leading-relaxed mb-4">Three brand colours. Red is the accent — used sparingly.</p>
-        <div class="grid sm:grid-cols-3 gap-3">
-          <div class="rounded-xl border border-line p-4"><div class="w-full h-8 rounded bg-ink mb-2"></div><p class="text-xs font-mono text-ink-mid">Ink · #0A0A0A</p></div>
-          <div class="rounded-xl border border-line p-4"><div class="w-full h-8 rounded bg-red mb-2"></div><p class="text-xs font-mono text-ink-mid">Red · #DC2626</p></div>
-          <div class="rounded-xl border border-line p-4"><div class="w-full h-8 rounded bg-yellow mb-2"></div><p class="text-xs font-mono text-ink-mid">Yellow · #FCD34D</p></div>
-        </div>
-      </div>
-      <div class="reveal flex flex-col sm:flex-row gap-3 pt-4">
-        <a href="mailto:brand@helvex.ai?subject=HelveX%20-%20Brand%20asset%20request" class="btn-primary inline-flex items-center gap-2 bg-ink hover:bg-ink-soft text-white text-sm font-semibold px-6 py-3.5 rounded-full transition-colors btn-shadow">Request brand assets <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
-        <a href="/press" class="inline-flex items-center gap-2 border border-line hover:border-ink text-ink text-sm font-semibold px-6 py-3.5 rounded-full transition-colors">Press kit</a>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════ BRAND SYSTEM ════════ -->
-  <section class="py-20 sm:py-28 border-t border-line">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8">
-      <div class="reveal max-w-3xl mb-14 sm:mb-16">
-        <p class="section-mark mb-5">Brand system</p>
-        <h2 class="h-section text-3xl sm:text-5xl mb-5 balance">The full visual system.</h2>
-        <p class="pretty text-base sm:text-lg text-ink-mid leading-relaxed">
-          The wordmark, the type pairing, the colour palette, and the voice. Together these make a page read as HelveX even when the logo is not in view.
-        </p>
-      </div>
+    <!-- TYPOGRAPHY -->
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">Typography</p>
+        <h2 class="hx-doc-section-title">Two families, <span class="hx-doc-section-italic">used in pairs.</span></h2>
+        <p class="hx-doc-section-desc">The system is intentionally narrow: one neutral sans, one editorial italic. Nothing else is HelveX type.</p>
 
-      <div class="space-y-5 sm:space-y-6">
-        <div class="reveal rounded-2xl border border-line bg-white p-7 sm:p-9">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light mb-4">Wordmark · TECH caption</p>
-          <div class="mb-5">
-            <p class="text-5xl sm:text-6xl font-extrabold tracking-tight leading-none">Helve<span class="text-red">X</span></p>
-            <p class="font-mono text-[10px] tracking-[0.3em] uppercase text-ink-light mt-2">Tech</p>
+        <div class="hx-doc-grid">
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Sans</span>
+            <h3 class="hx-doc-card-title">Inter</h3>
+            <p class="hx-doc-card-body">Used at weights 300, 400, 500, 600, 700, 800, 900. Drives every body line, label, navigation item, and table on the site. Hosted on Google Fonts.</p>
           </div>
-          <p class="text-sm text-ink-mid leading-relaxed">The wordmark sits above a small caption — typically "TECH" — set in monospaced, wide-tracked uppercase. The caption locks to the bottom of the wordmark on its leftmost letter and never sets larger than one quarter of the wordmark cap-height.</p>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Serif</span>
+            <h3 class="hx-doc-card-title">Instrument Serif italic</h3>
+            <p class="hx-doc-card-body">Used exclusively in italic, for editorial accents — sub-headlines, page taglines, the closing serif statement on every doc page. Never used as body text.</p>
+          </div>
         </div>
+      </div>
+    </section>
 
-        <div class="reveal rounded-2xl border border-line bg-white p-7 sm:p-9">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light mb-4">Type pairing</p>
-          <div class="grid sm:grid-cols-2 gap-6 mb-5">
-            <div>
-              <p class="text-3xl font-extrabold tracking-tight mb-1">Inter</p>
-              <p class="font-mono text-[10px] tracking-widest uppercase text-ink-light mb-3">Sans · 300 / 400 / 500 / 600 / 700 / 800 / 900</p>
-              <p class="text-sm text-ink-mid leading-relaxed">Body, headings, eyebrows, mono captions. All seven weights are in active use across the site.</p>
+    <!-- LOGO USAGE -->
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">Logo usage</p>
+        <h2 class="hx-doc-section-title">Six rules, <span class="hx-doc-section-italic">do and don't.</span></h2>
+        <p class="hx-doc-section-desc">Three things to do, three things to never do. If you're unsure, the rule is probably "don't."</p>
+
+        <ol class="hx-doc-list">
+          <li>
+            <span class="hx-doc-list-num">01</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Do — keep the sixteen-pixel padding</h3>
+              <p class="hx-doc-list-desc">Every edge of the mark needs at least sixteen pixels of clear space. Crowding the mark crushes the visual rhythm of the page.</p>
             </div>
-            <div>
-              <p class="text-3xl font-serif italic tracking-tight mb-1">Instrument Serif</p>
-              <p class="font-mono text-[10px] tracking-widest uppercase text-ink-light mb-3">Serif italic · editorial accents only</p>
-              <p class="text-sm text-ink-mid leading-relaxed">Used as a pull-line inside larger headings to break the rhythm. Always italic, never set as body copy.</p>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">02</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Do — use the mark on cream or ink</h3>
+              <p class="hx-doc-list-desc">Cream background with ink mark, or ink background with cream mark. Those are the two production lock-ups. Everything else is a derivative.</p>
             </div>
-          </div>
-          <p class="text-sm text-ink-mid leading-relaxed">A typical headline pairs the two: a sans serif noun phrase followed by an italic serif sub-clause. <span class="font-bold">Three minds.</span> <span class="font-serif italic">One frontier.</span></p>
-        </div>
-
-        <div class="reveal rounded-2xl border border-line bg-white p-7 sm:p-9">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light mb-4">Full colour palette</p>
-          <p class="text-sm text-ink-mid leading-relaxed mb-5">Seven tokens. Ink is the body. Red is the accent. Amber and yellow are the highlight family. Cream is the warm surface. Token names ship in the Tailwind config on every page.</p>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="rounded-xl border border-line p-4"><div class="w-full h-10 rounded bg-ink mb-2"></div><p class="text-xs font-mono text-ink-mid">ink · #0A0A0A</p></div>
-            <div class="rounded-xl border border-line p-4"><div class="w-full h-10 rounded bg-red mb-2"></div><p class="text-xs font-mono text-ink-mid">red · #DC2626</p></div>
-            <div class="rounded-xl border border-line p-4"><div class="w-full h-10 rounded bg-red-deep mb-2"></div><p class="text-xs font-mono text-ink-mid">red-deep · #991B1B</p></div>
-            <div class="rounded-xl border border-line p-4"><div class="w-full h-10 rounded bg-yellow-deep mb-2"></div><p class="text-xs font-mono text-ink-mid">amber · #F59E0B</p></div>
-            <div class="rounded-xl border border-line p-4"><div class="w-full h-10 rounded bg-yellow mb-2"></div><p class="text-xs font-mono text-ink-mid">yellow · #FCD34D</p></div>
-            <div class="rounded-xl border border-line p-4"><div class="w-full h-10 rounded bg-yellow-soft mb-2"></div><p class="text-xs font-mono text-ink-mid">yellow-soft · #FEF3C7</p></div>
-            <div class="rounded-xl border border-line p-4"><div class="w-full h-10 rounded bg-cream mb-2"></div><p class="text-xs font-mono text-ink-mid">cream · #FAFAF7</p></div>
-            <div class="rounded-xl border border-line p-4"><div class="w-full h-10 rounded bg-line mb-2"></div><p class="text-xs font-mono text-ink-mid">line · #E5E5E5</p></div>
-          </div>
-        </div>
-
-        <div class="reveal rounded-2xl border border-line bg-white p-7 sm:p-9">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink-light mb-4">Voice</p>
-          <p class="text-base font-semibold text-ink mb-3">Methodical. Plain-English. No AI hyperbole.</p>
-          <p class="text-sm text-ink-mid leading-relaxed mb-3">We describe what the product does, in the words the reader would use. We do not write "revolutionary", "world-class", "industry-first", or "game-changing". We do not write "leverage" when we mean "use". We do not bury a hedge in a footnote.</p>
-          <p class="text-sm text-ink-mid leading-relaxed">If a sentence could appear on any other AI platform's site without changing meaning, it does not belong on ours.</p>
-        </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">03</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Do — pair the mark with HELVEX TECH</h3>
+              <p class="hx-doc-list-desc">In long-form contexts, ship the full lock-up: mark plus HELVEX TECH wordmark. The monogram is shorthand; the wordmark is the canonical name.</p>
+            </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">04</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Don't — recolor the mark</h3>
+              <p class="hx-doc-list-desc">No red mark, no gradient mark, no holiday-themed mark. The mark is monochrome ink on cream, or monochrome cream on ink. Full stop.</p>
+            </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">05</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Don't — stretch, skew, or rotate</h3>
+              <p class="hx-doc-list-desc">The mark sits flat, scaled proportionally. Skewed, rotated, or non-uniform-scaled marks are off-brand on sight.</p>
+            </div>
+          </li>
+          <li>
+            <span class="hx-doc-list-num">06</span>
+            <div class="hx-doc-list-body">
+              <h3 class="hx-doc-list-title">Don't — set the mark in shadows or effects</h3>
+              <p class="hx-doc-list-desc">No drop shadow, no outer glow, no bevel. The mark is a flat graphic; presentation effects come from layout, not from the mark itself.</p>
+            </div>
+          </li>
+        </ol>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════ LOGO USAGE ════════ -->
-  <section class="bg-cream/40 border-y border-line py-20 sm:py-28">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8">
-      <div class="reveal max-w-3xl mb-14 sm:mb-16">
-        <p class="section-mark mb-5">Logo usage</p>
-        <h2 class="h-section text-3xl sm:text-5xl mb-5 balance">Do this. Don't do that.</h2>
-        <p class="pretty text-base sm:text-lg text-ink-mid leading-relaxed">
-          A short list of the choices we make every time we set the wordmark — and the ones we never make.
-        </p>
-      </div>
+    <section class="hx-doc-closing">
+      <span class="hx-doc-closing-mark">End of overview</span>
+      <p>The marks, the colours, the voice. Match these and you've matched HelveX.</p>
+    </section>
 
-      <div class="grid sm:grid-cols-2 gap-5 sm:gap-6">
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink mb-3">Do</p>
-          <ul class="space-y-3 text-sm text-ink-mid leading-relaxed">
-            <li class="flex gap-3"><span class="text-ink font-bold mt-0.5">·</span><span>Keep at least one wordmark cap-height of clear space on every side.</span></li>
-            <li class="flex gap-3"><span class="text-ink font-bold mt-0.5">·</span><span>Set the X in red <span class="font-mono text-[12px]">#DC2626</span>, ink for the rest of the letters.</span></li>
-            <li class="flex gap-3"><span class="text-ink font-bold mt-0.5">·</span><span>On dark surfaces, set the body of the wordmark in white and keep the red X.</span></li>
-            <li class="flex gap-3"><span class="text-ink font-bold mt-0.5">·</span><span>Use the wordmark at no smaller than 24 px tall on screen, 20 mm in print.</span></li>
-            <li class="flex gap-3"><span class="text-ink font-bold mt-0.5">·</span><span>Pair with the small TECH caption only when there is space — never crammed.</span></li>
-          </ul>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-red mb-3">Don't</p>
-          <ul class="space-y-3 text-sm text-ink-mid leading-relaxed">
-            <li class="flex gap-3"><span class="text-red font-bold mt-0.5">·</span><span>Recolour the wordmark to match a partner's palette.</span></li>
-            <li class="flex gap-3"><span class="text-red font-bold mt-0.5">·</span><span>Stretch, skew, or condense the wordmark on any axis.</span></li>
-            <li class="flex gap-3"><span class="text-red font-bold mt-0.5">·</span><span>Lowercase the X, or set it in any colour other than red on a light surface.</span></li>
-            <li class="flex gap-3"><span class="text-red font-bold mt-0.5">·</span><span>Place the wordmark on a photographic background without an ink wash.</span></li>
-            <li class="flex gap-3"><span class="text-red font-bold mt-0.5">·</span><span>Reproduce the wordmark in any font other than the supplied vector.</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+  </main>
 
-  <!-- ════════ CTA ════════ -->
-  <section class="border-t border-line py-16 sm:py-20 bg-cream/40">
-    <div class="max-w-3xl mx-auto px-6 sm:px-8 text-center">
-      <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="/about" class="btn-primary inline-flex items-center gap-2 bg-ink hover:bg-ink-soft text-white text-sm font-semibold px-6 py-3.5 rounded-full transition-colors btn-shadow">
-          About HelveX
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-        </a>
-        <a href="/press" class="inline-flex items-center gap-2 border border-line hover:border-ink text-ink text-sm font-semibold px-6 py-3.5 rounded-full transition-colors">Press</a>
-      </div>
-    </div>
-  </section>
-  <!-- ════════════════════════════════════════════════════════════
-       PREMIUM FOOTER — luxe obsidian edition
-       Deep dark stage with ambient mesh, signature aurora rims,
-       refined column hierarchy, premium glass subscribe form,
-       trust ribbon with badges, glass social chips.
-       ════════════════════════════════════════════════════════════ -->
   <footer class="hx-footer">
     <div class="hx-footer-bg" aria-hidden="true">
       <div class="hx-footer-grid"></div>
@@ -316,10 +283,8 @@
 
     <div class="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 sm:pt-28 pb-10">
 
-      <!-- Top row: brand + 4 columns -->
       <div class="hx-footer-top">
 
-        <!-- Brand column -->
         <div class="hx-footer-brand-col">
           <a href="/" class="hx-footer-brand">
             <span class="hx-footer-brand-halo" aria-hidden="true"></span>
@@ -339,7 +304,6 @@
           </form>
         </div>
 
-        <!-- Product -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#F5C863"></span>Product</p>
           <ul>
@@ -351,7 +315,6 @@
           </ul>
         </div>
 
-        <!-- Company -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#DC2626"></span>Company</p>
           <ul>
@@ -363,7 +326,6 @@
           </ul>
         </div>
 
-        <!-- Resources -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#F0B852"></span>Resources</p>
           <ul>
@@ -375,11 +337,9 @@
             <li><a href="/best-practices"><span class="hx-footer-link-title">Best practices</span><span class="hx-footer-link-desc">Engineering principles, anti-patterns</span></a></li>
             <li><a href="/customer-stories"><span class="hx-footer-link-title">Customer stories</span><span class="hx-footer-link-desc">Engagement shapes and outcomes</span></a></li>
             <li><a href="/help-center"><span class="hx-footer-link-title">Help center</span><span class="hx-footer-link-desc">Docs, FAQs, and how-tos</span></a></li>
-            <li><a href="/community"><span class="hx-footer-link-title">Community</span><span class="hx-footer-link-desc">Forum, Discord, GitHub</span></a></li>
           </ul>
         </div>
 
-        <!-- Legal -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#D4D4D8"></span>Legal</p>
           <ul>
@@ -393,7 +353,6 @@
 
       </div>
 
-      <!-- Trust ribbon: signature → certifications → live status -->
       <div class="hx-footer-trust">
         <span class="hx-footer-trust-item">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="hx-footer-trust-flag"><rect width="24" height="24" rx="3" fill="#DC2626"/><rect x="10" y="5" width="4" height="14" fill="#FFFFFF"/><rect x="5" y="10" width="14" height="4" fill="#FFFFFF"/></svg>
@@ -410,7 +369,6 @@
         <span class="hx-footer-trust-item hx-footer-trust-mono">v 2.4 · Cycle 12</span>
       </div>
 
-      <!-- Bottom row: copyright + socials -->
       <div class="hx-footer-bottom">
         <p class="hx-footer-copy">© 2026 HelveX AG · Zurich, Switzerland · All rights reserved.</p>
         <div class="hx-footer-social">

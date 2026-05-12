@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
   <title>Careers — HelveX</title>
-  <meta name="description" content="We hire senior, we hire rarely. Open roles at HelveX in Zurich and remote across the EU." />
+  <meta name="description" content="Careers at HelveX. Senior engineers, written-first culture, weekly ship cadence. Based in Zurich with global remote." />
   <meta property="og:title" content="Careers — HelveX" />
-  <meta property="og:description" content="We hire senior, we hire rarely. Open roles at HelveX in Zurich and remote across the EU." />
+  <meta property="og:description" content="Senior engineers, written-first defaults, weekly ship. Zurich and global remote." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="HelveX" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -19,27 +19,26 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            ink: '#0A0A0A', 'ink-soft': '#171717', 'ink-mid': '#525252', 'ink-light': '#A3A3A3', 'ink-faint': '#D4D4D4',
-            line: '#E5E5E5', 'line-soft': '#F0EFEC', cream: '#FAFAF7', beige: '#F4EFE6', 'beige-warm': '#EDE5D6',
-            red: '#DC2626', 'red-deep': '#991B1B', 'red-soft': '#FEE2E2',
-            yellow: '#FCD34D', 'yellow-deep': '#F59E0B', 'yellow-soft': '#FEF3C7',
-          },
-          fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'], serif: ['"Instrument Serif"', 'Georgia', 'serif'] },
-        },
-      },
-    };
+    tailwind.config = { theme: { extend: { colors: { ink: '#0A0A0A', 'ink-soft': '#171717', 'ink-mid': '#525252', 'ink-light': '#A3A3A3', 'ink-faint': '#D4D4D4', line: '#E5E5E5', 'line-soft': '#F0EFEC', cream: '#FAFAF7', beige: '#F4EFE6', red: '#DC2626', 'red-deep': '#991B1B', 'red-soft': '#FEE2E2', yellow: '#FCD34D', 'yellow-deep': '#F59E0B', 'yellow-soft': '#FEF3C7' }, fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'], serif: ['"Instrument Serif"', 'Georgia', 'serif'] } } } };
   </script>
 
   <link rel="stylesheet" href="/helvex.css" />
 
+  <style>
+    .hx-doc-page {
+      --accent: #DC2626;
+      --accent-text: #991B1B;
+      --accent-bg: #FEE2E2;
+      --accent-glow: rgba(220,38,38,0.22);
+      --accent-shadow: rgba(220,38,38,0.16);
+      --accent-from: #991B1B;
+      --accent-mid: #DC2626;
+      --accent-to: #7F1D1D;
+    }
+  </style>
 </head>
-<body class="bg-white text-ink antialiased">
+<body class="hx-doc-page antialiased">
 
-  <!-- Premium .hx-header styles live in /helvex.css so every page that loads the shared stylesheet gets them automatically. -->
   <header class="hx-header">
     <nav class="max-w-[1520px] mx-auto pl-4 pr-5 sm:pl-6 sm:pr-8 flex items-center justify-between gap-4">
       <div class="flex items-center gap-5 lg:gap-8">
@@ -95,188 +94,131 @@
     </nav>
   </header>
 
-  <!-- ════════ MOBILE MENU DRAWER ════════ -->
-  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Site navigation">
-    <div class="mobile-menu-backdrop" data-close></div>
-    <div class="mobile-menu-panel">
-      <div class="mobile-menu-header">
-        <a href="/" class="brand-mark text-xl flex items-center gap-2">
-          <span class="brand-logo"><img src="/helvex-logo.png" alt="HelveX" class="h-16 w-auto" /></span>
-        </a>
-        <button type="button" class="mobile-menu-close" data-close aria-label="Close menu">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6l-12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <nav class="mobile-menu-nav" aria-label="Main">
-        <a href="/" class="mobile-menu-link">Home</a>
-        <details class="mobile-menu-services">
-          <summary class="mobile-menu-link" style="list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-            <span>Services</span>
-            <svg class="w-4 h-4 text-ink-light transition-transform" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </summary>
-          <div class="pl-4 mt-1 mb-2 space-y-0.5 border-l border-line">
-            <a href="/ai-automation.html" class="mobile-menu-link">AI &amp; Automation</a>
-            <a href="/business-consulting.html" class="mobile-menu-link">Business Consulting</a>
-            <a href="/digital-services.html" class="mobile-menu-link">Digital Services</a>
-            <a href="/growth-marketing.html" class="mobile-menu-link">Growth &amp; Marketing</a>
-            <a href="/enterprise.html" class="mobile-menu-link">Enterprise</a>
-          </div>
-        </details>
-        <a href="/models" class="mobile-menu-link">Models</a>
-        <a href="/workspace" class="mobile-menu-link">Workspace</a>
-        <a href="/research" class="mobile-menu-link">Research</a>
-        <a href="/customer-stories" class="mobile-menu-link">Customers</a>
-        <a href="/resources" class="mobile-menu-link">Resources</a>
-      </nav>
-      <div class="mobile-menu-cta">
-        <a href="/signup.html" class="primary">
-          Try HeliX
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
-        <a href="/signup.html" class="secondary">Sign in</a>
-      </div>
-      <div class="mobile-menu-meta">Built in Switzerland</div>
-    </div>
+  <div class="hx-doc-bg" aria-hidden="true">
+    <div class="hx-doc-bg-grid"></div>
+    <div class="hx-doc-bg-glow hx-doc-bg-glow-1"></div>
+    <div class="hx-doc-bg-glow hx-doc-bg-glow-2"></div>
   </div>
 
-  <!-- ════════ HERO ════════ -->
-  <section class="relative pt-14 sm:pt-24 pb-12 sm:pb-16 overflow-hidden">
-    <div class="hero-orb hero-orb-2" style="opacity: 0.3;"></div>
-    <div class="relative max-w-5xl mx-auto px-6 sm:px-8">
-      <p class="reveal section-mark mb-7">Careers</p>
-      <h1 class="reveal h-display balance text-[44px] sm:text-7xl mb-6">
-        We hire senior.<br />
-        <span class="italic font-serif font-normal tech-gradient-text">We hire rarely.</span>
-      </h1>
-      <p class="reveal pretty text-base sm:text-xl text-ink-mid max-w-2xl leading-relaxed">A small, calm, senior team is the only thing we have found that consistently ships frontier work. We post roles when we have a real seat — not to fill a pipeline. Every role below is open today.</p>
-    </div>
-  </section>
+  <main class="hx-doc-wrap">
 
-  <section class="py-16 sm:py-24">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8 grid lg:grid-cols-12 gap-10 lg:gap-16">
-      <div class="lg:col-span-4">
-        <p class="reveal section-mark mb-5">How we hire</p>
-        <h2 class="reveal text-3xl sm:text-4xl font-extrabold tracking-tightest mb-5 balance">No riddles. No grind interviews.</h2>
-        <p class="reveal text-base text-ink-mid leading-relaxed pretty mb-6">A two-week process: a 45-minute conversation, a paid take-home reflecting real work, two follow-up interviews, an offer. Decisions communicated within 48 h of the final stage, every time.</p>
-        <a href="mailto:careers@helvex.ai?subject=HelveX%20-%20Career%20interest" class="btn-primary inline-flex items-center gap-2 bg-ink hover:bg-ink-soft text-white text-sm font-semibold px-6 py-3.5 rounded-full transition-colors btn-shadow">Email careers@helvex.ai <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
-      </div>
-      <div class="lg:col-span-8 border-y border-line divide-y divide-line">
-        <div class="reveal flex items-center justify-between py-5 gap-4">
-          <div><p class="font-semibold text-ink mb-1">Research scientist · long-horizon agents</p><p class="text-sm text-ink-mid">Zurich · on-site or hybrid</p></div>
-          <a href="mailto:careers@helvex.ai?subject=HelveX%20-%20Research%20scientist%20%C2%B7%20long-horizon%20agents" class="text-sm font-semibold text-ink hover:text-red transition-colors inline-flex items-center gap-1 flex-shrink-0">Apply <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
-        </div><div class="reveal flex items-center justify-between py-5 gap-4">
-          <div><p class="font-semibold text-ink mb-1">Senior platform engineer · agent runtime</p><p class="text-sm text-ink-mid">Zurich · remote (EU)</p></div>
-          <a href="mailto:careers@helvex.ai?subject=HelveX%20-%20Senior%20platform%20engineer%20%C2%B7%20agent%20runtime" class="text-sm font-semibold text-ink hover:text-red transition-colors inline-flex items-center gap-1 flex-shrink-0">Apply <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
-        </div><div class="reveal flex items-center justify-between py-5 gap-4">
-          <div><p class="font-semibold text-ink mb-1">Member of technical staff · evaluation</p><p class="text-sm text-ink-mid">Zurich · on-site preferred</p></div>
-          <a href="mailto:careers@helvex.ai?subject=HelveX%20-%20Member%20of%20technical%20staff%20%C2%B7%20evaluation" class="text-sm font-semibold text-ink hover:text-red transition-colors inline-flex items-center gap-1 flex-shrink-0">Apply <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
-        </div><div class="reveal flex items-center justify-between py-5 gap-4">
-          <div><p class="font-semibold text-ink mb-1">Forward-deployed engineer</p><p class="text-sm text-ink-mid">London · New York · Zurich</p></div>
-          <a href="mailto:careers@helvex.ai?subject=HelveX%20-%20Forward-deployed%20engineer" class="text-sm font-semibold text-ink hover:text-red transition-colors inline-flex items-center gap-1 flex-shrink-0">Apply <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
-        </div><div class="reveal flex items-center justify-between py-5 gap-4">
-          <div><p class="font-semibold text-ink mb-1">Senior frontend engineer · workspace</p><p class="text-sm text-ink-mid">Remote (EU)</p></div>
-          <a href="mailto:careers@helvex.ai?subject=HelveX%20-%20Senior%20frontend%20engineer%20%C2%B7%20workspace" class="text-sm font-semibold text-ink hover:text-red transition-colors inline-flex items-center gap-1 flex-shrink-0">Apply <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
-        </div><div class="reveal flex items-center justify-between py-5 gap-4">
-          <div><p class="font-semibold text-ink mb-1">Trust & safety researcher</p><p class="text-sm text-ink-mid">Zurich · on-site</p></div>
-          <a href="mailto:careers@helvex.ai?subject=HelveX%20-%20Trust%20%26%20safety%20researcher" class="text-sm font-semibold text-ink hover:text-red transition-colors inline-flex items-center gap-1 flex-shrink-0">Apply <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></a>
+    <section class="hx-doc-hero">
+      <div class="hx-doc-hero-inner">
+        <p class="hx-doc-eyebrow">
+          <span class="hx-doc-eyebrow-dot"></span>
+          Company · Careers
+        </p>
+        <h1 class="hx-doc-title">
+          Careers
+          <span class="hx-doc-title-italic">Senior engineers, written-first culture.</span>
+        </h1>
+        <p class="hx-doc-lede">
+          We hire senior people who own their work end-to-end. Small team, deliberate cadence, written-first defaults. Based in Zurich with global remote.
+        </p>
+        <div class="hx-doc-chips">
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Zurich + global remote</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Senior compensation</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Written-first</span>
+          <span class="hx-doc-chip"><span class="hx-doc-chip-dot"></span>Weekly ship</span>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="border-t border-line bg-cream/40 py-16 sm:py-24">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8">
-      <div class="reveal max-w-3xl mb-12"><p class="section-mark mb-5">What you get</p><h2 class="text-2xl sm:text-4xl font-extrabold tracking-tightest balance">Senior, small, calm.</h2></div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div class="reveal rounded-2xl border border-line bg-white p-6"><h3 class="font-bold text-ink mb-2">Above-market comp</h3><p class="text-sm text-ink-mid leading-relaxed">Cash + equity benchmarked at the 90th percentile of the Swiss / EU market for the role.</p></div><div class="reveal rounded-2xl border border-line bg-white p-6"><h3 class="font-bold text-ink mb-2">Senior peers only</h3><p class="text-sm text-ink-mid leading-relaxed">You will be the most junior person on your team only briefly. The bar is high and even.</p></div><div class="reveal rounded-2xl border border-line bg-white p-6"><h3 class="font-bold text-ink mb-2">Real ownership</h3><p class="text-sm text-ink-mid leading-relaxed">You name the project, you run the project, you write the post-mortem. No shadow PMs.</p></div><div class="reveal rounded-2xl border border-line bg-white p-6"><h3 class="font-bold text-ink mb-2">Quiet calendars</h3><p class="text-sm text-ink-mid leading-relaxed">Two-day-a-week meeting cap. Async-first by default. Deep work is the literal job.</p></div><div class="reveal rounded-2xl border border-line bg-white p-6"><h3 class="font-bold text-ink mb-2">Frontier compute</h3><p class="text-sm text-ink-mid leading-relaxed">Generous research budget. If a paper needs a thousand H100s, we run it.</p></div><div class="reveal rounded-2xl border border-line bg-white p-6"><h3 class="font-bold text-ink mb-2">Built in Zurich</h3><p class="text-sm text-ink-mid leading-relaxed">Office in Kreis 4. Lake five minutes away. Visa support and relocation included.</p></div>
-      </div>
-    </div>
-  </section>
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">What we look for</p>
+        <h2 class="hx-doc-section-title">Four signals, <span class="hx-doc-section-italic">in every hire.</span></h2>
+        <p class="hx-doc-section-desc">The traits that show up in everyone we keep. Specific enough to be useful, vague enough to apply across roles.</p>
 
-  <!-- ════════ WHAT WE LOOK FOR ════════ -->
-  <section class="py-20 sm:py-28 border-t border-line">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8">
-      <div class="reveal max-w-3xl mb-14 sm:mb-16">
-        <p class="section-mark mb-5">What we look for</p>
-        <h2 class="h-section text-3xl sm:text-5xl mb-5 balance">Four traits, in roughly this order.</h2>
-        <p class="pretty text-base sm:text-lg text-ink-mid leading-relaxed">
-          Resumes get a careful read. They are not how we decide. Every offer we have ever made traces back to the four traits below, in roughly the order they appear.
-        </p>
-      </div>
-
-      <div class="grid sm:grid-cols-2 gap-5 sm:gap-6">
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-red mb-3">01 · Senior</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">You have shipped before.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Not "you have led a team that shipped." You have personally taken a hard problem from an empty repo to production. We hire that pattern more than we hire any specific stack.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-yellow-deep mb-3">02 · Owns end-to-end</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">You don't wait for a handoff.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">You write the spec, you write the eval, you write the runbook. You sit with the customer for the rollout. You write the post-mortem when something breaks. There is no shadow PM behind you.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-ink mb-3">03 · Writes before code</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">A doc lands first.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">Before you open an editor on a project that will outlive a week, you write the one-page brief — the problem, the constraints, the eval. If you cannot write the brief, you do not yet understand the problem.</p>
-        </div>
-        <div class="reveal rounded-2xl border border-line bg-white p-7">
-          <p class="font-mono text-[11px] tracking-widest uppercase text-red-deep mb-3">04 · Ships every week</p>
-          <h3 class="text-lg font-bold tracking-tight mb-2.5">Something real, every Friday.</h3>
-          <p class="text-sm text-ink-mid leading-relaxed">A weekly cadence of small, observable progress beats heroic month-long sprints. The work is on a branch, behind a flag, in a customer's tenant — never in a slide.</p>
+        <div class="hx-doc-grid hx-doc-grid-4">
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Level</span>
+            <h3 class="hx-doc-card-title">Senior</h3>
+            <p class="hx-doc-card-body">Eight years plus of meaningful production experience. You've shipped, broken, and fixed real systems. Bench reflexes, not tutorial confidence.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Mode</span>
+            <h3 class="hx-doc-card-title">Owns end-to-end</h3>
+            <p class="hx-doc-card-body">Comfortable from brief to production. You don't wait for a PM to translate a problem, and you don't drop your work over the wall to someone else.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Method</span>
+            <h3 class="hx-doc-card-title">Writes before code</h3>
+            <p class="hx-doc-card-body">A doc, a brief, a spec — whatever the project needs. The thinking happens in writing first; the code is the second pass at it.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Cadence</span>
+            <h3 class="hx-doc-card-title">Ships every week</h3>
+            <p class="hx-doc-card-body">Something visible lands every week. Not always the headline feature — sometimes a runbook, a doc, an eval. Steady delivery beats the heroic sprint.</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════ HOW WE WORK ════════ -->
-  <section class="bg-cream/40 border-y border-line py-20 sm:py-28">
-    <div class="max-w-6xl mx-auto px-6 sm:px-8 grid lg:grid-cols-12 gap-10 lg:gap-16">
-      <div class="lg:col-span-5">
-        <p class="reveal section-mark mb-5">How we work</p>
-        <h2 class="reveal h-section text-3xl sm:text-5xl mb-5 balance">Zurich-based. Senior-paced. Written-first.</h2>
-        <p class="reveal pretty text-base sm:text-lg text-ink-mid leading-relaxed">
-          A small senior team, an office in Kreis 4, and engineering across three continents. The rhythm below is what every week looks like — for everyone, from the founders down.
-        </p>
-      </div>
-      <div class="lg:col-span-7 space-y-5 text-base text-ink-mid leading-relaxed pretty">
-        <p class="reveal">
-          <span class="font-semibold text-ink">Zurich plus global remote.</span> Most roles are based in Zurich on a hybrid pattern; some are full remote across the EU. Forward-deployed engineers travel to where the customer is — London, New York, sometimes further. We pay relocation for anyone moving to Zurich.
-        </p>
-        <p class="reveal">
-          <span class="font-semibold text-ink">A weekly ship cadence.</span> Every Friday is a written check-in: what shipped this week, what is in review, what slipped and why. No standups. No status meetings. The cadence is the planning system.
-        </p>
-        <p class="reveal">
-          <span class="font-semibold text-ink">No on-call burnout.</span> Production incidents do happen — and a rotation exists for them — but the team is large enough that no one carries the pager for more than a week at a time, and a paid recovery day follows a major incident. We do not glamourise heroics.
-        </p>
-        <p class="reveal">
-          <span class="font-semibold text-ink">Written-first culture.</span> Proposals are documents, not slides. Reviews happen in the margin. The senior people on this team got senior by writing — they continue to write, and they expect you to.
-        </p>
-        <p class="reveal">
-          <span class="font-semibold text-ink">Small team, senior compensation.</span> Headcount is not a goal. The path here is to be paid well enough that you do not think about money, and trusted enough that you do not need a manager. The bar to come in is high, and so is the floor.
-        </p>
-      </div>
-    </div>
-  </section>
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">How we work</p>
+        <h2 class="hx-doc-section-title">The operating model.</h2>
+        <p class="hx-doc-section-desc">Four working defaults that show up in every team. Different from most AI shops, deliberately.</p>
 
-  <!-- ════════ CTA ════════ -->
-  <section class="border-t border-line py-16 sm:py-20 bg-cream/40">
-    <div class="max-w-3xl mx-auto px-6 sm:px-8 text-center">
-      <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="mailto:careers@helvex.ai?subject=HelveX%20-%20Career%20interest" class="btn-primary inline-flex items-center gap-2 bg-ink hover:bg-ink-soft text-white text-sm font-semibold px-6 py-3.5 rounded-full transition-colors btn-shadow">
-          Email careers@helvex.ai
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg>
-        </a>
-        <a href="/about" class="inline-flex items-center gap-2 border border-line hover:border-ink text-ink text-sm font-semibold px-6 py-3.5 rounded-full transition-colors">About HelveX</a>
+        <div class="hx-doc-grid hx-doc-grid-4">
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Place</span>
+            <h3 class="hx-doc-card-title">Zurich + global remote</h3>
+            <p class="hx-doc-card-body">HQ in Zurich. Engineering distributed across EU, UK, North America. Overlap windows kept short; everything important written down.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Cadence</span>
+            <h3 class="hx-doc-card-title">Weekly ship cadence</h3>
+            <p class="hx-doc-card-body">Friday demo, Monday plan. Small enough deltas that the team always knows what landed. No quarterly waterfalls.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Hours</span>
+            <h3 class="hx-doc-card-title">No on-call burnout</h3>
+            <p class="hx-doc-card-body">Production is monitored, but on-call rotates fairly and triggers are tuned hard. Senior engineers are paid to think, not to sleep with a phone.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Culture</span>
+            <h3 class="hx-doc-card-title">Written-first culture</h3>
+            <p class="hx-doc-card-body">Decisions live in docs. Meetings exist to make a doc better, not to replace one. New hires can read three months back and catch up.</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
-  <!-- ════════════════════════════════════════════════════════════
-       PREMIUM FOOTER — luxe obsidian edition
-       Deep dark stage with ambient mesh, signature aurora rims,
-       refined column hierarchy, premium glass subscribe form,
-       trust ribbon with badges, glass social chips.
-       ════════════════════════════════════════════════════════════ -->
+    </section>
+
+    <section class="hx-doc-section">
+      <div class="hx-doc-section-inner">
+        <p class="hx-doc-section-eyebrow">Where we work</p>
+        <h2 class="hx-doc-section-title">Three locations, <span class="hx-doc-section-italic">one team.</span></h2>
+        <p class="hx-doc-section-desc">Where the work happens. Roles open across all three; the brief is the same.</p>
+
+        <div class="hx-doc-grid hx-doc-grid-3">
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">HQ</span>
+            <h3 class="hx-doc-card-title">Zurich</h3>
+            <p class="hx-doc-card-body">Headquarters. Leadership, finance, design, customer-facing engineering. The room where the cadence is set.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Engineering</span>
+            <h3 class="hx-doc-card-title">Global remote</h3>
+            <p class="hx-doc-card-body">Distributed across EU, UK, North America. Async-first, written briefs, weekly demos. Two contiguous time-zone-overlap hours expected.</p>
+          </div>
+          <div class="hx-doc-card">
+            <span class="hx-doc-card-kicker">Research</span>
+            <h3 class="hx-doc-card-title">EU-Central</h3>
+            <p class="hx-doc-card-body">Research team clustered in EU-Central time zones for tight collaboration. Publishes notes monthly, ships findings into production.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hx-doc-closing">
+      <span class="hx-doc-closing-mark">End of overview</span>
+      <p>We pay senior, we ship weekly, we write things down. If that matches, we should talk.</p>
+    </section>
+
+  </main>
+
   <footer class="hx-footer">
     <div class="hx-footer-bg" aria-hidden="true">
       <div class="hx-footer-grid"></div>
@@ -287,10 +229,8 @@
 
     <div class="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 sm:pt-28 pb-10">
 
-      <!-- Top row: brand + 4 columns -->
       <div class="hx-footer-top">
 
-        <!-- Brand column -->
         <div class="hx-footer-brand-col">
           <a href="/" class="hx-footer-brand">
             <span class="hx-footer-brand-halo" aria-hidden="true"></span>
@@ -310,7 +250,6 @@
           </form>
         </div>
 
-        <!-- Product -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#F5C863"></span>Product</p>
           <ul>
@@ -322,7 +261,6 @@
           </ul>
         </div>
 
-        <!-- Company -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#DC2626"></span>Company</p>
           <ul>
@@ -334,7 +272,6 @@
           </ul>
         </div>
 
-        <!-- Resources -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#F0B852"></span>Resources</p>
           <ul>
@@ -346,11 +283,9 @@
             <li><a href="/best-practices"><span class="hx-footer-link-title">Best practices</span><span class="hx-footer-link-desc">Engineering principles, anti-patterns</span></a></li>
             <li><a href="/customer-stories"><span class="hx-footer-link-title">Customer stories</span><span class="hx-footer-link-desc">Engagement shapes and outcomes</span></a></li>
             <li><a href="/help-center"><span class="hx-footer-link-title">Help center</span><span class="hx-footer-link-desc">Docs, FAQs, and how-tos</span></a></li>
-            <li><a href="/community"><span class="hx-footer-link-title">Community</span><span class="hx-footer-link-desc">Forum, Discord, GitHub</span></a></li>
           </ul>
         </div>
 
-        <!-- Legal -->
         <div class="hx-footer-col">
           <p class="hx-footer-col-eyebrow"><span class="hx-footer-col-dot" style="--c:#D4D4D8"></span>Legal</p>
           <ul>
@@ -364,7 +299,6 @@
 
       </div>
 
-      <!-- Trust ribbon: signature → certifications → live status -->
       <div class="hx-footer-trust">
         <span class="hx-footer-trust-item">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="hx-footer-trust-flag"><rect width="24" height="24" rx="3" fill="#DC2626"/><rect x="10" y="5" width="4" height="14" fill="#FFFFFF"/><rect x="5" y="10" width="14" height="4" fill="#FFFFFF"/></svg>
@@ -381,7 +315,6 @@
         <span class="hx-footer-trust-item hx-footer-trust-mono">v 2.4 · Cycle 12</span>
       </div>
 
-      <!-- Bottom row: copyright + socials -->
       <div class="hx-footer-bottom">
         <p class="hx-footer-copy">© 2026 HelveX AG · Zurich, Switzerland · All rights reserved.</p>
         <div class="hx-footer-social">
