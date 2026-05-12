@@ -39,6 +39,13 @@
             yellow: '#FCD34D',
             'yellow-deep': '#F59E0B',
             'yellow-soft': '#FEF3C7',
+            /* Premium primary accent — a refined slate-blue used for
+               focus rings, links, and subtle highlights. Sits next to
+               the red brand mark without competing with it. */
+            blue: '#2563EB',
+            'blue-deep': '#1E40AF',
+            'blue-soft': '#DBEAFE',
+            'blue-ink': '#0F172A',
           },
           fontFamily: {
             sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
@@ -230,7 +237,7 @@
   </div>
 
   <!-- ════════ HERO — futuristic tech ════════ -->
-  <section class="relative pt-14 sm:pt-24 pb-20 sm:pb-32 overflow-hidden tech-wash-blush">
+  <section class="relative pt-14 sm:pt-24 pb-24 sm:pb-32 overflow-hidden tech-wash-blush">
     <div class="tech-aurora"><div class="blob"></div></div>
     <div class="tech-grid"></div>
 
@@ -539,7 +546,7 @@
   </section>
 
   <!-- ════════ MODELS — preview that funnels to /models ════════ -->
-  <section id="models-preview" class="relative py-24 sm:py-36 tech-wash-pink overflow-hidden">
+  <section id="models-preview" class="relative py-24 sm:py-32 tech-wash-pink overflow-hidden">
     <div class="tech-aurora"><div class="blob"></div></div>
     <div class="relative max-w-7xl mx-auto px-6 sm:px-8">
 
@@ -724,7 +731,7 @@
   </section>
 
   <!-- ════════ WORKSPACE (product-side, fully user-facing) ════════ -->
-  <section id="workspace" class="relative py-24 sm:py-36 tech-wash-soft border-y border-line overflow-hidden">
+  <section id="workspace" class="relative py-24 sm:py-32 tech-wash-soft border-y border-line overflow-hidden">
     <div class="tech-aurora"><div class="blob"></div></div>
     <div class="relative max-w-7xl mx-auto px-6 sm:px-8">
       <div class="max-w-3xl mb-16 sm:mb-20">
@@ -870,7 +877,7 @@
   </section>
 
   <!-- ════════ FAQ — futuristic glass accordion ════════ -->
-  <section class="relative py-24 sm:py-36 tech-wash-blush overflow-hidden">
+  <section class="relative py-24 sm:py-32 tech-wash-blush overflow-hidden">
     <div class="tech-aurora"><div class="blob"></div></div>
     <div class="relative max-w-4xl mx-auto px-6 sm:px-8">
       <div class="text-center mb-14 sm:mb-20">
@@ -925,6 +932,38 @@
             <svg class="w-5 h-5 text-ink-mid group-open:text-ink flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </summary>
           <p class="text-base text-ink-mid leading-relaxed pb-6 px-6 sm:px-8 pretty">Three concrete answers, not one slogan. (1) Nexus is grounded on retrieval whenever sources are available — answers cite the line they came from, and you can click through. (2) When confidence is low, the model says so, and points at what's missing instead of inventing. (3) For agent runs, every step writes to a replayable trace, so a wrong answer becomes a question you can audit and fix.</p>
+        </details>
+
+        <details class="reveal group hover:bg-cream/60 transition-colors">
+          <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 px-6 sm:px-8 list-none">
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">How does pricing work?</span>
+            <svg class="w-5 h-5 text-ink-mid group-open:text-ink flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </summary>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 px-6 sm:px-8 pretty">Engagements are scoped, not metered. We agree on the outcome, the timeline, and a fixed price up front — no per-token surprises. Ongoing operate-mode is a flat monthly retainer with the senior engineer who built the system. Anything outside scope is quoted in writing before work starts.</p>
+        </details>
+
+        <details class="reveal group hover:bg-cream/60 transition-colors">
+          <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 px-6 sm:px-8 list-none">
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Which integrations do you support?</span>
+            <svg class="w-5 h-5 text-ink-mid group-open:text-ink flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </summary>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 px-6 sm:px-8 pretty">The systems most teams already run on — Slack, Microsoft 365, Google Workspace, Salesforce, HubSpot, Notion, Linear, Jira, GitHub, Zendesk, Intercom, plus your own Postgres, Snowflake, or BigQuery. Anything with a documented API or a database can be wired in; bespoke connectors are part of standard build scope.</p>
+        </details>
+
+        <details class="reveal group hover:bg-cream/60 transition-colors">
+          <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 px-6 sm:px-8 list-none">
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">Who owns the code and IP we ship together?</span>
+            <svg class="w-5 h-5 text-ink-mid group-open:text-ink flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </summary>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 px-6 sm:px-8 pretty">You do. Every line of bespoke code, prompt set, dataset, and operational artefact produced in your engagement is assigned to your company on delivery, and lands in a private repository you control. HelveX retains rights only to the shared platform — the engine, not the work built on top of it.</p>
+        </details>
+
+        <details class="reveal group hover:bg-cream/60 transition-colors">
+          <summary class="flex items-center justify-between gap-6 cursor-pointer py-6 px-6 sm:px-8 list-none">
+            <span class="font-bold text-lg sm:text-xl tracking-tight pretty">What if our requirements change mid-engagement?</span>
+            <svg class="w-5 h-5 text-ink-mid group-open:text-ink flex-shrink-0 group-open:rotate-45 transition-transform" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </summary>
+          <p class="text-base text-ink-mid leading-relaxed pb-6 px-6 sm:px-8 pretty">We expect them to. Every engagement runs in two-week cycles with a written review at each boundary — what shipped, what's next, anything we need to re-scope. Small adjustments fold into the current cycle; larger pivots are re-quoted before work continues. The senior engineer assigned to you stays the same person, so context is never lost.</p>
         </details>
 
       </div>
@@ -1253,9 +1292,11 @@
        Longer hold (1800 ms) + slower morph (1100 ms) ≈ 2.9 s/state —
        gives the eye time to land on each word, and the transition
        feels cinematic instead of strobing. */
-    var HOLD_LOGO  = 1800;
-    var HOLD_WORD  = 1800;
-    var MORPH_DUR  = 1100;
+    /* Longer hold + shorter morph = each word reads cleanly before
+       the next transition begins. Net cycle ≈ 3.2 s per state. */
+    var HOLD_LOGO  = 2500;
+    var HOLD_WORD  = 2500;
+    var MORPH_DUR  = 900;
 
     /* Apple-style ease — out-quint-ish. Smooth at start, deliberate
        at the end, no perceptible kick. */
@@ -1367,7 +1408,9 @@
 
         var tx, ty;
         if (isMorph) {
-          var offset = (p.seed - 0.5) * 0.20;  // -0.10 … +0.10
+          // Tighter per-particle stagger keeps the morph harmonious —
+          // every particle finishes within ±5% of the same moment.
+          var offset = (p.seed - 0.5) * 0.10;  // -0.05 … +0.05
           var localK = (k - 0.5) / (1 - Math.abs(offset)) + 0.5 + offset * 0.5;
           if (localK < 0) localK = 0;
           if (localK > 1) localK = 1;
