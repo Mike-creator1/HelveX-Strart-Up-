@@ -1508,22 +1508,22 @@
         if (fs < smallestFs) smallestFs = fs;
       }
 
-      /* 2) Reference font size = smallest of the bunch. The longest
-         word uses this size at density 3. Larger-font states scale
-         density and dot radius UP proportionally so the per-stroke
-         dot count stays roughly constant. */
-      var REF_FS    = smallestFs;
-      var REF_DOT   = 1.7;   // dot radius for the reference state
-      var REF_GRID  = 3;     // sampling spacing for the reference state
+      /* 2) Fixed dot radius + fixed grid spacing across every state.
+         The previous per-state proportional scaling made short words
+         like "AI Agents" sample at grid=6 with 3.5 px dots — adjacent
+         dots overlapped so much the letters read as a muddy solid
+         instead of crisp dotted type. With a single (DOT, GRID) pair
+         across all states the visual weight per letter-stroke stays
+         uniform because each state's font is auto-fit independently:
+         short words just get fewer dots in total, not bigger ones. */
+      var DOT_R = 1.7;
+      var GRID  = 3;
 
       DOT_BY_STATE = [];
       statePts    = [];
       for (var sx = 0; sx < STATES.length; sx++) {
-        var scale = fsPerState[sx] / REF_FS;
-        var grid  = Math.max(2, Math.round(REF_GRID * scale));
-        var dot   = REF_DOT * scale;
-        DOT_BY_STATE.push(dot);
-        statePts.push(buildPointsFor(STATES[sx].text, STATES[sx].font, grid, fsPerState[sx]).pts);
+        DOT_BY_STATE.push(DOT_R);
+        statePts.push(buildPointsFor(STATES[sx].text, STATES[sx].font, GRID, fsPerState[sx]).pts);
       }
 
       // Equalize lengths
@@ -1531,14 +1531,10 @@
       for (var i = 0; i < statePts.length; i++) {
         if (statePts[i].length > maxLen) maxLen = statePts[i].length;
       }
-      // Cap dramatically raised — long phrases like "Intelligent
-      // Workflows" / "Advanced Reasoning" produce ~8k natural sample
-      // points at this font size. The previous 4 k cap downsampled
-      // them by ~50%, leaving visible gaps inside the strokes. With
-      // CAP = 9000 every state can be sampled at full density and the
-      // single batched Path2D fill keeps performance flat regardless
-      // of N.
-      var CAP = (W < 640) ? 5500 : 9000;
+      // CAP halved — at uniform GRID=3 the longest natural state samples
+      // around 5–6k points; capping at 5500 covers them in full while
+      // cutting per-frame Path2D work in half versus the previous 9k.
+      var CAP = (W < 640) ? 3500 : 5500;
       if (maxLen > CAP) maxLen = CAP;
       if (maxLen < 50)  maxLen = 50;  // safety floor — never zero
       N = maxLen;
@@ -1682,31 +1678,35 @@
       ctx.shadowColor = 'transparent';
       ctx.fillStyle   = 'rgba(0, 0, 0, 1)';
 
-      // Active dot radius — interpolated from/to during a morph, locked
-      // to the current state during hold.
-      var dotFrom = DOT_BY_STATE[st.from] || 1.7;
-      var dotTo   = DOT_BY_STATE[st.to]   || 1.7;
-      var DOT     = isMorph ? (dotFrom + (dotTo - dotFrom) * k) : dotFrom;
+      // Uniform dot radius across every state — no per-frame interpolation
+      // needed. The letter weight is governed by sampling density, not
+      // by dot scale, so the dot stays a constant 1.7 px throughout.
+      var DOT = DOT_BY_STATE[st.from] || 1.7;
 
       ctx.beginPath();
       for (var i = 0; i < N; i++) {
         var p  = particles[i];
         var fp = fromArr[i], tp = toArr[i];
 
-        var tx, ty;
         if (isMorph) {
-          // Tighter per-particle stagger keeps the morph harmonious —
-          // every particle finishes within ±5% of the same moment.
-          var offset = (p.seed - 0.5) * 0.10;  // -0.05 … +0.05
-          var localK = (k - 0.5) / (1 - Math.abs(offset)) + 0.5 + offset * 0.5;
+          /* Asymmetric per-particle stagger.
+             Each particle has its own start time in [0, STAGGER] but
+             EVERY particle ends at exactly k = 1. This means:
+              - no exponential-lerp "drift" past the morph window
+              - no transient overshoot between morph and hold
+              - the wave reads as a coordinated arrival, not a smear */
+          var STAGGER = 0.15;
+          var startK = p.seed * STAGGER;
+          var localK = (k - startK) / (1 - startK);
           if (localK < 0) localK = 0;
-          if (localK > 1) localK = 1;
-          localK = easeInOut(localK);
+          else if (localK > 1) localK = 1;
+          else localK = easeInOut(localK);
 
-          tx = fp.x + (tp.x - fp.x) * localK;
-          ty = fp.y + (tp.y - fp.y) * localK;
-          p.x += (tx - p.x) * 0.22;
-          p.y += (ty - p.y) * 0.22;
+          // Direct positional interpolation — particle sits exactly on
+          // the lerp between source and target every frame. No chasing
+          // a moving target with a damped follow.
+          p.x = fp.x + (tp.x - fp.x) * localK;
+          p.y = fp.y + (tp.y - fp.y) * localK;
         } else {
           // HOLD — snap every particle to its exact target. No lerping,
           // no transient drift, no half-pixel doubling. The letter
