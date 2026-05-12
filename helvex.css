@@ -317,11 +317,10 @@
       transition: border-color .3s ease, box-shadow .3s ease;
     }
     .hx-footer-form-row:focus-within {
-      border-color: rgba(245,158,11,0.30);
+      border-color: rgba(255,255,255,0.18);
       box-shadow:
-        0 1px 0 rgba(255,255,255,0.06) inset,
-        0 0 0 4px rgba(245,158,11,0.08),
-        0 8px 28px -10px rgba(0,0,0,0.55);
+        0 1px 0 rgba(255,255,255,0.08) inset,
+        0 12px 32px -12px rgba(0,0,0,0.6);
     }
     .hx-footer-form input {
       flex: 1; min-width: 0;
