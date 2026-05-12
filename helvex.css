@@ -422,48 +422,36 @@
       flex-shrink: 0;
     }
 
+    /* Two-line informational items: title + small descriptor.
+       Footer is a guide, not a CTA — no sliding dashes, no marketing
+       buttons, just clean editorial typography. The whole row is still
+       a link for navigation, but the dominant visual is the description. */
     .hx-footer-col ul {
       list-style: none; padding: 0; margin: 0;
-      display: flex; flex-direction: column; gap: 11px;
+      display: flex; flex-direction: column; gap: 14px;
     }
     .hx-footer-col li a {
-      position: relative;
-      display: inline-flex; align-items: center;
+      display: flex; flex-direction: column; gap: 3px;
       font-family: 'Inter', sans-serif;
-      font-size: 13px; font-weight: 500;
-      color: rgba(236,236,238,0.62);
-      letter-spacing: -0.005em;
       text-decoration: none;
-      transition: color .3s ease, padding-left .35s cubic-bezier(.22,1,.36,1);
+      letter-spacing: -0.005em;
+      transition: color .3s ease;
     }
-    .hx-footer-col li a::before {
-      content: ""; position: absolute; left: -2px; top: 50%;
-      width: 5px; height: 1px;
-      background: var(--c, #DC2626);
-      transform: translateY(-50%) scaleX(0);
-      transform-origin: right center;
-      opacity: 0;
-      transition: transform .35s cubic-bezier(.22,1,.36,1), opacity .3s ease;
+    .hx-footer-link-title {
+      font-size: 13px; font-weight: 600;
+      color: rgba(236,236,238,0.88);
+      letter-spacing: -0.005em;
+      transition: color .3s ease;
     }
-    .hx-footer-col li a:hover {
-      color: #FAFAFA;
-      padding-left: 10px;
+    .hx-footer-link-desc {
+      font-size: 11px; font-weight: 400;
+      line-height: 1.4;
+      color: rgba(236,236,238,0.42);
+      letter-spacing: -0.002em;
+      transition: color .3s ease;
     }
-    .hx-footer-col li a:hover::before { transform: translateY(-50%) scaleX(1); opacity: 1; }
-
-    /* Accent CTA link (e.g. "Try HeliX" in the Product column) */
-    .hx-footer-link-accent {
-      color: #F5C863 !important;
-      font-weight: 700 !important;
-      letter-spacing: 0.06em !important;
-      text-transform: uppercase;
-      font-size: 11px !important;
-      margin-top: 4px;
-    }
-    .hx-footer-link-accent svg { width: 10px; height: 10px; margin-left: 2px; transition: transform .3s ease; }
-    .hx-footer-link-accent:hover svg { transform: translateX(3px); }
-    .hx-footer-link-accent:hover { color: #FFFFFF !important; }
-    .hx-footer-link-accent::before { display: none !important; }
+    .hx-footer-col li a:hover .hx-footer-link-title { color: #FFFFFF; }
+    .hx-footer-col li a:hover .hx-footer-link-desc { color: rgba(236,236,238,0.62); }
 
     /* Trust ribbon — smaller, more refined */
     .hx-footer-trust {
