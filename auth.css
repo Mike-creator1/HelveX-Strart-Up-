@@ -2421,3 +2421,72 @@ body {
   .auth-shell.split .side-headline { font-size: clamp(38px, 9vw, 48px) !important; }
   .auth-shell.split .side-sub { font-size: 15.5px !important; line-height: 1.6 !important; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   v7 — bigger logo + another type bump on the left panel
+   Pushes the editorial weight further. Spacing is trimmed
+   slightly so the larger type still fits inside 100vh.
+   ════════════════════════════════════════════════════════════ */
+@media (min-width: 921px) {
+  /* Logo — bigger and more prominent */
+  .auth-shell.split .side-brand img {
+    height: clamp(72px, 9.5vh, 104px) !important;
+  }
+
+  /* Eyebrow pill — slightly larger + denser tracking */
+  .auth-shell.split .side-eyebrow {
+    font-size: clamp(12px, 1.55vh, 13px) !important;
+    letter-spacing: 0.32em !important;
+    padding: clamp(6px, 0.9vh, 8px) clamp(13px, 1.6vh, 16px) clamp(6px, 0.9vh, 8px) clamp(11px, 1.4vh, 13px) !important;
+  }
+
+  /* Headline — bigger and tighter */
+  .auth-shell.split .side-headline {
+    font-size: clamp(52px, 8.4vh, 88px) !important;
+    line-height: 0.92 !important;
+    letter-spacing: -0.048em !important;
+  }
+
+  /* Subtitle — more confident reading size */
+  .auth-shell.split .side-sub {
+    font-size: clamp(16px, 2.05vh, 19px) !important;
+    line-height: 1.55 !important;
+    max-width: 46ch !important;
+  }
+
+  /* Feature titles + descriptions */
+  .auth-shell.split .feat-body strong {
+    font-size: clamp(15.5px, 1.95vh, 18px) !important;
+    letter-spacing: -0.015em !important;
+  }
+  .auth-shell.split .feat-body span {
+    font-size: clamp(14px, 1.8vh, 16px) !important;
+    line-height: 1.55 !important;
+  }
+
+  /* Feature icons — slightly larger to balance the type */
+  .auth-shell.split .feat-icon {
+    width: clamp(42px, 5.2vh, 50px) !important;
+    height: clamp(42px, 5.2vh, 50px) !important;
+    border-radius: clamp(12px, 1.4vh, 14px) !important;
+  }
+  .auth-shell.split .feat-icon svg {
+    width: clamp(18px, 2.2vh, 22px) !important;
+    height: clamp(18px, 2.2vh, 22px) !important;
+  }
+
+  /* Footer mono — slightly larger */
+  .auth-shell.split .side-foot {
+    font-size: clamp(11px, 1.3vh, 12.5px) !important;
+  }
+
+  /* Trim some vertical spacing so the larger type fits inside 100vh */
+  .auth-shell.split .auth-side {
+    padding: clamp(24px, 3.8vh, 48px) clamp(36px, 4vw, 64px) !important;
+  }
+  .auth-shell.split .side-content { padding: clamp(12px, 2vh, 24px) 0 !important; }
+  .auth-shell.split .side-eyebrow { margin-bottom: clamp(12px, 1.7vh, 22px) !important; }
+  .auth-shell.split .side-headline { margin-bottom: clamp(8px, 1.3vh, 16px) !important; }
+  .auth-shell.split .side-sub { margin-bottom: clamp(14px, 2.2vh, 28px) !important; }
+  .auth-shell.split .side-features { gap: clamp(9px, 1.4vh, 16px) !important; }
+}
