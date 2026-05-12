@@ -2492,6 +2492,61 @@ body {
 }
 
 /* ════════════════════════════════════════════════════════════
+   v9 — refined spacing rhythm on the left panel
+   Loosens the vertical rhythm between blocks: more breathing
+   room between eyebrow→headline→subtitle→features, plus more
+   space inside each feature row (icon-to-body, title-to-desc).
+   ════════════════════════════════════════════════════════════ */
+@media (min-width: 921px) {
+  /* Outer breathing — slightly more side padding for an airier composition */
+  .auth-shell.split .auth-side {
+    padding: clamp(32px, 4.6vh, 60px) clamp(44px, 4.5vw, 72px) !important;
+  }
+  .auth-shell.split .side-content {
+    padding: clamp(20px, 3vh, 36px) 0 !important;
+    gap: 0;
+  }
+
+  /* Vertical rhythm — looser spacing between each editorial block */
+  .auth-shell.split .side-eyebrow {
+    margin-bottom: clamp(18px, 2.6vh, 32px) !important;
+  }
+  .auth-shell.split .side-headline {
+    margin-bottom: clamp(14px, 2vh, 26px) !important;
+  }
+  .auth-shell.split .side-sub {
+    margin-bottom: clamp(24px, 3.6vh, 44px) !important;
+  }
+  .auth-shell.split .side-features {
+    gap: clamp(16px, 2.4vh, 26px) !important;
+  }
+
+  /* Inside each feature row — wider icon-to-body gap + more space
+     between the bold title and its description line */
+  .auth-shell.split .side-features li {
+    gap: clamp(14px, 1.8vh, 20px) !important;
+    align-items: flex-start;
+  }
+  .auth-shell.split .feat-body {
+    gap: clamp(4px, 0.6vh, 7px) !important;
+  }
+
+  /* Footer — slightly more breathing above the hairline */
+  .auth-shell.split .side-foot {
+    padding-top: clamp(18px, 2.6vh, 28px) !important;
+  }
+}
+
+/* Mobile — keep the looser rhythm on stacked layout */
+@media (max-width: 920px) {
+  .auth-shell.split .side-eyebrow { margin-bottom: 22px !important; }
+  .auth-shell.split .side-headline { margin-bottom: 18px !important; }
+  .auth-shell.split .side-sub { margin-bottom: 28px !important; }
+  .auth-shell.split .side-features { gap: 20px !important; }
+  .auth-shell.split .side-features li { gap: 16px !important; }
+}
+
+/* ════════════════════════════════════════════════════════════
    v8 — scale up the right-panel auth card
    Bigger surface + larger inputs + bigger button + bumped
    typography. Stays inside 100vh.
