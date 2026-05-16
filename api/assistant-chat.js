@@ -35,9 +35,16 @@ export default async function handler(req, res) {
   // history is an array of { role: 'user'|'assistant', content: '...' }
   const history = Array.isArray(payload.history) ? payload.history.slice(-20) : [];
 
+  // Optional persona override — replaces the default SYSTEM prompt if provided.
+  // Used by the Business Assistant when the user picks "Sales coach", "Legal
+  // advisor", or any custom persona they saved.
+  const systemOverride = typeof payload.system === 'string' && payload.system.trim().length > 10
+    ? payload.system.trim().slice(0, 4000)
+    : null;
+
   try {
     const upstream = await callAnthropicStream({
-      system: SYSTEM,
+      system: systemOverride || SYSTEM,
       userPrompt: message,
       history,
       maxTokens: 2000,

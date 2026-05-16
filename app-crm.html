@@ -115,6 +115,45 @@
     /* Danger button */
     .hx-btn-danger { background: white; border: 1px solid var(--hx-line); color: var(--hx-red); font-weight: 500; }
     .hx-btn-danger:hover { border-color: var(--hx-red); background: rgba(220,38,38,0.06); }
+    /* === DEALS KANBAN === */
+    .hx-deals-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 6px 0 14px; }
+    @media (max-width: 800px) { .hx-deals-stats { grid-template-columns: repeat(2, 1fr); } }
+    .hx-deals-stat { background: #fff; border: 1px solid var(--hx-line); border-radius: 12px; padding: 12px 14px; }
+    .hx-deals-stat .lbl { font-size: 11px; color: var(--hx-text-mid); font-family: var(--hx-mono); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 4px; }
+    .hx-deals-stat .val { font-size: 20px; font-weight: 700; color: var(--hx-text); margin: 0; font-variant-numeric: tabular-nums; }
+    .hx-deals-stat .meta { font-size: 11px; color: var(--hx-text-mid); margin: 2px 0 0; }
+
+    .hx-deals-kanban { display: grid; grid-template-columns: repeat(5, minmax(220px, 1fr)); gap: 12px; overflow-x: auto; padding-bottom: 4px; }
+    @media (max-width: 1100px) { .hx-deals-kanban { grid-template-columns: repeat(5, 240px); } }
+    .hx-deal-col { background: var(--hx-cream); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; min-height: 380px; transition: background 0.14s; }
+    .hx-deal-col.over { background: rgba(252, 211, 77, 0.18); outline: 2px dashed rgba(252, 211, 77, 0.7); outline-offset: -4px; }
+    .hx-deal-col-head { display: flex; align-items: center; justify-content: space-between; padding: 4px 6px 10px; border-bottom: 1px solid var(--hx-line); margin-bottom: 8px; }
+    .hx-deal-col-name { font-size: 12px; font-weight: 700; color: var(--hx-text); display: flex; gap: 6px; align-items: center; }
+    .hx-deal-col-name .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .hx-deal-col-meta { font-family: var(--hx-mono); font-size: 11px; color: var(--hx-text-mid); }
+    .hx-deal-col-list { display: flex; flex-direction: column; gap: 6px; flex: 1; min-height: 0; }
+    .hx-deal-add { width: 100%; padding: 8px 10px; background: transparent; border: 1px dashed var(--hx-line); border-radius: 8px; color: var(--hx-text-mid); font-size: 12px; cursor: pointer; margin-top: 8px; transition: all 0.12s; }
+    .hx-deal-add:hover { border-color: var(--hx-text); color: var(--hx-text); border-style: solid; background: #fff; }
+
+    .hx-deal-card { background: #fff; border: 1px solid var(--hx-line); border-radius: 10px; padding: 10px 12px; cursor: grab; transition: border-color 0.12s, box-shadow 0.12s, transform 0.12s; user-select: none; }
+    .hx-deal-card:hover { border-color: var(--hx-text-mid); box-shadow: 0 4px 12px -4px rgba(15,15,16,0.08); }
+    .hx-deal-card.dragging { opacity: 0.4; cursor: grabbing; }
+    .hx-deal-card-title { font-size: 13px; font-weight: 600; color: var(--hx-text); margin: 0 0 4px; line-height: 1.35; }
+    .hx-deal-card-meta { display: flex; justify-content: space-between; align-items: center; }
+    .hx-deal-card-val { font-family: var(--hx-mono); font-size: 12px; font-weight: 600; color: var(--hx-text); }
+    .hx-deal-card-age { font-size: 10.5px; color: var(--hx-text-mid); font-family: var(--hx-mono); }
+    .hx-deal-card-age.warm { color: #b45309; }
+    .hx-deal-card-age.hot { color: #b91c1c; }
+    .hx-deal-card-sub { font-size: 11px; color: var(--hx-text-mid); margin-top: 4px; display: flex; align-items: center; gap: 6px; }
+    .hx-deal-card-stage-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+    /* Stage dot colors */
+    .stage-lead         { background: #94a3b8; }
+    .stage-qualified    { background: #3b82f6; }
+    .stage-proposal     { background: #a855f7; }
+    .stage-negotiation  { background: #f59e0b; }
+    .stage-won          { background: #22c55e; }
+    .stage-lost         { background: #ef4444; }
   </style>
 </head>
 <body data-active="app-crm">
@@ -224,8 +263,27 @@
           </div>
         </div>
 
+        <!-- DEALS KANBAN -->
         <div class="hx-section-head">
-          <h2>Pipeline</h2>
+          <h2>Deals · pipeline</h2>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span class="meta" id="hx-deals-meta">0 open</span>
+            <button class="hx-btn hx-btn-primary" id="hx-new-deal-btn">+ New deal</button>
+          </div>
+        </div>
+
+        <div class="hx-deals-stats">
+          <div class="hx-deals-stat"><p class="lbl">Pipeline value</p><p class="val" id="hx-deals-val">CHF 0</p><p class="meta">All open stages</p></div>
+          <div class="hx-deals-stat"><p class="lbl">Open deals</p><p class="val" id="hx-deals-open">0</p><p class="meta" id="hx-deals-avg">Avg —</p></div>
+          <div class="hx-deals-stat"><p class="lbl">Won this month</p><p class="val" id="hx-deals-won">CHF 0</p><p class="meta" id="hx-deals-won-count">0 deals</p></div>
+          <div class="hx-deals-stat"><p class="lbl">Win rate (30d)</p><p class="val" id="hx-deals-winrate">—</p><p class="meta">Last 30 days</p></div>
+        </div>
+
+        <div id="hx-deals-host"></div>
+
+        <!-- CONTACTS PIPELINE -->
+        <div class="hx-section-head" style="margin-top:28px;">
+          <h2>Contacts · by stage</h2>
           <span class="meta" id="hx-pipeline-meta">—</span>
         </div>
 
@@ -714,6 +772,60 @@
     })();
   </script>
 
+  <!-- Deal create/edit modal -->
+  <div class="hxai-modal-back" id="hx-deal-modal" role="dialog" aria-modal="true">
+    <div class="hxai-modal">
+      <div class="hxai-modal-head">
+        <h3 id="hx-deal-modal-title">New deal</h3>
+        <button class="close" data-modal-close="hx-deal-modal" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="hxai-modal-body">
+        <div class="hxai-field">
+          <label for="hx-deal-title">Deal name *</label>
+          <input type="text" id="hx-deal-title" placeholder="e.g. Schmidt GmbH · CRM rollout Q4" maxlength="120" />
+        </div>
+        <div class="hxai-field-row">
+          <div class="hxai-field">
+            <label for="hx-deal-value">Value (CHF)</label>
+            <input type="number" id="hx-deal-value" placeholder="0" min="0" step="100" />
+          </div>
+          <div class="hxai-field">
+            <label for="hx-deal-stage">Stage</label>
+            <select id="hx-deal-stage">
+              <option value="lead">Lead</option>
+              <option value="qualified">Qualified</option>
+              <option value="proposal">Proposal</option>
+              <option value="negotiation">Negotiation</option>
+              <option value="won">Won</option>
+              <option value="lost">Lost</option>
+            </select>
+          </div>
+        </div>
+        <div class="hxai-field-row">
+          <div class="hxai-field">
+            <label for="hx-deal-contact">Contact (optional)</label>
+            <input type="text" id="hx-deal-contact" placeholder="e.g. Maria Schmidt" maxlength="120" />
+          </div>
+          <div class="hxai-field">
+            <label for="hx-deal-close">Expected close date</label>
+            <input type="date" id="hx-deal-close" />
+          </div>
+        </div>
+        <div class="hxai-field">
+          <label for="hx-deal-notes">Notes</label>
+          <textarea id="hx-deal-notes" placeholder="Context, requirements, anything useful for follow-up."></textarea>
+        </div>
+      </div>
+      <div class="hxai-modal-foot">
+        <button class="hx-btn hx-btn-danger" id="hx-deal-delete" style="margin-right:auto;display:none;">Delete</button>
+        <button class="hx-btn hx-btn-secondary" data-modal-close="hx-deal-modal">Cancel</button>
+        <button class="hx-btn hx-btn-primary" id="hx-deal-save">Save deal</button>
+      </div>
+    </div>
+  </div>
+
   <!-- AI Enrich modal -->
   <div class="hxai-modal-back" id="hx-enrich-modal" role="dialog" aria-modal="true">
     <div class="hxai-modal">
@@ -838,6 +950,241 @@
           runBtn.disabled = false; runBtn.textContent = 'Enrich';
         }
       });
+    })();
+  </script>
+
+  <!-- ============ DEALS KANBAN ============ -->
+  <script>
+    (function () {
+      const STAGES = [
+        { id: 'lead',         label: 'Lead',        dot: 'stage-lead' },
+        { id: 'qualified',    label: 'Qualified',   dot: 'stage-qualified' },
+        { id: 'proposal',     label: 'Proposal',    dot: 'stage-proposal' },
+        { id: 'negotiation',  label: 'Negotiation', dot: 'stage-negotiation' },
+        { id: 'won',          label: 'Won',         dot: 'stage-won' },
+      ];
+
+      const SEED = [
+        { id: HXAI.store.id(), title: 'Schmidt GmbH · Website redesign',           value: 8500,  stage: 'lead',         contact: 'Anna Schmidt',     close: '', notes: 'Inbound via website form. Wants new homepage + 4 landing pages.', createdAt: new Date().toISOString(), updatedAt: new Date(Date.now() - 2*86400000).toISOString() },
+        { id: HXAI.store.id(), title: 'Acme Berlin · CRM rollout',                 value: 24000, stage: 'qualified',    contact: 'Maria Klein',      close: '', notes: '60-person SaaS, evaluating HelveX vs HubSpot. SSO required.', createdAt: new Date().toISOString(), updatedAt: new Date(Date.now() - 5*86400000).toISOString() },
+        { id: HXAI.store.id(), title: 'Müller Holding · AI consulting Q4',         value: 18000, stage: 'proposal',     contact: 'Stefan Müller',    close: '', notes: 'Proposal sent 3 days ago. Decision expected next week.', createdAt: new Date().toISOString(), updatedAt: new Date(Date.now() - 9*86400000).toISOString() },
+        { id: HXAI.store.id(), title: 'Vienna Tech · Marketing automation',        value: 45000, stage: 'negotiation',  contact: 'Lukas Wagner',     close: '', notes: 'Negotiating contract terms. They want 90-day pilot pricing.', createdAt: new Date().toISOString(), updatedAt: new Date(Date.now() - 12*86400000).toISOString() },
+        { id: HXAI.store.id(), title: 'Geneva Bank · Custom assistant',            value: 67000, stage: 'won',          contact: 'Sophie Dubois',    close: '', notes: 'Closed last week. Kickoff scheduled.', createdAt: new Date().toISOString(), updatedAt: new Date(Date.now() - 4*86400000).toISOString() },
+      ];
+
+      let deals = HXAI.store.get('crm', 'deals', null);
+      if (deals === null) {
+        deals = SEED;
+        HXAI.store.set('crm', 'deals', deals);
+      }
+
+      const host       = document.getElementById('hx-deals-host');
+      const metaEl     = document.getElementById('hx-deals-meta');
+      const valEl      = document.getElementById('hx-deals-val');
+      const openEl     = document.getElementById('hx-deals-open');
+      const avgEl      = document.getElementById('hx-deals-avg');
+      const wonEl      = document.getElementById('hx-deals-won');
+      const wonCountEl = document.getElementById('hx-deals-won-count');
+      const winrateEl  = document.getElementById('hx-deals-winrate');
+      const newBtn     = document.getElementById('hx-new-deal-btn');
+
+      const modal     = document.getElementById('hx-deal-modal');
+      const modalTitle= document.getElementById('hx-deal-modal-title');
+      const titleEl   = document.getElementById('hx-deal-title');
+      const valueEl   = document.getElementById('hx-deal-value');
+      const stageEl   = document.getElementById('hx-deal-stage');
+      const contactEl = document.getElementById('hx-deal-contact');
+      const closeEl   = document.getElementById('hx-deal-close');
+      const notesEl   = document.getElementById('hx-deal-notes');
+      const saveBtn   = document.getElementById('hx-deal-save');
+      const deleteBtn = document.getElementById('hx-deal-delete');
+
+      HXAI.wireModal('hx-deal-modal');
+
+      let editingId = null;
+
+      function save() { HXAI.store.set('crm', 'deals', deals); }
+
+      function fmtCHF(n) {
+        return 'CHF ' + (n || 0).toLocaleString('de-CH');
+      }
+
+      function dealAgeClass(updatedAt) {
+        const days = Math.floor((Date.now() - new Date(updatedAt).getTime()) / 86400000);
+        if (days >= 14) return 'hot';
+        if (days >= 7) return 'warm';
+        return '';
+      }
+
+      function dealCard(d) {
+        const ageClass = dealAgeClass(d.updatedAt);
+        return `
+          <div class="hx-deal-card" draggable="true" data-id="${d.id}">
+            <div class="hx-deal-card-title">${HXAI.esc(d.title)}</div>
+            <div class="hx-deal-card-meta">
+              <span class="hx-deal-card-val">${fmtCHF(d.value)}</span>
+              <span class="hx-deal-card-age ${ageClass}">${HXAI.timeAgo(d.updatedAt)}</span>
+            </div>
+            ${d.contact ? `<div class="hx-deal-card-sub">👤 ${HXAI.esc(d.contact)}</div>` : ''}
+          </div>
+        `;
+      }
+
+      function render() {
+        const byStage = {};
+        STAGES.forEach(s => byStage[s.id] = []);
+        deals.forEach(d => {
+          if (byStage[d.stage]) byStage[d.stage].push(d);
+        });
+
+        host.innerHTML = '<div class="hx-deals-kanban">' + STAGES.map(s => {
+          const col = byStage[s.id] || [];
+          const total = col.reduce((acc, d) => acc + (d.value || 0), 0);
+          return `
+            <div class="hx-deal-col" data-stage="${s.id}">
+              <div class="hx-deal-col-head">
+                <span class="hx-deal-col-name"><span class="dot ${s.dot}"></span>${s.label}</span>
+                <span class="hx-deal-col-meta">${col.length} · ${fmtCHF(total)}</span>
+              </div>
+              <div class="hx-deal-col-list" data-drop-stage="${s.id}">
+                ${col.map(dealCard).join('')}
+              </div>
+              <button class="hx-deal-add" data-add-stage="${s.id}">+ Add deal</button>
+            </div>
+          `;
+        }).join('') + '</div>';
+
+        wireCards();
+        wireColumns();
+        wireAddButtons();
+        renderStats();
+      }
+
+      function renderStats() {
+        const open = deals.filter(d => d.stage !== 'won' && d.stage !== 'lost');
+        const totalOpen = open.reduce((acc, d) => acc + (d.value || 0), 0);
+        const avg = open.length ? Math.round(totalOpen / open.length) : 0;
+        const since30 = Date.now() - 30 * 86400000;
+        const won30 = deals.filter(d => d.stage === 'won' && new Date(d.updatedAt).getTime() >= since30);
+        const closed30 = deals.filter(d => (d.stage === 'won' || d.stage === 'lost') && new Date(d.updatedAt).getTime() >= since30);
+        const wonValue = won30.reduce((acc, d) => acc + (d.value || 0), 0);
+        const winrate = closed30.length ? Math.round((won30.length / closed30.length) * 100) : null;
+
+        metaEl.textContent = `${open.length} open · ${deals.length} total`;
+        valEl.textContent = fmtCHF(totalOpen);
+        openEl.textContent = open.length;
+        avgEl.textContent = `Avg ${fmtCHF(avg)}`;
+        wonEl.textContent = fmtCHF(wonValue);
+        wonCountEl.textContent = `${won30.length} deal${won30.length === 1 ? '' : 's'}`;
+        winrateEl.textContent = winrate === null ? '—' : `${winrate}%`;
+      }
+
+      function wireCards() {
+        host.querySelectorAll('.hx-deal-card').forEach(card => {
+          card.addEventListener('click', () => openEdit(card.dataset.id));
+          card.addEventListener('dragstart', (e) => {
+            card.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', card.dataset.id);
+            e.dataTransfer.effectAllowed = 'move';
+          });
+          card.addEventListener('dragend', () => card.classList.remove('dragging'));
+        });
+      }
+
+      function wireColumns() {
+        host.querySelectorAll('.hx-deal-col').forEach(col => {
+          col.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            col.classList.add('over');
+          });
+          col.addEventListener('dragleave', () => col.classList.remove('over'));
+          col.addEventListener('drop', (e) => {
+            e.preventDefault();
+            col.classList.remove('over');
+            const dealId = e.dataTransfer.getData('text/plain');
+            const newStage = col.dataset.stage;
+            const deal = deals.find(d => d.id === dealId);
+            if (deal && deal.stage !== newStage) {
+              deal.stage = newStage;
+              deal.updatedAt = new Date().toISOString();
+              save();
+              render();
+            }
+          });
+        });
+      }
+
+      function wireAddButtons() {
+        host.querySelectorAll('.hx-deal-add').forEach(btn => {
+          btn.addEventListener('click', () => openNew(btn.dataset.addStage));
+        });
+      }
+
+      function openNew(presetStage) {
+        editingId = null;
+        modalTitle.textContent = 'New deal';
+        deleteBtn.style.display = 'none';
+        titleEl.value = '';
+        valueEl.value = '';
+        stageEl.value = presetStage || 'lead';
+        contactEl.value = '';
+        closeEl.value = '';
+        notesEl.value = '';
+        HXAI.openModal('hx-deal-modal');
+        setTimeout(() => titleEl.focus(), 60);
+      }
+
+      function openEdit(id) {
+        const deal = deals.find(d => d.id === id);
+        if (!deal) return;
+        editingId = id;
+        modalTitle.textContent = 'Edit deal';
+        deleteBtn.style.display = '';
+        titleEl.value = deal.title || '';
+        valueEl.value = deal.value || '';
+        stageEl.value = deal.stage || 'lead';
+        contactEl.value = deal.contact || '';
+        closeEl.value = deal.close || '';
+        notesEl.value = deal.notes || '';
+        HXAI.openModal('hx-deal-modal');
+      }
+
+      saveBtn.addEventListener('click', () => {
+        const title = titleEl.value.trim();
+        if (!title) { titleEl.focus(); return; }
+        const patch = {
+          title,
+          value: parseFloat(valueEl.value) || 0,
+          stage: stageEl.value,
+          contact: contactEl.value.trim(),
+          close: closeEl.value || '',
+          notes: notesEl.value.trim(),
+          updatedAt: new Date().toISOString(),
+        };
+        if (editingId) {
+          const i = deals.findIndex(d => d.id === editingId);
+          if (i !== -1) deals[i] = { ...deals[i], ...patch };
+        } else {
+          deals.push({ id: HXAI.store.id(), createdAt: new Date().toISOString(), ...patch });
+        }
+        save();
+        render();
+        HXAI.closeModal('hx-deal-modal');
+      });
+
+      deleteBtn.addEventListener('click', () => {
+        if (!editingId) return;
+        if (!confirm('Delete this deal? This cannot be undone.')) return;
+        deals = deals.filter(d => d.id !== editingId);
+        save();
+        render();
+        HXAI.closeModal('hx-deal-modal');
+      });
+
+      newBtn.addEventListener('click', () => openNew('lead'));
+
+      render();
     })();
   </script>
 </body>
