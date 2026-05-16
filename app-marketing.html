@@ -32,6 +32,52 @@
     .hx-beta-strip svg { width: 18px; height: 18px; color: var(--hx-yellow-deep); flex-shrink: 0; }
     .hx-beta-strip p { font-size: 13px; color: var(--hx-text); margin: 0; line-height: 1.5; flex: 1; }
     .hx-beta-strip strong { font-weight: 600; }
+
+    /* Active "LIVE" generator card */
+    .hx-gen.hx-gen-live { opacity: 1; cursor: pointer; }
+    .hx-gen.hx-gen-live .hx-gen-tag { color: var(--hx-yellow-deep); }
+
+    /* Modal */
+    .hx-modal-back { position: fixed; inset: 0; background: rgba(15,15,16,0.42); backdrop-filter: blur(4px); display: none; align-items: flex-start; justify-content: center; z-index: 1000; padding: 56px 16px 16px; overflow-y: auto; }
+    .hx-modal-back.open { display: flex; }
+    .hx-modal { background: #fff; border-radius: 16px; box-shadow: 0 24px 64px -16px rgba(15,15,16,0.30); max-width: 760px; width: 100%; max-height: calc(100vh - 80px); display: flex; flex-direction: column; overflow: hidden; }
+    .hx-modal-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid var(--hx-line); }
+    .hx-modal-head h3 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.005em; }
+    .hx-modal-head .close { background: transparent; border: 0; cursor: pointer; padding: 6px; color: var(--hx-text-mid); border-radius: 8px; }
+    .hx-modal-head .close:hover { background: var(--hx-cream); color: var(--hx-text); }
+    .hx-modal-body { padding: 20px 22px; overflow-y: auto; }
+    .hx-modal-foot { padding: 14px 22px; border-top: 1px solid var(--hx-line); background: var(--hx-cream); display: flex; gap: 10px; justify-content: flex-end; align-items: center; }
+    .hx-modal-foot .hx-cost { font-family: var(--hx-mono); font-size: 11px; color: var(--hx-text-mid); margin-right: auto; }
+
+    .hx-field { display: block; margin-bottom: 14px; }
+    .hx-field label { font-size: 12.5px; font-weight: 600; color: var(--hx-text); display: block; margin-bottom: 6px; letter-spacing: -0.005em; }
+    .hx-field textarea, .hx-field input, .hx-field select { width: 100%; padding: 10px 12px; border: 1px solid var(--hx-line); border-radius: 10px; font: inherit; font-size: 13.5px; background: #fff; color: var(--hx-text); outline: none; transition: border-color 0.12s, box-shadow 0.12s; }
+    .hx-field textarea:focus, .hx-field input:focus, .hx-field select:focus { border-color: var(--hx-yellow-deep); box-shadow: 0 0 0 3px rgba(252,211,77,0.18); }
+    .hx-field textarea { min-height: 100px; resize: vertical; line-height: 1.55; }
+    .hx-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 600px) { .hx-field-row { grid-template-columns: 1fr; } }
+
+    /* Results */
+    .hx-results { display: flex; flex-direction: column; gap: 14px; }
+    .hx-variant { border: 1px solid var(--hx-line); border-radius: 12px; padding: 14px 16px; background: #fff; }
+    .hx-variant-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+    .hx-variant-num { font-family: var(--hx-mono); font-size: 10.5px; font-weight: 600; color: var(--hx-yellow-deep); text-transform: uppercase; letter-spacing: 0.08em; background: rgba(252,211,77,0.15); padding: 3px 8px; border-radius: 6px; }
+    .hx-variant-angle { font-size: 11.5px; color: var(--hx-text-mid); font-style: italic; }
+    .hx-variant-subject { font-weight: 600; font-size: 14.5px; color: var(--hx-text); margin: 6px 0 2px; }
+    .hx-variant-preview { font-size: 12.5px; color: var(--hx-text-mid); margin-bottom: 10px; }
+    .hx-variant-body { font-size: 13.5px; color: var(--hx-text); white-space: pre-wrap; line-height: 1.55; padding: 10px 12px; background: var(--hx-cream); border-radius: 8px; border-left: 3px solid var(--hx-yellow-deep); }
+    .hx-variant-cta { display: inline-block; margin-top: 10px; padding: 6px 14px; background: var(--hx-text); color: #fff; font-size: 12px; font-weight: 600; border-radius: 6px; letter-spacing: 0.02em; }
+    .hx-variant-copy { font-size: 11.5px; color: var(--hx-text-mid); background: transparent; border: 1px solid var(--hx-line); padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all 0.12s; }
+    .hx-variant-copy:hover { color: var(--hx-text); border-color: var(--hx-text); }
+    .hx-variant-copy.copied { color: #22c55e; border-color: #22c55e; }
+
+    .hx-status { font-size: 12.5px; color: var(--hx-text-mid); display: flex; align-items: center; gap: 8px; padding: 12px 0; }
+    .hx-status .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--hx-yellow-deep); animation: hx-pulse 1.1s ease-in-out infinite; }
+    @keyframes hx-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
+    .hx-status.error { color: #dc2626; }
+    .hx-status.error .dot { background: #dc2626; animation: none; }
+
+    .hx-stream-preview { font-family: var(--hx-mono); font-size: 11px; color: var(--hx-text-mid); white-space: pre-wrap; background: var(--hx-cream); padding: 10px 12px; border-radius: 8px; max-height: 200px; overflow-y: auto; margin-top: 10px; }
   </style>
 </head>
 <body data-active="app-marketing">
@@ -75,7 +121,7 @@
           <button class="hx-gen" disabled><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 11-5.8-1.6"/></svg></span><h3>Ad copy</h3><p>Meta · Google · TikTok. Headlines, body, CTAs, A/B variants.</p><div class="hx-gen-meta"><span class="hx-gen-tag">Ads</span><span class="hx-gen-cta">Soon →</span></div></button>
           <button class="hx-gen" disabled><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span><h3>TikTok &amp; Reels scripts</h3><p>Hook, beats, captions, on-screen text. Short-form rhythm.</p><div class="hx-gen-meta"><span class="hx-gen-tag">Video</span><span class="hx-gen-cta">Soon →</span></div></button>
           <button class="hx-gen" disabled><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><h3>SEO articles</h3><p>Topic → outline → article. Headings, links, meta description.</p><div class="hx-gen-meta"><span class="hx-gen-tag">SEO</span><span class="hx-gen-cta">Soon →</span></div></button>
-          <button class="hx-gen" disabled><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><h3>Email campaigns</h3><p>Newsletters, drips, broadcasts. Subjects that earn the open.</p><div class="hx-gen-meta"><span class="hx-gen-tag">Email</span><span class="hx-gen-cta">Soon →</span></div></button>
+          <button class="hx-gen hx-gen-live" id="hx-email-gen-btn"><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><h3>Email campaigns</h3><p>Newsletters, drips, broadcasts. Subjects that earn the open.</p><div class="hx-gen-meta"><span class="hx-gen-tag">Email · LIVE</span><span class="hx-gen-cta">Open →</span></div></button>
           <button class="hx-gen" disabled><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></span><h3>Landing pages</h3><p>Hero, features, social proof, FAQ, CTA. Ship-ready copy.</p><div class="hx-gen-meta"><span class="hx-gen-tag">Pages</span><span class="hx-gen-cta">Soon →</span></div></button>
         </div>
 
@@ -95,6 +141,248 @@
       </main>
     </div>
   </div>
+
+  <!-- Email Campaign Generator Modal -->
+  <div class="hx-modal-back" id="hx-email-modal" role="dialog" aria-modal="true" aria-labelledby="hx-email-modal-title">
+    <div class="hx-modal">
+      <div class="hx-modal-head">
+        <h3 id="hx-email-modal-title">Email campaign generator</h3>
+        <button class="close" id="hx-email-modal-close" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="hx-modal-body" id="hx-email-modal-body">
+        <form id="hx-email-form">
+          <div class="hx-field">
+            <label for="hx-brief">What's the email about? <span style="color:var(--hx-text-mid);font-weight:400;">(brief — what to say, why now, what action)</span></label>
+            <textarea id="hx-brief" name="brief" required minlength="10" maxlength="4000" placeholder="e.g. Launch announcement for our new pricing tier — €49/month, includes unlimited workspaces, available from Monday. Audience are existing free users who haven't converted yet."></textarea>
+          </div>
+          <div class="hx-field-row">
+            <div class="hx-field">
+              <label for="hx-audience">Audience</label>
+              <select id="hx-audience" name="audience">
+                <option>Existing customers</option>
+                <option>Free trial users</option>
+                <option>Cold leads (first contact)</option>
+                <option>Newsletter subscribers</option>
+                <option>Lapsed customers (re-engagement)</option>
+                <option>Internal team / partners</option>
+              </select>
+            </div>
+            <div class="hx-field">
+              <label for="hx-goal">Goal</label>
+              <select id="hx-goal" name="goal">
+                <option>Drive purchase / conversion</option>
+                <option>Drive sign-up / trial start</option>
+                <option>Re-engage inactive users</option>
+                <option>Announce a launch / feature</option>
+                <option>Book a demo or call</option>
+                <option>Share a content piece (educate)</option>
+              </select>
+            </div>
+          </div>
+          <div class="hx-field-row">
+            <div class="hx-field">
+              <label for="hx-tone">Tone</label>
+              <select id="hx-tone" name="tone">
+                <option>Professional but warm</option>
+                <option>Friendly and casual</option>
+                <option>Confident and direct</option>
+                <option>Premium / luxury</option>
+                <option>Witty and playful</option>
+                <option>Urgent (time-sensitive)</option>
+              </select>
+            </div>
+            <div class="hx-field">
+              <label for="hx-language">Language</label>
+              <select id="hx-language" name="language">
+                <option>English</option>
+                <option>Greek (Ελληνικά)</option>
+                <option>German (Deutsch)</option>
+                <option>French (Français)</option>
+                <option>Italian (Italiano)</option>
+                <option>Spanish (Español)</option>
+                <option>Dutch (Nederlands)</option>
+                <option>Portuguese (Português)</option>
+              </select>
+            </div>
+          </div>
+          <div class="hx-field-row">
+            <div class="hx-field">
+              <label for="hx-variants">Number of variants</label>
+              <select id="hx-variants" name="variants">
+                <option value="3">3 (default)</option>
+                <option value="2">2</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="1">1</option>
+              </select>
+            </div>
+            <div></div>
+          </div>
+        </form>
+
+        <div id="hx-status-area"></div>
+        <div id="hx-results-area" class="hx-results" style="margin-top:8px;"></div>
+      </div>
+      <div class="hx-modal-foot">
+        <span class="hx-cost" id="hx-cost-hint">~$0.01 per generation · Claude Sonnet 4.5</span>
+        <button class="hx-btn hx-btn-secondary" id="hx-email-cancel">Close</button>
+        <button class="hx-btn hx-btn-primary" id="hx-email-submit" type="button">Generate variants</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const btn      = document.getElementById('hx-email-gen-btn');
+      const modal    = document.getElementById('hx-email-modal');
+      const closeBtn = document.getElementById('hx-email-modal-close');
+      const cancelBtn= document.getElementById('hx-email-cancel');
+      const form     = document.getElementById('hx-email-form');
+      const submit   = document.getElementById('hx-email-submit');
+      const statusEl = document.getElementById('hx-status-area');
+      const resultsEl= document.getElementById('hx-results-area');
+
+      function openModal() { modal.classList.add('open'); document.body.style.overflow = 'hidden'; }
+      function closeModal() {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      btn.addEventListener('click', openModal);
+      closeBtn.addEventListener('click', closeModal);
+      cancelBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+      function setStatus(text, isError = false) {
+        statusEl.innerHTML = text
+          ? `<div class="hx-status${isError ? ' error' : ''}"><span class="dot"></span><span>${text}</span></div>`
+          : '';
+      }
+
+      function renderVariants(variants) {
+        resultsEl.innerHTML = variants.map((v, i) => {
+          const safe = (s) => (s || '').toString()
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+          const copyText = `Subject: ${v.subject || ''}\nPreview: ${v.preview || ''}\n\n${v.body || ''}\n\n[CTA] ${v.cta || ''}`;
+          const copyJs = `(function(b){navigator.clipboard.writeText(${JSON.stringify(copyText)}).then(()=>{b.textContent='Copied ✓';b.classList.add('copied');setTimeout(()=>{b.textContent='Copy';b.classList.remove('copied')},1600)})})(this)`;
+          return `
+            <div class="hx-variant">
+              <div class="hx-variant-head">
+                <span class="hx-variant-num">Variant ${i + 1}</span>
+                <button class="hx-variant-copy" onclick="${copyJs}">Copy</button>
+              </div>
+              ${v.angle ? `<div class="hx-variant-angle">Angle: ${safe(v.angle)}</div>` : ''}
+              <div class="hx-variant-subject">${safe(v.subject) || '(no subject)'}</div>
+              <div class="hx-variant-preview">${safe(v.preview) || ''}</div>
+              <div class="hx-variant-body">${safe(v.body) || ''}</div>
+              ${v.cta ? `<div class="hx-variant-cta">${safe(v.cta)}</div>` : ''}
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Parse the streaming response. Anthropic SSE events look like:
+      //   event: content_block_delta
+      //   data: {"type":"content_block_delta","delta":{"type":"text_delta","text":"..."}}
+      // We accumulate all text deltas; the final assembled text should be a
+      // JSON object with the "variants" array.
+      async function streamGenerate(payload) {
+        const res = await fetch('/api/generate-campaign', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) {
+          let msg = `Error ${res.status}`;
+          try { const j = await res.json(); msg = j.error || msg; } catch {}
+          throw new Error(msg);
+        }
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let assembled = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+
+          // SSE events end with \n\n
+          let nl;
+          while ((nl = buffer.indexOf('\n\n')) !== -1) {
+            const block = buffer.slice(0, nl);
+            buffer = buffer.slice(nl + 2);
+            // Each block has lines like "event: foo" and "data: {...}"
+            const dataLine = block.split('\n').find(l => l.startsWith('data: '));
+            if (!dataLine) continue;
+            const dataStr = dataLine.slice(6);
+            try {
+              const ev = JSON.parse(dataStr);
+              if (ev.type === 'content_block_delta' && ev.delta?.type === 'text_delta') {
+                assembled += ev.delta.text;
+                setStatus(`Generating… (${assembled.length} chars)`);
+              } else if (ev.type === 'message_stop') {
+                // Done
+              }
+            } catch {}
+          }
+        }
+        return assembled;
+      }
+
+      submit.addEventListener('click', async () => {
+        const brief = document.getElementById('hx-brief').value.trim();
+        if (brief.length < 10) {
+          setStatus('Brief is too short — give at least a sentence.', true);
+          return;
+        }
+        const payload = {
+          brief,
+          audience: document.getElementById('hx-audience').value,
+          goal: document.getElementById('hx-goal').value,
+          tone: document.getElementById('hx-tone').value,
+          language: document.getElementById('hx-language').value,
+          variants: parseInt(document.getElementById('hx-variants').value, 10) || 3,
+        };
+
+        submit.disabled = true; submit.textContent = 'Generating…';
+        resultsEl.innerHTML = '';
+        setStatus('Calling Claude…');
+
+        try {
+          const raw = await streamGenerate(payload);
+          setStatus('Parsing result…');
+
+          // Strip any surrounding markdown/code fence the model sometimes adds
+          let jsonText = raw.trim();
+          jsonText = jsonText.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '');
+          // Find the first { and last } for safety
+          const first = jsonText.indexOf('{');
+          const last  = jsonText.lastIndexOf('}');
+          if (first === -1 || last === -1) throw new Error('Model did not return JSON');
+          jsonText = jsonText.slice(first, last + 1);
+
+          const parsed = JSON.parse(jsonText);
+          if (!parsed.variants || !Array.isArray(parsed.variants) || parsed.variants.length === 0) {
+            throw new Error('No variants in response');
+          }
+          renderVariants(parsed.variants);
+          setStatus('');
+        } catch (err) {
+          console.error(err);
+          setStatus(`Generation failed: ${err.message || err}. Try again.`, true);
+        } finally {
+          submit.disabled = false; submit.textContent = 'Generate variants';
+        }
+      });
+    })();
+  </script>
 
   <script src="/platform.js"></script>
 </body>
