@@ -320,6 +320,7 @@
           return;
         }
         scrollEl.innerHTML = t.messages.map(m => bubbleHtml(m.role, m.content)).join('');
+        wireRememberButtons();
         scrollEl.scrollTop = scrollEl.scrollHeight;
       }
 
@@ -327,7 +328,46 @@
         if (role === 'user') {
           return `<div class="hxai-msg user"><div class="hxai-msg-bubble">${HXAI.esc(text)}</div></div>`;
         }
-        return `<div class="hxai-msg assistant"><div class="hxai-msg-avatar">HX</div><div class="hxai-msg-bubble"><span class="hxai-msg-text">${HXAI.esc(text)}</span></div></div>`;
+        // Assistant messages get a "Remember this" affordance that saves
+        // the selected text (or the full message) to public.memories so
+        // future chats carry the fact in their system prompt.
+        return `<div class="hxai-msg assistant"><div class="hxai-msg-avatar">HX</div><div class="hxai-msg-bubble"><span class="hxai-msg-text">${HXAI.esc(text)}</span><div class="hxai-msg-actions" style="margin-top:8px;display:flex;gap:4px;"><button class="hxai-remember" data-content="${HXAI.esc(text).replace(/"/g,'&quot;')}" type="button" style="font-size:11.5px;font-weight:500;color:var(--hx-text-mid);background:transparent;border:1px solid transparent;padding:3px 8px;border-radius:5px;cursor:pointer;font-family:inherit;transition:background 0.12s, border-color 0.12s, color 0.12s;">Remember this</button></div></div></div>`;
+      }
+
+      function wireRememberButtons() {
+        scrollEl.querySelectorAll('.hxai-remember').forEach((b) => {
+          if (b.__bound) return;
+          b.__bound = true;
+          b.addEventListener('mouseenter', () => { b.style.background = 'var(--hx-cream)'; b.style.borderColor = 'var(--hx-line)'; b.style.color = 'var(--hx-text)'; });
+          b.addEventListener('mouseleave', () => { if (b.dataset.state !== 'saving' && b.dataset.state !== 'saved') { b.style.background = 'transparent'; b.style.borderColor = 'transparent'; b.style.color = 'var(--hx-text-mid)'; } });
+          b.addEventListener('click', async () => {
+            if (b.dataset.state === 'saving' || b.dataset.state === 'saved') return;
+            b.dataset.state = 'saving';
+            const orig = b.textContent;
+            b.textContent = 'Saving…';
+            try {
+              const sb = (window.HX && window.HX.supabase) || null;
+              const sess = sb ? (await sb.auth.getSession()).data.session : null;
+              if (!sess || !sess.access_token) throw new Error('Sign in to save a memory.');
+              const r = await fetch('/api/memory-save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sess.access_token },
+                body: JSON.stringify({ content: b.dataset.content, source: 'assistant_chat', tags: ['assistant'], importance: 3 }),
+              });
+              if (!r.ok) {
+                const d = await r.json().catch(() => ({}));
+                throw new Error(d.error || ('HTTP ' + r.status));
+              }
+              b.dataset.state = 'saved';
+              b.textContent = 'Saved to Memory ✓';
+              b.style.color = '#15803d';
+            } catch (err) {
+              b.dataset.state = '';
+              b.textContent = orig;
+              if (window.cxToast) window.cxToast((err && err.message) || 'Could not save.', 'error');
+            }
+          });
+        });
       }
 
       function appendBubble(role, text) {
@@ -335,6 +375,7 @@
         div.innerHTML = bubbleHtml(role, text).trim();
         const node = div.firstChild;
         scrollEl.appendChild(node);
+        if (role === 'assistant') wireRememberButtons();
         scrollEl.scrollTop = scrollEl.scrollHeight;
         return node;
       }

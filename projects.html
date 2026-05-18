@@ -150,6 +150,15 @@
         <!-- Project list / empty state lives here -->
         <div id="hx-projects-host"></div>
 
+        <!-- Files for the active project. Operates on whichever project
+             is currently set as active via the existing localStorage
+             pref shared with chat.html and the dashboard banner. -->
+        <div class="hx-section-head" style="margin-top:28px;">
+          <h2>Files</h2>
+          <span class="meta" id="hx-files-meta">—</span>
+        </div>
+        <div id="hx-files-host"></div>
+
       </main>
     </div>
   </div>
@@ -329,8 +338,8 @@
             // Active-project actions don't touch the projects table —
             // they just persist a localStorage preference shared with
             // chat.html and dashboard.html.
-            if (act === 'set-active')   { setActiveProject(id, name);            await refresh(); btn.disabled = false; return; }
-            if (act === 'clear-active') { setActiveProject(null);                await refresh(); btn.disabled = false; return; }
+            if (act === 'set-active')   { setActiveProject(id, name);            await refresh(); renderFiles(); btn.disabled = false; return; }
+            if (act === 'clear-active') { setActiveProject(null);                await refresh(); renderFiles(); btn.disabled = false; return; }
 
             if (act === 'pause')   { await sb.from('projects').update({ status: 'paused' }).eq('id', id); await sb.rpc('log_event', { p_kind: 'project.paused', p_payload: { id: id }, p_project_id: id }); }
             if (act === 'resume')  { await sb.from('projects').update({ status: 'active' }).eq('id', id); await sb.rpc('log_event', { p_kind: 'project.resumed', p_payload: { id: id }, p_project_id: id }); }
@@ -403,7 +412,162 @@
           }
         });
 
+        // ───────────────────────────────────────────────────────────
+        // Files (per active project). Uses Supabase Storage bucket
+        // 'project-files' and the public.project_files index table.
+        // Files only render when there's an active project selected.
+        // ───────────────────────────────────────────────────────────
+        var BUCKET = 'project-files';
+        var MAX_BYTES = 25 * 1024 * 1024; // 25MB cap per file
+
+        function fmtBytes(n) {
+          if (n < 1024) return n + ' B';
+          if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+          return (n / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        async function renderFiles() {
+          var host = $('hx-files-host');
+          var meta = $('hx-files-meta');
+          var active = getActiveProject();
+          if (!active || !active.id) {
+            host.innerHTML = '<div class="hx-empty"><h3>No active project</h3><p>Set a project as Active (button on each row above) to upload files into it. Files are private and only you can see them.</p></div>';
+            meta.textContent = '—';
+            return;
+          }
+          meta.textContent = 'Project · ' + (active.name || 'active');
+          var r = await sb.from('project_files').select('*').eq('project_id', active.id).order('created_at', { ascending: false });
+          if (r.error) {
+            host.innerHTML = '<div class="hx-empty"><h3>Could not load files</h3><p>' + escape(r.error.message) + '</p></div>';
+            return;
+          }
+          var rows = r.data || [];
+          var dropZone = ''
+            + '<div class="hx-card" style="padding:18px 20px;">'
+            +   '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">'
+            +     '<div style="flex:1;min-width:0;">'
+            +       '<p style="margin:0;font-weight:600;font-size:14px;">Upload to ' + escape(active.name || 'this project') + '</p>'
+            +       '<p style="margin:4px 0 0;font-size:12.5px;color:var(--hx-text-mid);">Private to you — files live in EU-CH-1 with managed encryption. 25 MB per file.</p>'
+            +     '</div>'
+            +     '<input type="file" id="hx-file-input" style="display:none;" />'
+            +     '<button class="hx-btn hx-btn-secondary" id="hx-file-pick">Choose file</button>'
+            +     '<button class="hx-btn hx-btn-primary" id="hx-file-upload" disabled>Upload</button>'
+            +   '</div>'
+            +   '<p id="hx-file-status" style="margin:8px 0 0;font-size:12.5px;color:var(--hx-text-mid);"></p>'
+            + '</div>';
+          var listHtml = '';
+          if (rows.length === 0) {
+            listHtml = '<div class="hx-empty" style="margin-top:10px;"><h3>No files yet</h3><p>Upload the first PDF, Word doc, CSV, JSON, or image. Drop them into a brief later as context.</p></div>';
+          } else {
+            listHtml = '<div class="hx-card" style="padding:0;overflow:hidden;margin-top:10px;">';
+            rows.forEach(function (f, i) {
+              listHtml += '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;' + (i > 0 ? 'border-top:1px solid var(--hx-line);' : '') + '">' +
+                '<div style="flex:1;min-width:0;">' +
+                  '<div style="font-size:13.5px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escape(f.name) + '</div>' +
+                  '<div class="hx-mono" style="font-size:11.5px;color:var(--hx-text-dim);margin-top:2px;">' + fmtBytes(f.size_bytes) + ' · ' + (f.mime_type || 'unknown') + ' · ' + new Date(f.created_at).toLocaleDateString() + '</div>' +
+                '</div>' +
+                '<button class="hx-btn hx-btn-secondary hx-btn-sm" data-file-act="download" data-id="' + escape(f.id) + '" data-path="' + escape(f.storage_path) + '" data-name="' + escape(f.name) + '">Download</button>' +
+                '<button class="hx-btn hx-btn-danger hx-btn-sm" data-file-act="delete" data-id="' + escape(f.id) + '" data-path="' + escape(f.storage_path) + '">Delete</button>' +
+              '</div>';
+            });
+            listHtml += '</div>';
+          }
+          host.innerHTML = dropZone + listHtml;
+          wireFileForm();
+          wireFileRows();
+        }
+
+        function wireFileForm() {
+          var fileInput = $('hx-file-input');
+          var pick = $('hx-file-pick');
+          var up = $('hx-file-upload');
+          var status = $('hx-file-status');
+          if (!fileInput || !pick || !up) return;
+          pick.addEventListener('click', function () { fileInput.click(); });
+          fileInput.addEventListener('change', function () {
+            var f = fileInput.files && fileInput.files[0];
+            if (!f) { up.disabled = true; status.textContent = ''; return; }
+            if (f.size > MAX_BYTES) { up.disabled = true; status.style.color = 'var(--hx-red)'; status.textContent = 'File too large — ' + fmtBytes(f.size) + ' exceeds the 25 MB cap.'; return; }
+            status.style.color = 'var(--hx-text-mid)';
+            status.textContent = 'Ready · ' + f.name + ' · ' + fmtBytes(f.size);
+            up.disabled = false;
+          });
+          up.addEventListener('click', async function () {
+            var active = getActiveProject(); if (!active || !active.id) return;
+            var f = fileInput.files && fileInput.files[0]; if (!f) return;
+            up.disabled = true; up.textContent = 'Uploading…';
+            status.style.color = 'var(--hx-text-mid)';
+            status.textContent = 'Uploading…';
+            try {
+              var u = (await sb.auth.getUser()).data.user;
+              if (!u) throw new Error('Sign in to upload files.');
+              var path = u.id + '/' + active.id + '/' + Date.now() + '_' + f.name.replace(/[^a-zA-Z0-9._-]+/g, '_');
+              var upRes = await sb.storage.from(BUCKET).upload(path, f, { contentType: f.type, upsert: false });
+              if (upRes.error) throw upRes.error;
+              var ins = await sb.from('project_files').insert({
+                project_id: active.id, owner_id: u.id, name: f.name,
+                size_bytes: f.size, mime_type: f.type || null, storage_path: path,
+              });
+              if (ins.error) throw ins.error;
+              await sb.rpc('log_event', { p_kind: 'project.file_uploaded', p_payload: { name: f.name, size: f.size }, p_project_id: active.id }).catch(function () {});
+              fileInput.value = '';
+              await renderFiles();
+            } catch (err) {
+              up.disabled = false; up.textContent = 'Upload';
+              status.style.color = 'var(--hx-red)';
+              status.textContent = (err && err.message) || 'Upload failed.';
+            }
+          });
+        }
+
+        function wireFileRows() {
+          $('hx-files-host').addEventListener('click', async function (e) {
+            var btn = e.target.closest && e.target.closest('button[data-file-act]');
+            if (!btn) return;
+            var act = btn.getAttribute('data-file-act');
+            var id = btn.getAttribute('data-id');
+            var path = btn.getAttribute('data-path');
+            if (act === 'download') {
+              btn.disabled = true; var orig = btn.textContent; btn.textContent = '…';
+              var signed = await sb.storage.from(BUCKET).createSignedUrl(path, 60);
+              btn.disabled = false; btn.textContent = orig;
+              if (signed.error || !signed.data || !signed.data.signedUrl) {
+                if (window.cxToast) window.cxToast(signed.error ? signed.error.message : 'Could not get download link.', 'error');
+                return;
+              }
+              window.open(signed.data.signedUrl, '_blank', 'noopener');
+              return;
+            }
+            if (act === 'delete') {
+              if (btn.dataset.armed !== '1') {
+                btn.dataset.armed = '1';
+                btn.dataset.original = btn.textContent;
+                btn.textContent = 'Click to confirm';
+                btn.classList.add('armed');
+                setTimeout(function () {
+                  if (btn.dataset.armed === '1') {
+                    btn.dataset.armed = '';
+                    btn.textContent = btn.dataset.original || 'Delete';
+                    btn.classList.remove('armed');
+                  }
+                }, 3000);
+                return;
+              }
+              btn.dataset.armed = ''; btn.classList.remove('armed');
+              await sb.storage.from(BUCKET).remove([path]);
+              await sb.from('project_files').delete().eq('id', id);
+              await renderFiles();
+            }
+          }, { once: true });
+        }
+
+        // Re-render files when the active project changes (cross-tab too).
+        window.addEventListener('storage', function (e) {
+          if (e.key === ACTIVE_KEY) renderFiles();
+        });
+
         refresh();
+        renderFiles();
       });
     })();
   </script>

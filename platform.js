@@ -13,6 +13,7 @@
         { id: 'dashboard',  href: '/dashboard.html',  label: 'Overview',   icon: 'home' },
         { id: 'chat',       href: '/chat.html',       label: 'Chat',       icon: 'chat' },
         { id: 'workbench',  href: '/workbench.html',  label: 'Workbench',  icon: 'workbench' },
+        { id: 'memory',     href: '/memory.html',     label: 'Memory',     icon: 'memory' },
         { id: 'projects',   href: '/projects.html',   label: 'Projects',   icon: 'folder' },
         { id: 'services',   href: '/services.html',   label: 'Services',   icon: 'grid' },
         { id: 'consulting', href: '/consulting.html', label: 'Consulting', icon: 'briefcase' }
@@ -79,6 +80,7 @@
     chat:     '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
     folder:   '<path d="M3 7a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
     workbench:'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 17.9V21h3.1l6.2-6.2a4 4 0 0 0 5.4-5.4l-3 3-1.4-1.4 3-3z"/>',
+    memory:   '<path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0-3 3v1a3 3 0 0 0-1 5.83V18a3 3 0 0 0 3 3h1.5a2.5 2.5 0 0 0 5 0H16a3 3 0 0 0 3-3v-2.17A3 3 0 0 0 18 10V9a3 3 0 0 0-3-3V5a3 3 0 0 0-3-3z"/><path d="M12 7v10"/>',
     grid:     '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
     briefcase:'<rect x="2.5" y="7.5" width="19" height="13" rx="2"/><path d="M16 21V5.5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2V21"/><line x1="2.5" y1="13" x2="21.5" y2="13"/>',
     cpu:      '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>',
@@ -283,16 +285,41 @@
     var topbar = document.querySelector('.hx-topbar');
     if (topbar) topbar.innerHTML = buildTopbar(activeItem);
 
+    // Mobile backdrop overlay — injected once. Sidebar open/close also
+    // toggles a body class so the page itself stops scrolling while the
+    // menu is up (a real-product touch that prevents iOS rubber-banding).
+    var backdrop = document.querySelector('.hx-mobile-backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'hx-mobile-backdrop';
+      document.body.appendChild(backdrop);
+    }
+    function setMenuOpen(open) {
+      if (!sidebar) return;
+      sidebar.classList.toggle('open', open);
+      document.body.classList.toggle('hx-menu-open', open);
+    }
     var toggle = document.getElementById('hx-menu-toggle');
     if (toggle && sidebar) {
-      toggle.addEventListener('click', function () { sidebar.classList.toggle('open'); });
+      toggle.addEventListener('click', function () { setMenuOpen(!sidebar.classList.contains('open')); });
     }
+    backdrop.addEventListener('click', function () { setMenuOpen(false); });
     if (sidebar) {
+      // Close on outside click (desktop's existing behaviour).
       document.addEventListener('click', function (e) {
         if (window.innerWidth > 900) return;
         if (!sidebar.classList.contains('open')) return;
-        if (sidebar.contains(e.target) || (toggle && toggle.contains(e.target))) return;
-        sidebar.classList.remove('open');
+        if (sidebar.contains(e.target) || (toggle && toggle.contains(e.target)) || e.target === backdrop) return;
+        setMenuOpen(false);
+      });
+      // Close after the user navigates to a new section.
+      sidebar.addEventListener('click', function (e) {
+        if (window.innerWidth > 900) return;
+        if (e.target.closest && e.target.closest('a')) setMenuOpen(false);
+      });
+      // Snap shut when crossing back to desktop width.
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > 900) setMenuOpen(false);
       });
     }
 

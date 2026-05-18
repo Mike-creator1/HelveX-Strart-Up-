@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memory — HelveX</title>
+  <meta name="description" content="HelveX Memory — short facts your assistant carries into every new conversation. Tag, weight, and curate what you want it to know." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://yjmpallrtpeinpdilptj.supabase.co" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+  <style>
+    /* HelveX Memory — paradigm: an explicit, curated layer of "things
+       the assistant knows about me". Not a black-box vector store, not
+       a chat history. Each memory is a short sentence the user wrote
+       (or accepted). Importance + tags decide what gets included in
+       the next conversation. The page lists them like notes in a
+       Field Notes notebook: chronological, sparse, calm. */
+    .hx-mem-grid { display: grid; gap: 10px; margin-top: 14px; }
+    .hx-mem-card { background: #fff; border: 1px solid var(--hx-line); border-radius: var(--hx-r); padding: 14px 18px; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: start; }
+    .hx-mem-card.editing { border-color: var(--hx-text); }
+    .hx-mem-content { font-size: 14.5px; line-height: 1.55; color: var(--hx-text); white-space: pre-wrap; }
+    .hx-mem-content textarea { all: unset; display: block; width: 100%; font: inherit; font-size: 14.5px; line-height: 1.55; color: var(--hx-text); padding: 4px 0; border-bottom: 1px solid var(--hx-line); transition: border-color 0.12s; }
+    .hx-mem-content textarea:focus { border-color: var(--hx-text); }
+    .hx-mem-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; font-family: var(--hx-mono); font-size: 11px; color: var(--hx-text-mid); flex-shrink: 0; }
+    .hx-mem-imp { display: inline-flex; gap: 1px; }
+    .hx-mem-imp button { background: transparent; border: 0; padding: 0 1px; cursor: pointer; color: var(--hx-line); font-size: 11px; line-height: 1; }
+    .hx-mem-imp button.on { color: var(--hx-text); }
+    .hx-mem-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+    .hx-mem-tag { font-family: var(--hx-mono); font-size: 10.5px; font-weight: 600; padding: 2px 7px; background: var(--hx-cream); border-radius: 4px; color: var(--hx-text-mid); }
+    .hx-mem-actions { display: flex; gap: 4px; margin-top: 8px; opacity: 0; transition: opacity 0.12s; }
+    .hx-mem-card:hover .hx-mem-actions { opacity: 1; }
+    .hx-mem-act { background: transparent; border: 1px solid transparent; padding: 4px 8px; font-size: 11.5px; color: var(--hx-text-mid); cursor: pointer; border-radius: 5px; font-family: inherit; transition: background 0.12s, border-color 0.12s, color 0.12s; }
+    .hx-mem-act:hover { background: var(--hx-bg-2); border-color: var(--hx-line); color: var(--hx-text); }
+    .hx-mem-act.armed { background: #dc2626; border-color: #dc2626; color: #fff; }
+
+    .hx-mem-toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+    .hx-mem-search { flex: 1; min-width: 220px; position: relative; }
+    .hx-mem-search input { width: 100%; padding: 10px 14px 10px 38px; border: 1px solid var(--hx-line); border-radius: 10px; font: inherit; font-size: 13.5px; background: #fff; outline: none; transition: border-color 0.12s; }
+    .hx-mem-search input:focus { border-color: var(--hx-text); }
+    .hx-mem-search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--hx-text-mid); }
+    .hx-mem-tag-filter { padding: 6px 12px; border: 1px solid var(--hx-line); border-radius: 999px; font-family: var(--hx-mono); font-size: 11px; font-weight: 600; color: var(--hx-text-mid); background: #fff; cursor: pointer; transition: border-color 0.12s, color 0.12s; }
+    .hx-mem-tag-filter:hover { color: var(--hx-text); border-color: var(--hx-text-mid); }
+    .hx-mem-tag-filter.active { background: var(--hx-text); color: #fff; border-color: var(--hx-text); }
+
+    .hx-mem-new { background: #fff; border: 1px solid var(--hx-line); border-radius: var(--hx-r); padding: 16px 18px; margin-bottom: 14px; display: none; }
+    .hx-mem-new.open { display: block; }
+    .hx-mem-new textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--hx-line); border-radius: 10px; font: inherit; font-size: 14px; min-height: 80px; background: #fff; outline: none; resize: vertical; line-height: 1.5; margin-bottom: 10px; }
+    .hx-mem-new textarea:focus { border-color: var(--hx-text); }
+    .hx-mem-new input { padding: 8px 10px; border: 1px solid var(--hx-line); border-radius: 8px; font: inherit; font-size: 13px; background: #fff; outline: none; margin-bottom: 10px; width: 100%; }
+
+    .hx-mem-empty { background: #fff; border: 1px dashed var(--hx-line); border-radius: var(--hx-r); padding: 60px 24px; text-align: center; }
+    .hx-mem-empty h3 { font-size: 18px; font-weight: 600; margin: 0 0 6px; }
+    .hx-mem-empty p { font-size: 13.5px; color: var(--hx-text-mid); margin: 0 0 18px; max-width: 460px; margin-inline: auto; line-height: 1.55; }
+  </style>
+</head>
+<body data-active="memory">
+
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
+
+        <div class="hx-page-head">
+          <div>
+            <h1>Memory.</h1>
+            <p class="sub">Short facts your assistant carries into every conversation. The top-10 most important memories get included in each new chat's system prompt — so the assistant feels like it actually knows you.</p>
+          </div>
+          <div class="hx-page-actions">
+            <button class="hx-btn hx-btn-primary" id="hx-mem-new-btn">+ New memory</button>
+          </div>
+        </div>
+
+        <div class="hx-grid hx-grid-3">
+          <div class="hx-stat"><p class="hx-stat-label">Total</p><p class="hx-stat-value hx-mono" id="hx-mem-total">0</p><p class="hx-stat-meta">Memories in your workspace</p></div>
+          <div class="hx-stat"><p class="hx-stat-label">High importance</p><p class="hx-stat-value hx-mono" id="hx-mem-high">0</p><p class="hx-stat-meta">Rated 4 or 5 — always injected</p></div>
+          <div class="hx-stat"><p class="hx-stat-label">Tags</p><p class="hx-stat-value hx-mono" id="hx-mem-tags-count">0</p><p class="hx-stat-meta">Unique tags across all memories</p></div>
+        </div>
+
+        <div id="hx-mem-new" class="hx-mem-new">
+          <textarea id="hx-mem-new-content" placeholder="e.g. 'I run a 12-person agency in Zurich focused on Swiss SaaS clients.' One short sentence the assistant should remember."></textarea>
+          <input type="text" id="hx-mem-new-tags" placeholder="Tags, comma-separated (optional). e.g. company, role, swiss" />
+          <div style="display:flex;align-items:center;gap:10px;">
+            <label style="font-size:12px;color:var(--hx-text-mid);">Importance:</label>
+            <div class="hx-mem-imp" id="hx-mem-new-imp" data-value="3">
+              <button data-v="1">●</button><button data-v="2">●</button><button class="on" data-v="3">●</button><button data-v="4">●</button><button data-v="5">●</button>
+            </div>
+            <button class="hx-btn hx-btn-primary" id="hx-mem-new-save" style="margin-left:auto;">Save</button>
+            <button class="hx-btn hx-btn-ghost" id="hx-mem-new-cancel">Cancel</button>
+            <span id="hx-mem-new-status" style="font-size:11.5px;color:var(--hx-text-mid);"></span>
+          </div>
+        </div>
+
+        <div class="hx-mem-toolbar">
+          <div class="hx-mem-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" id="hx-mem-search-input" placeholder="Search memories…" />
+          </div>
+        </div>
+
+        <div id="hx-mem-tag-filters" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;"></div>
+
+        <div id="hx-mem-grid" class="hx-mem-grid"></div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/platform.js"></script>
+  <script>
+    (function () {
+      function whenAuthReady(fn) {
+        if (window.HX && window.HX.auth) { fn(); return; }
+        document.addEventListener('hx:auth-ready', fn, { once: true });
+      }
+      function $(id) { return document.getElementById(id); }
+      function esc(s) { return (s == null ? '' : String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+      function rel(iso) {
+        if (!iso) return '—';
+        var diff = (Date.now() - new Date(iso).getTime()) / 1000;
+        if (diff < 60) return 'just now';
+        if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+        if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+        return Math.floor(diff/86400) + 'd ago';
+      }
+
+      var state = { items: [], filterTag: null, search: '', sb: null, owner: null };
+
+      function dots(n) {
+        var out = '';
+        for (var i = 1; i <= 5; i++) out += '<button class="' + (i <= n ? 'on' : '') + '" data-v="' + i + '">●</button>';
+        return out;
+      }
+
+      function renderStats() {
+        $('hx-mem-total').textContent = state.items.length;
+        $('hx-mem-high').textContent = state.items.filter(function (m) { return m.importance >= 4; }).length;
+        var allTags = new Set();
+        state.items.forEach(function (m) { (m.tags || []).forEach(function (t) { allTags.add(t); }); });
+        $('hx-mem-tags-count').textContent = allTags.size;
+      }
+
+      function renderTagFilters() {
+        var host = $('hx-mem-tag-filters');
+        var counts = {};
+        state.items.forEach(function (m) { (m.tags || []).forEach(function (t) { counts[t] = (counts[t] || 0) + 1; }); });
+        var tags = Object.keys(counts).sort();
+        host.innerHTML = '<button class="hx-mem-tag-filter ' + (!state.filterTag ? 'active' : '') + '" data-tag="">All</button>' +
+          tags.map(function (t) {
+            var on = state.filterTag === t;
+            return '<button class="hx-mem-tag-filter ' + (on ? 'active' : '') + '" data-tag="' + esc(t) + '">' + esc(t) + ' · ' + counts[t] + '</button>';
+          }).join('');
+        host.querySelectorAll('.hx-mem-tag-filter').forEach(function (b) {
+          b.addEventListener('click', function () {
+            state.filterTag = b.getAttribute('data-tag') || null;
+            renderGrid();
+            renderTagFilters();
+          });
+        });
+      }
+
+      function filtered() {
+        var q = state.search.trim().toLowerCase();
+        return state.items.filter(function (m) {
+          if (state.filterTag && !(m.tags || []).includes(state.filterTag)) return false;
+          if (q && !(m.content || '').toLowerCase().includes(q)) return false;
+          return true;
+        });
+      }
+
+      function renderGrid() {
+        var rows = filtered();
+        var host = $('hx-mem-grid');
+        if (!rows.length) {
+          host.innerHTML = '<div class="hx-mem-empty">' +
+            '<h3>' + (state.search || state.filterTag ? 'Nothing matches.' : 'Your memory is empty.') + '</h3>' +
+            '<p>' + (state.search || state.filterTag ? 'Clear the filter or search.' : 'Drop one sentence the assistant should know — your role, your company, your style, what you care about. The top-10 most important memories get attached to every new chat.') + '</p>' +
+            (!(state.search || state.filterTag) ? '<button class="hx-btn hx-btn-primary" id="hx-mem-empty-new">+ New memory</button>' : '') +
+            '</div>';
+          var b = $('hx-mem-empty-new'); if (b) b.addEventListener('click', openForm);
+          return;
+        }
+        host.innerHTML = rows.map(function (m) {
+          return ''
+            + '<div class="hx-mem-card" data-id="' + esc(m.id) + '">'
+            +   '<div>'
+            +     '<div class="hx-mem-content" data-role="content-view">' + esc(m.content) + '</div>'
+            +     ((m.tags || []).length ? '<div class="hx-mem-tags">' + (m.tags || []).map(function (t) { return '<span class="hx-mem-tag">' + esc(t) + '</span>'; }).join('') + '</div>' : '')
+            +     '<div class="hx-mem-actions">'
+            +       '<button class="hx-mem-act" data-role="edit">Edit</button>'
+            +       '<button class="hx-mem-act" data-role="delete">Delete</button>'
+            +     '</div>'
+            +   '</div>'
+            +   '<div class="hx-mem-meta">'
+            +     '<div class="hx-mem-imp" data-role="imp">' + dots(m.importance) + '</div>'
+            +     '<span>' + rel(m.updated_at) + '</span>'
+            +   '</div>'
+            + '</div>';
+        }).join('');
+
+        host.querySelectorAll('.hx-mem-card').forEach(function (card) {
+          var id = card.getAttribute('data-id');
+          // Importance dots — click any to set
+          card.querySelector('[data-role="imp"]').querySelectorAll('button').forEach(function (b) {
+            b.addEventListener('click', function () {
+              var v = parseInt(b.getAttribute('data-v'), 10);
+              setImportance(id, v);
+            });
+          });
+          card.querySelector('[data-role="edit"]').addEventListener('click', function () {
+            beginEdit(card, id);
+          });
+          var del = card.querySelector('[data-role="delete"]');
+          del.addEventListener('click', function () { deleteMemory(id, del); });
+        });
+      }
+
+      function beginEdit(card, id) {
+        var m = state.items.find(function (x) { return x.id === id; });
+        if (!m) return;
+        var view = card.querySelector('[data-role="content-view"]');
+        view.innerHTML = '<textarea rows="3">' + esc(m.content) + '</textarea>' +
+          '<div style="margin-top:8px;display:flex;gap:6px;align-items:center;">' +
+            '<input type="text" placeholder="Tags, comma-separated" value="' + esc((m.tags || []).join(', ')) + '" style="flex:1;padding:6px 8px;border:1px solid var(--hx-line);border-radius:6px;font:inherit;font-size:12.5px;" />' +
+            '<button class="hx-btn hx-btn-primary hx-btn-sm" data-role="save">Save</button>' +
+            '<button class="hx-btn hx-btn-ghost hx-btn-sm" data-role="cancel">Cancel</button>' +
+          '</div>';
+        card.classList.add('editing');
+        var ta = view.querySelector('textarea');
+        var tagInp = view.querySelector('input');
+        ta.focus();
+        view.querySelector('[data-role="save"]').addEventListener('click', async function () {
+          var content = ta.value.trim();
+          var tags = tagInp.value.split(',').map(function (t) { return t.trim(); }).filter(Boolean);
+          if (!content) return;
+          await state.sb.from('memories').update({ content: content, tags: tags }).eq('id', id);
+          await refresh();
+        });
+        view.querySelector('[data-role="cancel"]').addEventListener('click', function () { renderGrid(); });
+      }
+
+      async function setImportance(id, v) {
+        await state.sb.from('memories').update({ importance: v }).eq('id', id);
+        var m = state.items.find(function (x) { return x.id === id; });
+        if (m) m.importance = v;
+        renderStats();
+        renderGrid();
+      }
+
+      async function deleteMemory(id, btn) {
+        if (btn.dataset.armed !== '1') {
+          btn.dataset.armed = '1';
+          btn.dataset.original = btn.textContent;
+          btn.textContent = 'Click to confirm';
+          btn.classList.add('armed');
+          setTimeout(function () {
+            if (btn.dataset.armed === '1') {
+              btn.dataset.armed = '';
+              btn.textContent = btn.dataset.original || 'Delete';
+              btn.classList.remove('armed');
+            }
+          }, 3000);
+          return;
+        }
+        await state.sb.from('memories').delete().eq('id', id);
+        await refresh();
+      }
+
+      function openForm() {
+        $('hx-mem-new-content').value = '';
+        $('hx-mem-new-tags').value = '';
+        $('hx-mem-new-status').textContent = '';
+        $('hx-mem-new-imp').dataset.value = '3';
+        $('hx-mem-new-imp').innerHTML = dots(3);
+        wireImpButtons('hx-mem-new-imp');
+        $('hx-mem-new').classList.add('open');
+        setTimeout(function () { $('hx-mem-new-content').focus(); }, 30);
+      }
+      function closeForm() { $('hx-mem-new').classList.remove('open'); }
+
+      function wireImpButtons(containerId) {
+        var c = $(containerId);
+        c.querySelectorAll('button').forEach(function (b) {
+          b.addEventListener('click', function () {
+            var v = parseInt(b.getAttribute('data-v'), 10);
+            c.dataset.value = v;
+            c.innerHTML = dots(v);
+            wireImpButtons(containerId);
+          });
+        });
+      }
+
+      async function createMemory() {
+        var content = ($('hx-mem-new-content').value || '').trim();
+        var tagsStr = ($('hx-mem-new-tags').value || '').trim();
+        var importance = parseInt($('hx-mem-new-imp').dataset.value, 10) || 3;
+        if (!content) { $('hx-mem-new-status').textContent = 'Content required.'; return; }
+        var tags = tagsStr ? tagsStr.split(',').map(function (t) { return t.trim(); }).filter(Boolean) : [];
+        var save = $('hx-mem-new-save'); save.disabled = true;
+        try {
+          var r = await state.sb.from('memories').insert({
+            owner_id: state.owner, content: content, tags: tags, importance: importance, source: 'manual'
+          });
+          if (r.error) throw r.error;
+          closeForm();
+          await refresh();
+        } catch (err) {
+          $('hx-mem-new-status').textContent = err.message || 'Save failed.';
+        } finally { save.disabled = false; }
+      }
+
+      async function refresh() {
+        var r = await state.sb.from('memories').select('*').order('importance', { ascending: false }).order('updated_at', { ascending: false });
+        state.items = (r.data || []);
+        renderStats();
+        renderTagFilters();
+        renderGrid();
+      }
+
+      whenAuthReady(async function () {
+        state.sb = window.HX.supabase;
+        var u = (await state.sb.auth.getUser()).data.user;
+        if (!u) return;
+        state.owner = u.id;
+
+        $('hx-mem-new-btn').addEventListener('click', openForm);
+        $('hx-mem-new-cancel').addEventListener('click', closeForm);
+        $('hx-mem-new-save').addEventListener('click', createMemory);
+        $('hx-mem-search-input').addEventListener('input', function (e) { state.search = e.target.value; renderGrid(); });
+        wireImpButtons('hx-mem-new-imp');
+
+        await refresh();
+      });
+    })();
+  </script>
+</body>
+</html>

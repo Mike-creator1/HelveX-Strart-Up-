@@ -51,6 +51,7 @@
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/chat", "destination": "/chat.html" },
     { "source": "/workbench", "destination": "/workbench.html" },
+    { "source": "/memory", "destination": "/memory.html" },
     { "source": "/docs", "destination": "/docs.html" },
     { "source": "/services", "destination": "/services.html" },
     { "source": "/consulting", "destination": "/consulting.html" },

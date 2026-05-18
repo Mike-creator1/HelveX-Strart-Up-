@@ -1,5 +1,6 @@
 import { callAnthropicStream, relayStream, parseJsonBody, requirePost } from './_lib/anthropic.js';
 import { gateAndCharge } from './_lib/auth.js';
+import { buildMemoryBlock } from './_lib/memory.js';
 
 const SYSTEM = `You are HelveX Assistant, the AI business companion built into the HelveX platform.
 
@@ -46,9 +47,17 @@ export default async function handler(req, res) {
   const gate = await gateAndCharge(req, 'nexus-4-5', 1);
   if (!gate.ok) return res.status(gate.status).json({ error: gate.error, trace_id: gate.traceId });
 
+  // Pull top memories and prepend them to whichever system prompt
+  // applies (persona override or default). The assistant gets the
+  // user's curated context every turn without the client having to
+  // ship it.
+  const memoryBlock = await buildMemoryBlock(gate.token, gate.owner.id);
+  const baseSystem = systemOverride || SYSTEM;
+  const finalSystem = memoryBlock ? `${baseSystem}\n\n${memoryBlock}` : baseSystem;
+
   try {
     const upstream = await callAnthropicStream({
-      system: systemOverride || SYSTEM,
+      system: finalSystem,
       userPrompt: message,
       history,
       maxTokens: 2000,
