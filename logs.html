@@ -33,12 +33,12 @@
         <div class="hx-grid hx-grid-4">
           <div class="hx-stat">
             <p class="hx-stat-label">Streaming</p>
-            <p class="hx-stat-value" style="font-size:18px;color:var(--hx-text-dim);">Idle</p>
-            <p class="hx-stat-meta">No active deployments</p>
+            <p class="hx-stat-value" id="hx-stat-streaming" style="font-size:18px;color:var(--hx-text-dim);">Idle</p>
+            <p class="hx-stat-meta" id="hx-stat-streaming-meta">No active deployments</p>
           </div>
           <div class="hx-stat">
             <p class="hx-stat-label">Events (24 h)</p>
-            <p class="hx-stat-value hx-mono">0</p>
+            <p class="hx-stat-value hx-mono" id="hx-stat-events">0</p>
             <p class="hx-stat-meta">Across all sources</p>
           </div>
           <div class="hx-stat">
@@ -88,12 +88,25 @@
         var channel = null;
 
         async function refresh() {
-          var [logs, total24] = await Promise.all([
+          var [logs, total24, liveDeps] = await Promise.all([
             sb.from('log_events').select('*').order('created_at', { ascending: false }).limit(200),
-            sb.from('log_events').select('id', { count: 'exact', head: true }).gte('created_at', new Date(Date.now() - 86400000).toISOString())
+            sb.from('log_events').select('id', { count: 'exact', head: true }).gte('created_at', new Date(Date.now() - 86400000).toISOString()),
+            sb.from('deployments').select('id', { count: 'exact', head: true }).eq('status', 'live')
           ]);
           $('hx-log-meta').textContent = ((total24 && total24.count) || 0) + ' events / 24h · all severities';
           $('hx-stat-events').textContent = ((total24 && total24.count) || 0).toLocaleString();
+          var liveCount = (liveDeps && liveDeps.count) || 0;
+          var streamEl = $('hx-stat-streaming');
+          var streamMetaEl = $('hx-stat-streaming-meta');
+          if (streamEl) {
+            streamEl.textContent = liveCount > 0 ? 'Live' : 'Idle';
+            streamEl.style.color = liveCount > 0 ? 'var(--hx-emerald)' : 'var(--hx-text-dim)';
+          }
+          if (streamMetaEl) {
+            streamMetaEl.textContent = liveCount > 0
+              ? liveCount + ' deployment' + (liveCount === 1 ? '' : 's') + ' streaming'
+              : 'No active deployments';
+          }
           var rows = logs.data || [];
           if (rows.length === 0) {
             host.innerHTML =
