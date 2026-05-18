@@ -36,13 +36,11 @@
     { "source": "/marketing-tools", "destination": "/marketing-tools.html" },
     { "source": "/automation", "destination": "/automation.html" },
     { "source": "/business-assistant", "destination": "/business-assistant.html" },
-    { "source": "/marketplace", "destination": "/marketplace.html" },
 
     { "source": "/app-crm", "destination": "/app-crm.html" },
     { "source": "/app-marketing", "destination": "/app-marketing.html" },
     { "source": "/app-automation", "destination": "/app-automation.html" },
     { "source": "/app-assistant", "destination": "/app-assistant.html" },
-    { "source": "/app-marketplace", "destination": "/app-marketplace.html" },
 
     { "source": "/signup", "destination": "/signup.html" },
     { "source": "/login", "destination": "/signup.html" },

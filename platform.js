@@ -23,8 +23,7 @@
         { id: 'app-crm',         href: '/app-crm',         label: 'CRM',                icon: 'contacts' },
         { id: 'app-marketing',   href: '/app-marketing',   label: 'Marketing Tools',    icon: 'megaphone' },
         { id: 'app-automation',  href: '/app-automation',  label: 'Automation',         icon: 'flow' },
-        { id: 'app-assistant',   href: '/app-assistant',   label: 'Business Assistant', icon: 'sparkle' },
-        { id: 'app-marketplace', href: '/app-marketplace', label: 'Marketplace',        icon: 'bag' }
+        { id: 'app-assistant',   href: '/app-assistant',   label: 'Business Assistant', icon: 'sparkle' }
       ]
     },
     {
@@ -106,8 +105,7 @@
     contacts: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
     megaphone:'<path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
     flow:     '<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6h7M6 8.5v7M18 8.5v7M8.5 18h7"/>',
-    sparkle:  '<path d="M12 3l1.5 5.5L19 10l-5.5 1.5L12 17l-1.5-5.5L5 10l5.5-1.5z"/><path d="M19 17l.6 2 2 .6-2 .6L19 22l-.6-1.8-2-.6 2-.6z"/>',
-    bag:      '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 1 1-8 0"/>'
+    sparkle:  '<path d="M12 3l1.5 5.5L19 10l-5.5 1.5L12 17l-1.5-5.5L5 10l5.5-1.5z"/><path d="M19 17l.6 2 2 .6-2 .6L19 22l-.6-1.8-2-.6 2-.6z"/>'
   };
 
   function svg(name, opts) {
