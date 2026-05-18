@@ -119,7 +119,7 @@
             <div class="hx-asst-bar">
               <div class="hx-persona-wrap" id="hx-persona-wrap">
                 <button class="hx-persona-pill" id="hx-persona-pill">
-                  <span class="ico" id="hx-persona-ico">🤖</span>
+                  <span class="ico" id="hx-persona-ico">D</span>
                   <span id="hx-persona-name">Default</span>
                   <span class="arrow">▾</span>
                 </button>
@@ -152,8 +152,8 @@
       </div>
       <div class="hxai-modal-body">
         <div class="hxai-field">
-          <label for="hx-persona-name">Persona name <span class="hxai-hint">(short, e.g. "Swiss tax advisor")</span></label>
-          <input type="text" id="hx-persona-name" maxlength="60" placeholder="Swiss tax advisor" />
+          <label for="hx-persona-name-input">Persona name <span class="hxai-hint">(short, e.g. "Swiss tax advisor")</span></label>
+          <input type="text" id="hx-persona-name-input" maxlength="60" placeholder="Swiss tax advisor" />
         </div>
         <div class="hxai-field">
           <label for="hx-persona-system">Instructions <span class="hxai-hint">(how this persona should behave — minimum 20 characters)</span></label>
@@ -253,7 +253,7 @@
         });
 
         if (filtered.length === 0) {
-          listEl.innerHTML = `<div class="hx-thread-empty">${query ? 'No threads match your search.' : 'No threads yet. Start a new chat — it\\'ll appear here, saved automatically.'}</div>`;
+          listEl.innerHTML = `<div class="hx-thread-empty">${query ? 'No threads match your search.' : "No threads yet. Start a new chat — it'll appear here, saved automatically."}</div>`;
           return;
         }
 
@@ -265,7 +265,7 @@
             <div class="hx-thread-item ${t.id === activeId ? 'active' : ''}" data-id="${t.id}">
               <div class="hx-thread-title">${HXAI.esc(t.title)}</div>
               <div class="hx-thread-meta">
-                <span>${HXAI.esc(p.name)} · ${HXAI.timeAgo(t.updatedAt)}</span>
+                <span>${HXAI.esc(p.name)} · ${HXAI.store.timeAgo(t.updatedAt)}</span>
                 <button class="hx-thread-del" data-del="${t.id}" title="Delete thread" aria-label="Delete thread"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 01-2 2H9a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a2 2 0 012-2h2a2 2 0 012 2v2"/></svg></button>
               </div>
             </div>
@@ -392,7 +392,7 @@
 
       // ============ PERSONA CREATION MODAL ============
       const personaModal    = document.getElementById('hx-persona-modal');
-      const personaNameInp  = document.getElementById('hx-persona-name');
+      const personaNameInp  = document.getElementById('hx-persona-name-input');
       const personaSysInp   = document.getElementById('hx-persona-system');
       const personaErrEl    = document.getElementById('hx-persona-err');
 
