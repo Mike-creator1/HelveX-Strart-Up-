@@ -323,21 +323,22 @@
       });
     }
 
-    // Sidebar "Find…" button + topbar Cmd+K + keyboard shortcut all
-    // focus the same affordance (no actual command palette yet).
+    // Sidebar "Find…" + topbar Cmd+K + ⌘K shortcut all open the real
+    // command palette. Behaviour lives at the bottom of this file in
+    // mountCommandPalette() — opens on demand, lazy-loads Supabase
+    // data, supports arrow / Enter / Escape, no focus-only theatre.
     var sidebarFind = document.getElementById('hx-sidebar-find');
-    function focusCmdK() {
-      var cmdk = document.getElementById('hx-cmdk');
-      if (cmdk) cmdk.focus();
-    }
-    if (sidebarFind) sidebarFind.addEventListener('click', focusCmdK);
+    var cmdkOpener  = document.getElementById('hx-cmdk');
+    if (sidebarFind) sidebarFind.addEventListener('click', function () { openCommandPalette(); });
+    if (cmdkOpener)  cmdkOpener.addEventListener('click',  function () { openCommandPalette(); });
     document.addEventListener('keydown', function (e) {
       var meta = e.metaKey || e.ctrlKey;
       if (meta && (e.key === 'k' || e.key === 'K')) {
         e.preventDefault();
-        focusCmdK();
+        openCommandPalette();
       }
     });
+    mountCommandPalette();
 
     loadAuthScript();
     if (window.HX && window.HX.auth) hydrateUser();
@@ -405,4 +406,283 @@
       });
     });
   })();
+
+  /* ─── Command palette ───────────────────────────────────────────
+     Single overlay mounted lazily on first ⌘K. Search providers:
+       • Quick actions  (always shown when query is empty)
+       • Pages          (static catalogue, filtered)
+       • Projects       (public.projects, debounced ilike)
+       • Memories       (public.memories,  debounced ilike)
+       • Artifacts      (public.artifacts, debounced ilike)
+       • Leads          (public.leads,     debounced ilike)
+     Selection moves with ↑/↓, Enter executes, Esc closes.
+     Recent jumps are cached in localStorage so the top of the
+     palette feels personalised after the first few uses. */
+  var hxCmd = { mounted: false, items: [], active: 0, q: '', reqSeq: 0, recent: [] };
+  var RECENT_KEY = 'hx.cmdp_recent';
+
+  function loadRecent() {
+    try { return JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); } catch (_) { return []; }
+  }
+  function saveRecent(entry) {
+    try {
+      var list = loadRecent().filter(function (r) { return r.href !== entry.href; });
+      list.unshift(entry);
+      list = list.slice(0, 5);
+      localStorage.setItem(RECENT_KEY, JSON.stringify(list));
+    } catch (_) {}
+  }
+
+  var PAGES = [
+    { title: 'Overview',          href: '/dashboard.html',  hint: 'Workspace' },
+    { title: 'Chat',              href: '/chat.html',       hint: 'Workspace' },
+    { title: 'Workbench',         href: '/workbench.html',  hint: 'Workspace' },
+    { title: 'Memory',            href: '/memory.html',     hint: 'Workspace' },
+    { title: 'Projects',          href: '/projects.html',   hint: 'Workspace' },
+    { title: 'Services',          href: '/services.html',   hint: 'Workspace' },
+    { title: 'Consulting',        href: '/consulting.html', hint: 'Workspace' },
+    { title: 'CRM',               href: '/app-crm.html',         hint: 'Toolkit' },
+    { title: 'Marketing Tools',   href: '/app-marketing.html',   hint: 'Toolkit' },
+    { title: 'Automation',        href: '/app-automation.html',  hint: 'Toolkit' },
+    { title: 'Business Assistant',href: '/app-assistant.html',   hint: 'Toolkit' },
+    { title: 'Models',            href: '/models.html',          hint: 'AI' },
+    { title: 'Workflows',         href: '/workflows.html',       hint: 'AI' },
+    { title: 'Deployments',       href: '/deployments.html',     hint: 'AI' },
+    { title: 'Activity',          href: '/activity.html',        hint: 'Observability' },
+    { title: 'Usage',             href: '/usage.html',           hint: 'Observability' },
+    { title: 'Logs',              href: '/logs.html',            hint: 'Observability' },
+    { title: 'Monitoring',        href: '/monitoring.html',      hint: 'Observability' },
+    { title: 'API Keys',          href: '/api-keys.html',        hint: 'Developer' },
+    { title: 'Integrations',      href: '/integrations.html',    hint: 'Developer' },
+    { title: 'Domains',           href: '/domains.html',         hint: 'Developer' },
+    { title: 'API Docs',          href: '/docs.html',            hint: 'Developer' },
+    { title: 'Credits',           href: '/credits.html',         hint: 'Billing' },
+    { title: 'Pricing',           href: '/pricing.html',         hint: 'Billing' },
+    { title: 'Subscriptions',     href: '/subscriptions.html',   hint: 'Billing' },
+    { title: 'Invoices',          href: '/invoices.html',        hint: 'Billing' },
+    { title: 'Billing',           href: '/billing.html',         hint: 'Billing' },
+    { title: 'Profile',           href: '/profile.html',         hint: 'Account' },
+    { title: 'Team',              href: '/team.html',            hint: 'Account' },
+    { title: 'Security',          href: '/security.html',        hint: 'Account' },
+    { title: 'Settings',          href: '/settings.html',        hint: 'Account' },
+    { title: 'Support',           href: '/support.html',         hint: 'Account' },
+    { title: 'Status',            href: '/status.html',          hint: 'Platform' },
+  ];
+
+  function quickActions() {
+    return [
+      { title: 'New project',  hint: 'Open the new-project form',  exec: function () { window.location.href = '/projects.html?new=1'; } },
+      { title: 'New memory',   hint: 'Drop a fact for the assistant', exec: function () { window.location.href = '/memory.html?new=1'; } },
+      { title: 'New artifact', hint: 'Open the Workbench composer', exec: function () { window.location.href = '/workbench.html?new=1'; } },
+      { title: 'Open API docs',hint: 'Endpoints, auth, streaming',  href:  '/docs.html' },
+      { title: 'Live status',  hint: 'System health right now',     href:  '/status.html' },
+      { title: 'Sign out',     hint: 'End this session',            exec: function () {
+        try {
+          if (window.HX && window.HX.supabase) window.HX.supabase.auth.signOut().finally(function () { window.location.href = '/signup'; });
+          else window.location.href = '/signup';
+        } catch (_) { window.location.href = '/signup'; }
+      } },
+    ];
+  }
+
+  function buildEmptyResults() {
+    var groups = [];
+    var recent = loadRecent();
+    if (recent.length) {
+      groups.push({
+        label: 'Recent',
+        items: recent.map(function (r) { return { icon: 'R', title: r.title, sub: r.sub || r.hint || '', hint: r.hint || '', href: r.href }; }),
+      });
+    }
+    groups.push({
+      label: 'Quick actions',
+      items: quickActions().map(function (a) { return Object.assign({ icon: '⌘' }, a); }),
+    });
+    return groups;
+  }
+
+  function pageMatches(q) {
+    q = q.toLowerCase();
+    return PAGES.filter(function (p) {
+      return p.title.toLowerCase().includes(q) || (p.hint || '').toLowerCase().includes(q);
+    }).slice(0, 8).map(function (p) {
+      return { icon: (p.hint || 'P').slice(0,1).toUpperCase(), title: p.title, sub: p.hint || '', hint: 'Page', href: p.href };
+    });
+  }
+
+  async function supabaseSearch(q) {
+    var sb = window.HX && window.HX.supabase;
+    if (!sb) return { projects: [], memories: [], artifacts: [], leads: [] };
+    var like = '%' + q.replace(/%/g, '') + '%';
+    var seq = ++hxCmd.reqSeq;
+    var [pr, me, ar, ld] = await Promise.all([
+      sb.from('projects').select('id, name, slug, status').ilike('name', like).limit(5),
+      sb.from('memories').select('id, content, tags').ilike('content', like).limit(5),
+      sb.from('artifacts').select('id, title, kind').ilike('title', like).limit(5),
+      sb.from('leads').select('id, name, company, email').ilike('name', like).limit(5),
+    ]).catch(function () { return [{}, {}, {}, {}]; });
+    if (seq !== hxCmd.reqSeq) return null; // outpaced by a newer query
+    return {
+      projects:  (pr && pr.data) || [],
+      memories:  (me && me.data) || [],
+      artifacts: (ar && ar.data) || [],
+      leads:     (ld && ld.data) || [],
+    };
+  }
+
+  function renderResults(groups) {
+    var flat = [];
+    groups.forEach(function (g) { g.items.forEach(function (it) { flat.push(it); }); });
+    hxCmd.items = flat;
+    if (hxCmd.active >= flat.length) hxCmd.active = 0;
+
+    var host = document.getElementById('hx-cmdp-results');
+    if (!flat.length) {
+      host.innerHTML = '<div class="hx-cmdp-empty">No matches for <strong>' + (hxCmd.q ? escapeHtml(hxCmd.q) : '...') + '</strong>. Press Esc to close.</div>';
+      return;
+    }
+    var idx = 0;
+    host.innerHTML = groups.map(function (g) {
+      var rows = g.items.map(function (it) {
+        var i = idx++;
+        var active = i === hxCmd.active ? ' is-active' : '';
+        return ''
+          + '<div class="hx-cmdp-item' + active + '" data-i="' + i + '">'
+          +   '<div class="hx-cmdp-item-icon">' + escapeHtml(it.icon || '·') + '</div>'
+          +   '<div class="hx-cmdp-item-body">'
+          +     '<div class="hx-cmdp-item-title">' + escapeHtml(it.title) + '</div>'
+          +     (it.sub ? '<div class="hx-cmdp-item-sub">' + escapeHtml(it.sub) + '</div>' : '')
+          +   '</div>'
+          +   (it.hint ? '<div class="hx-cmdp-item-hint">' + escapeHtml(it.hint) + '</div>' : '')
+          + '</div>';
+      }).join('');
+      return '<div class="hx-cmdp-group"><div class="hx-cmdp-group-label">' + escapeHtml(g.label) + '</div>' + rows + '</div>';
+    }).join('');
+    host.querySelectorAll('.hx-cmdp-item').forEach(function (el) {
+      el.addEventListener('mouseenter', function () {
+        hxCmd.active = parseInt(el.getAttribute('data-i'), 10);
+        host.querySelectorAll('.hx-cmdp-item').forEach(function (x, i) { x.classList.toggle('is-active', i === hxCmd.active); });
+      });
+      el.addEventListener('click', function () {
+        hxCmd.active = parseInt(el.getAttribute('data-i'), 10);
+        executeActive();
+      });
+    });
+  }
+
+  function escapeHtml(s) {
+    return (s == null ? '' : String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  var searchTimer = null;
+  function onInput(e) {
+    var q = (e.target.value || '').trim();
+    hxCmd.q = q;
+    if (!q) {
+      renderResults(buildEmptyResults());
+      return;
+    }
+    var pages = pageMatches(q);
+    var groups = [];
+    if (pages.length) groups.push({ label: 'Pages', items: pages });
+    renderResults(groups.length ? groups : [{ label: 'Pages', items: [] }]);
+    // Show a "loading" hint for the data search.
+    document.getElementById('hx-cmdp-status').textContent = 'searching your data…';
+
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(async function () {
+      var res = await supabaseSearch(q);
+      if (!res) return; // out-of-order; drop
+      document.getElementById('hx-cmdp-status').textContent = '';
+      var merged = groups.slice();
+      if (res.projects.length) merged.push({ label: 'Projects', items: res.projects.map(function (p) {
+        return { icon: 'Pj', title: p.name, sub: 'Project · ' + (p.status || 'active'), hint: 'Enter', href: '/projects.html#' + p.slug };
+      }) });
+      if (res.memories.length) merged.push({ label: 'Memories', items: res.memories.map(function (m) {
+        var s = String(m.content || '').slice(0, 70);
+        return { icon: 'Me', title: s, sub: (m.tags || []).join(' · ') || 'Memory', hint: 'Enter', href: '/memory.html' };
+      }) });
+      if (res.artifacts.length) merged.push({ label: 'Workbench', items: res.artifacts.map(function (a) {
+        return { icon: 'Wb', title: a.title, sub: 'Artifact · ' + (a.kind || 'note'), hint: 'Enter', href: '/workbench.html' };
+      }) });
+      if (res.leads.length) merged.push({ label: 'CRM leads', items: res.leads.map(function (l) {
+        return { icon: 'Ld', title: l.name || l.email || 'Lead', sub: l.company || l.email || '', hint: 'Enter', href: '/app-crm.html' };
+      }) });
+      renderResults(merged);
+    }, 180);
+  }
+
+  function executeActive() {
+    var it = hxCmd.items[hxCmd.active];
+    if (!it) return;
+    saveRecent({ title: it.title, sub: it.sub, hint: it.hint, href: it.href });
+    closeCommandPalette();
+    if (typeof it.exec === 'function') { it.exec(); return; }
+    if (it.href) window.location.href = it.href;
+  }
+
+  function move(delta) {
+    if (!hxCmd.items.length) return;
+    hxCmd.active = (hxCmd.active + delta + hxCmd.items.length) % hxCmd.items.length;
+    var host = document.getElementById('hx-cmdp-results');
+    host.querySelectorAll('.hx-cmdp-item').forEach(function (x, i) { x.classList.toggle('is-active', i === hxCmd.active); });
+    var activeEl = host.querySelector('.hx-cmdp-item.is-active');
+    if (activeEl) activeEl.scrollIntoView({ block: 'nearest' });
+  }
+
+  function mountCommandPalette() {
+    if (hxCmd.mounted) return;
+    hxCmd.mounted = true;
+    var back = document.createElement('div');
+    back.className = 'hx-cmdp-back';
+    back.id = 'hx-cmdp-back';
+    back.innerHTML =
+      '<div class="hx-cmdp" role="dialog" aria-label="Command palette">' +
+        '<div class="hx-cmdp-input-row">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' +
+          '<input id="hx-cmdp-input" class="hx-cmdp-input" type="text" placeholder="Jump to a page, search projects, memories, leads…" spellcheck="false" autocomplete="off" />' +
+          '<span class="hx-cmdp-kbd"><kbd>Esc</kbd></span>' +
+        '</div>' +
+        '<div id="hx-cmdp-results" class="hx-cmdp-results"></div>' +
+        '<div class="hx-cmdp-foot">' +
+          '<span><kbd>↑</kbd><kbd>↓</kbd> move</span>' +
+          '<span><kbd>Enter</kbd> open</span>' +
+          '<span><kbd>Esc</kbd> close</span>' +
+          '<span id="hx-cmdp-status" style="margin-left:auto;"></span>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(back);
+
+    back.addEventListener('click', function (e) { if (e.target === back) closeCommandPalette(); });
+    var input = back.querySelector('#hx-cmdp-input');
+    input.addEventListener('input', onInput);
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape')   { e.preventDefault(); closeCommandPalette(); }
+      if (e.key === 'ArrowDown'){ e.preventDefault(); move(1); }
+      if (e.key === 'ArrowUp')  { e.preventDefault(); move(-1); }
+      if (e.key === 'Enter')    { e.preventDefault(); executeActive(); }
+    });
+  }
+
+  function openCommandPalette() {
+    mountCommandPalette();
+    var back = document.getElementById('hx-cmdp-back');
+    var input = document.getElementById('hx-cmdp-input');
+    if (!back || !input) return;
+    back.classList.add('open');
+    input.value = '';
+    hxCmd.q = '';
+    hxCmd.active = 0;
+    renderResults(buildEmptyResults());
+    setTimeout(function () { input.focus(); }, 10);
+  }
+
+  function closeCommandPalette() {
+    var back = document.getElementById('hx-cmdp-back');
+    if (back) back.classList.remove('open');
+  }
+
+  // Expose so other pages can summon it.
+  window.HX = window.HX || {};
+  window.HX.openCommandPalette = openCommandPalette;
 })();
