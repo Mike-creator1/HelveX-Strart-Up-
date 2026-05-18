@@ -654,7 +654,9 @@
         '<div class="hx-cmdp-input-row">' +
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' +
           '<input id="hx-cmdp-input" class="hx-cmdp-input" type="text" placeholder="Jump to a page, search projects, memories, leads…" spellcheck="false" autocomplete="off" />' +
-          '<span class="hx-cmdp-kbd"><kbd>Esc</kbd></span>' +
+          '<button type="button" class="hx-cmdp-close" id="hx-cmdp-close" aria-label="Close">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+          '</button>' +
         '</div>' +
         '<div id="hx-cmdp-results" class="hx-cmdp-results"></div>' +
         '<div class="hx-cmdp-foot">' +
@@ -667,6 +669,8 @@
     document.body.appendChild(back);
 
     back.addEventListener('click', function (e) { if (e.target === back) closeCommandPalette(); });
+    var closeBtn = back.querySelector('#hx-cmdp-close');
+    if (closeBtn) closeBtn.addEventListener('click', function () { closeCommandPalette(); });
     var input = back.querySelector('#hx-cmdp-input');
     input.addEventListener('input', onInput);
     input.addEventListener('keydown', function (e) {

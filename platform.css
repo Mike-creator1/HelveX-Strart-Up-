@@ -1476,3 +1476,25 @@ code { font-family: var(--hx-mono); font-size: 0.92em; }
   .hx-cmdp { max-height: 86vh; }
   .hx-cmdp-foot { display: none; }
 }
+
+/* Command palette close button (replaces the inert Esc badge). */
+.hx-cmdp-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid var(--hx-line);
+  color: var(--hx-text-mid);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.hx-cmdp-close:hover {
+  background: var(--hx-bg-2);
+  color: var(--hx-text);
+  border-color: var(--hx-text-mid);
+}
+.hx-cmdp-close svg { width: 14px; height: 14px; }
