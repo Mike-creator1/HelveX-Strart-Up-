@@ -5,7 +5,7 @@
 // be cheap enough to call every 30s without burning anything.
 //
 //   GET  /api/health
-//   200  { ok: true,  services: { api, supabase, anthropic }, ms }
+//   200  { ok: true,  services: { api, supabase, inference }, ms }
 //   503  { ok: false, services: { ... }, ms }  on any failure
 
 const SUPABASE_URL = 'https://yjmpallrtpeinpdilptj.supabase.co';
@@ -32,8 +32,8 @@ async function checkSupabase() {
   return r.status < 500;
 }
 
-async function checkAnthropic() {
-  // HEAD on the messages endpoint with no body is rejected as 4xx but
+async function checkInference() {
+  // HEAD on the upstream messages endpoint with no body is rejected as 4xx but
   // proves the upstream is reachable. We treat 4xx/5xx differently from
   // a network failure: only a network failure should flip ok=false.
   try {
@@ -52,12 +52,12 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0');
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  const [supa, ant] = await Promise.all([
+  const [supa, inf] = await Promise.all([
     timed('supabase', checkSupabase),
-    timed('anthropic', checkAnthropic),
+    timed('inference', checkInference),
   ]);
   const api = { name: 'api', ok: true, ms: Date.now() - started };
-  const services = [api, supa, ant];
+  const services = [api, supa, inf];
   const ok = services.every((s) => s.ok);
 
   res.status(ok ? 200 : 503).json({

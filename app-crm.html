@@ -974,7 +974,7 @@
     })();
   </script>
 
-  <!-- ============ DEALS KANBAN ============ -->
+  <!-- ============ DEALS KANBAN (real public.deals) ============ -->
   <script>
     (function () {
       const STAGES = [
@@ -985,18 +985,48 @@
         { id: 'won',          label: 'Won',         dot: 'stage-won' },
       ];
 
-      const SEED = [
-        { id: HXAI.store.id(), title: 'Schmidt GmbH · Website redesign',           value: 8500,  stage: 'lead',         contact: 'Anna Schmidt',     close: '', notes: 'Inbound via website form. Wants new homepage + 4 landing pages.', createdAt: new Date().toISOString(), updatedAt: new Date(Date.now() - 2*86400000).toISOString() },
-        { id: HXAI.store.id(), title: 'Acme Berlin · CRM rollout',                 value: 24000, stage: 'qualified',    contact: 'Maria Klein',      close: '', notes: '60-person SaaS, evaluating HelveX vs HubSpot. SSO required.', createdAt: new Date().toISOString(), updatedAt: new Date(Date.now() - 5*86400000).toISOString() },
-        { id: HXAI.store.id(), title: 'Müller Holding · AI consulting Q4',         value: 18000, stage: 'proposal',     contact: 'Stefan Müller',    close: '', notes: 'Proposal sent 3 days ago. Decision expected next week.', createdAt: new Date().toISOString(), updatedAt: new Date(Date.now() - 9*86400000).toISOString() },
-        { id: HXAI.store.id(), title: 'Vienna Tech · Marketing automation',        value: 45000, stage: 'negotiation',  contact: 'Lukas Wagner',     close: '', notes: 'Negotiating contract terms. They want 90-day pilot pricing.', createdAt: new Date().toISOString(), updatedAt: new Date(Date.now() - 12*86400000).toISOString() },
-        { id: HXAI.store.id(), title: 'Geneva Bank · Custom assistant',            value: 67000, stage: 'won',          contact: 'Sophie Dubois',    close: '', notes: 'Closed last week. Kickoff scheduled.', createdAt: new Date().toISOString(), updatedAt: new Date(Date.now() - 4*86400000).toISOString() },
-      ];
+      // In-memory cache of deal rows fetched from Supabase.
+      let deals = [];
+      let sb = null;
 
-      let deals = HXAI.store.get('crm', 'deals', null);
-      if (deals === null) {
-        deals = SEED;
-        HXAI.store.set('crm', 'deals', deals);
+      function whenAuthReady(fn) {
+        if (window.HX && window.HX.supabase) { fn(); return; }
+        document.addEventListener('hx:auth-ready', fn, { once: true });
+      }
+
+      // Map between UI shape (uses 'value', 'close', 'updatedAt' camelCase) and
+      // DB shape (value_chf, close_at, updated_at). The UI was originally built
+      // against an in-memory localStorage model; we keep that contract on the
+      // client and translate at the I/O boundary.
+      function fromDb(row) {
+        return {
+          id:        row.id,
+          title:     row.title,
+          value:     row.value_chf || 0,
+          stage:     row.stage || 'lead',
+          contact:   row.contact || '',
+          close:     row.close_at ? row.close_at.slice(0, 10) : '',
+          notes:     row.notes || '',
+          createdAt: row.created_at,
+          updatedAt: row.updated_at,
+        };
+      }
+      function toDb(patch) {
+        const out = {};
+        if (patch.title    !== undefined) out.title     = patch.title;
+        if (patch.value    !== undefined) out.value_chf = parseInt(patch.value, 10) || 0;
+        if (patch.stage    !== undefined) out.stage     = patch.stage;
+        if (patch.contact  !== undefined) out.contact   = patch.contact || null;
+        if (patch.close    !== undefined) out.close_at  = patch.close ? new Date(patch.close).toISOString() : null;
+        if (patch.notes    !== undefined) out.notes     = patch.notes || null;
+        return out;
+      }
+
+      async function refresh() {
+        const r = await sb.from('deals').select('*').order('updated_at', { ascending: false });
+        if (r.error) { console.error('[hx-deals] load', r.error); return; }
+        deals = (r.data || []).map(fromDb);
+        render();
       }
 
       const host       = document.getElementById('hx-deals-host');
@@ -1024,8 +1054,6 @@
 
       let editingId = null;
 
-      function save() { HXAI.store.set('crm', 'deals', deals); }
-
       function fmtCHF(n) {
         return 'CHF ' + (n || 0).toLocaleString('de-CH');
       }
@@ -1044,7 +1072,7 @@
             <div class="hx-deal-card-title">${HXAI.esc(d.title)}</div>
             <div class="hx-deal-card-meta">
               <span class="hx-deal-card-val">${fmtCHF(d.value)}</span>
-              <span class="hx-deal-card-age ${ageClass}">${HXAI.timeAgo(d.updatedAt)}</span>
+              <span class="hx-deal-card-age ${ageClass}">${HXAI.store.timeAgo(d.updatedAt)}</span>
             </div>
             ${d.contact ? `<div class="hx-deal-card-sub"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:4px;"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${HXAI.esc(d.contact)}</div>` : ''}
           </div>
@@ -1120,17 +1148,25 @@
             col.classList.add('over');
           });
           col.addEventListener('dragleave', () => col.classList.remove('over'));
-          col.addEventListener('drop', (e) => {
+          col.addEventListener('drop', async (e) => {
             e.preventDefault();
             col.classList.remove('over');
             const dealId = e.dataTransfer.getData('text/plain');
             const newStage = col.dataset.stage;
             const deal = deals.find(d => d.id === dealId);
             if (deal && deal.stage !== newStage) {
+              const prev = deal.stage;
               deal.stage = newStage;
               deal.updatedAt = new Date().toISOString();
-              save();
               render();
+              const r = await sb.from('deals').update(toDb({ stage: newStage })).eq('id', dealId);
+              if (r.error) {
+                deal.stage = prev;
+                render();
+                if (window.cxToast) window.cxToast('Could not move deal: ' + r.error.message, 'error');
+              } else {
+                await sb.rpc('log_event', { p_kind: 'deal.stage_changed', p_payload: { id: dealId, from: prev, to: newStage } }).catch(() => {});
+              }
             }
           });
         });
@@ -1171,7 +1207,7 @@
         HXAI.openModal('hx-deal-modal');
       }
 
-      saveBtn.addEventListener('click', () => {
+      saveBtn.addEventListener('click', async () => {
         const title = titleEl.value.trim();
         if (!title) { titleEl.focus(); return; }
         const patch = {
@@ -1181,20 +1217,30 @@
           contact: contactEl.value.trim(),
           close: closeEl.value || '',
           notes: notesEl.value.trim(),
-          updatedAt: new Date().toISOString(),
         };
-        if (editingId) {
-          const i = deals.findIndex(d => d.id === editingId);
-          if (i !== -1) deals[i] = { ...deals[i], ...patch };
-        } else {
-          deals.push({ id: HXAI.store.id(), createdAt: new Date().toISOString(), ...patch });
+        const original = saveBtn.textContent;
+        saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
+        try {
+          if (editingId) {
+            const r = await sb.from('deals').update(toDb(patch)).eq('id', editingId);
+            if (r.error) throw r.error;
+            await sb.rpc('log_event', { p_kind: 'deal.updated', p_payload: { id: editingId, stage: patch.stage } }).catch(() => {});
+          } else {
+            const u = (await sb.auth.getUser()).data.user;
+            const r = await sb.from('deals').insert({ owner_id: u.id, ...toDb(patch) }).select().single();
+            if (r.error) throw r.error;
+            await sb.rpc('log_event', { p_kind: 'deal.created', p_payload: { id: r.data.id, title: patch.title, stage: patch.stage } }).catch(() => {});
+          }
+          await refresh();
+          HXAI.closeModal('hx-deal-modal');
+        } catch (err) {
+          if (window.cxToast) window.cxToast((err && err.message) || 'Could not save deal.', 'error');
+        } finally {
+          saveBtn.disabled = false; saveBtn.textContent = original;
         }
-        save();
-        render();
-        HXAI.closeModal('hx-deal-modal');
       });
 
-      deleteBtn.addEventListener('click', () => {
+      deleteBtn.addEventListener('click', async () => {
         if (!editingId) return;
         if (deleteBtn.dataset.armed !== '1') {
           deleteBtn.dataset.armed = '1';
@@ -1212,15 +1258,23 @@
         }
         deleteBtn.dataset.armed = '';
         deleteBtn.classList.remove('armed');
-        deals = deals.filter(d => d.id !== editingId);
-        save();
-        render();
+        const idToDelete = editingId;
+        const r = await sb.from('deals').delete().eq('id', idToDelete);
+        if (r.error) {
+          if (window.cxToast) window.cxToast('Could not delete: ' + r.error.message, 'error');
+          return;
+        }
+        await sb.rpc('log_event', { p_kind: 'deal.deleted', p_payload: { id: idToDelete } }).catch(() => {});
+        await refresh();
         HXAI.closeModal('hx-deal-modal');
       });
 
       newBtn.addEventListener('click', () => openNew('lead'));
 
-      render();
+      whenAuthReady(function () {
+        sb = window.HX.supabase;
+        refresh();
+      });
     })();
   </script>
 </body>
