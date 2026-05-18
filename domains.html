@@ -112,7 +112,7 @@
               '<div class="hx-empty">' +
                 '<div class="icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>' +
                 '<h3>No custom domains yet</h3>' +
-                '<p>Every project ships on a HelveX-managed endpoint by default. Add a custom domain — like <span class="hx-mono">copilot.yourcompany.com</span> — and we'll verify DNS, issue TLS, and pin routing to your region.</p>' +
+                "<p>Every project ships on a HelveX-managed endpoint by default. Add a custom domain — like <span class=\"hx-mono\">copilot.yourcompany.com</span> — and we'll verify DNS, issue TLS, and pin routing to your region.</p>" +
                 '<button class="hx-btn hx-btn-primary" id="hx-dom-empty-add">+ Add domain</button>' +
               '</div>';
             var b = $('hx-dom-empty-add'); if (b) b.addEventListener('click', function () { $('hx-dom-form').hidden = false; $('hx-dom-host').focus(); });
@@ -136,8 +136,21 @@
         $('hx-dom-host-list').addEventListener('click', async function (e) {
           var btn = e.target.closest && e.target.closest('button[data-act="remove"]');
           if (!btn) return;
+          if (btn.dataset.armed !== '1') {
+            btn.dataset.armed = '1';
+            btn.dataset.original = btn.textContent;
+            btn.textContent = 'Click to confirm';
+            btn.classList.add('armed');
+            setTimeout(function () {
+              if (btn.dataset.armed === '1') {
+                btn.dataset.armed = '';
+                btn.textContent = btn.dataset.original || 'Remove';
+                btn.classList.remove('armed');
+              }
+            }, 3000);
+            return;
+          }
           var id = btn.closest('tr').getAttribute('data-id');
-          if (!confirm('Remove this domain? Traffic to it will start failing immediately.')) return;
           await sb.from('domains').delete().eq('id', id);
           await sb.rpc('log_event', { p_kind: 'domain.removed', p_payload: { id: id } });
           refresh();

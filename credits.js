@@ -1,5 +1,5 @@
 /**
- * CreateX Credit System — Client-Side Module
+ * HelveX Credit System — Client-Side Module
  * ============================================
  * Loaded by every page that makes HelveX API calls.
  * Handles: balance checks, pre-deduction, post-cost reconciliation,

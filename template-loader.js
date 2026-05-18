@@ -1,4 +1,4 @@
-/*! CreateX · Template loader
+/*! HelveX · Template loader
  *  Runs on every builder page. If the user clicked "Use Template" in the
  *  AI Template Hub, this picks up the seed from localStorage and:
  *   - Pre-fills the composer with the template's starter prompt

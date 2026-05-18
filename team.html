@@ -226,7 +226,22 @@
             });
           }
           if (btn.getAttribute('data-act') === 'revoke') {
-            if (!confirm('Revoke this invitation? The link will stop working immediately.')) return;
+            if (btn.dataset.armed !== '1') {
+              btn.dataset.armed = '1';
+              btn.dataset.original = btn.textContent;
+              btn.textContent = 'Click to confirm';
+              btn.classList.add('armed');
+              setTimeout(function () {
+                if (btn.dataset.armed === '1') {
+                  btn.dataset.armed = '';
+                  btn.textContent = btn.dataset.original || 'Revoke';
+                  btn.classList.remove('armed');
+                }
+              }, 3000);
+              return;
+            }
+            btn.dataset.armed = '';
+            btn.classList.remove('armed');
             await sb.from('invitations').delete().eq('id', id);
             await sb.rpc('log_event', { p_kind: 'team.invitation_revoked', p_payload: { id: id } });
             await refresh();

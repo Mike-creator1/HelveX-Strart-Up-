@@ -2,7 +2,7 @@
 <html lang="en" translate="no" class="notranslate">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Knowledge Base — CreateX</title>
+  <title>Knowledge Base — HelveX</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>window.SUPABASE_URL='https://ikbdhxobdjlwirydhxym.supabase.co';window.SUPABASE_ANON='sb_publishable_chzlbY97SlQx_Apf4zqrTQ_mdwWhmyE';(function i(t){t=t||0;var l=window.supabase;if(l&&typeof l.createClient==='function'){try{window.sb=l.createClient(window.SUPABASE_URL,window.SUPABASE_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});}catch(e){}return;}if(t>80)return;setTimeout(function(){i(t+1);},40);})();</script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
@@ -71,7 +71,7 @@
         <div class="card feature-card">
           <div class="feature-icon"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
           <div class="feature-title">Document Ingestion</div>
-          <div class="feature-desc">Upload PDFs, Word documents, Markdown, and HTML. CreateX parses, chunks, and indexes them for semantic search automatically.</div>
+          <div class="feature-desc">Upload PDFs, Word documents, Markdown, and HTML. HelveX parses, chunks, and indexes them for semantic search automatically.</div>
         </div>
         <div class="card feature-card">
           <div class="feature-icon" style="color:#65efff;background:rgba(24,215,255,.08);border-color:rgba(24,215,255,.16)"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div>
@@ -92,7 +92,6 @@
   </div>
 </div>
 <script>
-function showComingSoon(){alert('Knowledge Base is launching soon.');}
 async function handleSignOut(){try{if(window.sb)await window.sb.auth.signOut();}catch(e){}window.location.href='index.html';}
 (function(){function w(cb,t){if(window.sb)return cb();if((t=t||0)>80)return;setTimeout(function(){w(cb,t+1);},40);}w(async function(){if(!window.sb)return;var r=await window.sb.auth.getSession().catch(function(){return{};});var s=r&&r.data&&r.data.session;if(!s||!s.user){window.location.href='index.html';return;}var u=s.user;var m=u.user_metadata||{};var el=document.getElementById('topbar-user');if(el)el.textContent=m.full_name||m.name||u.email||'';window.sb.auth.onAuthStateChange(function(_,ss){if(!ss||!ss.user)window.location.href='index.html';});});})();
 </script>

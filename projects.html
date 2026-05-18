@@ -336,7 +336,23 @@
             if (act === 'resume')  { await sb.from('projects').update({ status: 'active' }).eq('id', id); await sb.rpc('log_event', { p_kind: 'project.resumed', p_payload: { id: id }, p_project_id: id }); }
             if (act === 'archive') { await sb.from('projects').update({ status: 'archived' }).eq('id', id); await sb.rpc('log_event', { p_kind: 'project.archived', p_payload: { id: id }, p_project_id: id }); }
             if (act === 'delete')  {
-              if (!confirm('Delete this project? Activity events stay, but the project row is removed.')) { btn.disabled = false; return; }
+              if (btn.dataset.armed !== '1') {
+                btn.dataset.armed = '1';
+                btn.dataset.original = btn.textContent;
+                btn.textContent = 'Click to confirm';
+                btn.classList.add('armed');
+                btn.disabled = false;
+                setTimeout(function () {
+                  if (btn.dataset.armed === '1') {
+                    btn.dataset.armed = '';
+                    btn.textContent = btn.dataset.original || 'Delete';
+                    btn.classList.remove('armed');
+                  }
+                }, 3000);
+                return;
+              }
+              btn.dataset.armed = '';
+              btn.classList.remove('armed');
               await sb.from('projects').delete().eq('id', id);
               await sb.rpc('log_event', { p_kind: 'project.deleted', p_payload: { id: id } });
             }
@@ -347,7 +363,7 @@
             }
             await refresh();
           } catch (err) {
-            alert((err && err.message) || 'Action failed.');
+            if (window.cxToast) window.cxToast((err && err.message) || 'Action failed.', 'error');
           }
         });
 

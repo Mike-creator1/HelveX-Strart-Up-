@@ -211,14 +211,31 @@
           if (!btn) return;
           var tr = btn.closest('tr'); if (!tr) return;
           var id = tr.getAttribute('data-id');
-          if (!confirm('Revoke this key? Calls using it will start failing immediately.')) return;
+          if (btn.dataset.armed !== '1') {
+            btn.dataset.armed = '1';
+            btn.dataset.original = btn.textContent;
+            btn.textContent = 'Click to confirm';
+            btn.classList.add('armed');
+            setTimeout(function () {
+              if (btn.dataset.armed === '1') {
+                btn.dataset.armed = '';
+                btn.textContent = btn.dataset.original || 'Revoke';
+                btn.classList.remove('armed');
+              }
+            }, 3000);
+            return;
+          }
+          btn.dataset.armed = '';
+          btn.classList.remove('armed');
           btn.disabled = true;
           try {
             var r = await sb.rpc('revoke_api_key', { p_id: id });
             if (r.error) throw r.error;
             await refresh();
           } catch (err) {
-            alert((err && err.message) || 'Could not revoke.');
+            btn.disabled = false;
+            btn.textContent = btn.dataset.original || 'Revoke';
+            if (window.cxToast) window.cxToast((err && err.message) || 'Could not revoke.', 'error');
           }
         });
 

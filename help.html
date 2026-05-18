@@ -2,7 +2,7 @@
 <html lang="en" translate="no" class="notranslate">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Help — CreateX</title>
+  <title>Help — HelveX</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>window.SUPABASE_URL='https://ikbdhxobdjlwirydhxym.supabase.co';window.SUPABASE_ANON='sb_publishable_chzlbY97SlQx_Apf4zqrTQ_mdwWhmyE';(function i(t){t=t||0;var l=window.supabase;if(l&&typeof l.createClient==='function'){try{window.sb=l.createClient(window.SUPABASE_URL,window.SUPABASE_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});}catch(e){}return;}if(t>80)return;setTimeout(function(){i(t+1);},40);})();</script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
@@ -88,7 +88,7 @@
         <div class="card feature-card">
           <div class="feature-icon" style="color:#6dffa7;background:rgba(57,245,138,.08);border-color:rgba(57,245,138,.16)"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
           <div class="feature-title">Community</div>
-          <div class="feature-desc">Join thousands of builders sharing prompts, templates, workflows, and deployment tips. Learn from the most advanced CreateX users.</div>
+          <div class="feature-desc">Join thousands of builders sharing prompts, templates, workflows, and deployment tips. Learn from the most advanced HelveX users.</div>
         </div>
       </div>
 
@@ -116,13 +116,12 @@
 
       <div class="contact-banner anim d4">
         <div><h3>Still have questions?</h3><p>Our support team is available Monday – Friday, 09:00 – 18:00 UTC. Typical response time under 4 hours.</p></div>
-        <button onclick="showComingSoon()" class="btn-outline" style="padding:11px 22px;font-size:13px;white-space:nowrap">Open Support Ticket</button>
+        <a href="/support.html" class="btn-outline" style="padding:11px 22px;font-size:13px;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">Open Support Ticket</a>
       </div>
     </main>
   </div>
 </div>
 <script>
-function showComingSoon(){alert('Help centre is launching soon.');}
 async function handleSignOut(){try{if(window.sb)await window.sb.auth.signOut();}catch(e){}window.location.href='index.html';}
 (function(){function w(cb,t){if(window.sb)return cb();if((t=t||0)>80)return;setTimeout(function(){w(cb,t+1);},40);}w(async function(){if(!window.sb)return;var r=await window.sb.auth.getSession().catch(function(){return{};});var s=r&&r.data&&r.data.session;if(!s||!s.user){window.location.href='index.html';return;}var u=s.user;var m=u.user_metadata||{};var el=document.getElementById('topbar-user');if(el)el.textContent=m.full_name||m.name||u.email||'';window.sb.auth.onAuthStateChange(function(_,ss){if(!ss||!ss.user)window.location.href='index.html';});});})();
 </script>

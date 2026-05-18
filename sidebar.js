@@ -1,5 +1,5 @@
 /*!
- * CreateX Sidebar — shared navigation component
+ * HelveX Sidebar — shared navigation component
  * Mounts into the first .sidebar / #sidebar / #app-sidebar element found.
  * Active state is inferred from window.location.pathname.
  * Injects its own scoped CSS so it works in any page regardless of existing styles.
@@ -51,7 +51,6 @@
       { label: 'Website Builder',   href: 'website-builder.html',  file: 'website-builder', icon: 'website'    },
       { label: 'App Builder',       href: 'app-builder.html',      file: 'app-builder',     icon: 'app'        },
       { label: 'Workflow Builder',  href: 'workflow-builder.html', file: 'workflow-builder',icon: 'workflow',   badge: 'NEW' },
-      { label: 'Knowledge Base',    href: 'knowledge-base.html',   file: 'knowledge-base',  icon: 'knowledge',  badge: 'NEW' },
       { label: 'AI Template Hub',   href: 'templates.html',        file: 'templates',       icon: 'templates'  },
     ]},
     { section: 'MANAGE', items: [
@@ -136,7 +135,7 @@
 
     var html = '<a href="dashboard.html" class="cx-sb-brand">'
       + logo
-      + '<div><strong>CreateX</strong><small>AI Platform</small></div>'
+      + '<div><strong>HelveX</strong><small>AI Platform</small></div>'
       + '</a>';
 
     for (var g = 0; g < NAV.length; g++) {

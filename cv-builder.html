@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="google" content="notranslate" />
-  <title>CreateX - CV Generation Studio</title>
+  <title>HelveX - CV Generation Studio</title>
   <script>
     (function guardCvBuilder() {
       const params = new URLSearchParams(location.search);
@@ -2281,7 +2281,7 @@
           </linearGradient></defs>
         </svg>
         <div>
-          <strong>CreateX</strong>
+          <strong>HelveX</strong>
           <small>AI Agent</small>
         </div>
       </a>
@@ -2349,7 +2349,7 @@
         <div class="sidebar-user">
           <div class="sidebar-user-badge">CX</div>
           <div>
-            <strong>CreateX Studio</strong>
+            <strong>HelveX Studio</strong>
             <small>Swiss CV workspace</small>
           </div>
         </div>
@@ -2370,7 +2370,7 @@
           </a>
         </div>
         <div class="editor-bar-center">
-          <strong id="editor-document-name">CreateX Resume</strong>
+          <strong id="editor-document-name">HelveX Resume</strong>
           <span>Live editing workspace</span>
         </div>
         <div class="editor-bar-actions">
@@ -3158,7 +3158,7 @@
       const title = document.getElementById("editor-document-name");
       if (!title) return;
       const fullName = previewName();
-      title.textContent = fullName ? `${fullName} Resume` : "CreateX Resume";
+      title.textContent = fullName ? `${fullName} Resume` : "HelveX Resume";
     }
 
     function focusLinkedInField() {
@@ -4281,7 +4281,7 @@
         heightLeft -= pageHeight;
       }
 
-      const filename = (state.personal.name || "CreateX-CV")
+      const filename = (state.personal.name || "HelveX-CV")
         .replace(/[^a-z0-9]+/gi, "-")
         .replace(/^-|-$/g, "") + ".pdf";
       pdf.save(filename);

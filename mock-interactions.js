@@ -1,4 +1,4 @@
-/*! CreateX — Mock interactions layer
+/*! HelveX — Mock interactions layer
  *  Auto-attaches realistic simulated handlers to every dead button/link/card
  *  across the platform. Existing onclick/addEventListener handlers are
  *  preserved; this only fires when nothing else is wired.
@@ -145,7 +145,7 @@
     } else if (/^view|^open|^manage|^configure|^edit/i.test(lower)) {
       modal({ title: txt || 'Detail view', text: 'This panel shows full details. In the production build, this opens a dedicated workspace for the selected item.', okText: 'OK' });
     } else if (/learn more|read more|docs|documentation/i.test(lower)) {
-      modal({ title: 'Documentation', text: 'Full documentation lives in the CreateX docs portal. The link will be active once the docs site is published.', okText: 'OK' });
+      modal({ title: 'Documentation', text: 'Full documentation lives in the HelveX docs portal. The link will be active once the docs site is published.', okText: 'OK' });
     } else if (txt) {
       toast(txt + ' — coming soon', 'info');
     } else {

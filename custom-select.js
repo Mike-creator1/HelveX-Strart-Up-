@@ -1,4 +1,4 @@
-/*! CreateX custom dark dropdown — replaces native <select.ctrl-sel> with a
+/*! HelveX custom dark dropdown — replaces native <select.ctrl-sel> with a
     HelveX-style menu. Keeps original <select> for value & change events. */
 (function () {
   var CSS = ''

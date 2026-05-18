@@ -364,7 +364,7 @@
             .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
           const copyText = `Subject: ${v.subject || ''}\nPreview: ${v.preview || ''}\n\n${v.body || ''}\n\n[CTA] ${v.cta || ''}`;
-          const copyJs = `(function(b){navigator.clipboard.writeText(${JSON.stringify(copyText)}).then(()=>{b.textContent='Copied ✓';b.classList.add('copied');setTimeout(()=>{b.textContent='Copy';b.classList.remove('copied')},1600)})})(this)`;
+          const copyJs = `(function(b){navigator.clipboard.writeText(${JSON.stringify(copyText)}).then(()=>{b.textContent='Copied';b.classList.add('copied');setTimeout(()=>{b.textContent='Copy';b.classList.remove('copied')},1600)})})(this)`;
           return `
             <div class="hx-variant">
               <div class="hx-variant-head">

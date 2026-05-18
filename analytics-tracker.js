@@ -1,4 +1,4 @@
-/*! CreateX · Analytics tracker
+/*! HelveX · Analytics tracker
  *  Fire-and-forget event capture. Auto-loaded by sidebar.js on every
  *  authenticated page. Writes to public.analytics_events (RLS-scoped
  *  to the signed-in user). All Analytics charts read from this table.
