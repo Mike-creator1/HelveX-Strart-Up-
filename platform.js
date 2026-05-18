@@ -184,11 +184,11 @@
     html +=   '<span class="crumb-sep">/</span>';
     html +=   '<span class="crumb-current">' + pageLabel + '</span>';
     html += '</nav>';
-    html += '<button type="button" class="hx-cmdk" id="hx-cmdk" aria-label="Search">';
+    html += '<label class="hx-cmdk" id="hx-cmdk-wrap" aria-label="Search">';
     html +=   svg('search', { sw: 1.8 });
-    html +=   '<span class="hx-cmdk-text">Search…</span>';
+    html +=   '<input id="hx-cmdk" class="hx-cmdk-input" type="text" placeholder="Search…" autocomplete="off" spellcheck="false" />';
     html +=   '<span class="hx-cmdk-kbd">⌘K</span>';
-    html += '</button>';
+    html += '</label>';
     return html;
   }
 
@@ -328,9 +328,17 @@
     // mountCommandPalette() — opens on demand, lazy-loads Supabase
     // data, supports arrow / Enter / Escape, no focus-only theatre.
     var sidebarFind = document.getElementById('hx-sidebar-find');
-    var cmdkOpener  = document.getElementById('hx-cmdk');
+    var cmdkInput   = document.getElementById('hx-cmdk');
     if (sidebarFind) sidebarFind.addEventListener('click', function () { openCommandPalette(); });
-    if (cmdkOpener)  cmdkOpener.addEventListener('click',  function () { openCommandPalette(); });
+    if (cmdkInput) {
+      // Focusing the topbar input opens the palette and hands focus to
+      // the palette's own input — that way every keystroke after the
+      // first click ends up in the palette, results render below, and
+      // the topbar input visually keeps the user's query in sync.
+      cmdkInput.addEventListener('focus', function () { openCommandPalette(cmdkInput.value); });
+      cmdkInput.addEventListener('click', function () { openCommandPalette(cmdkInput.value); });
+      cmdkInput.addEventListener('input', function () { openCommandPalette(cmdkInput.value); });
+    }
     document.addEventListener('keydown', function (e) {
       var meta = e.metaKey || e.ctrlKey;
       if (meta && (e.key === 'k' || e.key === 'K')) {
@@ -578,6 +586,11 @@
   function onInput(e) {
     var q = (e.target.value || '').trim();
     hxCmd.q = q;
+    // Mirror palette query into the topbar input so both surfaces
+    // stay visually in lock-step regardless of which one the user is
+    // typing into.
+    var topbarInput = document.getElementById('hx-cmdk');
+    if (topbarInput && topbarInput.value !== e.target.value) topbarInput.value = e.target.value;
     if (!q) {
       renderResults(buildEmptyResults());
       return;
@@ -664,22 +677,41 @@
     });
   }
 
-  function openCommandPalette() {
+  function openCommandPalette(initialQuery) {
     mountCommandPalette();
     var back = document.getElementById('hx-cmdp-back');
     var input = document.getElementById('hx-cmdp-input');
     if (!back || !input) return;
+    var alreadyOpen = back.classList.contains('open');
+    var q = typeof initialQuery === 'string' ? initialQuery : '';
     back.classList.add('open');
-    input.value = '';
-    hxCmd.q = '';
-    hxCmd.active = 0;
-    renderResults(buildEmptyResults());
-    setTimeout(function () { input.focus(); }, 10);
+
+    // If the user is summoning the palette by typing into the topbar
+    // input, we mirror that text in the palette and run the same
+    // pipeline as if they typed in the palette directly.
+    if (q && (!alreadyOpen || input.value !== q)) {
+      input.value = q;
+      hxCmd.q = q;
+      hxCmd.active = 0;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    } else if (!alreadyOpen) {
+      input.value = '';
+      hxCmd.q = '';
+      hxCmd.active = 0;
+      renderResults(buildEmptyResults());
+    }
+
+    if (!alreadyOpen) setTimeout(function () { input.focus(); }, 10);
   }
 
   function closeCommandPalette() {
     var back = document.getElementById('hx-cmdp-back');
     if (back) back.classList.remove('open');
+    var topbarInput = document.getElementById('hx-cmdk');
+    if (topbarInput) {
+      topbarInput.value = '';
+      try { topbarInput.blur(); } catch (_) {}
+    }
   }
 
   // Expose so other pages can summon it.
