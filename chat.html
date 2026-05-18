@@ -1045,9 +1045,8 @@
               renderThread();
               return;
             } else {
-              if (confirm('You need a project before you can chat. Create one now?')) {
-                window.location.href = '/projects.html?new=1';
-              }
+              if (window.cxToast) window.cxToast('Create a project to start a new chat.', 'info');
+              window.location.href = '/projects.html?new=1';
               return;
             }
           }
@@ -1056,7 +1055,7 @@
           var ins = await sb.from('conversations').insert({
             owner_id: u.id, project_id: proj, model: model, title: 'New chat'
           }).select().maybeSingle();
-          if (ins.error) { alert(ins.error.message); return; }
+          if (ins.error) { if (window.cxToast) window.cxToast(ins.error.message, 'error'); return; }
           await sb.rpc('log_event', { p_kind: 'chat.conversation_created', p_payload: { id: ins.data.id, model: model } });
           await refreshList();
           await openConversation(ins.data.id);
@@ -1343,7 +1342,22 @@
         // ─── Delete current conversation ─────────────────────
         async function deleteCurrent() {
           if (!state.conversation) return;
-          if (!confirm('Delete this conversation? Messages stay in your activity log.')) return;
+          var btn = $('hx-c-clear');
+          if (btn && btn.dataset.armed !== '1') {
+            btn.dataset.armed = '1';
+            btn.dataset.original = btn.textContent;
+            btn.textContent = 'Click again to confirm';
+            btn.classList.add('armed');
+            setTimeout(function () {
+              if (btn.dataset.armed === '1') {
+                btn.dataset.armed = '';
+                btn.textContent = btn.dataset.original || 'Delete';
+                btn.classList.remove('armed');
+              }
+            }, 3000);
+            return;
+          }
+          if (btn) { btn.dataset.armed = ''; btn.classList.remove('armed'); btn.textContent = btn.dataset.original || 'Delete'; }
           var id = state.conversation.id;
           await sb.from('conversations').update({ archived_at: new Date().toISOString() }).eq('id', id);
           await sb.rpc('log_event', { p_kind: 'chat.conversation_archived', p_payload: { id: id } });

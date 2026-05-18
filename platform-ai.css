@@ -1,6 +1,20 @@
 /* HelveX shared AI UI — modals, streaming results, chat bubbles.
    Loaded by every app-* page that runs HelveX-powered features. */
 
+/* Inline confirm pattern — applied to any button while it's "armed"
+   waiting for a second click to confirm a destructive action. */
+.hx-btn.armed,
+button.armed {
+  background: #dc2626 !important;
+  color: #fff !important;
+  border-color: #dc2626 !important;
+}
+.hx-thread-del.armed {
+  background: rgba(220, 38, 38, 0.12);
+  color: #dc2626;
+  border-radius: 6px;
+}
+
 /* Modal */
 .hxai-modal-back {
   position: fixed; inset: 0;

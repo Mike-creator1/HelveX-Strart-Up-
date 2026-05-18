@@ -95,20 +95,13 @@
           </div>
           <div class="hx-page-actions">
             <a href="/marketing-tools" class="hx-btn hx-btn-secondary">About marketing</a>
-            <button class="hx-btn hx-btn-primary" disabled title="Coming soon">+ New brief</button>
           </div>
         </div>
 
-        <div class="hx-beta-strip" role="note">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <p><strong>Marketing tools — under construction.</strong> The generator surface is ready, AI generation wiring is the next milestone. Brand voice calibration and draft persistence land first; scheduling integrations land second.</p>
-        </div>
-
-        <div class="hx-grid hx-grid-4">
-          <div class="hx-stat"><p class="hx-stat-label">Drafts created</p><p class="hx-stat-value hx-mono">0</p><p class="hx-stat-meta">No drafts yet</p></div>
-          <div class="hx-stat"><p class="hx-stat-label">Scheduled</p><p class="hx-stat-value hx-mono">0</p><p class="hx-stat-meta">Across channels</p></div>
-          <div class="hx-stat"><p class="hx-stat-label">Brand voice</p><p class="hx-stat-value hx-mono">—</p><p class="hx-stat-meta">Not yet calibrated</p></div>
-          <div class="hx-stat"><p class="hx-stat-label">Languages</p><p class="hx-stat-value hx-mono">—</p><p class="hx-stat-meta">Pick on first run</p></div>
+        <div class="hx-grid hx-grid-3">
+          <div class="hx-stat"><p class="hx-stat-label">Drafts created</p><p class="hx-stat-value hx-mono" id="hx-stat-drafts">0</p><p class="hx-stat-meta">Stored in your browser</p></div>
+          <div class="hx-stat"><p class="hx-stat-label">Active generators</p><p class="hx-stat-value hx-mono">3</p><p class="hx-stat-meta">Social · Ads · Email</p></div>
+          <div class="hx-stat"><p class="hx-stat-label">Languages</p><p class="hx-stat-value hx-mono">7</p><p class="hx-stat-meta">EN · DE · FR · IT · ES · GR · PT</p></div>
         </div>
 
         <div class="hx-section-head">
@@ -117,12 +110,9 @@
         </div>
 
         <div class="hx-gen-grid">
-          <button class="hx-gen hx-gen-live" id="hx-social-gen-btn"><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></span><h3>Social posts</h3><p>Instagram · LinkedIn · X · Facebook. Sized, hashtagged, on-brand.</p><div class="hx-gen-meta"><span class="hx-gen-tag">Posts · LIVE</span><span class="hx-gen-cta">Open →</span></div></button>
-          <button class="hx-gen hx-gen-live" id="hx-ads-gen-btn"><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 11-5.8-1.6"/></svg></span><h3>Ad copy</h3><p>Meta · Google · TikTok. Headlines, body, CTAs, A/B variants.</p><div class="hx-gen-meta"><span class="hx-gen-tag">Ads · LIVE</span><span class="hx-gen-cta">Open →</span></div></button>
-          <button class="hx-gen" disabled><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span><h3>TikTok &amp; Reels scripts</h3><p>Hook, beats, captions, on-screen text. Short-form rhythm.</p><div class="hx-gen-meta"><span class="hx-gen-tag">Video</span><span class="hx-gen-cta">Soon →</span></div></button>
-          <button class="hx-gen" disabled><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><h3>SEO articles</h3><p>Topic → outline → article. Headings, links, meta description.</p><div class="hx-gen-meta"><span class="hx-gen-tag">SEO</span><span class="hx-gen-cta">Soon →</span></div></button>
-          <button class="hx-gen hx-gen-live" id="hx-email-gen-btn"><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><h3>Email campaigns</h3><p>Newsletters, drips, broadcasts. Subjects that earn the open.</p><div class="hx-gen-meta"><span class="hx-gen-tag">Email · LIVE</span><span class="hx-gen-cta">Open →</span></div></button>
-          <button class="hx-gen" disabled><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></span><h3>Landing pages</h3><p>Hero, features, social proof, FAQ, CTA. Ship-ready copy.</p><div class="hx-gen-meta"><span class="hx-gen-tag">Pages</span><span class="hx-gen-cta">Soon →</span></div></button>
+          <button class="hx-gen hx-gen-live" id="hx-social-gen-btn"><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></span><h3>Social posts</h3><p>Instagram · LinkedIn · X · Facebook. Sized, hashtagged, on-brand.</p><div class="hx-gen-meta"><span class="hx-gen-cta">Open →</span></div></button>
+          <button class="hx-gen hx-gen-live" id="hx-ads-gen-btn"><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 11-5.8-1.6"/></svg></span><h3>Ad copy</h3><p>Meta · Google · TikTok. Headlines, body, CTAs, A/B variants.</p><div class="hx-gen-meta"><span class="hx-gen-cta">Open →</span></div></button>
+          <button class="hx-gen hx-gen-live" id="hx-email-gen-btn"><span class="hx-gen-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><h3>Email campaigns</h3><p>Newsletters, drips, broadcasts. Subjects that earn the open.</p><div class="hx-gen-meta"><span class="hx-gen-cta">Open →</span></div></button>
         </div>
 
         <div class="hx-section-head" style="margin-top:24px;">
@@ -519,7 +509,7 @@
         statusEl.innerHTML = text ? `<div class="hxai-status${err ? ' error' : ''}"><span class="dot"></span><span>${text}</span></div>` : '';
       }
 
-      const platIcons = { instagram: '📸', linkedin: '💼', x: '🐦', facebook: '👍' };
+      const platIcons = { instagram: '', linkedin: '', x: '', facebook: '' };
       function render(posts) {
         resultEl.innerHTML = posts.map((p, i) => {
           const text = p.text || '';
@@ -679,7 +669,7 @@
   <!-- ============ RECENT DRAFTS HISTORY ============ -->
   <script>
     (function () {
-      const TYPE_LABEL = { email: '📧 Email campaign', social: '📸 Social posts', ads: '🎯 Ad copy' };
+      const TYPE_LABEL = { email: 'Email campaign', social: 'Social posts', ads: 'Ad copy' };
       const TYPE_DOT   = { email: '#f59e0b', social: '#a855f7', ads: '#3b82f6' };
 
       const host    = document.getElementById('hx-history-host');

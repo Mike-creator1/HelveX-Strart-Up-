@@ -305,7 +305,7 @@ function rmAt(i){attachments.splice(i,1);renderAttach();}
 function toggleVoice(){listening?stopV():startV();}
 function startV(){
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){alert('Voice input requires Chrome or Edge.');return;}
+  if(!SR){return;}
   rec=new SR();rec.lang='en-US';rec.interimResults=false;
   rec.onresult=function(e){var inp=document.getElementById('c-input');inp.value+=(inp.value?' ':'')+e.results[0][0].transcript;grow(inp);stopV();};
   rec.onerror=rec.onend=stopV;rec.start();listening=true;

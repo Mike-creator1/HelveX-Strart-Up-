@@ -95,11 +95,10 @@
           </div>
         </div>
 
-        <div class="hx-grid hx-grid-4">
+        <div class="hx-grid hx-grid-3">
           <div class="hx-stat"><p class="hx-stat-label">Threads saved</p><p class="hx-stat-value hx-mono" id="hx-stat-threads">0</p><p class="hx-stat-meta">In your browser</p></div>
           <div class="hx-stat"><p class="hx-stat-label">Personas</p><p class="hx-stat-value hx-mono" id="hx-stat-personas">5</p><p class="hx-stat-meta">Built-in + custom</p></div>
           <div class="hx-stat"><p class="hx-stat-label">Model</p><p class="hx-stat-value hx-mono">Nexus 4.5</p><p class="hx-stat-meta">HelveX · streaming</p></div>
-          <div class="hx-stat"><p class="hx-stat-label">Status</p><p class="hx-stat-value hx-mono" style="color:#15803d;">LIVE</p><p class="hx-stat-meta">Production ready</p></div>
         </div>
 
         <div class="hx-asst-layout">
@@ -142,17 +141,44 @@
     </div>
   </div>
 
+  <!-- New custom persona modal -->
+  <div class="hxai-modal-back" id="hx-persona-modal" role="dialog" aria-modal="true">
+    <div class="hxai-modal">
+      <div class="hxai-modal-head">
+        <h3>New custom persona</h3>
+        <button class="close" id="hx-persona-modal-close" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="hxai-modal-body">
+        <div class="hxai-field">
+          <label for="hx-persona-name">Persona name <span class="hxai-hint">(short, e.g. "Swiss tax advisor")</span></label>
+          <input type="text" id="hx-persona-name" maxlength="60" placeholder="Swiss tax advisor" />
+        </div>
+        <div class="hxai-field">
+          <label for="hx-persona-system">Instructions <span class="hxai-hint">(how this persona should behave — minimum 20 characters)</span></label>
+          <textarea id="hx-persona-system" rows="6" placeholder="You are a Swiss tax advisor. You explain VAT, withholding tax, and cantonal differences clearly. You cite the cantonal source when relevant. You never give advice that requires a licensed Treuhänder without flagging it."></textarea>
+        </div>
+        <div id="hx-persona-err" style="font-size:12.5px;color:#b91c1c;margin-top:4px;display:none;"></div>
+      </div>
+      <div class="hxai-modal-foot">
+        <button class="hx-btn hx-btn-secondary" id="hx-persona-cancel">Cancel</button>
+        <button class="hx-btn hx-btn-primary" id="hx-persona-save">Create persona</button>
+      </div>
+    </div>
+  </div>
+
   <script src="/platform.js"></script>
   <script src="/platform-ai.js"></script>
   <script>
     (function () {
       // ============ PERSONAS ============
       const BUILTIN_PERSONAS = [
-        { id: 'default',  ico: '🤖',  name: 'Default',          desc: 'General business co-pilot. Concise, multilingual, action-first.', system: '' },
-        { id: 'sales',    ico: '💼',  name: 'Sales coach',      desc: 'B2B sales mentor. Cold emails, discovery, objection handling.',  system: 'You are a senior B2B sales coach. You write copy that converts, prep talking points for calls, handle objections with direct counters. Concise, opinionated, no fluff. Match the user\'s language.' },
-        { id: 'marketing',ico: '📣',  name: 'Marketing strategist',desc: 'Campaigns, positioning, copywriting, GTM.',                     system: 'You are a growth marketing strategist who has launched SaaS products from zero to $10M ARR. You think in funnels, channels, and unit economics. You give clear, opinionated recommendations with concrete next steps. Match the user\'s language.' },
-        { id: 'legal',    ico: '⚖️',  name: 'Legal advisor (CH/EU)',desc: 'Swiss + EU contract drafting, GDPR, NDAs, ToS — not a replacement for a lawyer.', system: 'You are a corporate legal advisor specialising in Swiss and EU contract law. You draft NDAs, SoWs, terms of service, privacy policies; you explain GDPR obligations clearly; you flag risks honestly. Always end legal output with: "Reviewed by a qualified lawyer before signing — this is drafting assistance, not legal advice." Match the user\'s language.' },
-        { id: 'recruit',  ico: '👥',  name: 'Recruiter',        desc: 'Job specs, interview kits, candidate rejection emails, sourcing.',system: 'You are a senior recruiter who has hired 500+ people across tech, sales, and operations. You write tight job specs that filter the right candidates, design interview kits, draft kind rejection emails. Match the user\'s language.' },
+        { id: 'default',  ico: 'D',  name: 'Default',          desc: 'General business co-pilot. Concise, multilingual, action-first.', system: '' },
+        { id: 'sales',    ico: 'S',  name: 'Sales coach',      desc: 'B2B sales mentor. Cold emails, discovery, objection handling.',  system: 'You are a senior B2B sales coach. You write copy that converts, prep talking points for calls, handle objections with direct counters. Concise, opinionated, no fluff. Match the user\'s language.' },
+        { id: 'marketing',ico: 'M',  name: 'Marketing strategist',desc: 'Campaigns, positioning, copywriting, GTM.',                     system: 'You are a growth marketing strategist who has launched SaaS products from zero to $10M ARR. You think in funnels, channels, and unit economics. You give clear, opinionated recommendations with concrete next steps. Match the user\'s language.' },
+        { id: 'legal',    ico: 'L',  name: 'Legal advisor (CH/EU)',desc: 'Swiss + EU contract drafting, GDPR, NDAs, ToS — not a replacement for a lawyer.', system: 'You are a corporate legal advisor specialising in Swiss and EU contract law. You draft NDAs, SoWs, terms of service, privacy policies; you explain GDPR obligations clearly; you flag risks honestly. Always end legal output with: "Reviewed by a qualified lawyer before signing — this is drafting assistance, not legal advice." Match the user\'s language.' },
+        { id: 'recruit',  ico: 'R',  name: 'Recruiter',        desc: 'Job specs, interview kits, candidate rejection emails, sourcing.',system: 'You are a senior recruiter who has hired 500+ people across tech, sales, and operations. You write tight job specs that filter the right candidates, design interview kits, draft kind rejection emails. Match the user\'s language.' },
       ];
 
       const customPersonas = HXAI.store.get('assistant', 'custom_personas', []);
@@ -237,10 +263,10 @@
           const preview = last ? (last.content || '').slice(0, 50) : '';
           return `
             <div class="hx-thread-item ${t.id === activeId ? 'active' : ''}" data-id="${t.id}">
-              <div class="hx-thread-title">${p.ico} ${HXAI.esc(t.title)}</div>
+              <div class="hx-thread-title">${HXAI.esc(t.title)}</div>
               <div class="hx-thread-meta">
                 <span>${HXAI.esc(p.name)} · ${HXAI.timeAgo(t.updatedAt)}</span>
-                <button class="hx-thread-del" data-del="${t.id}" title="Delete">🗑</button>
+                <button class="hx-thread-del" data-del="${t.id}" title="Delete thread" aria-label="Delete thread"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 01-2 2H9a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a2 2 0 012-2h2a2 2 0 012 2v2"/></svg></button>
               </div>
             </div>
           `;
@@ -255,9 +281,18 @@
         listEl.querySelectorAll('[data-del]').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (!confirm('Delete this thread? This cannot be undone.')) return;
-            deleteThread(btn.dataset.del);
-            renderAll();
+            if (btn.dataset.armed === '1') {
+              deleteThread(btn.dataset.del);
+              renderAll();
+              return;
+            }
+            btn.dataset.armed = '1';
+            btn.classList.add('armed');
+            btn.title = 'Click again to confirm';
+            const original = btn.innerHTML;
+            btn.innerHTML = '<span style="font-size:11px;font-weight:600;letter-spacing:.02em;">Confirm</span>';
+            const reset = () => { btn.dataset.armed = ''; btn.classList.remove('armed'); btn.title = 'Delete thread'; btn.innerHTML = original; };
+            setTimeout(() => { if (btn.dataset.armed === '1') reset(); }, 3000);
           });
         });
       }
@@ -350,20 +385,50 @@
           });
         });
         document.getElementById('hx-persona-add').addEventListener('click', () => {
-          const name = prompt('Custom persona name (e.g. "Swiss tax advisor"):');
-          if (!name) return;
-          const ico = prompt('Pick an emoji (e.g. 💰):') || '✨';
-          const system = prompt('System prompt — describe how this persona should behave:');
-          if (!system || system.length < 20) { alert('System prompt must be at least 20 characters.'); return; }
-          const id = 'custom_' + HXAI.store.id();
-          const p = { id, ico, name: name.slice(0, 60), desc: 'Custom persona', system };
-          customPersonas.push(p);
-          personas = [...BUILTIN_PERSONAS, ...customPersonas];
-          persist();
           menuEl.classList.remove('open');
-          renderAll();
+          openPersonaModal();
         });
       }
+
+      // ============ PERSONA CREATION MODAL ============
+      const personaModal    = document.getElementById('hx-persona-modal');
+      const personaNameInp  = document.getElementById('hx-persona-name');
+      const personaSysInp   = document.getElementById('hx-persona-system');
+      const personaErrEl    = document.getElementById('hx-persona-err');
+
+      function openPersonaModal() {
+        personaNameInp.value = '';
+        personaSysInp.value = '';
+        personaErrEl.style.display = 'none';
+        personaModal.classList.add('open');
+        setTimeout(() => personaNameInp.focus(), 30);
+      }
+      function closePersonaModal() {
+        personaModal.classList.remove('open');
+      }
+      function showPersonaErr(msg) {
+        personaErrEl.textContent = msg;
+        personaErrEl.style.display = 'block';
+      }
+      function savePersona() {
+        const name = personaNameInp.value.trim();
+        const system = personaSysInp.value.trim();
+        if (!name) { showPersonaErr('Please enter a persona name.'); personaNameInp.focus(); return; }
+        if (system.length < 20) { showPersonaErr('Instructions must be at least 20 characters.'); personaSysInp.focus(); return; }
+        const id = 'custom_' + HXAI.store.id();
+        const ico = name.trim().charAt(0).toUpperCase();
+        const p = { id, ico, name: name.slice(0, 60), desc: 'Custom persona', system };
+        customPersonas.push(p);
+        personas = [...BUILTIN_PERSONAS, ...customPersonas];
+        persist();
+        closePersonaModal();
+        renderAll();
+      }
+
+      document.getElementById('hx-persona-modal-close').addEventListener('click', closePersonaModal);
+      document.getElementById('hx-persona-cancel').addEventListener('click', closePersonaModal);
+      document.getElementById('hx-persona-save').addEventListener('click', savePersona);
+      personaModal.addEventListener('click', (e) => { if (e.target === personaModal) closePersonaModal(); });
 
       function renderAll() {
         renderThreadList();
@@ -430,8 +495,9 @@
           });
         } catch (err) {
           typing.remove();
-          const errNode = appendBubble('assistant', `⚠️ ${err.message || err}`);
-          t.messages.push({ role: 'assistant', content: `⚠️ ${err.message || err}` });
+          const errMsg = `Error: ${err.message || err}`;
+          const errNode = appendBubble('assistant', errMsg);
+          t.messages.push({ role: 'assistant', content: errMsg });
           persist();
         } finally {
           sendBtn.disabled = false;
