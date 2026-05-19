@@ -4,188 +4,100 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Services — HelveX</title>
-  <meta name="description" content="HelveX service catalog — AI & Automation, Digital Services, Consulting." />
+  <meta name="description" content="Request specialised work from the HelveX delivery team. Submit a brief, get a quote, track status to delivery." />
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://yjmpallrtpeinpdilptj.supabase.co" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
   <style>
-    /* ─────────────────────────────────────────────────────────────
-       SERVICES PAGE — clear, single-pass scan layout.
-       Each category is a self-contained block (header + grid of
-       services). No abstract overview tiles, no scattered cards.
-       The visitor sees AT A GLANCE which services live in which
-       practice, with duration + outcome on every card.
-       ───────────────────────────────────────────────────────────── */
+    /* Services workspace — a real engagement tracker, not a brochure.
+       Card layout mirrors /workbench so the platform feels consistent:
+       a "+ New request" form expands inline above the list; each
+       request is a card you can open into a focused detail panel. */
+    .hx-svc-grid    { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+    .hx-svc-card    { background: #fff; border: 1px solid var(--hx-line); border-radius: var(--hx-r); padding: 16px 18px; cursor: pointer; transition: border-color 0.12s; }
+    .hx-svc-card:hover { border-color: var(--hx-text-mid); }
+    .hx-svc-card.open { border-color: var(--hx-text); }
+    .hx-svc-head    { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .hx-svc-title   { font-size: 14.5px; font-weight: 600; color: var(--hx-text); margin: 0; letter-spacing: -0.005em; flex: 1; min-width: 0; }
+    .hx-svc-meta    { display: flex; align-items: center; gap: 8px; flex-shrink: 0; font-family: var(--hx-mono); font-size: 11px; color: var(--hx-text-mid); }
+    .hx-svc-preview { font-size: 12.5px; color: var(--hx-text-mid); margin-top: 8px; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .hx-svc-body    { margin-top: 14px; display: none; }
+    .hx-svc-card.open .hx-svc-body    { display: block; }
+    .hx-svc-card.open .hx-svc-preview { display: none; }
 
-    /* Quick-nav pills above the blocks — anchor to each category */
-    .hx-cat-nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin: 4px 0 18px;
+    /* Status pill — colour-codes the lifecycle stage at a glance. */
+    .hx-svc-status {
+      padding: 2px 8px; border-radius: 5px;
+      font-family: var(--hx-mono); font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--hx-cream); color: var(--hx-text-mid);
     }
-    .hx-cat-nav a {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--hx-text-mid);
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-      border-radius: 9999px;
-      text-decoration: none;
-      transition: color 0.12s, border-color 0.12s, background 0.12s;
-    }
-    .hx-cat-nav a:hover { color: var(--hx-text); border-color: var(--hx-line-strong); background: var(--hx-surface); }
-    .hx-cat-nav a .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .hx-cat-nav a .dot.yellow  { background: var(--hx-yellow-deep); }
-    .hx-cat-nav a .dot.red     { background: var(--hx-red); }
-    .hx-cat-nav a .dot.emerald { background: var(--hx-emerald); }
-    .hx-cat-nav a .count {
-      font-family: var(--hx-mono);
-      font-size: 10.5px;
-      color: var(--hx-text-dim);
-      letter-spacing: 0;
+    .hx-svc-status.submitted    { background: rgba(15,15,16,0.08);    color: var(--hx-text); }
+    .hx-svc-status.scoping      { background: rgba(59,130,246,0.12);  color: #1d4ed8; }
+    .hx-svc-status.quoted       { background: rgba(245,158,11,0.14);  color: #92400e; }
+    .hx-svc-status.approved     { background: rgba(124,58,237,0.12);  color: #6d28d9; }
+    .hx-svc-status.in_progress  { background: rgba(34,197,94,0.14);   color: #15803d; }
+    .hx-svc-status.delivered    { background: rgba(15,15,16,0.06);    color: var(--hx-text-mid); }
+    .hx-svc-status.cancelled    { background: rgba(220,38,38,0.10);   color: #991b1b; }
+
+    /* Type chip — which practice the request lives under. */
+    .hx-svc-type {
+      padding: 2px 8px; border-radius: 5px;
+      font-family: var(--hx-mono); font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: rgba(15,15,16,0.06); color: var(--hx-text-mid);
     }
 
-    /* Category block — one per practice */
-    .hx-cat-block {
-      background: var(--hx-surface);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r-lg);
-      overflow: hidden;
-      scroll-margin-top: 24px;
-    }
-    .hx-cat-block + .hx-cat-block { margin-top: 16px; }
+    /* Open-card detail layout — split into Brief / Quote / Timeline. */
+    .hx-svc-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 6px; }
+    @media (max-width: 720px) { .hx-svc-detail-grid { grid-template-columns: 1fr; } }
+    .hx-svc-block      { background: var(--hx-bg-2); border: 1px solid var(--hx-line); border-radius: 10px; padding: 14px 16px; }
+    .hx-svc-block h4   { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--hx-text-mid); margin: 0 0 8px; font-family: var(--hx-mono); }
+    .hx-svc-block p    { font-size: 13px; line-height: 1.55; margin: 0; color: var(--hx-text); white-space: pre-wrap; }
+    .hx-svc-block .kv  { display: flex; gap: 8px; margin-bottom: 4px; font-size: 12.5px; }
+    .hx-svc-block .kv span:first-child { color: var(--hx-text-mid); min-width: 80px; }
+    .hx-svc-block .kv span:last-child  { color: var(--hx-text); font-weight: 500; }
 
-    .hx-cat-block-head {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 18px 22px;
-      border-bottom: 1px solid var(--hx-line);
-      background: var(--hx-bg-2);
-    }
-    .hx-cat-block-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: var(--hx-r);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      background: var(--hx-surface);
-      border: 1px solid var(--hx-line);
-    }
-    .hx-cat-block-icon.yellow  { background: var(--hx-yellow-soft); color: var(--hx-yellow-deep); border-color: rgba(252, 211, 77, 0.4); }
-    .hx-cat-block-icon.red     { background: var(--hx-red-soft);    color: var(--hx-red);          border-color: rgba(220, 38, 38, 0.22); }
-    .hx-cat-block-icon.emerald { background: var(--hx-emerald-soft); color: var(--hx-emerald);     border-color: rgba(16, 185, 129, 0.22); }
+    /* Timeline of events — dot-on-line vertical layout. */
+    .hx-svc-timeline { margin-top: 12px; position: relative; padding-left: 18px; }
+    .hx-svc-timeline::before { content: ""; position: absolute; left: 5px; top: 4px; bottom: 4px; width: 1px; background: var(--hx-line); }
+    .hx-svc-evt      { position: relative; margin-bottom: 12px; }
+    .hx-svc-evt::before { content: ""; position: absolute; left: -16px; top: 5px; width: 9px; height: 9px; border-radius: 50%; background: var(--hx-text); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--hx-line); }
+    .hx-svc-evt.team::before     { background: #6d28d9; }
+    .hx-svc-evt.system::before   { background: var(--hx-text-mid); }
+    .hx-svc-evt .ts  { font-family: var(--hx-mono); font-size: 10.5px; color: var(--hx-text-mid); }
+    .hx-svc-evt .msg { font-size: 13px; color: var(--hx-text); margin-top: 2px; line-height: 1.45; }
 
-    .hx-cat-block-text { flex: 1; min-width: 0; }
-    .hx-cat-block-text h2 {
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: -0.014em;
-      color: var(--hx-text);
-      margin: 0 0 3px;
+    /* New-request form (inline, same pattern as workbench). */
+    .hx-svc-new-form { background: #fff; border: 1px solid var(--hx-line); border-radius: var(--hx-r); padding: 18px 20px; margin-bottom: 14px; display: none; }
+    .hx-svc-new-form.open { display: block; }
+    .hx-svc-new-form label { display: block; font-size: 11.5px; font-weight: 600; color: var(--hx-text-mid); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; font-family: var(--hx-mono); }
+    .hx-svc-new-form input, .hx-svc-new-form textarea, .hx-svc-new-form select {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--hx-line);
+      border-radius: 10px; font: inherit; font-size: 13.5px; background: #fff;
+      outline: none; margin-bottom: 12px;
     }
-    .hx-cat-block-text p {
-      font-size: 13px;
-      line-height: 1.55;
-      color: var(--hx-text-mid);
-      margin: 0;
-    }
-    .hx-cat-block-count {
-      font-family: var(--hx-mono);
-      font-size: 10.5px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--hx-text-dim);
-      background: var(--hx-surface);
-      border: 1px solid var(--hx-line);
-      padding: 5px 10px;
-      border-radius: 9999px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
+    .hx-svc-new-form textarea { min-height: 110px; font-family: var(--hx-sans); line-height: 1.5; resize: vertical; }
+    .hx-svc-new-form .row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    @media (max-width: 720px) { .hx-svc-new-form .row { grid-template-columns: 1fr; } }
+    .hx-svc-new-form .actions { display: flex; gap: 8px; align-items: center; }
+    .hx-svc-new-form .actions .status { margin-left: auto; font-size: 11.5px; color: var(--hx-text-mid); }
 
-    /* Service grid inside a category block — 3 cols → 2 → 1 */
-    .hx-cat-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1px;
-      background: var(--hx-line);
-    }
-    @media (max-width: 980px) { .hx-cat-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 640px) { .hx-cat-grid { grid-template-columns: 1fr; } }
+    /* Empty-state onboarding card — same vibe as the workbench. */
+    .hx-svc-onboard { background: #fff; border: 1px solid var(--hx-line); border-radius: var(--hx-r); padding: 36px 28px; }
+    .hx-svc-onboard h3   { margin: 0 0 6px; font-size: 19px; font-weight: 600; letter-spacing: -0.01em; }
+    .hx-svc-onboard .lede { font-size: 13.5px; color: var(--hx-text-mid); margin: 0 0 22px; line-height: 1.55; max-width: 560px; }
+    .hx-svc-onboard .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 22px; }
+    @media (max-width: 720px) { .hx-svc-onboard .pillars { grid-template-columns: 1fr; } }
+    .hx-svc-pillar { background: var(--hx-bg-2); border: 1px solid var(--hx-line); border-radius: 10px; padding: 14px 16px; }
+    .hx-svc-pillar .tag { font-family: var(--hx-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--hx-text-mid); text-transform: uppercase; margin-bottom: 6px; }
+    .hx-svc-pillar h4  { font-size: 14px; font-weight: 600; margin: 0 0 4px; }
+    .hx-svc-pillar p   { font-size: 12.5px; color: var(--hx-text-mid); margin: 0; line-height: 1.5; }
 
-    .hx-cat-svc {
-      background: var(--hx-surface);
-      padding: 16px 18px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      min-height: 140px;
-      transition: background 0.12s;
-    }
-    .hx-cat-svc:hover { background: var(--hx-bg-2); }
-    .hx-cat-svc-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .hx-cat-svc-name {
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: -0.012em;
-      color: var(--hx-text);
-      margin: 0;
-    }
-    .hx-cat-svc-tag {
-      font-family: var(--hx-mono);
-      font-size: 10.5px;
-      font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 9999px;
-      background: var(--hx-surface);
-      border: 1px solid var(--hx-line);
-      color: var(--hx-text-mid);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .hx-cat-svc-outcome {
-      font-size: 12.5px;
-      line-height: 1.5;
-      color: var(--hx-text-mid);
-      margin: 0;
-      flex: 1;
-    }
-    .hx-cat-svc-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11.5px;
-      font-weight: 500;
-      color: var(--hx-text);
-      margin-top: 2px;
-      align-self: flex-start;
-      border-bottom: 1px solid transparent;
-      padding-bottom: 1px;
-      transition: border-color 0.12s, gap 0.12s;
-    }
-    .hx-cat-svc-link:hover { border-color: var(--hx-text); gap: 6px; }
-    .hx-cat-svc-link::after { content: '→'; font-weight: 400; }
+    .armed { background: #dc2626 !important; color: #fff !important; border-color: #dc2626 !important; }
   </style>
 </head>
 <body data-active="services">
@@ -199,259 +111,381 @@
         <div class="hx-page-head">
           <div>
             <h1>Services.</h1>
-            <p class="sub">Three practices, one delivery team. Every service below ships with a fixed delivery window — scoped and quoted by a senior engineer before any work starts.</p>
+            <p class="sub">Specialised work delivered by the HelveX engineering team — agents, automation, data tooling. Submit a brief, receive a fixed quote within 48 hours, track every status change until delivery.</p>
           </div>
           <div class="hx-page-actions">
-            <a href="/support.html" class="hx-btn hx-btn-secondary">Talk to a strategist</a>
-            <a href="/projects.html?new=1" class="hx-btn hx-btn-primary">Open a brief</a>
+            <button class="hx-btn hx-btn-primary" id="hx-svc-new">+ Request a service</button>
           </div>
         </div>
 
-        <!-- Quick anchor nav -->
-        <nav class="hx-cat-nav" aria-label="Service categories">
-          <a href="#ai">         <span class="dot yellow"></span>  AI &amp; Automation  <span class="count">7</span></a>
-          <a href="#digital">    <span class="dot red"></span>     Digital Services    <span class="count">7</span></a>
-          <a href="#consulting"> <span class="dot emerald"></span> Consulting          <span class="count">5</span></a>
-        </nav>
+        <div class="hx-grid hx-grid-4">
+          <div class="hx-stat"><p class="hx-stat-label">Active</p><p class="hx-stat-value hx-mono" id="hx-svc-active">0</p><p class="hx-stat-meta">In scoping or delivery</p></div>
+          <div class="hx-stat"><p class="hx-stat-label">Awaiting your approval</p><p class="hx-stat-value hx-mono" id="hx-svc-quoted">0</p><p class="hx-stat-meta">Quote received</p></div>
+          <div class="hx-stat"><p class="hx-stat-label">Delivered</p><p class="hx-stat-value hx-mono" id="hx-svc-delivered">0</p><p class="hx-stat-meta">All-time</p></div>
+          <div class="hx-stat"><p class="hx-stat-label">Avg. quote time</p><p class="hx-stat-value" id="hx-svc-avg" style="font-size:16px;">—</p><p class="hx-stat-meta">Submitted → quoted</p></div>
+        </div>
 
-        <!-- ═════════════════════════════════════════════════════════
-             AI & AUTOMATION
-             ═════════════════════════════════════════════════════════ -->
-        <section id="ai" class="hx-cat-block" aria-labelledby="ai-h">
-          <header class="hx-cat-block-head">
-            <div class="hx-cat-block-icon yellow" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 11h.01M15 11h.01"/><path d="M12 7V3"/></svg>
-            </div>
-            <div class="hx-cat-block-text">
-              <h2 id="ai-h">AI &amp; Automation</h2>
-              <p>Custom agents, workflow automation, document &amp; inbox triage, internal copilots, and AI-driven data tooling.</p>
-            </div>
-            <span class="hx-cat-block-count">7 services</span>
-          </header>
-          <div class="hx-cat-grid">
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">Custom AI Agent</h3>
-                <span class="hx-cat-svc-tag">3–4 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Replace a manual workflow with a measurable agent — domain-trained, evals included, monitored from day one.</p>
-              <a href="/projects.html?new=1&amp;service=custom-ai-agent" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">Inbox / Triage Automation</h3>
-                <span class="hx-cat-svc-tag">2 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Cut response times and routing errors on email, ticketing, or form pipelines with a classifier-plus-router stack.</p>
-              <a href="/projects.html?new=1&amp;service=inbox-triage" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">Document Processing Pipeline</h3>
-                <span class="hx-cat-svc-tag">2–3 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Extract structured data from PDFs, scans, and contracts. Confidence scoring with human-in-the-loop on edge cases.</p>
-              <a href="/projects.html?new=1&amp;service=document-pipeline" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">Internal Copilot</h3>
-                <span class="hx-cat-svc-tag">3 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Knowledge assistant grounded in your private docs, with citations, per-team access controls, and audit trail.</p>
-              <a href="/projects.html?new=1&amp;service=internal-copilot" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">Workflow Automation</h3>
-                <span class="hx-cat-svc-tag">1–2 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Connect tools and eliminate manual handoffs. Built on durable queues — retries, idempotency, and observability included.</p>
-              <a href="/projects.html?new=1&amp;service=workflow-automation" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">RAG &amp; Search</h3>
-                <span class="hx-cat-svc-tag">2 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Search across your private knowledge base — embeddings tuned to your domain, hybrid keyword + vector ranking.</p>
-              <a href="/projects.html?new=1&amp;service=rag-search" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">Evaluation &amp; Hardening</h3>
-                <span class="hx-cat-svc-tag">2 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Make an existing model production-grade — eval harness, regression suite, latency budgets, and rollback plan.</p>
-              <a href="/projects.html?new=1&amp;service=eval-hardening" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-          </div>
-        </section>
-
-        <!-- ═════════════════════════════════════════════════════════
-             DIGITAL SERVICES
-             ═════════════════════════════════════════════════════════ -->
-        <section id="digital" class="hx-cat-block" aria-labelledby="digital-h">
-          <header class="hx-cat-block-head">
-            <div class="hx-cat-block-icon red" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-            </div>
-            <div class="hx-cat-block-text">
-              <h2 id="digital-h">Digital Services</h2>
-              <p>Web apps, dashboards, CRM rebuilds, e-commerce, integrations, and internal tools — built and shipped by senior engineers.</p>
-            </div>
-            <span class="hx-cat-block-count">7 services</span>
-          </header>
-          <div class="hx-cat-grid">
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">Web Application</h3>
-                <span class="hx-cat-svc-tag">4–6 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Production app from spec to deploy. Typed end-to-end, observable in production, documented for the next engineer.</p>
-              <a href="/projects.html?new=1&amp;service=web-app" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">Internal Dashboard</h3>
-                <span class="hx-cat-svc-tag">3 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Single source of truth for ops, finance, or leadership — live data, role-based access, exportable everywhere.</p>
-              <a href="/projects.html?new=1&amp;service=dashboard" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">CRM Rebuild / Migration</h3>
-                <span class="hx-cat-svc-tag">4 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Modern CRM tailored to your sales motion. Migrate from a legacy stack without losing history or breaking integrations.</p>
-              <a href="/projects.html?new=1&amp;service=crm-rebuild" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">E-commerce Build</h3>
-                <span class="hx-cat-svc-tag">3–5 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Storefront, payments, fulfillment — clean checkout, inventory sync, and the analytics you need to actually grow.</p>
-              <a href="/projects.html?new=1&amp;service=ecommerce" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">System Integration</h3>
-                <span class="hx-cat-svc-tag">1–2 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Wire two SaaS tools together cleanly — webhooks, retries, dead-letter queue, and a runbook your ops team can read.</p>
-              <a href="/projects.html?new=1&amp;service=integration" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">Marketing Site</h3>
-                <span class="hx-cat-svc-tag">2–3 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Brand-aligned, fast, SEO-ready. Editable by your team without re-deploys, A/B-test ready out of the box.</p>
-              <a href="/projects.html?new=1&amp;service=marketing-site" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">API / Backend Service</h3>
-                <span class="hx-cat-svc-tag">2–4 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Typed, observable, documented. Versioned API with contract tests, OpenAPI schema, and SDK generation.</p>
-              <a href="/projects.html?new=1&amp;service=backend-api" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-          </div>
-        </section>
-
-        <!-- ═════════════════════════════════════════════════════════
-             CONSULTING
-             ═════════════════════════════════════════════════════════ -->
-        <section id="consulting" class="hx-cat-block" aria-labelledby="consulting-h">
-          <header class="hx-cat-block-head">
-            <div class="hx-cat-block-icon emerald" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 17V11M11 17V7M16 17v-9M21 17v-5"/></svg>
-            </div>
-            <div class="hx-cat-block-text">
-              <h2 id="consulting-h">Consulting</h2>
-              <p>AI strategy roadmaps, technical due diligence, architecture reviews, and senior fractional engineering leadership.</p>
-            </div>
-            <span class="hx-cat-block-count">5 services</span>
-          </header>
-          <div class="hx-cat-grid">
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">AI Strategy Roadmap</h3>
-                <span class="hx-cat-svc-tag">2 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">12-month plan with scored use cases, build / buy / partner calls, and a sequencing recommendation your CFO can read.</p>
-              <a href="/projects.html?new=1&amp;service=ai-strategy" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">Technical Due Diligence</h3>
-                <span class="hx-cat-svc-tag">1–2 weeks</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Independent read for investors or boards — codebase, infra, team, dependencies, and a risk register.</p>
-              <a href="/projects.html?new=1&amp;service=tech-dd" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">Architecture Review</h3>
-                <span class="hx-cat-svc-tag">1 week</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Find risk, cost, and scaling issues early — independent assessment with a prioritised remediation plan.</p>
-              <a href="/projects.html?new=1&amp;service=arch-review" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">Fractional Engineering Lead</h3>
-                <span class="hx-cat-svc-tag">Ongoing</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Senior leadership, part-time, hands-on. Embedded with your team for sprint planning, hiring loops, and architecture calls.</p>
-              <a href="/projects.html?new=1&amp;service=fractional-lead" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-
-            <article class="hx-cat-svc">
-              <div class="hx-cat-svc-head">
-                <h3 class="hx-cat-svc-name">Vendor / Model Selection</h3>
-                <span class="hx-cat-svc-tag">1 week</span>
-              </div>
-              <p class="hx-cat-svc-outcome">Cut through hype. Independent shortlist with proof-of-concept budgets and exit-cost analysis for each vendor.</p>
-              <a href="/projects.html?new=1&amp;service=vendor-selection" class="hx-cat-svc-link">Open a brief</a>
-            </article>
-          </div>
-        </section>
-
-        <!-- Closing -->
-        <div class="hx-card" style="margin-top:24px;">
-          <div class="hx-card-head">
+        <!-- New-request form (collapsed by default; revealed by + button) -->
+        <div id="hx-svc-new-form" class="hx-svc-new-form">
+          <div class="row">
             <div>
-              <p class="hx-card-eyebrow">Not sure where to start?</p>
-              <h3>Send us the problem, not the spec.</h3>
+              <label for="hx-svc-type">Service</label>
+              <select id="hx-svc-type">
+                <option value="agents">Custom AI agents</option>
+                <option value="automation">Workflow automation</option>
+                <option value="data">Data tooling / pipelines</option>
+                <option value="copilot">Internal copilot</option>
+                <option value="triage">Document / inbox triage</option>
+                <option value="other">Other (describe below)</option>
+              </select>
             </div>
-            <a href="/projects.html?new=1" class="hx-btn hx-btn-primary">Open a brief</a>
+            <div>
+              <label for="hx-svc-budget">Budget band</label>
+              <select id="hx-svc-budget">
+                <option value="open">Open / discuss with us</option>
+                <option value="<5k">Under €5,000</option>
+                <option value="5-15k">€5,000 – €15,000</option>
+                <option value="15-50k">€15,000 – €50,000</option>
+                <option value="50k+">€50,000+</option>
+              </select>
+            </div>
+            <div>
+              <label for="hx-svc-start">Preferred start</label>
+              <input type="date" id="hx-svc-start" />
+            </div>
           </div>
-          <p class="desc">Describe what's broken or what you'd like to be true. A senior engineer will write the scope back to you within one business day, with a delivery window and a clear quote.</p>
+          <label for="hx-svc-brief">Brief</label>
+          <textarea id="hx-svc-brief" placeholder="What outcome are you after? Who's the user? What does success look like in 6 weeks? Any constraints (stack, compliance, integrations)?" maxlength="4000"></textarea>
+          <div class="actions">
+            <button class="hx-btn hx-btn-primary" id="hx-svc-submit">Submit request</button>
+            <button class="hx-btn hx-btn-ghost"   id="hx-svc-cancel">Cancel</button>
+            <span id="hx-svc-status-msg" class="status"></span>
+          </div>
         </div>
+
+        <div id="hx-svc-grid" class="hx-svc-grid"></div>
 
       </main>
     </div>
   </div>
 
   <script src="/platform.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      function whenAuthReady(fn) {
+        if (window.HX && window.HX.auth) { fn(); return; }
+        document.addEventListener('hx:auth-ready', fn, { once: true });
+      }
+      function $(id) { return document.getElementById(id); }
+      function esc(s) { return (s == null ? '' : String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+      var SERVICE_LABEL = {
+        agents:     'Custom AI agents',
+        automation: 'Workflow automation',
+        data:       'Data tooling',
+        copilot:    'Internal copilot',
+        triage:     'Document / inbox triage',
+        other:      'Custom request',
+      };
+      var STATUS_LABEL = {
+        submitted:   'Submitted',
+        scoping:     'Scoping',
+        quoted:      'Quote ready',
+        approved:    'Approved',
+        in_progress: 'In progress',
+        delivered:   'Delivered',
+        cancelled:   'Cancelled',
+      };
+
+      function fmtDate(iso) {
+        if (!iso) return '—';
+        try { return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }); }
+        catch (e) { return '—'; }
+      }
+      function fmtTime(iso) {
+        if (!iso) return '';
+        try { return new Date(iso).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+        catch (e) { return ''; }
+      }
+      function relTime(iso) {
+        if (!iso) return '—';
+        var diff = (Date.now() - new Date(iso).getTime()) / 1000;
+        if (diff < 60) return 'just now';
+        if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+        if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+        return Math.floor(diff/86400) + 'd ago';
+      }
+      function fmtMoney(n, ccy) {
+        if (n == null) return '—';
+        try { return new Intl.NumberFormat(undefined, { style: 'currency', currency: ccy || 'EUR', maximumFractionDigits: 0 }).format(n); }
+        catch (e) { return (ccy || 'EUR') + ' ' + n; }
+      }
+
+      var state = { requests: [], events: {}, openId: null, sb: null, owner: null };
+
+      function renderStats() {
+        var active    = state.requests.filter(function (r) { return ['submitted','scoping','approved','in_progress'].indexOf(r.status) > -1; }).length;
+        var quoted    = state.requests.filter(function (r) { return r.status === 'quoted'; }).length;
+        var delivered = state.requests.filter(function (r) { return r.status === 'delivered'; }).length;
+        $('hx-svc-active').textContent    = active;
+        $('hx-svc-quoted').textContent    = quoted;
+        $('hx-svc-delivered').textContent = delivered;
+
+        // Average submitted → quoted duration (in hours), across requests
+        // that have actually been quoted. Single-request average is fine.
+        var quoteHrs = state.requests
+          .filter(function (r) { return r.quote_at && r.created_at; })
+          .map(function (r) { return (new Date(r.quote_at) - new Date(r.created_at)) / 3600000; });
+        if (quoteHrs.length) {
+          var avg = quoteHrs.reduce(function (a, b) { return a + b; }, 0) / quoteHrs.length;
+          $('hx-svc-avg').textContent = avg < 24 ? Math.round(avg) + 'h' : (avg/24).toFixed(1) + 'd';
+        } else {
+          $('hx-svc-avg').textContent = '—';
+        }
+      }
+
+      function renderOnboarding(host) {
+        host.innerHTML = ''
+          + '<div class="hx-svc-onboard">'
+          +   '<h3>No requests yet.</h3>'
+          +   '<p class="lede">Three practices, one delivery team. Describe what you want built, we scope and quote within 48 hours, and every status change shows up here until delivery.</p>'
+          +   '<div class="pillars">'
+          +     '<div class="hx-svc-pillar"><div class="tag">Practice 01</div><h4>AI & agents</h4><p>Custom agents, internal copilots, retrieval over your own data, voice / phone agents.</p></div>'
+          +     '<div class="hx-svc-pillar"><div class="tag">Practice 02</div><h4>Automation</h4><p>Workflow automation, document and inbox triage, daily digests, lead enrichment.</p></div>'
+          +     '<div class="hx-svc-pillar"><div class="tag">Practice 03</div><h4>Data tooling</h4><p>Pipelines, dashboards, ETL, AI-driven analysis, internal reporting surfaces.</p></div>'
+          +   '</div>'
+          +   '<button class="hx-btn hx-btn-primary" id="hx-svc-empty-new">+ Request your first service</button>'
+          + '</div>';
+        var b = $('hx-svc-empty-new'); if (b) b.addEventListener('click', openNewForm);
+      }
+
+      function renderGrid() {
+        var host = $('hx-svc-grid');
+        if (!state.requests.length) { renderOnboarding(host); return; }
+
+        host.innerHTML = state.requests.map(function (r) {
+          var isOpen = r.id === state.openId;
+          var evts = state.events[r.id] || [];
+          return ''
+            + '<div class="hx-svc-card' + (isOpen ? ' open' : '') + '" data-id="' + esc(r.id) + '">'
+            +   '<div class="hx-svc-head">'
+            +     '<div>'
+            +       '<h3 class="hx-svc-title">' + esc(SERVICE_LABEL[r.service_type] || r.service_type) + '</h3>'
+            +       '<div class="hx-svc-meta" style="margin-top:6px;">'
+            +         '<span class="hx-svc-type">' + esc(r.service_type) + '</span>'
+            +         '<span class="hx-svc-status ' + esc(r.status) + '">' + esc(STATUS_LABEL[r.status] || r.status) + '</span>'
+            +         '<span>Submitted ' + relTime(r.created_at) + '</span>'
+            +         (r.quote_amount != null ? '<span>· Quote ' + esc(fmtMoney(r.quote_amount, r.quote_currency)) + '</span>' : '')
+            +       '</div>'
+            +     '</div>'
+            +   '</div>'
+            +   (isOpen ? '' : '<div class="hx-svc-preview">' + esc(r.scope_brief || '') + '</div>')
+            +   '<div class="hx-svc-body">'
+            +     '<div class="hx-svc-detail-grid">'
+            +       '<div class="hx-svc-block">'
+            +         '<h4>Brief</h4>'
+            +         '<p>' + esc(r.scope_brief || '—') + '</p>'
+            +       '</div>'
+            +       '<div class="hx-svc-block">'
+            +         '<h4>Scope & quote</h4>'
+            +         '<div class="kv"><span>Budget</span><span>' + esc(r.budget_band || 'open') + '</span></div>'
+            +         '<div class="kv"><span>Preferred start</span><span>' + esc(fmtDate(r.preferred_start)) + '</span></div>'
+            +         '<div class="kv"><span>Quote</span><span>' + esc(r.quote_amount != null ? fmtMoney(r.quote_amount, r.quote_currency) : 'Pending') + '</span></div>'
+            +         '<div class="kv"><span>Status</span><span>' + esc(STATUS_LABEL[r.status] || r.status) + '</span></div>'
+            +       '</div>'
+            +     '</div>'
+            +     '<div class="hx-svc-timeline">'
+            +       buildTimeline(r, evts)
+            +     '</div>'
+            +     '<div class="actions" style="display:flex;gap:8px;margin-top:14px;">'
+            +       (r.status === 'quoted'
+                      ? '<button class="hx-btn hx-btn-primary hx-btn-sm" data-role="approve">Approve quote</button>'
+                      : '')
+            +       (['delivered','cancelled'].indexOf(r.status) === -1
+                      ? '<button class="hx-btn hx-btn-danger hx-btn-sm" data-role="cancel">Cancel request</button>'
+                      : '')
+            +       '<button class="hx-btn hx-btn-ghost hx-btn-sm" data-role="close" style="margin-left:auto;">Close</button>'
+            +       '<span class="status" data-role="status"></span>'
+            +     '</div>'
+            +   '</div>'
+            + '</div>';
+        }).join('');
+
+        host.querySelectorAll('.hx-svc-card').forEach(function (card) {
+          var id = card.getAttribute('data-id');
+          card.addEventListener('click', function (e) {
+            if (e.target.closest('[data-role]')) return;
+            state.openId = state.openId === id ? null : id;
+            if (state.openId && !state.events[state.openId]) loadEvents(state.openId);
+            renderGrid();
+          });
+          var close = card.querySelector('[data-role="close"]');
+          if (close) close.addEventListener('click', function () { state.openId = null; renderGrid(); });
+          var approve = card.querySelector('[data-role="approve"]');
+          if (approve) approve.addEventListener('click', function () { approveQuote(card, id); });
+          var cancel = card.querySelector('[data-role="cancel"]');
+          if (cancel) cancel.addEventListener('click', function () { cancelRequest(card, id, cancel); });
+        });
+      }
+
+      // Synthesise a baseline timeline from request lifecycle timestamps
+      // (created/quoted/approved/started/delivered/cancelled) and merge
+      // any additional event rows the team has posted.
+      function buildTimeline(r, evts) {
+        var line = [];
+        line.push({ ts: r.created_at, msg: 'Request submitted.', kind: 'system' });
+        if (r.quote_at)     line.push({ ts: r.quote_at,     msg: 'Quote sent: ' + fmtMoney(r.quote_amount, r.quote_currency) + '.', kind: 'team' });
+        if (r.approved_at)  line.push({ ts: r.approved_at,  msg: 'You approved the quote.', kind: 'customer' });
+        if (r.started_at)   line.push({ ts: r.started_at,   msg: 'Work started.', kind: 'team' });
+        if (r.delivered_at) line.push({ ts: r.delivered_at, msg: 'Delivered.', kind: 'team' });
+        if (r.cancelled_at) line.push({ ts: r.cancelled_at, msg: 'Request cancelled.', kind: 'system' });
+        (evts || []).forEach(function (e) {
+          var msg = (e.payload && e.payload.message)
+            ? e.payload.message
+            : (e.kind === 'status_change'
+                ? 'Status changed to ' + (STATUS_LABEL[(e.payload || {}).to] || (e.payload || {}).to)
+                : e.kind);
+          line.push({ ts: e.created_at, msg: msg, kind: e.actor_kind });
+        });
+        line.sort(function (a, b) { return new Date(a.ts) - new Date(b.ts); });
+        if (!line.length) return '<p style="font-size:12px;color:var(--hx-text-mid);">No events yet.</p>';
+        return line.map(function (e) {
+          return '<div class="hx-svc-evt ' + esc(e.kind) + '">'
+            +    '<div class="ts">' + esc(fmtTime(e.ts)) + '</div>'
+            +    '<div class="msg">' + esc(e.msg) + '</div>'
+            +  '</div>';
+        }).join('');
+      }
+
+      async function loadEvents(reqId) {
+        var r = await state.sb.from('service_request_events')
+          .select('*').eq('request_id', reqId).order('created_at', { ascending: true });
+        if (!r.error) {
+          state.events[reqId] = r.data || [];
+          renderGrid();
+        }
+      }
+
+      async function refresh() {
+        var r = await state.sb.from('service_requests_public').select('*').order('created_at', { ascending: false });
+        if (r.error) { console.error('[services] load:', r.error); return; }
+        state.requests = r.data || [];
+        renderStats();
+        renderGrid();
+      }
+
+      function openNewForm() {
+        $('hx-svc-brief').value = '';
+        $('hx-svc-type').value = 'agents';
+        $('hx-svc-budget').value = 'open';
+        $('hx-svc-start').value = '';
+        $('hx-svc-new-form').classList.add('open');
+        setTimeout(function () { $('hx-svc-brief').focus(); }, 30);
+      }
+      function closeNewForm() {
+        $('hx-svc-new-form').classList.remove('open');
+        $('hx-svc-status-msg').textContent = '';
+      }
+
+      async function submitRequest() {
+        var brief  = ($('hx-svc-brief').value || '').trim();
+        var type   = $('hx-svc-type').value;
+        var budget = $('hx-svc-budget').value;
+        var start  = $('hx-svc-start').value || null;
+        if (brief.length < 20) {
+          $('hx-svc-status-msg').textContent = 'Brief must be at least 20 characters.';
+          return;
+        }
+        var btn = $('hx-svc-submit');
+        btn.disabled = true; btn.textContent = 'Submitting…';
+        try {
+          var ins = await state.sb.from('service_requests').insert({
+            owner_id: state.owner,
+            service_type: type,
+            scope_brief: brief,
+            budget_band: budget,
+            preferred_start: start,
+          }).select().single();
+          if (ins.error) throw ins.error;
+          closeNewForm();
+          await refresh();
+          state.openId = ins.data.id;
+          renderGrid();
+        } catch (err) {
+          $('hx-svc-status-msg').textContent = (err && err.message) || 'Submit failed.';
+        } finally {
+          btn.disabled = false; btn.textContent = 'Submit request';
+        }
+      }
+
+      async function approveQuote(card, id) {
+        var status = card.querySelector('[data-role="status"]');
+        status.textContent = 'Approving…';
+        // Customer-side approval — the team will then move to in_progress.
+        var r = await state.sb.from('service_requests')
+          .update({ status: 'approved', approved_at: new Date().toISOString() })
+          .eq('id', id);
+        if (r.error) { status.textContent = r.error.message; return; }
+        await state.sb.from('service_request_events').insert({
+          request_id: id, actor_kind: 'customer', actor_id: state.owner,
+          kind: 'status_change', payload: { to: 'approved', message: 'You approved the quote — work can start.' },
+        });
+        status.textContent = 'Approved.';
+        await refresh();
+      }
+
+      async function cancelRequest(card, id, btn) {
+        if (btn.dataset.armed !== '1') {
+          btn.dataset.armed = '1';
+          btn.dataset.original = btn.textContent;
+          btn.textContent = 'Click again to cancel';
+          btn.classList.add('armed');
+          setTimeout(function () {
+            if (btn.dataset.armed === '1') {
+              btn.dataset.armed = ''; btn.classList.remove('armed');
+              btn.textContent = btn.dataset.original || 'Cancel request';
+            }
+          }, 3000);
+          return;
+        }
+        btn.dataset.armed = ''; btn.classList.remove('armed');
+        var status = card.querySelector('[data-role="status"]');
+        status.textContent = 'Cancelling…';
+        var r = await state.sb.from('service_requests')
+          .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
+          .eq('id', id);
+        if (r.error) { status.textContent = r.error.message; return; }
+        await state.sb.from('service_request_events').insert({
+          request_id: id, actor_kind: 'customer', actor_id: state.owner,
+          kind: 'status_change', payload: { to: 'cancelled', message: 'Request cancelled.' },
+        });
+        await refresh();
+      }
+
+      whenAuthReady(async function () {
+        state.sb = window.HX.supabase;
+        var u = (await state.sb.auth.getUser()).data.user;
+        if (!u) return;
+        state.owner = u.id;
+
+        $('hx-svc-new').addEventListener('click', openNewForm);
+        $('hx-svc-cancel').addEventListener('click', closeNewForm);
+        $('hx-svc-submit').addEventListener('click', submitRequest);
+
+        // Realtime — when the HelveX team updates a request (status,
+        // quote, etc.), the customer's view reflects it immediately
+        // without a page reload.
+        state.sb.channel('hx-svc-' + u.id)
+          .on('postgres_changes',
+              { event: '*', schema: 'public', table: 'service_requests', filter: 'owner_id=eq.' + u.id },
+              function () { refresh(); })
+          .subscribe();
+
+        await refresh();
+      });
+    })();
+  </script>
 </body>
 </html>

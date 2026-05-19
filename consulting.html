@@ -4,277 +4,98 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Consulting — HelveX</title>
-  <meta name="description" content="HelveX Consulting plans — Business Strategy, Business Plan, and Strategy Call engagements." />
+  <meta name="description" content="Book consulting sessions with the HelveX team. Pick a tier, propose times, get a confirmed call in under 48 hours." />
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://yjmpallrtpeinpdilptj.supabase.co" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
   <style>
-    /* ─── Plan grid ───────────────────────────────────────────── */
-    .hx-plans-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      max-width: 1080px;
-      margin-bottom: 120px;       /* room for the sticky CTA */
-    }
-    @media (max-width: 900px) {
-      .hx-plans-grid { grid-template-columns: 1fr; }
-    }
+    /* Consulting workspace — functional booking, not a brochure.
+       Layout mirrors /services and /workbench: stats row, inline new-
+       booking form, then list separating Upcoming from Past so the
+       call you actually have on Thursday is impossible to miss. */
+    .hx-con-section h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--hx-text-mid); margin: 22px 0 10px; font-family: var(--hx-mono); }
+    .hx-con-grid { display: flex; flex-direction: column; gap: 10px; }
+    .hx-con-card { background: #fff; border: 1px solid var(--hx-line); border-radius: var(--hx-r); padding: 16px 18px; cursor: pointer; transition: border-color 0.12s; }
+    .hx-con-card:hover { border-color: var(--hx-text-mid); }
+    .hx-con-card.open { border-color: var(--hx-text); }
 
-    /* Plan card itself — a button so it's accessible by default. */
-    .hx-plan {
-      position: relative;
-      text-align: left;
-      background: var(--hx-surface);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r-lg);
-      padding: 26px 24px 22px;
-      cursor: pointer;
-      transition:
-        transform   0.18s cubic-bezier(.2,.8,.2,1),
-        box-shadow  0.22s cubic-bezier(.2,.8,.2,1),
-        border-color 0.18s,
-        background  0.18s;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      font-family: inherit;
-      color: inherit;
-      width: 100%;
-    }
-    .hx-plan:hover {
-      transform: translateY(-2px);
-      border-color: var(--hx-line-strong);
-      box-shadow: 0 6px 22px -10px rgba(0,0,0,0.10), 0 1px 0 rgba(0,0,0,0.02);
-    }
-    .hx-plan:focus-visible {
-      outline: none;
-      border-color: var(--hx-text);
-      box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
-    }
-    .hx-plan.is-selected {
-      border-color: var(--hx-text);
-      background: var(--hx-bg-2);
-      box-shadow:
-        0 10px 30px -12px rgba(0,0,0,0.18),
-        0 0 0 1px var(--hx-text) inset;
-      transform: translateY(-2px);
-    }
+    .hx-con-head  { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .hx-con-when  { font-size: 14.5px; font-weight: 600; color: var(--hx-text); margin: 0; letter-spacing: -0.005em; }
+    .hx-con-when small { display: block; font-size: 11.5px; font-weight: 500; color: var(--hx-text-mid); margin-top: 3px; }
+    .hx-con-meta  { display: flex; align-items: center; gap: 8px; flex-shrink: 0; font-family: var(--hx-mono); font-size: 11px; color: var(--hx-text-mid); }
 
-    /* "Most Popular" badge sits above the card and looks like a pill */
-    .hx-plan-popular-mark {
-      position: absolute;
-      top: -11px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--hx-text);
-      color: #FFF;
-      font-size: 10.5px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 999px;
-      pointer-events: none;
-      white-space: nowrap;
+    .hx-con-tier {
+      padding: 2px 8px; border-radius: 5px;
+      font-family: var(--hx-mono); font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em;
     }
-    .hx-plan.is-popular { border-color: var(--hx-text); }
+    .hx-con-tier.strategic { background: rgba(124,58,237,0.10); color: #6d28d9; }
+    .hx-con-tier.growth    { background: rgba(34,197,94,0.12);  color: #15803d; }
+    .hx-con-tier.ops       { background: rgba(245,158,11,0.14); color: #92400e; }
 
-    /* Header row: name + tier tag */
-    .hx-plan-head {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      gap: 8px;
+    .hx-con-status {
+      padding: 2px 8px; border-radius: 5px;
+      font-family: var(--hx-mono); font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--hx-cream); color: var(--hx-text-mid);
     }
-    .hx-plan-name {
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: -0.012em;
-      color: var(--hx-text);
-      margin: 0;
-    }
-    .hx-plan-tier {
-      font-family: var(--hx-mono);
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--hx-text-dim);
-      padding: 3px 7px;
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-      border-radius: 4px;
-      white-space: nowrap;
-    }
+    .hx-con-status.requested  { background: rgba(15,15,16,0.08);    color: var(--hx-text); }
+    .hx-con-status.scheduling { background: rgba(59,130,246,0.12);  color: #1d4ed8; }
+    .hx-con-status.confirmed  { background: rgba(34,197,94,0.14);   color: #15803d; }
+    .hx-con-status.completed  { background: rgba(15,15,16,0.06);    color: var(--hx-text-mid); }
+    .hx-con-status.cancelled  { background: rgba(220,38,38,0.10);   color: #991b1b; }
 
-    /* Big price */
-    .hx-plan-price {
-      display: flex; align-items: baseline; gap: 6px;
-      margin-top: 4px;
-    }
-    .hx-plan-currency {
-      font-family: var(--hx-mono);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--hx-text-dim);
-      letter-spacing: 0.04em;
-    }
-    .hx-plan-amount {
-      font-size: 38px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--hx-text);
-      line-height: 1;
-    }
-    .hx-plan-amount-meta {
-      font-size: 12px;
-      color: var(--hx-text-dim);
-      align-self: flex-end;
-      margin-bottom: 4px;
-      margin-left: 4px;
-    }
+    .hx-con-preview { font-size: 12.5px; color: var(--hx-text-mid); margin-top: 8px; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .hx-con-body { margin-top: 14px; display: none; }
+    .hx-con-card.open .hx-con-body { display: block; }
+    .hx-con-card.open .hx-con-preview { display: none; }
 
-    .hx-plan-desc {
-      font-size: 13px;
-      line-height: 1.6;
-      color: var(--hx-text-mid);
-      margin: 0;
-    }
+    .hx-con-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) { .hx-con-detail { grid-template-columns: 1fr; } }
+    .hx-con-block { background: var(--hx-bg-2); border: 1px solid var(--hx-line); border-radius: 10px; padding: 14px 16px; }
+    .hx-con-block h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--hx-text-mid); margin: 0 0 8px; font-family: var(--hx-mono); }
+    .hx-con-block p { font-size: 13px; line-height: 1.55; margin: 0; color: var(--hx-text); white-space: pre-wrap; }
+    .hx-con-block .kv { display: flex; gap: 8px; margin-bottom: 4px; font-size: 12.5px; }
+    .hx-con-block .kv span:first-child { color: var(--hx-text-mid); min-width: 95px; }
+    .hx-con-block .kv span:last-child  { color: var(--hx-text); font-weight: 500; }
+    .hx-con-block .slot { display: inline-block; padding: 5px 9px; border: 1px solid var(--hx-line); border-radius: 8px; font-size: 12px; margin: 2px 4px 2px 0; font-family: var(--hx-mono); }
 
-    /* Bullet list */
-    .hx-plan-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      border-top: 1px solid var(--hx-line);
-      padding-top: 14px;
-    }
-    .hx-plan-list li {
-      display: flex; align-items: flex-start; gap: 8px;
-      font-size: 13px; line-height: 1.5;
-      color: var(--hx-text-mid);
-    }
-    .hx-plan-list li svg {
-      width: 14px; height: 14px;
-      color: var(--hx-text-mid);
-      flex-shrink: 0; margin-top: 2px;
-    }
-    .hx-plan.is-selected .hx-plan-list li svg { color: var(--hx-text); }
+    .hx-con-cta { display: inline-flex; align-items: center; gap: 6px; background: var(--hx-text); color: #fff; padding: 9px 14px; border-radius: 9px; font-size: 13px; font-weight: 600; text-decoration: none; }
+    .hx-con-cta:hover { opacity: 0.9; }
 
-    /* In-card CTA — turns into "Selected" when active */
-    .hx-plan-cta {
-      margin-top: 4px;
-      width: 100%;
-      display: inline-flex; align-items: center; justify-content: center;
-      gap: 8px;
-      padding: 10px 14px;
-      background: transparent;
-      color: var(--hx-text);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r-sm);
-      font: inherit;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-      pointer-events: none;            /* the whole card is the click target */
+    .hx-con-new-form { background: #fff; border: 1px solid var(--hx-line); border-radius: var(--hx-r); padding: 18px 20px; margin-bottom: 14px; display: none; }
+    .hx-con-new-form.open { display: block; }
+    .hx-con-new-form label { display: block; font-size: 11.5px; font-weight: 600; color: var(--hx-text-mid); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; font-family: var(--hx-mono); }
+    .hx-con-new-form input, .hx-con-new-form textarea, .hx-con-new-form select {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--hx-line);
+      border-radius: 10px; font: inherit; font-size: 13.5px; background: #fff;
+      outline: none; margin-bottom: 12px;
     }
-    .hx-plan:hover .hx-plan-cta {
-      border-color: var(--hx-text);
-      background: var(--hx-bg-2);
-    }
-    .hx-plan.is-selected .hx-plan-cta {
-      background: var(--hx-text);
-      color: #FFF;
-      border-color: var(--hx-text);
-    }
-    .hx-plan-cta-icon {
-      width: 14px; height: 14px;
-      opacity: 0;
-      transform: translateX(-4px) scale(0.8);
-      transition: opacity 0.18s, transform 0.18s;
-    }
-    .hx-plan.is-selected .hx-plan-cta-icon {
-      opacity: 1;
-      transform: translateX(0) scale(1);
-    }
+    .hx-con-new-form textarea { min-height: 90px; font-family: var(--hx-sans); line-height: 1.5; resize: vertical; }
+    .hx-con-new-form .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    @media (max-width: 720px) { .hx-con-new-form .row3 { grid-template-columns: 1fr; } }
+    .hx-con-slots-list { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .hx-con-slots-list .slot { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border: 1px solid var(--hx-line); border-radius: 999px; font-size: 12px; background: var(--hx-bg-2); font-family: var(--hx-mono); }
+    .hx-con-slots-list .slot button { all: unset; cursor: pointer; color: var(--hx-text-mid); font-size: 14px; line-height: 1; }
+    .hx-con-add-slot { display: flex; gap: 8px; align-items: flex-end; }
+    .hx-con-add-slot input[type="datetime-local"] { flex: 1; margin-bottom: 0; }
+    .hx-con-actions { display: flex; gap: 8px; align-items: center; }
+    .hx-con-actions .status { margin-left: auto; font-size: 11.5px; color: var(--hx-text-mid); }
 
-    /* ─── Sticky checkout bar (revealed once a plan is selected) ─ */
-    .hx-checkout-bar {
-      position: fixed;
-      left: 50%;
-      transform: translate(-50%, calc(100% + 24px));
-      bottom: 24px;
-      background: var(--hx-text);
-      color: #FFF;
-      border-radius: 999px;
-      padding: 10px 12px 10px 22px;
-      box-shadow:
-        0 18px 40px -12px rgba(0,0,0,0.35),
-        0 4px 14px -8px rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      transition: transform 0.32s cubic-bezier(.2,.8,.2,1), opacity 0.2s;
-      opacity: 0;
-      z-index: 50;
-      max-width: calc(100% - 32px);
-    }
-    .hx-checkout-bar.is-visible {
-      transform: translate(-50%, 0);
-      opacity: 1;
-    }
-    .hx-checkout-bar-summary {
-      display: flex; flex-direction: column;
-      font-size: 12px;
-      color: rgba(255,255,255,0.65);
-    }
-    .hx-checkout-bar-name {
-      color: #FFF;
-      font-weight: 500;
-      font-size: 13px;
-    }
-    .hx-checkout-bar-cta {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 9px 18px;
-      background: #FFF;
-      color: var(--hx-text);
-      border: none;
-      border-radius: 999px;
-      font: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform 0.15s ease;
-      text-decoration: none;
-    }
-    .hx-checkout-bar-cta:hover { transform: scale(1.02); }
-    .hx-checkout-bar-cta svg { width: 14px; height: 14px; }
-    .hx-checkout-bar-amount {
-      font-family: var(--hx-mono);
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
+    .hx-con-onboard { background: #fff; border: 1px solid var(--hx-line); border-radius: var(--hx-r); padding: 36px 28px; }
+    .hx-con-onboard h3 { margin: 0 0 6px; font-size: 19px; font-weight: 600; }
+    .hx-con-onboard .lede { font-size: 13.5px; color: var(--hx-text-mid); margin: 0 0 22px; max-width: 580px; line-height: 1.55; }
+    .hx-con-onboard .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 22px; }
+    @media (max-width: 720px) { .hx-con-onboard .tiers { grid-template-columns: 1fr; } }
+    .hx-con-tile { background: var(--hx-bg-2); border: 1px solid var(--hx-line); border-radius: 10px; padding: 14px 16px; }
+    .hx-con-tile .tag { font-family: var(--hx-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--hx-text-mid); margin-bottom: 6px; text-transform: uppercase; }
+    .hx-con-tile h4 { font-size: 14px; font-weight: 600; margin: 0 0 4px; }
+    .hx-con-tile p  { font-size: 12.5px; color: var(--hx-text-mid); margin: 0; line-height: 1.5; }
 
-    @media (max-width: 600px) {
-      .hx-checkout-bar {
-        left: 12px; right: 12px;
-        bottom: 12px;
-        max-width: none;
-        transform: translateY(calc(100% + 24px));
-        border-radius: 16px;
-        padding: 12px 14px;
-        flex-direction: row;
-        justify-content: space-between;
-      }
-      .hx-checkout-bar.is-visible { transform: translateY(0); }
-      .hx-checkout-bar-cta { padding: 10px 14px; font-size: 12.5px; }
-      .hx-plan-amount { font-size: 32px; }
-    }
+    .armed { background: #dc2626 !important; color: #fff !important; border-color: #dc2626 !important; }
   </style>
 </head>
 <body data-active="consulting">
@@ -288,180 +109,406 @@
         <div class="hx-page-head">
           <div>
             <h1>Consulting.</h1>
-            <p class="sub">Senior advisory engagements for founders and operators. Pick a plan, scope it on a 30-minute call, get a fixed quote within 48 hours.</p>
+            <p class="sub">30, 60, or 90-minute calls with senior operators. Pick a tier, propose times, get a confirmed slot with a calendar link — usually within 24 hours.</p>
+          </div>
+          <div class="hx-page-actions">
+            <button class="hx-btn hx-btn-primary" id="hx-con-new">+ Book a session</button>
           </div>
         </div>
 
-        <!-- Plan grid -->
-        <div class="hx-plans-grid" role="radiogroup" aria-label="Consulting plans" id="hx-plans">
+        <div class="hx-grid hx-grid-4">
+          <div class="hx-stat"><p class="hx-stat-label">Upcoming</p><p class="hx-stat-value hx-mono" id="hx-con-upcoming">0</p><p class="hx-stat-meta">Confirmed in the future</p></div>
+          <div class="hx-stat"><p class="hx-stat-label">Awaiting confirm</p><p class="hx-stat-value hx-mono" id="hx-con-pending">0</p><p class="hx-stat-meta">Requested · scheduling</p></div>
+          <div class="hx-stat"><p class="hx-stat-label">Completed</p><p class="hx-stat-value hx-mono" id="hx-con-done">0</p><p class="hx-stat-meta">All-time</p></div>
+          <div class="hx-stat"><p class="hx-stat-label">Next session</p><p class="hx-stat-value" id="hx-con-next" style="font-size:15px;">—</p><p class="hx-stat-meta" id="hx-con-next-meta">No call scheduled</p></div>
+        </div>
 
-          <button type="button" class="hx-plan" role="radio" aria-checked="false"
-                  data-slug="business-strategy" data-name="Business Strategy" data-amount="499">
-            <div class="hx-plan-head">
-              <h2 class="hx-plan-name">Business Strategy</h2>
-              <span class="hx-plan-tier">Engagement 01</span>
+        <div id="hx-con-new-form" class="hx-con-new-form">
+          <div class="row3">
+            <div>
+              <label for="hx-con-tier">Plan tier</label>
+              <select id="hx-con-tier">
+                <option value="strategic">Strategic — direction &amp; positioning</option>
+                <option value="growth">Growth — distribution &amp; monetisation</option>
+                <option value="ops">Ops — execution &amp; systems</option>
+              </select>
             </div>
-            <div class="hx-plan-price">
-              <span class="hx-plan-currency">CHF</span>
-              <span class="hx-plan-amount">499</span>
-              <span class="hx-plan-amount-meta">one-time</span>
+            <div>
+              <label for="hx-con-duration">Duration</label>
+              <select id="hx-con-duration">
+                <option value="30">30 minutes</option>
+                <option value="60" selected>60 minutes</option>
+                <option value="90">90 minutes</option>
+              </select>
             </div>
-            <p class="hx-plan-desc">Long-term direction for your venture: positioning, market thesis, and the few decisions that compound.</p>
-            <ul class="hx-plan-list">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Strategic direction</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Market positioning</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Growth roadmap</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Executive advisory</li>
-            </ul>
-            <span class="hx-plan-cta">
-              <svg class="hx-plan-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              <span class="hx-plan-cta-label">Select Plan</span>
-            </span>
-          </button>
+            <div>
+              <label for="hx-con-tz">Timezone</label>
+              <input type="text" id="hx-con-tz" readonly />
+            </div>
+          </div>
 
-          <button type="button" class="hx-plan is-popular" role="radio" aria-checked="false"
-                  data-slug="business-plan" data-name="Business Plan" data-amount="399">
-            <span class="hx-plan-popular-mark">Most Popular</span>
-            <div class="hx-plan-head">
-              <h2 class="hx-plan-name">Business Plan</h2>
-              <span class="hx-plan-tier">Engagement 02</span>
-            </div>
-            <div class="hx-plan-price">
-              <span class="hx-plan-currency">CHF</span>
-              <span class="hx-plan-amount">399</span>
-              <span class="hx-plan-amount-meta">one-time</span>
-            </div>
-            <p class="hx-plan-desc">Investor-ready document covering the company, the market, the financial model, and the execution roadmap.</p>
-            <ul class="hx-plan-list">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Investor-ready documentation</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Financial projections</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Execution roadmap</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Market analysis</li>
-            </ul>
-            <span class="hx-plan-cta">
-              <svg class="hx-plan-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              <span class="hx-plan-cta-label">Select Plan</span>
-            </span>
-          </button>
+          <label for="hx-con-agenda">Agenda</label>
+          <textarea id="hx-con-agenda" placeholder="What do you want to walk out of the call having decided? Drop any links / context the operator should review beforehand." maxlength="2000"></textarea>
 
-          <button type="button" class="hx-plan" role="radio" aria-checked="false"
-                  data-slug="strategy-call" data-name="Strategy Call" data-amount="199">
-            <div class="hx-plan-head">
-              <h2 class="hx-plan-name">Strategy Call</h2>
-              <span class="hx-plan-tier">Engagement 03</span>
-            </div>
-            <div class="hx-plan-price">
-              <span class="hx-plan-currency">CHF</span>
-              <span class="hx-plan-amount">199</span>
-              <span class="hx-plan-amount-meta">one-time</span>
-            </div>
-            <p class="hx-plan-desc">A focused 60-minute call with a senior advisor — bring your three biggest questions, leave with a written action plan and clear next steps.</p>
-            <ul class="hx-plan-list">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>60-minute strategy call</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Pre-call intake form</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Written action plan</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>7-day email follow-up</li>
-            </ul>
-            <span class="hx-plan-cta">
-              <svg class="hx-plan-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              <span class="hx-plan-cta-label">Select Plan</span>
-            </span>
-          </button>
+          <label>Preferred slots (propose 2–4 times)</label>
+          <div id="hx-con-slots-list" class="hx-con-slots-list"></div>
+          <div class="hx-con-add-slot">
+            <input type="datetime-local" id="hx-con-slot-input" />
+            <button class="hx-btn hx-btn-secondary" id="hx-con-add-slot" type="button">Add slot</button>
+          </div>
 
+          <div class="hx-con-actions" style="margin-top:14px;">
+            <button class="hx-btn hx-btn-primary" id="hx-con-submit">Request booking</button>
+            <button class="hx-btn hx-btn-ghost"   id="hx-con-cancel-new">Cancel</button>
+            <span id="hx-con-status-msg" class="status"></span>
+          </div>
+        </div>
+
+        <div id="hx-con-upcoming-section" class="hx-con-section">
+          <h2>Upcoming</h2>
+          <div id="hx-con-grid-upcoming" class="hx-con-grid"></div>
+        </div>
+        <div id="hx-con-past-section" class="hx-con-section">
+          <h2>Past sessions</h2>
+          <div id="hx-con-grid-past" class="hx-con-grid"></div>
         </div>
 
       </main>
     </div>
   </div>
 
-  <!-- Sticky checkout bar — revealed once a plan is selected -->
-  <div class="hx-checkout-bar" id="hx-checkout-bar" role="region" aria-label="Selected plan">
-    <div class="hx-checkout-bar-summary">
-      <span>Selected plan</span>
-      <span class="hx-checkout-bar-name" id="hx-checkout-bar-name">—</span>
-    </div>
-    <a class="hx-checkout-bar-cta" id="hx-checkout-bar-cta" href="#">
-      <span>Continue to Checkout</span>
-      <span aria-hidden="true">·</span>
-      <span class="hx-checkout-bar-amount" id="hx-checkout-bar-amount">CHF —</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-    </a>
-  </div>
-
   <script src="/platform.js"></script>
   <script>
     (function () {
-      // The plan catalogue is mirrored server-side in the
-      // create-checkout-session Edge Function — never trust the
-      // client-side data attributes for actual billing.
-      var STORAGE_KEY = 'hx.consulting.selectedPlan';
+      'use strict';
 
-      var grid = document.getElementById('hx-plans');
-      var bar  = document.getElementById('hx-checkout-bar');
-      var barName   = document.getElementById('hx-checkout-bar-name');
-      var barAmount = document.getElementById('hx-checkout-bar-amount');
-      var barCta    = document.getElementById('hx-checkout-bar-cta');
-      var plans     = grid.querySelectorAll('.hx-plan');
+      function whenAuthReady(fn) {
+        if (window.HX && window.HX.auth) { fn(); return; }
+        document.addEventListener('hx:auth-ready', fn, { once: true });
+      }
+      function $(id) { return document.getElementById(id); }
+      function esc(s) { return (s == null ? '' : String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-      var selected = null;
+      var TIER_LABEL = { strategic: 'Strategic', growth: 'Growth', ops: 'Ops' };
+      var STATUS_LABEL = {
+        requested:  'Requested',
+        scheduling: 'Scheduling',
+        confirmed:  'Confirmed',
+        completed:  'Completed',
+        cancelled:  'Cancelled',
+      };
 
-      function selectPlan(card) {
-        plans.forEach(function (c) {
-          var on = c === card;
-          c.classList.toggle('is-selected', on);
-          c.setAttribute('aria-checked', on ? 'true' : 'false');
-          var label = c.querySelector('.hx-plan-cta-label');
-          if (label) label.textContent = on ? 'Selected' : 'Select Plan';
-        });
-
-        selected = {
-          slug:   card.getAttribute('data-slug'),
-          name:   card.getAttribute('data-name'),
-          amount: parseInt(card.getAttribute('data-amount'), 10),
-          currency: 'CHF',
-        };
-
-        barName.textContent   = selected.name;
-        barAmount.textContent = 'CHF ' + selected.amount;
-        barCta.setAttribute('href', '/checkout/' + selected.slug);
-        bar.classList.add('is-visible');
-
+      function fmtSlot(iso) {
+        if (!iso) return '—';
         try {
-          sessionStorage.setItem(STORAGE_KEY, JSON.stringify(selected));
-        } catch (e) { /* private mode etc — non-fatal */ }
+          return new Date(iso).toLocaleString(undefined, {
+            weekday: 'short', month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit',
+          });
+        } catch (e) { return iso; }
+      }
+      function relTime(iso) {
+        if (!iso) return '—';
+        var diff = (Date.now() - new Date(iso).getTime()) / 1000;
+        if (Math.abs(diff) < 60) return 'just now';
+        if (diff > 0) {
+          if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+          if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+          return Math.floor(diff/86400) + 'd ago';
+        }
+        var ahead = -diff;
+        if (ahead < 3600) return 'in ' + Math.floor(ahead/60) + 'm';
+        if (ahead < 86400) return 'in ' + Math.floor(ahead/3600) + 'h';
+        return 'in ' + Math.floor(ahead/86400) + 'd';
       }
 
-      // Click + keyboard activation on each card.
-      plans.forEach(function (card) {
-        card.addEventListener('click', function () { selectPlan(card); });
-        card.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            selectPlan(card);
-          }
+      var state = { bookings: [], openId: null, sb: null, owner: null, proposedSlots: [] };
+
+      function renderStats() {
+        var now = Date.now();
+        var upcoming = state.bookings.filter(function (b) {
+          return b.status === 'confirmed' && b.confirmed_slot && new Date(b.confirmed_slot).getTime() > now;
         });
-      });
+        var pending = state.bookings.filter(function (b) {
+          return b.status === 'requested' || b.status === 'scheduling';
+        });
+        var done = state.bookings.filter(function (b) { return b.status === 'completed'; });
 
-      // Persist + intercept the CTA click so we always carry the
-      // selection through the navigation. The href is the source of
-      // truth — sessionStorage is just so checkout.html can render
-      // immediately without re-running price logic.
-      barCta.addEventListener('click', function (e) {
-        if (!selected) { e.preventDefault(); return; }
-        try {
-          sessionStorage.setItem(STORAGE_KEY, JSON.stringify(selected));
-        } catch (err) { /* ignore */ }
-      });
+        $('hx-con-upcoming').textContent = upcoming.length;
+        $('hx-con-pending').textContent  = pending.length;
+        $('hx-con-done').textContent     = done.length;
 
-      // If the user lands here with a previously-selected plan in
-      // sessionStorage (e.g. came back from /checkout), pre-select it.
-      try {
-        var prev = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || 'null');
-        if (prev && prev.slug) {
-          var c = grid.querySelector('.hx-plan[data-slug="' + prev.slug + '"]');
-          if (c) selectPlan(c);
+        var next = upcoming
+          .slice()
+          .sort(function (a, b) { return new Date(a.confirmed_slot) - new Date(b.confirmed_slot); })[0];
+        if (next) {
+          $('hx-con-next').textContent = fmtSlot(next.confirmed_slot);
+          $('hx-con-next-meta').textContent = TIER_LABEL[next.plan_tier] + ' · ' + next.duration_minutes + 'min · ' + relTime(next.confirmed_slot);
+        } else {
+          $('hx-con-next').textContent = '—';
+          $('hx-con-next-meta').textContent = 'No call scheduled';
         }
-      } catch (e) { /* ignore */ }
+      }
+
+      function renderOnboarding(host) {
+        host.innerHTML = ''
+          + '<div class="hx-con-onboard">'
+          +   '<h3>No sessions yet.</h3>'
+          +   '<p class="lede">Pick a tier, share your agenda, propose 2–4 times that work for you, and an operator confirms one within 24 hours. The confirmed slot lands here with a calendar link.</p>'
+          +   '<div class="tiers">'
+          +     '<div class="hx-con-tile"><div class="tag">Strategic</div><h4>Direction</h4><p>Positioning, market thesis, go/no-go on the big decisions that compound.</p></div>'
+          +     '<div class="hx-con-tile"><div class="tag">Growth</div><h4>Distribution</h4><p>Channels, monetisation, pricing experiments, retention loops.</p></div>'
+          +     '<div class="hx-con-tile"><div class="tag">Ops</div><h4>Execution</h4><p>Internal systems, hiring, processes that turn a chaotic week into a calm one.</p></div>'
+          +   '</div>'
+          +   '<button class="hx-btn hx-btn-primary" id="hx-con-empty-new">+ Book your first session</button>'
+          + '</div>';
+        var b = $('hx-con-empty-new'); if (b) b.addEventListener('click', openNewForm);
+      }
+
+      function cardHTML(b) {
+        var isOpen = b.id === state.openId;
+        var slots = Array.isArray(b.preferred_slots) ? b.preferred_slots : [];
+        return ''
+          + '<div class="hx-con-card' + (isOpen ? ' open' : '') + '" data-id="' + esc(b.id) + '">'
+          +   '<div class="hx-con-head">'
+          +     '<div>'
+          +       '<h3 class="hx-con-when">'
+          +         (b.confirmed_slot ? esc(fmtSlot(b.confirmed_slot)) : 'Awaiting confirmation')
+          +         '<small>' + esc(TIER_LABEL[b.plan_tier] || b.plan_tier) + ' · ' + esc(String(b.duration_minutes)) + ' minutes · requested ' + esc(relTime(b.created_at)) + '</small>'
+          +       '</h3>'
+          +     '</div>'
+          +     '<div class="hx-con-meta">'
+          +       '<span class="hx-con-tier ' + esc(b.plan_tier) + '">' + esc(b.plan_tier) + '</span>'
+          +       '<span class="hx-con-status ' + esc(b.status) + '">' + esc(STATUS_LABEL[b.status] || b.status) + '</span>'
+          +     '</div>'
+          +   '</div>'
+          +   (isOpen ? '' : '<div class="hx-con-preview">' + esc(b.agenda || '') + '</div>')
+          +   '<div class="hx-con-body">'
+          +     '<div class="hx-con-detail">'
+          +       '<div class="hx-con-block">'
+          +         '<h4>Agenda</h4>'
+          +         '<p>' + esc(b.agenda || '—') + '</p>'
+          +       '</div>'
+          +       '<div class="hx-con-block">'
+          +         '<h4>Details</h4>'
+          +         '<div class="kv"><span>Plan tier</span><span>' + esc(TIER_LABEL[b.plan_tier] || b.plan_tier) + '</span></div>'
+          +         '<div class="kv"><span>Duration</span><span>' + esc(String(b.duration_minutes)) + ' minutes</span></div>'
+          +         '<div class="kv"><span>Timezone</span><span>' + esc(b.timezone || '—') + '</span></div>'
+          +         '<div class="kv"><span>Status</span><span>' + esc(STATUS_LABEL[b.status] || b.status) + '</span></div>'
+          +         '<div class="kv"><span>Confirmed slot</span><span>' + esc(b.confirmed_slot ? fmtSlot(b.confirmed_slot) : 'Pending') + '</span></div>'
+          +       '</div>'
+          +     '</div>'
+          +     (slots.length ? '<div class="hx-con-block" style="margin-top:14px;"><h4>Your proposed times</h4>'
+                + slots.map(function (s) { return '<span class="slot">' + esc(fmtSlot(s)) + '</span>'; }).join('')
+                + '</div>' : '')
+          +     (b.notes ? '<div class="hx-con-block" style="margin-top:14px;"><h4>Notes from the operator</h4><p>' + esc(b.notes) + '</p></div>' : '')
+          +     '<div class="hx-con-actions" style="display:flex;gap:8px;margin-top:14px;">'
+          +       (b.status === 'confirmed' && b.meeting_url
+                    ? '<a class="hx-con-cta" href="' + esc(b.meeting_url) + '" target="_blank" rel="noopener noreferrer">Join meeting →</a>'
+                    : '')
+          +       (['completed','cancelled'].indexOf(b.status) === -1
+                    ? '<button class="hx-btn hx-btn-danger hx-btn-sm" data-role="cancel">Cancel booking</button>'
+                    : '')
+          +       '<button class="hx-btn hx-btn-ghost hx-btn-sm" data-role="close" style="margin-left:auto;">Close</button>'
+          +       '<span class="status" data-role="status"></span>'
+          +     '</div>'
+          +   '</div>'
+          + '</div>';
+      }
+
+      function renderGrid() {
+        var now = Date.now();
+        var upcoming = state.bookings.filter(function (b) {
+          if (['cancelled','completed'].indexOf(b.status) > -1) return false;
+          if (b.status === 'confirmed' && b.confirmed_slot) {
+            return new Date(b.confirmed_slot).getTime() > now;
+          }
+          return true; // requested / scheduling
+        }).sort(function (a, b) {
+          var ax = a.confirmed_slot ? new Date(a.confirmed_slot) : new Date(a.created_at);
+          var bx = b.confirmed_slot ? new Date(b.confirmed_slot) : new Date(b.created_at);
+          return ax - bx;
+        });
+        var past = state.bookings.filter(function (b) {
+          if (b.status === 'cancelled') return true;
+          if (b.status === 'completed') return true;
+          if (b.status === 'confirmed' && b.confirmed_slot && new Date(b.confirmed_slot).getTime() <= now) return true;
+          return false;
+        }).sort(function (a, b) {
+          var ax = a.confirmed_slot ? new Date(a.confirmed_slot) : new Date(a.created_at);
+          var bx = b.confirmed_slot ? new Date(b.confirmed_slot) : new Date(b.created_at);
+          return bx - ax;
+        });
+
+        var upHost = $('hx-con-grid-upcoming');
+        var pastHost = $('hx-con-grid-past');
+
+        if (!upcoming.length && !past.length) {
+          $('hx-con-upcoming-section').style.display = 'block';
+          $('hx-con-past-section').style.display = 'none';
+          renderOnboarding(upHost);
+        } else {
+          $('hx-con-upcoming-section').style.display = 'block';
+          $('hx-con-past-section').style.display = past.length ? 'block' : 'none';
+          upHost.innerHTML   = upcoming.length ? upcoming.map(cardHTML).join('')
+                                              : '<div class="hx-con-onboard" style="padding:24px 22px;"><p class="lede" style="margin:0;">No upcoming sessions. Use <b>+ Book a session</b> above to schedule one.</p></div>';
+          pastHost.innerHTML = past.map(cardHTML).join('');
+        }
+
+        document.querySelectorAll('.hx-con-card').forEach(function (card) {
+          var id = card.getAttribute('data-id');
+          card.addEventListener('click', function (e) {
+            if (e.target.closest('[data-role]') || e.target.closest('a')) return;
+            state.openId = state.openId === id ? null : id;
+            renderGrid();
+          });
+          var close = card.querySelector('[data-role="close"]');
+          if (close) close.addEventListener('click', function () { state.openId = null; renderGrid(); });
+          var cancel = card.querySelector('[data-role="cancel"]');
+          if (cancel) cancel.addEventListener('click', function () { cancelBooking(card, id, cancel); });
+        });
+      }
+
+      async function refresh() {
+        var r = await state.sb.from('consulting_bookings').select('*').order('created_at', { ascending: false });
+        if (r.error) { console.error('[consulting] load:', r.error); return; }
+        state.bookings = r.data || [];
+        renderStats();
+        renderGrid();
+      }
+
+      function renderSlots() {
+        var host = $('hx-con-slots-list');
+        if (!state.proposedSlots.length) {
+          host.innerHTML = '<span style="font-size:12px;color:var(--hx-text-mid);">No times added yet — add at least one below.</span>';
+          return;
+        }
+        host.innerHTML = state.proposedSlots.map(function (iso, idx) {
+          return '<span class="slot" data-idx="' + idx + '">'
+            + esc(fmtSlot(iso))
+            + '<button type="button" aria-label="Remove" data-idx="' + idx + '">×</button>'
+            + '</span>';
+        }).join('');
+        host.querySelectorAll('button').forEach(function (b) {
+          b.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var idx = +b.getAttribute('data-idx');
+            state.proposedSlots.splice(idx, 1);
+            renderSlots();
+          });
+        });
+      }
+
+      function addSlot() {
+        var v = $('hx-con-slot-input').value;
+        if (!v) return;
+        var iso = new Date(v).toISOString();
+        if (new Date(iso).getTime() < Date.now()) {
+          $('hx-con-status-msg').textContent = 'Pick a time in the future.';
+          return;
+        }
+        if (state.proposedSlots.indexOf(iso) > -1) return;
+        if (state.proposedSlots.length >= 6) {
+          $('hx-con-status-msg').textContent = 'Maximum 6 slots.';
+          return;
+        }
+        state.proposedSlots.push(iso);
+        state.proposedSlots.sort();
+        $('hx-con-slot-input').value = '';
+        $('hx-con-status-msg').textContent = '';
+        renderSlots();
+      }
+
+      function openNewForm() {
+        state.proposedSlots = [];
+        $('hx-con-tier').value = 'strategic';
+        $('hx-con-duration').value = '60';
+        $('hx-con-agenda').value = '';
+        $('hx-con-slot-input').value = '';
+        try { $('hx-con-tz').value = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (_) { $('hx-con-tz').value = ''; }
+        $('hx-con-status-msg').textContent = '';
+        renderSlots();
+        $('hx-con-new-form').classList.add('open');
+        setTimeout(function () { $('hx-con-agenda').focus(); }, 30);
+      }
+      function closeNewForm() {
+        $('hx-con-new-form').classList.remove('open');
+        $('hx-con-status-msg').textContent = '';
+      }
+
+      async function submitBooking() {
+        var agenda = ($('hx-con-agenda').value || '').trim();
+        if (agenda.length < 10) { $('hx-con-status-msg').textContent = 'Agenda required (at least 10 characters).'; return; }
+        if (!state.proposedSlots.length) { $('hx-con-status-msg').textContent = 'Add at least one preferred time.'; return; }
+
+        var btn = $('hx-con-submit');
+        btn.disabled = true; btn.textContent = 'Submitting…';
+        try {
+          var ins = await state.sb.from('consulting_bookings').insert({
+            owner_id: state.owner,
+            plan_tier: $('hx-con-tier').value,
+            duration_minutes: parseInt($('hx-con-duration').value, 10),
+            agenda: agenda,
+            preferred_slots: state.proposedSlots,
+            timezone: $('hx-con-tz').value || null,
+          }).select().single();
+          if (ins.error) throw ins.error;
+          closeNewForm();
+          await refresh();
+          state.openId = ins.data.id;
+          renderGrid();
+        } catch (err) {
+          $('hx-con-status-msg').textContent = (err && err.message) || 'Submit failed.';
+        } finally {
+          btn.disabled = false; btn.textContent = 'Request booking';
+        }
+      }
+
+      async function cancelBooking(card, id, btn) {
+        if (btn.dataset.armed !== '1') {
+          btn.dataset.armed = '1';
+          btn.dataset.original = btn.textContent;
+          btn.textContent = 'Click again to cancel';
+          btn.classList.add('armed');
+          setTimeout(function () {
+            if (btn.dataset.armed === '1') {
+              btn.dataset.armed = ''; btn.classList.remove('armed');
+              btn.textContent = btn.dataset.original || 'Cancel booking';
+            }
+          }, 3000);
+          return;
+        }
+        btn.dataset.armed = ''; btn.classList.remove('armed');
+        var status = card.querySelector('[data-role="status"]');
+        status.textContent = 'Cancelling…';
+        var r = await state.sb.from('consulting_bookings').update({ status: 'cancelled' }).eq('id', id);
+        if (r.error) { status.textContent = r.error.message; return; }
+        await refresh();
+      }
+
+      whenAuthReady(async function () {
+        state.sb = window.HX.supabase;
+        var u = (await state.sb.auth.getUser()).data.user;
+        if (!u) return;
+        state.owner = u.id;
+
+        $('hx-con-new').addEventListener('click', openNewForm);
+        $('hx-con-cancel-new').addEventListener('click', closeNewForm);
+        $('hx-con-submit').addEventListener('click', submitBooking);
+        $('hx-con-add-slot').addEventListener('click', addSlot);
+        $('hx-con-slot-input').addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); addSlot(); }
+        });
+
+        // Realtime — confirmed slot / meeting URL arrives without reload
+        state.sb.channel('hx-con-' + u.id)
+          .on('postgres_changes',
+              { event: '*', schema: 'public', table: 'consulting_bookings', filter: 'owner_id=eq.' + u.id },
+              function () { refresh(); })
+          .subscribe();
+
+        await refresh();
+      });
     })();
   </script>
 </body>
