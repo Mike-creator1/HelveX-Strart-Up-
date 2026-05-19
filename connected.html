@@ -12,26 +12,54 @@
   <link rel="stylesheet" href="/platform.css" />
   <style>
     .hx-provider {
-      display: flex; align-items: center; gap: 14px;
-      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 16px; align-items: center;
+      padding: 18px 20px;
       border-top: 1px solid var(--hx-line);
     }
     .hx-provider:first-child { border-top: 0; }
     .hx-provider .logo {
-      width: 38px; height: 38px; border-radius: var(--hx-r);
+      width: 44px; height: 44px; border-radius: var(--hx-r);
       background: var(--hx-bg-2); border: 1px solid var(--hx-line);
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-    .hx-provider .body { flex: 1; min-width: 0; }
+    .hx-provider .body { min-width: 0; }
     .hx-provider .body .name {
-      font-size: 14px; font-weight: 600; color: var(--hx-text);
-      display: flex; align-items: center; gap: 8px;
+      font-size: 14.5px; font-weight: 600; color: var(--hx-text);
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
     }
     .hx-provider .body .sub {
-      font-size: 12px; color: var(--hx-text-mid); margin-top: 2px;
+      font-size: 12.5px; color: var(--hx-text-mid); margin-top: 3px;
     }
-    .hx-provider .action { flex-shrink: 0; }
+    .hx-provider .body .meta {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-top: 6px;
+      font-size: 11.5px; color: var(--hx-text-dim);
+      font-family: var(--hx-mono);
+    }
+    .hx-provider .body .meta b {
+      font-weight: 500; color: var(--hx-text-mid); font-family: 'Inter', sans-serif;
+    }
+    .hx-provider .action { display: flex; gap: 8px; flex-shrink: 0; }
+
+    .hx-warn-banner {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 18px;
+      background: rgba(252, 211, 77, 0.10);
+      border: 1px solid rgba(181, 130, 26, 0.30);
+      border-radius: var(--hx-r);
+      margin-bottom: 14px;
+    }
+    .hx-warn-banner .ico {
+      width: 22px; height: 22px;
+      color: var(--hx-yellow-deep);
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .hx-warn-banner .body { flex: 1; min-width: 0; }
+    .hx-warn-banner .body .t { font-size: 13.5px; font-weight: 600; color: var(--hx-text); }
+    .hx-warn-banner .body .d { font-size: 12.5px; color: var(--hx-text-mid); margin-top: 3px; }
   </style>
 </head>
 <body data-active="connected">
@@ -74,6 +102,10 @@
             <p class="hx-stat-meta">HelveX never reads provider data</p>
           </div>
         </div>
+
+        <!-- Backup-method banner — appears when only one sign-in method
+             exists, so the user gets a single-click prompt to harden. -->
+        <div id="hx-conn-banner-host"></div>
 
         <div class="hx-section-head">
           <h2>Providers</h2>
@@ -160,16 +192,63 @@
         }
       ];
 
-      function renderProviders(linkedMap, primaryEmail, hasPassword) {
+      function renderBanner(totalMethods, hasPassword, primaryProvider) {
+        var host = $('hx-conn-banner-host');
+        if (totalMethods >= 2) { host.innerHTML = ''; return; }
+        var title, desc, action;
+        if (!hasPassword && primaryProvider) {
+          title = 'You sign in with ' + primaryProvider + ' only.';
+          desc  = 'Set a password too — that way if you lose access to ' + primaryProvider + ', you can still get into HelveX without contacting support.';
+          action = '<a href="/forgot-password" class="hx-btn hx-btn-primary hx-btn-sm">Set a password</a>';
+        } else if (hasPassword && totalMethods === 1) {
+          title = 'You only have a password.';
+          desc  = 'Connect Google, GitHub, or Apple as a backup. Then a forgotten password is one click away from being recovered.';
+          action = '<a href="#hx-conn-providers" class="hx-btn hx-btn-primary hx-btn-sm">Add a provider</a>';
+        } else {
+          host.innerHTML = ''; return;
+        }
+        host.innerHTML =
+          '<div class="hx-warn-banner">' +
+            '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
+            '<div class="body">' +
+              '<div class="t">' + escape(title) + '</div>' +
+              '<div class="d">' + escape(desc) + '</div>' +
+            '</div>' +
+            '<div style="flex-shrink:0;">' + action + '</div>' +
+          '</div>';
+      }
+
+      function renderProviders(linkedMap, primaryEmail, hasPassword, lastSignInProvider) {
         var host = $('hx-conn-providers');
+        var totalMethods = Object.keys(linkedMap).length + (hasPassword ? 1 : 0);
         var html = PROVIDERS.map(function (p) {
           var linked = linkedMap[p.id];
           var since = linked && linked.created_at ? fmtDate(linked.created_at) : '';
           var linkedEmail = linked && (linked.identity_data && (linked.identity_data.email || linked.identity_data.sub)) || (linked ? primaryEmail : '');
-          // If this is the ONLY sign-in method, block unlink to prevent
-          // the lock-out case.
-          var totalMethods = Object.keys(linkedMap).length + (hasPassword ? 1 : 0);
           var isLast = linked && totalMethods <= 1;
+          var isPrimary = linked && (p.id === lastSignInProvider);
+
+          var nameRow = escape(p.name);
+          if (linked) {
+            nameRow += ' <span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Connected</span>';
+            if (isPrimary) nameRow += ' <span class="hx-badge hx-badge-yellow">Primary</span>';
+          } else {
+            nameRow += ' <span class="hx-badge hx-badge-neutral">Not connected</span>';
+          }
+
+          var subRow = linked
+            ? escape(linkedEmail || '—')
+            : escape(p.tagline);
+
+          var metaRow = '';
+          if (linked) {
+            metaRow = '<div class="meta">' +
+              (since ? '<span><b>Connected</b> ' + escape(since) + '</span>' : '') +
+              '<span><b>Provider ID</b> ' + escape((linked.id || '').slice(0, 8) + '…') + '</span>' +
+              '<span><b>Scope</b> openid · email · profile</span>' +
+            '</div>';
+          }
+
           var actionBtn = linked
             ? '<button class="hx-btn hx-btn-secondary hx-btn-sm" data-act="unlink" data-id="' + p.id + '"' + (isLast ? ' disabled title="Set a password first — you can\'t remove your only sign-in method."' : '') + '>Disconnect</button>'
             : '<button class="hx-btn hx-btn-primary hx-btn-sm" data-act="link" data-id="' + p.id + '">Connect</button>';
@@ -177,15 +256,9 @@
           return '<div class="hx-provider" data-id="' + p.id + '">' +
               '<div class="logo">' + p.logo + '</div>' +
               '<div class="body">' +
-                '<div class="name">' + escape(p.name) +
-                  (linked ? ' <span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Connected</span>' : ' <span class="hx-badge hx-badge-neutral">Not connected</span>') +
-                '</div>' +
-                '<div class="sub">' +
-                  (linked
-                    ? escape(linkedEmail || '—') + (since ? ' · linked ' + escape(since) : '')
-                    : escape(p.tagline)
-                  ) +
-                '</div>' +
+                '<div class="name">' + nameRow + '</div>' +
+                '<div class="sub">' + subRow + '</div>' +
+                metaRow +
               '</div>' +
               '<div class="action">' + actionBtn + '</div>' +
             '</div>';
@@ -210,6 +283,15 @@
           var emailIdentity = identities.find(function (i) { return i.provider === 'email'; });
           var primaryEmail = (emailIdentity && emailIdentity.identity_data && emailIdentity.identity_data.email) || u.email || '';
 
+          // The provider used to start this session — surfaced as "Primary".
+          var lastSignInProvider = (u.app_metadata && u.app_metadata.provider) || (hasPassword ? 'email' : null);
+          // Show the friendly name in the banner ("Google" not "google").
+          var primaryProviderName = (function () {
+            if (!lastSignInProvider || lastSignInProvider === 'email') return null;
+            var match = PROVIDERS.find(function (p) { return p.id === lastSignInProvider; });
+            return match ? match.name : (lastSignInProvider.charAt(0).toUpperCase() + lastSignInProvider.slice(1));
+          })();
+
           var totalMethods = Object.keys(linkedMap).length + (hasPassword ? 1 : 0);
           $('hx-conn-count').textContent = String(totalMethods);
           $('hx-conn-count-meta').textContent = totalMethods === 1
@@ -219,7 +301,8 @@
           $('hx-conn-pwd').style.color = hasPassword ? '#15803d' : 'var(--hx-text-dim)';
           $('hx-conn-pwd-meta').textContent = hasPassword ? 'Email + password sign-in' : 'OAuth-only account';
 
-          renderProviders(linkedMap, primaryEmail, hasPassword);
+          renderBanner(totalMethods, hasPassword, primaryProviderName);
+          renderProviders(linkedMap, primaryEmail, hasPassword, lastSignInProvider);
         }
 
         async function linkProvider(id) {

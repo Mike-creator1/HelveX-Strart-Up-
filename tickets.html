@@ -237,6 +237,9 @@
 
         function renderTickets(rows) {
           var host = $('hx-tk-host');
+          // Keep the row data accessible to the click handler so it can
+          // build the expanded section in-place without another query.
+          window.__hxTickets = rows;
           $('hx-tk-meta').textContent = rows.length + (rows.length === 1 ? ' ticket' : ' tickets');
           var openCount = rows.filter(function (r) { return r.status === 'open' || r.status === 'pending'; }).length;
           $('hx-tk-stat-open').textContent = openCount;
@@ -255,10 +258,13 @@
             return;
           }
 
+          // Preserve window scroll so realtime repaints don't visually
+          // jerk the page back to the top.
+          var savedScroll = window.scrollY;
+
           var html = '<div class="hx-card" style="padding:0;overflow:hidden;">';
           rows.forEach(function (r) {
             var isOpen = !!expanded[r.id];
-            var thread = eventsCache[r.id] || [];
             html += '<div class="hx-ticket" data-id="' + r.id + '">' +
               '<div class="head">' +
                 '<div style="flex:1;min-width:0;">' +
@@ -276,31 +282,16 @@
                   statusBadge(r.status) +
                 '</div>' +
               '</div>' +
-              (isOpen
-                ? '<div class="body">' + escape(r.message || '') + '</div>' +
-                  (thread.length > 1
-                    ? '<div class="thread">' + thread.filter(function (e) { return e.kind !== 'opened'; }).map(function (e) {
-                        return '<div class="evt">' +
-                          '<div class="dot"></div>' +
-                          '<div style="flex:1;min-width:0;">' +
-                            '<span class="label">' + escape(e.kind.replace(/_/g, ' ')) + '</span> · ' +
-                            '<span class="hx-mono" style="font-size:11.5px;color:var(--hx-text-dim);">' + escape(relTime(e.created_at)) + '</span>' +
-                            (e.body ? '<div style="margin-top:4px;color:var(--hx-text);">' + escape(e.body) + '</div>' : '') +
-                          '</div>' +
-                        '</div>';
-                      }).join('') + '</div>'
-                    : '') +
-                  '<div style="margin-top:12px;display:flex;gap:8px;">' +
-                    (r.status !== 'closed'
-                      ? '<button class="hx-btn hx-btn-secondary hx-btn-sm" data-act="close" data-id="' + r.id + '">Close this ticket</button>'
-                      : '') +
-                  '</div>'
-                : ''
-              ) +
+              (isOpen ? expandedHtml(r, eventsCache[r.id]) : '') +
             '</div>';
           });
           html += '</div>';
           host.innerHTML = html;
+
+          // Restore scroll synchronously so the user never sees a jump.
+          if (savedScroll && Math.abs(window.scrollY - savedScroll) > 4) {
+            window.scrollTo({ top: savedScroll, behavior: 'instant' });
+          }
         }
 
         async function refresh() {
@@ -414,7 +405,36 @@
           }
         });
 
-        // Expand/collapse + close action
+        // Build just the expanded body for one ticket — used for in-place
+        // toggle so we don't have to wipe and rebuild the whole list
+        // (which threw away the user's scroll position on every click).
+        function expandedHtml(row, threadRows) {
+          var thread = (threadRows || []).filter(function (e) { return e.kind !== 'opened'; });
+          var html = '<div class="body">' + escape(row.message || '') + '</div>';
+          if (thread.length) {
+            html += '<div class="thread">' + thread.map(function (e) {
+              return '<div class="evt">' +
+                '<div class="dot"></div>' +
+                '<div style="flex:1;min-width:0;">' +
+                  '<span class="label">' + escape(e.kind.replace(/_/g, ' ')) + '</span> · ' +
+                  '<span class="hx-mono" style="font-size:11.5px;color:var(--hx-text-dim);">' + escape(relTime(e.created_at)) + '</span>' +
+                  (e.body ? '<div style="margin-top:4px;color:var(--hx-text);">' + escape(e.body) + '</div>' : '') +
+                '</div>' +
+              '</div>';
+            }).join('') + '</div>';
+          }
+          if (row.status !== 'closed') {
+            html += '<div style="margin-top:12px;display:flex;gap:8px;">' +
+              '<button class="hx-btn hx-btn-secondary hx-btn-sm" data-act="close" data-id="' + row.id + '">Close this ticket</button>' +
+            '</div>';
+          }
+          return '<div data-expanded="1">' + html + '</div>';
+        }
+
+        // Expand/collapse + close action — fully in-place, NO refresh()
+        // call on user clicks. refresh() only runs on initial load,
+        // realtime events, and after submitting a new ticket. This is
+        // what kept resetting the page to the top after every click.
         $('hx-tk-host').addEventListener('click', async function (e) {
           var btn = e.target.closest && e.target.closest('button[data-act]');
           if (btn) {
@@ -443,7 +463,7 @@
                   ticket_id: id, owner_id: u.id, kind: 'closed_by_owner', body: null
                 });
                 await sb.rpc('log_event', { p_kind: 'support.ticket_closed', p_payload: { id: parseInt(id, 10) } });
-                await refresh();
+                // The realtime subscription will repaint; no manual call.
               } catch (err) {
                 alert((err && err.message) || 'Could not close.');
                 btn.disabled = false; btn.textContent = btn.dataset.original || 'Close this ticket';
@@ -451,17 +471,32 @@
             }
             return;
           }
+          // Ignore clicks on links inside the row (status / docs cards
+          // aren't here, but be defensive).
+          if (e.target.closest && e.target.closest('a')) return;
           var row = e.target.closest('.hx-ticket');
           if (!row) return;
           var rid = row.getAttribute('data-id');
-          expanded[rid] = !expanded[rid];
-          // If newly opened, fetch the thread.
-          if (expanded[rid] && !eventsCache[rid]) {
+          var existing = row.querySelector('[data-expanded="1"]');
+          if (existing) {
+            // Collapse: drop the expanded section in place. Scroll stays put.
+            existing.remove();
+            expanded[rid] = false;
+            return;
+          }
+          // Expand: fetch thread if not cached, then insert the section
+          // at the end of the row. Window scroll is untouched.
+          expanded[rid] = true;
+          if (!eventsCache[rid]) {
             var ev = await sb.from('support_ticket_events')
               .select('*').eq('ticket_id', rid).order('created_at', { ascending: true });
             eventsCache[rid] = ev.data || [];
           }
-          await refresh();
+          // Find the source row in the data so we have the original
+          // message body to render.
+          var src = (window.__hxTickets || []).find(function (t) { return String(t.id) === String(rid); });
+          if (!src) return;
+          row.insertAdjacentHTML('beforeend', expandedHtml(src, eventsCache[rid]));
         });
 
         // Realtime — team replies / status changes show up immediately.
