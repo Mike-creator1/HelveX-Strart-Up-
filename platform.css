@@ -85,7 +85,7 @@ html[data-theme="dark"] img { filter: brightness(0.95); }
   --hx-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
   /* Layout */
-  --hx-sidebar-w:   244px;
+  --hx-sidebar-w:   256px;     /* +12 to breathe the bigger items */
   --hx-topbar-h:    48px;
 }
 
@@ -319,17 +319,19 @@ code { font-family: var(--hx-mono); font-size: 0.92em; }
 }
 .hx-nav-section + .hx-nav-section { margin-top: 10px; }
 
-/* Premium section label — gradient text + accent dot + fade-out line */
+/* Premium section label — gradient text + accent dot + fade-out line.
+   Bumped from 10→11.5px and tightened padding so labels read cleanly
+   above the larger nav items below. */
 .hx-nav-label {
   position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 10px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  padding: 12px 10px 8px;
+  padding: 14px 12px 8px;
   margin: 0;
   color: var(--hx-text-mid);
   background: linear-gradient(110deg, var(--hx-text-mid) 0%, var(--hx-text) 100%);
@@ -355,20 +357,23 @@ code { font-family: var(--hx-mono); font-size: 0.92em; }
   -webkit-text-fill-color: initial;
 }
 
-/* Nav item — premium hover with shimmer sweep + icon slide */
+/* Nav item — premium hover with shimmer sweep + icon slide.
+   User feedback: items felt cramped and small. Bumped:
+     font 13 → 14.5, padding 5/10 → 9/12, line 18 → 20, gap 9 → 11.
+   Net row height ≈ 38px (was ≈ 28px) — Vercel/Linear scale. */
 .hx-nav-item {
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 5px 10px;
-  font-size: 13px;
+  gap: 11px;
+  padding: 9px 12px;
+  font-size: 14.5px;
   font-weight: 500;
   color: var(--hx-text-mid);
-  border-radius: var(--hx-r-sm);
+  border-radius: var(--hx-r);
   transition: background 0.18s, color 0.18s;
   cursor: pointer;
   position: relative;
-  line-height: 18px;
+  line-height: 20px;
   overflow: hidden;
 
   /* Items inherit reveal from parent .hx-nav-section.is-revealed */
@@ -402,11 +407,11 @@ code { font-family: var(--hx-mono); font-size: 0.92em; }
 .hx-nav-item:hover::after { transform: translateX(110%); }
 
 .hx-nav-item svg {
-  width: 14px;
-  height: 14px;
+  width: 17px;
+  height: 17px;
   flex-shrink: 0;
   opacity: 0.85;
-  stroke-width: 1.55;
+  stroke-width: 1.6;
   transition: opacity 0.18s, transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .hx-nav-item:hover {
