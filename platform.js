@@ -91,12 +91,23 @@
     {
       label: 'Account',
       items: [
-        // Profile merged into Settings (was 5 fields the user touched
-        // once at signup and never again).
-        { id: 'team',     href: '/team.html',     label: 'Team',     icon: 'users'  },
-        { id: 'security', href: '/security.html', label: 'Security', icon: 'shield' },
-        { id: 'settings', href: '/settings.html', label: 'Settings', icon: 'cog'    },
-        { id: 'support',  href: '/support.html',  label: 'Support',  icon: 'help'   }
+        // Vercel-grade account surface. Each item is a real settings
+        // page with its own concern — name + avatar, email & push
+        // notifications, active sessions and devices, connected
+        // identities, password + MFA, team members + roles, audit
+        // trail of account actions, language/theme/density, ticket
+        // channel. Nine items because a real product covers nine
+        // concerns; cramming them into a single Settings page is what
+        // makes a platform feel half-baked.
+        { id: 'profile',       href: '/profile.html',         label: 'Profile',           icon: 'user'      },
+        { id: 'notifications', href: '/notifications.html',   label: 'Notifications',     icon: 'bell'      },
+        { id: 'sessions',      href: '/sessions.html',        label: 'Sessions',          icon: 'monitor'   },
+        { id: 'connected',     href: '/connected.html',       label: 'Connected accounts', icon: 'link'     },
+        { id: 'security',      href: '/security.html',        label: 'Password & MFA',    icon: 'shield'    },
+        { id: 'team',          href: '/team.html',            label: 'Team members',      icon: 'users'     },
+        { id: 'audit-log',     href: '/audit-log.html',       label: 'Audit log',         icon: 'history'   },
+        { id: 'settings',      href: '/settings.html',        label: 'Preferences',       icon: 'cog'       },
+        { id: 'support',       href: '/support.html',         label: 'Support',           icon: 'help'      }
       ]
     }
   ];
@@ -135,7 +146,11 @@
     contacts: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
     megaphone:'<path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
     flow:     '<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6h7M6 8.5v7M18 8.5v7M8.5 18h7"/>',
-    sparkle:  '<path d="M12 3l1.5 5.5L19 10l-5.5 1.5L12 17l-1.5-5.5L5 10l5.5-1.5z"/><path d="M19 17l.6 2 2 .6-2 .6L19 22l-.6-1.8-2-.6 2-.6z"/>'
+    sparkle:  '<path d="M12 3l1.5 5.5L19 10l-5.5 1.5L12 17l-1.5-5.5L5 10l5.5-1.5z"/><path d="M19 17l.6 2 2 .6-2 .6L19 22l-.6-1.8-2-.6 2-.6z"/>',
+    bell:     '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
+    monitor:  '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+    link:     '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+    history:  '<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/><line x1="12" y1="7" x2="12" y2="12"/><line x1="12" y1="12" x2="15" y2="14"/>'
   };
 
   function svg(name, opts) {
@@ -193,8 +208,8 @@
     html +=     '<div class="hx-workspace-menu-sep"></div>';
     html +=     '<button type="button" class="hx-workspace-menu-item" data-action="theme"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Toggle theme</button>';
     html +=     '<a class="hx-workspace-menu-item" href="/support.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Help &amp; support</a>';
-    html +=     '<div class="hx-workspace-menu-sep"></div>';
-    html +=     '<button type="button" class="hx-workspace-menu-item is-danger" data-action="signout"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign out</button>';
+    // Sign-out lives in the top-bar user-action button (rendered by the
+    // topbar); having it here too was redundant and felt out of place.
     html +=   '</div>';
     html += '</div>';
 

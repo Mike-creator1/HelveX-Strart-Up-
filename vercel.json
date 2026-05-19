@@ -76,7 +76,12 @@
     { "source": "/integrations", "destination": "/integrations.html" },
     { "source": "/domains", "destination": "/domains.html" },
     { "source": "/team", "destination": "/team.html" },
-    { "source": "/security", "destination": "/security.html" }
+    { "source": "/security", "destination": "/security.html" },
+
+    { "source": "/notifications", "destination": "/notifications.html" },
+    { "source": "/sessions", "destination": "/sessions.html" },
+    { "source": "/connected", "destination": "/connected.html" },
+    { "source": "/audit-log", "destination": "/audit-log.html" }
   ],
   "redirects": [
     { "source": "/checkout/sync-plan", "destination": "/checkout/strategy-call", "permanent": true },

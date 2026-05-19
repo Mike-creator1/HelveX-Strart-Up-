@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Audit log — HelveX</title>
+  <meta name="description" content="HelveX audit log — every account-impacting action with actor, IP, timestamp, and trace ID. Filterable and exportable." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+  <style>
+    .hx-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px;
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line);
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--hx-text-mid);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .hx-chip:hover { background: var(--hx-bg-2); }
+    .hx-chip.is-active {
+      background: var(--hx-text);
+      border-color: var(--hx-text);
+      color: #fff;
+    }
+    .hx-chip .count {
+      font-family: var(--hx-mono);
+      font-size: 11px;
+      opacity: 0.7;
+    }
+    .hx-filter-row {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    }
+    .hx-search {
+      flex: 1; min-width: 220px;
+      padding: 7px 12px;
+      border: 1px solid var(--hx-line);
+      border-radius: var(--hx-r-sm);
+      background: var(--hx-surface);
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--hx-text);
+    }
+    .hx-search:focus { outline: 0; border-color: var(--hx-line-focus); }
+    .hx-range {
+      padding: 7px 10px;
+      border: 1px solid var(--hx-line);
+      border-radius: var(--hx-r-sm);
+      background: var(--hx-surface);
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--hx-text);
+    }
+    .hx-evt-row {
+      display: grid;
+      grid-template-columns: 24px minmax(180px, 1.4fr) minmax(140px, 1fr) 100px 60px;
+      gap: 14px;
+      align-items: center;
+      padding: 11px 16px;
+      border-top: 1px solid var(--hx-line);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .hx-evt-row:hover { background: var(--hx-bg-2); }
+    .hx-evt-row .kind { font-size: 13px; font-weight: 500; }
+    .hx-evt-row .actor { font-size: 12.5px; color: var(--hx-text-mid); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .hx-evt-row .time { font-size: 12px; color: var(--hx-text-dim); font-family: var(--hx-mono); }
+    .hx-evt-row .id { font-size: 11px; color: var(--hx-text-faint); font-family: var(--hx-mono); text-align: right; }
+    .hx-evt-row .glyph { color: var(--hx-text-dim); }
+    .hx-evt-detail {
+      grid-column: 1 / -1;
+      margin-top: 8px;
+      padding: 10px 12px;
+      background: var(--hx-bg-2);
+      border: 1px solid var(--hx-line);
+      border-radius: var(--hx-r-sm);
+      font-family: var(--hx-mono);
+      font-size: 12px;
+      color: var(--hx-text-mid);
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    @media (max-width: 720px) {
+      .hx-evt-row {
+        grid-template-columns: 24px 1fr auto;
+        grid-template-areas:
+          "glyph kind time"
+          ". actor id";
+      }
+      .hx-evt-row .glyph { grid-area: glyph; }
+      .hx-evt-row .kind  { grid-area: kind; }
+      .hx-evt-row .actor { grid-area: actor; }
+      .hx-evt-row .time  { grid-area: time; text-align: right; }
+      .hx-evt-row .id    { grid-area: id; }
+    }
+  </style>
+</head>
+<body data-active="audit-log">
+
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
+
+        <div class="hx-page-head">
+          <div>
+            <h1>Audit log.</h1>
+            <p class="sub">Every account-impacting action — sign-ins, password changes, API key issuance, team edits, plan changes — with actor, IP region, timestamp, and trace ID. Held for 365 days.</p>
+          </div>
+          <div class="hx-page-actions">
+            <button id="hx-audit-refresh" class="hx-btn hx-btn-secondary" type="button">Refresh</button>
+            <button id="hx-audit-export"  class="hx-btn hx-btn-primary"   type="button">Export CSV</button>
+          </div>
+        </div>
+
+        <div class="hx-grid hx-grid-4">
+          <div class="hx-stat">
+            <p class="hx-stat-label">Events (last 30 days)</p>
+            <p class="hx-stat-value hx-mono" id="hx-audit-stat-total">0</p>
+            <p class="hx-stat-meta" id="hx-audit-stat-total-meta">Across all categories</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Auth events</p>
+            <p class="hx-stat-value hx-mono" id="hx-audit-stat-auth">0</p>
+            <p class="hx-stat-meta">Sign-ins, token rotations</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Security events</p>
+            <p class="hx-stat-value hx-mono" id="hx-audit-stat-sec">0</p>
+            <p class="hx-stat-meta">2FA, identities, keys</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Retention</p>
+            <p class="hx-stat-value" style="font-size:18px;">365 days</p>
+            <p class="hx-stat-meta">Then purged</p>
+          </div>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Filter</h2>
+        </div>
+        <div class="hx-card">
+          <div class="hx-filter-row" style="margin-bottom:10px;">
+            <input type="text" class="hx-search" id="hx-audit-search" placeholder="Search by kind, actor, or payload…" />
+            <select class="hx-range" id="hx-audit-range">
+              <option value="1">Last 24 hours</option>
+              <option value="7" selected>Last 7 days</option>
+              <option value="30">Last 30 days</option>
+              <option value="90">Last 90 days</option>
+              <option value="365">Last year</option>
+            </select>
+          </div>
+          <div class="hx-filter-row" id="hx-audit-chips">
+            <button class="hx-chip is-active" data-fam="all">All <span class="count" id="hx-c-all">0</span></button>
+            <button class="hx-chip" data-fam="auth">Auth <span class="count" id="hx-c-auth">0</span></button>
+            <button class="hx-chip" data-fam="security">Security <span class="count" id="hx-c-security">0</span></button>
+            <button class="hx-chip" data-fam="settings">Settings <span class="count" id="hx-c-settings">0</span></button>
+            <button class="hx-chip" data-fam="profile">Profile <span class="count" id="hx-c-profile">0</span></button>
+            <button class="hx-chip" data-fam="team">Team <span class="count" id="hx-c-team">0</span></button>
+            <button class="hx-chip" data-fam="api_key">API keys <span class="count" id="hx-c-api_key">0</span></button>
+            <button class="hx-chip" data-fam="billing">Billing <span class="count" id="hx-c-billing">0</span></button>
+          </div>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Events</h2>
+          <span class="meta" id="hx-audit-meta">—</span>
+        </div>
+        <div id="hx-audit-host"></div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/platform.js"></script>
+  <script>
+    /* Real audit feed from public.activity_events.
+       This page narrows the firehose at /activity to security-relevant
+       families — exactly the events a SOC reviewer would want to see
+       when something's odd. Family chips + free-text search are applied
+       client-side over the most recent page (cap 500) so filter
+       toggling is instant.                                              */
+    (function () {
+      function whenAuthReady(fn) {
+        if (window.HX && window.HX.supabase) { fn(); return; }
+        document.addEventListener('hx:auth-ready', fn, { once: true });
+      }
+      var $ = function (id) { return document.getElementById(id); };
+      function escape(s) {
+        return (s == null ? '' : String(s))
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+      function fmtTime(iso) {
+        if (!iso) return '—';
+        try { return new Date(iso).toLocaleString(undefined, { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }); }
+        catch (e) { return '—'; }
+      }
+      function relTime(iso) {
+        if (!iso) return '—';
+        var d = new Date(iso); var diff = (Date.now() - d.getTime()) / 1000;
+        if (diff < 60) return Math.floor(diff) + 's';
+        if (diff < 3600) return Math.floor(diff/60) + 'm';
+        if (diff < 86400) return Math.floor(diff/3600) + 'h';
+        return Math.floor(diff/86400) + 'd';
+      }
+      // Only events that belong to the audit log live here. Others
+      // (e.g. deal.created, chat.conversation_created) belong to
+      // /activity which is the product-wide feed.
+      var AUDIT_FAMILIES = ['auth', 'security', 'settings', 'profile', 'team', 'api_key', 'billing'];
+
+      function familyOf(kind) {
+        if (!kind) return null;
+        var head = kind.split('.')[0];
+        return AUDIT_FAMILIES.indexOf(head) >= 0 ? head : null;
+      }
+
+      function iconFor(family) {
+        switch (family) {
+          case 'auth':     return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+          case 'security': return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+          case 'settings': return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.36.86 1.18 1.43 2.12 1.43H21a2 2 0 1 1 0 4h-.09c-.94 0-1.76.57-2.12 1.43z"/></svg>';
+          case 'profile':  return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+          case 'team':     return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>';
+          case 'api_key':  return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3"/></svg>';
+          case 'billing':  return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>';
+          default:         return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>';
+        }
+      }
+      function labelFor(kind) {
+        return (kind || '').split('.').map(function (s) {
+          return s.charAt(0).toUpperCase() + s.slice(1).replace(/_/g, ' ');
+        }).join(' / ');
+      }
+
+      // Cached state
+      var STATE = { all: [], filtered: [], family: 'all', query: '', range: 7 };
+
+      function applyFilters() {
+        var q = STATE.query.toLowerCase();
+        var fam = STATE.family;
+        STATE.filtered = STATE.all.filter(function (r) {
+          var f = familyOf(r.kind);
+          if (!f) return false;
+          if (fam !== 'all' && f !== fam) return false;
+          if (!q) return true;
+          var hay = [r.kind || '', r.actor_email || '', JSON.stringify(r.payload || {})].join(' ').toLowerCase();
+          return hay.indexOf(q) >= 0;
+        });
+        renderList();
+        $('hx-audit-meta').textContent = STATE.filtered.length + (STATE.filtered.length === 1 ? ' event' : ' events');
+      }
+
+      function paintChipCounts() {
+        var counts = { all: 0, auth: 0, security: 0, settings: 0, profile: 0, team: 0, api_key: 0, billing: 0 };
+        STATE.all.forEach(function (r) {
+          var f = familyOf(r.kind);
+          if (!f) return;
+          counts.all++; counts[f]++;
+        });
+        AUDIT_FAMILIES.concat(['all']).forEach(function (k) {
+          var el = $('hx-c-' + k); if (el) el.textContent = counts[k] || 0;
+        });
+        $('hx-audit-stat-total').textContent = counts.all;
+        $('hx-audit-stat-auth').textContent  = counts.auth;
+        $('hx-audit-stat-sec').textContent   = counts.security;
+      }
+
+      function renderList() {
+        var host = $('hx-audit-host');
+        var rows = STATE.filtered;
+        if (!rows.length) {
+          host.innerHTML =
+            '<div class="hx-empty">' +
+              '<div class="icon" aria-hidden="true">' +
+                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' +
+              '</div>' +
+              '<h3>No matching events</h3>' +
+              '<p>' + (STATE.all.length === 0
+                ? 'Audit events appear here as soon as you sign in, edit a setting, rotate a key, or change a team member. Try the &quot;All&quot; chip in 24 hours.'
+                : 'Try a wider time range or clear the search.') +
+              '</p>' +
+            '</div>';
+          return;
+        }
+        var html = '<div class="hx-card" style="padding:0;overflow:hidden;">';
+        rows.forEach(function (r) {
+          var fam = familyOf(r.kind);
+          // Build the detail block: payload + IP + UA when present.
+          var detailLines = [];
+          if (r.ip) detailLines.push('ip:         ' + r.ip);
+          if (r.user_agent) detailLines.push('user_agent: ' + r.user_agent);
+          if (r.payload && Object.keys(r.payload).length) {
+            try { detailLines.push('payload:    ' + JSON.stringify(r.payload, null, 2)); } catch (e) {}
+          }
+          var detailStr = detailLines.join('\n');
+          var actorLine = r.actor_email || '—';
+          if (r.ip && !r.actor_email) actorLine = r.ip;
+          else if (r.ip) actorLine = r.actor_email + ' · ' + r.ip;
+
+          html += '<div class="hx-evt-row" data-id="' + r.id + '">' +
+            '<div class="glyph">' + iconFor(fam) + '</div>' +
+            '<div class="kind">' + escape(labelFor(r.kind)) + '</div>' +
+            '<div class="actor" title="' + escape(actorLine) + '">' + escape(actorLine) + '</div>' +
+            '<div class="time" title="' + escape(fmtTime(r.created_at)) + '">' + escape(relTime(r.created_at)) + ' ago</div>' +
+            '<div class="id">#' + r.id + '</div>' +
+            (detailStr ? '<div class="hx-evt-detail" hidden>' + escape(detailStr) + '</div>' : '') +
+          '</div>';
+        });
+        html += '</div>';
+        host.innerHTML = html;
+      }
+
+      function toCsv(rows) {
+        function cell(v) {
+          if (v == null) return '';
+          var s = typeof v === 'string' ? v : JSON.stringify(v);
+          if (/[",\n]/.test(s)) s = '"' + s.replace(/"/g, '""') + '"';
+          return s;
+        }
+        var lines = ['id,kind,actor_email,ip,user_agent,created_at,payload'];
+        rows.forEach(function (r) {
+          lines.push([r.id, r.kind, r.actor_email, r.ip, r.user_agent, r.created_at, r.payload].map(cell).join(','));
+        });
+        return lines.join('\n');
+      }
+
+      whenAuthReady(function () {
+        var sb = window.HX.supabase;
+
+        async function refresh() {
+          var since = new Date(Date.now() - STATE.range * 24 * 3600 * 1000).toISOString();
+          // Pull the union of audit families. We let the DB pre-filter
+          // with an OR over `kind LIKE` so we don't drag down unrelated
+          // product events.
+          var or = AUDIT_FAMILIES.map(function (f) { return 'kind.like.' + f + '.%'; }).join(',');
+          var r = await sb.from('activity_events')
+            .select('id, kind, payload, actor_email, ip, user_agent, created_at')
+            .or(or)
+            .gte('created_at', since)
+            .order('created_at', { ascending: false })
+            .limit(500);
+          if (r.error) {
+            $('hx-audit-host').innerHTML = '<div class="hx-empty"><h3>Could not load events</h3><p>' + escape(r.error.message) + '</p></div>';
+            return;
+          }
+          STATE.all = r.data || [];
+          paintChipCounts();
+          applyFilters();
+        }
+
+        // Search
+        var debounceTimer = null;
+        $('hx-audit-search').addEventListener('input', function (e) {
+          STATE.query = e.target.value || '';
+          if (debounceTimer) clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(applyFilters, 150);
+        });
+
+        // Range
+        $('hx-audit-range').addEventListener('change', function (e) {
+          STATE.range = parseInt(e.target.value, 10) || 7;
+          refresh();
+        });
+
+        // Chips
+        $('hx-audit-chips').addEventListener('click', function (e) {
+          var chip = e.target.closest('.hx-chip');
+          if (!chip) return;
+          document.querySelectorAll('.hx-chip').forEach(function (c) { c.classList.remove('is-active'); });
+          chip.classList.add('is-active');
+          STATE.family = chip.getAttribute('data-fam');
+          applyFilters();
+        });
+
+        // Expand a row to show its payload
+        $('hx-audit-host').addEventListener('click', function (e) {
+          var row = e.target.closest('.hx-evt-row');
+          if (!row) return;
+          var detail = row.querySelector('.hx-evt-detail');
+          if (!detail) return;
+          detail.hidden = !detail.hidden;
+        });
+
+        // Refresh
+        $('hx-audit-refresh').addEventListener('click', refresh);
+
+        // Export CSV
+        $('hx-audit-export').addEventListener('click', function () {
+          var csv = toCsv(STATE.filtered);
+          var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = 'helvex-audit-' + new Date().toISOString().slice(0, 10) + '.csv';
+          document.body.appendChild(a); a.click();
+          setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 0);
+        });
+
+        // Realtime: a new audit event should drop in at the top.
+        sb.auth.getUser().then(function (res) {
+          var u = res && res.data ? res.data.user : null;
+          if (!u || !sb.channel) return;
+          sb.channel('hx-audit-' + u.id)
+            .on('postgres_changes',
+                { event: 'INSERT', schema: 'public', table: 'activity_events', filter: 'owner_id=eq.' + u.id },
+                function () { refresh(); })
+            .subscribe();
+        });
+
+        refresh();
+      });
+    })();
+  </script>
+</body>
+</html>

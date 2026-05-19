@@ -152,13 +152,19 @@
         return callOtp('send-signup', { email: clean_email, password: pending.password, meta: {} });
       },
 
-      // ─── Email + password sign-in (after verification has completed)
+      // ─── Email + password sign-in (after verification has completed).
+      // We intentionally DO NOT log here — onAuthStateChange below sees
+      // the SIGNED_IN event a moment later and logs it once. Logging in
+      // both places would double-count every sign-in.
       signInPassword: function (email, password) {
         return sb.auth.signInWithPassword({ email: clean(email), password: password });
       },
 
       // ─── Social sign-in (Google / Apple / GitHub)
       signInOAuth: function (provider) {
+        // The OAuth round-trip lands back on /dashboard; the audit log is
+        // written on return by onAuthStateChange below — we can't log
+        // before redirecting because the user isn't signed in yet here.
         return sb.auth.signInWithOAuth({
           provider: provider,
           options: { redirectTo: window.location.origin + '/dashboard' }
@@ -207,11 +213,43 @@
       user:    function () { return sb.auth.getUser(); },
 
       signOut: function () {
-        return sb.auth.signOut().then(function () {
-          window.location.replace('/signup');
-        });
+        // Log the sign-out BEFORE the actual call — once the session is
+        // gone, log_event would 401.
+        var logPromise;
+        try {
+          logPromise = sb.rpc('log_event', { p_kind: 'auth.signed_out', p_payload: {} });
+        } catch (e) { logPromise = Promise.resolve(); }
+        return Promise.resolve(logPromise)
+          .catch(function () {})
+          .then(function () { return sb.auth.signOut(); })
+          .then(function () { window.location.replace('/signup'); });
       }
     };
+
+    /* ---------- audit hook: log social sign-ins on return.
+       Email/password sign-ins are already logged in signInPassword above;
+       OAuth flows redirect away, so we hook into onAuthStateChange and
+       log a SIGNED_IN event the first time per tab session — dedup'd via
+       sessionStorage so page reloads don't spam the audit log.          */
+    var SIGNIN_LOGGED_KEY = 'helvex.signin_logged_at';
+    try {
+      sb.auth.onAuthStateChange(function (event, session) {
+        if (event !== 'SIGNED_IN' || !session) return;
+        var marker;
+        try { marker = sessionStorage.getItem(SIGNIN_LOGGED_KEY); } catch (e) {}
+        // Already logged for this tab session — don't double-log on
+        // reload or token refresh.
+        if (marker) return;
+        try { sessionStorage.setItem(SIGNIN_LOGGED_KEY, String(Date.now())); } catch (e) {}
+        try {
+          var provider = (session.user && session.user.app_metadata && session.user.app_metadata.provider) || 'email';
+          sb.rpc('log_event', {
+            p_kind: 'auth.signed_in',
+            p_payload: { method: provider }
+          });
+        } catch (e) {}
+      });
+    } catch (e) {}
 
     /* ---------- session guard ---------- */
     var path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';

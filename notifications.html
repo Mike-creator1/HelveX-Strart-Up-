@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications — HelveX</title>
+  <meta name="description" content="HelveX notification preferences — per-category control across email, in-app, and mobile push, with digest scheduling and quiet hours." />
+  <link rel="icon" type="image/png" href="/helvex-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+  <style>
+    /* Page-local: a clean Vercel-style toggle. Lives here rather than
+       platform.css because no other surface needs it yet. */
+    .hx-toggle { position: relative; display: inline-block; width: 36px; height: 20px; flex-shrink: 0; }
+    .hx-toggle input { opacity: 0; width: 0; height: 0; }
+    .hx-toggle .track {
+      position: absolute; inset: 0; background: var(--hx-bg-3); border: 1px solid var(--hx-line);
+      border-radius: 999px; transition: background 0.15s, border-color 0.15s; cursor: pointer;
+    }
+    .hx-toggle .thumb {
+      position: absolute; left: 2px; top: 2px; width: 14px; height: 14px;
+      background: #fff; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.18);
+      transition: transform 0.15s ease;
+    }
+    .hx-toggle input:checked + .track { background: var(--hx-text); border-color: var(--hx-text); }
+    .hx-toggle input:checked + .track .thumb { transform: translateX(16px); }
+    .hx-toggle input:disabled + .track { opacity: 0.5; cursor: not-allowed; }
+
+    .hx-matrix {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .hx-matrix th, .hx-matrix td {
+      padding: 14px 16px;
+      border-top: 1px solid var(--hx-line);
+      vertical-align: middle;
+      text-align: left;
+    }
+    .hx-matrix thead th {
+      background: var(--hx-bg-2);
+      border-top: 0;
+      font-size: 11.5px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--hx-text-mid);
+    }
+    .hx-matrix thead th.ch {
+      text-align: center;
+      width: 96px;
+    }
+    .hx-matrix tbody td.ch {
+      text-align: center;
+      width: 96px;
+    }
+    .hx-matrix tbody td .cat-title {
+      font-size: 13.5px; font-weight: 500; color: var(--hx-text);
+    }
+    .hx-matrix tbody td .cat-desc {
+      font-size: 12px; color: var(--hx-text-mid); margin-top: 2px;
+    }
+  </style>
+</head>
+<body data-active="notifications">
+
+  <div class="hx-app">
+    <aside class="hx-sidebar"></aside>
+    <div>
+      <div class="hx-topbar"></div>
+      <main class="hx-main">
+
+        <div class="hx-page-head">
+          <div>
+            <h1>Notifications.</h1>
+            <p class="sub">Decide which events reach you, on which channel. Defaults are tuned to be useful without being noisy — turn the rest down to zero.</p>
+          </div>
+          <div class="hx-page-actions">
+            <button id="hx-notif-reset" class="hx-btn hx-btn-secondary" type="button">Reset to defaults</button>
+            <button id="hx-notif-save"  class="hx-btn hx-btn-primary"   type="button">Save changes</button>
+          </div>
+        </div>
+
+        <div class="hx-grid hx-grid-4">
+          <div class="hx-stat">
+            <p class="hx-stat-label">Email channel</p>
+            <p class="hx-stat-value" style="font-size:18px;" id="hx-stat-email">—</p>
+            <p class="hx-stat-meta" id="hx-stat-email-meta">—</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">In-app</p>
+            <p class="hx-stat-value" style="font-size:18px;" id="hx-stat-inapp">—</p>
+            <p class="hx-stat-meta" id="hx-stat-inapp-meta">Shown in the top-bar bell</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Mobile push</p>
+            <p class="hx-stat-value" style="font-size:18px;color:var(--hx-text-dim);" id="hx-stat-push">Not paired</p>
+            <p class="hx-stat-meta">Install the HelveX iOS app to enable</p>
+          </div>
+          <div class="hx-stat">
+            <p class="hx-stat-label">Digest</p>
+            <p class="hx-stat-value" style="font-size:18px;" id="hx-stat-digest">Daily</p>
+            <p class="hx-stat-meta">Non-urgent items, grouped</p>
+          </div>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>By category</h2>
+          <span class="meta">Security alerts are always delivered via email</span>
+        </div>
+        <div class="hx-card" style="padding:0;overflow:hidden;">
+          <table class="hx-matrix">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th class="ch">Email</th>
+                <th class="ch">In-app</th>
+                <th class="ch">Push</th>
+              </tr>
+            </thead>
+            <tbody id="hx-notif-rows">
+              <!-- rendered from JS so the same source-of-truth seeds the
+                   defaults and the saved payload below -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>Delivery</h2>
+        </div>
+        <div class="hx-grid hx-grid-2">
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Digest schedule</p>
+            <h3 style="margin:4px 0 8px;">When non-urgent items batch up</h3>
+            <p class="desc" style="margin:0 0 14px;">Security and billing always arrive instantly. Lower-priority categories — product news, delivery updates, marketing — can be grouped into a single email at the cadence you pick.</p>
+            <div class="hx-field" style="margin:0;max-width:280px;">
+              <label>Digest frequency</label>
+              <select id="hx-notif-digest">
+                <option value="off">Off — each item arrives separately</option>
+                <option value="daily">Daily — one email each morning</option>
+                <option value="weekly">Weekly — Monday morning</option>
+              </select>
+            </div>
+          </div>
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Quiet hours</p>
+            <h3 style="margin:4px 0 8px;">When in-app and push stay silent</h3>
+            <p class="desc" style="margin:0 0 14px;">Times are in your workspace time zone. Security alerts still come through — everything else is held until the window ends.</p>
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13.5px;margin-bottom:12px;">
+              <span class="hx-toggle"><input type="checkbox" id="hx-notif-quiet-enabled" /><span class="track"><span class="thumb"></span></span></span>
+              <span>Enable quiet hours</span>
+            </label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="hx-field" style="margin:0;">
+                <label>From</label>
+                <input type="time" id="hx-notif-quiet-from" value="22:00" />
+              </div>
+              <div class="hx-field" style="margin:0;">
+                <label>To</label>
+                <input type="time" id="hx-notif-quiet-to" value="08:00" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hx-section-head">
+          <h2>What you can expect</h2>
+        </div>
+        <div class="hx-card">
+          <ul style="margin:0;padding:0;list-style:none;">
+            <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--hx-line);"><span class="hx-mono" style="color:var(--hx-text-dim);min-width:24px;">01</span><span>Security events bypass every preference here — new sign-ins, password changes, key issuance always reach your verified email.</span></li>
+            <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--hx-line);"><span class="hx-mono" style="color:var(--hx-text-dim);min-width:24px;">02</span><span>In-app appears as a dot on the top-bar bell with a side panel; nothing pings or pops.</span></li>
+            <li style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--hx-line);"><span class="hx-mono" style="color:var(--hx-text-dim);min-width:24px;">03</span><span>Mobile push is available once the HelveX iOS app is paired to your workspace.</span></li>
+            <li style="display:flex;gap:10px;padding:8px 0;"><span class="hx-mono" style="color:var(--hx-text-dim);min-width:24px;">04</span><span>We never send marketing without your explicit opt-in here — the toggle defaults to off.</span></li>
+          </ul>
+        </div>
+
+        <div id="hx-notif-status" style="margin-top:16px;font-size:12.5px;font-weight:500;min-height:18px;"></div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/platform.js"></script>
+  <script>
+    /* Real read/write of public.user_settings.
+       We extend the row with a `notification_prefs` JSONB column so the
+       full category matrix has a home, but keep writing the legacy flat
+       columns (email_product / email_security / email_billing) too so
+       /settings continues to display the right state without changes.   */
+    (function () {
+      function whenAuthReady(fn) {
+        if (window.HX && window.HX.supabase) { fn(); return; }
+        document.addEventListener('hx:auth-ready', fn, { once: true });
+      }
+      var $ = function (id) { return document.getElementById(id); };
+      function escape(s) {
+        return (s == null ? '' : String(s))
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+      function status(msg, kind) {
+        var el = $('hx-notif-status'); if (!el) return;
+        el.style.color = kind === 'error' ? 'var(--hx-red)' : 'var(--hx-emerald)';
+        el.textContent = msg || '';
+        if (msg) setTimeout(function () { if (el.textContent === msg) el.textContent = ''; }, 3000);
+      }
+
+      // The matrix — single source of truth for both the form layout and
+      // the default payload. Keys here are stable; the legacy email_*
+      // columns map to the categories below.
+      var CATEGORIES = [
+        { id: 'security', title: 'Security',          desc: 'New sign-ins, password changes, 2FA enrolment, API key issuance.', lockEmail: true },
+        { id: 'billing',  title: 'Billing & invoices',desc: 'Receipts, plan changes, payment failures, credit top-ups.' },
+        { id: 'product',  title: 'Product updates',   desc: 'New platform sections, model releases, roadmap changes.' },
+        { id: 'team',     title: 'Team activity',     desc: 'New members, invitation accepts, role changes, departures.' },
+        { id: 'delivery', title: 'Project delivery',  desc: 'Status changes on service requests, consulting bookings, automation runs.' },
+        { id: 'comments', title: 'Comments & mentions', desc: 'Replies on shared artefacts, mentions in project briefs.' },
+        { id: 'marketing',title: 'Newsletter',        desc: 'Quarterly customer letter and case studies. Off by default.' }
+      ];
+
+      var DEFAULTS = {
+        channels: { email: true, inapp: true, push: false },
+        categories: {
+          security:  { email: true,  inapp: true,  push: true  },
+          billing:   { email: true,  inapp: true,  push: false },
+          product:   { email: true,  inapp: true,  push: false },
+          team:      { email: true,  inapp: true,  push: false },
+          delivery:  { email: true,  inapp: true,  push: false },
+          comments:  { email: false, inapp: true,  push: false },
+          marketing: { email: false, inapp: false, push: false }
+        },
+        digest: 'daily',
+        quiet_hours: { enabled: false, from: '22:00', to: '08:00' }
+      };
+
+      function mergePrefs(saved) {
+        // Defensive merge: missing categories fall back to defaults,
+        // legacy flat columns map onto the relevant category.email slots.
+        var out = JSON.parse(JSON.stringify(DEFAULTS));
+        if (!saved) return out;
+        if (saved.channels) Object.assign(out.channels, saved.channels);
+        if (saved.categories) {
+          Object.keys(saved.categories).forEach(function (k) {
+            out.categories[k] = Object.assign({}, out.categories[k] || {}, saved.categories[k]);
+          });
+        }
+        if (saved.digest) out.digest = saved.digest;
+        if (saved.quiet_hours) Object.assign(out.quiet_hours, saved.quiet_hours);
+        return out;
+      }
+
+      function renderRows(prefs) {
+        var tbody = $('hx-notif-rows');
+        tbody.innerHTML = CATEGORIES.map(function (c) {
+          var p = prefs.categories[c.id] || {};
+          var pushDisabled = !prefs.channels.push;
+          return '<tr data-cat="' + c.id + '">' +
+            '<td>' +
+              '<div class="cat-title">' + escape(c.title) + '</div>' +
+              '<div class="cat-desc">' + escape(c.desc) + '</div>' +
+            '</td>' +
+            '<td class="ch">' +
+              '<label class="hx-toggle"><input type="checkbox" data-channel="email" ' + (p.email ? 'checked' : '') + ' ' + (c.lockEmail ? 'disabled' : '') + ' />' +
+                '<span class="track"><span class="thumb"></span></span>' +
+              '</label>' +
+            '</td>' +
+            '<td class="ch">' +
+              '<label class="hx-toggle"><input type="checkbox" data-channel="inapp" ' + (p.inapp ? 'checked' : '') + ' />' +
+                '<span class="track"><span class="thumb"></span></span>' +
+              '</label>' +
+            '</td>' +
+            '<td class="ch">' +
+              '<label class="hx-toggle"><input type="checkbox" data-channel="push" ' + (p.push ? 'checked' : '') + ' ' + (pushDisabled ? 'disabled' : '') + ' />' +
+                '<span class="track"><span class="thumb"></span></span>' +
+              '</label>' +
+            '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      function readForm() {
+        var prefs = JSON.parse(JSON.stringify(DEFAULTS));
+        prefs.categories = {};
+        document.querySelectorAll('#hx-notif-rows tr').forEach(function (tr) {
+          var id = tr.getAttribute('data-cat');
+          prefs.categories[id] = {
+            email: !!tr.querySelector('input[data-channel="email"]').checked,
+            inapp: !!tr.querySelector('input[data-channel="inapp"]').checked,
+            push:  !!tr.querySelector('input[data-channel="push"]').checked
+          };
+        });
+        // Channels stay derived from row state — a channel is "on" if any
+        // category uses it.
+        var any = { email: false, inapp: false, push: false };
+        Object.keys(prefs.categories).forEach(function (k) {
+          var c = prefs.categories[k];
+          if (c.email) any.email = true;
+          if (c.inapp) any.inapp = true;
+          if (c.push)  any.push  = true;
+        });
+        prefs.channels = any;
+        prefs.digest = $('hx-notif-digest').value;
+        prefs.quiet_hours = {
+          enabled: !!$('hx-notif-quiet-enabled').checked,
+          from: $('hx-notif-quiet-from').value || '22:00',
+          to:   $('hx-notif-quiet-to').value   || '08:00'
+        };
+        return prefs;
+      }
+
+      function paintStats(prefs) {
+        function count(channel) {
+          return Object.keys(prefs.categories).reduce(function (n, k) {
+            return n + (prefs.categories[k][channel] ? 1 : 0);
+          }, 0);
+        }
+        var emailN = count('email');
+        var inappN = count('inapp');
+        var pushN  = count('push');
+        var total  = CATEGORIES.length;
+        $('hx-stat-email').textContent      = emailN + ' of ' + total;
+        $('hx-stat-email-meta').textContent = emailN === total ? 'All categories on' : emailN === 0 ? 'All off' : 'Selective';
+        $('hx-stat-inapp').textContent      = inappN + ' of ' + total;
+        if (prefs.channels.push) $('hx-stat-push').textContent = pushN + ' of ' + total;
+        $('hx-stat-digest').textContent     = prefs.digest === 'off' ? 'Off' : prefs.digest === 'weekly' ? 'Weekly' : 'Daily';
+      }
+
+      function paintForm(prefs) {
+        renderRows(prefs);
+        $('hx-notif-digest').value         = prefs.digest;
+        $('hx-notif-quiet-enabled').checked= !!prefs.quiet_hours.enabled;
+        $('hx-notif-quiet-from').value     = prefs.quiet_hours.from;
+        $('hx-notif-quiet-to').value       = prefs.quiet_hours.to;
+        paintStats(prefs);
+      }
+
+      whenAuthReady(function () {
+        var sb = window.HX.supabase;
+        var uid = null;
+
+        sb.auth.getUser().then(async function (res) {
+          var u = res && res.data ? res.data.user : null;
+          if (!u) return;
+          uid = u.id;
+          // Read the full row — we use notification_prefs if present, and
+          // fall back to the legacy flat columns for first-time visitors.
+          var r = await sb.from('user_settings').select('notification_prefs, email_product, email_security, email_billing').eq('user_id', uid).maybeSingle();
+          var saved = (r && r.data && r.data.notification_prefs) || null;
+          if (!saved && r && r.data) {
+            saved = JSON.parse(JSON.stringify(DEFAULTS));
+            saved.categories.product.email  = r.data.email_product  !== false;
+            saved.categories.security.email = r.data.email_security !== false;
+            saved.categories.billing.email  = r.data.email_billing  !== false;
+          }
+          paintForm(mergePrefs(saved));
+        });
+
+        // Reflect changes live without saving — feels responsive,
+        // matches what Settings does for theme.
+        document.addEventListener('change', function (e) {
+          if (!e.target || !e.target.matches) return;
+          if (e.target.matches('#hx-notif-rows input, #hx-notif-digest, #hx-notif-quiet-enabled, #hx-notif-quiet-from, #hx-notif-quiet-to')) {
+            paintStats(readForm());
+          }
+        });
+
+        $('hx-notif-save').addEventListener('click', async function (e) {
+          if (!uid) return;
+          var btn = e.currentTarget; var lbl = btn.textContent;
+          btn.disabled = true; btn.textContent = 'Saving…';
+          try {
+            var prefs = readForm();
+            // Write both the JSONB column and the legacy flat columns so
+            // settings.html stays in sync without a migration sweep.
+            var patch = {
+              user_id: uid,
+              notification_prefs: prefs,
+              email_product:  !!prefs.categories.product.email,
+              email_security: !!prefs.categories.security.email,
+              email_billing:  !!prefs.categories.billing.email
+            };
+            var r = await sb.from('user_settings').upsert(patch, { onConflict: 'user_id' });
+            if (r.error) throw r.error;
+            await sb.rpc('log_event', { p_kind: 'settings.notifications_updated', p_payload: { digest: prefs.digest, quiet: prefs.quiet_hours.enabled, channels: prefs.channels } });
+            status('Saved.', 'ok');
+          } catch (err) {
+            status((err && err.message) || 'Could not save.', 'error');
+          } finally {
+            btn.disabled = false; btn.textContent = lbl;
+          }
+        });
+
+        $('hx-notif-reset').addEventListener('click', function () {
+          if (!confirm('Reset all notification preferences to HelveX defaults? Unsaved changes will be lost.')) return;
+          paintForm(JSON.parse(JSON.stringify(DEFAULTS)));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
