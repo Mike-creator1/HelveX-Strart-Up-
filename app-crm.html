@@ -378,7 +378,7 @@
       var $ = function (id) { return document.getElementById(id); };
 
       function whenAuthReady(fn) {
-        if (window.HX && window.HX.auth && window.HX.supabase) { fn(); return; }
+        if (window.HX && window.HX.supabase && window.HX.supabase) { fn(); return; }
         document.addEventListener('hx:auth-ready', fn, { once: true });
       }
 

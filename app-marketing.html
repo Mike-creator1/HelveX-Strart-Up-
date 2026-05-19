@@ -811,7 +811,7 @@
             }
           });
         }
-        if (window.HX && window.HX.auth) { go(); return; }
+        if (window.HX && window.HX.supabase) { go(); return; }
         document.addEventListener('hx:auth-ready', go, { once: true });
       })();
     })();

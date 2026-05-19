@@ -108,7 +108,7 @@
       var PROJECT_URL = 'https://yjmpallrtpeinpdilptj.supabase.co';
 
       function whenAuthReady(fn) {
-        if (window.HX && window.HX.auth) { fn(); return; }
+        if (window.HX && window.HX.supabase) { fn(); return; }
         document.addEventListener('hx:auth-ready', fn, { once: true });
       }
       function toast(msg, kind) {

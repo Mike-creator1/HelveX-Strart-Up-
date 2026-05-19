@@ -120,7 +120,7 @@
       // detectSessionInUrl: true). Otherwise, if there's no email param at
       // all and no active session, kick back to signup.
       function whenAuthReadyOnce(fn) {
-        if (window.HX && window.HX.auth) { fn(); return; }
+        if (window.HX && window.HX.supabase) { fn(); return; }
         document.addEventListener('hx:auth-ready', fn, { once: true });
       }
       whenAuthReadyOnce(function () {
@@ -215,7 +215,7 @@
       }
 
       function whenAuthReady(fn) {
-        if (window.HX && window.HX.auth) { fn(); return; }
+        if (window.HX && window.HX.supabase) { fn(); return; }
         document.addEventListener('hx:auth-ready', fn, { once: true });
       }
 

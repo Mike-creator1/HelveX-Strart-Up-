@@ -112,7 +112,7 @@
       var FIELDS = ['company','email','addr1','addr2','city','postal','country','vat'];
       var $ = function (id) { return document.getElementById(id); };
       function whenAuthReady(fn) {
-        if (window.HX && window.HX.auth) { fn(); return; }
+        if (window.HX && window.HX.supabase) { fn(); return; }
         document.addEventListener('hx:auth-ready', fn, { once: true });
       }
       function setStatus(msg, color) {

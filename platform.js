@@ -212,7 +212,7 @@
   }
 
   function loadAuthScript() {
-    if (window.HX && window.HX.auth) return;
+    if (window.HX && window.HX.supabase) return;
     if (document.querySelector('script[data-hx-auth]')) return;
     var s = document.createElement('script');
     s.src = '/auth.js';
@@ -368,7 +368,7 @@
     mountCommandPalette();
 
     loadAuthScript();
-    if (window.HX && window.HX.auth) hydrateUser();
+    if (window.HX && window.HX.supabase) hydrateUser();
     else document.addEventListener('hx:auth-ready', hydrateUser, { once: true });
   }
 

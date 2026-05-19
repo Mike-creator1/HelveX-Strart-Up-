@@ -99,7 +99,7 @@
   <script>
     (function () {
       function whenAuthReady(fn) {
-        if (window.HX && window.HX.auth) { fn(); return; }
+        if (window.HX && window.HX.supabase) { fn(); return; }
         document.addEventListener('hx:auth-ready', fn, { once: true });
       }
       function $(id) { return document.getElementById(id); }

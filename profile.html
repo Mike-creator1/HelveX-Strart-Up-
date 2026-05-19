@@ -95,7 +95,7 @@
     /* Real read/write of public.profiles via Supabase JS. */
     (function () {
       function whenAuthReady(fn) {
-        if (window.HX && window.HX.auth) { fn(); return; }
+        if (window.HX && window.HX.supabase) { fn(); return; }
         document.addEventListener('hx:auth-ready', fn, { once: true });
       }
       function initials(first, last, email) {

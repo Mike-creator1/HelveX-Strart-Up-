@@ -619,7 +619,7 @@
        the assistant reply appears the moment the proxy commits the row. */
     (function () {
       function whenAuthReady(fn) {
-        if (window.HX && window.HX.auth) { fn(); return; }
+        if (window.HX && window.HX.supabase) { fn(); return; }
         document.addEventListener('hx:auth-ready', fn, { once: true });
       }
       var $ = function (id) { return document.getElementById(id); };
