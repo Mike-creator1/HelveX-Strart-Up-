@@ -58,6 +58,45 @@
     .hx-wb-new-form textarea { min-height: 140px; font-family: var(--hx-mono); font-size: 12.5px; line-height: 1.55; }
     .hx-wb-new-form .row { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; }
     .armed { background: #dc2626 !important; color: #fff !important; border-color: #dc2626 !important; }
+    /* Tiny "AUTO" badge next to the kind chip for artifacts captured
+       from chat. Sits inline with the kind label so the eye picks it
+       up without crowding the title. */
+    .hx-wb-auto-badge {
+      font-family: var(--hx-mono);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(15,15,16,0.06);
+      color: var(--hx-text-mid);
+      text-transform: uppercase;
+    }
+    /* "Use in chat" primary action — pulls the artifact into a fresh
+       conversation as the first user message. Sits on the left of the
+       body controls so it reads as the primary post-save next action. */
+    .hx-wb-reuse-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--hx-text); color: #fff;
+      border: 1px solid var(--hx-text);
+      padding: 7px 12px; border-radius: 8px;
+      font: inherit; font-size: 12px; font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.12s;
+    }
+    .hx-wb-reuse-btn:hover { opacity: 0.85; }
+    .hx-wb-reuse-btn svg { width: 13px; height: 13px; }
+    /* Onboarding-flavoured empty state — three short steps instead of
+       the previous "Nothing here" cliché. */
+    .hx-wb-onboard { background: #fff; border: 1px solid var(--hx-line); border-radius: var(--hx-r); padding: 36px 28px; }
+    .hx-wb-onboard h3 { margin: 0 0 6px; font-size: 19px; font-weight: 600; letter-spacing: -0.01em; }
+    .hx-wb-onboard .lede { font-size: 13.5px; color: var(--hx-text-mid); margin: 0 0 22px; line-height: 1.55; max-width: 560px; }
+    .hx-wb-onboard .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .hx-wb-onboard .step { background: var(--hx-bg-2, #fafafa); border: 1px solid var(--hx-line); border-radius: 10px; padding: 14px 16px; }
+    .hx-wb-onboard .step-num { font-family: var(--hx-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--hx-text-mid); margin-bottom: 6px; text-transform: uppercase; }
+    .hx-wb-onboard .step-title { font-weight: 600; font-size: 13.5px; margin-bottom: 4px; color: var(--hx-text); }
+    .hx-wb-onboard .step-body { font-size: 12.5px; color: var(--hx-text-mid); line-height: 1.5; }
+    .hx-wb-onboard .actions { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
   </style>
 </head>
 <body data-active="workbench">
@@ -126,6 +165,7 @@
   </div>
 
   <script src="/platform.js"></script>
+  <script src="/hx-workbench.js"></script>
   <script>
     (function () {
       function whenAuthReady(fn) {
@@ -148,7 +188,11 @@
         try { return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }); } catch (e) { return '—'; }
       }
 
-      var state = { artifacts: [], filter: 'all', search: '', openId: null, sb: null, owner: null };
+      var state = { artifacts: [], filter: 'all', search: '', openId: null, sb: null, owner: null,
+                    // Cached search result so re-renders don't re-hit the
+                    // FTS RPC on every keystroke. Reset whenever the
+                    // query string or the artifacts list changes.
+                    searchCache: { q: '', rows: null } };
 
       function renderStats() {
         var total = state.artifacts.length;
@@ -160,27 +204,101 @@
         $('hx-wb-last-meta').textContent = last ? esc(last.title).slice(0, 40) : 'No history';
       }
 
-      function filterRows() {
-        var q = state.search.trim().toLowerCase();
-        return state.artifacts.filter(function (a) {
-          if (state.filter !== 'all' && a.kind !== state.filter) return false;
-          if (!q) return true;
-          return (a.title || '').toLowerCase().includes(q) || (a.content || '').toLowerCase().includes(q);
-        });
+      // Two-stage row selection: kind filter first (cheap), then search
+      // ranking. Search uses HX.workbench.smartSearch when available
+      // (server-side Postgres FTS with client-side fallback) so a query
+      // like "stripe webhook" matches a row titled "Webhook handler for
+      // Stripe" even though the words are reordered.
+      function kindFilter(list) {
+        if (state.filter === 'all') return list;
+        return list.filter(function (a) { return a.kind === state.filter; });
       }
 
-      function renderGrid() {
-        var rows = filterRows();
-        var host = $('hx-wb-grid');
-        if (!rows.length) {
+      async function computeVisible() {
+        var q = (state.search || '').trim();
+        var pool = kindFilter(state.artifacts);
+        if (!q) return pool;
+        if (!window.HX || !window.HX.workbench || !window.HX.workbench.smartSearch) {
+          return pool.filter(function (a) {
+            var lq = q.toLowerCase();
+            return (a.title || '').toLowerCase().includes(lq)
+                || (a.content || '').toLowerCase().includes(lq);
+          });
+        }
+        // Use the cached ranking when the user is just toggling kinds.
+        if (state.searchCache.q === q && state.searchCache.rows) {
+          var allowed = Object.create(null);
+          pool.forEach(function (a) { allowed[a.id] = true; });
+          return state.searchCache.rows.filter(function (a) { return allowed[a.id]; });
+        }
+        var ranked = await window.HX.workbench.smartSearch(q, state.artifacts, state.sb);
+        state.searchCache = { q: q, rows: ranked };
+        var allowed2 = Object.create(null);
+        pool.forEach(function (a) { allowed2[a.id] = true; });
+        return ranked.filter(function (a) { return allowed2[a.id]; });
+      }
+
+      function renderEmpty(host, filteredOrSearched) {
+        // Two distinct empty states. When the user has a filter or search
+        // active, just say so — no need for the onboarding pitch. When
+        // the workbench is genuinely empty, show how outputs land here
+        // automatically from chat, plus a hand-rolled escape hatch.
+        if (filteredOrSearched) {
           host.innerHTML = ''
             + '<div class="hx-wb-empty">'
             +   '<div class="icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>'
-            +   '<h3>' + (state.search || state.filter !== 'all' ? 'Nothing matches your filter.' : 'Your workbench is empty.') + '</h3>'
-            +   '<p>' + (state.search || state.filter !== 'all' ? 'Try a different search or clear the filter.' : 'Drop in a piece of code, a draft, a prompt — anything worth keeping next to your work.') + '</p>'
-            +   '<button class="hx-btn hx-btn-primary" id="hx-wb-empty-new">+ New artifact</button>'
+            +   '<h3>Nothing matches that filter.</h3>'
+            +   '<p>Adjust the search or switch to <b>All</b> to see everything you have saved.</p>'
+            +   '<button class="hx-btn hx-btn-ghost" id="hx-wb-clear-filter">Clear filter</button>'
             + '</div>';
-          var b = $('hx-wb-empty-new'); if (b) b.addEventListener('click', openNewForm);
+          var clr = $('hx-wb-clear-filter');
+          if (clr) clr.addEventListener('click', function () {
+            state.search = '';
+            state.filter = 'all';
+            state.searchCache = { q: '', rows: null };
+            var input = $('hx-wb-search-input'); if (input) input.value = '';
+            document.querySelectorAll('.hx-wb-filter').forEach(function (b) {
+              b.classList.toggle('active', b.getAttribute('data-filter') === 'all');
+            });
+            renderGrid();
+          });
+          return;
+        }
+        host.innerHTML = ''
+          + '<div class="hx-wb-onboard">'
+          +   '<h3>Your workbench is ready.</h3>'
+          +   '<p class="lede">Anything substantial Helix produces in chat — code blocks, drafts, configs, prompts — lands here automatically, categorised and searchable. You don\'t pin anything; the workbench does it for you.</p>'
+          +   '<div class="steps">'
+          +     '<div class="step">'
+          +       '<div class="step-num">01 · Capture</div>'
+          +       '<div class="step-title">Send a real prompt in Chat</div>'
+          +       '<div class="step-body">Ask Helix to draft something concrete — a webhook handler, an outline, a system prompt. The reply auto-saves here the moment it finishes streaming.</div>'
+          +     '</div>'
+          +     '<div class="step">'
+          +       '<div class="step-num">02 · Find</div>'
+          +       '<div class="step-title">Search by meaning, not just text</div>'
+          +       '<div class="step-body">Type what you remember. <i>"stripe webhook"</i> finds <i>"Handler for Stripe events"</i>. Filter by kind from the toolbar above.</div>'
+          +     '</div>'
+          +     '<div class="step">'
+          +       '<div class="step-num">03 · Reuse</div>'
+          +       '<div class="step-title">Pull any artifact back into chat</div>'
+          +       '<div class="step-body">Open an artifact and press <b>Use in chat</b>. It seeds a new conversation with the content already in the composer, ready to continue.</div>'
+          +     '</div>'
+          +   '</div>'
+          +   '<div class="actions">'
+          +     '<a class="hx-btn hx-btn-primary" href="/chat.html">Open Chat &rarr;</a>'
+          +     '<button class="hx-btn hx-btn-ghost" id="hx-wb-empty-new">+ Add one manually</button>'
+          +   '</div>'
+          + '</div>';
+        var b = $('hx-wb-empty-new'); if (b) b.addEventListener('click', openNewForm);
+      }
+
+      async function renderGrid() {
+        var host = $('hx-wb-grid');
+        var rows = await computeVisible();
+        if (!rows.length) {
+          var hasFilter = !!(state.search || state.filter !== 'all');
+          renderEmpty(host, hasFilter);
           return;
         }
         host.innerHTML = rows.map(function (a) {
@@ -195,6 +313,7 @@
             +     '</div>'
             +     '<div class="hx-wb-card-meta">'
             +       '<span class="hx-wb-kind ' + a.kind + '">' + esc(a.kind) + '</span>'
+            +       (a.auto_captured ? '<span class="hx-wb-auto-badge" title="Auto-captured from chat">AUTO</span>' : '')
             +       '<span>' + relTime(a.updated_at) + '</span>'
             +     '</div>'
             +   '</div>'
@@ -202,6 +321,10 @@
             +   '<div class="hx-wb-body">'
             +     '<textarea data-role="content" spellcheck="false">' + esc(a.content || '') + '</textarea>'
             +     '<div class="controls">'
+            +       '<button class="hx-wb-reuse-btn" data-role="reuse" title="Open this artifact in a new chat with it pre-loaded as context">'
+            +         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'
+            +         'Use in chat'
+            +       '</button>'
             +       '<select data-role="kind">'
             +         ['note','code','document','config','prompt','snippet'].map(function (k) {
                         return '<option value="' + k + '"' + (k === a.kind ? ' selected' : '') + '>' + k + '</option>';
@@ -232,6 +355,13 @@
           if (del) del.addEventListener('click', function () { deleteArtifact(card, id, del); });
           var pin = card.querySelector('[data-role="pin"]');
           if (pin) pin.addEventListener('click', function () { togglePin(id); });
+          var reuse = card.querySelector('[data-role="reuse"]');
+          if (reuse) reuse.addEventListener('click', function () {
+            var artifact = state.artifacts.find(function (x) { return x.id === id; });
+            if (artifact && window.HX && window.HX.workbench && window.HX.workbench.seedChat) {
+              window.HX.workbench.seedChat(artifact);
+            }
+          });
         });
       }
 
@@ -239,8 +369,11 @@
         var r = await state.sb.from('artifacts').select('*').order('updated_at', { ascending: false });
         if (r.error) { console.error('[workbench] load:', r.error); return; }
         state.artifacts = r.data || [];
+        // List changed → drop the cached ranking so the next render
+        // re-fetches against the current artifact set.
+        state.searchCache = { q: '', rows: null };
         renderStats();
-        renderGrid();
+        await renderGrid();
       }
 
       function openNewForm() {
@@ -347,12 +480,36 @@
             renderGrid();
           });
         });
+        // Debounce the search a touch so we don't hammer the FTS RPC
+        // on every keystroke. 160ms feels instant to a typing user but
+        // collapses bursts ("stripe" arrives as 6 keystrokes → 1 call).
+        var searchTimer = null;
         $('hx-wb-search-input').addEventListener('input', function (e) {
-          state.search = e.target.value;
-          renderGrid();
+          var v = e.target.value;
+          state.search = v;
+          state.searchCache = { q: '', rows: null };
+          if (searchTimer) clearTimeout(searchTimer);
+          searchTimer = setTimeout(function () { renderGrid(); }, 160);
         });
 
         await refresh();
+
+        // Deep-link support: /workbench.html?open=<artifact-id> opens
+        // that artifact's editor on load. Used by the "Saved to
+        // workbench" toast from the chat page.
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var openId = params.get('open');
+          if (openId && state.artifacts.find(function (a) { return a.id === openId; })) {
+            state.openId = openId;
+            await renderGrid();
+            // Scroll the opened card into view, accounting for sticky header.
+            setTimeout(function () {
+              var el = document.querySelector('.hx-wb-card.open');
+              if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 60);
+          }
+        } catch (_) { /* deep-link is best-effort */ }
       });
     })();
   </script>
