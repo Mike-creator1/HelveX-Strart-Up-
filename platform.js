@@ -27,35 +27,73 @@
     } catch (e) {}
   })();
 
-  // ── Sidebar nav — Vercel layout ────────────────────────────────────
-  // Single flat list of 9 items. No section labels. This matches
-  // Vercel's team-scope sidebar exactly: Overview / Projects /
-  // Deployments / a couple of utilities / Settings.
-  //
-  // What got folded:
-  //   • CRM, Marketing, Automation, Workbench, Memory → tools
-  //     accessible from inside a Project, not as standalone top-level.
-  //   • Workflows → merged into Deployments (a workflow IS a deploy).
-  //   • Monitoring → merged into Analytics.
-  //   • Services, Consulting → become Project templates / sales CTAs
-  //     inside Projects, not their own nav slots.
-  //   • Notifications, Sessions, Connected, Security, Team, Audit,
-  //     Preferences, API Keys, Integrations, Billing, Support →
-  //     all tabs inside /settings (Vercel's pattern). Each old route
-  //     keeps working as a deep-link.
+  // ── Sidebar nav, post-audit ─────────────────────────────────────────
+  // Sections restored as the user requested. Visual treatment of the
+  // rest of the platform stays Vercel-austere; the IA keeps the
+  // group labels (WORKSPACE / TOOLKIT / BUILD / OBSERVABILITY /
+  // DEVELOPER / BILLING / ACCOUNT) so the surface map stays familiar.
   var NAV_GROUPS = [
     {
-      label: '',
+      label: 'Workspace',
       items: [
-        { id: 'dashboard',   href: '/dashboard.html',   label: 'Overview',    icon: 'home' },
-        { id: 'projects',    href: '/projects.html',    label: 'Projects',    icon: 'folder' },
-        { id: 'deployments', href: '/deployments.html', label: 'Deployments', icon: 'cloud' },
-        { id: 'chat',        href: '/chat.html',        label: 'Chat',        icon: 'chat' },
-        { id: 'workbench',   href: '/workbench.html',   label: 'Workbench',   icon: 'workbench' },
-        { id: 'usage',       href: '/usage.html',       label: 'Analytics',   icon: 'chart' },
-        { id: 'logs',        href: '/logs.html',        label: 'Logs',        icon: 'terminal' },
-        { id: 'activity',    href: '/activity.html',    label: 'Activity',    icon: 'pulse' },
-        { id: 'settings',    href: '/settings.html',    label: 'Settings',    icon: 'cog' }
+        { id: 'dashboard',  href: '/dashboard.html',  label: 'Overview',   icon: 'home' },
+        { id: 'chat',       href: '/chat.html',       label: 'Chat',       icon: 'chat' },
+        { id: 'workbench',  href: '/workbench.html',  label: 'Workbench',  icon: 'workbench' },
+        { id: 'memory',     href: '/memory.html',     label: 'Memory',     icon: 'memory' },
+        { id: 'projects',   href: '/projects.html',   label: 'Projects',   icon: 'folder' },
+        { id: 'services',   href: '/services.html',   label: 'Services',   icon: 'grid' },
+        { id: 'consulting', href: '/consulting.html', label: 'Consulting', icon: 'briefcase' }
+      ]
+    },
+    {
+      label: 'Toolkit',
+      items: [
+        { id: 'app-crm',         href: '/app-crm',         label: 'CRM',             icon: 'contacts' },
+        { id: 'app-marketing',   href: '/app-marketing',   label: 'Marketing Tools', icon: 'megaphone' },
+        { id: 'app-automation',  href: '/app-automation',  label: 'Automation',      icon: 'flow' }
+      ]
+    },
+    {
+      label: 'Build',
+      items: [
+        { id: 'workflows',   href: '/workflows.html',   label: 'Workflows',   icon: 'zap' },
+        { id: 'deployments', href: '/deployments.html', label: 'Deployments', icon: 'cloud' }
+      ]
+    },
+    {
+      label: 'Observability',
+      items: [
+        { id: 'activity',   href: '/activity.html',   label: 'Activity',   icon: 'pulse' },
+        { id: 'usage',      href: '/usage.html',      label: 'Usage',      icon: 'chart' },
+        { id: 'logs',       href: '/logs.html',       label: 'Logs',       icon: 'terminal' }
+      ]
+    },
+    {
+      label: 'Developer',
+      items: [
+        { id: 'api-keys',     href: '/api-keys.html',     label: 'API Keys',     icon: 'key' },
+        { id: 'integrations', href: '/integrations.html', label: 'Integrations', icon: 'plug' },
+        { id: 'domains',      href: '/domains.html',      label: 'Domains',      icon: 'globe' }
+      ]
+    },
+    {
+      label: 'Billing',
+      items: [
+        { id: 'billing', href: '/billing.html', label: 'Billing & Plan', icon: 'card' }
+      ]
+    },
+    {
+      label: 'Account',
+      items: [
+        { id: 'profile',       href: '/profile.html',         label: 'Profile',           icon: 'user'      },
+        { id: 'notifications', href: '/notifications.html',   label: 'Notifications',     icon: 'bell'      },
+        { id: 'sessions',      href: '/sessions.html',        label: 'Sessions',          icon: 'monitor'   },
+        { id: 'connected',     href: '/connected.html',       label: 'Connected accounts', icon: 'link'     },
+        { id: 'security',      href: '/security.html',        label: 'Password & MFA',    icon: 'shield'    },
+        { id: 'team',          href: '/team.html',            label: 'Team members',      icon: 'users'     },
+        { id: 'audit-log',     href: '/audit-log.html',       label: 'Audit log',         icon: 'history'   },
+        { id: 'settings',      href: '/settings.html',        label: 'Preferences',       icon: 'cog'       },
+        { id: 'support',       href: '/tickets.html',         label: 'Support',           icon: 'help'      }
       ]
     }
   ];
