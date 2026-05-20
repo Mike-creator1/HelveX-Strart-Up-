@@ -28,7 +28,7 @@
               <p class="hx-pg-sub">Your active HelveX plan, renewal, and upgrade options. Changing tier takes effect on the next billing cycle.</p>
               <div class="hx-pg-cta-row">
                 <button type="button" id="hx-sub-portal" class="hx-cta-primary" style="display:none;">Manage in Stripe</button>
-                <a href="/pricing.html" class="hx-cta-secondary">Change plan</a>
+                <a href="/billing.html" class="hx-cta-secondary">Change plan</a>
                 <a href="/invoices.html" class="hx-cta-secondary">Invoices</a>
               </div>
             </div>
@@ -90,7 +90,7 @@
           '</div>' +
           '<h3>No active subscription</h3>' +
           '<p>Pick a plan to unlock monthly credits, priority delivery, and a senior engineer on your team.</p>' +
-          '<a href="/pricing.html" class="hx-btn hx-btn-primary">Compare plans</a>' +
+          '<a href="/billing.html" class="hx-btn hx-btn-primary">Compare plans</a>' +
         '</div>';
       }
       function emptyHistory() {
@@ -160,7 +160,7 @@
                 '<div><p class="hx-stat-label">Credits used</p><p class="hx-stat-value hx-mono">' + (bal ? (bal.credits_used || 0) : 0) + '</p></div>' +
                 '<div><p class="hx-stat-label">' + renewLabel + '</p><p class="hx-stat-value" style="font-size:16px;">' + fmtDate(sub.current_period_end) + '</p></div>' +
               '</div>' +
-              '<p class="desc" style="margin-top:14px;">Change tier from <a href="/pricing.html" style="color:var(--hx-text);text-decoration:underline;">Pricing</a>. Invoices live under <a href="/invoices.html" style="color:var(--hx-text);text-decoration:underline;">Invoices</a>.</p>' +
+              '<p class="desc" style="margin-top:14px;">Change tier from <a href="/billing.html" style="color:var(--hx-text);text-decoration:underline;">Pricing</a>. Invoices live under <a href="/invoices.html" style="color:var(--hx-text);text-decoration:underline;">Invoices</a>.</p>' +
             '</div>';
         }).catch(function () { activeHost.innerHTML = emptyActive(); });
 
