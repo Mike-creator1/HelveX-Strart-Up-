@@ -652,7 +652,7 @@
     { title: 'Domains',           href: '/domains.html',         hint: 'Developer' },
     { title: 'API Docs',          href: '/docs.html',            hint: 'Developer' },
     { title: 'Credits',           href: '/credits.html',         hint: 'Billing' },
-    { title: 'Pricing',           href: '/pricing.html',         hint: 'Billing' },
+    { title: 'Pricing',           href: '/billing.html',         hint: 'Billing' },
     { title: 'Subscriptions',     href: '/subscriptions.html',   hint: 'Billing' },
     { title: 'Invoices',          href: '/invoices.html',        hint: 'Billing' },
     { title: 'Billing',           href: '/billing.html',         hint: 'Billing' },
