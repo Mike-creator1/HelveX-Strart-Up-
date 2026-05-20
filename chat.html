@@ -1375,110 +1375,22 @@
       75%      { transform: scale(1.05) skewX(-0.5deg); }
     }
 
-    /* Old pill — kept around in case anyone still mounts .hx-thinking, but
-       we don't render it anymore in this build. */
-    .hx-thinking {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 4px 12px 4px 8px;
-      background: linear-gradient(180deg, var(--hx-surface) 0%, var(--hx-bg-2) 100%);
-      border: 1px solid var(--hx-line);
-      border-radius: 999px;
-      color: var(--hx-text-mid);
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      box-shadow: var(--hx-shadow-xs);
-    }
-    /* Model-aware mark — each Helix model shows its own logo in the
-       thinking pill. Color + animation are themed per model. */
-    .hx-thinking-mark {
-      width: 22px; height: 22px;
-      display: inline-flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      border-radius: 8px;
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-    }
-    .hx-thinking-mark svg { width: 14px; height: 14px; }
-    /* Ether — atom orbits, gold accent, slow rotation */
-    .hx-thinking.is-ether {
-      border-color: color-mix(in srgb, var(--hx-yellow) 35%, var(--hx-line));
-    }
-    .hx-thinking.is-ether .hx-thinking-mark {
-      background: var(--hx-yellow-soft);
-      border-color: color-mix(in srgb, var(--hx-yellow) 35%, var(--hx-line));
-      color: var(--hx-yellow-deep);
-      box-shadow: 0 0 12px color-mix(in srgb, var(--hx-yellow) 25%, transparent);
-    }
-    .hx-thinking.is-ether .hx-thinking-mark svg {
-      animation: hx-mark-rotate 3.2s linear infinite;
-    }
-    @keyframes hx-mark-rotate {
-      to { transform: rotate(360deg); }
-    }
-    /* Nexus — reasoning burst, coral/red accent, breathing pulse */
-    .hx-thinking.is-nexus {
-      border-color: color-mix(in srgb, var(--hx-red) 28%, var(--hx-line));
-    }
-    .hx-thinking.is-nexus .hx-thinking-mark {
-      background: var(--hx-red-soft);
-      border-color: color-mix(in srgb, var(--hx-red) 30%, var(--hx-line));
-      color: var(--hx-red);
-      box-shadow: 0 0 12px color-mix(in srgb, var(--hx-red) 20%, transparent);
-    }
-    .hx-thinking.is-nexus .hx-thinking-mark svg {
-      animation: hx-mark-burst 2.2s ease-in-out infinite;
-    }
-    @keyframes hx-mark-burst {
-      0%, 100% { transform: scale(0.92); }
-      50%      { transform: scale(1.08); }
-    }
-    /* Prometheus — flame, graphite accent, flickering ascent */
-    .hx-thinking.is-prometheus {
-      border-color: color-mix(in srgb, var(--hx-text) 25%, var(--hx-line));
-    }
-    .hx-thinking.is-prometheus .hx-thinking-mark {
-      background: linear-gradient(180deg, var(--hx-bg-2) 0%, color-mix(in srgb, var(--hx-text) 8%, var(--hx-bg-2)) 100%);
-      border-color: color-mix(in srgb, var(--hx-text) 30%, var(--hx-line));
-      color: var(--hx-text);
-      box-shadow:
-        inset 0 1px 0 color-mix(in srgb, #fff 35%, transparent),
-        0 0 14px color-mix(in srgb, var(--hx-text) 18%, transparent);
-    }
-    .hx-thinking.is-prometheus .hx-thinking-mark svg {
-      animation: hx-mark-flicker 1.5s ease-in-out infinite;
-      transform-origin: 12px 20px;
-    }
-    @keyframes hx-mark-flicker {
-      0%, 100% { transform: scale(1)   skewX(0deg);  opacity: 1; }
-      25%      { transform: scale(1.05) skewX(-1.5deg); opacity: 0.9; }
-      50%      { transform: scale(0.96) skewX(1deg);    opacity: 1; }
-      75%      { transform: scale(1.04) skewX(-0.5deg); opacity: 0.95; }
-    }
-    .hx-thinking-text {
-      font-family: 'Instrument Serif', Georgia, serif;
-      font-style: italic;
-      font-size: 14px;
-      letter-spacing: -0.005em;
-      color: var(--hx-text);
-    }
-    /* Typing indicator — small dots inline with the thinking pill */
-    .hx-typing {
-      display: inline-flex; gap: 3px; align-items: center;
-    }
+    /* The old pill thinking indicator (.hx-thinking, .hx-thinking-mark,
+       .hx-thinking-text, .hx-typing) is intentionally not styled — only
+       .hx-thinking-solo (just the model logo) is active. If any stale
+       HTML still references the old classes, it renders as plain inline
+       content with no chrome, which is the desired minimal look. */
+    .hx-thinking,
+    .hx-thinking-mark,
+    .hx-thinking-text,
+    .hx-typing,
     .hx-typing span {
-      width: 4px; height: 4px; border-radius: 50%;
-      background: var(--hx-text-dim);
-      animation: hx-typing-bounce 1.2s infinite;
+      all: unset;
+      display: none !important;
     }
-    .hx-typing span:nth-child(2) { animation-delay: 0.15s; }
-    .hx-typing span:nth-child(3) { animation-delay: 0.30s; }
-    @keyframes hx-typing-bounce {
-      0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
-      30%           { transform: translateY(-3px); opacity: 1; }
-    }
+    /* Also remove the HELIX meta line when the message is empty (i.e.
+       the thinking-only state) so it really IS just the logo. */
+    .hx-msg-thinking .hx-msg-meta { display: none !important; }
 
     /* Empty state — editorial welcome */
     .hx-chat-blank {
