@@ -338,18 +338,29 @@
         renderGrid();
       }
 
+      // UI handlers wire IMMEDIATELY on DOMContentLoaded so the page
+      // is interactive even before Supabase resolves. The save action
+      // itself short-circuits with a status message if state.sb is
+      // still null when the user clicks.
+      function wireMemoryUI() {
+        var nb = $('hx-mem-new-btn');    if (nb) nb.addEventListener('click', openForm);
+        var nc = $('hx-mem-new-cancel'); if (nc) nc.addEventListener('click', closeForm);
+        var ns = $('hx-mem-new-save');   if (ns) ns.addEventListener('click', createMemory);
+        var si = $('hx-mem-search-input');
+        if (si) si.addEventListener('input', function (e) { state.search = e.target.value; renderGrid(); });
+        try { wireImpButtons('hx-mem-new-imp'); } catch (_) {}
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wireMemoryUI, { once: true });
+      } else {
+        wireMemoryUI();
+      }
+
       whenAuthReady(async function () {
         state.sb = window.HX.supabase;
         var u = (await state.sb.auth.getUser()).data.user;
         if (!u) return;
         state.owner = u.id;
-
-        $('hx-mem-new-btn').addEventListener('click', openForm);
-        $('hx-mem-new-cancel').addEventListener('click', closeForm);
-        $('hx-mem-new-save').addEventListener('click', createMemory);
-        $('hx-mem-search-input').addEventListener('input', function (e) { state.search = e.target.value; renderGrid(); });
-        wireImpButtons('hx-mem-new-imp');
-
         await refresh();
       });
     })();

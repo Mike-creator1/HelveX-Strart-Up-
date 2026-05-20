@@ -525,26 +525,36 @@
         await refresh();
       }
 
+      // UI listeners wire IMMEDIATELY so the form / slot adder are
+      // alive even if auth bootstrap is slow. Data fetch still waits.
+      function wireConsultingUI() {
+        var nb = $('hx-con-new');         if (nb) nb.addEventListener('click', openNewForm);
+        var nc = $('hx-con-cancel-new');  if (nc) nc.addEventListener('click', closeNewForm);
+        var ns = $('hx-con-submit');      if (ns) ns.addEventListener('click', submitBooking);
+        var na = $('hx-con-add-slot');    if (na) na.addEventListener('click', addSlot);
+        var si = $('hx-con-slot-input');
+        if (si) si.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); addSlot(); }
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wireConsultingUI, { once: true });
+      } else { wireConsultingUI(); }
+
       whenAuthReady(async function () {
         state.sb = window.HX.supabase;
         var u = (await state.sb.auth.getUser()).data.user;
         if (!u) return;
         state.owner = u.id;
 
-        $('hx-con-new').addEventListener('click', openNewForm);
-        $('hx-con-cancel-new').addEventListener('click', closeNewForm);
-        $('hx-con-submit').addEventListener('click', submitBooking);
-        $('hx-con-add-slot').addEventListener('click', addSlot);
-        $('hx-con-slot-input').addEventListener('keydown', function (e) {
-          if (e.key === 'Enter') { e.preventDefault(); addSlot(); }
-        });
-
         // Realtime — confirmed slot / meeting URL arrives without reload
-        state.sb.channel('hx-con-' + u.id)
-          .on('postgres_changes',
-              { event: '*', schema: 'public', table: 'consulting_bookings', filter: 'owner_id=eq.' + u.id },
-              function () { refresh(); })
-          .subscribe();
+        try {
+          state.sb.channel('hx-con-' + u.id)
+            .on('postgres_changes',
+                { event: '*', schema: 'public', table: 'consulting_bookings', filter: 'owner_id=eq.' + u.id },
+                function () { refresh(); })
+            .subscribe();
+        } catch (_) {}
 
         await refresh();
       });

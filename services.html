@@ -504,24 +504,34 @@
         await refresh();
       }
 
+      // UI listeners wire IMMEDIATELY so buttons are alive even if
+      // Supabase auth is slow or fails. Data-side fetches still wait
+      // for whenAuthReady below.
+      function wireServicesUI() {
+        var nb = $('hx-svc-new');    if (nb) nb.addEventListener('click', openNewForm);
+        var nc = $('hx-svc-cancel'); if (nc) nc.addEventListener('click', closeNewForm);
+        var ns = $('hx-svc-submit'); if (ns) ns.addEventListener('click', submitRequest);
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wireServicesUI, { once: true });
+      } else { wireServicesUI(); }
+
       whenAuthReady(async function () {
         state.sb = window.HX.supabase;
         var u = (await state.sb.auth.getUser()).data.user;
         if (!u) return;
         state.owner = u.id;
 
-        $('hx-svc-new').addEventListener('click', openNewForm);
-        $('hx-svc-cancel').addEventListener('click', closeNewForm);
-        $('hx-svc-submit').addEventListener('click', submitRequest);
-
         // Realtime — when the HelveX team updates a request (status,
         // quote, etc.), the customer's view reflects it immediately
         // without a page reload.
-        state.sb.channel('hx-svc-' + u.id)
-          .on('postgres_changes',
-              { event: '*', schema: 'public', table: 'service_requests', filter: 'owner_id=eq.' + u.id },
-              function () { refresh(); })
-          .subscribe();
+        try {
+          state.sb.channel('hx-svc-' + u.id)
+            .on('postgres_changes',
+                { event: '*', schema: 'public', table: 'service_requests', filter: 'owner_id=eq.' + u.id },
+                function () { refresh(); })
+            .subscribe();
+        } catch (_) {}
 
         await refresh();
       });
