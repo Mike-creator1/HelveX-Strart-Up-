@@ -194,6 +194,68 @@
     .hx-pj-tmpl .ic svg { width: 14px; height: 14px; }
     .hx-pj-tmpl .nm { font-weight: 600; font-size: 13.5px; }
     .hx-pj-tmpl .dc { font-size: 11.5px; color: var(--hx-text-mid); margin-top: 3px; line-height: 1.4; }
+    .hx-pj-tmpl.is-selected {
+      background: var(--hx-bg-2);
+      outline: 2px solid var(--hx-text);
+      outline-offset: -2px;
+    }
+
+    /* ── Create-project inline form (replaces native prompt) ─── */
+    .hx-pj-form {
+      display: none;
+      padding: 20px 22px;
+      border-top: 1px solid var(--hx-line);
+      background: var(--hx-bg-2);
+    }
+    .hx-pj-form.is-open { display: block; }
+    .hx-pj-form .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 640px) { .hx-pj-form .row { grid-template-columns: 1fr; } }
+    .hx-pj-form label {
+      display: block;
+      font-size: 11.5px; font-weight: 500;
+      color: var(--hx-text-mid);
+      margin-bottom: 5px;
+      letter-spacing: 0;
+    }
+    .hx-pj-form label .req { color: var(--hx-red); font-weight: 600; }
+    .hx-pj-form .help {
+      font-size: 11.5px;
+      color: var(--hx-text-dim);
+      margin-top: 5px;
+      font-family: var(--hx-mono);
+    }
+    .hx-pj-form input[type="text"] {
+      width: 100%;
+      height: 36px;
+      padding: 0 12px;
+      border: 1px solid var(--hx-line);
+      border-radius: var(--hx-r-sm);
+      background: var(--hx-surface);
+      font: inherit; font-size: 13.5px;
+      color: var(--hx-text);
+      transition: border-color 0.12s, box-shadow 0.12s;
+    }
+    .hx-pj-form input[type="text"]:focus {
+      outline: 0;
+      border-color: var(--hx-text);
+      box-shadow: 0 0 0 3px rgba(15,15,16,0.06);
+    }
+    .hx-pj-form .actions {
+      display: flex; gap: 8px; align-items: center;
+      margin-top: 8px;
+    }
+    .hx-pj-form-status {
+      font-family: var(--hx-mono);
+      font-size: 12px;
+      margin-left: auto;
+    }
+    .hx-pj-form-status.is-error { color: var(--hx-red); }
+    .hx-pj-form-status.is-ok    { color: var(--hx-emerald); }
   </style>
 </head>
 <body data-active="projects">
@@ -275,6 +337,27 @@
               <div class="dc">Start empty — bring your own brief.</div>
             </a>
           </div>
+
+          <!-- Create form — replaces the native prompt(). Pre-filled
+               with the picked template; user types a name and saves. -->
+          <form class="hx-pj-form" id="hx-pj-form">
+            <div class="row">
+              <div>
+                <label>Project name <span class="req">*</span></label>
+                <input type="text" id="hx-pj-fname" placeholder="e.g. Mike's CRM rebuild" maxlength="100" autocomplete="off" />
+              </div>
+              <div>
+                <label>Slug</label>
+                <input type="text" id="hx-pj-fslug" placeholder="auto-generated from name" maxlength="60" autocomplete="off" />
+                <p class="help" id="hx-pj-fslug-preview">your-name.helvex.app</p>
+              </div>
+            </div>
+            <div class="actions">
+              <button type="submit" class="hx-cta-primary" id="hx-pj-fsubmit">Create project</button>
+              <button type="button" class="hx-cta-secondary" id="hx-pj-fcancel">Cancel</button>
+              <span class="hx-pj-form-status" id="hx-pj-fstatus"></span>
+            </div>
+          </form>
         </div>
 
         <!-- Toolbar -->
@@ -422,6 +505,36 @@
       }
       function closeTemplates() { $('hx-tmpl-host').classList.remove('is-open'); }
 
+      var SELECTED_TEMPLATE = 'blank';
+
+      function slugify(s) {
+        return (s || '').toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '')
+          .slice(0, 60);
+      }
+
+      function pickTemplate(tmpl) {
+        SELECTED_TEMPLATE = tmpl || 'blank';
+        document.querySelectorAll('.hx-pj-tmpl').forEach(function (x) {
+          x.classList.toggle('is-selected', x.getAttribute('data-tmpl') === SELECTED_TEMPLATE);
+        });
+        // Reveal the form; focus the name input.
+        var form = $('hx-pj-form');
+        if (form) form.classList.add('is-open');
+        // Prefill placeholder hint with the template label.
+        var tnm = SELECTED_TEMPLATE === 'blank' ? 'Project' : (SELECTED_TEMPLATE.charAt(0).toUpperCase() + SELECTED_TEMPLATE.slice(1));
+        $('hx-pj-fname').setAttribute('placeholder', 'e.g. ' + tnm + ' for Acme Co.');
+        setTimeout(function () { $('hx-pj-fname').focus(); }, 30);
+      }
+
+      function setFormStatus(msg, kind) {
+        var el = $('hx-pj-fstatus');
+        if (!el) return;
+        el.textContent = msg || '';
+        el.className = 'hx-pj-form-status' + (kind === 'error' ? ' is-error' : kind === 'ok' ? ' is-ok' : '');
+      }
+
       // Wire UI immediately
       function wireUI() {
         var nb = $('hx-new-project'); if (nb) nb.addEventListener('click', openTemplates);
@@ -429,14 +542,40 @@
         document.querySelectorAll('.hx-pj-tmpl').forEach(function (t) {
           t.addEventListener('click', function (e) {
             e.preventDefault();
-            var tmpl = t.getAttribute('data-tmpl');
-            // For now, prompt the user; the actual generator wizard is the
-            // next thing to build. We at least give a clean entry point.
-            var name = prompt('Project name for the ' + tmpl + ' template?');
-            if (!name) return;
-            createProject(name, tmpl);
+            pickTemplate(t.getAttribute('data-tmpl'));
           });
         });
+
+        // Form interactions
+        var nameEl = $('hx-pj-fname');
+        var slugEl = $('hx-pj-fslug');
+        var slugPv = $('hx-pj-fslug-preview');
+        var slugTouched = false;
+        if (slugEl) slugEl.addEventListener('input', function () { slugTouched = true; updateSlugPreview(); });
+        if (nameEl) nameEl.addEventListener('input', function () {
+          if (!slugTouched) slugEl.value = slugify(nameEl.value);
+          updateSlugPreview();
+          setFormStatus('');
+        });
+        function updateSlugPreview() {
+          var s = slugEl.value || slugify(nameEl.value) || 'your-project';
+          slugPv.textContent = s + '.helvex.app';
+        }
+
+        var cancelBtn = $('hx-pj-fcancel');
+        if (cancelBtn) cancelBtn.addEventListener('click', function () {
+          $('hx-pj-form').classList.remove('is-open');
+          nameEl.value = ''; slugEl.value = '';
+          slugTouched = false;
+          setFormStatus('');
+        });
+
+        var form = $('hx-pj-form');
+        if (form) form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          createProject();
+        });
+
         document.querySelectorAll('.hx-pj-tab').forEach(function (b) {
           b.addEventListener('click', function () {
             document.querySelectorAll('.hx-pj-tab').forEach(function (x) { x.classList.remove('is-active'); });
@@ -458,29 +597,76 @@
         document.addEventListener('DOMContentLoaded', wireUI, { once: true });
       } else { wireUI(); }
 
-      async function createProject(name, template) {
+      async function createProject() {
+        var name = ($('hx-pj-fname').value || '').trim();
+        if (!name) { setFormStatus('Name is required.', 'error'); $('hx-pj-fname').focus(); return; }
+        var slug = slugify($('hx-pj-fslug').value || name);
+        if (!slug) { setFormStatus('Slug must contain at least one letter or digit.', 'error'); return; }
+
         var sb = window.HX && window.HX.supabase;
-        if (!sb) return alert('Sign in required.');
+        if (!sb) { setFormStatus('Sign in required.', 'error'); return; }
         var u = (await sb.auth.getUser()).data.user;
-        if (!u) return alert('Sign in required.');
-        var slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
-        var r = await sb.from('projects').insert({
+        if (!u) { setFormStatus('Sign in required.', 'error'); return; }
+
+        var submitBtn = $('hx-pj-fsubmit');
+        var lbl = submitBtn.textContent;
+        submitBtn.disabled = true; submitBtn.textContent = 'Creating…';
+        setFormStatus('Saving…');
+
+        // Compose the description from the template choice — keeps the
+        // record useful without depending on a `template` column that
+        // doesn't exist in this Supabase schema. Insert only fields the
+        // table is known to have.
+        var desc = (SELECTED_TEMPLATE && SELECTED_TEMPLATE !== 'blank')
+          ? 'Started from the ' + SELECTED_TEMPLATE + ' template.'
+          : null;
+
+        var insertPayload = {
           owner_id: u.id,
           name: name,
           slug: slug,
-          status: 'active',
-          description: template === 'blank' ? null : ('Started from the ' + template + ' template.'),
-          template: template
-        }).select().single();
-        if (r.error) { alert(r.error.message); return; }
-        closeTemplates();
-        load();
+          status: 'active'
+        };
+        if (desc) insertPayload.description = desc;
+
+        try {
+          var r = await sb.from('projects').insert(insertPayload).select().single();
+          if (r.error) throw r.error;
+          // Log the template choice as an activity event — that way the
+          // info isn't lost, even though the projects table doesn't
+          // store it directly.
+          try {
+            await sb.rpc('log_event', {
+              p_kind: 'project.created',
+              p_payload: { project_id: r.data.id, slug: slug, template: SELECTED_TEMPLATE }
+            });
+          } catch (_) {}
+          setFormStatus('Created.', 'ok');
+          // Reset + close + reload list
+          setTimeout(function () {
+            $('hx-pj-form').classList.remove('is-open');
+            $('hx-pj-fname').value = '';
+            $('hx-pj-fslug').value = '';
+            closeTemplates();
+            setFormStatus('');
+            load();
+          }, 400);
+        } catch (err) {
+          setFormStatus((err && err.message) || 'Could not create project.', 'error');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = lbl;
+        }
       }
 
       async function load() {
         var sb = window.HX.supabase;
+        // Do NOT select a `template` column — the projects table in
+        // this Supabase schema doesn't have one. Asking for it returned
+        // a schema-cache error every time. Template info lives in the
+        // description string and the activity_events log instead.
         var [projects, deploys] = await Promise.all([
-          safeQuery(sb.from('projects').select('id,name,slug,status,description,template,updated_at,created_at')),
+          safeQuery(sb.from('projects').select('id,name,slug,status,description,updated_at,created_at')),
           safeQuery(sb.from('deployments').select('id,project_id,status,version,region,environment,endpoint_url,created_at').order('created_at', { ascending: false }))
         ]);
         STATE.projects = projects.data || [];
