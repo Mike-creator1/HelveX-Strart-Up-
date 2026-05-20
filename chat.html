@@ -133,9 +133,10 @@
     }
 
     /* ─── CINEMATIC MORPH OVERLAY ─────────────────────────────────────
-       7 layered choreographies fire in sequence when the model changes.
-       Each layer uses only transform + opacity + filter so the whole
-       thing stays on the GPU compositor. */
+       11 layered choreographies fire over 2.4s when the model swaps.
+       Stages: anticipation → impact → reveal → decay → finale.
+       Every animation uses only transform / opacity / filter so the
+       whole thing stays on the GPU compositor. */
     .hx-morph {
       position: fixed;
       inset: 0;
@@ -143,8 +144,72 @@
       z-index: 80;
       opacity: 0;
       transition: opacity 0.2s ease;
+      perspective: 1200px;
     }
     .hx-morph.is-playing { opacity: 1; }
+
+    /* L0 — Camera shake on the BODY for 360ms during the impact frame.
+       Five micro-translations on a tight cubic; subtle enough to feel
+       like a punch landing, not a screen glitch. */
+    body.hx-screen-shake { animation: hx-shake 0.36s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+    @keyframes hx-shake {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      15%      { transform: translate3d(-2px, 1px, 0); }
+      30%      { transform: translate3d(2px, -1px, 0); }
+      45%      { transform: translate3d(-1px, 2px, 0); }
+      60%      { transform: translate3d(1px, -2px, 0); }
+      80%      { transform: translate3d(-1px, 1px, 0); }
+    }
+
+    /* L0.5 — Aurora wash: a slow-rotating conic gradient washes the
+       whole screen at very low alpha so the chat feels touched by the
+       new model's spectrum, not just spot-lit. */
+    .hx-morph-aurora {
+      position: absolute; inset: -30%;
+      background: conic-gradient(from 0deg,
+        transparent 0deg,
+        color-mix(in srgb, var(--hx-mc) 8%, transparent) 30deg,
+        color-mix(in srgb, var(--hx-mc) 22%, transparent) 90deg,
+        transparent 120deg,
+        color-mix(in srgb, var(--hx-mc) 18%, transparent) 200deg,
+        transparent 250deg,
+        color-mix(in srgb, var(--hx-mc) 14%, transparent) 320deg,
+        transparent 360deg);
+      filter: blur(60px) saturate(140%);
+      opacity: 0;
+      transform: rotate(0deg) scale(1.2);
+    }
+    .hx-morph.is-playing .hx-morph-aurora {
+      animation: hx-aurora 2.2s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+    @keyframes hx-aurora {
+      0%   { opacity: 0;    transform: rotate(0deg)   scale(1.4); }
+      30%  { opacity: 0.55; transform: rotate(40deg)  scale(1.0); }
+      70%  { opacity: 0.45; transform: rotate(110deg) scale(1.0); }
+      100% { opacity: 0;    transform: rotate(160deg) scale(1.1); }
+    }
+
+    /* L0.7 — Anticipation charge: a small dot pulses at center BEFORE
+       the burst, like energy gathering. */
+    .hx-morph-charge {
+      position: absolute; top: 50%; left: 50%;
+      width: 16px; height: 16px;
+      margin: -8px 0 0 -8px;
+      border-radius: 50%;
+      background: var(--hx-mc);
+      box-shadow:
+        0 0 24px var(--hx-mc-glow),
+        0 0 60px var(--hx-mc-glow);
+      transform: scale(0); opacity: 0;
+    }
+    .hx-morph.is-playing .hx-morph-charge {
+      animation: hx-charge 0.32s cubic-bezier(0.4, 0, 1, 1) both;
+    }
+    @keyframes hx-charge {
+      0%   { transform: scale(0);   opacity: 0; }
+      40%  { transform: scale(1.4); opacity: 1; }
+      100% { transform: scale(0.2); opacity: 0; }
+    }
 
     /* L1 — vignette closes in then opens out, focuses attention */
     .hx-morph-vignette {
@@ -165,16 +230,18 @@
       100% { opacity: 0; transform: scale(0.9); }
     }
 
-    /* L2 — short bright flash at the start (~80ms), like a camera strobe */
+    /* L2 — short bright flash at the impact moment (post-charge) */
     .hx-morph-flash {
       position: absolute; inset: 0;
       background: radial-gradient(circle at center,
-        color-mix(in srgb, var(--hx-mc) 22%, transparent) 0%,
-        transparent 50%);
+        color-mix(in srgb, var(--hx-mc) 35%, transparent) 0%,
+        color-mix(in srgb, var(--hx-mc) 12%, transparent) 30%,
+        transparent 55%);
       opacity: 0;
+      mix-blend-mode: screen;
     }
     .hx-morph.is-playing .hx-morph-flash {
-      animation: hx-flash 0.5s cubic-bezier(0, 0, 0.2, 1) both;
+      animation: hx-flash 0.5s cubic-bezier(0, 0, 0.2, 1) 0.26s both;
     }
     @keyframes hx-flash {
       0%   { opacity: 0; }
@@ -195,9 +262,15 @@
       box-shadow: 0 0 32px var(--hx-mc-glow);
       transform: scale(0); opacity: 0;
     }
-    .hx-morph.is-playing .hx-morph-rings span:nth-child(1) { animation: hx-ring 1.1s cubic-bezier(0, 0.55, 0.25, 1) 0.05s both; }
-    .hx-morph.is-playing .hx-morph-rings span:nth-child(2) { animation: hx-ring 1.2s cubic-bezier(0, 0.55, 0.25, 1) 0.18s both; }
-    .hx-morph.is-playing .hx-morph-rings span:nth-child(3) { animation: hx-ring 1.3s cubic-bezier(0, 0.55, 0.25, 1) 0.32s both; }
+    .hx-morph.is-playing .hx-morph-rings span:nth-child(1) { animation: hx-ring 1.1s cubic-bezier(0, 0.55, 0.25, 1) 0.30s both; }
+    .hx-morph.is-playing .hx-morph-rings span:nth-child(2) { animation: hx-ring 1.2s cubic-bezier(0, 0.55, 0.25, 1) 0.42s both; }
+    .hx-morph.is-playing .hx-morph-rings span:nth-child(3) { animation: hx-ring 1.3s cubic-bezier(0, 0.55, 0.25, 1) 0.56s both; }
+    .hx-morph.is-playing .hx-morph-rings span:nth-child(4) { animation: hx-ring-finale 0.9s cubic-bezier(0.16, 0.84, 0.44, 1) 1.6s both; }
+    @keyframes hx-ring-finale {
+      0%   { transform: scale(0);   opacity: 0; border-width: 2px; }
+      18%  { opacity: 0.6; }
+      100% { transform: scale(14);  opacity: 0; border-width: 0; }
+    }
     @keyframes hx-ring {
       0%   { transform: scale(0);   opacity: 0;    border-width: 3px; }
       15%  { opacity: 0.9; }
@@ -214,21 +287,27 @@
       width: 6px; height: 6px;
       border-radius: 50%;
       background: var(--hx-mc);
-      box-shadow: 0 0 12px var(--hx-mc-glow);
+      /* Multi-layer box-shadow creates a comet-trail effect */
+      box-shadow:
+        0 0 16px var(--hx-mc-glow),
+        0 8px 6px -2px color-mix(in srgb, var(--hx-mc) 70%, transparent),
+        0 18px 10px -4px color-mix(in srgb, var(--hx-mc) 40%, transparent),
+        0 32px 14px -6px color-mix(in srgb, var(--hx-mc) 18%, transparent);
       transform-origin: 3px 3px;
-      transform: rotate(calc(var(--p) * 25.714deg)) translateY(0) scale(0);
+      transform: rotate(calc(var(--p) * 20deg)) translateY(0) scale(0);
       opacity: 0;
     }
     .hx-morph.is-playing .hx-morph-particles i {
-      animation: hx-particle 1.2s cubic-bezier(0.18, 0.89, 0.32, 1.28) 0.1s both;
+      animation: hx-particle 1.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) 0.30s both;
     }
-    .hx-morph.is-playing .hx-morph-particles i:nth-child(2n)  { animation-delay: 0.16s; animation-duration: 1.3s; }
-    .hx-morph.is-playing .hx-morph-particles i:nth-child(3n)  { animation-delay: 0.22s; animation-duration: 1.4s; }
-    .hx-morph.is-playing .hx-morph-particles i:nth-child(5n)  { animation-delay: 0.12s; animation-duration: 1.25s; }
+    .hx-morph.is-playing .hx-morph-particles i:nth-child(2n)  { animation-delay: 0.36s; animation-duration: 1.5s; }
+    .hx-morph.is-playing .hx-morph-particles i:nth-child(3n)  { animation-delay: 0.42s; animation-duration: 1.6s; }
+    .hx-morph.is-playing .hx-morph-particles i:nth-child(5n)  { animation-delay: 0.32s; animation-duration: 1.45s; }
+    .hx-morph.is-playing .hx-morph-particles i:nth-child(7n)  { animation-delay: 0.48s; animation-duration: 1.7s; }
     @keyframes hx-particle {
-      0%   { transform: rotate(calc(var(--p) * 25.714deg)) translateY(0)      scale(0);   opacity: 0; }
-      15%  { transform: rotate(calc(var(--p) * 25.714deg)) translateY(-40px)  scale(1);   opacity: 1; }
-      100% { transform: rotate(calc(var(--p) * 25.714deg)) translateY(-560px) scale(0.2); opacity: 0; }
+      0%   { transform: rotate(calc(var(--p) * 20deg)) translateY(0)      scale(0)   rotate(0); opacity: 0; }
+      12%  { transform: rotate(calc(var(--p) * 20deg)) translateY(-50px)  scale(1.4) rotate(0); opacity: 1; }
+      100% { transform: rotate(calc(var(--p) * 20deg)) translateY(-680px) scale(0.1) rotate(0); opacity: 0; }
     }
 
     /* L5 — diagonal scan beam sweeps once across the screen */
@@ -245,7 +324,7 @@
       filter: blur(8px);
     }
     .hx-morph.is-playing .hx-morph-beam {
-      animation: hx-beam 1.1s cubic-bezier(0.4, 0, 0.1, 1) 0.2s both;
+      animation: hx-beam 1.1s cubic-bezier(0.4, 0, 0.1, 1) 0.45s both;
     }
     @keyframes hx-beam {
       0%   { left: -40%; opacity: 0; }
@@ -253,41 +332,74 @@
       100% { left: 130%; opacity: 0; }
     }
 
-    /* L6 — the model logo: scales in, holds, drifts up + fades */
+    /* L5.5 — Anamorphic lens flare: a horizontal cinematic streak that
+       appears under the logo as it lands, like J.J. Abrams. */
+    .hx-morph-flare {
+      position: absolute; top: 50%; left: 50%;
+      width: 80%; height: 8px;
+      transform: translate(-50%, -50%) scaleX(0);
+      background: linear-gradient(90deg,
+        transparent 0%,
+        color-mix(in srgb, var(--hx-mc) 60%, transparent) 20%,
+        var(--hx-mc) 50%,
+        color-mix(in srgb, var(--hx-mc) 60%, transparent) 80%,
+        transparent 100%);
+      filter: blur(6px);
+      opacity: 0;
+      mix-blend-mode: screen;
+    }
+    .hx-morph.is-playing .hx-morph-flare {
+      animation: hx-flare 1s cubic-bezier(0.16, 0.84, 0.44, 1) 0.42s both;
+    }
+    @keyframes hx-flare {
+      0%   { transform: translate(-50%, -50%) scaleX(0)   scaleY(1);   opacity: 0; }
+      30%  { transform: translate(-50%, -50%) scaleX(1.1) scaleY(1);   opacity: 1; }
+      60%  { transform: translate(-50%, -50%) scaleX(1)   scaleY(0.7); opacity: 0.8; }
+      100% { transform: translate(-50%, -50%) scaleX(1.2) scaleY(0.2); opacity: 0; }
+    }
+
+    /* L6 — the model logo lands in 3D space with chromatic aberration */
     .hx-morph-mark {
       position: absolute; top: 50%; left: 50%;
-      width: 240px; height: 240px;
-      transform: translate(-50%, -50%) scale(0.3);
+      width: 260px; height: 260px;
+      transform: translate(-50%, -50%) scale(0.2) rotateY(-90deg);
       opacity: 0;
       color: var(--hx-mc);
       display: flex; align-items: center; justify-content: center;
-      filter: drop-shadow(0 0 36px var(--hx-mc-glow)) drop-shadow(0 0 14px var(--hx-mc-glow));
+      filter:
+        drop-shadow(0 0 44px var(--hx-mc-glow))
+        drop-shadow(0 0 20px var(--hx-mc-glow))
+        drop-shadow(2px 0 0 rgba(255, 60, 60, 0.5))
+        drop-shadow(-2px 0 0 rgba(60, 100, 255, 0.5));
+      transform-style: preserve-3d;
     }
     .hx-morph-mark svg { width: 100%; height: 100%; }
     .hx-morph.is-playing .hx-morph-mark {
-      animation: hx-mark 1.5s cubic-bezier(0.16, 0.84, 0.44, 1) 0.05s both;
+      animation: hx-mark 1.8s cubic-bezier(0.16, 0.84, 0.44, 1) 0.32s both;
     }
     .hx-morph.is-prometheus .hx-morph-mark {
       animation-name: hx-mark-flame;
-      animation-duration: 1.7s;
+      animation-duration: 2s;
     }
-    .hx-morph.is-ether .hx-morph-mark svg { animation: hx-mark-spin 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both; }
-    @keyframes hx-mark-spin { to { transform: rotate(540deg); } }
+    .hx-morph.is-ether .hx-morph-mark svg { animation: hx-mark-spin 1.7s cubic-bezier(0.4, 0, 0.2, 1) 0.32s both; }
+    @keyframes hx-mark-spin { to { transform: rotate(720deg); } }
     @keyframes hx-mark {
-      0%   { transform: translate(-50%, -50%) scale(0.3)  rotate(-12deg); opacity: 0; filter: drop-shadow(0 0 0 transparent) blur(8px); }
-      18%  { transform: translate(-50%, -50%) scale(1.18) rotate(2deg);   opacity: 1; filter: drop-shadow(0 0 40px var(--hx-mc-glow)) blur(0); }
-      45%  { transform: translate(-50%, -50%) scale(1)    rotate(0);      opacity: 1; }
-      75%  { transform: translate(-50%, -50%) scale(1.05) rotate(0);      opacity: 0.85; }
-      100% { transform: translate(-50%, -55%) scale(1.4)  rotate(0);      opacity: 0; filter: drop-shadow(0 0 60px var(--hx-mc-glow)) blur(2px); }
+      0%   { transform: translate(-50%, -50%) scale(0.2)  rotateY(-90deg) rotate(-18deg); opacity: 0; filter: blur(12px) drop-shadow(0 0 0 transparent); }
+      10%  { transform: translate(-50%, -50%) scale(0.9)  rotateY(-20deg) rotate(-6deg);  opacity: 0.9; filter: blur(2px) drop-shadow(0 0 20px var(--hx-mc-glow)) drop-shadow(3px 0 0 rgba(255,60,60,0.6)) drop-shadow(-3px 0 0 rgba(60,100,255,0.6)); }
+      22%  { transform: translate(-50%, -50%) scale(1.25) rotateY(8deg)   rotate(3deg);   opacity: 1;   filter: blur(0)   drop-shadow(0 0 50px var(--hx-mc-glow)) drop-shadow(1px 0 0 rgba(255,60,60,0.3)) drop-shadow(-1px 0 0 rgba(60,100,255,0.3)); }
+      40%  { transform: translate(-50%, -50%) scale(1)    rotateY(0)      rotate(0);      opacity: 1;   filter: blur(0)   drop-shadow(0 0 36px var(--hx-mc-glow)); }
+      72%  { transform: translate(-50%, -50%) scale(1.04) rotateY(0)      rotate(0);      opacity: 0.95; }
+      100% { transform: translate(-50%, -58%) scale(1.5)  rotateY(0)      rotate(0);      opacity: 0;   filter: blur(3px) drop-shadow(0 0 70px var(--hx-mc-glow)); }
     }
     @keyframes hx-mark-flame {
-      0%   { transform: translate(-50%, -42%) scale(0.2)  skewX(-6deg); opacity: 0; filter: blur(10px); }
-      12%  { transform: translate(-50%, -50%) scale(1.15) skewX(3deg);  opacity: 1; filter: blur(0) drop-shadow(0 0 40px var(--hx-mc-glow)); }
-      28%  { transform: translate(-50%, -50%) scale(0.96) skewX(-2deg); opacity: 1; }
-      44%  { transform: translate(-50%, -50%) scale(1.06) skewX(2deg);  opacity: 1; }
-      60%  { transform: translate(-50%, -50%) scale(0.98) skewX(-1deg); opacity: 1; }
-      80%  { transform: translate(-50%, -52%) scale(1.1)  skewX(1deg);  opacity: 0.7; }
-      100% { transform: translate(-50%, -60%) scale(1.45) skewX(0deg);  opacity: 0; filter: blur(2px) drop-shadow(0 0 70px var(--hx-mc-glow)); }
+      0%   { transform: translate(-50%, -42%) scale(0.15) skewX(-8deg);  opacity: 0; filter: blur(14px); }
+      8%   { transform: translate(-50%, -48%) scale(0.7)  skewX(4deg);   opacity: 0.6; filter: blur(4px); }
+      18%  { transform: translate(-50%, -50%) scale(1.2)  skewX(3deg);   opacity: 1; filter: blur(0) drop-shadow(0 0 50px var(--hx-mc-glow)); }
+      32%  { transform: translate(-50%, -50%) scale(0.94) skewX(-3deg);  opacity: 1; }
+      48%  { transform: translate(-50%, -50%) scale(1.08) skewX(2deg);   opacity: 1; }
+      64%  { transform: translate(-50%, -50%) scale(0.97) skewX(-1deg);  opacity: 1; }
+      82%  { transform: translate(-50%, -54%) scale(1.12) skewX(1deg);   opacity: 0.7; }
+      100% { transform: translate(-50%, -64%) scale(1.55) skewX(0deg);   opacity: 0; filter: blur(3px) drop-shadow(0 0 80px var(--hx-mc-glow)); }
     }
 
     /* L7 — model name reveals under the logo as a thin caps line */
@@ -307,25 +419,48 @@
       padding: 0 4px;
     }
     .hx-morph.is-playing .hx-morph-name {
-      animation: hx-name 1.4s cubic-bezier(0.16, 0.84, 0.44, 1) 0.35s both;
+      animation: hx-name 1.6s cubic-bezier(0.16, 0.84, 0.44, 1) 0.7s both;
     }
     @keyframes hx-name {
-      0%   { transform: translate(-50%, 110px); opacity: 0; letter-spacing: 0.4em; }
-      35%  { transform: translate(-50%, 100px); opacity: 1; letter-spacing: -0.012em; }
+      0%   { transform: translate(-50%, 110px); opacity: 0; letter-spacing: 0.5em; filter: blur(8px); }
+      30%  { transform: translate(-50%, 100px); opacity: 1; letter-spacing: -0.012em; filter: blur(0); }
       70%  { transform: translate(-50%, 100px); opacity: 1; }
-      100% { transform: translate(-50%, 92px);  opacity: 0; }
+      100% { transform: translate(-50%, 86px);  opacity: 0; filter: blur(2px); }
     }
 
-    /* The chat pane gets a brief sympathetic pulse: a soft glow blooms
-       around the message area while the morph plays so the user feels
-       the whole surface 're-skin' itself, not just the overlay. */
+    /* L8 — Finale shockwave: one big slow ring expanding outward AFTER
+       the logo dissipates, like the aftermath of a detonation. */
+    .hx-morph-finale {
+      position: absolute; top: 50%; left: 50%;
+      width: 60px; height: 60px;
+      margin: -30px 0 0 -30px;
+      border-radius: 50%;
+      border: 2px solid var(--hx-mc);
+      box-shadow:
+        0 0 40px var(--hx-mc-glow),
+        inset 0 0 40px var(--hx-mc-glow);
+      transform: scale(0); opacity: 0;
+    }
+    .hx-morph.is-playing .hx-morph-finale {
+      animation: hx-finale 1.4s cubic-bezier(0.22, 1, 0.36, 1) 1.4s both;
+    }
+    @keyframes hx-finale {
+      0%   { transform: scale(0);  opacity: 0;   border-width: 4px; }
+      20%  { opacity: 1; }
+      100% { transform: scale(25); opacity: 0;   border-width: 0; }
+    }
+
+    /* The chat pane gets a sympathetic pulse: a soft glow blooms around
+       the message area while the morph plays so the user feels the whole
+       surface 're-skin' itself, not just the overlay. */
     .hx-chat-pane.is-morphing {
-      animation: hx-pane-pulse 1.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+      animation: hx-pane-pulse 1.8s cubic-bezier(0.4, 0, 0.2, 1) both;
     }
     @keyframes hx-pane-pulse {
-      0%, 100% { box-shadow: inset 0 0 0 0 transparent; }
-      35%      { box-shadow: inset 0 0 120px 0 var(--hx-mc-soft); }
-      65%      { box-shadow: inset 0 0 80px 0 var(--hx-mc-soft); }
+      0%, 100% { box-shadow: inset 0 0 0   0 transparent; }
+      25%      { box-shadow: inset 0 0 160px 0 var(--hx-mc-soft); }
+      50%      { box-shadow: inset 0 0 120px 0 var(--hx-mc-soft); }
+      80%      { box-shadow: inset 0 0 60px  0 var(--hx-mc-soft); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -3719,17 +3854,21 @@
             overlay = document.createElement('div');
             overlay.id = 'hx-c-morph';
             overlay.className = 'hx-morph';
-            // 14 particles arranged radially; CSS reads --p to set angle.
+            // 18 particles arranged radially; CSS reads --p to set angle.
             var particles = '';
-            for (var i = 0; i < 14; i++) particles += '<i style="--p:' + i + '"></i>';
+            for (var i = 0; i < 18; i++) particles += '<i style="--p:' + i + '"></i>';
             overlay.innerHTML =
+              '<div class="hx-morph-aurora"    aria-hidden="true"></div>' +
               '<div class="hx-morph-vignette"  aria-hidden="true"></div>' +
+              '<div class="hx-morph-charge"    aria-hidden="true"></div>' +
               '<div class="hx-morph-flash"     aria-hidden="true"></div>' +
-              '<div class="hx-morph-rings"     aria-hidden="true"><span></span><span></span><span></span></div>' +
+              '<div class="hx-morph-rings"     aria-hidden="true"><span></span><span></span><span></span><span></span></div>' +
               '<div class="hx-morph-particles" aria-hidden="true">' + particles + '</div>' +
               '<div class="hx-morph-beam"      aria-hidden="true"></div>' +
+              '<div class="hx-morph-flare"     aria-hidden="true"></div>' +
               '<div class="hx-morph-mark"      aria-hidden="true"></div>' +
-              '<div class="hx-morph-name"      aria-hidden="true"><span></span></div>';
+              '<div class="hx-morph-name"      aria-hidden="true"><span></span></div>' +
+              '<div class="hx-morph-finale"    aria-hidden="true"></div>';
             document.body.appendChild(overlay);
           }
           // Inject the new model's logo + name
@@ -3747,11 +3886,19 @@
             setTimeout(function () { pane.classList.remove('is-morphing'); }, 1700);
           }
 
+          // Camera shake on body at the impact moment (250ms after charge)
+          document.body.classList.remove('hx-screen-shake');
+          void document.body.offsetWidth;
+          setTimeout(function () {
+            document.body.classList.add('hx-screen-shake');
+            setTimeout(function () { document.body.classList.remove('hx-screen-shake'); }, 360);
+          }, 280);
+
           // Restart the overlay animation
           overlay.classList.remove('is-playing', 'is-ether', 'is-nexus', 'is-prometheus');
           void overlay.offsetWidth;
           overlay.classList.add('is-playing', 'is-' + model);
-          setTimeout(function () { overlay.classList.remove('is-playing'); }, 1750);
+          setTimeout(function () { overlay.classList.remove('is-playing'); }, 2400);
         }
         // Project switch = full chat-context refresh. Closes the current
         // conversation, persists the new active project, reloads the
