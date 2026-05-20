@@ -13,27 +13,33 @@
    bootstrap from localStorage "hx.theme" which Settings page writes).
    Light mode is the default; this block overrides the core variables.   */
 html[data-theme="dark"] {
-  --hx-bg:           #07070A;
-  --hx-bg-2:         #0E0E14;
-  --hx-bg-3:         #15151D;
-  --hx-surface:      #0E0E14;
-  --hx-surface-2:    #15151D;
-  --hx-surface-3:    #1A1A23;
-  --hx-line:         #1F1F28;
-  --hx-line-soft:    #15151D;
-  --hx-line-strong:  #2A2A36;
+  /* Pure black surfaces + pure white text. User requirement: dark
+     mode must be #000 across every page, content #FFF. No navy,
+     no slate — black. Subtle elevation comes from #0A / #111 on
+     the few surfaces that need to read as "raised" against the
+     page (cards, popovers). Borders sit at #222 so they stay
+     legible on the black page. */
+  --hx-bg:           #000000;
+  --hx-bg-2:         #0A0A0A;
+  --hx-bg-3:         #111111;
+  --hx-surface:      #000000;
+  --hx-surface-2:    #0A0A0A;
+  --hx-surface-3:    #141414;
+  --hx-line:         #222222;
+  --hx-line-soft:    #161616;
+  --hx-line-strong:  #2E2E2E;
   --hx-line-focus:   #FCD34D;
-  --hx-text:         #F5F5F7;
-  --hx-text-mid:     #A8A8B0;
-  --hx-text-dim:     #6E6E78;
-  --hx-text-faint:   #494954;
+  --hx-text:         #FFFFFF;
+  --hx-text-mid:     #B5B5B5;
+  --hx-text-dim:     #7A7A7A;
+  --hx-text-faint:   #4A4A4A;
   --hx-yellow-soft:  rgba(252, 211, 77, 0.12);
   --hx-red-soft:     rgba(220, 38, 38, 0.16);
   --hx-emerald-soft: rgba(16, 185, 129, 0.16);
-  --hx-shadow-xs:    0 1px 2px rgba(0, 0, 0, 0.5);
-  --hx-shadow-sm:    0 1px 3px rgba(0, 0, 0, 0.55);
-  --hx-shadow:       0 4px 12px -2px rgba(0, 0, 0, 0.55);
-  --hx-shadow-lg:    0 12px 32px -8px rgba(0, 0, 0, 0.6);
+  --hx-shadow-xs:    0 1px 2px rgba(0, 0, 0, 0.6);
+  --hx-shadow-sm:    0 1px 3px rgba(0, 0, 0, 0.6);
+  --hx-shadow:       0 4px 12px -2px rgba(0, 0, 0, 0.6);
+  --hx-shadow-lg:    0 12px 32px -8px rgba(0, 0, 0, 0.7);
 }
 html[data-theme="dark"] body { color-scheme: dark; }
 
@@ -56,7 +62,7 @@ html[data-theme="dark"] .hx-sidebar-brand img {
    translucent-white veneer over the dark page. Override with a dark
    translucent so the blur still reads but the colour fits. */
 html[data-theme="dark"] .hx-topbar {
-  background: rgba(14, 14, 20, 0.78);
+  background: rgba(0, 0, 0, 0.82);
   border-bottom-color: var(--hx-line);
 }
 
