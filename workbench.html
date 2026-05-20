@@ -480,16 +480,18 @@
         if (!r.error) await refresh();
       }
 
-      whenAuthReady(async function () {
-        state.sb = window.HX.supabase;
-        var u = (await state.sb.auth.getUser()).data.user;
-        if (!u) return;
-        state.owner = u.id;
-
-        $('hx-wb-new').addEventListener('click', openNewForm);
-        $('hx-wb-new-cancel').addEventListener('click', closeNewForm);
-        $('hx-wb-new-save').addEventListener('click', createArtifact);
-
+      // ─── UI wiring runs IMMEDIATELY on DOMContentLoaded ──────────
+      // The previous build wired every button inside whenAuthReady,
+      // which meant a slow Supabase bootstrap (or a network error)
+      // left the entire UI dead — buttons sat there visibly but no
+      // listener was attached. Now the click handlers attach as soon
+      // as the DOM is ready; the Supabase-dependent action inside
+      // each handler short-circuits with a helpful status when the
+      // auth gate hasn't finished yet.
+      function wireUI() {
+        var bNew = $('hx-wb-new');     if (bNew) bNew.addEventListener('click', openNewForm);
+        var bCan = $('hx-wb-new-cancel'); if (bCan) bCan.addEventListener('click', closeNewForm);
+        var bSav = $('hx-wb-new-save'); if (bSav) bSav.addEventListener('click', createArtifact);
         document.querySelectorAll('.hx-wb-filter').forEach(function (b) {
           b.addEventListener('click', function () {
             document.querySelectorAll('.hx-wb-filter').forEach(function (x) { x.classList.remove('active'); });
@@ -498,17 +500,38 @@
             renderGrid();
           });
         });
-        // Debounce the search a touch so we don't hammer the FTS RPC
-        // on every keystroke. 160ms feels instant to a typing user but
-        // collapses bursts ("stripe" arrives as 6 keystrokes → 1 call).
         var searchTimer = null;
-        $('hx-wb-search-input').addEventListener('input', function (e) {
+        var si = $('hx-wb-search-input');
+        if (si) si.addEventListener('input', function (e) {
           var v = e.target.value;
           state.search = v;
           state.searchCache = { q: '', rows: null };
           if (searchTimer) clearTimeout(searchTimer);
           searchTimer = setTimeout(function () { renderGrid(); }, 160);
         });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wireUI, { once: true });
+      } else {
+        wireUI();
+      }
+
+      // Render an immediate empty state so the user sees the onboarding
+      // even before Supabase comes back. This means the "+ Add one
+      // manually" button works the moment the page is interactive.
+      if (document.readyState !== 'loading') {
+        try { renderEmpty($('hx-wb-grid'), false); } catch (_) {}
+      } else {
+        document.addEventListener('DOMContentLoaded', function () {
+          try { renderEmpty($('hx-wb-grid'), false); } catch (_) {}
+        }, { once: true });
+      }
+
+      whenAuthReady(async function () {
+        state.sb = window.HX.supabase;
+        var u = (await state.sb.auth.getUser()).data.user;
+        if (!u) return;
+        state.owner = u.id;
 
         await refresh();
 
