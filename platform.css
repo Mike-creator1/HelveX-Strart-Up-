@@ -2446,8 +2446,30 @@ html[data-theme="dark"] .hx-cmdp-foot kbd {
   margin: -10px 0 22px;
   overflow-x: auto;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  /* Visual hint that the row scrolls horizontally — soft fade on the
+     right edge so users know more tabs exist past the viewport. */
+  mask-image: linear-gradient(90deg,
+    #000 0%,
+    #000 calc(100% - 36px),
+    transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg,
+    #000 0%,
+    #000 calc(100% - 36px),
+    transparent 100%);
+  position: relative;
 }
 .hx-settings-tabs::-webkit-scrollbar { display: none; }
+@media (max-width: 720px) {
+  /* On mobile the fade is the only affordance, so make it tighter and
+     wider so the swipe hint is unmissable. */
+  .hx-settings-tabs {
+    margin: -6px 0 18px;
+    mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 48px), transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 48px), transparent 100%);
+  }
+  .hx-settings-tabs a { padding: 10px 12px; font-size: 12.5px; }
+}
 .hx-settings-tabs a {
   position: relative;
   padding: 10px 14px;

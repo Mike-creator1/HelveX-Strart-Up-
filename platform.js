@@ -585,6 +585,20 @@
       if (hero && hero.nextSibling) main.insertBefore(bar, hero.nextSibling);
       else if (hero) main.appendChild(bar);
       else main.insertBefore(bar, main.firstChild);
+      // On narrow screens scroll the active tab into view so users see
+      // where they are even if other tabs are off-screen to the right.
+      requestAnimationFrame(function () {
+        var activeTab = bar.querySelector('a.is-active');
+        if (!activeTab) return;
+        var barRect    = bar.getBoundingClientRect();
+        var tabRect    = activeTab.getBoundingClientRect();
+        // If the active tab is anywhere except fully within the visible
+        // strip, scroll the bar so the active tab sits 16px from the left.
+        if (tabRect.left < barRect.left + 4 || tabRect.right > barRect.right - 4) {
+          var delta = (tabRect.left - barRect.left) - 16;
+          bar.scrollBy({ left: delta, behavior: 'auto' });
+        }
+      });
     })();
 
     loadAuthScript();
