@@ -345,7 +345,7 @@
         try {
           var mql = window.matchMedia('(prefers-color-scheme: dark)');
           var listener = function () {
-            var pref = (function () { try { return localStorage.getItem('hx.theme') || 'system'; } catch (e) { return 'system'; } })();
+            var pref = (function () { try { return localStorage.getItem('hx.theme') || 'light'; } catch (e) { return 'system'; } })();
             if (pref === 'system') applyTheme('system');
           };
           if (mql.addEventListener) mql.addEventListener('change', listener);
@@ -369,10 +369,10 @@
           $('hx-stat-ws').textContent = company || 'Untitled workspace';
 
           var s = await sb.from('user_settings').select('*').eq('user_id', uid).maybeSingle();
-          var st = (s && s.data) || { language:'en', timezone:'Europe/Zurich', theme:'system', density:'comfortable' };
+          var st = (s && s.data) || { language:'en', timezone:'Europe/Zurich', theme:'light', density:'comfortable' };
           $('hx-ws-timezone').value = st.timezone || 'Europe/Zurich';
           $('hx-ws-language').value = st.language || 'en';
-          var theme   = st.theme || 'system';
+          var theme   = st.theme || 'light';
           var density = st.density || 'comfortable';
           setSegActive('theme',   theme);
           setSegActive('density', density);

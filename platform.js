@@ -9,9 +9,11 @@
   // Theme + language bootstrap — applied before paint so there's no flash.
   // Settings page persists to user_settings *and* localStorage; this reads
   // localStorage so every platform page picks up the user's preference.
+  // Default is LIGHT — we never start a new user in dark mode, even if their
+  // OS is set to dark. They have to opt in via Preferences.
   (function applyStoredTheme() {
     try {
-      var theme = localStorage.getItem('hx.theme') || 'system';
+      var theme = localStorage.getItem('hx.theme') || 'light';
       var resolved = theme;
       if (theme === 'system') {
         resolved = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -355,14 +357,13 @@
       if (action === 'current') { close(); return; } // already on this workspace
       if (action === 'theme') {
         try {
-          var current = localStorage.getItem('hx.theme') || 'system';
-          var next = current === 'dark' ? 'light' : (current === 'light' ? 'system' : 'dark');
+          var current = localStorage.getItem('hx.theme') || 'light';
+          // Toggle between light and dark only — system mode is opt-in
+          // via Preferences and never reached from this quick-toggle.
+          var next = current === 'dark' ? 'light' : 'dark';
           localStorage.setItem('hx.theme', next);
-          var resolved = next === 'system'
-            ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-            : next;
-          document.documentElement.setAttribute('data-theme', resolved);
-          document.documentElement.style.colorScheme = resolved;
+          document.documentElement.setAttribute('data-theme', next);
+          document.documentElement.style.colorScheme = next;
         } catch (_) {}
         close();
         return;
