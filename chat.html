@@ -616,6 +616,47 @@
       color: var(--hx-text-mid);
     }
     .hx-chat-blank p strong { color: var(--hx-text); font-weight: 600; }
+
+    /* Premium suggestion chips — appear under the empty-state hero so
+       new users have a clear, opinionated way to start. ChatGPT/Anthropic
+       style: rounded surface, subtle hover lift, leading icon. */
+    .hx-chat-blank-chips {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
+      width: 100%;
+      max-width: 520px;
+      margin-top: 14px;
+    }
+    .hx-chat-blank-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: linear-gradient(180deg, var(--hx-surface) 0%, var(--hx-bg-2) 100%);
+      border: 1px solid var(--hx-line);
+      border-radius: 12px;
+      color: var(--hx-text-mid);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.16s ease, box-shadow 0.18s ease, transform 0.14s ease, color 0.14s ease;
+      box-shadow: var(--hx-shadow-xs);
+    }
+    .hx-chat-blank-chip:hover {
+      border-color: var(--hx-line-strong);
+      color: var(--hx-text);
+      transform: translateY(-1px);
+      box-shadow: var(--hx-shadow-sm);
+    }
+    .hx-chat-blank-chip svg {
+      width: 14px; height: 14px;
+      flex-shrink: 0;
+      color: var(--hx-yellow-deep);
+    }
+    .hx-chat-blank-chip span { flex: 1; min-width: 0; }
     .hx-chat-blank-mark {
       width: 36px; height: 36px;
       border-radius: 50%;
@@ -1223,7 +1264,7 @@
                     type="file"
                     id="hx-c-file"
                     multiple
-                    accept="image/png,image/jpeg,image/gif,image/webp,image/heic,application/pdf,text/plain,text/markdown,text/csv"
+                    accept="image/*,application/pdf,text/*,.md,.csv,.tsv,.json,.xml,.yaml,.yml,.toml,.sql,.sh,.py,.js,.ts,.tsx,.jsx,.html,.css,.scss,.less,.go,.rs,.rb,.java,.kt,.swift,.c,.cpp,.h,.hpp,.cs,.php,.lua,.r,.docx,.xlsx,.pptx,.doc,.xls,.ppt"
                     style="display:none;" />
                   <textarea
                     id="hx-c-input"
@@ -1397,10 +1438,15 @@
       }
 
       // ─── Attachment / upload limits ──────────────────────────────
+      // HelveX accepts a wide range of formats so business users can drop
+      // contracts, reports, screenshots, code, spreadsheets-as-CSV, etc.
+      // Images + PDFs are sent natively to the model. Text-based formats
+      // (including source code) are inlined as text. Office documents
+      // (.docx/.xlsx) come through via their PDF export for now.
       var ATTACH_LIMITS = {
-        maxFiles:   5,
-        maxBytes:   10 * 1024 * 1024,           // 10 MB per file
-        accepted:   /^(image\/(png|jpe?g|gif|webp|heic)|application\/pdf|text\/(plain|markdown|csv))$/i,
+        maxFiles:   10,
+        maxBytes:   25 * 1024 * 1024,           // 25 MB per file
+        accepted:   /^(image\/(png|jpe?g|gif|webp|heic|svg\+xml)|application\/pdf|text\/.*|application\/(json|xml|yaml|x-yaml|sql|x-sh|x-python|javascript|typescript|x-typescript|toml|x-toml))$|^application\/vnd\.openxmlformats|^application\/msword/i,
       };
       // Cache of signed URLs for storage paths so we don't re-sign on
       // every render of historical attachments.
@@ -1633,8 +1679,38 @@
                 '<span class="hx-chat-blank-mark" aria-hidden="true"></span>' +
                 '<span class="hx-chat-blank-eyebrow">New chat</span>' +
                 '<h2>' + escape(state.conversation.title || 'New chat') + '</h2>' +
-                '<p>Send your first message below to begin the conversation.</p>' +
+                '<p>Type a question, or <strong>drop a PDF, image, contract, or code file</strong> and ask Helix to analyze it.</p>' +
+                '<div class="hx-chat-blank-chips">' +
+                  '<button type="button" class="hx-chat-blank-chip" data-prompt="Summarize the key points in plain language.">' +
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>' +
+                    '<span>Summarize a document</span>' +
+                  '</button>' +
+                  '<button type="button" class="hx-chat-blank-chip" data-prompt="Help me draft a professional response to this.">' +
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>' +
+                    '<span>Draft an email or message</span>' +
+                  '</button>' +
+                  '<button type="button" class="hx-chat-blank-chip" data-prompt="Walk me through this code or explain what it does.">' +
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>' +
+                    '<span>Explain code</span>' +
+                  '</button>' +
+                  '<button type="button" class="hx-chat-blank-chip" data-prompt="Brainstorm 5 ideas for">' +
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' +
+                    '<span>Brainstorm ideas</span>' +
+                  '</button>' +
+                '</div>' +
               '</div>';
+            // Wire chips to prefill the composer
+            thread.querySelectorAll('.hx-chat-blank-chip').forEach(function (chip) {
+              chip.addEventListener('click', function () {
+                var prompt = chip.getAttribute('data-prompt') || '';
+                if (!prompt) return;
+                inputEl.value = prompt + (prompt.endsWith(' ') ? '' : ' ');
+                autoSize(inputEl);
+                refreshSendDisabled();
+                inputEl.focus();
+                try { inputEl.selectionStart = inputEl.selectionEnd = inputEl.value.length; } catch (e) {}
+              });
+            });
             return;
           }
           var html = '<div class="hx-chat-thread-inner">';
@@ -2727,7 +2803,13 @@
               var uploadP = sb.storage.from('chat-uploads').upload(path, it.file, {
                 upsert: false, contentType: it.media_type,
               });
-              var inlineP = (it.kind === 'file' && /^text\//i.test(it.media_type))
+              // Anything text-based (including source code, JSON, YAML, SQL,
+              // shell scripts) is read inline and prepended as text. Images
+              // and PDFs are base64-encoded for the model's native vision.
+              var isTextLike = /^text\//i.test(it.media_type) ||
+                /^application\/(json|xml|yaml|x-yaml|sql|x-sh|x-python|javascript|typescript|x-typescript|toml|x-toml)$/i.test(it.media_type) ||
+                /\.(md|markdown|csv|tsv|json|xml|yaml|yml|toml|sql|sh|py|js|ts|tsx|jsx|html|css|scss|less|go|rs|rb|java|kt|swift|c|cpp|h|hpp|cs|php|lua|r|env|conf|ini|log|txt)$/i.test(it.name || '');
+              var inlineP = (it.kind === 'file' && isTextLike)
                   ? readFileAsText(it.file).then(function (t) { it.text_content = t.slice(0, 200_000); })
                   : readFileAsBase64(it.file).then(function (b) { it.base64 = b; });
 
