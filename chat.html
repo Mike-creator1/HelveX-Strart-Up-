@@ -452,6 +452,103 @@
     }
     .hx-md-link:hover { border-color: var(--hx-text); }
 
+    /* Headings inside the chat — editorial hierarchy.
+       H1/H2 use the Instrument Serif italic so longform plans + reports
+       read like a New Yorker piece, not a corporate doc. H3/H4 stay in
+       the Inter family with refined weight/letter-spacing. */
+    .hx-md-h { margin: 22px 0 8px; line-height: 1.2; color: var(--hx-text); letter-spacing: -0.012em; }
+    .hx-md-h:first-child { margin-top: 4px; }
+    .hx-md-h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 30px;
+      letter-spacing: -0.022em;
+    }
+    .hx-md-h2 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 23px;
+      letter-spacing: -0.018em;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--hx-line-soft, var(--hx-line));
+    }
+    .hx-md-h3 {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.005em;
+      text-transform: none;
+    }
+    .hx-md-h4 {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--hx-text-dim);
+    }
+
+    /* Horizontal rule — fade hairline */
+    .hx-md-hr {
+      border: 0;
+      height: 1px;
+      margin: 18px 0;
+      background: linear-gradient(90deg, transparent 0%, var(--hx-line) 18%, var(--hx-line) 82%, transparent 100%);
+    }
+
+    /* Lists — refined spacing + custom markers */
+    .hx-md-list {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .hx-md-list > li {
+      position: relative;
+      padding-left: 22px;
+      line-height: 1.6;
+      color: var(--hx-text);
+    }
+    .hx-md-list > li::before {
+      content: '';
+      position: absolute;
+      left: 8px; top: 0.62em;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--hx-text-mid);
+    }
+    .hx-md-list.hx-md-list-num {
+      counter-reset: hxlist;
+    }
+    .hx-md-list.hx-md-list-num > li {
+      padding-left: 28px;
+      counter-increment: hxlist;
+    }
+    .hx-md-list.hx-md-list-num > li::before {
+      content: counter(hxlist) ".";
+      background: transparent;
+      width: auto; height: auto;
+      left: 4px; top: 0;
+      font-family: var(--hx-mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--hx-yellow-deep);
+      border-radius: 0;
+    }
+
+    /* Blockquote — editorial pull-quote */
+    .hx-md-quote {
+      margin: 14px 0;
+      padding: 8px 16px;
+      border-left: 3px solid var(--hx-yellow-deep);
+      background: linear-gradient(90deg, var(--hx-yellow-soft) 0%, transparent 60%);
+      color: var(--hx-text-mid);
+      font-style: italic;
+      border-radius: 0 8px 8px 0;
+    }
+
     /* Code block — premium card with header, body, and optional live preview */
     .hx-code-block {
       margin: 12px 0;
@@ -1840,12 +1937,9 @@
       // Anything between fences is escaped + linkified + has **bold**/`code`
       // light Markdown handling so prose reads cleanly.
       function renderInlineMarkdown(text) {
-        // Pull task-list items out of the prose first so we can render them
-        // as a real checklist UI. We detect blocks of consecutive lines
-        // that start with "- [ ] " or "- [x] " and replace them with a
-        // single placeholder we expand below.
+        // Task lists first (- [ ] / - [x]) so they don't get caught by bullets
         var checklistRe = /(^|\n)((?:[ \t]*[-*][ \t]+\[[ xX]\][^\n]*(?:\n|$))+)/g;
-        var lists = [];
+        var checklists = [];
         var stripped = text.replace(checklistRe, function (m, lead, block) {
           var items = [];
           block.split(/\n/).forEach(function (line) {
@@ -1854,30 +1948,126 @@
             items.push({ done: im[1].toLowerCase() === 'x', label: im[2] });
           });
           if (!items.length) return m;
-          var idx = lists.length;
-          lists.push(items);
+          var idx = checklists.length;
+          checklists.push(items);
           return (lead || '') + '\x00CHECKLIST_' + idx + '\x00';
         });
+
+        // Bullet lists (- foo / * foo) — but NOT task lists (already removed)
+        var bulletRe = /(^|\n)((?:[ \t]*[-*][ \t]+(?!\[[ xX]\])[^\n]+(?:\n|$))+)/g;
+        var bullets = [];
+        stripped = stripped.replace(bulletRe, function (m, lead, block) {
+          var items = [];
+          block.split(/\n/).forEach(function (line) {
+            var im = line.match(/^[ \t]*[-*][ \t]+(.*)$/);
+            if (im && im[1].trim()) items.push(im[1]);
+          });
+          if (!items.length) return m;
+          var idx = bullets.length;
+          bullets.push(items);
+          return (lead || '') + '\x00BULLET_' + idx + '\x00';
+        });
+
+        // Ordered lists (1. foo / 2. foo)
+        var orderedRe = /(^|\n)((?:[ \t]*\d+\.[ \t]+[^\n]+(?:\n|$))+)/g;
+        var ordereds = [];
+        stripped = stripped.replace(orderedRe, function (m, lead, block) {
+          var items = [];
+          block.split(/\n/).forEach(function (line) {
+            var im = line.match(/^[ \t]*\d+\.[ \t]+(.*)$/);
+            if (im && im[1].trim()) items.push(im[1]);
+          });
+          if (!items.length) return m;
+          var idx = ordereds.length;
+          ordereds.push(items);
+          return (lead || '') + '\x00ORDERED_' + idx + '\x00';
+        });
+
+        // Blockquotes (> text)
+        var quoteRe = /(^|\n)((?:[ \t]*>[^\n]*(?:\n|$))+)/g;
+        var quotes = [];
+        stripped = stripped.replace(quoteRe, function (m, lead, block) {
+          var lines = [];
+          block.split(/\n/).forEach(function (line) {
+            var im = line.match(/^[ \t]*>[ \t]?(.*)$/);
+            if (im) lines.push(im[1]);
+          });
+          if (!lines.length) return m;
+          var idx = quotes.length;
+          quotes.push(lines.join(' '));
+          return (lead || '') + '\x00QUOTE_' + idx + '\x00';
+        });
+
+        // Horizontal rule on its own line
+        stripped = stripped.replace(/(^|\n)[ \t]*(?:-{3,}|\*{3,})[ \t]*(?=\n|$)/g, '$1\x00HR\x00');
+
+        // Headings (# / ## / ### / ####)
+        stripped = stripped.replace(/(^|\n)(#{1,4})[ \t]+([^\n]+)/g, function (_, lead, hashes, content) {
+          return (lead || '') + '\x00H' + hashes.length + '_' + content.trim() + '_H\x00';
+        });
+
         var s = escape(stripped);
+
         // **bold**
         s = s.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+        // *italic* — non-overlapping with bold
+        s = s.replace(/(^|[^*\w])\*([^*\n]+?)\*(?!\*)/g, '$1<em>$2</em>');
         // `code`
         s = s.replace(/`([^`\n]+)`/g, '<code class="hx-md-inline">$1</code>');
         // Auto-link bare URLs
         s = s.replace(/(https?:\/\/[^\s<]+[^\s<.,!?)\];:])/g, '<a href="$1" target="_blank" rel="noopener" class="hx-md-link">$1</a>');
+
+        // Expand headings
+        s = s.replace(/\x00H([1-4])_([\s\S]*?)_H\x00/g, function (_, level, content) {
+          return '<h' + level + ' class="hx-md-h hx-md-h' + level + '">' + content + '</h' + level + '>';
+        });
+        // Expand HR
+        s = s.replace(/\x00HR\x00/g, '<hr class="hx-md-hr" />');
+        // Expand bullet lists
+        s = s.replace(/\x00BULLET_(\d+)\x00/g, function (_, n) {
+          var items = bullets[parseInt(n, 10)] || [];
+          var html = '<ul class="hx-md-list">';
+          items.forEach(function (it) { html += '<li>' + renderInlineFragments(it) + '</li>'; });
+          html += '</ul>';
+          return html;
+        });
+        // Expand ordered lists
+        s = s.replace(/\x00ORDERED_(\d+)\x00/g, function (_, n) {
+          var items = ordereds[parseInt(n, 10)] || [];
+          var html = '<ol class="hx-md-list hx-md-list-num">';
+          items.forEach(function (it) { html += '<li>' + renderInlineFragments(it) + '</li>'; });
+          html += '</ol>';
+          return html;
+        });
+        // Expand blockquotes
+        s = s.replace(/\x00QUOTE_(\d+)\x00/g, function (_, n) {
+          var content = quotes[parseInt(n, 10)] || '';
+          return '<blockquote class="hx-md-quote">' + renderInlineFragments(content) + '</blockquote>';
+        });
         // Expand checklist placeholders
         s = s.replace(/\x00CHECKLIST_(\d+)\x00/g, function (_, n) {
-          var items = lists[parseInt(n, 10)] || [];
+          var items = checklists[parseInt(n, 10)] || [];
           var html = '<ul class="hx-md-checklist">';
           items.forEach(function (it) {
             html += '<li class="hx-md-check-item' + (it.done ? ' is-done' : '') + '">' +
               '<span class="hx-md-check-box" aria-hidden="true"></span>' +
-              '<span class="hx-md-check-label">' + escape(it.label) + '</span>' +
+              '<span class="hx-md-check-label">' + renderInlineFragments(it.label) + '</span>' +
             '</li>';
           });
           html += '</ul>';
           return html;
         });
+        return s;
+      }
+
+      // Inline-only formatter for content inside list items / blockquotes
+      // so we don't recursively re-process block-level markdown.
+      function renderInlineFragments(text) {
+        var s = escape(String(text || ''));
+        s = s.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+        s = s.replace(/(^|[^*\w])\*([^*\n]+?)\*(?!\*)/g, '$1<em>$2</em>');
+        s = s.replace(/`([^`\n]+)`/g, '<code class="hx-md-inline">$1</code>');
+        s = s.replace(/(https?:\/\/[^\s<]+[^\s<.,!?)\];:])/g, '<a href="$1" target="_blank" rel="noopener" class="hx-md-link">$1</a>');
         return s;
       }
       function renderRichContent(text, isAssistant) {
