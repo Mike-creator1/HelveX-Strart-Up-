@@ -1016,6 +1016,147 @@
     .hx-chat-tool-btn.is-active {
       background: var(--hx-text); color: var(--hx-bg); border-color: var(--hx-text);
     }
+    /* Agent mode button — premium pill that announces the highest-level
+       capability of the chat. When on, Helix plans and executes
+       autonomously, calling web_search + code_execution as needed. */
+    .hx-chat-agent-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 32px;
+      padding: 0 10px;
+      background: linear-gradient(180deg, var(--hx-surface) 0%, var(--hx-bg-2) 100%);
+      border: 1px solid var(--hx-line);
+      border-radius: 999px;
+      color: var(--hx-text-mid);
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+      flex-shrink: 0;
+      transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease, box-shadow 0.18s ease, transform 0.14s ease;
+      box-shadow: var(--hx-shadow-xs);
+      position: relative;
+    }
+    .hx-chat-agent-btn:hover {
+      border-color: var(--hx-line-strong);
+      color: var(--hx-text);
+      box-shadow: var(--hx-shadow-sm);
+    }
+    .hx-chat-agent-btn:active { transform: scale(0.97); }
+    .hx-chat-agent-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .hx-chat-agent-label { font-weight: 600; }
+    .hx-chat-agent-btn[aria-pressed="true"] {
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--hx-yellow) 22%, var(--hx-surface)) 0%,
+        color-mix(in srgb, var(--hx-yellow-soft) 90%, var(--hx-surface)) 100%);
+      color: var(--hx-yellow-deep);
+      border-color: color-mix(in srgb, var(--hx-yellow) 50%, var(--hx-line));
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
+        0 0 0 3px color-mix(in srgb, var(--hx-yellow) 14%, transparent),
+        0 4px 14px -6px color-mix(in srgb, var(--hx-yellow) 50%, transparent);
+    }
+    .hx-chat-agent-btn[aria-pressed="true"] svg {
+      animation: hx-agent-spark 2.4s ease-in-out infinite;
+    }
+    @keyframes hx-agent-spark {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50%      { transform: rotate(10deg) scale(1.08); }
+    }
+    @media (max-width: 700px) {
+      .hx-chat-agent-label { display: none; }
+      .hx-chat-agent-btn { padding: 0; width: 32px; justify-content: center; }
+    }
+
+    /* Agent badge in the toolbar — visible while Agent mode is active so
+       the user always knows they're talking to an autonomous Helix. */
+    .hx-chat-agent-toolbar-badge {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      font-family: var(--hx-mono);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--hx-yellow-deep);
+      background: var(--hx-yellow-soft);
+      border: 1px solid color-mix(in srgb, var(--hx-yellow) 35%, var(--hx-line));
+      border-radius: 999px;
+      box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 50%, transparent);
+    }
+    .hx-chat-agent-toolbar-badge.is-on { display: inline-flex; }
+    .hx-chat-agent-toolbar-badge::before {
+      content: '';
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--hx-yellow-deep);
+      box-shadow: 0 0 8px color-mix(in srgb, var(--hx-yellow) 60%, transparent);
+      animation: hx-agent-dot 1.6s ease-in-out infinite;
+    }
+    @keyframes hx-agent-dot {
+      0%, 100% { opacity: 0.6; }
+      50%      { opacity: 1; }
+    }
+
+    /* Markdown task list rendering — Helix uses "- [ ]" / "- [x]" to
+       show its plan and execution progress. We render those as visual
+       checkboxes that tick in real time as the model streams. */
+    .hx-md-checklist {
+      list-style: none;
+      padding: 6px 0;
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .hx-md-check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: background 0.18s ease;
+    }
+    .hx-md-check-item.is-done {
+      background: color-mix(in srgb, var(--hx-yellow-soft) 50%, transparent);
+    }
+    .hx-md-check-box {
+      width: 16px; height: 16px;
+      border-radius: 5px;
+      border: 1.5px solid var(--hx-line-strong);
+      flex-shrink: 0;
+      margin-top: 3px;
+      position: relative;
+      transition: background 0.18s ease, border-color 0.18s ease;
+    }
+    .hx-md-check-item.is-done .hx-md-check-box {
+      background: var(--hx-yellow-deep);
+      border-color: var(--hx-yellow-deep);
+    }
+    .hx-md-check-item.is-done .hx-md-check-box::after {
+      content: '';
+      position: absolute;
+      left: 3px; top: 6px;
+      width: 7px; height: 3px;
+      border-left: 1.5px solid #fff;
+      border-bottom: 1.5px solid #fff;
+      transform: rotate(-45deg);
+    }
+    .hx-md-check-label {
+      flex: 1;
+      color: var(--hx-text);
+      line-height: 1.5;
+    }
+    .hx-md-check-item.is-done .hx-md-check-label {
+      color: var(--hx-text-mid);
+      text-decoration: line-through;
+      text-decoration-color: color-mix(in srgb, var(--hx-text-mid) 40%, transparent);
+      text-decoration-thickness: 1px;
+    }
+
     /* Consolidated Tools popover — declutters the composer by hiding
        web_search + code_execution behind a single elegant menu. */
     .hx-chat-tools-wrap { position: relative; flex-shrink: 0; }
@@ -1545,6 +1686,16 @@
                     title="Attach an image or document">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
                   </button>
+                  <button
+                    class="hx-chat-agent-btn"
+                    id="hx-c-agent"
+                    type="button"
+                    aria-pressed="false"
+                    aria-label="Agent mode"
+                    title="Agent mode — Helix plans and executes autonomously">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.39 4.84L20 8l-4 3.9.94 5.5L12 14.77 7.06 17.4 8 11.9 4 8l5.61-1.16L12 2z"/></svg>
+                    <span class="hx-chat-agent-label">Agent</span>
+                  </button>
                   <input
                     type="file"
                     id="hx-c-file"
@@ -1653,13 +1804,44 @@
       // Anything between fences is escaped + linkified + has **bold**/`code`
       // light Markdown handling so prose reads cleanly.
       function renderInlineMarkdown(text) {
-        var s = escape(text);
+        // Pull task-list items out of the prose first so we can render them
+        // as a real checklist UI. We detect blocks of consecutive lines
+        // that start with "- [ ] " or "- [x] " and replace them with a
+        // single placeholder we expand below.
+        var checklistRe = /(^|\n)((?:[ \t]*[-*][ \t]+\[[ xX]\][^\n]*(?:\n|$))+)/g;
+        var lists = [];
+        var stripped = text.replace(checklistRe, function (m, lead, block) {
+          var items = [];
+          block.split(/\n/).forEach(function (line) {
+            var im = line.match(/^[ \t]*[-*][ \t]+\[([ xX])\][ \t]*(.*)$/);
+            if (!im) return;
+            items.push({ done: im[1].toLowerCase() === 'x', label: im[2] });
+          });
+          if (!items.length) return m;
+          var idx = lists.length;
+          lists.push(items);
+          return (lead || '') + '\x00CHECKLIST_' + idx + '\x00';
+        });
+        var s = escape(stripped);
         // **bold**
         s = s.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
         // `code`
         s = s.replace(/`([^`\n]+)`/g, '<code class="hx-md-inline">$1</code>');
         // Auto-link bare URLs
         s = s.replace(/(https?:\/\/[^\s<]+[^\s<.,!?)\];:])/g, '<a href="$1" target="_blank" rel="noopener" class="hx-md-link">$1</a>');
+        // Expand checklist placeholders
+        s = s.replace(/\x00CHECKLIST_(\d+)\x00/g, function (_, n) {
+          var items = lists[parseInt(n, 10)] || [];
+          var html = '<ul class="hx-md-checklist">';
+          items.forEach(function (it) {
+            html += '<li class="hx-md-check-item' + (it.done ? ' is-done' : '') + '">' +
+              '<span class="hx-md-check-box" aria-hidden="true"></span>' +
+              '<span class="hx-md-check-label">' + escape(it.label) + '</span>' +
+            '</li>';
+          });
+          html += '</ul>';
+          return html;
+        });
         return s;
       }
       function renderRichContent(text, isAssistant) {
@@ -1808,6 +1990,17 @@
         'Be concise and substantive. Skip preamble. Lead with the answer, then add context only if useful.'
       ].join(' ');
 
+      // Appended to HELIX_SYSTEM when Agent Mode is on. Tells Helix to plan
+      // first, execute autonomously with tools, then summarize.
+      var HELIX_AGENT_SYSTEM = [
+        '',
+        'AGENT MODE is active. Operate autonomously toward the user goal:',
+        '1) PLAN: Begin every response with a brief plan formatted as a Markdown task list. Each line MUST start with "- [ ] " (open checkbox), three to seven steps total, written as concise imperatives.',
+        '2) EXECUTE: After the plan, work through each step. Use the available web_search and code_execution tools without asking permission whenever they help. As you finish a step, restate the same step line but with "- [x] " (filled checkbox) before continuing.',
+        '3) DELIVER: End with a short SUMMARY heading and a concrete result the user can act on.',
+        'Make decisions on your own; only ask the user clarifying questions if a critical piece of information is missing.'
+      ].join(' ');
+
       var state = {
         owner: null,
         conversation: null,    // current conversation row
@@ -1819,6 +2012,7 @@
         attachments: [],       // composer's pending attachments
         webEnabled: false,     // when true, model gets Anthropic web_search tool
         codeEnabled: false,    // when true, model gets Anthropic code_execution tool
+        agentEnabled: false,   // when true, model gets agent system prompt + ALL tools
       };
 
       // ─── Global active project (shared across pages via localStorage) ──
@@ -2503,12 +2697,15 @@
               body: JSON.stringify({
                 model:           $('hx-c-model').value || 'ether',
                 conversation_id: state.conversation.id,
-                system:          HELIX_SYSTEM,
+                system:          HELIX_SYSTEM + (state.agentEnabled ? HELIX_AGENT_SYSTEM : ''),
                 messages:        send_msgs,
                 user_attachments: persistAttachs,
-                max_tokens:      2048,
+                max_tokens:      state.agentEnabled ? 4096 : 2048,
                 stream:          true,
-                tools:           { web: !!state.webEnabled, code: !!state.codeEnabled },
+                tools:           {
+                  web:  !!(state.webEnabled  || state.agentEnabled),
+                  code: !!(state.codeEnabled || state.agentEnabled),
+                },
               }),
             });
 
@@ -3304,6 +3501,28 @@
         });
 
         micBtn.addEventListener('click', toggleVoice);
+
+        // Agent mode — the highest-level toggle. When on:
+        // - Prepends an agent system prompt (plan, execute, summarize)
+        // - Force-enables web_search + code_execution server-side tools
+        // - Shows a yellow "AGENT" badge in the toolbar so the user always
+        //   knows they're talking to an autonomous Helix.
+        var agentBtn = $('hx-c-agent');
+        var agentBadge = document.createElement('span');
+        agentBadge.className = 'hx-chat-agent-toolbar-badge';
+        agentBadge.textContent = 'Agent';
+        // Insert right after the chat title in the toolbar so it sits next to "New chat"
+        var toolbarTitle = $('hx-c-title');
+        if (toolbarTitle && toolbarTitle.parentNode) {
+          toolbarTitle.parentNode.insertBefore(agentBadge, toolbarTitle.nextSibling);
+        }
+        if (agentBtn) {
+          agentBtn.addEventListener('click', function () {
+            state.agentEnabled = !state.agentEnabled;
+            agentBtn.setAttribute('aria-pressed', state.agentEnabled ? 'true' : 'false');
+            agentBadge.classList.toggle('is-on', state.agentEnabled);
+          });
+        }
 
         // Consolidated Tools popover — one elegant button that toggles
         // the web_search + code_execution menu. Keeps the composer clean
