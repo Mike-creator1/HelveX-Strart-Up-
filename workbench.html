@@ -22,8 +22,108 @@
     .hx-wb-search input { width: 100%; padding: 10px 14px 10px 38px; border: 1px solid var(--hx-line); border-radius: 10px; font: inherit; font-size: 13.5px; background: #fff; outline: none; transition: border-color 0.12s, box-shadow 0.12s; }
     .hx-wb-search input:focus { border-color: var(--hx-text); box-shadow: 0 0 0 3px rgba(15,15,16,0.05); }
     .hx-wb-search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--hx-text-mid); }
-    .hx-wb-filter { padding: 9px 14px; border: 1px solid var(--hx-line); border-radius: 10px; background: #fff; font: inherit; font-size: 12.5px; color: var(--hx-text); cursor: pointer; }
-    .hx-wb-filter.active { background: var(--hx-text); color: #fff; border-color: var(--hx-text); }
+    .hx-wb-filter {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 12px;
+      border: 1px solid var(--hx-line);
+      border-radius: 10px;
+      background: #fff;
+      font: inherit; font-size: 12.5px; font-weight: 500;
+      color: var(--hx-text-mid);
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s, border-color 0.12s, transform 0.12s;
+    }
+    .hx-wb-filter:hover { color: var(--hx-text); border-color: var(--hx-line-strong); }
+    .hx-wb-filter.active { background: var(--hx-text); color: var(--hx-bg); border-color: var(--hx-text); }
+    .hx-wb-filter svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .hx-wb-filter .hx-wb-fcount {
+      font-family: var(--hx-mono);
+      font-size: 10.5px; font-weight: 600;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: var(--hx-bg-2);
+      color: var(--hx-text-dim);
+      min-width: 16px; text-align: center;
+      line-height: 1.3;
+    }
+    .hx-wb-filter.active .hx-wb-fcount {
+      background: rgba(255,255,255,0.18);
+      color: var(--hx-bg);
+    }
+
+    /* Per-kind empty state — shown when a filter is active and 0 matches */
+    .hx-wb-kind-empty {
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line);
+      border-radius: var(--hx-r-lg);
+      padding: 32px 28px;
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr);
+      gap: 22px;
+      align-items: flex-start;
+    }
+    .hx-wb-kind-empty .icn {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--hx-bg-2), var(--hx-surface-3));
+      border: 1px solid var(--hx-line);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--hx-text);
+      box-shadow: var(--hx-shadow-xs), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+    .hx-wb-kind-empty .icn svg { width: 22px; height: 22px; }
+    .hx-wb-kind-empty h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.012em;
+    }
+    .hx-wb-kind-empty .lede {
+      margin: 0 0 14px;
+      font-size: 13.5px;
+      color: var(--hx-text-mid);
+      line-height: 1.55;
+      max-width: 580px;
+    }
+    .hx-wb-kind-empty .uses {
+      list-style: none; padding: 0; margin: 0 0 18px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .hx-wb-kind-empty .uses li {
+      font-size: 12.5px; color: var(--hx-text-mid);
+      display: flex; align-items: flex-start; gap: 8px;
+      line-height: 1.5;
+    }
+    .hx-wb-kind-empty .uses li::before {
+      content: ''; width: 4px; height: 4px;
+      border-radius: 50%; background: var(--hx-text-dim);
+      margin-top: 8px; flex-shrink: 0;
+    }
+    .hx-wb-kind-empty .sample {
+      background: var(--hx-bg-2);
+      border: 1px solid var(--hx-line);
+      border-radius: var(--hx-r-sm);
+      padding: 10px 12px;
+      font-family: var(--hx-mono);
+      font-size: 12px;
+      color: var(--hx-text-mid);
+      max-height: 120px;
+      overflow: hidden;
+      white-space: pre-wrap;
+      margin: 0 0 14px;
+      line-height: 1.5;
+      position: relative;
+    }
+    .hx-wb-kind-empty .sample::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 36px;
+      background: linear-gradient(180deg, transparent, var(--hx-bg-2));
+      pointer-events: none;
+    }
+    .hx-wb-kind-empty .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    @media (max-width: 640px) {
+      .hx-wb-kind-empty { grid-template-columns: 1fr; }
+    }
     .hx-wb-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
     .hx-wb-card { background: #fff; border: 1px solid var(--hx-line); border-radius: var(--hx-r); padding: 16px 18px; cursor: pointer; transition: border-color 0.12s, transform 0.12s; }
     .hx-wb-card:hover { border-color: var(--hx-text-mid); }
@@ -167,13 +267,34 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <input type="search" id="hx-wb-search-input" placeholder="Search title or content…" />
           </div>
-          <button class="hx-wb-filter active" data-filter="all">All</button>
-          <button class="hx-wb-filter" data-filter="code">Code</button>
-          <button class="hx-wb-filter" data-filter="document">Document</button>
-          <button class="hx-wb-filter" data-filter="config">Config</button>
-          <button class="hx-wb-filter" data-filter="prompt">Prompt</button>
-          <button class="hx-wb-filter" data-filter="snippet">Snippet</button>
-          <button class="hx-wb-filter" data-filter="note">Note</button>
+          <button class="hx-wb-filter active" data-filter="all" title="Show every artifact">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            <span>All</span><span class="hx-wb-fcount" data-c="all">0</span>
+          </button>
+          <button class="hx-wb-filter" data-filter="code" title="Code blocks, scripts, functions">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <span>Code</span><span class="hx-wb-fcount" data-c="code">0</span>
+          </button>
+          <button class="hx-wb-filter" data-filter="document" title="Long-form prose, drafts, outlines">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+            <span>Document</span><span class="hx-wb-fcount" data-c="document">0</span>
+          </button>
+          <button class="hx-wb-filter" data-filter="config" title="YAML, JSON, env, .toml settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Config</span><span class="hx-wb-fcount" data-c="config">0</span>
+          </button>
+          <button class="hx-wb-filter" data-filter="prompt" title="Reusable system prompts and instructions">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Prompt</span><span class="hx-wb-fcount" data-c="prompt">0</span>
+          </button>
+          <button class="hx-wb-filter" data-filter="snippet" title="Short reusable text — phrases, replies, signatures">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11h6"/><path d="M9 15h4"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            <span>Snippet</span><span class="hx-wb-fcount" data-c="snippet">0</span>
+          </button>
+          <button class="hx-wb-filter" data-filter="note" title="Free-form notes — anything that isn't structured">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            <span>Note</span><span class="hx-wb-fcount" data-c="note">0</span>
+          </button>
         </div>
 
         <div id="hx-wb-grid" class="hx-wb-grid"></div>
@@ -220,6 +341,115 @@
         var last = state.artifacts[0];
         $('hx-wb-last').textContent = last ? fmtDate(last.updated_at) : '—';
         $('hx-wb-last-meta').textContent = last ? esc(last.title).slice(0, 40) : 'No history';
+
+        // Per-kind counts in the filter chips
+        var counts = { all: total, code: 0, document: 0, config: 0, prompt: 0, snippet: 0, note: 0 };
+        state.artifacts.forEach(function (a) {
+          if (counts[a.kind] !== undefined) counts[a.kind]++;
+        });
+        document.querySelectorAll('.hx-wb-fcount').forEach(function (el) {
+          var k = el.getAttribute('data-c');
+          if (counts[k] !== undefined) el.textContent = counts[k];
+        });
+      }
+
+      // Per-kind onboarding — what each kind is for, why save one,
+      // and a real starter template the user can drop into the form
+      // with one click. The "Create from template" button below the
+      // sample pre-fills the new-artifact form and opens it.
+      var KIND_TEMPLATES = {
+        code: {
+          title: 'Code',
+          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+          lede: "Functions, scripts, components, and full files the assistant writes — kept editable, runnable, and quick to pull back into chat.",
+          uses: [
+            "Webhook handlers, API routes, edge functions",
+            "React / Svelte components and hooks",
+            "SQL migrations, RLS policies, scheduled jobs",
+            "Build scripts, Dockerfiles, GitHub Actions"
+          ],
+          sampleTitle: "Stripe webhook handler — Express",
+          sample: "// POST /webhooks/stripe\nimport Stripe from 'stripe';\nimport { buffer } from 'micro';\n\nconst stripe = new Stripe(process.env.STRIPE_SECRET_KEY);\nconst webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;\n\nexport default async function handler(req, res) {\n  const sig = req.headers['stripe-signature'];\n  let event;\n  try {\n    const rawBody = await buffer(req);\n    event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);\n  } catch (err) {\n    return res.status(400).send(`Webhook Error: ${err.message}`);\n  }\n\n  switch (event.type) {\n    case 'checkout.session.completed':\n      // fulfil the order\n      break;\n    case 'invoice.payment_failed':\n      // alert the customer\n      break;\n  }\n  res.json({ received: true });\n}"
+        },
+        document: {
+          title: 'Document',
+          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>',
+          lede: "Long-form prose the assistant drafts for you — briefs, outlines, memos, sales pages, anything with paragraphs and headings.",
+          uses: [
+            "Project briefs and engagement scopes",
+            "Customer-facing documentation and FAQs",
+            "Investor updates, board memos, internal RFCs",
+            "Sales pages, landing copy, blog drafts"
+          ],
+          sampleTitle: "Q3 engagement brief — internal CRM rebuild",
+          sample: "# Q3 engagement brief — internal CRM rebuild\n\n**Owner:** Mike\n**Sponsor:** Sara\n**Engineer:** HelveX (Ilias)\n\n## Goal\nReplace the spreadsheet-based lead pipeline with a real CRM the team can run from one place. Must support: 200+ active leads, follow-up reminders, deal pipeline, contact history.\n\n## Out of scope\n- Email sending (use existing Postmark account)\n- Marketing automation\n- Phone integration\n\n## Success criteria\n- Sara can close her first deal in the new tool by end of Q3.\n- Daniela imports the spreadsheet without losing a row.\n- Mike sees the monthly pipeline value at a glance.\n\n## Open questions\n- Single workspace, or per-region split?\n- Who owns the data on offboarding?"
+        },
+        config: {
+          title: 'Config',
+          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.36.86 1.18 1.43 2.12 1.43H21a2 2 0 1 1 0 4h-.09c-.94 0-1.76.57-2.12 1.43z"/></svg>',
+          lede: "Structured settings the assistant generates — YAML, JSON, TOML, env files. Drop straight into a repo or runtime.",
+          uses: [
+            "vercel.json, netlify.toml, render.yaml",
+            "GitHub Actions workflow files",
+            "Supabase RLS policies in JSON",
+            "Tailwind / ESLint / TypeScript configs"
+          ],
+          sampleTitle: "vercel.json — clean URLs + rewrites",
+          sample: '{\n  "cleanUrls": true,\n  "trailingSlash": false,\n  "rewrites": [\n    { "source": "/docs/(.*)", "destination": "/docs.html" },\n    { "source": "/blog/(.*)", "destination": "/blog.html" }\n  ],\n  "headers": [\n    {\n      "source": "/(.*\\\\.html)",\n      "headers": [\n        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }\n      ]\n    }\n  ]\n}'
+        },
+        prompt: {
+          title: 'Prompt',
+          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+          lede: "Reusable system prompts and instructions. Save the ones that worked so you don't have to rewrite them next conversation.",
+          uses: [
+            "System prompts that gave you the best results",
+            "Personas the assistant should adopt",
+            "Format specs (\"reply only with JSON\")",
+            "Style guides for tone, voice, length"
+          ],
+          sampleTitle: "Senior engineer reviewer persona",
+          sample: "You are a senior software engineer reviewing a pull request.\n\nWhen I share code, you will:\n1. Read the entire diff before commenting.\n2. Flag bugs, race conditions, and security issues FIRST.\n3. Suggest cleaner names or refactors SECOND.\n4. Praise good patterns LAST.\n\nKeep replies short. Use bullet points, not prose. Quote line numbers when you flag something. If the diff is fine, just say \"LGTM\" and stop — no padding.\n\nDo not rewrite the entire file. Suggest the smallest change that fixes the problem."
+        },
+        snippet: {
+          title: 'Snippet',
+          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11h6"/><path d="M9 15h4"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>',
+          lede: "Short reusable bits of text — a polite cancellation reply, a meeting-confirmation line, an email signature, a one-liner you keep typing.",
+          uses: [
+            "Email replies you reuse (refund, reschedule)",
+            "Calendar invite descriptions",
+            "Slack canned responses",
+            "Sign-offs and signatures"
+          ],
+          sampleTitle: "Polite reschedule reply",
+          sample: "Hi [name],\n\nThanks for the heads-up. No problem at all — let's find a new slot.\n\nI'm open these times next week (Zurich time):\n\n• Tuesday, 14:00 – 15:30\n• Wednesday, 10:00 – 11:00\n• Thursday, 16:00 – 17:30\n\nDoes any of those work? Happy to send a fresh invite once you pick one.\n\nBest,\nMike"
+        },
+        note: {
+          title: 'Note',
+          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+          lede: "Free-form notes — anything that doesn't fit the structured kinds. Stays searchable alongside everything else.",
+          uses: [
+            "Meeting notes and action items",
+            "Half-formed ideas to revisit",
+            "Decision logs (what / why / when)",
+            "Personal references and bookmarks"
+          ],
+          sampleTitle: "Q3 planning — Thu meeting notes",
+          sample: "Meeting: Q3 planning, Thu 14:00\nAttendees: Mike, Sara, Ilias, Daniela\n\nDecisions made\n- Workbench launch end of next week (Mike).\n- Sara writes the launch post — deadline Monday.\n- Daniela handles email blast once Sara's post is ready.\n- Stripe migration deferred to Q4 (Ilias to revisit).\n\nOpen questions\n- Who owns the public changelog?\n- Do we soft-launch to existing customers first?\n\nFollow-up\n- Mike: book a 1-on-1 with Daniela this week.\n- Ilias: file the Stripe migration as a Q4 brief."
+        }
+      };
+
+      // Insert template into the new-artifact form, set kind, open form.
+      function loadKindTemplate(kind) {
+        var t = KIND_TEMPLATES[kind]; if (!t) return;
+        $('hx-wb-new-title').value = t.sampleTitle;
+        $('hx-wb-new-content').value = t.sample;
+        $('hx-wb-new-kind').value = kind;
+        $('hx-wb-new-form').classList.add('open');
+        setTimeout(function () {
+          $('hx-wb-new-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          $('hx-wb-new-title').focus();
+          $('hx-wb-new-title').select();
+        }, 30);
       }
 
       // Two-stage row selection: kind filter first (cheap), then search
@@ -257,11 +487,59 @@
       }
 
       function renderEmpty(host, filteredOrSearched) {
-        // Two distinct empty states. When the user has a filter or search
-        // active, just say so — no need for the onboarding pitch. When
-        // the workbench is genuinely empty, show how outputs land here
-        // automatically from chat, plus a hand-rolled escape hatch.
+        // Three distinct empty states:
+        // 1. Genuinely empty workbench → onboarding pitch (further down).
+        // 2. A search query returned nothing → "nothing matches that
+        //    search" + clear button.
+        // 3. A kind filter is selected and that kind has no artifacts →
+        //    a per-kind educational card with description, common uses,
+        //    a real sample, and a "Create from template" button that
+        //    pre-fills the new-artifact form with the sample.
         if (filteredOrSearched) {
+          // Case 3 first: kind filter with no search query and the kind
+          // genuinely has zero entries — show educational template.
+          var t = KIND_TEMPLATES[state.filter];
+          if (t && !state.search) {
+            host.innerHTML = ''
+              + '<div class="hx-wb-kind-empty">'
+              +   '<div class="icn">' + t.icon + '</div>'
+              +   '<div>'
+              +     '<h3>' + esc(t.title) + ' artifacts</h3>'
+              +     '<p class="lede">' + esc(t.lede) + '</p>'
+              +     '<ul class="uses">'
+              +       t.uses.map(function (u) { return '<li>' + esc(u) + '</li>'; }).join('')
+              +     '</ul>'
+              +     '<p style="font-family:var(--hx-mono);font-size:10.5px;font-weight:600;letter-spacing:0.10em;text-transform:uppercase;color:var(--hx-text-dim);margin:0 0 6px;">Starter template · ' + esc(t.sampleTitle) + '</p>'
+              +     '<pre class="sample">' + esc(t.sample) + '</pre>'
+              +     '<div class="actions">'
+              +       '<button class="hx-cta-primary" id="hx-wb-kind-create">'
+              +         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>'
+              +         'Create from template'
+              +       '</button>'
+              +       '<button class="hx-cta-secondary" id="hx-wb-kind-blank">Start blank ' + esc(t.title.toLowerCase()) + '</button>'
+              +       '<button class="hx-cta-secondary" id="hx-wb-clear-filter">All artifacts</button>'
+              +     '</div>'
+              +   '</div>'
+              + '</div>';
+            var cBtn = $('hx-wb-kind-create');
+            if (cBtn) cBtn.addEventListener('click', function () { loadKindTemplate(state.filter); });
+            var bBtn = $('hx-wb-kind-blank');
+            if (bBtn) bBtn.addEventListener('click', function () {
+              openNewForm();
+              $('hx-wb-new-kind').value = state.filter;
+            });
+            var clr0 = $('hx-wb-clear-filter');
+            if (clr0) clr0.addEventListener('click', function () {
+              state.filter = 'all'; state.searchCache = { q: '', rows: null };
+              document.querySelectorAll('.hx-wb-filter').forEach(function (b) {
+                b.classList.toggle('active', b.getAttribute('data-filter') === 'all');
+              });
+              renderGrid();
+            });
+            return;
+          }
+
+          // Case 2: search + filter combo returned nothing.
           host.innerHTML = ''
             + '<div class="hx-wb-empty">'
             +   '<div class="icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>'
