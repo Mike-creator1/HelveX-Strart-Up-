@@ -66,16 +66,36 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
-        <div class="hx-page-head">
-          <div>
-            <h1>Support.</h1>
-            <p class="sub">Open a ticket from inside your workspace and track every reply here. Humans read every message — no auto-replies. One business day on active engagements, two to three otherwise.</p>
+        <div class="hx-aura" aria-hidden="true"></div>
+        <header class="hx-pg-hero">
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Tickets · humans only</p>
+          <div class="hx-pg-hero-grid">
+            <div>
+              <h1 class="hx-pg-title">Support <em>tickets.</em></h1>
+              <p class="hx-pg-sub">Open a ticket from inside your workspace and track every reply here. Humans read every message — no auto-replies. One business day on active engagements, two to three otherwise.</p>
+              <div class="hx-pg-cta-row">
+                <button id="hx-tk-open" class="hx-cta-primary" type="button">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  New ticket
+                </button>
+                <a href="/status.html" class="hx-cta-secondary" target="_blank" rel="noopener">
+                  <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--hx-emerald);box-shadow:0 0 0 2px rgba(16,185,129,0.18);"></span>
+                  Status
+                </a>
+              </div>
+            </div>
+            <div class="hx-pg-meta-strip">
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Reply</p>
+                <p class="hx-pg-meta-value">1 business day</p>
+              </div>
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Hours</p>
+                <p class="hx-pg-meta-value">Mon–Fri · CET</p>
+              </div>
+            </div>
           </div>
-          <div class="hx-page-actions">
-            <a href="/status.html" class="hx-btn hx-btn-secondary" target="_blank" rel="noopener">Status</a>
-            <button id="hx-tk-open" class="hx-btn hx-btn-primary" type="button">+ New ticket</button>
-          </div>
-        </div>
+        </header>
 
         <div class="hx-grid hx-grid-4">
           <div class="hx-stat">

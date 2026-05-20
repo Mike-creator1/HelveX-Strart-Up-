@@ -81,20 +81,34 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
-        <div class="hx-page-head">
-          <div>
-            <h1>Team members.</h1>
-            <p class="sub">Invite collaborators to your HelveX workspace, scope what they can see and ship, and keep an audit trail of every action they take.</p>
+        <div class="hx-aura" aria-hidden="true"></div>
+        <header class="hx-pg-hero">
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Team · invite-only</p>
+          <div class="hx-pg-hero-grid">
+            <div>
+              <h1 class="hx-pg-title">Team <em>members.</em></h1>
+              <p class="hx-pg-sub">Invite collaborators to your HelveX workspace, scope what they can see and ship, and keep an audit trail of every action they take.</p>
+              <div class="hx-pg-cta-row">
+                <button id="hx-invite-open" class="hx-cta-primary">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Invite member
+                </button>
+                <a href="/billing" class="hx-cta-secondary">Plan &amp; seats</a>
+                <a href="/audit-log" class="hx-cta-secondary">Audit trail</a>
+              </div>
+            </div>
+            <div class="hx-pg-meta-strip">
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Roles</p>
+                <p class="hx-pg-meta-value">Owner · Admin · Member</p>
+              </div>
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Invite expiry</p>
+                <p class="hx-pg-meta-value">7 days</p>
+              </div>
+            </div>
           </div>
-          <div class="hx-page-actions">
-            <a href="/audit-log" class="hx-btn hx-btn-secondary hx-btn-sm">Audit trail</a>
-            <a href="/billing" class="hx-btn hx-btn-secondary hx-btn-sm">Plan &amp; seats</a>
-            <button id="hx-invite-open" class="hx-btn hx-btn-primary">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Invite member
-            </button>
-          </div>
-        </div>
+        </header>
 
         <!-- ═══════════════ HERO STATS ═══════════════ -->
         <div class="hx-grid hx-grid-4">

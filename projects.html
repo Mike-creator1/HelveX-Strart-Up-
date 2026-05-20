@@ -73,16 +73,33 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
-        <div class="hx-page-head">
-          <div>
-            <h1>Projects.</h1>
-            <p class="sub">Every engagement you have running with HelveX. Click a row for its brief, owner, and delivery state.</p>
+        <div class="hx-aura" aria-hidden="true"></div>
+        <header class="hx-pg-hero">
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Projects · ready</p>
+          <div class="hx-pg-hero-grid">
+            <div>
+              <h1 class="hx-pg-title">Projects <em>·</em></h1>
+              <p class="hx-pg-sub">Every engagement you have running with HelveX. Click a row for its brief, owner, and delivery state.</p>
+              <div class="hx-pg-cta-row">
+                <button id="hx-new-project" class="hx-cta-primary">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  New project
+                </button>
+                <a href="/services.html" class="hx-cta-secondary">Browse services</a>
+              </div>
+            </div>
+            <div class="hx-pg-meta-strip">
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Region</p>
+                <p class="hx-pg-meta-value hx-mono">EU-CH-1</p>
+              </div>
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Retention</p>
+                <p class="hx-pg-meta-value">Forever</p>
+              </div>
+            </div>
           </div>
-          <div class="hx-page-actions">
-            <a href="/services.html" class="hx-btn hx-btn-secondary">Browse services</a>
-            <button id="hx-new-project" class="hx-btn hx-btn-primary">+ New project</button>
-          </div>
-        </div>
+        </header>
 
         <!-- Active project banner — shared with chat + overview -->
         <div class="hx-active-bar" id="hx-active-bar" hidden>

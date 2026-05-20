@@ -71,16 +71,33 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
-        <div class="hx-page-head">
-          <div>
-            <h1>Notifications.</h1>
-            <p class="sub">Decide which events reach you, on which channel. Defaults are tuned to be useful without being noisy — turn the rest down to zero.</p>
+        <div class="hx-aura" aria-hidden="true"></div>
+        <header class="hx-pg-hero">
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Notifications · tuned to signal</p>
+          <div class="hx-pg-hero-grid">
+            <div>
+              <h1 class="hx-pg-title">Notifications <em>·</em></h1>
+              <p class="hx-pg-sub">Decide which events reach you, on which channel. Defaults are tuned to be useful without being noisy — turn the rest down to zero.</p>
+              <div class="hx-pg-cta-row">
+                <button id="hx-notif-save" class="hx-cta-primary" type="button">
+                  Save changes
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button id="hx-notif-reset" class="hx-cta-secondary" type="button">Reset to defaults</button>
+              </div>
+            </div>
+            <div class="hx-pg-meta-strip">
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Channels</p>
+                <p class="hx-pg-meta-value">Email · In-app · Push</p>
+              </div>
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Security</p>
+                <p class="hx-pg-meta-value">Always on</p>
+              </div>
+            </div>
           </div>
-          <div class="hx-page-actions">
-            <button id="hx-notif-reset" class="hx-btn hx-btn-secondary" type="button">Reset to defaults</button>
-            <button id="hx-notif-save"  class="hx-btn hx-btn-primary"   type="button">Save changes</button>
-          </div>
-        </div>
+        </header>
 
         <div class="hx-grid hx-grid-4">
           <div class="hx-stat">

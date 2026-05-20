@@ -107,15 +107,33 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
-        <div class="hx-page-head">
-          <div>
-            <h1>Workbench.</h1>
-            <p class="sub">Pinned outputs from every HelveX session. Code, documents, configurations, prompts, snippets — kept editable, searchable, and yours.</p>
+        <div class="hx-aura" aria-hidden="true"></div>
+        <header class="hx-pg-hero">
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Workbench · ready</p>
+          <div class="hx-pg-hero-grid">
+            <div>
+              <h1 class="hx-pg-title">Workbench <em>·</em></h1>
+              <p class="hx-pg-sub">Pinned outputs from every HelveX session. Code, documents, configurations, prompts, snippets — kept editable, searchable, and yours.</p>
+              <div class="hx-pg-cta-row">
+                <button class="hx-cta-primary" id="hx-wb-new">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  New artifact
+                </button>
+                <a href="/chat.html" class="hx-cta-secondary">Open chat</a>
+              </div>
+            </div>
+            <div class="hx-pg-meta-strip">
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Region</p>
+                <p class="hx-pg-meta-value hx-mono">EU-CH-1</p>
+              </div>
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Storage</p>
+                <p class="hx-pg-meta-value">Encrypted</p>
+              </div>
+            </div>
           </div>
-          <div class="hx-page-actions">
-            <button class="hx-btn hx-btn-primary" id="hx-wb-new">+ New artifact</button>
-          </div>
-        </div>
+        </header>
 
         <div class="hx-grid hx-grid-4">
           <div class="hx-stat"><p class="hx-stat-label">Total</p><p class="hx-stat-value hx-mono" id="hx-wb-total">0</p><p class="hx-stat-meta">Artifacts in your workspace</p></div>

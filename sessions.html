@@ -133,16 +133,32 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
-        <div class="hx-page-head">
-          <div>
-            <h1>Sessions.</h1>
-            <p class="sub">Every device with a live HelveX session. Revoke any you don't recognise — the next request from that device fails and the user is forced to sign in again.</p>
+        <div class="hx-aura" aria-hidden="true"></div>
+        <header class="hx-pg-hero">
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Sessions · this browser is active</p>
+          <div class="hx-pg-hero-grid">
+            <div>
+              <h1 class="hx-pg-title">Sessions <em>·</em></h1>
+              <p class="hx-pg-sub">Every device with a live HelveX session. Revoke any you don't recognise — the next request from that device fails and the user is forced to sign in again.</p>
+              <div class="hx-pg-cta-row">
+                <button id="hx-sess-signout-others" class="hx-cta-primary" type="button" style="background:linear-gradient(180deg,var(--hx-red),#991B1B);color:#fff;border-color:var(--hx-red);">
+                  Sign out other sessions
+                </button>
+                <a href="/audit-log" class="hx-cta-secondary">Audit log</a>
+              </div>
+            </div>
+            <div class="hx-pg-meta-strip">
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Token TTL</p>
+                <p class="hx-pg-meta-value">~1 hour</p>
+              </div>
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Region</p>
+                <p class="hx-pg-meta-value hx-mono">EU-CH-1</p>
+              </div>
+            </div>
           </div>
-          <div class="hx-page-actions">
-            <a href="/audit-log" class="hx-btn hx-btn-secondary">Audit log</a>
-            <button id="hx-sess-signout-others" class="hx-btn hx-btn-danger" type="button">Sign out other sessions</button>
-          </div>
-        </div>
+        </header>
 
         <div class="hx-grid hx-grid-4">
           <div class="hx-stat">

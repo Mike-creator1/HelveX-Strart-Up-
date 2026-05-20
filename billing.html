@@ -54,15 +54,34 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
-        <div class="hx-page-head">
-          <div>
-            <h1>Billing &amp; Plan</h1>
-            <p class="sub">Your subscription, credits, invoices and payment details in one place.</p>
+        <div class="hx-aura" aria-hidden="true"></div>
+        <header class="hx-pg-hero">
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Billing · Swiss-processed</p>
+          <div class="hx-pg-hero-grid">
+            <div>
+              <h1 class="hx-pg-title">Billing &amp; <em>plan.</em></h1>
+              <p class="hx-pg-sub">Your subscription, credits, invoices and payment details in one place. Charged in CHF, processed through Stripe Europe.</p>
+              <div class="hx-pg-cta-row">
+                <button type="button" id="hx-bx-portal" class="hx-cta-primary" style="display:none;">
+                  Manage in Stripe
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <a href="/pricing.html" class="hx-cta-secondary">Compare plans</a>
+                <a href="/invoices.html" class="hx-cta-secondary">Invoices</a>
+              </div>
+            </div>
+            <div class="hx-pg-meta-strip">
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Currency</p>
+                <p class="hx-pg-meta-value hx-mono">CHF</p>
+              </div>
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Processor</p>
+                <p class="hx-pg-meta-value">Stripe · EU</p>
+              </div>
+            </div>
           </div>
-          <div class="hx-page-actions">
-            <button type="button" id="hx-bx-portal" class="hx-btn hx-btn-primary" style="display:none;">Manage in Stripe</button>
-          </div>
-        </div>
+        </header>
 
         <!-- Top stats row — plan, credits, next invoice, payment status -->
         <div class="hx-bx-row" id="hx-bx-stats">

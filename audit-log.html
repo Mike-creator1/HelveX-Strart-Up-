@@ -129,16 +129,33 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
-        <div class="hx-page-head">
-          <div>
-            <h1>Audit log.</h1>
-            <p class="sub">Every account-impacting action — sign-ins, password changes, API key issuance, team edits, plan changes — with actor, IP region, timestamp, and trace ID. Held for 365 days.</p>
+        <div class="hx-aura" aria-hidden="true"></div>
+        <header class="hx-pg-hero">
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Audit log · immutable</p>
+          <div class="hx-pg-hero-grid">
+            <div>
+              <h1 class="hx-pg-title">Audit <em>log.</em></h1>
+              <p class="hx-pg-sub">Every account-impacting action — sign-ins, password changes, API key issuance, team edits, plan changes — with actor, IP region, timestamp, and trace ID. Held for 365 days.</p>
+              <div class="hx-pg-cta-row">
+                <button id="hx-audit-export" class="hx-cta-primary" type="button">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Export CSV
+                </button>
+                <button id="hx-audit-refresh" class="hx-cta-secondary" type="button">Refresh</button>
+              </div>
+            </div>
+            <div class="hx-pg-meta-strip">
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Retention</p>
+                <p class="hx-pg-meta-value">365 days</p>
+              </div>
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Region</p>
+                <p class="hx-pg-meta-value hx-mono">EU-CH-1</p>
+              </div>
+            </div>
           </div>
-          <div class="hx-page-actions">
-            <button id="hx-audit-refresh" class="hx-btn hx-btn-secondary" type="button">Refresh</button>
-            <button id="hx-audit-export"  class="hx-btn hx-btn-primary"   type="button">Export CSV</button>
-          </div>
-        </div>
+        </header>
 
         <div class="hx-grid hx-grid-4">
           <div class="hx-stat">

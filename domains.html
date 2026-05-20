@@ -19,16 +19,33 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
-        <div class="hx-page-head">
-          <div>
-            <h1>Domains.</h1>
-            <p class="sub">Custom endpoints for your agents and copilots — under your subdomain, with managed TLS, automatic renewal, and DNS verified before any traffic flows.</p>
+        <div class="hx-aura" aria-hidden="true"></div>
+        <header class="hx-pg-hero">
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Domains · TLS-managed</p>
+          <div class="hx-pg-hero-grid">
+            <div>
+              <h1 class="hx-pg-title">Domains <em>·</em></h1>
+              <p class="hx-pg-sub">Custom endpoints for your agents and copilots — under your subdomain, with managed TLS, automatic renewal, and DNS verified before any traffic flows.</p>
+              <div class="hx-pg-cta-row">
+                <button id="hx-dom-open" class="hx-cta-primary">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Add domain
+                </button>
+                <a href="/deployments.html" class="hx-cta-secondary">View deployments</a>
+              </div>
+            </div>
+            <div class="hx-pg-meta-strip">
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">TLS</p>
+                <p class="hx-pg-meta-value">Auto-renewed</p>
+              </div>
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">DNS</p>
+                <p class="hx-pg-meta-value">Verified first</p>
+              </div>
+            </div>
           </div>
-          <div class="hx-page-actions">
-            <a href="/deployments.html" class="hx-btn hx-btn-secondary">View deployments</a>
-            <button id="hx-dom-open" class="hx-btn hx-btn-primary">+ Add domain</button>
-          </div>
-        </div>
+        </header>
 
         <div class="hx-grid hx-grid-4">
           <div class="hx-stat">

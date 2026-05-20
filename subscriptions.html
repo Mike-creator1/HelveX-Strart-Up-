@@ -19,16 +19,31 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
-        <div class="hx-page-head">
-          <div>
-            <h1>Subscriptions.</h1>
-            <p class="sub">Your active HelveX plan, renewal, and upgrade options. Changing tier takes effect on the next billing cycle.</p>
+        <div class="hx-aura" aria-hidden="true"></div>
+        <header class="hx-pg-hero">
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Subscription · active</p>
+          <div class="hx-pg-hero-grid">
+            <div>
+              <h1 class="hx-pg-title">Subscriptions <em>·</em></h1>
+              <p class="hx-pg-sub">Your active HelveX plan, renewal, and upgrade options. Changing tier takes effect on the next billing cycle.</p>
+              <div class="hx-pg-cta-row">
+                <button type="button" id="hx-sub-portal" class="hx-cta-primary" style="display:none;">Manage in Stripe</button>
+                <a href="/pricing.html" class="hx-cta-secondary">Change plan</a>
+                <a href="/invoices.html" class="hx-cta-secondary">Invoices</a>
+              </div>
+            </div>
+            <div class="hx-pg-meta-strip">
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Cycle</p>
+                <p class="hx-pg-meta-value">Monthly</p>
+              </div>
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Cancel anytime</p>
+                <p class="hx-pg-meta-value">Pro-rated</p>
+              </div>
+            </div>
           </div>
-          <div class="hx-page-actions">
-            <a href="/pricing.html" class="hx-btn hx-btn-secondary">Change plan</a>
-            <button type="button" id="hx-sub-portal" class="hx-btn hx-btn-primary" style="display:none;">Manage in Stripe</button>
-          </div>
-        </div>
+        </header>
 
         <div class="hx-section-head">
           <h2>Active subscription</h2>

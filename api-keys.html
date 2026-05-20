@@ -19,16 +19,33 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
-        <div class="hx-page-head">
-          <div>
-            <h1>API Keys.</h1>
-            <p class="sub">Programmatic access to your HelveX workspace. Keys are generated server-side, hashed before storage, and only the plaintext is shown once.</p>
+        <div class="hx-aura" aria-hidden="true"></div>
+        <header class="hx-pg-hero">
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>API keys · shown once</p>
+          <div class="hx-pg-hero-grid">
+            <div>
+              <h1 class="hx-pg-title">API <em>keys.</em></h1>
+              <p class="hx-pg-sub">Programmatic access to your HelveX workspace. Keys are generated server-side, hashed before storage, and only the plaintext is shown once.</p>
+              <div class="hx-pg-cta-row">
+                <button class="hx-cta-primary" id="hx-new-key">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Create API key
+                </button>
+                <a href="/activity.html" class="hx-cta-secondary">View activity</a>
+              </div>
+            </div>
+            <div class="hx-pg-meta-strip">
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Hash</p>
+                <p class="hx-pg-meta-value hx-mono">argon2id</p>
+              </div>
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Scope</p>
+                <p class="hx-pg-meta-value">Per key</p>
+              </div>
+            </div>
           </div>
-          <div class="hx-page-actions">
-            <a href="/activity.html" class="hx-btn hx-btn-secondary">View activity</a>
-            <button class="hx-btn hx-btn-primary" id="hx-new-key">+ Create API key</button>
-          </div>
-        </div>
+        </header>
 
         <!-- New key inline form -->
         <div class="hx-card" id="hx-key-form" hidden style="margin-bottom:14px;">

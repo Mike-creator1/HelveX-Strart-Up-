@@ -19,16 +19,34 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
-        <div class="hx-page-head">
-          <div>
-            <h1>Deployments.</h1>
-            <p class="sub">Every live agent, copilot, and automation HelveX has shipped into your stack — with version, region, and current status.</p>
+        <div class="hx-aura" aria-hidden="true"></div>
+        <header class="hx-pg-hero">
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Deployments · live</p>
+          <div class="hx-pg-hero-grid">
+            <div>
+              <h1 class="hx-pg-title">Deployments <em>·</em></h1>
+              <p class="hx-pg-sub">Every live agent, copilot, and automation HelveX has shipped into your stack — with version, region, and current status.</p>
+              <div class="hx-pg-cta-row">
+                <a href="/projects.html?new=1" class="hx-cta-primary">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Create project
+                </a>
+                <a href="/projects.html" class="hx-cta-secondary">View projects</a>
+                <a href="/monitoring.html" class="hx-cta-secondary">Monitoring</a>
+              </div>
+            </div>
+            <div class="hx-pg-meta-strip">
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Region</p>
+                <p class="hx-pg-meta-value hx-mono">EU-CH-1</p>
+              </div>
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Runtime</p>
+                <p class="hx-pg-meta-value">Containerised</p>
+              </div>
+            </div>
           </div>
-          <div class="hx-page-actions">
-            <a href="/projects.html" class="hx-btn hx-btn-secondary">View projects</a>
-            <a href="/projects.html?new=1" class="hx-btn hx-btn-primary">Create project</a>
-          </div>
-        </div>
+        </header>
 
         <div class="hx-grid hx-grid-4">
           <div class="hx-stat">

@@ -19,15 +19,33 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
-        <div class="hx-page-head">
-          <div>
-            <h1>Activity.</h1>
-            <p class="sub">Every event across your HelveX workspace — sign-ins, project briefs, API key issuance, plan changes, deployments — in one chronological feed with actor, timestamp, and trace ID.</p>
+        <div class="hx-aura" aria-hidden="true"></div>
+        <header class="hx-pg-hero">
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Activity · live feed</p>
+          <div class="hx-pg-hero-grid">
+            <div>
+              <h1 class="hx-pg-title">Activity <em>·</em></h1>
+              <p class="hx-pg-sub">Every event across your HelveX workspace — sign-ins, project briefs, API key issuance, plan changes, deployments — in one chronological feed with actor, timestamp, and trace ID.</p>
+              <div class="hx-pg-cta-row">
+                <button id="hx-act-refresh" class="hx-cta-primary">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                  Refresh
+                </button>
+                <a href="/audit-log.html" class="hx-cta-secondary">Audit log</a>
+              </div>
+            </div>
+            <div class="hx-pg-meta-strip">
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Retention</p>
+                <p class="hx-pg-meta-value">365 days</p>
+              </div>
+              <div class="hx-pg-meta-item">
+                <p class="hx-pg-meta-label">Region</p>
+                <p class="hx-pg-meta-value hx-mono">EU-CH-1</p>
+              </div>
+            </div>
           </div>
-          <div class="hx-page-actions">
-            <button id="hx-act-refresh" class="hx-btn hx-btn-secondary">Refresh</button>
-          </div>
-        </div>
+        </header>
 
         <div class="hx-section-head">
           <h2>Recent activity</h2>
