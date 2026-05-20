@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Overview — HelveX</title>
-  <meta name="description" content="HelveX client portal — your workspace overview." />
+  <meta name="description" content="HelveX client portal — your workspace overview, recent chats, artifacts, usage, and engagements at a glance." />
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,16 +12,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
   <style>
-    /* Active-project bar — shown when the user has picked a working
-       project from the chat or projects page. Mirrors the chat's
-       "Project: ..." selector and lets the user clear or switch. */
+    /* Active-project banner — visible only when the user has scoped
+       the workspace to a project from chat or projects. */
     .hx-active-bar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      padding: 10px 14px;
-      margin: 0 0 14px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      padding: 10px 14px; margin: 0 0 14px;
       background: var(--hx-yellow-soft);
       border: 1px solid rgba(252, 211, 77, 0.45);
       border-radius: var(--hx-r);
@@ -29,11 +24,8 @@
     .hx-active-bar[hidden] { display: none; }
     .hx-active-bar-kicker {
       font-family: var(--hx-mono);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: var(--hx-yellow-deep);
+      font-size: 10px; font-weight: 600; letter-spacing: 0.10em;
+      text-transform: uppercase; color: var(--hx-yellow-deep);
     }
     .hx-active-bar-dot {
       width: 6px; height: 6px; border-radius: 50%;
@@ -42,28 +34,138 @@
       box-shadow: 0 0 0 3px rgba(252, 211, 77, 0.28);
     }
     .hx-active-bar-name {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--hx-text);
-      flex: 1;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      font-size: 13px; font-weight: 600; color: var(--hx-text);
+      flex: 1; min-width: 0;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
     .hx-active-bar-action {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--hx-text-mid);
-      background: transparent;
-      border: 0;
-      padding: 4px 8px;
-      border-radius: 6px;
-      cursor: pointer;
+      font-size: 12px; font-weight: 500; color: var(--hx-text-mid);
+      background: transparent; border: 0;
+      padding: 4px 8px; border-radius: 6px; cursor: pointer;
       text-decoration: none;
       transition: color 0.12s, background 0.12s;
     }
     .hx-active-bar-action:hover { color: var(--hx-text); background: rgba(0,0,0,0.04); }
+
+    /* Quick-action tile — primary CTA grid. */
+    .hx-qa {
+      display: block;
+      padding: 16px;
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line);
+      border-radius: var(--hx-r);
+      text-decoration: none; color: var(--hx-text);
+      transition: border-color 0.12s, transform 0.12s, box-shadow 0.12s;
+      position: relative;
+    }
+    .hx-qa:hover {
+      border-color: var(--hx-line-strong);
+      transform: translateY(-1px);
+      box-shadow: var(--hx-shadow-sm);
+    }
+    .hx-qa-head {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 8px;
+    }
+    .hx-qa-ico {
+      width: 32px; height: 32px;
+      border-radius: var(--hx-r-sm);
+      background: var(--hx-bg-2);
+      border: 1px solid var(--hx-line);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--hx-text);
+      flex-shrink: 0;
+    }
+    .hx-qa-ico svg { width: 15px; height: 15px; }
+    .hx-qa-title { font-size: 13.5px; font-weight: 600; letter-spacing: -0.012em; }
+    .hx-qa-desc { font-size: 12px; color: var(--hx-text-mid); line-height: 1.5; }
+    .hx-qa-arrow {
+      position: absolute; top: 14px; right: 14px;
+      color: var(--hx-text-dim);
+      transition: color 0.12s, transform 0.12s;
+    }
+    .hx-qa:hover .hx-qa-arrow { color: var(--hx-text); transform: translate(2px, -2px); }
+
+    /* Recent list row — used for chats, artifacts, activity */
+    .hx-list-row {
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 11px 14px;
+      border-top: 1px solid var(--hx-line-soft);
+      text-decoration: none;
+      color: var(--hx-text);
+      transition: background 0.1s;
+    }
+    .hx-list-row:first-child { border-top: 0; }
+    .hx-list-row:hover { background: var(--hx-bg-2); }
+    .hx-list-row .glyph {
+      width: 24px; height: 24px;
+      border-radius: var(--hx-r-xs);
+      background: var(--hx-bg-2);
+      border: 1px solid var(--hx-line);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--hx-text-mid);
+      flex-shrink: 0;
+    }
+    .hx-list-row .glyph svg { width: 12px; height: 12px; }
+    .hx-list-row .body { min-width: 0; }
+    .hx-list-row .ttl {
+      font-size: 13px; font-weight: 500;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .hx-list-row .meta {
+      font-size: 11.5px; color: var(--hx-text-mid);
+      margin-top: 2px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .hx-list-row .time {
+      font-family: var(--hx-mono);
+      font-size: 11px; color: var(--hx-text-dim);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Usage bar — single horizontal bar showing credit consumption */
+    .hx-usage-bar {
+      height: 6px;
+      background: var(--hx-bg-2);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 10px 0 6px;
+    }
+    .hx-usage-bar-fill {
+      height: 100%;
+      background: var(--hx-text);
+      border-radius: 999px;
+      transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .hx-usage-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-size: 12px; color: var(--hx-text-mid);
+    }
+    .hx-usage-row b { color: var(--hx-text); font-weight: 600; font-family: var(--hx-mono); font-size: 13px; }
+
+    /* Two-col responsive grid for the recents row */
+    @media (min-width: 900px) {
+      .hx-recents { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    }
+    .hx-recents > .hx-card { padding: 0; overflow: hidden; }
+    .hx-recents-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid var(--hx-line);
+    }
+    .hx-recents-head h3 {
+      margin: 0; font-size: 13px; font-weight: 600; letter-spacing: -0.005em;
+    }
+    .hx-recents-head a {
+      font-size: 11.5px; color: var(--hx-text-mid);
+      border-bottom: 1px solid transparent;
+      transition: color 0.12s, border-color 0.12s;
+    }
+    .hx-recents-head a:hover { color: var(--hx-text); border-color: var(--hx-text); }
   </style>
 </head>
 <body data-active="dashboard">
@@ -76,20 +178,22 @@
 
         <div class="hx-page-head">
           <div>
-            <h1 id="hx-greeting">Welcome to HelveX.</h1>
-            <p class="sub">Browse services, choose a plan, and request your first engagement.</p>
+            <h1 id="hx-greeting">Overview.</h1>
+            <p class="sub">Your workspace at a glance — credits, recent work, active engagement, and the shortcuts you use most.</p>
           </div>
           <div class="hx-page-actions">
-            <a href="/services.html" class="hx-btn hx-btn-secondary">Browse services</a>
-            <a href="/pricing.html" class="hx-btn hx-btn-primary">
-              Choose a plan
+            <a href="/chat.html" class="hx-btn hx-btn-secondary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z"/></svg>
+              Open chat
+            </a>
+            <a href="/services.html" class="hx-btn hx-btn-primary">
+              Browse services
               <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </div>
         </div>
 
-        <!-- Active project banner — visible only when the user has selected
-             one from chat or projects. Reads from localStorage. -->
+        <!-- Active project banner -->
         <div class="hx-active-bar" id="hx-active-bar" hidden>
           <span class="hx-active-bar-dot" aria-hidden="true"></span>
           <span class="hx-active-bar-kicker">Working on</span>
@@ -99,72 +203,155 @@
           <button type="button" id="hx-active-bar-clear" class="hx-active-bar-action">Clear</button>
         </div>
 
-        <!-- Status row — every value reads from real account state. -->
+        <!-- ═══════════════ METRICS ═══════════════ -->
         <div class="hx-grid hx-grid-4">
           <div class="hx-stat">
-            <p class="hx-stat-label">Credits</p>
+            <p class="hx-stat-label">Credits available</p>
             <p class="hx-stat-value hx-mono" id="hx-stat-credits">0</p>
             <p class="hx-stat-meta" id="hx-stat-credits-meta">No active subscription</p>
           </div>
           <div class="hx-stat">
             <p class="hx-stat-label">Active projects</p>
             <p class="hx-stat-value hx-mono" id="hx-stat-projects">0</p>
-            <p class="hx-stat-meta">Nothing in flight</p>
+            <p class="hx-stat-meta" id="hx-stat-projects-meta">Nothing in flight</p>
           </div>
           <div class="hx-stat">
             <p class="hx-stat-label">Subscription</p>
-            <p class="hx-stat-value" id="hx-stat-plan" style="font-size:18px;">None</p>
+            <p class="hx-stat-value" id="hx-stat-plan" style="font-size:17px;">Free</p>
             <p class="hx-stat-meta" id="hx-stat-plan-meta">Pick a plan to get started</p>
           </div>
           <div class="hx-stat">
             <p class="hx-stat-label">Open invoices</p>
             <p class="hx-stat-value hx-mono" id="hx-stat-invoices">0</p>
-            <p class="hx-stat-meta">Nothing due</p>
+            <p class="hx-stat-meta" id="hx-stat-invoices-meta">Nothing due</p>
           </div>
         </div>
 
-        <!-- Active engagements — rendered into a stable host so the
-             active-project context can refresh it without re-loading. -->
+        <!-- ═══════════════ QUICK ACTIONS ═══════════════ -->
         <div class="hx-section-head">
-          <h2>Active engagements</h2>
-          <a href="/projects.html">View all</a>
+          <h2>Quick actions</h2>
+          <span class="meta">The work most users start with.</span>
+        </div>
+        <div class="hx-grid hx-grid-4">
+          <a href="/chat.html" class="hx-qa">
+            <svg class="hx-qa-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+            <div class="hx-qa-head">
+              <div class="hx-qa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z"/></svg></div>
+              <div class="hx-qa-title">New chat</div>
+            </div>
+            <p class="hx-qa-desc">Start a fresh conversation. Pick a model and (optionally) a project to scope it.</p>
+          </a>
+          <a href="/projects.html?new=1" class="hx-qa">
+            <svg class="hx-qa-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+            <div class="hx-qa-head">
+              <div class="hx-qa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+              <div class="hx-qa-title">New project</div>
+            </div>
+            <p class="hx-qa-desc">Group chats, memories, and artifacts under one workspace context.</p>
+          </a>
+          <a href="/memory.html?new=1" class="hx-qa">
+            <svg class="hx-qa-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+            <div class="hx-qa-head">
+              <div class="hx-qa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+              <div class="hx-qa-title">New memory</div>
+            </div>
+            <p class="hx-qa-desc">A single fact the assistant carries into every new conversation.</p>
+          </a>
+          <a href="/services.html" class="hx-qa">
+            <svg class="hx-qa-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+            <div class="hx-qa-head">
+              <div class="hx-qa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+              <div class="hx-qa-title">Request a service</div>
+            </div>
+            <p class="hx-qa-desc">Brief our engineering team — agents, automation, data tooling, fractional leads.</p>
+          </a>
+        </div>
+
+        <!-- ═══════════════ RECENT WORK (chats + artifacts) ═══════════════ -->
+        <div class="hx-section-head">
+          <h2>Recent work</h2>
+        </div>
+        <div class="hx-recents">
+          <div class="hx-card">
+            <div class="hx-recents-head">
+              <h3>Recent chats</h3>
+              <a href="/chat.html">Open all →</a>
+            </div>
+            <div id="hx-recent-chats-host"></div>
+          </div>
+          <div class="hx-card">
+            <div class="hx-recents-head">
+              <h3>Workbench artifacts</h3>
+              <a href="/workbench.html">Open workbench →</a>
+            </div>
+            <div id="hx-recent-artifacts-host"></div>
+          </div>
+        </div>
+
+        <!-- ═══════════════ USAGE THIS MONTH ═══════════════ -->
+        <div class="hx-section-head">
+          <h2>Usage this month</h2>
+          <a href="/usage.html">Full breakdown →</a>
+        </div>
+        <div class="hx-grid hx-grid-3">
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Credits</p>
+            <h3 style="margin:0;font-size:20px;letter-spacing:-0.012em;" id="hx-usage-credits">0</h3>
+            <p class="desc" id="hx-usage-credits-meta" style="margin:4px 0 0;">No usage yet this month.</p>
+            <div class="hx-usage-bar"><div class="hx-usage-bar-fill" id="hx-usage-credits-bar" style="width:0%;"></div></div>
+            <div class="hx-usage-row">
+              <span id="hx-usage-credits-used">0 used</span>
+              <span><b id="hx-usage-credits-cap">—</b> limit</span>
+            </div>
+          </div>
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Most-used model</p>
+            <h3 style="margin:0;font-size:20px;letter-spacing:-0.012em;" id="hx-usage-model">—</h3>
+            <p class="desc" style="margin:4px 0 0;" id="hx-usage-model-meta">No requests yet this month.</p>
+            <a href="/usage.html" class="hx-card-link">Model breakdown</a>
+          </div>
+          <div class="hx-card">
+            <p class="hx-card-eyebrow">Requests</p>
+            <h3 style="margin:0;font-size:20px;letter-spacing:-0.012em;" id="hx-usage-requests">0</h3>
+            <p class="desc" style="margin:4px 0 0;" id="hx-usage-requests-meta">Across every surface — chat, agents, workflows.</p>
+            <a href="/logs.html" class="hx-card-link">Open logs</a>
+          </div>
+        </div>
+
+        <!-- ═══════════════ ACTIVE ENGAGEMENT ═══════════════ -->
+        <div class="hx-section-head">
+          <h2>Active engagement</h2>
+          <a href="/projects.html">View all projects →</a>
         </div>
         <div id="hx-engagement-host"></div>
 
-        <!-- Recent activity — same pattern. Filtered to the active
-             project's events when one is selected. -->
+        <!-- ═══════════════ ACTIVITY ═══════════════ -->
         <div class="hx-section-head">
           <h2>Recent activity</h2>
-          <a href="/activity.html">Open activity log</a>
+          <a href="/activity.html">Open activity log →</a>
         </div>
         <div id="hx-activity-host"></div>
 
-        <!-- Practice areas (real product info, not simulated activity). -->
+        <!-- ═══════════════ PRACTICE SHORTCUTS ═══════════════ -->
         <div class="hx-section-head">
           <h2>Practice areas</h2>
-          <a href="/services.html">View all services</a>
+          <a href="/services.html">View all services →</a>
         </div>
         <div class="hx-grid hx-grid-3">
           <a href="/services.html#ai" class="hx-service-tile">
-            <div class="hx-service-tile-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 11h.01M15 11h.01"/><path d="M12 7V3"/></svg>
-            </div>
+            <div class="hx-service-tile-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 11h.01M15 11h.01"/><path d="M12 7V3"/></svg></div>
             <h3>AI &amp; Automation</h3>
             <p>Custom agents, workflow automation, document &amp; inbox triage, internal copilots.</p>
             <div class="meta"><span>7 services</span></div>
           </a>
           <a href="/services.html#digital" class="hx-service-tile">
-            <div class="hx-service-tile-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-            </div>
+            <div class="hx-service-tile-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
             <h3>Digital Services</h3>
             <p>Web apps, dashboards, CRM rebuilds, e-commerce, integrations, and internal tools.</p>
             <div class="meta"><span>7 services</span></div>
           </a>
           <a href="/services.html#consulting" class="hx-service-tile">
-            <div class="hx-service-tile-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 17V11M11 17V7M16 17v-9M21 17v-5"/></svg>
-            </div>
+            <div class="hx-service-tile-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 17V11M11 17V7M16 17v-9M21 17v-5"/></svg></div>
             <h3>Consulting</h3>
             <p>AI strategy roadmaps, technical due diligence, architecture reviews, fractional leads.</p>
             <div class="meta"><span>5 services</span></div>
@@ -178,7 +365,9 @@
   <script src="/platform.js"></script>
   <script>
     /* Real dashboard — reads from profiles, projects, credits_balance,
-       subscriptions, invoices, activity_events. */
+       subscriptions, invoices, activity_events, chat_conversations,
+       workbench_artifacts, api_usage_log. Every section has a
+       graceful fallback so missing tables don't break the page.    */
     (function () {
       function whenAuthReady(fn) {
         if (window.HX && window.HX.supabase) { fn(); return; }
@@ -191,51 +380,54 @@
           .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
       }
       function relTime(iso) {
+        if (!iso) return '—';
         var d = new Date(iso); var diff = (Date.now() - d.getTime()) / 1000;
         if (diff < 60) return 'just now';
         if (diff < 3600) return Math.floor(diff/60) + 'm ago';
         if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
-        return Math.floor(diff/86400) + 'd ago';
+        var days = Math.floor(diff/86400);
+        return days + (days === 1 ? 'd ago' : 'd ago');
       }
       function labelFor(kind) {
         return (kind || '').split('.').map(function (s) {
           return s.charAt(0).toUpperCase() + s.slice(1).replace(/_/g, ' ');
         }).join(' / ');
       }
+      function iconForKind(kind) {
+        var head = (kind || '').split('.')[0];
+        switch (head) {
+          case 'auth':     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+          case 'chat':     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z"/></svg>';
+          case 'project':  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
+          case 'memory':   return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>';
+          case 'security': return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+          case 'billing':  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>';
+          case 'settings': return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/></svg>';
+          case 'team':     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>';
+          default:         return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>';
+        }
+      }
 
-      // ─── Active project banner ───────────────────────────────
-      // Shared cross-page state, driven by localStorage. Reflects the
-      // project the user picked from the chat dropdown or the Projects
-      // page. Listens for both same-tab CustomEvents and cross-tab
-      // storage events so it stays in sync.
+      // ─── Active project banner ──────────────────────────────────
       var ACTIVE_KEY = 'hx_active_project';
       function getActiveProject() {
-        try { return JSON.parse(localStorage.getItem(ACTIVE_KEY) || 'null'); }
-        catch (e) { return null; }
+        try { return JSON.parse(localStorage.getItem(ACTIVE_KEY) || 'null'); } catch (e) { return null; }
       }
       function clearActiveProject() {
         try { localStorage.removeItem(ACTIVE_KEY); } catch (e) {}
         try { document.dispatchEvent(new CustomEvent('hx:active-project-changed', { detail: null })); } catch (e) {}
       }
       function renderActiveBar() {
-        var bar  = $('hx-active-bar');
-        var name = $('hx-active-bar-name');
+        var bar  = $('hx-active-bar'); var name = $('hx-active-bar-name');
         if (!bar || !name) return;
         var a = getActiveProject();
-        if (a && a.id) {
-          bar.hidden = false;
-          name.textContent = a.name || 'Unnamed project';
-        } else {
-          bar.hidden = true;
-        }
+        if (a && a.id) { bar.hidden = false; name.textContent = a.name || 'Unnamed project'; }
+        else { bar.hidden = true; }
       }
       function wireActiveBar() {
         renderActiveBar();
         var clearBtn = $('hx-active-bar-clear');
-        if (clearBtn) clearBtn.addEventListener('click', function () {
-          clearActiveProject();
-          renderActiveBar();
-        });
+        if (clearBtn) clearBtn.addEventListener('click', function () { clearActiveProject(); renderActiveBar(); });
         document.addEventListener('hx:active-project-changed', renderActiveBar);
         window.addEventListener('storage', function (e) { if (e.key === ACTIVE_KEY) renderActiveBar(); });
       }
@@ -245,65 +437,160 @@
       whenAuthReady(function () {
         var sb = window.HX.supabase;
 
+        async function safeQuery(promise) {
+          // Wrap each fetch so a missing table or RLS denial doesn't take
+          // down the whole dashboard — we just render an empty section.
+          try { var r = await promise; return r && !r.error ? r : { data: null, count: null }; }
+          catch (e) { return { data: null, count: null }; }
+        }
+
         async function loadDashboard() {
           var res = await sb.auth.getUser();
           var user = res && res.data ? res.data.user : null;
           if (!user) return;
           var meta = user.user_metadata || {};
-          var first = meta.first_name || '';
-          var el = $('hx-greeting');
-          if (el && first) el.textContent = 'Welcome back, ' + first + '.';
+          // Prefer first_name from the profile, fall back to user_metadata
+          var prof = await safeQuery(sb.from('profiles').select('first_name,last_name').eq('id', user.id).maybeSingle());
+          var first = (prof.data && prof.data.first_name) || meta.first_name || '';
+          if ($('hx-greeting')) {
+            $('hx-greeting').textContent = first ? ('Welcome back, ' + first + '.') : 'Overview.';
+          }
 
-          // The Overview reflects the same "active project" context that
-          // the chat uses. If there is one, recent activity is filtered
-          // to events tagged with it.
           var active = getActiveProject();
+          var firstOfMonth = new Date(); firstOfMonth.setDate(1); firstOfMonth.setHours(0,0,0,0);
+          var firstOfMonthIso = firstOfMonth.toISOString();
+
+          // Parallel fetch of every dashboard data source
           var activityQuery = sb.from('activity_events')
             .select('id,kind,created_at,payload,project_id')
             .order('created_at', { ascending: false })
             .limit(8);
           if (active && active.id) activityQuery = activityQuery.eq('project_id', active.id);
 
-          // Parallel fetch of every dashboard data source
-          var [projects, credits, subs, invoices, recent] = await Promise.all([
-            sb.from('projects').select('id,name,slug,status,description,updated_at', { count: 'exact', head: false }),
-            sb.from('credits_balance').select('credits_total,credits_used').maybeSingle(),
-            sb.from('subscriptions').select('plan,status,current_period_end').maybeSingle(),
-            sb.from('invoices').select('id,status', { count: 'exact', head: true }).neq('status', 'paid'),
-            activityQuery
+          var [projects, credits, subs, invoices, recent, chats, artifacts, usage] = await Promise.all([
+            safeQuery(sb.from('projects').select('id,name,slug,status,description,updated_at')),
+            safeQuery(sb.from('credits_balance').select('credits_total,credits_used').maybeSingle()),
+            safeQuery(sb.from('subscriptions').select('plan,status,current_period_end').maybeSingle()),
+            safeQuery(sb.from('invoices').select('id,status', { count: 'exact', head: true }).neq('status', 'paid')),
+            safeQuery(activityQuery),
+            safeQuery(sb.from('chat_conversations').select('id,title,model,project_id,updated_at').order('updated_at', { ascending: false }).limit(5)),
+            safeQuery(sb.from('workbench_artifacts').select('id,title,kind,updated_at').order('updated_at', { ascending: false }).limit(5)),
+            safeQuery(sb.from('api_usage_log').select('model,credits_consumed').gte('created_at', firstOfMonthIso))
           ]);
 
-          // Credits
-          if (credits && credits.data) {
+          // ── Credits ──
+          if (credits.data) {
             var available = Math.max(0, (credits.data.credits_total || 0) - (credits.data.credits_used || 0));
             $('hx-stat-credits').textContent = available.toLocaleString();
-            $('hx-stat-credits-meta').textContent = (subs && subs.data && subs.data.plan && subs.data.plan !== 'free')
-              ? subs.data.plan.charAt(0).toUpperCase() + subs.data.plan.slice(1) + ' plan · refreshes monthly'
+            $('hx-stat-credits-meta').textContent = (subs.data && subs.data.plan && subs.data.plan !== 'free')
+              ? (subs.data.plan.charAt(0).toUpperCase() + subs.data.plan.slice(1)) + ' plan · refreshes monthly'
               : 'Free plan — pick a plan to top up';
           }
 
-          // Active projects
+          // ── Active projects ──
           var rows = projects.data || [];
           var activeCount = rows.filter(function (p) { return p.status === 'active'; }).length;
           $('hx-stat-projects').textContent = activeCount;
-          $('hx-stat-projects').nextElementSibling.textContent = activeCount === 0
+          $('hx-stat-projects-meta').textContent = activeCount === 0
             ? 'Nothing in flight'
             : (rows.length - activeCount) + ' paused / archived';
 
-          // Subscription
-          if (subs && subs.data) {
-            var planLabel = (subs.data.plan || 'free').charAt(0).toUpperCase() + (subs.data.plan || 'free').slice(1);
-            $('hx-stat-plan').textContent = planLabel;
-            $('hx-stat-plan-meta').textContent = subs.data.plan === 'free'
-              ? 'Pick a plan to get started'
-              : (subs.data.status === 'active' ? 'Renews ' + (subs.data.current_period_end ? new Date(subs.data.current_period_end).toLocaleDateString() : 'soon') : subs.data.status);
+          // ── Subscription ──
+          var planRaw = (subs.data && subs.data.plan) || 'free';
+          var planLabel = planRaw.charAt(0).toUpperCase() + planRaw.slice(1);
+          $('hx-stat-plan').textContent = planLabel;
+          $('hx-stat-plan-meta').textContent = planRaw === 'free'
+            ? 'Pick a plan to get started'
+            : (subs.data && subs.data.status === 'active'
+                ? ('Renews ' + (subs.data.current_period_end ? new Date(subs.data.current_period_end).toLocaleDateString() : 'soon'))
+                : (subs.data && subs.data.status) || '—');
+
+          // ── Open invoices ──
+          $('hx-stat-invoices').textContent = (invoices.count) || 0;
+          $('hx-stat-invoices-meta').textContent = (invoices.count) ? 'Outstanding — pay from Billing' : 'Nothing due';
+
+          // ── Recent chats list ──
+          var chatHost = $('hx-recent-chats-host');
+          if (chatHost) {
+            var chatRows = (chats.data) || [];
+            if (chatRows.length) {
+              chatHost.innerHTML = chatRows.map(function (c) {
+                var meta = (c.model || 'model') + (c.project_id ? ' · scoped' : '');
+                return '<a class="hx-list-row" href="/chat.html?c=' + encodeURIComponent(c.id) + '">' +
+                  '<span class="glyph">' + iconForKind('chat') + '</span>' +
+                  '<span class="body">' +
+                    '<span class="ttl">' + escape(c.title || 'Untitled chat') + '</span>' +
+                    '<span class="meta">' + escape(meta) + '</span>' +
+                  '</span>' +
+                  '<span class="time">' + escape(relTime(c.updated_at)) + '</span>' +
+                '</a>';
+              }).join('');
+            } else {
+              chatHost.innerHTML =
+                '<div style="padding:20px 16px;text-align:center;">' +
+                  '<p style="margin:0 0 6px;font-size:13px;font-weight:500;">No chats yet</p>' +
+                  '<p style="margin:0 0 12px;font-size:12px;color:var(--hx-text-mid);">Start a conversation and it lands here.</p>' +
+                  '<a href="/chat.html" class="hx-btn hx-btn-secondary hx-btn-sm">Open chat</a>' +
+                '</div>';
+            }
           }
 
-          // Open invoices
-          $('hx-stat-invoices').textContent = (invoices && invoices.count) || 0;
+          // ── Recent workbench artifacts ──
+          var artHost = $('hx-recent-artifacts-host');
+          if (artHost) {
+            var artRows = (artifacts.data) || [];
+            if (artRows.length) {
+              artHost.innerHTML = artRows.map(function (a) {
+                var kindLabel = a.kind ? a.kind.charAt(0).toUpperCase() + a.kind.slice(1) : 'Artifact';
+                return '<a class="hx-list-row" href="/workbench.html?a=' + encodeURIComponent(a.id) + '">' +
+                  '<span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>' +
+                  '<span class="body">' +
+                    '<span class="ttl">' + escape(a.title || 'Untitled') + '</span>' +
+                    '<span class="meta">' + escape(kindLabel) + '</span>' +
+                  '</span>' +
+                  '<span class="time">' + escape(relTime(a.updated_at)) + '</span>' +
+                '</a>';
+              }).join('');
+            } else {
+              artHost.innerHTML =
+                '<div style="padding:20px 16px;text-align:center;">' +
+                  '<p style="margin:0 0 6px;font-size:13px;font-weight:500;">No artifacts yet</p>' +
+                  '<p style="margin:0 0 12px;font-size:12px;color:var(--hx-text-mid);">Anything substantial Helix produces in chat lands here automatically.</p>' +
+                  '<a href="/workbench.html" class="hx-btn hx-btn-secondary hx-btn-sm">Open workbench</a>' +
+                '</div>';
+            }
+          }
 
-          // Active engagement panel — shows the active project front-
-          // and-centre, or the no-active-project empty state.
+          // ── Usage this month ──
+          var usageRows = (usage.data) || [];
+          var creditsUsedMonth = usageRows.reduce(function (s, r) { return s + (r.credits_consumed || 0); }, 0);
+          var requestsMonth = usageRows.length;
+          var modelCounts = {};
+          usageRows.forEach(function (r) { if (r.model) modelCounts[r.model] = (modelCounts[r.model] || 0) + 1; });
+          var topModel = null; var topCount = 0;
+          Object.keys(modelCounts).forEach(function (k) { if (modelCounts[k] > topCount) { topCount = modelCounts[k]; topModel = k; } });
+
+          var creditsCap = (credits.data && credits.data.credits_total) || 0;
+          var pct = creditsCap > 0 ? Math.min(100, Math.round((creditsUsedMonth / creditsCap) * 100)) : 0;
+          if ($('hx-usage-credits')) $('hx-usage-credits').textContent = creditsUsedMonth.toLocaleString();
+          if ($('hx-usage-credits-meta')) $('hx-usage-credits-meta').textContent = creditsUsedMonth > 0
+            ? ('Spent so far in ' + new Date().toLocaleDateString(undefined, { month: 'long' }))
+            : 'No usage yet this month.';
+          if ($('hx-usage-credits-bar')) $('hx-usage-credits-bar').style.width = pct + '%';
+          if ($('hx-usage-credits-used')) $('hx-usage-credits-used').textContent = creditsUsedMonth.toLocaleString() + ' used';
+          if ($('hx-usage-credits-cap'))  $('hx-usage-credits-cap').textContent  = creditsCap ? creditsCap.toLocaleString() : '—';
+
+          if ($('hx-usage-model'))      $('hx-usage-model').textContent = topModel || '—';
+          if ($('hx-usage-model-meta')) $('hx-usage-model-meta').textContent = topModel
+            ? topCount + ' request' + (topCount === 1 ? '' : 's') + ' this month'
+            : 'No requests yet this month.';
+
+          if ($('hx-usage-requests')) $('hx-usage-requests').textContent = requestsMonth.toLocaleString();
+          if ($('hx-usage-requests-meta')) $('hx-usage-requests-meta').textContent = requestsMonth > 0
+            ? 'Across every surface — chat, agents, workflows.'
+            : 'Across every surface — chat, agents, workflows.';
+
+          // ── Active engagement panel ──
           var engHost = $('hx-engagement-host');
           if (engHost) {
             if (active && active.id) {
@@ -347,20 +634,22 @@
             }
           }
 
-          // Recent activity — filtered to the active project's events when
-          // one is selected, otherwise shows the workspace-wide stream.
+          // ── Recent activity feed ──
           var actHost = $('hx-activity-host');
           if (actHost) {
-            if (recent && recent.data && recent.data.length) {
-              var html = '<div class="hx-card" style="padding:0;overflow:hidden;">';
-              recent.data.forEach(function (r, i) {
-                html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;' + (i > 0 ? 'border-top:1px solid var(--hx-line);' : '') + '">' +
-                  '<span style="font-size:13px;">' + escape(labelFor(r.kind)) + '</span>' +
-                  '<span class="hx-mono" style="font-size:11.5px;color:var(--hx-text-dim);">' + escape(relTime(r.created_at)) + '</span>' +
+            var actRows = (recent.data) || [];
+            if (actRows.length) {
+              actHost.innerHTML = '<div class="hx-card" style="padding:0;overflow:hidden;">' +
+                actRows.map(function (r) {
+                  return '<div class="hx-list-row">' +
+                    '<span class="glyph">' + iconForKind(r.kind) + '</span>' +
+                    '<span class="body">' +
+                      '<span class="ttl">' + escape(labelFor(r.kind)) + '</span>' +
+                    '</span>' +
+                    '<span class="time">' + escape(relTime(r.created_at)) + '</span>' +
                   '</div>';
-              });
-              html += '</div>';
-              actHost.innerHTML = html;
+                }).join('') +
+              '</div>';
             } else {
               var emptyTitle = (active && active.id) ? 'No activity in this project yet' : 'Nothing has happened yet';
               var emptyDesc  = (active && active.id)
@@ -377,8 +666,7 @@
         }
 
         loadDashboard();
-        // Re-render whenever the active project changes (same tab or other tab)
-        document.addEventListener('hx:active-project-changed', function () { loadDashboard(); });
+        document.addEventListener('hx:active-project-changed', loadDashboard);
         window.addEventListener('storage', function (e) { if (e.key === ACTIVE_KEY) loadDashboard(); });
       });
     })();
