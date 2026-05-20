@@ -372,19 +372,28 @@
           var st = (s && s.data) || { language:'en', timezone:'Europe/Zurich', theme:'light', density:'comfortable' };
           $('hx-ws-timezone').value = st.timezone || 'Europe/Zurich';
           $('hx-ws-language').value = st.language || 'en';
-          var theme   = st.theme || 'light';
-          var density = st.density || 'comfortable';
-          setSegActive('theme',   theme);
-          setSegActive('density', density);
-          setStatThemeLabel(theme);
+          // The theme/density shown as "active" mirrors what the user has
+          // in localStorage RIGHT NOW (set by platform.js bootstrap, which
+          // defaults to light). We deliberately do NOT auto-apply the DB
+          // value here — that caused the surprise "platform went dark the
+          // moment I clicked Preferences" bug. The DB value is what gets
+          // saved on the next manual click; it is not authoritative for
+          // the page on load.
+          var currentTheme = 'light';
+          var currentDensity = 'comfortable';
+          try { currentTheme   = localStorage.getItem('hx.theme')   || 'light'; } catch (e) {}
+          try { currentDensity = localStorage.getItem('hx.density') || 'comfortable'; } catch (e) {}
+          setSegActive('theme',   currentTheme);
+          setSegActive('density', currentDensity);
+          setStatThemeLabel(currentTheme);
           setStatLocaleLabel(st.language || 'en', st.timezone || 'Europe/Zurich');
 
-          snapshot = { company: company, timezone: $('hx-ws-timezone').value, language: $('hx-ws-language').value, theme: theme, density: density };
+          snapshot = { company: company, timezone: $('hx-ws-timezone').value, language: $('hx-ws-language').value, theme: currentTheme, density: currentDensity };
 
-          applyTheme(theme);
+          // Only locale/language preview on load — they don't visually
+          // disrupt the page the way a theme flip does.
           applyLanguage(st.language || 'en');
           applyTimezone(st.timezone || 'Europe/Zurich');
-          applyDensity(density);
         });
 
         // Live preview as the user changes locale selectors
