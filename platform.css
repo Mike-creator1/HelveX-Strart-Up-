@@ -166,10 +166,24 @@ html { overflow-x: clip; }
 body { overflow-x: clip; }
 /* Cards, grids, and prose wrap properly within any container. */
 .hx-app { min-width: 0; }
-.hx-main > * { min-width: 0; }
+.hx-main { min-width: 0; max-width: 100%; }
+.hx-main > * { min-width: 0; max-width: 100%; }
 p, h1, h2, h3, h4, h5, h6, li, td, th {
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+/* Aggressive mobile clamp: every common page-level element gets pinned
+   to 100% of its container so long text + long emails + long urls
+   can't punch past the viewport. */
+@media (max-width: 720px) {
+  .hx-pg-hero, .hx-pg-hero-grid, .hx-pg-title, .hx-pg-sub,
+  .hx-page-head, .hx-page-head h1, .hx-page-head p,
+  .hx-card, .hx-card .desc, .hx-card h3, .hx-card p {
+    max-width: 100% !important;
+    min-width: 0;
+  }
+  .hx-pg-hero-grid > div { min-width: 0; max-width: 100%; }
+  .hx-pg-hero-grid { grid-template-columns: 1fr !important; }
 }
 /* Defensive mobile guard removed: the broad [class*='-list'] selector
    was matching .hx-chat-list and other unrelated elements, and the
