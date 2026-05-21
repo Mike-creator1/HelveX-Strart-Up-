@@ -1848,7 +1848,7 @@
     .hx-chat-compose {
       border-top: 1px solid var(--hx-line-soft, var(--hx-line));
       background: linear-gradient(180deg, color-mix(in srgb, var(--hx-surface) 70%, transparent) 0%, var(--hx-surface) 30%);
-      padding: 16px 24px 20px;
+      padding: 12px 24px 14px;
       position: relative;
     }
     .hx-chat-compose::before {
@@ -1861,64 +1861,21 @@
       max-width: 760px; margin: 0 auto;
       display: flex; flex-direction: column; gap: 10px;
     }
+    /* Claude Code-style composer card — tight, calm, two-row layout:
+       textarea on top, control cluster on bottom. Border softens until
+       focus, no big shadows. */
     .hx-chat-input-row {
-      display: flex; flex-direction: column; gap: 6px;
-      background: linear-gradient(180deg, var(--hx-surface) 0%, color-mix(in srgb, var(--hx-surface) 94%, var(--hx-bg-2)) 100%);
+      display: flex; flex-direction: column; gap: 4px;
+      background: var(--hx-surface);
       border: 1px solid var(--hx-line);
-      border-radius: 22px;
-      padding: 14px 16px 8px;
-      transition: border-color 0.16s ease, box-shadow 0.18s ease, transform 0.16s ease;
-      box-shadow:
-        inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
-        0 1px 2px rgba(20,18,12,0.04),
-        0 12px 32px -16px rgba(20,18,12,0.10);
+      border-radius: 16px;
+      padding: 6px 8px 6px 14px;
+      transition: border-color 0.16s ease, box-shadow 0.18s ease;
     }
     .hx-chat-input-row:hover { border-color: var(--hx-line-strong); }
     .hx-chat-input-row:focus-within {
-      border-color: color-mix(in srgb, var(--hx-text) 70%, var(--hx-line));
-      box-shadow:
-        inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
-        0 0 0 4px color-mix(in srgb, var(--hx-text) 5%, transparent),
-        0 12px 36px -14px rgba(20,18,12,0.14);
-    }
-    /* Inline keyboard hint INSIDE the composer card (Claude.ai pattern) */
-    .hx-chat-inline-hint {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 6px;
-      padding: 2px 4px 0;
-      font-size: 10.5px;
-      letter-spacing: 0.01em;
-      color: var(--hx-text-faint);
-      user-select: none;
-      pointer-events: none;
-      transition: opacity 0.18s ease;
-    }
-    .hx-chat-input-row:not(:focus-within) .hx-chat-inline-hint { opacity: 0.55; }
-    .hx-chat-inline-hint .hx-kbd {
-      display: inline-flex;
-      align-items: center;
-      padding: 1px 5px;
-      font-family: var(--hx-mono);
-      font-size: 9.5px;
-      font-weight: 600;
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-      border-radius: 4px;
-      color: var(--hx-text-mid);
-      margin: 0 2px;
-      line-height: 1.4;
-    }
-    .hx-chat-inline-hint .hx-kbd-plus {
-      font-family: var(--hx-mono);
-      font-size: 9.5px;
-      color: var(--hx-text-faint);
-      margin: 0 1px;
-    }
-    .hx-chat-inline-hint-sep { color: var(--hx-text-faint); opacity: 0.6; }
-    @media (max-width: 700px) {
-      .hx-chat-inline-hint { display: none; }
+      border-color: color-mix(in srgb, var(--hx-text) 55%, var(--hx-line));
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--hx-text) 5%, transparent);
     }
     .hx-chat-input-row.is-drag-over {
       border-color: var(--hx-yellow, var(--hx-text));
@@ -2000,33 +1957,52 @@
       border: none; outline: none;
       background: transparent;
       resize: none;
-      font: inherit; font-size: 15px; line-height: 1.55;
+      font: inherit; font-size: 14.5px; line-height: 1.5;
       color: var(--hx-text);
-      max-height: 240px; min-height: 28px;
-      padding: 8px 4px;
-      letter-spacing: -0.005em;
+      max-height: 240px; min-height: 24px;
+      padding: 6px 2px;
+      letter-spacing: -0.003em;
     }
     .hx-chat-textarea::placeholder {
       color: var(--hx-text-faint);
       font-style: normal;
     }
 
-    /* Round icon buttons inside the composer (attach + mic) */
+    /* Bottom controls row — Claude Code style: small icon buttons,
+       transparent, no borders until hover. Spacer pushes right-side
+       items (model tag, etc.) away. */
+    .hx-chat-controls {
+      display: flex; align-items: center; gap: 2px;
+      padding: 0 2px;
+    }
+    .hx-chat-controls-spacer { flex: 1; }
+    .hx-chat-model-tag {
+      font-family: var(--hx-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.04em;
+      color: var(--hx-text-faint);
+      padding-right: 6px;
+      text-transform: capitalize;
+      user-select: none;
+    }
+    .hx-chat-model-tag:empty { display: none; }
+
+    /* Round icon buttons inside the composer (attach + mic + tools) */
     .hx-chat-tool-btn {
-      width: 32px; height: 32px;
+      width: 28px; height: 28px;
       flex-shrink: 0;
       display: inline-flex; align-items: center; justify-content: center;
       background: transparent;
       border: 1px solid transparent;
-      border-radius: 8px;
-      color: var(--hx-text-mid);
+      border-radius: 7px;
+      color: var(--hx-text-dim);
       cursor: pointer;
       transition: background 0.12s, color 0.12s, border-color 0.12s;
       padding: 0;
     }
-    .hx-chat-tool-btn:hover { background: var(--hx-bg-2); color: var(--hx-text); border-color: var(--hx-line); }
+    .hx-chat-tool-btn:hover { background: var(--hx-bg-2); color: var(--hx-text); }
     .hx-chat-tool-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-    .hx-chat-tool-btn svg { width: 16px; height: 16px; }
+    .hx-chat-tool-btn svg { width: 15px; height: 15px; }
     .hx-chat-tool-btn.is-active {
       background: var(--hx-text); color: var(--hx-bg); border-color: var(--hx-text);
     }
@@ -2304,34 +2280,34 @@
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .hx-msg-attach-file .hx-msg-attach-meta { color: var(--hx-text-dim); font-size: 11.5px; }
+    /* Send arrow — Claude Code style: tight 28px square, sits inline at
+       the end of the textarea row. Filled dark when armed (text in the
+       input), faint outline when disabled. Up-arrow icon. */
     .hx-chat-send {
-      width: 36px; height: 36px;
+      width: 28px; height: 28px;
       display: inline-flex; align-items: center; justify-content: center;
-      background: linear-gradient(180deg,
-        color-mix(in srgb, var(--hx-text) 100%, transparent) 0%,
-        color-mix(in srgb, var(--hx-text) 88%, transparent) 100%);
+      background: var(--hx-text);
       color: var(--hx-bg);
       border: 1px solid var(--hx-text);
-      border-radius: 11px;
+      border-radius: 7px;
       cursor: pointer; flex-shrink: 0;
-      transition: transform 0.14s ease, box-shadow 0.18s ease, background 0.14s ease, opacity 0.14s ease;
-      box-shadow:
-        inset 0 1px 0 color-mix(in srgb, #fff 18%, transparent),
-        0 1px 2px rgba(0,0,0,0.10),
-        0 6px 14px -6px rgba(0,0,0,0.20);
+      transition: background 0.14s ease, transform 0.12s ease, opacity 0.14s ease, color 0.14s ease;
       position: relative;
+      padding: 0;
+      margin-bottom: 2px;
     }
     .hx-chat-send:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow:
-        inset 0 1px 0 color-mix(in srgb, #fff 22%, transparent),
-        0 2px 4px rgba(0,0,0,0.12),
-        0 10px 22px -8px rgba(0,0,0,0.28),
-        0 0 0 4px color-mix(in srgb, var(--hx-text) 8%, transparent);
+      background: var(--hx-text-mid);
+      border-color: var(--hx-text-mid);
     }
-    .hx-chat-send:active:not(:disabled) { transform: translateY(0); }
-    .hx-chat-send:disabled { opacity: 0.32; cursor: not-allowed; box-shadow: none; }
-    .hx-chat-send svg { width: 15px; height: 15px; }
+    .hx-chat-send:active:not(:disabled) { transform: scale(0.94); }
+    .hx-chat-send:disabled {
+      background: transparent;
+      color: var(--hx-text-faint);
+      border-color: var(--hx-line);
+      cursor: not-allowed;
+    }
+    .hx-chat-send svg { width: 14px; height: 14px; }
 
     .hx-chat-foot {
       display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
@@ -2532,7 +2508,8 @@
     }
     .hx-voice-done svg { width: 16px; height: 16px; }
     /* While the voice panel is up, hide the normal input bar */
-    .hx-chat-input-row.is-recording-mode .hx-chat-input-bar { display: none; }
+    .hx-chat-input-row.is-recording-mode .hx-chat-input-bar,
+    .hx-chat-input-row.is-recording-mode .hx-chat-controls { display: none; }
     .hx-voice-error {
       font-size: 11.5px;
       color: var(--hx-red);
@@ -2576,7 +2553,7 @@
       .hx-chat-blank p { font-size: 13px; }
       .hx-msg.is-user .hx-msg-body { max-width: 88%; }
       .hx-chat-foot { font-size: 10.5px; gap: 10px; }
-      .hx-chat-send { width: 34px; height: 34px; }
+      .hx-chat-send { width: 28px; height: 28px; }
       .hx-voice-panel { padding: 6px 6px 6px 12px; gap: 10px; }
       .hx-voice-panel-label { display: none; }
       .hx-voice-wave { height: 30px; gap: 2px; }
@@ -2816,7 +2793,29 @@
                   </div>
                 </div>
 
+                <input
+                  type="file"
+                  id="hx-c-file"
+                  multiple
+                  accept="image/*,application/pdf,text/*,.md,.csv,.tsv,.json,.xml,.yaml,.yml,.toml,.sql,.sh,.py,.js,.ts,.tsx,.jsx,.html,.css,.scss,.less,.go,.rs,.rb,.java,.kt,.swift,.c,.cpp,.h,.hpp,.cs,.php,.lua,.r,.docx,.xlsx,.pptx,.doc,.xls,.ppt"
+                  style="display:none;" />
+
+                <!-- TOP: textarea + small inline send arrow on right -->
                 <div class="hx-chat-input-bar">
+                  <textarea
+                    id="hx-c-input"
+                    class="hx-chat-textarea"
+                    placeholder="Reply to Helix…"
+                    rows="1"
+                    autocomplete="off"
+                    spellcheck="true"></textarea>
+                  <button class="hx-chat-send" id="hx-c-send" type="button" disabled aria-label="Send">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+                  </button>
+                </div>
+
+                <!-- BOTTOM: controls row — attach / tools / mic on left, send on right (Claude Code style) -->
+                <div class="hx-chat-controls">
                   <button
                     class="hx-chat-tool-btn"
                     id="hx-c-attach"
@@ -2825,19 +2824,6 @@
                     title="Attach an image or document">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
                   </button>
-                  <input
-                    type="file"
-                    id="hx-c-file"
-                    multiple
-                    accept="image/*,application/pdf,text/*,.md,.csv,.tsv,.json,.xml,.yaml,.yml,.toml,.sql,.sh,.py,.js,.ts,.tsx,.jsx,.html,.css,.scss,.less,.go,.rs,.rb,.java,.kt,.swift,.c,.cpp,.h,.hpp,.cs,.php,.lua,.r,.docx,.xlsx,.pptx,.doc,.xls,.ppt"
-                    style="display:none;" />
-                  <textarea
-                    id="hx-c-input"
-                    class="hx-chat-textarea"
-                    placeholder="Reply to Helix…"
-                    rows="1"
-                    autocomplete="off"
-                    spellcheck="true"></textarea>
                   <div class="hx-chat-tools-wrap">
                     <button
                       class="hx-chat-tool-btn"
@@ -2881,16 +2867,8 @@
                     title="Voice input">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
                   </button>
-                  <button class="hx-chat-send" id="hx-c-send" type="button" disabled aria-label="Send">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                  </button>
-                </div>
-
-                <!-- Inline hint inside the composer card (Claude.ai-style) -->
-                <div class="hx-chat-inline-hint" aria-hidden="true">
-                  <span><span class="hx-kbd">Enter</span> to send</span>
-                  <span class="hx-chat-inline-hint-sep">·</span>
-                  <span><span class="hx-kbd">Shift</span><span class="hx-kbd-plus">+</span><span class="hx-kbd">Enter</span> for new line</span>
+                  <span class="hx-chat-controls-spacer"></span>
+                  <span class="hx-chat-model-tag" id="hx-c-model-tag" aria-hidden="true"></span>
                 </div>
               </div>
               <div class="hx-chat-foot">
@@ -4619,6 +4597,11 @@
           opts = opts || {};
           var prev = document.body.getAttribute('data-model');
           document.body.setAttribute('data-model', model);
+          // Composer bottom-right tag — always reflects the active model
+          // so users can confirm which model is armed without looking up
+          // at the toolbar.
+          var modelTag = document.getElementById('hx-c-model-tag');
+          if (modelTag) modelTag.textContent = model;
           if (opts.silent || prev === model) return;
 
           // Update the in-toolbar pill if exposed
