@@ -276,8 +276,8 @@ tr:hover td{background:rgba(255,255,255,.025)}
               <button class="card-link" data-filter="error" onclick="filterActivity('error')">Errors</button>
             </div>
           </div>
-          <div class="table-wrap" style="max-height:380px;overflow-y:auto">
-            <table>
+          <div class="table-wrap" style="max-height:380px;overflow:auto;-webkit-overflow-scrolling:touch;">
+            <table style="min-width:640px;">
               <thead><tr><th>Event</th><th>Module</th><th>Model</th><th>Tokens</th><th>Latency</th><th>Status</th><th>Time</th></tr></thead>
               <tbody id="activity-tbody"></tbody>
             </table>

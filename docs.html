@@ -35,7 +35,8 @@
     .hx-docs-body code { font-family: var(--hx-mono); font-size: 12.5px; background: var(--hx-cream); padding: 1px 6px; border-radius: 4px; color: var(--hx-text); }
     .hx-docs-body pre  { font-family: var(--hx-mono); font-size: 12.5px; background: #0A0A0A; color: #F5F5F4; padding: 16px 18px; border-radius: 10px; overflow-x: auto; line-height: 1.6; margin: 14px 0 22px; }
     .hx-docs-body pre code { background: transparent; color: inherit; padding: 0; font-size: inherit; }
-    .hx-docs-body table { width: 100%; border-collapse: collapse; margin: 14px 0 22px; font-size: 13px; }
+    .hx-docs-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 14px -4px 22px; }
+    .hx-docs-body table { width: 100%; min-width: 480px; border-collapse: collapse; margin: 0; font-size: 13px; }
     .hx-docs-body th { text-align: left; font-weight: 600; padding: 10px 12px; background: var(--hx-cream); border-bottom: 1px solid var(--hx-line); color: var(--hx-text); }
     .hx-docs-body td { padding: 10px 12px; border-bottom: 1px solid var(--hx-line-soft); vertical-align: top; }
     .hx-docs-body td code { white-space: nowrap; }
@@ -95,7 +96,7 @@
       <section id="errors">
         <h2>Errors</h2>
         <p>Failure responses are always JSON with at least <code>error</code> and, when relevant, <code>trace_id</code>. The trace ID is the single string Support needs to investigate.</p>
-        <table>
+        <div class="hx-docs-table-wrap"><table>
           <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
           <tbody>
             <tr><td><code>400</code></td><td>Malformed body or a validation failure. The <code>error</code> string describes what's missing.</td></tr>
@@ -106,7 +107,7 @@
             <tr><td><code>502</code></td><td>Upstream provider unreachable. Retry after a short backoff.</td></tr>
             <tr><td><code>503</code></td><td>A dependency (Stripe, Supabase) is not configured for the workspace.</td></tr>
           </tbody>
-        </table>
+        </table></div>
       </section>
 
       <section id="streaming">
@@ -183,7 +184,7 @@ data: {"type":"message_stop"}</code></pre>
         <h2>Checkout</h2>
         <div class="hx-ep"><span class="verb POST">POST</span><span class="path">/functions/v1/create-checkout-session</span><span class="auth">Supabase Edge · Bearer</span></div>
         <p>Creates a Stripe Checkout Session for either a one-time consulting engagement or a recurring HelveX subscription. The <code>slug</code> decides which. Server-side price enforcement — the client never controls the amount.</p>
-        <table>
+        <div class="hx-docs-table-wrap"><table>
           <thead><tr><th>slug</th><th>kind</th><th>price</th></tr></thead>
           <tbody>
             <tr><td><code>business-strategy</code></td><td>one-time</td><td>CHF 499</td></tr>
@@ -193,7 +194,7 @@ data: {"type":"message_stop"}</code></pre>
             <tr><td><code>growth</code></td><td>subscription</td><td>STRIPE_PRICE_GROWTH</td></tr>
             <tr><td><code>scale</code></td><td>subscription</td><td>STRIPE_PRICE_SCALE</td></tr>
           </tbody>
-        </table>
+        </table></div>
         <p class="note">Subscription tiers require the corresponding <code>STRIPE_PRICE_*</code> secret in the Supabase Edge Function environment. If missing the endpoint returns <code>503</code> with a clean message naming the variable.</p>
       </section>
 

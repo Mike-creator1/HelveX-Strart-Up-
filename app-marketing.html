@@ -47,16 +47,21 @@
     .hx-modal-head .close { background: transparent; border: 0; cursor: pointer; padding: 6px; color: var(--hx-text-mid); border-radius: 8px; }
     .hx-modal-head .close:hover { background: var(--hx-cream); color: var(--hx-text); }
     .hx-modal-body { padding: 20px 22px; overflow-y: auto; }
-    .hx-modal-foot { padding: 14px 22px; border-top: 1px solid var(--hx-line); background: var(--hx-cream); display: flex; gap: 10px; justify-content: flex-end; align-items: center; }
+    .hx-modal-foot { padding: 14px 22px; border-top: 1px solid var(--hx-line); background: var(--hx-cream); display: flex; gap: 10px; justify-content: flex-end; align-items: center; flex-wrap: wrap; }
     .hx-modal-foot .hx-cost { font-family: var(--hx-mono); font-size: 11px; color: var(--hx-text-mid); margin-right: auto; }
 
     .hx-field { display: block; margin-bottom: 14px; }
-    .hx-field label { font-size: 12.5px; font-weight: 600; color: var(--hx-text); display: block; margin-bottom: 6px; letter-spacing: -0.005em; }
-    .hx-field textarea, .hx-field input, .hx-field select { width: 100%; padding: 10px 12px; border: 1px solid var(--hx-line); border-radius: 10px; font: inherit; font-size: 13.5px; background: #fff; color: var(--hx-text); outline: none; transition: border-color 0.12s, box-shadow 0.12s; }
+    .hx-field > label { font-size: 12.5px; font-weight: 600; color: var(--hx-text); display: block; margin-bottom: 6px; letter-spacing: -0.005em; }
+    .hx-field textarea, .hx-field input:not([type="checkbox"]):not([type="radio"]), .hx-field select { width: 100%; padding: 10px 12px; border: 1px solid var(--hx-line); border-radius: 10px; font: inherit; font-size: 13.5px; background: #fff; color: var(--hx-text); outline: none; transition: border-color 0.12s, box-shadow 0.12s; }
     .hx-field textarea:focus, .hx-field input:focus, .hx-field select:focus { border-color: var(--hx-yellow-deep); box-shadow: 0 0 0 3px rgba(252,211,77,0.18); }
     .hx-field textarea { min-height: 100px; resize: vertical; line-height: 1.55; }
     .hx-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    @media (max-width: 600px) { .hx-field-row { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) {
+      .hx-field-row { grid-template-columns: 1fr; }
+      .hx-modal-foot { padding: 12px 16px; gap: 8px; }
+      .hx-modal-foot .hx-cost { width: 100%; margin-right: 0; order: -1; }
+      .hx-modal-foot .hx-btn { flex: 1; min-width: 0; }
+    }
 
     /* Results */
     .hx-results { display: flex; flex-direction: column; gap: 14px; }
@@ -181,11 +186,11 @@
         </div>
         <div class="hx-field">
           <label>Platforms <span style="color:var(--hx-text-mid);font-weight:400;">(at least one)</span></label>
-          <div style="display:flex;gap:14px;flex-wrap:wrap;padding-top:4px;">
-            <label style="display:flex;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" class="hx-social-plat" value="instagram" checked> Instagram</label>
-            <label style="display:flex;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" class="hx-social-plat" value="linkedin" checked> LinkedIn</label>
-            <label style="display:flex;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" class="hx-social-plat" value="x" checked> X (Twitter)</label>
-            <label style="display:flex;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" class="hx-social-plat" value="facebook"> Facebook</label>
+          <div class="hx-checks-grid">
+            <label><input type="checkbox" class="hx-social-plat" value="instagram" checked><span>Instagram</span></label>
+            <label><input type="checkbox" class="hx-social-plat" value="linkedin" checked><span>LinkedIn</span></label>
+            <label><input type="checkbox" class="hx-social-plat" value="x" checked><span>X (Twitter)</span></label>
+            <label><input type="checkbox" class="hx-social-plat" value="facebook"><span>Facebook</span></label>
           </div>
         </div>
         <div id="hx-social-status"></div>
@@ -237,10 +242,10 @@
         </div>
         <div class="hx-field">
           <label>Platforms</label>
-          <div style="display:flex;gap:14px;flex-wrap:wrap;padding-top:4px;">
-            <label style="display:flex;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" class="hx-ads-plat" value="meta" checked> Meta (Facebook + Instagram)</label>
-            <label style="display:flex;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" class="hx-ads-plat" value="google" checked> Google Search</label>
-            <label style="display:flex;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" class="hx-ads-plat" value="tiktok"> TikTok</label>
+          <div class="hx-checks-grid">
+            <label><input type="checkbox" class="hx-ads-plat" value="meta" checked><span>Meta (Facebook + Instagram)</span></label>
+            <label><input type="checkbox" class="hx-ads-plat" value="google" checked><span>Google Search</span></label>
+            <label><input type="checkbox" class="hx-ads-plat" value="tiktok"><span>TikTok</span></label>
           </div>
         </div>
         <div id="hx-ads-status"></div>

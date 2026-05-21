@@ -1387,6 +1387,75 @@ code { font-family: var(--hx-mono); font-size: 0.92em; }
   margin-top: 5px;
 }
 
+/* Reusable form-row helpers — always collapse to 1 column on mobile */
+.hx-form-row-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.hx-form-row-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 720px) {
+  .hx-form-row-2, .hx-form-row-3 { grid-template-columns: 1fr; }
+}
+
+/* Defensive blanket: any inline 2- or 3-column grid declared via the
+   style attribute collapses to a single column on phones. Catches every
+   ad-hoc `style="display:grid;grid-template-columns:..."` snippet in
+   page-local markup without hunting them down one by one. */
+@media (max-width: 600px) {
+  [style*="grid-template-columns:repeat(2,1fr)"],
+  [style*="grid-template-columns:repeat(2, 1fr)"],
+  [style*="grid-template-columns:repeat(3,1fr)"],
+  [style*="grid-template-columns:repeat(3, 1fr)"],
+  [style*="grid-template-columns:repeat(4,1fr)"],
+  [style*="grid-template-columns:repeat(4, 1fr)"],
+  [style*="grid-template-columns:1fr 1fr"],
+  [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Reusable checkbox/radio cluster — grid (not flex-wrap) so each option
+   occupies a predictable cell and the text labels stay aligned in rows
+   regardless of label length. Tracks collapse from 4 → 2 → 1 column
+   on narrower viewports. */
+.hx-checks-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px 14px;
+  padding-top: 4px;
+}
+.hx-checks-grid > label {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--hx-text);
+  font-weight: 400;
+  margin: 0 !important;
+  min-width: 0;
+  line-height: 1.35;
+}
+.hx-checks-grid input[type="checkbox"],
+.hx-checks-grid input[type="radio"] {
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0;
+  margin: 0;
+  accent-color: var(--hx-text);
+}
+@media (max-width: 900px) {
+  .hx-checks-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 420px) {
+  .hx-checks-grid { grid-template-columns: 1fr; }
+}
+
 /* ═══════════════════════════════════════════════════════════
    PRICING CARDS
    ═══════════════════════════════════════════════════════════ */
