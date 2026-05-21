@@ -2789,6 +2789,30 @@
        tweaks so the new compose bar is the only footer visible */
     .hx-chat-inline-hint { display: none !important; }
 
+    /* Force-hide the legacy credit balance pill that platform.css renders
+       even when the HTML attribute "hidden" is present (because the
+       .hx-chat-balance rule sets display:inline-flex which trumps the
+       UA's [hidden]{display:none}). */
+    html body[data-active="chat"] #hx-c-balance,
+    html body[data-active="chat"] .hx-chat-balance,
+    html body[data-active="chat"] .hx-chat-pill,
+    html body[data-active="chat"] #hx-c-clear,
+    html body[data-active="chat"] .hx-cc-toolbar > select,
+    html body[data-active="chat"] .hx-cc-toolbar [hidden] {
+      display: none !important;
+      visibility: hidden !important;
+    }
+    /* The drawer-toggle hamburger doesn't belong in the Claude Code chrome */
+    html body[data-active="chat"] .hx-chat-drawer-toggle {
+      display: none !important;
+    }
+    /* Make the .hx-cc-blank truly empty — no centered text/icon/spinner */
+    html body[data-active="chat"] .hx-cc-blank {
+      display: block !important;
+      min-height: 0 !important;
+    }
+    html body[data-active="chat"] .hx-cc-blank * { display: none !important; }
+
     /* Hide the global platform chrome on the chat page — the chat owns
        its full window, just like Claude Code. Multiple selectors so we
        beat whatever specificity platform.css throws at us. */
@@ -3038,12 +3062,7 @@
           </div>
 
           <div class="hx-chat-thread hx-cc-thread" id="hx-c-thread">
-            <div class="hx-chat-blank hx-cc-blank" id="hx-c-blank">
-              <!-- Minimal IDE-style empty state (Claude Code parity) -->
-              <span class="hx-cc-blank-spark" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>
-              </span>
-            </div>
+            <div class="hx-chat-blank hx-cc-blank" id="hx-c-blank"></div>
           </div>
 
           <div class="hx-chat-compose">
@@ -3988,14 +4007,14 @@
               // No project selected — guide the user to pick one (or create
               // their first project) before they can start chatting.
               // Claude-Code-style: minimal empty state with a single spark icon
-              thread.innerHTML = '<div class="hx-chat-blank hx-cc-blank"><span class="hx-cc-blank-spark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></span></div>';
+              thread.innerHTML = '<div class="hx-chat-blank hx-cc-blank"></div>';
               return;
             }
-            thread.innerHTML = '<div class="hx-chat-blank hx-cc-blank"><span class="hx-cc-blank-spark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></span></div>';
+            thread.innerHTML = '<div class="hx-chat-blank hx-cc-blank"></div>';
             return;
           }
           if (!state.messages.length && !state.sending) {
-            thread.innerHTML = '<div class="hx-chat-blank hx-cc-blank"><span class="hx-cc-blank-spark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></span></div>';
+            thread.innerHTML = '<div class="hx-chat-blank hx-cc-blank"></div>';
             // Wire chips to prefill the composer
             thread.querySelectorAll('.hx-chat-blank-chip').forEach(function (chip) {
               chip.addEventListener('click', function () {
