@@ -1385,6 +1385,16 @@
     }
     /* User turns sit in a refined ivory-tinted chip; assistant turns are flush editorial prose. */
     .hx-msg.is-user { align-items: flex-end; }
+    /* The body wrapper takes the max-width constraint so the bubble
+       itself can shrink to its content (width: auto inside a flex
+       column with align-items: flex-end naturally produces a fit-to-
+       content size). Short user messages now render as compact pills
+       on the right, long ones cap at 78% of the thread. */
+    .hx-msg.is-user .hx-msg-body {
+      width: auto;
+      max-width: 78%;
+      align-self: flex-end;
+    }
     .hx-msg.is-user .hx-msg-content {
       background: linear-gradient(180deg,
         color-mix(in srgb, var(--hx-yellow-soft, var(--hx-bg-2)) 40%, var(--hx-surface)) 0%,
@@ -1394,7 +1404,9 @@
       border-bottom-right-radius: 5px;
       padding: 13px 17px;
       font-size: 14.5px; line-height: 1.62;
-      max-width: 78%;
+      max-width: 100%;
+      width: fit-content;
+      margin-left: auto;
       box-shadow:
         inset 0 1px 0 color-mix(in srgb, #fff 65%, transparent),
         0 1px 2px rgba(0,0,0,0.04),
@@ -2450,7 +2462,7 @@
       .hx-chat-blank { padding: 40px 20px; gap: 14px; }
       .hx-chat-blank h2 { font-size: 44px; }
       .hx-chat-blank p { font-size: 13px; }
-      .hx-msg.is-user .hx-msg-content { max-width: 88%; }
+      .hx-msg.is-user .hx-msg-body { max-width: 88%; }
       .hx-chat-foot { font-size: 10.5px; gap: 10px; }
       .hx-chat-send { width: 34px; height: 34px; }
       .hx-voice-panel { padding: 6px 6px 6px 12px; gap: 10px; }
