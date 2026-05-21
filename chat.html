@@ -2198,6 +2198,23 @@
       background: linear-gradient(180deg, var(--hx-yellow-soft) 0%, transparent 100%);
       border-color: color-mix(in srgb, var(--hx-yellow) 22%, var(--hx-line));
     }
+    /* "Simple" tool items (no toggle dot) — used for Add files / Slash commands */
+    .hx-chat-tools-item.is-simple .hx-chat-tools-check { display: none; }
+    .hx-chat-tools-item .hx-chat-tools-kbd {
+      font-family: var(--hx-mono);
+      font-size: 11px;
+      color: var(--hx-text-faint);
+      padding: 2px 6px;
+      border: 1px solid var(--hx-line);
+      border-radius: 4px;
+      background: var(--hx-bg-2);
+      flex-shrink: 0;
+    }
+    .hx-chat-tools-divider {
+      height: 1px;
+      background: var(--hx-line-soft, var(--hx-line));
+      margin: 6px 4px;
+    }
     .hx-chat-tools-ico {
       width: 32px; height: 32px;
       display: inline-flex; align-items: center; justify-content: center;
@@ -2248,6 +2265,189 @@
       0%   { box-shadow: 0 0 0 0 rgba(0,0,0,0.4); }
       100% { box-shadow: 0 0 0 8px rgba(0,0,0,0.0); }
     }
+
+    /* ─── Model picker popover (bottom-right of composer) ───────────
+       Claude Code parity: click the model tag to open a list of models
+       with keyboard shortcuts (Cmd+1/2/3). */
+    .hx-chat-modelpop-wrap { position: relative; }
+    .hx-chat-modelpop-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 6px 4px 8px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      cursor: pointer;
+      color: var(--hx-text-mid);
+      font-family: inherit;
+      font-size: 11.5px;
+      letter-spacing: 0.01em;
+      transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+    }
+    .hx-chat-modelpop-btn:hover {
+      background: var(--hx-bg-2);
+      color: var(--hx-text);
+    }
+    .hx-chat-modelpop-btn[aria-expanded="true"] {
+      background: var(--hx-bg-2);
+      border-color: var(--hx-line);
+      color: var(--hx-text);
+    }
+    .hx-chat-modelpop-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--hx-yellow, var(--hx-text));
+      box-shadow:
+        0 0 0 2px color-mix(in srgb, var(--hx-yellow, transparent) 25%, transparent),
+        0 0 6px color-mix(in srgb, var(--hx-yellow, transparent) 55%, transparent);
+    }
+    body[data-model="nexus"] .hx-chat-modelpop-dot,
+    body[data-model="prometheus"] .hx-chat-modelpop-dot { background: var(--hx-mc, var(--hx-text)); box-shadow: 0 0 0 2px var(--hx-mc-soft, transparent), 0 0 6px var(--hx-mc-glow, transparent); }
+    .hx-chat-modelpop-name {
+      font-weight: 600;
+      color: inherit;
+      text-transform: capitalize;
+    }
+    .hx-chat-modelpop-btn svg { width: 11px; height: 11px; opacity: 0.7; }
+
+    .hx-chat-modelpop-menu {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      right: -4px;
+      min-width: 220px;
+      padding: 6px;
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line);
+      border-radius: 12px;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
+        0 18px 38px -12px rgba(20,18,12,0.20),
+        0 4px 10px rgba(20,18,12,0.06);
+      z-index: 25;
+      animation: hx-tools-in 0.18s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    .hx-chat-modelpop-menu[hidden] { display: none; }
+    .hx-chat-modelpop-section {
+      font-family: var(--hx-mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--hx-text-faint);
+      padding: 6px 10px 4px;
+    }
+    .hx-chat-modelpop-item {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 8px 10px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      font: inherit;
+      color: var(--hx-text);
+      text-align: left;
+      transition: background 0.12s ease, border-color 0.12s ease;
+    }
+    .hx-chat-modelpop-item:hover { background: var(--hx-bg-2); }
+    .hx-chat-modelpop-iname { font-size: 13px; font-weight: 600; }
+    .hx-chat-modelpop-meta {
+      font-family: var(--hx-mono);
+      font-size: 10.5px;
+      color: var(--hx-text-faint);
+      letter-spacing: 0.04em;
+    }
+    .hx-chat-modelpop-tick {
+      width: 14px; height: 14px;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--hx-yellow-deep);
+      opacity: 0;
+    }
+    .hx-chat-modelpop-tick::before {
+      content: '';
+      width: 9px; height: 5px;
+      border-left: 1.6px solid currentColor;
+      border-bottom: 1.6px solid currentColor;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+    .hx-chat-modelpop-item[aria-checked="true"] .hx-chat-modelpop-tick { opacity: 1; }
+    .hx-chat-modelpop-num {
+      font-family: var(--hx-mono);
+      font-size: 10.5px;
+      color: var(--hx-text-faint);
+      padding: 2px 6px;
+      border: 1px solid var(--hx-line);
+      border-radius: 4px;
+      background: var(--hx-bg-2);
+    }
+
+    /* ─── Slash command palette (opens when textarea starts with "/") ───
+       Floats above the composer with the available commands. Arrow keys
+       navigate, Enter selects, Esc dismisses. */
+    .hx-chat-slash-menu {
+      position: absolute;
+      bottom: calc(100% + 12px);
+      left: 0; right: 0;
+      max-width: 460px;
+      margin: 0 auto;
+      padding: 6px;
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line);
+      border-radius: 12px;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
+        0 22px 50px -16px rgba(20,18,12,0.22),
+        0 6px 14px rgba(20,18,12,0.06);
+      z-index: 30;
+      animation: hx-tools-in 0.18s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    .hx-chat-slash-menu[hidden] { display: none; }
+    .hx-chat-slash-section {
+      font-family: var(--hx-mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--hx-text-faint);
+      padding: 8px 12px 6px;
+    }
+    .hx-chat-slash-item {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 12px;
+      width: 100%;
+      padding: 8px 12px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      font: inherit;
+      color: var(--hx-text);
+      text-align: left;
+      transition: background 0.12s ease, border-color 0.12s ease;
+      align-items: center;
+    }
+    .hx-chat-slash-item:hover,
+    .hx-chat-slash-item.is-active {
+      background: var(--hx-bg-2);
+      border-color: var(--hx-line-soft, var(--hx-line));
+    }
+    .hx-chat-slash-item strong {
+      font-family: var(--hx-mono);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--hx-yellow-deep);
+    }
+    .hx-chat-slash-item span {
+      font-size: 12.5px;
+      color: var(--hx-text-mid);
+    }
+    /* The composer card needs to be a positioning context for the slash menu */
+    .hx-chat-compose-inner { position: relative; }
 
     /* Attachments rendered inside a message bubble */
     .hx-msg-attachments {
@@ -2814,16 +3014,8 @@
                   </button>
                 </div>
 
-                <!-- BOTTOM: controls row — attach / tools / mic on left, send on right (Claude Code style) -->
+                <!-- BOTTOM: controls row — "+" menu / mic on left, model popover on right (Claude Code parity) -->
                 <div class="hx-chat-controls">
-                  <button
-                    class="hx-chat-tool-btn"
-                    id="hx-c-attach"
-                    type="button"
-                    aria-label="Attach files"
-                    title="Attach an image or document">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                  </button>
                   <div class="hx-chat-tools-wrap">
                     <button
                       class="hx-chat-tool-btn"
@@ -2831,19 +3023,37 @@
                       type="button"
                       aria-haspopup="menu"
                       aria-expanded="false"
-                      aria-label="Tools"
-                      title="Web search · code execution">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg>
+                      aria-label="Add"
+                      title="Add files, slash commands, or tools">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                       <span class="hx-chat-tools-count" id="hx-c-tools-count" hidden>0</span>
                     </button>
                     <div class="hx-chat-tools-menu" id="hx-c-tools-menu" role="menu" hidden>
+                      <button class="hx-chat-tools-item is-simple" id="hx-c-attach" type="button" role="menuitem">
+                        <span class="hx-chat-tools-ico">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                        </span>
+                        <span class="hx-chat-tools-body">
+                          <span class="hx-chat-tools-title">Add files or photos</span>
+                        </span>
+                      </button>
+                      <button class="hx-chat-tools-item is-simple" id="hx-c-slash" type="button" role="menuitem">
+                        <span class="hx-chat-tools-ico">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="18" y2="4"/></svg>
+                        </span>
+                        <span class="hx-chat-tools-body">
+                          <span class="hx-chat-tools-title">Slash commands</span>
+                        </span>
+                        <span class="hx-chat-tools-kbd">/</span>
+                      </button>
+                      <div class="hx-chat-tools-divider" role="separator"></div>
                       <button class="hx-chat-tools-item" id="hx-c-web" type="button" role="menuitemcheckbox" aria-checked="false">
                         <span class="hx-chat-tools-ico">
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg>
                         </span>
                         <span class="hx-chat-tools-body">
                           <span class="hx-chat-tools-title">Browse the web</span>
-                          <span class="hx-chat-tools-desc">Fresh info, current news, live data</span>
+                          <span class="hx-chat-tools-desc">Fresh info, news, live data</span>
                         </span>
                         <span class="hx-chat-tools-check" aria-hidden="true"></span>
                       </button>
@@ -2853,7 +3063,7 @@
                         </span>
                         <span class="hx-chat-tools-body">
                           <span class="hx-chat-tools-title">Run code</span>
-                          <span class="hx-chat-tools-desc">Python · math · data analysis · charts</span>
+                          <span class="hx-chat-tools-desc">Python · math · data · charts</span>
                         </span>
                         <span class="hx-chat-tools-check" aria-hidden="true"></span>
                       </button>
@@ -2868,7 +3078,53 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
                   </button>
                   <span class="hx-chat-controls-spacer"></span>
-                  <span class="hx-chat-model-tag" id="hx-c-model-tag" aria-hidden="true"></span>
+
+                  <!-- Model picker popover — Claude Code parity (click to switch, ⌘+1/2/3 shortcuts) -->
+                  <div class="hx-chat-modelpop-wrap">
+                    <button
+                      class="hx-chat-modelpop-btn"
+                      id="hx-c-modelpop-btn"
+                      type="button"
+                      aria-haspopup="menu"
+                      aria-expanded="false"
+                      aria-label="Switch model">
+                      <span class="hx-chat-modelpop-dot" aria-hidden="true"></span>
+                      <span class="hx-chat-modelpop-name" id="hx-c-modelpop-name">ether</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="hx-chat-modelpop-menu" id="hx-c-modelpop-menu" role="menu" hidden>
+                      <div class="hx-chat-modelpop-section">Models</div>
+                      <button class="hx-chat-modelpop-item" data-model="ether" type="button" role="menuitemradio" aria-checked="true">
+                        <span class="hx-chat-modelpop-iname">Ether</span>
+                        <span class="hx-chat-modelpop-meta">fast</span>
+                        <span class="hx-chat-modelpop-tick" aria-hidden="true"></span>
+                        <span class="hx-chat-modelpop-num">1</span>
+                      </button>
+                      <button class="hx-chat-modelpop-item" data-model="nexus" type="button" role="menuitemradio" aria-checked="false">
+                        <span class="hx-chat-modelpop-iname">Nexus</span>
+                        <span class="hx-chat-modelpop-meta">balanced</span>
+                        <span class="hx-chat-modelpop-tick" aria-hidden="true"></span>
+                        <span class="hx-chat-modelpop-num">2</span>
+                      </button>
+                      <button class="hx-chat-modelpop-item" data-model="prometheus" type="button" role="menuitemradio" aria-checked="false">
+                        <span class="hx-chat-modelpop-iname">Prometheus</span>
+                        <span class="hx-chat-modelpop-meta">deepest</span>
+                        <span class="hx-chat-modelpop-tick" aria-hidden="true"></span>
+                        <span class="hx-chat-modelpop-num">3</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slash command palette (opens when textarea starts with "/") -->
+                <div class="hx-chat-slash-menu" id="hx-c-slash-menu" hidden role="menu">
+                  <div class="hx-chat-slash-section">Slash commands</div>
+                  <button class="hx-chat-slash-item" data-slash="new"   type="button"><strong>/new</strong><span>Start a new conversation</span></button>
+                  <button class="hx-chat-slash-item" data-slash="clear" type="button"><strong>/clear</strong><span>Archive the current chat</span></button>
+                  <button class="hx-chat-slash-item" data-slash="web"   type="button"><strong>/web</strong><span>Toggle web search for next message</span></button>
+                  <button class="hx-chat-slash-item" data-slash="code"  type="button"><strong>/code</strong><span>Toggle code execution for next message</span></button>
+                  <button class="hx-chat-slash-item" data-slash="model" type="button"><strong>/model</strong><span>Switch active model</span></button>
+                  <button class="hx-chat-slash-item" data-slash="help"  type="button"><strong>/help</strong><span>Show keyboard shortcuts</span></button>
                 </div>
               </div>
               <div class="hx-chat-foot">
@@ -5267,7 +5523,13 @@
         }
 
         // File picker + drag-drop on the composer
-        attachBtn.addEventListener('click', function () { fileInput.click(); });
+        attachBtn.addEventListener('click', function () {
+          // Close the unified "+" menu if it's open, then pop the picker.
+          var tm = document.getElementById('hx-c-tools-menu');
+          var tb = document.getElementById('hx-c-tools-btn');
+          if (tm && !tm.hidden) { tm.hidden = true; if (tb) tb.setAttribute('aria-expanded', 'false'); }
+          fileInput.click();
+        });
         fileInput.addEventListener('change', function (e) {
           handleFiles(e.target.files);
           fileInput.value = '';
@@ -5381,6 +5643,201 @@
           if (e.key === 'Escape') closeToolsMenu();
         });
         refreshToolsUI();
+
+        // "Add files or photos" item shares id=hx-c-attach with the existing
+        // attach handler at the top of this scope — that handler already
+        // triggers the file picker and closes this menu, so no extra wiring.
+
+        // "Slash commands" menu item — focuses the textarea and inserts "/"
+        // which automatically pops up the slash command palette below.
+        var slashTrigger = $('hx-c-slash');
+        var inputBox     = $('hx-c-input');
+        if (slashTrigger && inputBox) {
+          slashTrigger.addEventListener('click', function () {
+            closeToolsMenu();
+            if (inputBox.value === '') inputBox.value = '/';
+            inputBox.focus();
+            // Position caret at end and trigger input handler so the
+            // slash palette opens.
+            inputBox.setSelectionRange(inputBox.value.length, inputBox.value.length);
+            inputBox.dispatchEvent(new Event('input', { bubbles: true }));
+          });
+        }
+
+        // ─── Model picker popover (bottom-right of composer) ─────────
+        var modelPopBtn   = $('hx-c-modelpop-btn');
+        var modelPopMenu  = $('hx-c-modelpop-menu');
+        var modelPopName  = $('hx-c-modelpop-name');
+        var modelSelectEl = $('hx-c-model');
+        function refreshModelPopUI() {
+          if (!modelPopMenu || !modelSelectEl) return;
+          var current = modelSelectEl.value || 'ether';
+          if (modelPopName) modelPopName.textContent = current;
+          modelPopMenu.querySelectorAll('.hx-chat-modelpop-item').forEach(function (it) {
+            it.setAttribute('aria-checked', it.getAttribute('data-model') === current ? 'true' : 'false');
+          });
+        }
+        function openModelPop() {
+          if (!modelPopMenu || !modelPopBtn) return;
+          modelPopMenu.hidden = false;
+          modelPopBtn.setAttribute('aria-expanded', 'true');
+          refreshModelPopUI();
+        }
+        function closeModelPop() {
+          if (!modelPopMenu || !modelPopBtn) return;
+          modelPopMenu.hidden = true;
+          modelPopBtn.setAttribute('aria-expanded', 'false');
+        }
+        if (modelPopBtn) {
+          modelPopBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (modelPopBtn.getAttribute('aria-expanded') === 'true') closeModelPop();
+            else openModelPop();
+          });
+        }
+        if (modelPopMenu) {
+          modelPopMenu.querySelectorAll('.hx-chat-modelpop-item').forEach(function (it) {
+            it.addEventListener('click', function () {
+              var m = it.getAttribute('data-model');
+              if (!m || !modelSelectEl) return;
+              modelSelectEl.value = m;
+              modelSelectEl.dispatchEvent(new Event('change', { bubbles: true }));
+              refreshModelPopUI();
+              closeModelPop();
+            });
+          });
+        }
+        // Close on outside click
+        document.addEventListener('click', function (e) {
+          if (!modelPopMenu || !modelPopBtn) return;
+          if (modelPopBtn.contains(e.target) || modelPopMenu.contains(e.target)) return;
+          closeModelPop();
+        });
+        // Cmd/Ctrl + 1/2/3 → switch model directly (Claude Code parity)
+        document.addEventListener('keydown', function (e) {
+          if (!(e.metaKey || e.ctrlKey)) return;
+          var map = { '1': 'ether', '2': 'nexus', '3': 'prometheus' };
+          var target = map[e.key];
+          if (!target || !modelSelectEl) return;
+          e.preventDefault();
+          modelSelectEl.value = target;
+          modelSelectEl.dispatchEvent(new Event('change', { bubbles: true }));
+          refreshModelPopUI();
+        });
+        // Esc closes
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closeModelPop();
+        });
+        refreshModelPopUI();
+        // Reflect external model changes (toolbar dropdown, conversation load)
+        if (modelSelectEl) modelSelectEl.addEventListener('change', refreshModelPopUI);
+
+        // ─── Slash command palette ───────────────────────────────────
+        // Opens when the textarea content starts with "/". Arrow keys
+        // navigate, Enter selects, Esc closes. Selecting an item either
+        // executes immediately (clear / new / model) or stays in the
+        // input ready to send (web / code / help).
+        var slashMenu = $('hx-c-slash-menu');
+        var slashItems = slashMenu ? Array.prototype.slice.call(slashMenu.querySelectorAll('.hx-chat-slash-item')) : [];
+        var slashActive = 0;
+        function highlightSlash() {
+          slashItems.forEach(function (it, i) { it.classList.toggle('is-active', i === slashActive); });
+        }
+        function openSlash() {
+          if (!slashMenu || slashMenu.hidden === false) return;
+          slashMenu.hidden = false;
+          slashActive = 0;
+          highlightSlash();
+        }
+        function closeSlash() {
+          if (!slashMenu) return;
+          slashMenu.hidden = true;
+        }
+        function runSlash(name) {
+          closeSlash();
+          if (!inputBox) return;
+          inputBox.value = '';
+          inputBox.dispatchEvent(new Event('input', { bubbles: true }));
+          if (name === 'new')   { if (typeof newConversation === 'function') newConversation(); return; }
+          if (name === 'clear') { if (typeof deleteCurrent   === 'function') deleteCurrent();   return; }
+          if (name === 'model') { openModelPop(); return; }
+          if (name === 'web')   {
+            state.webEnabled = !state.webEnabled;
+            if (webItem) webItem.setAttribute('aria-checked', state.webEnabled ? 'true' : 'false');
+            refreshToolsUI();
+            return;
+          }
+          if (name === 'code')  {
+            state.codeEnabled = !state.codeEnabled;
+            if (codeItem) codeItem.setAttribute('aria-checked', state.codeEnabled ? 'true' : 'false');
+            refreshToolsUI();
+            return;
+          }
+          if (name === 'help')  {
+            inputBox.placeholder = '⌘+1/2/3 model · ⌘+\\ toggle sidebar · Enter send · Shift+Enter newline';
+            setTimeout(function () { inputBox.placeholder = 'Reply to Helix…'; }, 4500);
+            return;
+          }
+        }
+        if (inputBox) {
+          inputBox.addEventListener('input', function () {
+            var v = inputBox.value;
+            if (v.charAt(0) === '/' && v.length <= 24 && v.indexOf('\n') === -1) {
+              // Filter items by typed prefix
+              var typed = v.slice(1).toLowerCase();
+              var anyVisible = false;
+              slashItems.forEach(function (it) {
+                var slug = it.getAttribute('data-slash') || '';
+                var match = !typed || slug.indexOf(typed) === 0;
+                it.style.display = match ? '' : 'none';
+                if (match) anyVisible = true;
+              });
+              if (anyVisible) {
+                openSlash();
+                // Reset active to first visible
+                var firstVisible = slashItems.findIndex(function (it) { return it.style.display !== 'none'; });
+                slashActive = firstVisible >= 0 ? firstVisible : 0;
+                highlightSlash();
+              } else {
+                closeSlash();
+              }
+            } else {
+              closeSlash();
+            }
+          });
+          inputBox.addEventListener('keydown', function (e) {
+            if (!slashMenu || slashMenu.hidden) return;
+            var visible = slashItems.filter(function (it) { return it.style.display !== 'none'; });
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              var curIdx = visible.indexOf(slashItems[slashActive]);
+              var next = visible[(curIdx + 1) % visible.length];
+              slashActive = slashItems.indexOf(next);
+              highlightSlash();
+            } else if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              var curIdx2 = visible.indexOf(slashItems[slashActive]);
+              var prev = visible[(curIdx2 - 1 + visible.length) % visible.length];
+              slashActive = slashItems.indexOf(prev);
+              highlightSlash();
+            } else if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              var pickName = slashItems[slashActive].getAttribute('data-slash');
+              runSlash(pickName);
+            } else if (e.key === 'Escape') {
+              e.preventDefault();
+              closeSlash();
+            }
+          });
+        }
+        slashItems.forEach(function (it) {
+          it.addEventListener('click', function () { runSlash(it.getAttribute('data-slash')); });
+        });
+        document.addEventListener('click', function (e) {
+          if (!slashMenu || slashMenu.hidden) return;
+          if (slashMenu.contains(e.target) || (inputBox && inputBox.contains(e.target))) return;
+          closeSlash();
+        });
 
         if (voiceDoneBtn) {
           voiceDoneBtn.addEventListener('click', function () {
