@@ -2427,6 +2427,161 @@
       .hx-voice-wave span:nth-child(n+12) { display: none; }
       .hx-voice-cancel, .hx-voice-done { width: 32px; height: 32px; border-radius: 10px; }
     }
+
+    /* ─────────────────────────────────────────────────────────────────
+       Surgical fixes — kill toolbar / Claude-Code-style compose strip
+       / collapsible rail. Everything else on this page stays as it was.
+       ───────────────────────────────────────────────────────────────── */
+
+    /* 1. Hide the entire top toolbar (Helix wordmark + Model + Project +
+       balance pill). Keep the SELECTs in the DOM so existing JS that
+       reads $('hx-c-model').value etc. still works. */
+    body[data-active="chat"] .hx-chat-toolbar {
+      display: none !important;
+    }
+    /* Compensate the thread for the missing toolbar */
+    body[data-active="chat"] .hx-chat-thread {
+      padding-top: 18px;
+    }
+
+    /* 2. Compose bottom strip — Accept edits chip + model picker */
+    .hx-cc-compose-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 6px 2px;
+      position: relative;
+    }
+    .hx-cc-compose-bar-spacer { flex: 1; }
+    .hx-cc-edits {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 10px 5px 8px;
+      background: transparent;
+      border: 1px solid var(--hx-line);
+      border-radius: 999px;
+      color: var(--hx-text-dim);
+      font: 500 11.5px/1 var(--hx-sans, 'Inter'), sans-serif;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .hx-cc-edits:hover {
+      background: var(--hx-surface);
+      color: var(--hx-text);
+    }
+    .hx-cc-edits-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--hx-yellow, var(--hx-mc));
+      box-shadow: 0 0 0 2px var(--hx-yellow-soft, transparent);
+    }
+    .hx-cc-edits[aria-pressed="false"] .hx-cc-edits-dot {
+      background: var(--hx-text-faint, #999);
+      box-shadow: none;
+    }
+    .hx-cc-model-pick {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 9px 5px 8px;
+      background: transparent;
+      border: 1px solid var(--hx-line);
+      border-radius: 999px;
+      color: var(--hx-text);
+      font: 500 11.5px/1 var(--hx-sans, 'Inter'), sans-serif;
+      cursor: pointer;
+      position: relative;
+    }
+    .hx-cc-model-pick:hover { background: var(--hx-surface); }
+    .hx-cc-model-glyph { color: var(--hx-yellow, var(--hx-mc)); display: inline-flex; }
+    .hx-cc-model-glyph svg { width: 13px; height: 13px; }
+    .hx-cc-model-name { color: var(--hx-text); font-weight: 600; }
+    .hx-cc-model-sep  { color: var(--hx-text-faint, #aaa); }
+    .hx-cc-model-tier { color: var(--hx-text-dim); }
+    .hx-cc-model-caret { width: 11px; height: 11px; opacity: 0.55; }
+    .hx-cc-model-spinner {
+      display: none;
+      width: 10px; height: 10px; margin-left: 2px;
+      border-radius: 50%;
+      border: 1.5px solid color-mix(in srgb, var(--hx-yellow, var(--hx-mc)) 30%, transparent);
+      border-top-color: var(--hx-yellow, var(--hx-mc));
+      animation: hx-cc-spin 0.85s linear infinite;
+    }
+    .hx-cc-model-pick.is-busy .hx-cc-model-spinner { display: inline-block; }
+    .hx-cc-model-pick.is-busy .hx-cc-model-caret   { display: none; }
+    @keyframes hx-cc-spin { to { transform: rotate(360deg); } }
+    .hx-cc-model-menu {
+      position: absolute; bottom: calc(100% + 6px); right: 0;
+      min-width: 220px;
+      background: var(--hx-bg-elev, #fff);
+      border: 1px solid var(--hx-line);
+      border-radius: 10px;
+      padding: 4px;
+      box-shadow: var(--hx-shadow-md, 0 8px 24px rgba(0,0,0,0.12));
+      z-index: 20;
+    }
+    .hx-cc-model-opt {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%;
+      padding: 8px 10px;
+      background: transparent; border: 0;
+      color: var(--hx-text);
+      font: 500 12.5px/1 var(--hx-sans, 'Inter'), sans-serif;
+      border-radius: 7px;
+      cursor: pointer;
+      text-align: left;
+      gap: 12px;
+    }
+    .hx-cc-model-opt > span:last-child {
+      color: var(--hx-text-dim); font-size: 11px; font-weight: 400;
+    }
+    .hx-cc-model-opt:hover  { background: var(--hx-surface); }
+    .hx-cc-model-opt.is-active { background: var(--hx-yellow-soft, var(--hx-surface)); }
+    /* Hide the legacy "Enter to send" hint forever — replaced by the bar */
+    .hx-chat-inline-hint { display: none !important; }
+
+    /* 3. Collapsible rail */
+    .hx-chat-rail { position: relative; transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.22s, padding 0.22s, opacity 0.18s; }
+    .hx-chat-rail-collapse {
+      position: absolute;
+      top: 14px; right: -12px;
+      width: 24px; height: 24px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--hx-bg-elev, #fff);
+      border: 1px solid var(--hx-line);
+      border-radius: 50%;
+      color: var(--hx-text-dim);
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: var(--hx-shadow-xs, 0 1px 2px rgba(0,0,0,0.06));
+      transition: background 0.15s, color 0.15s;
+    }
+    .hx-chat-rail-collapse:hover {
+      background: var(--hx-surface);
+      color: var(--hx-text);
+    }
+    .hx-chat-rail-collapse svg { width: 12px; height: 12px; }
+    .hx-chat-rail.is-collapsed {
+      width: 0 !important; min-width: 0 !important;
+      padding-left: 0 !important; padding-right: 0 !important;
+      border-right: 0 !important;
+      opacity: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .hx-chat-rail.is-collapsed > * { visibility: hidden; }
+    /* Floating reopen button — sits on the left edge of the chat pane */
+    .hx-chat-rail-reopen {
+      position: absolute;
+      top: 14px; left: 12px;
+      width: 28px; height: 28px;
+      display: none;
+      align-items: center; justify-content: center;
+      background: var(--hx-bg-elev, #fff);
+      border: 1px solid var(--hx-line);
+      border-radius: 8px;
+      color: var(--hx-text-dim);
+      cursor: pointer;
+      z-index: 11;
+      box-shadow: var(--hx-shadow-xs, 0 1px 2px rgba(0,0,0,0.06));
+    }
+    .hx-chat-rail-reopen:not([hidden]) { display: inline-flex; }
+    .hx-chat-rail-reopen:hover { background: var(--hx-surface); color: var(--hx-text); }
+    .hx-chat-rail-reopen svg { width: 14px; height: 14px; }
   </style>
 </head>
 <body data-active="chat">
@@ -2438,7 +2593,7 @@
       <main class="hx-main">
 
         <!-- Conversation rail -->
-        <aside class="hx-chat-rail">
+        <aside class="hx-chat-rail" id="hx-c-rail">
           <div class="hx-chat-rail-head">
             <p class="hx-chat-rail-title">Conversations</p>
             <button class="hx-chat-new" type="button" id="hx-c-new" aria-label="New chat" title="Start a new conversation">
@@ -2448,7 +2603,17 @@
           <div class="hx-chat-list" id="hx-c-list">
             <div class="hx-chat-empty-list" id="hx-c-empty">Your conversations will appear here.</div>
           </div>
+          <!-- Collapse handle — sits on the right edge, flips its arrow
+               when the rail is collapsed so the user always knows which
+               way it'll move. -->
+          <button class="hx-chat-rail-collapse" type="button" id="hx-c-rail-collapse" aria-label="Collapse sidebar" title="Collapse sidebar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
         </aside>
+        <!-- Floating reopen tab that appears when the rail is collapsed -->
+        <button class="hx-chat-rail-reopen" type="button" id="hx-c-rail-reopen" aria-label="Show sidebar" title="Show sidebar" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
 
         <!-- Mobile drawer backdrop -->
         <div class="hx-chat-backdrop" id="hx-c-backdrop" aria-hidden="true"></div>
@@ -2540,7 +2705,7 @@
                   <textarea
                     id="hx-c-input"
                     class="hx-chat-textarea"
-                    placeholder="Reply to Helix…"
+                    placeholder="Type / for commands"
                     rows="1"
                     autocomplete="off"
                     spellcheck="true"></textarea>
@@ -2592,11 +2757,28 @@
                   </button>
                 </div>
 
-                <!-- Inline hint inside the composer card (Claude.ai-style) -->
-                <div class="hx-chat-inline-hint" aria-hidden="true">
-                  <span><span class="hx-kbd">Enter</span> to send</span>
-                  <span class="hx-chat-inline-hint-sep">·</span>
-                  <span><span class="hx-kbd">Shift</span><span class="hx-kbd-plus">+</span><span class="hx-kbd">Enter</span> for new line</span>
+                <!-- Claude-Code-style bottom strip inside the composer card -->
+                <div class="hx-cc-compose-bar">
+                  <button class="hx-cc-edits" type="button" id="hx-cc-edits" aria-pressed="true">
+                    <span class="hx-cc-edits-dot" aria-hidden="true"></span>
+                    <span>Accept edits</span>
+                  </button>
+                  <span class="hx-cc-compose-bar-spacer"></span>
+                  <button class="hx-cc-model-pick" type="button" id="hx-cc-model-pick" aria-haspopup="menu" aria-expanded="false">
+                    <span class="hx-cc-model-glyph" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18M3 12h18"/></svg>
+                    </span>
+                    <span class="hx-cc-model-name" id="hx-cc-model-name">Ether</span>
+                    <span class="hx-cc-model-sep">·</span>
+                    <span class="hx-cc-model-tier">Max</span>
+                    <svg class="hx-cc-model-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    <span class="hx-cc-model-spinner" id="hx-cc-model-spinner" aria-hidden="true"></span>
+                  </button>
+                  <div class="hx-cc-model-menu" id="hx-cc-model-menu" role="menu" hidden>
+                    <button class="hx-cc-model-opt is-active" data-model="ether"      role="menuitemradio"><span>Ether</span><span>fast</span></button>
+                    <button class="hx-cc-model-opt"          data-model="nexus"      role="menuitemradio"><span>Nexus</span><span>balanced</span></button>
+                    <button class="hx-cc-model-opt"          data-model="prometheus" role="menuitemradio"><span>Prometheus</span><span>deep</span></button>
+                  </div>
                 </div>
               </div>
               <div class="hx-chat-foot">
@@ -3303,7 +3485,7 @@
           await refreshList();
         }
         async function deleteConversationById(id) {
-          if (!confirm('Delete this conversation? This cannot be undone.')) return;
+          // No confirm popup — user explicitly asked for instant delete
           await sb.from('conversations').delete().eq('id', id);
           if (state.conversation && state.conversation.id === id) {
             state.conversation = null;
@@ -5041,6 +5223,80 @@
         window.addEventListener('beforeunload', function () {
           try { if (state.msgChannel) state.msgChannel.unsubscribe(); } catch (e) {}
         });
+
+        // ─── Collapsible conversation rail ─────────────────────────────
+        (function wireRailCollapse() {
+          var rail   = document.getElementById('hx-c-rail');
+          var btn    = document.getElementById('hx-c-rail-collapse');
+          var reopen = document.getElementById('hx-c-rail-reopen');
+          if (!rail || !btn || !reopen) return;
+          // Restore last state from localStorage
+          try {
+            if (localStorage.getItem('hx-rail-collapsed') === '1') {
+              rail.classList.add('is-collapsed');
+              reopen.hidden = false;
+            }
+          } catch (e) {}
+          function setCollapsed(on) {
+            rail.classList.toggle('is-collapsed', on);
+            reopen.hidden = !on;
+            try { localStorage.setItem('hx-rail-collapsed', on ? '1' : '0'); } catch (e) {}
+          }
+          btn.addEventListener('click',    function () { setCollapsed(true);  });
+          reopen.addEventListener('click', function () { setCollapsed(false); });
+        })();
+
+        // ─── Claude-Code-style model picker on the compose bar ─────────
+        (function wireModelPick() {
+          var pick = document.getElementById('hx-cc-model-pick');
+          var menu = document.getElementById('hx-cc-model-menu');
+          var sel  = document.getElementById('hx-c-model');
+          if (!pick || !menu || !sel) return;
+          var nameEl = document.getElementById('hx-cc-model-name');
+          function sync() {
+            var v = sel.value || 'ether';
+            if (nameEl) nameEl.textContent = v.charAt(0).toUpperCase() + v.slice(1);
+            menu.querySelectorAll('.hx-cc-model-opt').forEach(function (b) {
+              b.classList.toggle('is-active', b.getAttribute('data-model') === v);
+            });
+          }
+          function open()  { menu.hidden = false; pick.setAttribute('aria-expanded', 'true'); }
+          function close() { menu.hidden = true;  pick.setAttribute('aria-expanded', 'false'); }
+          pick.addEventListener('click', function (e) {
+            e.stopPropagation();
+            menu.hidden ? open() : close();
+          });
+          document.addEventListener('click', function (e) {
+            if (menu.hidden) return;
+            if (!menu.contains(e.target) && e.target !== pick) close();
+          });
+          menu.querySelectorAll('.hx-cc-model-opt').forEach(function (opt) {
+            opt.addEventListener('click', function () {
+              sel.value = opt.getAttribute('data-model');
+              sel.dispatchEvent(new Event('change', { bubbles: true }));
+              sync();
+              close();
+            });
+          });
+          sel.addEventListener('change', sync);
+          sync();
+          // Busy indicator reflects send/stream state
+          setInterval(function () {
+            var busy = !!(state && (state.sending || state.streaming));
+            pick.classList.toggle('is-busy', busy);
+          }, 250);
+        })();
+
+        // ─── Accept edits toggle (visual flag for now) ─────────────────
+        (function wireEditsToggle() {
+          var btn = document.getElementById('hx-cc-edits');
+          if (!btn) return;
+          btn.addEventListener('click', function () {
+            var on = btn.getAttribute('aria-pressed') === 'true';
+            btn.setAttribute('aria-pressed', on ? 'false' : 'true');
+            document.body.dataset.acceptEdits = on ? 'off' : 'on';
+          });
+        })();
       });
     })();
   </script>
