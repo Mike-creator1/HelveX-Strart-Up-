@@ -3856,10 +3856,35 @@
             renderThread();
           }
 
+          // Hard guards so the spinner can NEVER hang forever:
+          //   - 60s ceiling waiting for the first response byte
+          //   - 30s "idle" watchdog: if no SSE delta arrives, abort
+          //   - finally{} block guarantees state.sending/streaming reset
+          var ac          = new AbortController();
+          var headTimer   = null;
+          var idleTimer   = null;
+          var aborted     = false;
+          function armHeadTimeout() {
+            headTimer = setTimeout(function () {
+              aborted = true;
+              try { ac.abort(); } catch (e) {}
+            }, 60000);
+          }
+          function clearHeadTimeout() { if (headTimer) { clearTimeout(headTimer); headTimer = null; } }
+          function armIdleWatchdog() {
+            if (idleTimer) clearTimeout(idleTimer);
+            idleTimer = setTimeout(function () {
+              aborted = true;
+              try { ac.abort(); } catch (e) {}
+            }, 30000);
+          }
+          function clearIdleWatchdog() { if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; } }
+
           try {
             var sess = (await sb.auth.getSession()).data.session;
             if (!sess || !sess.access_token) throw new Error('Not signed in.');
 
+            armHeadTimeout();
             var resp = await fetch(PROJECT_URL + '/functions/v1/model-proxy', {
               method: 'POST',
               headers: {
@@ -3882,7 +3907,9 @@
                   code: !!state.codeEnabled,
                 },
               }),
+              signal: ac.signal,
             });
+            clearHeadTimeout();
 
             var ct = (resp.headers.get('content-type') || '').toLowerCase();
 
@@ -3908,10 +3935,12 @@
             var reader  = resp.body.getReader();
             var decoder = new TextDecoder();
             var buf = '';
+            armIdleWatchdog();
 
             while (true) {
               var chunk = await reader.read();
               if (chunk.done) break;
+              armIdleWatchdog();
               buf += decoder.decode(chunk.value, { stream: true });
               var events = buf.split('\n\n');
               buf = events.pop() || '';
@@ -3976,7 +4005,30 @@
             // render once afterwards so the action buttons attach.
             setTimeout(function () { renderThread(); refreshBalance(); refreshList(); }, 350);
           } catch (err) {
-            finalizeError((err && err.message) || 'Send failed.');
+            // Friendly error per failure class — never leave the user staring
+            // at an indefinite "thinking" indicator.
+            var msg;
+            if (aborted || (err && err.name === 'AbortError')) {
+              msg = 'The model took too long to respond. Send a shorter message or try again — large attachments can stall the request.';
+            } else if (err && /not signed in/i.test(err.message || '')) {
+              msg = 'You’re signed out. Refresh the page and sign in to continue.';
+            } else if (err && /failed to fetch|networkerror|load failed/i.test(err.message || '')) {
+              msg = 'Network issue — we couldn’t reach the model. Check your connection and try again.';
+            } else {
+              msg = (err && err.message) || 'Send failed.';
+            }
+            finalizeError(msg);
+          } finally {
+            // Guarantee: spinner can never outlive this turn, no matter
+            // what threw above (auth, fetch, stream, json parse).
+            clearHeadTimeout();
+            clearIdleWatchdog();
+            if (state.sending || state.streaming) {
+              state.sending  = false;
+              state.streaming = false;
+              renderThread();
+            }
+            refreshSendDisabled();
           }
         }
 
