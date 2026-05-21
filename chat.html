@@ -1123,27 +1123,26 @@
        Shows as a calm pill with icon + label + spinner (running) or check
        (done). Matches Claude.ai's tool-use visual: subtle surface, gold
        accent on the icon while running, emerald accent when complete. */
-    /* Search activity row — Perplexity / Claude style. Just a tiny
-       search icon, the actual query in italic, and a faint spinner /
-       check. Almost invisible. No pill, no chunky border. */
+    /* Search activity line — Claude.ai style. Plain inline text with
+       a tiny globe icon and a discreet spinner. No box, no border,
+       no shadow. Reads as a sentence, not a UI element. */
     .hx-tool-card {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 8px;
-      padding: 4px 0;
-      margin: 6px 0;
+      padding: 0;
+      margin: 8px 0 12px;
       background: transparent;
       border: 0;
       border-radius: 0;
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 400;
-      color: var(--hx-text-dim);
+      color: var(--hx-text-mid);
       box-shadow: none;
-      position: relative;
       max-width: 100%;
     }
     .hx-tool-card.is-running,
-    .hx-tool-card.is-done { border: 0; box-shadow: none; }
+    .hx-tool-card.is-done { border: 0; box-shadow: none; padding: 0; background: transparent; }
     .hx-tool-card-ico {
       width: 14px; height: 14px;
       display: inline-flex; align-items: center; justify-content: center;
@@ -1167,14 +1166,99 @@
       flex: 1;
       letter-spacing: -0.003em;
       line-height: 1.4;
-      font-style: italic;
-      color: var(--hx-text-mid);
+      font-style: normal;
+      color: inherit;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 480px;
     }
-    .hx-tool-card.is-done .hx-tool-card-label { color: var(--hx-text-faint); }
+    .hx-tool-card.is-done .hx-tool-card-label { color: var(--hx-text-dim); }
+
+    /* Premium draft cards — Email + generic copy-able content blocks.
+       Header with kind label on the left and action buttons (Copy,
+       Open in mail) on the right. Body in a clean monospace-friendly
+       container with preserved line breaks. */
+    .hx-draft-card {
+      margin: 14px 0;
+      border: 1px solid var(--hx-line);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--hx-surface);
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
+        0 1px 2px rgba(0,0,0,0.03),
+        0 6px 14px -6px rgba(0,0,0,0.06);
+    }
+    .hx-draft-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      background: linear-gradient(180deg, var(--hx-bg-2) 0%, var(--hx-surface) 100%);
+      border-bottom: 1px solid var(--hx-line-soft, var(--hx-line));
+    }
+    .hx-draft-card-kind {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11.5px; font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--hx-text-mid);
+      text-transform: none;
+    }
+    .hx-draft-card-kind svg { width: 14px; height: 14px; color: var(--hx-text-dim); }
+    .hx-draft-card-actions { display: inline-flex; gap: 4px; }
+    .hx-draft-act {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--hx-text-mid);
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line);
+      border-radius: 7px;
+      cursor: pointer;
+      font-family: inherit;
+      text-decoration: none;
+      transition: background 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+    }
+    .hx-draft-act:hover {
+      background: var(--hx-bg-2);
+      color: var(--hx-text);
+      border-color: var(--hx-line-strong);
+    }
+    .hx-draft-act svg { width: 12px; height: 12px; opacity: 0.85; }
+    .hx-draft-act.is-copied {
+      background: color-mix(in srgb, var(--hx-emerald, #059669) 14%, transparent);
+      color: var(--hx-emerald, #059669);
+      border-color: color-mix(in srgb, var(--hx-emerald, #059669) 28%, var(--hx-line));
+    }
+    .hx-draft-card-subject {
+      display: flex; align-items: baseline; gap: 12px;
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--hx-line-soft, var(--hx-line));
+    }
+    .hx-draft-card-flabel {
+      font-family: var(--hx-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--hx-text-faint);
+      flex-shrink: 0;
+      min-width: 56px;
+    }
+    .hx-draft-card-fvalue {
+      font-size: 13px;
+      color: var(--hx-text);
+      font-weight: 500;
+      letter-spacing: -0.003em;
+    }
+    .hx-draft-card-body {
+      padding: 14px 16px 16px;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--hx-text);
+      white-space: normal;
+    }
 
     /* Premium stock chart embed — appears when Helix surfaces a
        <<HXCHART:stock:TICKER>> marker. */
@@ -3625,6 +3709,34 @@
           chartMarkers.push({ kind: 'stock', symbol: ticker });
           return '\x00CHART_' + idx + '\x00';
         });
+        // Premium draft cards — copy-able blocks with action buttons:
+        //   <<HXEMAIL subject="…" to="…">…body lines…<<HXEMAIL_END>>
+        //   <<HXDRAFT title="…">…content…<<HXDRAFT_END>>
+        // Render as Notion/ChatGPT-style content cards with Copy + Open
+        // in mail (email only) buttons in the header.
+        var draftMarkers = [];
+        stripped0 = stripped0.replace(/<<HXEMAIL([^>]*)>>([\s\S]*?)<<HXEMAIL_END>>/g, function (_, attrs, body) {
+          var idx = draftMarkers.length;
+          var m1 = attrs.match(/subject\s*=\s*"([^"]*)"/i);
+          var m2 = attrs.match(/to\s*=\s*"([^"]*)"/i);
+          draftMarkers.push({
+            kind: 'email',
+            subject: (m1 && m1[1]) || '',
+            to:      (m2 && m2[1]) || '',
+            body:    body.replace(/^\n+|\n+$/g, '')
+          });
+          return '\x00DRAFT_' + idx + '\x00';
+        });
+        stripped0 = stripped0.replace(/<<HXDRAFT([^>]*)>>([\s\S]*?)<<HXDRAFT_END>>/g, function (_, attrs, body) {
+          var idx = draftMarkers.length;
+          var m1 = attrs.match(/title\s*=\s*"([^"]*)"/i);
+          draftMarkers.push({
+            kind: 'draft',
+            title: (m1 && m1[1]) || 'Draft',
+            body:  body.replace(/^\n+|\n+$/g, '')
+          });
+          return '\x00DRAFT_' + idx + '\x00';
+        });
         // Task lists first (- [ ] / - [x]) so they don't get caught by bullets
         var checklistRe = /(^|\n)((?:[ \t]*[-*][ \t]+\[[ xX]\][^\n]*(?:\n|$))+)/g;
         var checklists = [];
@@ -3760,16 +3872,21 @@
           toolStates[t.tool + ':rendered'] = true;
           // Show the actual query / first code line as the label so the
           // tool card explains itself — "Searching the web" was too
-          // generic. If the model hasn't surfaced a query yet (rare race
-          // during streaming), fall back to a one-word descriptor.
+          // generic. Reads as a natural sentence, not a button.
           var fallback = {
-            web_search:     { run: 'Searching',  done: 'Done',  icon: 'globe' },
-            code_execution: { run: 'Running',    done: 'Done',  icon: 'code'  }
+            web_search:     { run: 'Searching the web',  done: 'Searched the web',  icon: 'globe' },
+            code_execution: { run: 'Running code',       done: 'Ran code',          icon: 'code'  }
           };
           var info = fallback[t.tool] || { run: t.tool, done: t.tool, icon: 'tool' };
           var label;
-          if (t.query) {
-            label = t.query;
+          if (t.tool === 'web_search' && t.query) {
+            label = (finalState === 'done')
+              ? 'Searched the web for "' + t.query + '"'
+              : 'Searching the web for "' + t.query + '"';
+          } else if (t.tool === 'code_execution' && t.query) {
+            label = (finalState === 'done')
+              ? 'Ran ' + t.query
+              : 'Running ' + t.query;
           } else {
             label = finalState === 'done' ? info.done : info.run;
           }
@@ -3784,6 +3901,60 @@
             (finalState === 'running'
               ? '<span class="hx-tool-card-spinner" aria-hidden="true"></span>'
               : '<svg class="hx-tool-card-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') +
+          '</div>';
+        });
+        // Premium draft cards — email + generic copyable blocks
+        s = s.replace(/\x00DRAFT_(\d+)\x00/g, function (_, n) {
+          var d = draftMarkers[parseInt(n, 10)];
+          if (!d) return '';
+          var bodyEsc = escape(d.body);
+          var bodyHtml = bodyEsc.replace(/\n/g, '<br>');
+          var encodedBody = encodeURIComponent(d.body || '');
+          if (d.kind === 'email') {
+            var subjectEsc = escape(d.subject || '');
+            var toEsc      = escape(d.to || '');
+            var encSubject = encodeURIComponent(d.subject || '');
+            var encTo      = encodeURIComponent(d.to || '');
+            var mailto     = 'mailto:' + encTo + '?subject=' + encSubject + '&body=' + encodedBody;
+            var fullClip   = (d.subject ? ('Subject: ' + d.subject + '\n\n') : '') + (d.body || '');
+            return '<div class="hx-draft-card" data-kind="email">' +
+              '<div class="hx-draft-card-head">' +
+                '<span class="hx-draft-card-kind">' +
+                  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' +
+                  'Email draft' +
+                '</span>' +
+                '<div class="hx-draft-card-actions">' +
+                  '<button type="button" class="hx-draft-act hx-draft-copy" data-clip="' + escape(encodeURIComponent(fullClip)) + '">' +
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
+                    'Copy' +
+                  '</button>' +
+                  '<a href="' + mailto + '" class="hx-draft-act hx-draft-mailto">' +
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9 22 2z"/></svg>' +
+                    'Open in mail' +
+                  '</a>' +
+                '</div>' +
+              '</div>' +
+              (d.subject ? ('<div class="hx-draft-card-subject"><span class="hx-draft-card-flabel">Subject</span><span class="hx-draft-card-fvalue">' + subjectEsc + '</span></div>') : '') +
+              (d.to ? ('<div class="hx-draft-card-subject"><span class="hx-draft-card-flabel">To</span><span class="hx-draft-card-fvalue">' + toEsc + '</span></div>') : '') +
+              '<div class="hx-draft-card-body">' + bodyHtml + '</div>' +
+            '</div>';
+          }
+          // Generic draft
+          var titleEsc = escape(d.title || 'Draft');
+          return '<div class="hx-draft-card" data-kind="draft">' +
+            '<div class="hx-draft-card-head">' +
+              '<span class="hx-draft-card-kind">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' +
+                titleEsc +
+              '</span>' +
+              '<div class="hx-draft-card-actions">' +
+                '<button type="button" class="hx-draft-act hx-draft-copy" data-clip="' + escape(encodedBody) + '">' +
+                  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
+                  'Copy' +
+                '</button>' +
+              '</div>' +
+            '</div>' +
+            '<div class="hx-draft-card-body">' + bodyHtml + '</div>' +
           '</div>';
         });
         // Premium chart embeds — TradingView mini widget iframe per ticker.
@@ -4160,6 +4331,21 @@
           '• Citations belong at the very end, in parentheses, one line. Never mid-sentence "(according to X)" clutter.',
           '• Match the user\'s language exactly. If they write Greek, reply in Greek. If they switch mid-thread, switch with them. Use the same register — formal Greek for formal questions, casual Greek for casual ones.',
           '• No emojis, no kaomoji, no decorative symbols, no playful punctuation. Em-dashes are fine; smileys are not.',
+          // ── POLITENESS UNDER ATTACK ──────────────────────────────
+          'If the user is rude, profane, or insulting, never match the tone, never curse back, never get defensive. Respond with calm professional courtesy as if nothing happened, address the actual underlying request, and continue. Tools cursed at the user are unacceptable.',
+          // ── COPY-ABLE CONTENT CARDS ──────────────────────────────
+          'COPY-ABLE OUTPUT (use these whenever the answer is a piece of content the user will paste somewhere else).',
+          'Emails — wrap the draft in an HXEMAIL block so the client renders it as a card with Copy + Open in mail buttons. Format EXACTLY:',
+          '<<HXEMAIL subject="…" to="optional@example.com">>',
+          'Body of the email here, multiple paragraphs allowed.',
+          'Greeting line, body, closing line, signature.',
+          '<<HXEMAIL_END>>',
+          'The "to" attribute is optional; include it only when the user named the recipient. Put a one-line intro sentence BEFORE the block (e.g. "Here is a draft. Adjust [points] before sending."). Do not repeat the body in prose after the block.',
+          'Other drafts (LinkedIn posts, slack messages, contracts, briefs, etc.) — wrap in:',
+          '<<HXDRAFT title="LinkedIn post">>',
+          '…content…',
+          '<<HXDRAFT_END>>',
+          'Always use these blocks for content the user will copy. Never paste a draft as plain prose — it deprives the user of the Copy button.',
           // ── LIVE-DATA POLICY (mandatory) ──────────────────────────
           'CURRENT WALL-CLOCK TIME for this turn: ' + locale + ' (ISO ' + iso + '). Treat this as ground truth for any temporal reference.',
           'LIVE-DATA POLICY (mandatory). The web_search tool is wired in by default. The user EXPECTS live, current answers — never hedge with "I do not have access to real-time information". That refusal is forbidden while the tool is available.',
@@ -4741,6 +4927,22 @@
                   }, 1600);
                 });
               }
+            });
+          });
+          // Wire draft-card Copy buttons (email + generic drafts)
+          thread.querySelectorAll('.hx-draft-copy').forEach(function (b) {
+            b.addEventListener('click', function () {
+              var clip = decodeURIComponent(b.getAttribute('data-clip') || '');
+              if (!navigator.clipboard) return;
+              navigator.clipboard.writeText(clip).then(function () {
+                var prev = b.innerHTML;
+                b.classList.add('is-copied');
+                b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Copied';
+                setTimeout(function () {
+                  b.classList.remove('is-copied');
+                  b.innerHTML = prev;
+                }, 1600);
+              });
             });
           });
           thread.querySelectorAll('.hx-code-preview-btn').forEach(function (b) {
