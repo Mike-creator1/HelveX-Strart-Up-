@@ -572,22 +572,17 @@
       border-bottom: 1px solid var(--hx-line-soft, var(--hx-line));
     }
     .hx-chat-rail-title {
-      font-size: 10.5px;
+      font-size: 12px;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--hx-text-dim);
+      text-transform: none;
+      letter-spacing: -0.005em;
+      color: var(--hx-text);
       margin: 0;
       display: inline-flex;
       align-items: center;
       gap: 8px;
     }
-    .hx-chat-rail-title::before {
-      content: '';
-      width: 4px; height: 4px; border-radius: 50%;
-      background: var(--hx-yellow, var(--hx-text));
-      box-shadow: 0 0 0 3px var(--hx-yellow-soft, transparent);
-    }
+    .hx-chat-rail-title::before { content: none; }
     .hx-chat-rail-head-actions {
       display: inline-flex;
       align-items: center;
@@ -1463,7 +1458,43 @@
       border: 0;
       background: #fff;
     }
-    /* User turns sit in a refined ivory-tinted chip; assistant turns are flush editorial prose. */
+    /* ═══════════════════════════════════════════════════════════
+       PROFESSIONAL CHAT SURFACE — cool neutral palette override
+       (Linear / Vercel / Notion territory, not magazine cream).
+       Scoped to body[data-active="chat"] so other platform pages keep
+       their warm tone. ═══════════════════════════════════════════ */
+    body[data-active="chat"] {
+      --hx-bg:           #FFFFFF;
+      --hx-bg-2:         #F7F7F8;
+      --hx-bg-3:         #EFEFF1;
+      --hx-surface:      #FFFFFF;
+      --hx-surface-2:    #FAFAFA;
+      --hx-surface-3:    #F4F4F5;
+      --hx-line:         #E7E7E9;
+      --hx-line-soft:    #EFEFF1;
+      --hx-line-strong:  #D4D4D8;
+      --hx-text:         #0A0A0A;
+      --hx-text-mid:     #525252;
+      --hx-text-dim:     #737373;
+      --hx-text-faint:   #A3A3A3;
+    }
+    html[data-theme="dark"] body[data-active="chat"] {
+      --hx-bg:           #0A0A0B;
+      --hx-bg-2:         #131316;
+      --hx-bg-3:         #1B1B1F;
+      --hx-surface:      #111114;
+      --hx-surface-2:    #16161A;
+      --hx-surface-3:    #1B1B1F;
+      --hx-line:         #26262B;
+      --hx-line-soft:    #1F1F23;
+      --hx-line-strong:  #34343A;
+      --hx-text:         #FAFAFA;
+      --hx-text-mid:     #A1A1AA;
+      --hx-text-dim:     #71717A;
+      --hx-text-faint:   #52525B;
+    }
+
+    /* User turns sit in a refined chip; assistant turns are flush prose. */
     .hx-msg.is-user { align-items: flex-end; }
     /* The body wrapper takes the max-width constraint so the bubble
        itself can shrink to its content (width: auto inside a flex
@@ -1476,22 +1507,16 @@
       align-self: flex-end;
     }
     .hx-msg.is-user .hx-msg-content {
-      background: linear-gradient(180deg,
-        color-mix(in srgb, var(--hx-yellow-soft, var(--hx-bg-2)) 40%, var(--hx-surface)) 0%,
-        color-mix(in srgb, var(--hx-yellow-soft, var(--hx-bg-2)) 22%, var(--hx-bg-2)) 100%);
-      border: 1px solid color-mix(in srgb, var(--hx-yellow, var(--hx-line)) 14%, var(--hx-line));
-      border-radius: 16px;
-      border-bottom-right-radius: 4px;
+      background: var(--hx-bg-2);
+      border: 1px solid var(--hx-line);
+      border-radius: 14px;
       padding: 10px 14px;
       font-size: 13.5px; line-height: 1.55;
       max-width: 100%;
       width: fit-content;
+      min-width: 48px;
       margin-left: auto;
-      box-shadow:
-        inset 0 1px 0 color-mix(in srgb, #fff 65%, transparent),
-        0 1px 2px rgba(0,0,0,0.04),
-        0 8px 20px -8px rgba(0,0,0,0.10),
-        0 0 0 1px color-mix(in srgb, var(--hx-yellow, transparent) 6%, transparent);
+      box-shadow: none;
     }
     .hx-msg.is-user .hx-msg-meta {
       letter-spacing: 0.24em;
@@ -1506,24 +1531,31 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     .hx-msg-actions {
-      display: flex; align-items: center; gap: 4px;
-      margin-top: 8px;
+      display: flex; align-items: center; gap: 2px;
+      margin-top: 10px;
       opacity: 0;
-      transition: opacity 0.12s;
+      transition: opacity 0.16s ease;
     }
-    .hx-msg:hover .hx-msg-actions { opacity: 1; }
+    .hx-msg:hover .hx-msg-actions,
+    .hx-msg:focus-within .hx-msg-actions { opacity: 1; }
     .hx-msg-act {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 3px 8px;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 9px;
       font-size: 11.5px; font-weight: 500;
-      color: var(--hx-text-mid);
-      background: transparent; border: 1px solid transparent;
-      border-radius: 4px;
-      cursor: pointer; font-family: inherit;
-      transition: background 0.12s, border-color 0.12s, color 0.12s;
+      color: var(--hx-text-dim);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: -0.002em;
+      transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
     }
-    .hx-msg-act:hover { background: var(--hx-bg-2); color: var(--hx-text); border-color: var(--hx-line); }
-    .hx-msg-act svg { width: 11px; height: 11px; }
+    .hx-msg-act:hover {
+      background: var(--hx-bg-2);
+      color: var(--hx-text);
+    }
+    .hx-msg-act svg { width: 12px; height: 12px; opacity: 0.85; }
 
     /* Premium speaker / TTS button — sits to the left of Copy/Regenerate */
     .hx-msg-speak {
@@ -1837,71 +1869,29 @@
     .hx-chat-input-row {
       display: flex; flex-direction: column; gap: 6px;
       position: relative;
-      background:
-        linear-gradient(180deg,
-          color-mix(in srgb, var(--hx-surface) 96%, var(--hx-yellow-soft, transparent)) 0%,
-          color-mix(in srgb, var(--hx-surface) 90%, var(--hx-bg-2)) 100%);
-      border: 1px solid color-mix(in srgb, var(--hx-line) 80%, transparent);
-      border-radius: 20px;
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line);
+      border-radius: 14px;
       padding: 10px 10px 8px 16px;
-      backdrop-filter: saturate(140%) blur(12px);
-      -webkit-backdrop-filter: saturate(140%) blur(12px);
       transition:
-        border-color 0.22s cubic-bezier(0.2, 0.7, 0.2, 1),
-        box-shadow 0.26s cubic-bezier(0.2, 0.7, 0.2, 1),
-        transform 0.18s cubic-bezier(0.2, 0.7, 0.2, 1);
+        border-color 0.18s ease,
+        box-shadow 0.2s ease;
       box-shadow:
-        /* 1) inner top highlight — feels like a piece of glass */
-        inset 0 1px 0 color-mix(in srgb, #fff 68%, transparent),
-        /* 2) inner bottom shadow — implies depth */
-        inset 0 -1px 0 color-mix(in srgb, var(--hx-line) 40%, transparent),
-        /* 3) tight shadow — sits on the surface */
-        0 1px 2px rgba(20,18,12,0.04),
-        /* 4) medium drop — gives it a body */
-        0 6px 16px -6px rgba(20,18,12,0.10),
-        /* 5) ambient gold halo — barely visible, premium feel */
-        0 18px 40px -20px color-mix(in srgb, var(--hx-yellow, transparent) 35%, transparent);
+        0 1px 2px rgba(0,0,0,0.03),
+        0 2px 6px -2px rgba(0,0,0,0.04);
     }
     /* Static refined edge — removed the rotating conic gradient
        (read as "decorative animation" rather than "professional tool").
        Composer relies on the base border + focus shadow ring only. */
     .hx-chat-input-row::before { content: none; }
     .hx-chat-input-row:hover {
-      border-color: color-mix(in srgb, var(--hx-line-strong) 90%, transparent);
-      box-shadow:
-        inset 0 1px 0 color-mix(in srgb, #fff 72%, transparent),
-        inset 0 -1px 0 color-mix(in srgb, var(--hx-line) 50%, transparent),
-        0 1px 2px rgba(20,18,12,0.05),
-        0 10px 22px -8px rgba(20,18,12,0.13),
-        0 22px 44px -20px color-mix(in srgb, var(--hx-yellow, transparent) 40%, transparent);
+      border-color: var(--hx-line-strong);
     }
     .hx-chat-input-row:focus-within {
-      border-color: color-mix(in srgb, var(--hx-yellow, var(--hx-text)) 38%, var(--hx-line));
+      border-color: var(--hx-text);
       box-shadow:
-        inset 0 1px 0 color-mix(in srgb, #fff 75%, transparent),
-        inset 0 -1px 0 color-mix(in srgb, var(--hx-yellow, var(--hx-line)) 22%, transparent),
-        0 0 0 4px color-mix(in srgb, var(--hx-yellow, var(--hx-text)) 10%, transparent),
-        0 2px 6px rgba(20,18,12,0.06),
-        0 14px 30px -10px rgba(20,18,12,0.16),
-        0 28px 56px -20px color-mix(in srgb, var(--hx-yellow, transparent) 55%, transparent);
-    }
-    .hx-chat-input-row:focus-within::before {
-      background: linear-gradient(135deg,
-        color-mix(in srgb, var(--hx-yellow, var(--hx-text)) 36%, transparent) 0%,
-        color-mix(in srgb, var(--hx-yellow, var(--hx-text)) 0%,  transparent) 35%,
-        color-mix(in srgb, var(--hx-yellow, var(--hx-text)) 0%,  transparent) 65%,
-        color-mix(in srgb, var(--hx-yellow, var(--hx-text)) 22%, transparent) 100%);
-    }
-    body[data-model="nexus"] .hx-chat-input-row:focus-within,
-    body[data-model="prometheus"] .hx-chat-input-row:focus-within {
-      border-color: color-mix(in srgb, var(--hx-mc, var(--hx-text)) 38%, var(--hx-line));
-      box-shadow:
-        inset 0 1px 0 color-mix(in srgb, #fff 75%, transparent),
-        inset 0 -1px 0 color-mix(in srgb, var(--hx-mc, var(--hx-line)) 22%, transparent),
-        0 0 0 4px color-mix(in srgb, var(--hx-mc, var(--hx-text)) 10%, transparent),
-        0 2px 6px rgba(20,18,12,0.06),
-        0 14px 30px -10px rgba(20,18,12,0.16),
-        0 28px 56px -20px color-mix(in srgb, var(--hx-mc, transparent) 55%, transparent);
+        0 0 0 3px color-mix(in srgb, var(--hx-text) 6%, transparent),
+        0 1px 2px rgba(0,0,0,0.04);
     }
     .hx-chat-input-row.is-drag-over {
       border-color: var(--hx-yellow, var(--hx-text));
