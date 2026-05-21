@@ -5377,6 +5377,14 @@
           // this exact string. Bypasses preamble entirely. Don't make
           // it too long; the model still needs room to be itself.
           var turnPrefill = (function buildTurnPrefill() {
+            // Compliance retry: a previous turn produced output missing
+            // a required marker. Use the harder prefill that forces the
+            // marker into the model's opening tokens.
+            if (state.__retryPrefill) {
+              var p = state.__retryPrefill;
+              state.__retryPrefill = '';
+              return p;
+            }
             if (!ut) return '';
             // Stock / crypto: force the model to start with `**TICKER `
             if (tickerMatch || stockKw.test(ut)) {
@@ -5647,6 +5655,62 @@
               ensureStreamMessage();
               if (streamNode) streamNode.textContent = assistantText;
             }
+
+            // ─── Compliance validator ────────────────────────────
+            // Mechanical check: did the model produce the structural
+            // marker the intent demanded? If not (and we haven't
+            // already retried), automatically regenerate with a
+            // harder prefill that forces the marker on the first
+            // tokens. One retry max, no infinite loops.
+            (function validateAndMaybeRetry() {
+              if (state.__retryGuard) { state.__retryGuard = false; return; }
+              var content = assistantText || '';
+              var needsRetry = false;
+              var retryReason = '';
+              var harderPrefill = '';
+              if ((tickerMatch || stockKw.test(ut)) && content.indexOf('<<HXCHART:stock:') === -1) {
+                needsRetry = true;
+                retryReason = 'stock answer missing chart marker';
+                var t = tickerMatch ? tickerMatch[1].toUpperCase() : 'TICKER';
+                harderPrefill = '**' + t + ' ';
+                // We'll inject the chart marker explicitly via a
+                // second prefill segment after a newline.
+                state.__pendingChartTicker = t;
+              } else if (emailKw.test(ut) && content.indexOf('<<HXEMAIL') === -1) {
+                needsRetry = true;
+                retryReason = 'email request missing HXEMAIL block';
+                harderPrefill = hasGreek
+                  ? 'Πρόχειρο διαθέσιμο παρακάτω.\n\n<<HXEMAIL subject="'
+                  : 'Draft below.\n\n<<HXEMAIL subject="';
+              } else if (draftKw.test(ut) && !emailKw.test(ut) && content.indexOf('<<HXDRAFT') === -1) {
+                needsRetry = true;
+                retryReason = 'draft request missing HXDRAFT block';
+                harderPrefill = hasGreek
+                  ? 'Πρόχειρο.\n\n<<HXDRAFT title="'
+                  : 'Draft.\n\n<<HXDRAFT title="';
+              }
+              if (!needsRetry) return;
+              // Log for diagnostics; don't show to user.
+              try { console.warn('[Helix] Retrying:', retryReason); } catch (e) {}
+              // Wipe the non-compliant response and retry with a
+              // stronger prefill on the next event loop tick.
+              state.__retryGuard = true;
+              state.__retryPrefill = harderPrefill;
+              // Remove the optimistic assistant message so the retry
+              // replaces it. The user message stays so send(N) can
+              // replay it through the regenerate path.
+              if (streamId) {
+                state.messages = state.messages.filter(function (m) { return m.id !== streamId; });
+              }
+              // Use the regenerate path so send() reads the user text
+              // from state.messages instead of the now-empty input.
+              var replayFrom = state.messages.length;
+              setTimeout(function () {
+                state.streaming = false;
+                state.sending   = false;
+                send(replayFrom);
+              }, 60);
+            })();
 
             state.streaming = false;
             state.sending   = false;
