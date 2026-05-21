@@ -2504,33 +2504,109 @@
     .hx-cc-model-pick.is-busy .hx-cc-model-spinner { display: inline-block; }
     .hx-cc-model-pick.is-busy .hx-cc-model-caret   { display: none; }
     @keyframes hx-cc-spin { to { transform: rotate(360deg); } }
+    /* DARK dropdown — matches Claude Code regardless of page theme */
     .hx-cc-model-menu {
-      position: absolute; bottom: calc(100% + 6px); right: 0;
-      min-width: 220px;
-      background: var(--hx-bg-elev, #fff);
-      border: 1px solid var(--hx-line);
-      border-radius: 10px;
-      padding: 4px;
-      box-shadow: var(--hx-shadow-md, 0 8px 24px rgba(0,0,0,0.12));
+      position: absolute; bottom: calc(100% + 8px); right: 0;
+      min-width: 240px;
+      background: #1d1d20;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 6px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.25);
       z-index: 20;
+      color: #e8e8ea;
     }
-    .hx-cc-model-opt {
+    /* Section header row (Models / Effort / Fast mode) */
+    .hx-cc-menu-section {
       display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 10px 6px;
+      color: rgba(255,255,255,0.45);
+      font: 500 11.5px/1 var(--hx-sans, 'Inter'), sans-serif;
+      letter-spacing: 0.01em;
+    }
+    .hx-cc-menu-section-top { margin-top: 4px; }
+    .hx-cc-menu-kbd { display: inline-flex; gap: 3px; }
+    .hx-cc-menu-kbd > span {
+      min-width: 18px; height: 18px;
+      padding: 0 5px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.08);
+      border-radius: 4px;
+      color: rgba(255,255,255,0.72);
+      font: 600 10.5px/1 'JetBrains Mono', ui-monospace, monospace;
+    }
+    /* Model option */
+    .hx-cc-model-opt {
+      display: flex; align-items: center;
+      gap: 10px;
       width: 100%;
       padding: 8px 10px;
       background: transparent; border: 0;
-      color: var(--hx-text);
-      font: 500 12.5px/1 var(--hx-sans, 'Inter'), sans-serif;
+      color: #fff;
+      font: 600 13px/1 var(--hx-sans, 'Inter'), sans-serif;
       border-radius: 7px;
       cursor: pointer;
       text-align: left;
-      gap: 12px;
     }
-    .hx-cc-model-opt > span:last-child {
-      color: var(--hx-text-dim); font-size: 11px; font-weight: 400;
+    .hx-cc-model-opt:hover     { background: rgba(255,255,255,0.05); }
+    .hx-cc-model-opt.is-active { background: rgba(255,255,255,0.07); }
+    .hx-cc-opt-name { flex: 1; }
+    .hx-cc-check {
+      width: 13px; height: 13px;
+      color: rgba(255,255,255,0.75);
+      visibility: hidden;
     }
-    .hx-cc-model-opt:hover  { background: var(--hx-surface); }
-    .hx-cc-model-opt.is-active { background: var(--hx-yellow-soft, var(--hx-surface)); }
+    .hx-cc-model-opt.is-active  .hx-cc-check,
+    .hx-cc-effort-opt.is-active .hx-cc-check { visibility: visible; }
+    .hx-cc-num {
+      min-width: 14px;
+      text-align: right;
+      color: rgba(255,255,255,0.35);
+      font: 500 11px/1 'JetBrains Mono', ui-monospace, monospace;
+    }
+    /* Effort option */
+    .hx-cc-effort-opt {
+      display: flex; align-items: center;
+      width: 100%;
+      padding: 8px 10px;
+      background: transparent; border: 0;
+      color: #fff;
+      font: 600 13px/1 var(--hx-sans, 'Inter'), sans-serif;
+      border-radius: 7px;
+      cursor: pointer;
+      text-align: left;
+    }
+    .hx-cc-effort-opt > span:first-child { flex: 1; }
+    .hx-cc-effort-opt:hover     { background: rgba(255,255,255,0.05); }
+    .hx-cc-effort-opt.is-active { background: rgba(255,255,255,0.07); }
+    /* Fast mode row */
+    .hx-cc-fast-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 10px 6px;
+      color: #fff;
+      font: 600 13px/1 var(--hx-sans, 'Inter'), sans-serif;
+    }
+    .hx-cc-fast-switch {
+      width: 30px; height: 18px;
+      background: rgba(255,255,255,0.14);
+      border-radius: 999px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.18s ease;
+      flex-shrink: 0;
+    }
+    .hx-cc-fast-switch::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 14px; height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.18s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+    .hx-cc-fast-switch.is-on { background: var(--hx-yellow, #C9A227); }
+    .hx-cc-fast-switch.is-on::after { transform: translateX(12px); }
     /* Hide the legacy "Enter to send" hint forever — replaced by the bar */
     .hx-chat-inline-hint { display: none !important; }
 
@@ -2807,9 +2883,59 @@
                     <span class="hx-cc-model-spinner" id="hx-cc-model-spinner" aria-hidden="true"></span>
                   </button>
                   <div class="hx-cc-model-menu" id="hx-cc-model-menu" role="menu" hidden>
-                    <button class="hx-cc-model-opt is-active" data-model="ether"      role="menuitemradio"><span>Ether</span><span>fast</span></button>
-                    <button class="hx-cc-model-opt"          data-model="nexus"      role="menuitemradio"><span>Nexus</span><span>balanced</span></button>
-                    <button class="hx-cc-model-opt"          data-model="prometheus" role="menuitemradio"><span>Prometheus</span><span>deep</span></button>
+                    <!-- Models section -->
+                    <div class="hx-cc-menu-section">
+                      <span>Models</span>
+                      <span class="hx-cc-menu-kbd"><span>⇧</span><span>Ctrl</span><span>I</span></span>
+                    </div>
+                    <button class="hx-cc-model-opt is-active" data-model="ether" role="menuitemradio">
+                      <span class="hx-cc-opt-name">Ether</span>
+                      <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      <span class="hx-cc-num">1</span>
+                    </button>
+                    <button class="hx-cc-model-opt" data-model="nexus" role="menuitemradio">
+                      <span class="hx-cc-opt-name">Nexus</span>
+                      <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      <span class="hx-cc-num">2</span>
+                    </button>
+                    <button class="hx-cc-model-opt" data-model="prometheus" role="menuitemradio">
+                      <span class="hx-cc-opt-name">Prometheus</span>
+                      <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      <span class="hx-cc-num">3</span>
+                    </button>
+                    <!-- Effort section -->
+                    <div class="hx-cc-menu-section hx-cc-menu-section-top">
+                      <span>Effort</span>
+                      <span class="hx-cc-menu-kbd"><span>⇧</span><span>Ctrl</span><span>E</span></span>
+                    </div>
+                    <button class="hx-cc-effort-opt" data-effort="low" role="menuitemradio">
+                      <span>Low</span>
+                      <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </button>
+                    <button class="hx-cc-effort-opt" data-effort="medium" role="menuitemradio">
+                      <span>Medium</span>
+                      <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </button>
+                    <button class="hx-cc-effort-opt" data-effort="high" role="menuitemradio">
+                      <span>High</span>
+                      <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </button>
+                    <button class="hx-cc-effort-opt" data-effort="extra" role="menuitemradio">
+                      <span>Extra high</span>
+                      <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </button>
+                    <button class="hx-cc-effort-opt is-active" data-effort="max" role="menuitemradio">
+                      <span>Max</span>
+                      <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </button>
+                    <!-- Fast mode -->
+                    <div class="hx-cc-menu-section hx-cc-menu-section-top">
+                      <span>Fast mode</span>
+                    </div>
+                    <div class="hx-cc-fast-row">
+                      <span>Enable fast mode</span>
+                      <span class="hx-cc-fast-switch" id="hx-cc-fast" role="switch" aria-checked="false" tabindex="0"></span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -5317,6 +5443,47 @@
             var busy = !!(state && (state.sending || state.streaming));
             pick.classList.toggle('is-busy', busy);
           }, 250);
+          // Effort selector — updates the "· Max" suffix beside the model name.
+          // Decorative until backend supports per-effort routing.
+          menu.querySelectorAll('.hx-cc-effort-opt').forEach(function (opt) {
+            opt.addEventListener('click', function (e) {
+              e.stopPropagation();
+              menu.querySelectorAll('.hx-cc-effort-opt').forEach(function (o) {
+                o.classList.remove('is-active');
+              });
+              opt.classList.add('is-active');
+              var tierEl = pick.querySelector('.hx-cc-model-tier');
+              var label = opt.querySelector('span').textContent.trim();
+              if (tierEl) tierEl.textContent = label;
+              try { localStorage.setItem('hx-effort', opt.getAttribute('data-effort')); } catch (e) {}
+            });
+          });
+          // Restore last effort selection
+          try {
+            var savedEffort = localStorage.getItem('hx-effort');
+            if (savedEffort) {
+              var match = menu.querySelector('[data-effort="' + savedEffort + '"]');
+              if (match) match.click();
+            }
+          } catch (e) {}
+          // Fast-mode toggle
+          var fast = document.getElementById('hx-cc-fast');
+          if (fast) {
+            try {
+              if (localStorage.getItem('hx-fast-mode') === '1') {
+                fast.classList.add('is-on');
+                fast.setAttribute('aria-checked', 'true');
+                document.body.dataset.fastMode = 'on';
+              }
+            } catch (e) {}
+            fast.addEventListener('click', function (e) {
+              e.stopPropagation();
+              var on = fast.classList.toggle('is-on');
+              fast.setAttribute('aria-checked', on ? 'true' : 'false');
+              document.body.dataset.fastMode = on ? 'on' : 'off';
+              try { localStorage.setItem('hx-fast-mode', on ? '1' : '0'); } catch (e) {}
+            });
+          }
         })();
 
         // ─── Accept edits toggle (visual flag for now) ─────────────────
