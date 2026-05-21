@@ -1462,17 +1462,14 @@
        platform.css and applies across the whole app. The chat-scoped
        override was removed for consistency. */
 
-    /* User turns sit in a refined chip; assistant turns are flush prose. */
-    .hx-msg.is-user { align-items: flex-end; }
-    /* The body wrapper takes the max-width constraint so the bubble
-       itself can shrink to its content (width: auto inside a flex
-       column with align-items: flex-end naturally produces a fit-to-
-       content size). Short user messages now render as compact pills
-       on the right, long ones cap at 78% of the thread. */
+    /* User and assistant turns BOTH sit on the left (Claude.ai layout).
+       User turns get a subtle chip background so you can still tell
+       speakers apart; assistant turns are flush prose. */
+    .hx-msg.is-user { align-items: flex-start; }
     .hx-msg.is-user .hx-msg-body {
       width: auto;
-      max-width: 78%;
-      align-self: flex-end;
+      max-width: 100%;
+      align-self: flex-start;
     }
     .hx-msg.is-user .hx-msg-content {
       background: var(--hx-bg-2);
@@ -1483,7 +1480,7 @@
       max-width: 100%;
       width: fit-content;
       min-width: 48px;
-      margin-left: auto;
+      margin-left: 0;
       box-shadow: none;
     }
     .hx-msg.is-user .hx-msg-meta {
@@ -2977,7 +2974,7 @@
       .hx-chat-blank { padding: 40px 20px; gap: 14px; }
       .hx-chat-blank h2 { font-size: 44px; }
       .hx-chat-blank p { font-size: 13px; }
-      .hx-msg.is-user .hx-msg-body { max-width: 88%; }
+      .hx-msg.is-user .hx-msg-body { max-width: 100%; }
       .hx-chat-foot { font-size: 10.5px; gap: 10px; }
       .hx-chat-send { width: 28px; height: 28px; }
       .hx-voice-panel { padding: 6px 6px 6px 12px; gap: 10px; }
