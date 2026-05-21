@@ -1123,71 +1123,108 @@
        Shows as a calm pill with icon + label + spinner (running) or check
        (done). Matches Claude.ai's tool-use visual: subtle surface, gold
        accent on the icon while running, emerald accent when complete. */
+    /* Search activity row — Perplexity / Claude style. Just a tiny
+       search icon, the actual query in italic, and a faint spinner /
+       check. Almost invisible. No pill, no chunky border. */
     .hx-tool-card {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 8px 14px 8px 10px;
-      margin: 12px 0;
-      background: linear-gradient(180deg, var(--hx-surface) 0%, var(--hx-bg-2) 100%);
-      border: 1px solid var(--hx-line);
-      border-radius: 999px;
+      gap: 8px;
+      padding: 4px 0;
+      margin: 6px 0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
       font-size: 12.5px;
-      font-weight: 500;
-      color: var(--hx-text);
-      box-shadow:
-        inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
-        var(--hx-shadow-xs);
+      font-weight: 400;
+      color: var(--hx-text-dim);
+      box-shadow: none;
       position: relative;
       max-width: 100%;
     }
-    .hx-tool-card.is-running {
-      border-color: color-mix(in srgb, var(--hx-yellow) 35%, var(--hx-line));
-      box-shadow:
-        inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
-        0 0 0 3px color-mix(in srgb, var(--hx-yellow) 10%, transparent),
-        var(--hx-shadow-xs);
-    }
-    .hx-tool-card.is-done {
-      border-color: color-mix(in srgb, var(--hx-emerald) 25%, var(--hx-line));
-      color: var(--hx-text-mid);
-    }
+    .hx-tool-card.is-running,
+    .hx-tool-card.is-done { border: 0; box-shadow: none; }
     .hx-tool-card-ico {
-      width: 22px; height: 22px;
+      width: 14px; height: 14px;
       display: inline-flex; align-items: center; justify-content: center;
       flex-shrink: 0;
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-      border-radius: 8px;
-      color: var(--hx-text-mid);
+      background: transparent;
+      border: 0;
+      color: var(--hx-text-dim);
     }
     .hx-tool-card.is-running .hx-tool-card-ico {
-      background: var(--hx-yellow-soft);
-      border-color: color-mix(in srgb, var(--hx-yellow) 35%, var(--hx-line));
-      color: var(--hx-yellow-deep);
-      animation: hx-tool-icon-pulse 1.8s ease-in-out infinite;
+      animation: hx-tool-icon-pulse 1.6s ease-in-out infinite;
     }
     .hx-tool-card.is-done .hx-tool-card-ico {
-      background: var(--hx-emerald-soft);
-      border-color: color-mix(in srgb, var(--hx-emerald) 35%, var(--hx-line));
-      color: var(--hx-emerald);
+      color: var(--hx-text-dim);
     }
-    .hx-tool-card-ico svg { width: 12px; height: 12px; }
+    .hx-tool-card-ico svg { width: 13px; height: 13px; stroke-width: 1.8; }
     @keyframes hx-tool-icon-pulse {
-      0%, 100% { transform: scale(1);    opacity: 1; }
-      50%      { transform: scale(1.08); opacity: 0.85; }
+      0%, 100% { opacity: 1;    }
+      50%      { opacity: 0.45; }
     }
     .hx-tool-card-label {
       flex: 1;
-      letter-spacing: -0.005em;
-      line-height: 1.3;
+      letter-spacing: -0.003em;
+      line-height: 1.4;
+      font-style: italic;
+      color: var(--hx-text-mid);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 480px;
+    }
+    .hx-tool-card.is-done .hx-tool-card-label { color: var(--hx-text-faint); }
+
+    /* Premium stock chart embed — appears when Helix surfaces a
+       <<HXCHART:stock:TICKER>> marker. */
+    .hx-stock-card {
+      margin: 12px 0;
+      border: 1px solid var(--hx-line);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--hx-surface);
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
+        0 1px 2px rgba(0,0,0,0.03),
+        0 6px 14px -6px rgba(0,0,0,0.08);
+    }
+    .hx-stock-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 14px;
+      background: linear-gradient(180deg, var(--hx-bg-2) 0%, var(--hx-surface) 100%);
+      border-bottom: 1px solid var(--hx-line-soft, var(--hx-line));
+    }
+    .hx-stock-card-ticker {
+      font-family: var(--hx-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--hx-text);
+    }
+    .hx-stock-card-link {
+      font-size: 11.5px;
+      color: var(--hx-text-mid);
+      text-decoration: none;
+      letter-spacing: -0.003em;
+    }
+    .hx-stock-card-link:hover { color: var(--hx-text); }
+    .hx-stock-card-iframe {
+      display: block;
+      width: 100%;
+      height: 220px;
+      border: 0;
+      background: var(--hx-surface);
     }
     .hx-tool-card-spinner {
-      width: 14px; height: 14px;
+      width: 11px; height: 11px;
       flex-shrink: 0;
       border-radius: 50%;
-      border: 2px solid color-mix(in srgb, var(--hx-yellow) 22%, var(--hx-line));
-      border-top-color: var(--hx-yellow-deep);
+      border: 1.4px solid var(--hx-line);
+      border-top-color: var(--hx-text-mid);
       animation: hx-tool-spin 0.9s linear infinite;
     }
     @keyframes hx-tool-spin {
@@ -3573,10 +3610,20 @@
         // get pulled out before any other parsing so we render them as proper
         // animated cards (not as escaped text).
         var toolMarkers = [];
-        var stripped0 = text.replace(/<<HXTOOL:(running|done):([a-z_]+)>>/g, function (_, state, tool) {
+        // Tool-use cards
+        var stripped0 = text.replace(/<<HXTOOL:(running|done):([a-z_]+)(?::([^>]+))?>>/g, function (_, state, tool, q) {
           var idx = toolMarkers.length;
-          toolMarkers.push({ state: state, tool: tool });
+          toolMarkers.push({ state: state, tool: tool, query: q ? decodeURIComponent(q) : '' });
           return '\x00TOOL_' + idx + '\x00';
+        });
+        // Premium embeds — <<HXCHART:stock:NVDA>> renders a TradingView
+        // mini chart for the given ticker. Useful when the model is
+        // discussing a public company.
+        var chartMarkers = [];
+        stripped0 = stripped0.replace(/<<HXCHART:stock:([A-Za-z0-9._:-]+)>>/g, function (_, ticker) {
+          var idx = chartMarkers.length;
+          chartMarkers.push({ kind: 'stock', symbol: ticker });
+          return '\x00CHART_' + idx + '\x00';
         });
         // Task lists first (- [ ] / - [x]) so they don't get caught by bullets
         var checklistRe = /(^|\n)((?:[ \t]*[-*][ \t]+\[[ xX]\][^\n]*(?:\n|$))+)/g;
@@ -3711,23 +3758,58 @@
           // rendered one for this tool, skip the second marker.
           if (toolStates[t.tool + ':rendered']) return '';
           toolStates[t.tool + ':rendered'] = true;
-          var labels = {
-            web_search:     { running: 'Searching the web',   done: 'Searched the web',  icon: 'globe' },
-            code_execution: { running: 'Running code',        done: 'Ran code',          icon: 'code' }
+          // Show the actual query / first code line as the label so the
+          // tool card explains itself — "Searching the web" was too
+          // generic. If the model hasn't surfaced a query yet (rare race
+          // during streaming), fall back to a one-word descriptor.
+          var fallback = {
+            web_search:     { run: 'Searching',  done: 'Done',  icon: 'globe' },
+            code_execution: { run: 'Running',    done: 'Done',  icon: 'code'  }
           };
-          var info = labels[t.tool] || { running: 'Using ' + t.tool, done: 'Used ' + t.tool, icon: 'tool' };
-          var label = finalState === 'done' ? info.done : info.running;
+          var info = fallback[t.tool] || { run: t.tool, done: t.tool, icon: 'tool' };
+          var label;
+          if (t.query) {
+            label = t.query;
+          } else {
+            label = finalState === 'done' ? info.done : info.run;
+          }
           var icon  = info.icon === 'globe'
-            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg>'
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'
             : info.icon === 'code'
             ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>'
-            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>';
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/></svg>';
           return '<div class="hx-tool-card is-' + finalState + '">' +
             '<span class="hx-tool-card-ico">' + icon + '</span>' +
             '<span class="hx-tool-card-label">' + escape(label) + '</span>' +
             (finalState === 'running'
               ? '<span class="hx-tool-card-spinner" aria-hidden="true"></span>'
               : '<svg class="hx-tool-card-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') +
+          '</div>';
+        });
+        // Premium chart embeds — TradingView mini widget iframe per ticker.
+        s = s.replace(/\x00CHART_(\d+)\x00/g, function (_, n) {
+          var c = chartMarkers[parseInt(n, 10)];
+          if (!c || c.kind !== 'stock') return '';
+          var t = escape(c.symbol);
+          // TradingView's mini symbol-overview widget — lightweight,
+          // iframe-sandboxed, no JS injected into our page.
+          var cfg = encodeURIComponent(JSON.stringify({
+            symbol: c.symbol,
+            width: '100%', height: 220,
+            locale: 'en',
+            dateRange: '1D',
+            colorTheme: (document.documentElement.getAttribute('data-theme') === 'dark') ? 'dark' : 'light',
+            isTransparent: true,
+            autosize: false,
+            largeChartUrl: ''
+          }));
+          var src = 'https://s.tradingview.com/embed-widget/mini-symbol-overview/?locale=en#' + cfg;
+          return '<div class="hx-stock-card" data-ticker="' + t + '">' +
+            '<div class="hx-stock-card-head">' +
+              '<span class="hx-stock-card-ticker">' + t + '</span>' +
+              '<a class="hx-stock-card-link" href="https://www.tradingview.com/symbols/' + t + '/" target="_blank" rel="noopener">Open chart →</a>' +
+            '</div>' +
+            '<iframe class="hx-stock-card-iframe" src="' + src + '" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin"></iframe>' +
           '</div>';
         });
         return s;
@@ -4061,7 +4143,16 @@
           '• Anything you are not 100% certain about from training data.',
           'Issue MULTIPLE searches in the same turn when one query is not enough. Refine the query, cross-check across two or three independent sources, and verify the result is current (today\'s date, not last year\'s). Prefer official primary sources over aggregators when both exist.',
           'Answer LIVE: state the concrete fact (the kickoff time, the score, the price, the schedule) directly in the first sentence. Then add a one-line source citation in parentheses, e.g. "(euroleaguebasketball.net)". If multiple sources disagree, state both and which is more authoritative.',
-          'If web_search returns nothing useful, say so explicitly and offer the closest related information — never invent, never fall back on "I lack real-time access".'
+          'If web_search returns nothing useful, say so explicitly and offer the closest related information — never invent, never fall back on "I lack real-time access".',
+          // ── PREMIUM PRESENTATION RULES ─────────────────────────────
+          'PRESENTATION (mandatory for live data). Never reply with naked paragraphs when structured data exists. Use rich Markdown:',
+          '• Live match: a bold header like "**Olympiacos 78 — Fenerbahçe 81**" followed by a small markdown table with Quarter | OLY | FEN | rows for each quarter, then a single line stating venue, tipoff, broadcaster.',
+          '• Upcoming match: a bold "**Team A vs Team B**" header, then a small key-value table: Date, Tipoff (local + ET), Venue, Round, Broadcasters. Add a one-line storyline (e.g. "Game 3 of the EuroLeague Final Four semifinal — series tied 1-1").',
+          '• Standings, rosters, head-to-head: full Markdown tables with column headers.',
+          '• Stocks / crypto: bold ticker + price + percent change first ("**NVDA $1,238.42 +2.4%**"), then a 4-row table with Open, High, Low, Volume. Add "MarketCap" + "P/E" if available. Append "<<HXCHART:stock:NVDA>>" on its own line to embed a TradingView mini chart (the client renders this).',
+          '• Weather: today\'s temp + condition in bold, then a small forecast table for the next 3-5 hours or days.',
+          '• Prices / schedules / hours: always a table, never a comma-separated sentence.',
+          'Lead with the bold concrete fact, then the structure. Citations at the very end.'
         ].join(' ');
       }
 
@@ -5060,6 +5151,12 @@
                 try { obj = JSON.parse(dataStr); } catch (e) { continue; }
                 if (evname === 'content_block_delta' && obj.delta && obj.delta.type === 'text_delta') {
                   appendDelta(obj.delta.text || '');
+                } else if (evname === 'content_block_delta' && obj.delta && obj.delta.type === 'input_json_delta') {
+                  // Accumulate partial tool input JSON. The query / code
+                  // arrives in fragments as the model decides what to
+                  // search; we stitch them together here and use the
+                  // result inside the HXTOOL marker.
+                  state.currentToolInput = (state.currentToolInput || '') + (obj.delta.partial_json || '');
                 } else if (evname === 'content_block_start' && obj.content_block) {
                   // Anthropic server-side tools — when the model invokes
                   // web_search or code_execution, inject a structured marker
@@ -5068,11 +5165,37 @@
                   var cb = obj.content_block;
                   if (cb.type === 'server_tool_use' || cb.type === 'code_execution_tool_use') {
                     var toolName = cb.name || (cb.type === 'code_execution_tool_use' ? 'code_execution' : cb.type);
+                    state.currentToolName = toolName;
+                    state.currentToolInput = '';
+                    // Provisional marker — the query / code label fills in
+                    // a moment later on content_block_stop once we have the
+                    // full input JSON.
                     appendDelta('\n\n<<HXTOOL:running:' + toolName + '>>\n\n');
                   } else if (cb.type === 'web_search_tool_result' || cb.type === 'code_execution_tool_result') {
                     var resultTool = cb.type === 'code_execution_tool_result' ? 'code_execution' : 'web_search';
                     appendDelta('\n\n<<HXTOOL:done:' + resultTool + '>>\n\n');
                   }
+                } else if (evname === 'content_block_stop' && state.currentToolName) {
+                  // Tool input is complete — extract query/code and rewrite
+                  // the provisional running marker with the labelled one.
+                  var inp = {};
+                  try { inp = JSON.parse(state.currentToolInput || '{}'); } catch (e) { inp = {}; }
+                  var label = '';
+                  if (state.currentToolName === 'web_search')          label = inp.query || '';
+                  else if (state.currentToolName === 'code_execution') label = (inp.code || '').split('\n')[0].slice(0, 80);
+                  if (label) {
+                    var enc = encodeURIComponent(label);
+                    var streamNode = (state.streamMsgEl && state.streamMsgEl.querySelector('.hx-msg-content'));
+                    var bufNow = state.streamBuffer || '';
+                    var marker = '<<HXTOOL:running:' + state.currentToolName + '>>';
+                    var markerWithQ = '<<HXTOOL:running:' + state.currentToolName + ':' + enc + '>>';
+                    if (bufNow.indexOf(marker) !== -1) {
+                      state.streamBuffer = bufNow.replace(marker, markerWithQ);
+                      if (streamNode) streamNode.innerHTML = renderRichContent(state.streamBuffer, true);
+                    }
+                  }
+                  state.currentToolName = null;
+                  state.currentToolInput = '';
                 } else if (evname === 'message_delta' && obj.delta && obj.delta.stop_reason) {
                   // If the model stopped because it hit max_tokens, tell the user
                   if (obj.delta.stop_reason === 'max_tokens') {
