@@ -895,74 +895,67 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 14px 22px;
-      border-bottom: 1px solid var(--hx-line-soft, var(--hx-line));
-      background:
-        linear-gradient(180deg,
-          color-mix(in srgb, var(--hx-surface) 96%, transparent) 0%,
-          color-mix(in srgb, var(--hx-surface) 82%, transparent) 100%);
-      backdrop-filter: saturate(160%) blur(12px);
-      -webkit-backdrop-filter: saturate(160%) blur(12px);
-      flex-wrap: wrap;
+      padding: 10px 16px;
+      min-height: 48px;
+      border-bottom: 1px solid var(--hx-line);
+      background: var(--hx-surface);
+      flex-wrap: nowrap;
       position: sticky;
       top: 0;
       z-index: 4;
     }
     .hx-chat-toolbar::after {
-      content: '';
-      position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
-      background: linear-gradient(90deg, transparent 0%, var(--hx-line) 14%, var(--hx-line) 86%, transparent 100%);
-      pointer-events: none;
+      content: none;
     }
     .hx-chat-title {
       font-family: inherit;
-      font-size: 14px;
-      letter-spacing: -0.006em;
-      font-weight: 600;
-      color: var(--hx-text);
+      font-size: 13.5px;
+      letter-spacing: -0.005em;
+      font-weight: 500;
+      color: var(--hx-text-mid);
       margin: 0 auto 0 0;
-      max-width: 56%;
+      max-width: 60%;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      padding-left: 2px;
+      padding-left: 4px;
       line-height: 1.2;
     }
     .hx-chat-title::before { content: none; }
     .hx-chat-pill {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      height: 30px;
-      padding: 0 4px 0 10px;
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-      border-radius: 999px;
-      color: var(--hx-text);
-      font-size: 12.5px;
+      gap: 6px;
+      height: 28px;
+      padding: 0 6px 0 10px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      color: var(--hx-text-mid);
+      font-size: 12px;
       font-family: inherit;
       cursor: pointer;
-      transition: border-color 0.14s ease, background 0.14s ease, box-shadow 0.14s ease;
+      transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
     }
     .hx-chat-pill:hover {
-      border-color: var(--hx-line-strong);
-      background: var(--hx-surface);
-      box-shadow: var(--hx-shadow-xs);
+      background: var(--hx-bg-2);
+      border-color: var(--hx-line);
+      color: var(--hx-text);
     }
     .hx-chat-pill > span:first-child {
-      color: var(--hx-text-dim) !important;
-      font-size: 10px !important;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      padding-right: 8px;
-      border-right: 1px solid var(--hx-line);
-      margin-right: 4px;
+      color: var(--hx-text-faint) !important;
+      font-size: 11px !important;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: 0;
+      padding-right: 0;
+      border-right: 0;
+      margin-right: 0;
       line-height: 1;
     }
-    .hx-chat-pill svg { width: 10px; height: 10px; opacity: 0.55; margin-right: 6px; }
+    .hx-chat-pill svg { width: 11px; height: 11px; opacity: 0.55; margin-right: 0; }
     .hx-chat-pill select {
-      border: none; background: transparent; font-size: 12.5px; font-family: inherit;
+      border: none; background: transparent; font-size: 12px; font-family: inherit;
       color: var(--hx-text); padding: 0; outline: none; cursor: pointer;
       font-weight: 500;
     }
@@ -995,10 +988,32 @@
       flex-direction: column;
       gap: 22px;
     }
-    .hx-msg { display: flex; flex-direction: column; gap: 4px; }
-    /* Avatars are intentionally not rendered. Premium chats keep the
-       speaker identity to a single faint label and let the prose breathe. */
-    .hx-msg-avatar { display: none; }
+    /* Claude.ai layout: a thin column reserved for an avatar circle,
+       then the message body. User messages have no avatar so they
+       hang into the same indent as assistant text — visually parallel. */
+    .hx-msg {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr);
+      column-gap: 12px;
+      row-gap: 4px;
+      align-items: start;
+    }
+    .hx-msg-avatar {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line);
+      color: var(--hx-yellow-deep, var(--hx-text));
+      flex-shrink: 0;
+      margin-top: 2px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .hx-msg-avatar.is-nexus      { color: #C84A4A; }
+    .hx-msg-avatar.is-prometheus { color: #4A4A52; }
+    .hx-msg-avatar svg { width: 16px; height: 16px; }
+    /* User turns: no avatar — the body just spans both columns. */
+    .hx-msg.is-user .hx-msg-body { grid-column: 1 / -1; }
     .hx-msg-body { min-width: 0; width: 100%; }
     /* Author label above each message was removed (Claude.ai parity).
        The prose layout itself differentiates speakers: user turns sit
@@ -4400,6 +4415,9 @@
             // Minimal thinking indicator: just the active model's logo
             // doing its signature animation. No pill, no labels, no dots.
             html += '<div class="hx-msg is-assistant hx-msg-thinking">' +
+              '<div class="hx-msg-avatar is-' + activeModel + '" aria-hidden="true">' +
+                (typeof modelLogoSvg === 'function' ? modelLogoSvg(activeModel) : '') +
+              '</div>' +
               '<div class="hx-msg-body">' +
                 '<span class="hx-thinking-solo is-' + activeModel + '" aria-label="' + (isAgentModel(activeModel) ? 'Planning' : 'Thinking') + '">' +
                   modelLogoSvg(activeModel) +
@@ -4533,7 +4551,16 @@
           if (m.content) contentHtml = '<div class="hx-msg-content">' + renderRichContent(m.content, isAssist) + '</div>';
           else if (!atts.length) contentHtml = '<div class="hx-msg-content"></div>';
 
+          // Per Claude.ai: a small 26px circular avatar on the LEFT of
+          // every assistant turn carrying that model's SVG mark.
+          var avatarHtml = '';
+          if (isAssist) {
+            var mModel = m.model || (m.meta && m.meta.model) || (($('hx-c-model') && $('hx-c-model').value) || 'ether');
+            avatarHtml = '<div class="hx-msg-avatar is-' + mModel + '" aria-hidden="true">' + (typeof modelLogoSvg === 'function' ? modelLogoSvg(mModel) : '') + '</div>';
+          }
+
           return '<div class="hx-msg ' + (isAssist ? 'is-assistant' : 'is-user') + (m.__error ? ' hx-msg-error' : '') + '" data-msg-key="' + escape(m.id) + '">' +
+            avatarHtml +
             '<div class="hx-msg-body">' +
               (meta ? '<div class="hx-msg-meta">' + meta + '</div>' : '') +
               renderAttachmentsForMsg(atts) +
