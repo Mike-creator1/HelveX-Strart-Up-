@@ -52,9 +52,11 @@
 
     .hx-field { display: block; margin-bottom: 14px; }
     .hx-field > label { font-size: 12.5px; font-weight: 600; color: var(--hx-text); display: block; margin-bottom: 6px; letter-spacing: -0.005em; }
-    .hx-field textarea, .hx-field input:not([type="checkbox"]):not([type="radio"]), .hx-field select { width: 100%; padding: 10px 12px; border: 1px solid var(--hx-line); border-radius: 10px; font: inherit; font-size: 13.5px; background: #fff; color: var(--hx-text); outline: none; transition: border-color 0.12s, box-shadow 0.12s; }
+    .hx-field textarea, .hx-field input:not([type="checkbox"]):not([type="radio"]), .hx-field select { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid var(--hx-line); border-radius: 10px; font-family: inherit; font-size: 13.5px; line-height: 1.4; background: #fff; color: var(--hx-text); outline: none; transition: border-color 0.12s, box-shadow 0.12s; }
+    .hx-field input:not([type="checkbox"]):not([type="radio"]), .hx-field select { height: 42px; min-height: 42px; }
+    .hx-field select { -webkit-appearance: none; appearance: none; padding-right: 36px; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 14px center; background-size: 12px 12px; }
     .hx-field textarea:focus, .hx-field input:focus, .hx-field select:focus { border-color: var(--hx-yellow-deep); box-shadow: 0 0 0 3px rgba(252,211,77,0.18); }
-    .hx-field textarea { min-height: 100px; resize: vertical; line-height: 1.55; }
+    .hx-field textarea { min-height: 110px; resize: vertical; line-height: 1.55; height: auto; }
     .hx-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media (max-width: 600px) {
       .hx-field-row { grid-template-columns: 1fr; }

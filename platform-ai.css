@@ -67,11 +67,32 @@ button.armed {
 .hxai-field textarea,
 .hxai-field input:not([type="checkbox"]):not([type="radio"]),
 .hxai-field select {
-  width: 100%; padding: 10px 12px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
   border: 1px solid var(--hx-line); border-radius: 10px;
-  font: inherit; font-size: 13.5px;
+  font-family: inherit;
+  font-size: 13.5px;
+  line-height: 1.4;
   background: #fff; color: var(--hx-text);
   outline: none; transition: border-color 0.12s, box-shadow 0.12s;
+}
+.hxai-field input:not([type="checkbox"]):not([type="radio"]),
+.hxai-field select {
+  height: 42px;
+  min-height: 42px;
+}
+/* iOS Safari clips text inside native <select> when the box is too
+   short for the font. Add a custom chevron via background-image and
+   reserve right-side padding so the chevron doesn't sit on the text. */
+.hxai-field select {
+  -webkit-appearance: none;
+  appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 12px 12px;
 }
 .hxai-field textarea:focus,
 .hxai-field input:focus,
@@ -79,7 +100,7 @@ button.armed {
   border-color: var(--hx-yellow-deep);
   box-shadow: 0 0 0 3px rgba(252,211,77,0.18);
 }
-.hxai-field textarea { min-height: 100px; resize: vertical; line-height: 1.55; }
+.hxai-field textarea { min-height: 110px; resize: vertical; line-height: 1.55; height: auto; }
 .hxai-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 600px) { .hxai-field-row { grid-template-columns: 1fr; } }
 
