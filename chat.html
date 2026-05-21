@@ -4856,6 +4856,20 @@
                   for (var i = state.messages.length - 1; i >= 0; i--) {
                     var m = state.messages[i];
                     if (m.__optimistic && m.role === newMsg.role) {
+                      // If the optimistic message carried an assistant
+                      // prefill that the server didn't see (e.g. forced
+                      // bold opener "**NVDA "), the canonical row from
+                      // Supabase will be missing those leading tokens.
+                      // Merge them back in so reload-from-DB shows the
+                      // same answer the user saw streamed.
+                      if (m.__prefill && newMsg.role === 'assistant' && newMsg.content && newMsg.content.indexOf(m.__prefill) !== 0) {
+                        var merged = m.__prefill + newMsg.content;
+                        newMsg.content = merged;
+                        // Persist the merge so other tabs / future loads see it too.
+                        try {
+                          sb.from('messages').update({ content: merged }).eq('id', newMsg.id);
+                        } catch (e) {}
+                      }
                       state.messages[i] = newMsg;
                       // While streaming, suppress full re-renders — the
                       // streaming text node is already up to date and a
@@ -5294,19 +5308,29 @@
               return { role: m.role, content: m.content || '' };
             });
 
-          // ─── Intent router ────────────────────────────────────────
-          // Look at THIS turn's user text and append a targeted reminder
-          // to the system prompt. Per-turn nudges land at the top of the
-          // model's attention and dramatically improve format compliance
-          // vs. abstract rules buried in a 200-line system prompt.
+          // ─── Intent router + assistant pre-fill ──────────────────
+          // Two-pronged steering for THIS turn:
+          //   1. turnHint   — appended to the system prompt for tight,
+          //                   intent-specific guidance.
+          //   2. turnPrefill — partial assistant turn pushed as the last
+          //                   message. The model literally continues
+          //                   from this string, so it cannot start with
+          //                   "Sure!" / "Of course!" / "Here is..." —
+          //                   the bad opening tokens are physically
+          //                   impossible. This is the closest equivalent
+          //                   to fine-tuning available without retraining.
+          var ut = (typeof currentContent === 'string' ? currentContent : '').toLowerCase();
+          var hasGreek = /[Ͱ-Ͽἀ-῿]/.test(currentContent || '');
+          var tickerMatch = ut.match(/\b(nvda|aapl|tsla|msft|meta|amzn|googl|goog|nflx|amd|intc|nke|ko|pep|dis|jpm|bac|gs|spy|qqq|btc|eth|sol|xrp|ada|doge|otoel|opap|elpe|ete|alpha|peir)\b/);
+          var stockKw  = /\b(μετοχ|stock|share|price|τιμή|πόσο πάει|how much|crypto|κρυπτο|bitcoin|μπίτκοιν)\b/i;
+          var emailKw  = /\b(email|μέιλ|μειλ|μήνυμα|γράψε.*(email|μέιλ|μήνυμα|σε πελάτη|στον πελάτη|στη πελάτη)|write.*email|draft.*email)\b/i;
+          var draftKw  = /\b(linkedin|tweet|post|caption|brief|contract|proposal|cv|resume|βιογραφικό|πρόχειρο|γράψε ένα|γράψε μου)\b/i;
+          var liveKw   = /\b(σήμερα|αύριο|απόψε|τώρα|live|σκορ|ματς|αγών|fixture|kickoff|tipoff|today|tonight|tomorrow|latest|breaking|news|weather|καιρός|θερμοκρασία)\b/i;
+          var rudeKw   = /\b(μαλάκ|μαλακ|βλάκα|ηλίθι|χαζ|σκατά|fuck|shit|idiot|stupid|dumb)\b/i;
+
           var turnHint = (function buildTurnHint() {
-            var ut = (typeof currentContent === 'string' ? currentContent : '').toLowerCase();
             if (!ut) return '';
             var hints = [];
-            // Stock / crypto intent — match common tickers + Greek/English
-            // keywords. Pull out the ticker so we can name it back.
-            var tickerMatch = ut.match(/\b(nvda|aapl|tsla|msft|meta|amzn|googl|goog|nflx|amd|intc|nke|ko|pep|dis|jpm|bac|gs|spy|qqq|btc|eth|sol|xrp|ada|doge|otoel|opap|elpe|ete|alpha|peir)\b/);
-            var stockKw = /\b(μετοχ|stock|share|price|τιμή|πόσο πάει|how much|crypto|κρυπτο|bitcoin|μπίτκοιν)\b/i;
             if (tickerMatch || stockKw.test(ut)) {
               var tickerUpper = tickerMatch ? tickerMatch[1].toUpperCase() : '';
               hints.push(
@@ -5320,30 +5344,27 @@
                 'NO preamble, NO "Of course", NO closing pleasantries. Call web_search first to confirm live price.'
               );
             }
-            // Email / draft intent
-            if (/\b(email|μέιλ|μειλ|μήνυμα|γράψε.*(email|μέιλ|μήνυμα|σε πελάτη|στον πελάτη|στη πελάτη)|write.*email|draft.*email)\b/i.test(ut)) {
+            if (emailKw.test(ut)) {
               hints.push(
                 'TURN INTENT: EMAIL DRAFT. You MUST wrap the email in `<<HXEMAIL subject="…" to="…">> … <<HXEMAIL_END>>`. ' +
-                'Put exactly ONE short intro sentence before the block (e.g. "Πρόχειρο διαθέσιμο παρακάτω. Αντικατέστησε [placeholders]."). ' +
-                'NOTHING after the block. Use square-bracketed placeholders for unknowns. Greek body if the user wrote Greek.'
+                'Put exactly ONE short intro sentence before the block. NOTHING after the block. ' +
+                'Use square-bracketed placeholders for unknowns. ' + (hasGreek ? 'Body in Greek.' : 'Body in English.')
               );
-            } else if (/\b(linkedin|tweet|post|caption|brief|contract|proposal|cv|resume|βιογραφικό|πρόχειρο|γράψε ένα|γράψε μου)\b/i.test(ut)) {
+            } else if (draftKw.test(ut)) {
               hints.push(
                 'TURN INTENT: COPY-ABLE DRAFT. You MUST wrap the content in `<<HXDRAFT title="…">> … <<HXDRAFT_END>>`. ' +
                 'One intro sentence before, nothing after.'
               );
             }
-            // Live data intent — sports, news, weather, schedules
-            if (/\b(σήμερα|αύριο|απόψε|τώρα|live|σκορ|ματς|αγών|fixture|kickoff|tipoff|today|tonight|tomorrow|latest|breaking|news|weather|καιρός|θερμοκρασία)\b/i.test(ut)) {
+            if (liveKw.test(ut)) {
               hints.push(
                 'TURN INTENT: LIVE DATA. CALL web_search IMMEDIATELY — do not write any prose before searching. ' +
-                'After searching, lead with a bold concrete headline (score, time, temperature) on the first line. ' +
+                'After searching, lead with a bold concrete headline on the first line. ' +
                 'Use a Markdown table for structured details. Citation at the end. ' +
                 'Forbidden response: "I don\'t have access to real-time information."'
               );
             }
-            // Rude / profane user
-            if (/\b(μαλάκ|μαλακ|βλάκα|ηλίθι|χαζ|σκατά|fuck|shit|idiot|stupid|dumb)\b/i.test(ut)) {
+            if (rudeKw.test(ut)) {
               hints.push(
                 'TURN INTENT: USER USED PROFANITY. Do NOT acknowledge it, do NOT mirror it, do NOT lecture. ' +
                 'Respond as if the request was phrased calmly. Address the underlying question with full professionalism.'
@@ -5352,6 +5373,38 @@
             return hints.length ? '\n\n' + hints.join('\n\n') : '';
           })();
 
+          // Assistant pre-fill — the model's response will start WITH
+          // this exact string. Bypasses preamble entirely. Don't make
+          // it too long; the model still needs room to be itself.
+          var turnPrefill = (function buildTurnPrefill() {
+            if (!ut) return '';
+            // Stock / crypto: force the model to start with `**TICKER `
+            if (tickerMatch || stockKw.test(ut)) {
+              var t = tickerMatch ? tickerMatch[1].toUpperCase() : '';
+              return t ? ('**' + t + ' ') : '**';
+            }
+            // Email draft: force the HXEMAIL block to open right away
+            if (emailKw.test(ut)) {
+              return hasGreek
+                ? 'Πρόχειρο διαθέσιμο παρακάτω. Αντικατέστησε τα [bracketed] πριν στείλεις.\n\n<<HXEMAIL subject="'
+                : 'Draft below — replace [bracketed] placeholders before sending.\n\n<<HXEMAIL subject="';
+            }
+            // Other copy-able drafts: force the HXDRAFT block
+            if (draftKw.test(ut)) {
+              return hasGreek
+                ? 'Πρόχειρο για copy.\n\n<<HXDRAFT title="'
+                : 'Draft below.\n\n<<HXDRAFT title="';
+            }
+            // Live data: let the model decide to call web_search first;
+            // a prefill would lock in a wrong headline if the search
+            // surfaces unexpected data.
+            return '';
+          })();
+
+          if (turnPrefill) {
+            send_msgs.push({ role: 'assistant', content: turnPrefill });
+          }
+
           var t0 = Date.now();
           var traceCell = $('hx-c-trace');
           traceCell.textContent = '…';
@@ -5359,16 +5412,21 @@
           // Streaming state — locals so retries don't collide with class state
           var streamId       = null;
           var streamNode     = null;
-          var assistantText  = '';
+          // Seed with the assistant prefill so the rendered message
+          // starts WITH the prefilled tokens — the model continues from
+          // there. Without this the prefill would only live on the
+          // server side and the user would see a half answer.
+          var assistantText  = turnPrefill || '';
           var thread         = $('hx-c-thread');
 
           function ensureStreamMessage() {
             if (streamId) return;
             streamId = 'opt-a-' + Date.now();
             state.messages.push({
-              id: streamId, role: 'assistant', content: '',
+              id: streamId, role: 'assistant', content: assistantText,
               created_at: new Date().toISOString(),
               __optimistic: true, __streaming: true,
+              __prefill: turnPrefill || '',
             });
             state.sending  = false;
             state.streaming = true;
