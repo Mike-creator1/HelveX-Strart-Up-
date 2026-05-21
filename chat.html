@@ -2534,27 +2534,50 @@
     /* Hide the legacy "Enter to send" hint forever — replaced by the bar */
     .hx-chat-inline-hint { display: none !important; }
 
-    /* 3. Collapsible rail */
-    .hx-chat-rail { position: relative; transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.22s, padding 0.22s, opacity 0.18s; }
-    .hx-chat-rail-collapse {
-      position: absolute;
-      top: 14px; right: -12px;
-      width: 24px; height: 24px;
+    /* 2b. Hide the icons that used to live INSIDE the input row — they
+       now live in the bottom compose bar (proxies) to match Claude Code. */
+    body[data-active="chat"] #hx-c-attach,
+    body[data-active="chat"] .hx-chat-tools-wrap,
+    body[data-active="chat"] #hx-c-mic {
+      display: none !important;
+    }
+
+    /* 2c. Proxy icon buttons in the bottom bar */
+    .hx-cc-iconbtn {
+      width: 26px; height: 26px;
       display: inline-flex; align-items: center; justify-content: center;
-      background: var(--hx-bg-elev, #fff);
-      border: 1px solid var(--hx-line);
-      border-radius: 50%;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 7px;
       color: var(--hx-text-dim);
       cursor: pointer;
-      z-index: 10;
-      box-shadow: var(--hx-shadow-xs, 0 1px 2px rgba(0,0,0,0.06));
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .hx-cc-iconbtn:hover {
+      background: var(--hx-surface);
+      color: var(--hx-text);
+      border-color: var(--hx-line);
+    }
+    .hx-cc-iconbtn svg { width: 14px; height: 14px; }
+
+    /* 3. Collapsible rail — arrow lives INSIDE the header */
+    .hx-chat-rail { transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.22s, padding 0.22s, opacity 0.18s; }
+    .hx-chat-rail-collapse {
+      width: 26px; height: 26px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent;
+      border: 1px solid var(--hx-line);
+      border-radius: 7px;
+      color: var(--hx-text-dim);
+      cursor: pointer;
+      margin-right: 4px;
       transition: background 0.15s, color 0.15s;
     }
     .hx-chat-rail-collapse:hover {
       background: var(--hx-surface);
       color: var(--hx-text);
     }
-    .hx-chat-rail-collapse svg { width: 12px; height: 12px; }
+    .hx-chat-rail-collapse svg { width: 13px; height: 13px; }
     .hx-chat-rail.is-collapsed {
       width: 0 !important; min-width: 0 !important;
       padding-left: 0 !important; padding-right: 0 !important;
@@ -2566,9 +2589,9 @@
     .hx-chat-rail.is-collapsed > * { visibility: hidden; }
     /* Floating reopen button — sits on the left edge of the chat pane */
     .hx-chat-rail-reopen {
-      position: absolute;
-      top: 14px; left: 12px;
-      width: 28px; height: 28px;
+      position: fixed;
+      top: 16px; left: 14px;
+      width: 30px; height: 30px;
       display: none;
       align-items: center; justify-content: center;
       background: var(--hx-bg-elev, #fff);
@@ -2576,12 +2599,12 @@
       border-radius: 8px;
       color: var(--hx-text-dim);
       cursor: pointer;
-      z-index: 11;
-      box-shadow: var(--hx-shadow-xs, 0 1px 2px rgba(0,0,0,0.06));
+      z-index: 50;
+      box-shadow: var(--hx-shadow-xs, 0 1px 2px rgba(0,0,0,0.08));
     }
     .hx-chat-rail-reopen:not([hidden]) { display: inline-flex; }
     .hx-chat-rail-reopen:hover { background: var(--hx-surface); color: var(--hx-text); }
-    .hx-chat-rail-reopen svg { width: 14px; height: 14px; }
+    .hx-chat-rail-reopen svg { width: 15px; height: 15px; }
   </style>
 </head>
 <body data-active="chat">
@@ -2596,6 +2619,9 @@
         <aside class="hx-chat-rail" id="hx-c-rail">
           <div class="hx-chat-rail-head">
             <p class="hx-chat-rail-title">Conversations</p>
+            <button class="hx-chat-rail-collapse" type="button" id="hx-c-rail-collapse" aria-label="Collapse sidebar" title="Hide conversations">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
             <button class="hx-chat-new" type="button" id="hx-c-new" aria-label="New chat" title="Start a new conversation">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
@@ -2603,12 +2629,6 @@
           <div class="hx-chat-list" id="hx-c-list">
             <div class="hx-chat-empty-list" id="hx-c-empty">Your conversations will appear here.</div>
           </div>
-          <!-- Collapse handle — sits on the right edge, flips its arrow
-               when the rail is collapsed so the user always knows which
-               way it'll move. -->
-          <button class="hx-chat-rail-collapse" type="button" id="hx-c-rail-collapse" aria-label="Collapse sidebar" title="Collapse sidebar">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-          </button>
         </aside>
         <!-- Floating reopen tab that appears when the rail is collapsed -->
         <button class="hx-chat-rail-reopen" type="button" id="hx-c-rail-reopen" aria-label="Show sidebar" title="Show sidebar" hidden>
@@ -2757,11 +2777,23 @@
                   </button>
                 </div>
 
-                <!-- Claude-Code-style bottom strip inside the composer card -->
+                <!-- Claude-Code-style bottom strip inside the composer card.
+                     Order matches Claude Code exactly:
+                       [● Accept edits] [+] [🎤]   ……   [Ether · Max ▾]
+                     The [+] and [🎤] buttons here are proxies — they
+                     click the real (hidden) #hx-c-attach / #hx-c-mic
+                     buttons in the input row so all existing handlers
+                     keep firing. -->
                 <div class="hx-cc-compose-bar">
                   <button class="hx-cc-edits" type="button" id="hx-cc-edits" aria-pressed="true">
                     <span class="hx-cc-edits-dot" aria-hidden="true"></span>
                     <span>Accept edits</span>
+                  </button>
+                  <button class="hx-cc-iconbtn" type="button" id="hx-cc-attach-proxy" aria-label="Attach" title="Attach files">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </button>
+                  <button class="hx-cc-iconbtn" type="button" id="hx-cc-mic-proxy" aria-label="Voice" title="Voice input">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
                   </button>
                   <span class="hx-cc-compose-bar-spacer"></span>
                   <button class="hx-cc-model-pick" type="button" id="hx-cc-model-pick" aria-haspopup="menu" aria-expanded="false">
@@ -5296,6 +5328,23 @@
             btn.setAttribute('aria-pressed', on ? 'false' : 'true');
             document.body.dataset.acceptEdits = on ? 'off' : 'on';
           });
+        })();
+
+        // ─── Proxy buttons: forward clicks to the (now-hidden) icons
+        // that used to live inside the input row. Keeps the original
+        // handlers intact while moving the visual UI to the bottom bar.
+        (function wireProxyIcons() {
+          function proxy(proxyId, realId) {
+            var p = document.getElementById(proxyId);
+            var r = document.getElementById(realId);
+            if (!p || !r) return;
+            p.addEventListener('click', function (e) {
+              e.preventDefault(); e.stopPropagation();
+              r.click();
+            });
+          }
+          proxy('hx-cc-attach-proxy', 'hx-c-attach');
+          proxy('hx-cc-mic-proxy',    'hx-c-mic');
         })();
       });
     })();
