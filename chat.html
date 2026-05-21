@@ -1215,7 +1215,7 @@
     .hx-stock-card-iframe {
       display: block;
       width: 100%;
-      height: 220px;
+      height: 340px;
       border: 0;
       background: var(--hx-surface);
     }
@@ -3791,25 +3791,49 @@
           var c = chartMarkers[parseInt(n, 10)];
           if (!c || c.kind !== 'stock') return '';
           var t = escape(c.symbol);
-          // TradingView's mini symbol-overview widget — lightweight,
-          // iframe-sandboxed, no JS injected into our page.
-          var cfg = encodeURIComponent(JSON.stringify({
-            symbol: c.symbol,
-            width: '100%', height: 220,
+          // TradingView "symbol-overview" advanced widget — interactive
+          // chart with line series, range picker (1D/5D/1M/3M/1Y/ALL),
+          // and current-price overlay. Self-loaded inside a sandboxed
+          // iframe so its JS stays isolated from our page.
+          var isDark = (document.documentElement.getAttribute('data-theme') === 'dark');
+          var cfg = {
+            symbols: [[c.symbol, c.symbol + '|1D']],
+            chartOnly: false,
+            width: '100%',
+            height: 340,
             locale: 'en',
-            dateRange: '1D',
-            colorTheme: (document.documentElement.getAttribute('data-theme') === 'dark') ? 'dark' : 'light',
-            isTransparent: true,
+            colorTheme: isDark ? 'dark' : 'light',
             autosize: false,
-            largeChartUrl: ''
-          }));
-          var src = 'https://s.tradingview.com/embed-widget/mini-symbol-overview/?locale=en#' + cfg;
+            showVolume: false,
+            showMA: false,
+            hideDateRanges: false,
+            hideMarketStatus: false,
+            hideSymbolLogo: false,
+            scalePosition: 'right',
+            scaleMode: 'Normal',
+            fontFamily: '-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif',
+            fontSize: '10',
+            noTimeScale: false,
+            valuesTracking: '1',
+            changeMode: 'price-and-percent',
+            chartType: 'area',
+            maLineColor: '#2962FF',
+            maLineWidth: 1,
+            maLength: 9,
+            backgroundColor: isDark ? 'rgba(17,17,20,0)' : 'rgba(255,255,255,0)',
+            lineWidth: 2,
+            lineType: 0,
+            dateRanges: ['1d|1', '1m|30', '3m|60', '12m|1D', '60m|1W', 'all|1M']
+          };
+          // The TradingView embed reads the config from the URL fragment
+          // as a URI-encoded JSON blob.
+          var src = 'https://s.tradingview.com/embed-widget/symbol-overview/?locale=en#' + encodeURIComponent(JSON.stringify(cfg));
           return '<div class="hx-stock-card" data-ticker="' + t + '">' +
             '<div class="hx-stock-card-head">' +
               '<span class="hx-stock-card-ticker">' + t + '</span>' +
-              '<a class="hx-stock-card-link" href="https://www.tradingview.com/symbols/' + t + '/" target="_blank" rel="noopener">Open chart →</a>' +
+              '<a class="hx-stock-card-link" href="https://www.tradingview.com/symbols/' + t + '/" target="_blank" rel="noopener">Open on TradingView →</a>' +
             '</div>' +
-            '<iframe class="hx-stock-card-iframe" src="' + src + '" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin"></iframe>' +
+            '<iframe class="hx-stock-card-iframe" src="' + src + '" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>' +
           '</div>';
         });
         return s;
@@ -4155,7 +4179,14 @@
           '• Live match: a bold header like "**Olympiacos 78 — Fenerbahçe 81**" followed by a small markdown table with Quarter | OLY | FEN | rows for each quarter, then a single line stating venue, tipoff, broadcaster.',
           '• Upcoming match: a bold "**Team A vs Team B**" header, then a small key-value table: Date, Tipoff (local + ET), Venue, Round, Broadcasters. Add a one-line storyline (e.g. "Game 3 of the EuroLeague Final Four semifinal — series tied 1-1").',
           '• Standings, rosters, head-to-head: full Markdown tables with column headers.',
-          '• Stocks / crypto: bold ticker + price + percent change first ("**NVDA $1,238.42 +2.4%**"), then a 4-row table with Open, High, Low, Volume. Add "MarketCap" + "P/E" if available. Append "<<HXCHART:stock:NVDA>>" on its own line to embed a TradingView mini chart (the client renders this).',
+          // ── STOCK / CRYPTO RULE (MANDATORY CHART) ─────────────────
+          'STOCKS / CRYPTO — the chart is REQUIRED, not optional. Format EXACTLY in this order:',
+          '  1. Bold one-line headline: **TICKER $price ±%** (e.g. "**NKE $44.13 +4.02%**"). One line. No commentary on this line.',
+          '  2. IMMEDIATELY on the next line, the chart marker on its own line: <<HXCHART:stock:NKE>>. NEVER skip this. NEVER replace it with text describing the chart. NEVER wrap it in backticks or a code block — output the literal marker. The client turns it into a live interactive TradingView chart.',
+          '  3. A compact 3-4 row Markdown table with the key levels: Day range, 52-week range, Market cap, Volume (or P/E). Skip the table for crypto if irrelevant.',
+          '  4. One short paragraph (max two sentences) with the why — earnings, catalyst, sector move.',
+          '  5. Citation line at the very end in parentheses.',
+          'For US tickers omit the exchange prefix in HXCHART (e.g. NKE, AAPL, NVDA, TSLA). For non-US tickers use the exchange prefix (e.g. ETR:SAP, BCBA:GGAL, ATHEX:OTOEL). For crypto use BINANCE:BTCUSDT or COINBASE:BTCUSD style. If the user references a ticker by company name, look up the symbol via web_search first, then emit the marker.',
           '• Weather: today\'s temp + condition in bold, then a small forecast table for the next 3-5 hours or days.',
           '• Prices / schedules / hours: always a table, never a comma-separated sentence.',
           'Lead with the bold concrete fact, then the structure. Citations at the very end.'
