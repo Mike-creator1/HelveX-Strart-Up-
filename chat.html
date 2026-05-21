@@ -2790,24 +2790,48 @@
     .hx-chat-inline-hint { display: none !important; }
 
     /* Hide the global platform chrome on the chat page — the chat owns
-       its full window, just like Claude Code. */
-    body[data-active="chat"] .hx-topbar { display: none !important; }
-    body[data-active="chat"] > .hx-app > .hx-sidebar,
-    body[data-active="chat"] .hx-app > .hx-sidebar { display: none !important; }
-    /* Push the right-hand content full width since the global sidebar is hidden */
-    body[data-active="chat"] .hx-app {
+       its full window, just like Claude Code. Multiple selectors so we
+       beat whatever specificity platform.css throws at us. */
+    html body[data-active="chat"] .hx-topbar,
+    html body[data-active="chat"] > .hx-app > .hx-topbar,
+    html body[data-active="chat"] .hx-app > div > .hx-topbar {
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: 0 !important;
+    }
+    html body[data-active="chat"] > .hx-app > .hx-sidebar,
+    html body[data-active="chat"] .hx-app > aside.hx-sidebar {
+      display: none !important;
+      width: 0 !important;
+    }
+    /* FORCE dark background everywhere on the chat page so nothing
+       leaks white during transitions or empty states. */
+    html body[data-active="chat"],
+    html body[data-active="chat"] .hx-app,
+    html body[data-active="chat"] .hx-app > div,
+    html body[data-active="chat"] .hx-main,
+    html body[data-active="chat"] .hx-chat-pane,
+    html body[data-active="chat"] .hx-chat-thread {
+      background: #0a0a0b !important;
+      color: #e8e8ea;
+    }
+    html body[data-active="chat"] .hx-app {
       grid-template-columns: 1fr !important;
-      height: 100vh;
-      max-height: 100vh;
+      height: 100vh !important;
+      max-height: 100vh !important;
       overflow: hidden;
     }
-    body[data-active="chat"] .hx-app > div {
+    html body[data-active="chat"] .hx-app > div {
       height: 100vh !important;
       display: flex; flex-direction: column;
       min-height: 0; min-width: 0;
     }
-    body[data-active="chat"] .hx-app > div > .hx-main {
+    html body[data-active="chat"] .hx-app > div > .hx-main {
       flex: 1; height: auto !important; min-height: 0;
+      background: #0a0a0b !important;
     }
 
     /* Expand the model menu to match Claude Code's layout:
@@ -5581,6 +5605,38 @@
         window.addEventListener('beforeunload', function () {
           try { if (state.msgChannel) state.msgChannel.unsubscribe(); } catch (e) {}
         });
+
+        // ─── Hard kill the global platform chrome on the chat page ──────
+        // Platform.js may re-inject the topbar/sidebar after our CSS has
+        // loaded, so we also defensively rip them out of the DOM.
+        (function killGlobalChrome() {
+          function strip() {
+            document.querySelectorAll('.hx-topbar').forEach(function (el) {
+              el.style.display = 'none';
+              el.style.height  = '0';
+              el.setAttribute('aria-hidden', 'true');
+            });
+            document.querySelectorAll('.hx-app > aside.hx-sidebar').forEach(function (el) {
+              el.style.display = 'none';
+              el.style.width   = '0';
+            });
+            // Force dark on the host containers in case platform.css
+            // set them to a light value via inline style.
+            var app = document.querySelector('.hx-app');
+            if (app) {
+              app.style.background = '#0a0a0b';
+              app.style.gridTemplateColumns = '1fr';
+              app.style.height = '100vh';
+            }
+            document.body.style.background = '#0a0a0b';
+          }
+          strip();
+          // Re-strip a couple of times to defeat any late platform.js
+          // hydration that might paint things back in.
+          setTimeout(strip, 60);
+          setTimeout(strip, 250);
+          setTimeout(strip, 800);
+        })();
 
         // ─── Claude-Code parity helpers ────────────────────────────────
         // Centralised title setter: writes into the inner <span> of the
