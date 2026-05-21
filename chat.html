@@ -39,7 +39,6 @@
 
     /* Smooth transitions on the elements that swap accent */
     .hx-chat-title::before,
-    .hx-chat-balance::before,
     .hx-chat-rail-title::before,
     .hx-chat-item::before,
     .hx-msg.is-assistant .hx-msg-meta::before,
@@ -65,11 +64,6 @@
     body[data-model="nexus"] .hx-chat-title::before,
     body[data-model="prometheus"] .hx-chat-title::before {
       background: linear-gradient(180deg, transparent 0%, var(--hx-mc) 50%, transparent 100%);
-    }
-    body[data-model="nexus"] .hx-chat-balance::before,
-    body[data-model="prometheus"] .hx-chat-balance::before {
-      background: var(--hx-mc);
-      box-shadow: 0 0 0 2px var(--hx-mc-soft), 0 0 8px var(--hx-mc-glow);
     }
     body[data-model="nexus"] .hx-chat-rail-title::before,
     body[data-model="prometheus"] .hx-chat-rail-title::before {
@@ -1013,39 +1007,6 @@
     }
     button.hx-chat-pill:hover { color: var(--hx-red); border-color: rgba(220,38,38,0.3); background: var(--hx-red-soft); }
     button.hx-chat-pill svg { width: 12px; height: 12px; margin-right: 0; opacity: 0.75; }
-
-    /* Premium credit balance — small mono badge with halo on the gold dot */
-    .hx-chat-balance {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      height: 30px;
-      padding: 0 13px;
-      background: linear-gradient(180deg, var(--hx-bg-2) 0%, color-mix(in srgb, var(--hx-bg-2) 70%, var(--hx-surface)) 100%);
-      border: 1px solid var(--hx-line);
-      border-radius: 999px;
-      font-family: var(--hx-mono);
-      font-size: 11px;
-      color: var(--hx-text);
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 70%, transparent), var(--hx-shadow-xs);
-    }
-    .hx-chat-balance::before {
-      content: '';
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--hx-yellow, var(--hx-text));
-      box-shadow:
-        0 0 0 2px var(--hx-yellow-soft, transparent),
-        0 0 8px color-mix(in srgb, var(--hx-yellow, var(--hx-text)) 60%, transparent);
-      animation: hx-balance-pulse 2.8s ease-in-out infinite;
-    }
-    @keyframes hx-balance-pulse {
-      0%, 100% { box-shadow: 0 0 0 2px var(--hx-yellow-soft, transparent), 0 0 6px color-mix(in srgb, var(--hx-yellow, var(--hx-text)) 50%, transparent); }
-      50%      { box-shadow: 0 0 0 3px var(--hx-yellow-soft, transparent), 0 0 12px color-mix(in srgb, var(--hx-yellow, var(--hx-text)) 75%, transparent); }
-    }
-    .hx-chat-balance.is-empty { color: var(--hx-text-faint); }
-    .hx-chat-balance.is-empty::before { animation: none; box-shadow: none; opacity: 0.4; }
 
     /* Thread */
     .hx-chat-thread {
@@ -2486,7 +2447,6 @@
       .hx-chat-title::before { left: -2px; height: 70%; }
       .hx-chat-pill { height: 28px; font-size: 12px; }
       .hx-chat-pill > span:first-child { font-size: 9.5px !important; }
-      .hx-chat-balance { height: 28px; font-size: 10.5px; padding: 0 11px; }
       .hx-chat-blank { padding: 40px 20px; gap: 14px; }
       .hx-chat-blank h2 { font-size: 44px; }
       .hx-chat-blank p { font-size: 13px; }
@@ -2694,8 +2654,6 @@
             </label>
             <!-- Delete moved to each conversation's 3-dots menu in the rail.
                  Credit balance moved to the workspace/account header (not here). -->
-            <button class="hx-chat-pill" type="button" id="hx-c-clear" hidden aria-hidden="true"></button>
-            <span class="hx-chat-balance" id="hx-c-balance" hidden aria-hidden="true">—</span>
           </div>
 
           <div class="hx-chat-thread" id="hx-c-thread">
@@ -3313,16 +3271,9 @@
       whenAuthReady(function () {
         var sb = window.HX.supabase;
 
-        // ─── Auth + balance ───────────────────────────────────
-        async function refreshBalance() {
-          var el = $('hx-c-balance');
-          var r = await sb.from('credits_balance').select('credits_total,credits_used').maybeSingle();
-          if (r && r.data) {
-            var avail = Math.max(0, (r.data.credits_total || 0) - (r.data.credits_used || 0));
-            el.textContent = avail.toLocaleString() + ' cr';
-            el.classList.toggle('is-empty', avail <= 0);
-          }
-        }
+        // Credit balance lives in the account header; chat toolbar
+        // keeps only Model + Project per design.
+        async function refreshBalance() { /* no-op */ }
 
         // ─── Project picker ──────────────────────────────────
         async function loadProjects() {
@@ -4254,38 +4205,8 @@
           send(assistantIdx);
         }
 
-        // ─── Delete current conversation ─────────────────────
-        async function deleteCurrent() {
-          if (!state.conversation) return;
-          var btn = $('hx-c-clear');
-          if (btn && btn.dataset.armed !== '1') {
-            btn.dataset.armed = '1';
-            btn.dataset.original = btn.textContent;
-            btn.textContent = 'Click again to confirm';
-            btn.classList.add('armed');
-            setTimeout(function () {
-              if (btn.dataset.armed === '1') {
-                btn.dataset.armed = '';
-                btn.textContent = btn.dataset.original || 'Delete';
-                btn.classList.remove('armed');
-              }
-            }, 3000);
-            return;
-          }
-          if (btn) { btn.dataset.armed = ''; btn.classList.remove('armed'); btn.textContent = btn.dataset.original || 'Delete'; }
-          var id = state.conversation.id;
-          await sb.from('conversations').update({ archived_at: new Date().toISOString() }).eq('id', id);
-          await sb.rpc('log_event', { p_kind: 'chat.conversation_archived', p_payload: { id: id } });
-          if (state.msgChannel) { try { state.msgChannel.unsubscribe(); } catch (e) {} state.msgChannel = null; }
-          state.conversation = null;
-          state.messages = [];
-          renderThread();
-          await refreshList();
-        }
-
         // ─── Toolbar interactions ────────────────────────────
         $('hx-c-new').addEventListener('click', newConversation);
-        $('hx-c-clear').addEventListener('click', deleteCurrent);
 
         // ─── Mobile drawer (conversations panel) ─────────────
         var drawerRail    = document.querySelector('.hx-chat-rail');
