@@ -988,32 +988,8 @@
       flex-direction: column;
       gap: 22px;
     }
-    /* Claude.ai layout: a thin column reserved for an avatar circle,
-       then the message body. User messages have no avatar so they
-       hang into the same indent as assistant text — visually parallel. */
-    .hx-msg {
-      display: grid;
-      grid-template-columns: 30px minmax(0, 1fr);
-      column-gap: 12px;
-      row-gap: 4px;
-      align-items: start;
-    }
-    .hx-msg-avatar {
-      width: 26px; height: 26px;
-      border-radius: 50%;
-      display: inline-flex; align-items: center; justify-content: center;
-      background: var(--hx-surface);
-      border: 1px solid var(--hx-line);
-      color: var(--hx-yellow-deep, var(--hx-text));
-      flex-shrink: 0;
-      margin-top: 2px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-    }
-    .hx-msg-avatar.is-nexus      { color: #C84A4A; }
-    .hx-msg-avatar.is-prometheus { color: #4A4A52; }
-    .hx-msg-avatar svg { width: 16px; height: 16px; }
-    /* User turns: no avatar — the body just spans both columns. */
-    .hx-msg.is-user .hx-msg-body { grid-column: 1 / -1; }
+    .hx-msg { display: flex; flex-direction: column; gap: 4px; }
+    .hx-msg-avatar { display: none; }
     .hx-msg-body { min-width: 0; width: 100%; }
     /* Author label above each message was removed (Claude.ai parity).
        The prose layout itself differentiates speakers: user turns sit
@@ -4415,9 +4391,6 @@
             // Minimal thinking indicator: just the active model's logo
             // doing its signature animation. No pill, no labels, no dots.
             html += '<div class="hx-msg is-assistant hx-msg-thinking">' +
-              '<div class="hx-msg-avatar is-' + activeModel + '" aria-hidden="true">' +
-                (typeof modelLogoSvg === 'function' ? modelLogoSvg(activeModel) : '') +
-              '</div>' +
               '<div class="hx-msg-body">' +
                 '<span class="hx-thinking-solo is-' + activeModel + '" aria-label="' + (isAgentModel(activeModel) ? 'Planning' : 'Thinking') + '">' +
                   modelLogoSvg(activeModel) +
@@ -4551,16 +4524,7 @@
           if (m.content) contentHtml = '<div class="hx-msg-content">' + renderRichContent(m.content, isAssist) + '</div>';
           else if (!atts.length) contentHtml = '<div class="hx-msg-content"></div>';
 
-          // Per Claude.ai: a small 26px circular avatar on the LEFT of
-          // every assistant turn carrying that model's SVG mark.
-          var avatarHtml = '';
-          if (isAssist) {
-            var mModel = m.model || (m.meta && m.meta.model) || (($('hx-c-model') && $('hx-c-model').value) || 'ether');
-            avatarHtml = '<div class="hx-msg-avatar is-' + mModel + '" aria-hidden="true">' + (typeof modelLogoSvg === 'function' ? modelLogoSvg(mModel) : '') + '</div>';
-          }
-
           return '<div class="hx-msg ' + (isAssist ? 'is-assistant' : 'is-user') + (m.__error ? ' hx-msg-error' : '') + '" data-msg-key="' + escape(m.id) + '">' +
-            avatarHtml +
             '<div class="hx-msg-body">' +
               (meta ? '<div class="hx-msg-meta">' + meta + '</div>' : '') +
               renderAttachmentsForMsg(atts) +
