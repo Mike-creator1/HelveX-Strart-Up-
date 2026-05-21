@@ -3651,7 +3651,15 @@
 
         // ─── Send message (SSE streaming) ────────────────────
         async function send(retryFromIdx) {
-          if (state.sending || state.streaming) return;
+          // PANIC RESET: if the previous turn left state.sending/streaming
+          // stuck (network drop, JS error before finally, page reload mid-
+          // stream), break out instead of swallowing the click. We treat
+          // a second click while "stuck" as the user's intent to retry.
+          if (state.sending || state.streaming) {
+            state.sending  = false;
+            state.streaming = false;
+            renderThread();
+          }
           // Stop any active voice recording so it can't keep dictating
           // into a new turn after the user has hit send.
           if (typeof voiceState !== 'undefined' && voiceState !== 'idle') stopVoice();
