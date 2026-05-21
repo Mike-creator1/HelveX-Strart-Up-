@@ -2504,10 +2504,100 @@
     .hx-cc-model-pick.is-busy .hx-cc-model-spinner { display: inline-block; }
     .hx-cc-model-pick.is-busy .hx-cc-model-caret   { display: none; }
     @keyframes hx-cc-spin { to { transform: rotate(360deg); } }
+    /* Context window card (top of dropdown) */
+    .hx-cc-ctx-card {
+      display: block; width: 100%;
+      text-align: left;
+      padding: 12px;
+      margin-bottom: 6px;
+      background: transparent;
+      border: 1px solid rgba(125, 155, 255, 0.45);
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .hx-cc-ctx-card:hover { background: rgba(255,255,255,0.03); }
+    .hx-cc-ctx-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+      font: 600 12.5px/1 var(--hx-sans, 'Inter'), sans-serif;
+      color: #fff;
+    }
+    .hx-cc-ctx-stat {
+      display: inline-flex; align-items: center; gap: 4px;
+      color: rgba(255,255,255,0.55);
+      font-weight: 500;
+    }
+    .hx-cc-ctx-stat svg { width: 12px; height: 12px; opacity: 0.5; }
+    .hx-cc-ctx-bar {
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .hx-cc-ctx-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #5b8def, #7dafff);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+    /* Plan usage section */
+    .hx-cc-plan-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 10px 8px;
+      color: rgba(255,255,255,0.45);
+      font: 500 11.5px/1 var(--hx-sans, 'Inter'), sans-serif;
+    }
+    .hx-cc-plan-link {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px;
+      color: rgba(255,255,255,0.45);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .hx-cc-plan-link:hover { color: #fff; }
+    .hx-cc-plan-link svg { width: 12px; height: 12px; }
+    .hx-cc-plan-row {
+      padding: 7px 10px 9px;
+    }
+    .hx-cc-plan-row-last { padding-bottom: 6px; }
+    .hx-cc-plan-line {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 6px;
+      font: 600 12.5px/1 var(--hx-sans, 'Inter'), sans-serif;
+      color: #fff;
+    }
+    .hx-cc-plan-meta {
+      color: rgba(255,255,255,0.45);
+      font-weight: 500;
+      font-size: 11.5px;
+    }
+    .hx-cc-plan-bar {
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .hx-cc-plan-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #5b8def, #7dafff);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+    .hx-cc-menu-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.06);
+      margin: 4px 0 2px;
+    }
+
     /* DARK dropdown — matches Claude Code regardless of page theme */
     .hx-cc-model-menu {
       position: absolute; bottom: calc(100% + 8px); right: 0;
-      min-width: 240px;
+      min-width: 320px;
+      max-width: 380px;
+      max-height: 560px;
+      overflow-y: auto;
       background: #1d1d20;
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 12px;
@@ -2883,6 +2973,56 @@
                     <span class="hx-cc-model-spinner" id="hx-cc-model-spinner" aria-hidden="true"></span>
                   </button>
                   <div class="hx-cc-model-menu" id="hx-cc-model-menu" role="menu" hidden>
+                    <!-- Context window -->
+                    <button class="hx-cc-ctx-card" type="button" id="hx-cc-ctx-card" aria-label="Context window details">
+                      <div class="hx-cc-ctx-head">
+                        <span>Context window</span>
+                        <span class="hx-cc-ctx-stat">
+                          <span id="hx-cc-ctx-text">0 / 200k (0%)</span>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </span>
+                      </div>
+                      <div class="hx-cc-ctx-bar"><div class="hx-cc-ctx-bar-fill" id="hx-cc-ctx-bar-fill" style="width: 0%"></div></div>
+                    </button>
+
+                    <!-- Plan usage -->
+                    <div class="hx-cc-plan-head">
+                      <span>Plan usage</span>
+                      <a href="/billing.html" class="hx-cc-plan-link" aria-label="Open billing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+                    </div>
+
+                    <div class="hx-cc-plan-row">
+                      <div class="hx-cc-plan-line">
+                        <span class="hx-cc-plan-name">5-hour limit</span>
+                        <span class="hx-cc-plan-meta"><span id="hx-cc-pct-5h">0%</span> · resets <span id="hx-cc-rst-5h">3h</span></span>
+                      </div>
+                      <div class="hx-cc-plan-bar"><div class="hx-cc-plan-bar-fill" id="hx-cc-bar-5h" style="width: 0%"></div></div>
+                    </div>
+
+                    <div class="hx-cc-plan-row">
+                      <div class="hx-cc-plan-line">
+                        <span class="hx-cc-plan-name">Weekly &middot; all models</span>
+                        <span class="hx-cc-plan-meta"><span id="hx-cc-pct-wk">0%</span> · resets <span id="hx-cc-rst-wk">7d</span></span>
+                      </div>
+                      <div class="hx-cc-plan-bar"><div class="hx-cc-plan-bar-fill" id="hx-cc-bar-wk" style="width: 0%"></div></div>
+                    </div>
+
+                    <div class="hx-cc-plan-row">
+                      <div class="hx-cc-plan-line">
+                        <span class="hx-cc-plan-name">Weekly &middot; Prometheus</span>
+                        <span class="hx-cc-plan-meta"><span id="hx-cc-pct-pr">0%</span></span>
+                      </div>
+                    </div>
+
+                    <div class="hx-cc-plan-row hx-cc-plan-row-last">
+                      <div class="hx-cc-plan-line">
+                        <span class="hx-cc-plan-name">Nexus only</span>
+                        <span class="hx-cc-plan-meta"><span id="hx-cc-pct-nx">0%</span></span>
+                      </div>
+                    </div>
+
+                    <div class="hx-cc-menu-divider"></div>
+
                     <!-- Models section -->
                     <div class="hx-cc-menu-section">
                       <span>Models</span>
@@ -5512,6 +5652,97 @@
           }
           proxy('hx-cc-attach-proxy', 'hx-c-attach');
           proxy('hx-cc-mic-proxy',    'hx-c-mic');
+        })();
+
+        // ─── Live usage panel inside the model dropdown ───────────────
+        // Populates the Context window bar (estimated tokens used by the
+        // current conversation against the active model's ctx ceiling)
+        // and the Plan-usage bars (5-hour limit, weekly all-models,
+        // per-model weekly, etc.) from the credits_balance view and
+        // the recent model_calls window.
+        (function wireUsagePanel() {
+          var MODEL_CTX = { ether: 200000, nexus: 1000000, prometheus: 200000 };
+          function fmtTokens(n) {
+            if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+            if (n >= 1000)    return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+            return String(n);
+          }
+          function estimateConvTokens() {
+            try {
+              if (!state || !Array.isArray(state.messages)) return 0;
+              var chars = 0;
+              state.messages.forEach(function (m) {
+                if (typeof m.content === 'string') chars += m.content.length;
+              });
+              return Math.ceil(chars / 4);
+            } catch (e) { return 0; }
+          }
+          function refreshContext() {
+            try {
+              var model = ($('hx-c-model') && $('hx-c-model').value) || 'ether';
+              var ceiling = MODEL_CTX[model] || 200000;
+              var used = estimateConvTokens();
+              var pct = Math.min(100, Math.round((used / ceiling) * 100));
+              var txt = document.getElementById('hx-cc-ctx-text');
+              var bar = document.getElementById('hx-cc-ctx-bar-fill');
+              if (txt) txt.textContent = fmtTokens(used) + ' / ' + fmtTokens(ceiling) + ' (' + pct + '%)';
+              if (bar) bar.style.width = pct + '%';
+            } catch (e) {}
+          }
+          function setBar(barId, pctId, pct, rstId, rstText) {
+            var bar = document.getElementById(barId);
+            var pctEl = document.getElementById(pctId);
+            var rst = rstId ? document.getElementById(rstId) : null;
+            if (bar) bar.style.width = Math.min(100, pct) + '%';
+            if (pctEl) pctEl.textContent = Math.round(pct) + '%';
+            if (rst && rstText) rst.textContent = rstText;
+          }
+          async function refreshUsage() {
+            try {
+              // Pull credit balance — fraction consumed becomes the weekly bar
+              var r = await sb.from('credits_balance').select('credits_total,credits_used').maybeSingle();
+              if (r && r.data) {
+                var total = r.data.credits_total || 0;
+                var used  = r.data.credits_used  || 0;
+                var pct   = total > 0 ? (used / total) * 100 : 0;
+                setBar('hx-cc-bar-wk', 'hx-cc-pct-wk', pct, 'hx-cc-rst-wk', '7d');
+              }
+              // 5-hour rolling window — count model_calls in the last 5h
+              var since = new Date(Date.now() - 5 * 3600 * 1000).toISOString();
+              var calls = await sb.from('model_calls')
+                .select('id,model', { count: 'exact', head: false })
+                .gte('created_at', since);
+              var n = (calls && calls.data) ? calls.data.length : 0;
+              // Rough limit: 100 calls / 5h for visual scale
+              setBar('hx-cc-bar-5h', 'hx-cc-pct-5h', (n / 100) * 100, 'hx-cc-rst-5h', '3h');
+              // Per-model breakdown for the last 7d
+              var weekAgo = new Date(Date.now() - 7 * 86400 * 1000).toISOString();
+              var weekCalls = await sb.from('model_calls').select('model').gte('created_at', weekAgo);
+              var byModel = {};
+              if (weekCalls && weekCalls.data) {
+                weekCalls.data.forEach(function (row) {
+                  byModel[row.model] = (byModel[row.model] || 0) + 1;
+                });
+              }
+              var totalWeek = Object.values(byModel).reduce(function (a, b) { return a + b; }, 0) || 1;
+              var prEl = document.getElementById('hx-cc-pct-pr');
+              var nxEl = document.getElementById('hx-cc-pct-nx');
+              if (prEl) prEl.textContent = Math.round(((byModel.prometheus || 0) / totalWeek) * 100) + '%';
+              if (nxEl) nxEl.textContent = Math.round(((byModel.nexus      || 0) / totalWeek) * 100) + '%';
+            } catch (e) { /* usage panel is informational — never block boot */ }
+          }
+          // Refresh whenever the dropdown opens
+          var pick = document.getElementById('hx-cc-model-pick');
+          if (pick) {
+            pick.addEventListener('click', function () {
+              refreshContext();
+              refreshUsage();
+            });
+          }
+          // Initial paint
+          setTimeout(function () { refreshContext(); refreshUsage(); }, 800);
+          // Context bar follows new messages without re-opening the menu
+          setInterval(refreshContext, 4000);
         })();
       });
     })();
