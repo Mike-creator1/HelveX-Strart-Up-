@@ -2802,22 +2802,14 @@
     /* ── Mode menu (anchored to Accept edits, opens upward + left) ──── */
     .hx-cc-mode-menu {
       position: absolute; bottom: calc(100% + 10px); left: 0;
-      min-width: 240px; max-width: 280px;
-      padding: 6px;
+      min-width: 220px; max-width: 260px;
+      padding: 5px;
       z-index: 30;
       color: #e8e8ea;
-      background:
-        radial-gradient(120% 80% at 0% 0%, rgba(201,162,39,0.04) 0%, transparent 50%),
-        linear-gradient(180deg, #18181d 0%, #131318 100%);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 14px;
-      box-shadow:
-        0 32px 80px -12px rgba(0,0,0,0.65),
-        0 12px 24px -8px rgba(0,0,0,0.45),
-        0 1px 0 rgba(255,255,255,0.04) inset,
-        0 -1px 0 rgba(0,0,0,0.4) inset;
-      backdrop-filter: blur(24px) saturate(160%);
-      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      background: #161618;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      box-shadow: 0 20px 50px -16px rgba(0,0,0,0.55);
     }
     .hx-cc-mode-menu[hidden] { display: none; }
     .hx-cc-mode-opt {
@@ -2905,35 +2897,22 @@
       filter: drop-shadow(0 0 3px rgba(201,162,39,0.5));
     }
 
-    /* ── Context window card — premium financial-dashboard feel ─────── */
+    /* ── Context window card — minimal flat surface ─────────────────── */
     .hx-cc-ctx-card {
       display: block; width: 100%;
       text-align: left;
-      padding: 12px 12px 11px;
-      margin: 2px 2px 6px;
-      width: calc(100% - 4px);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.012) 100%);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
+      padding: 10px 10px 9px;
+      margin-bottom: 4px;
+      background: transparent;
+      border: 0;
+      border-radius: 6px;
       color: #fff;
       cursor: pointer;
       position: relative;
-      overflow: hidden;
-      transition: border-color 0.2s ease, background 0.2s ease;
+      transition: background 0.16s ease;
     }
-    .hx-cc-ctx-card:hover {
-      border-color: rgba(255,255,255,0.10);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.018) 100%);
-    }
-    .hx-cc-ctx-card::after {
-      /* Hairline top-left highlight for that brushed-metal feel */
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.10) 50%, transparent 100%);
-      pointer-events: none;
-    }
+    .hx-cc-ctx-card:hover { background: rgba(255,255,255,0.04); }
+    .hx-cc-ctx-card::after { content: none; }
     .hx-cc-ctx-head {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 9px;
@@ -2961,10 +2940,9 @@
     }
     .hx-cc-ctx-bar-fill {
       height: 100%;
-      background: linear-gradient(90deg, #C9A227 0%, #E3B947 100%);
+      background: #C9A227;
       border-radius: 999px;
       transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 0 6px rgba(201,162,39,0.45);
     }
 
     /* ── Plan usage — refined rows with strong rhythm ──────────────── */
@@ -3026,7 +3004,7 @@
     }
     .hx-cc-plan-bar-fill {
       height: 100%;
-      background: linear-gradient(90deg, #C9A227 0%, #E3B947 100%);
+      background: #C9A227;
       border-radius: 999px;
       transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -3041,42 +3019,22 @@
        flat dark menu.
        ════════════════════════════════════════════════════════════════ */
 
-    /* Container — glass-morphism surface with layered depth */
+    /* Container — flat dark, minimal, no gradient ring overlay */
     .hx-cc-model-menu {
-      position: absolute; bottom: calc(100% + 12px); right: 0;
-      min-width: 260px;
-      max-width: 300px;
+      position: absolute; bottom: calc(100% + 10px); right: 0;
+      min-width: 240px;
+      max-width: 290px;
       max-height: 560px;
       overflow-y: auto;
-      padding: 6px;
+      padding: 5px;
       z-index: 30;
       color: #e8e8ea;
-      /* Layered background: dark base + gradient + faint warm tint */
-      background:
-        radial-gradient(120% 80% at 100% 0%, rgba(201,162,39,0.04) 0%, transparent 50%),
-        linear-gradient(180deg, #18181d 0%, #131318 100%);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 16px;
-      box-shadow:
-        0 32px 80px -12px rgba(0,0,0,0.65),
-        0 12px 24px -8px rgba(0,0,0,0.45),
-        0 1px 0 rgba(255,255,255,0.04) inset,
-        0 -1px 0 rgba(0,0,0,0.4) inset;
-      backdrop-filter: blur(24px) saturate(160%);
-      -webkit-backdrop-filter: blur(24px) saturate(160%);
-      /* Hairline gradient ring overlay */
+      background: #161618;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      box-shadow: 0 20px 50px -16px rgba(0,0,0,0.55);
     }
-    .hx-cc-model-menu::before {
-      content: '';
-      position: absolute; inset: 0;
-      border-radius: 16px;
-      padding: 1px;
-      background: linear-gradient(135deg, rgba(201,162,39,0.20) 0%, rgba(255,255,255,0.04) 30%, transparent 70%);
-      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-              mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor; mask-composite: exclude;
-      pointer-events: none;
-    }
+    .hx-cc-model-menu::before { content: none; }
     /* Scrollbar — restrained, brand-tinted */
     .hx-cc-model-menu::-webkit-scrollbar { width: 6px; }
     .hx-cc-model-menu::-webkit-scrollbar-track { background: transparent; }
@@ -3089,25 +3047,25 @@
     /* ── Section headers (Models / Effort / Fast mode) ──────────────── */
     .hx-cc-menu-section {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 10px 4px;
-      color: rgba(255,255,255,0.42);
-      font: 500 11px/1 var(--hx-sans, 'Inter'), sans-serif;
+      padding: 8px 10px 4px;
+      color: rgba(255,255,255,0.38);
+      font: 500 10.5px/1 var(--hx-sans, 'Inter'), sans-serif;
       letter-spacing: 0;
       text-transform: none;
     }
-    .hx-cc-menu-section-top { margin-top: 2px; }
+    .hx-cc-menu-section-top { margin-top: 1px; }
 
-    /* Hotkey badge — recessed 3D inset */
+    /* Hotkey badge — flat minimal */
     .hx-cc-menu-kbd { display: inline-flex; gap: 3px; }
     .hx-cc-menu-kbd > span {
-      min-width: 17px; height: 16px;
-      padding: 0 5px;
+      min-width: 16px; height: 15px;
+      padding: 0 4px;
       display: inline-flex; align-items: center; justify-content: center;
-      background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-      border: 1px solid rgba(255,255,255,0.04);
-      border-radius: 5px;
-      color: rgba(255,255,255,0.7);
-      font: 600 10px/1 'JetBrains Mono', ui-monospace, monospace;
+      background: rgba(255,255,255,0.04);
+      border: 0;
+      border-radius: 4px;
+      color: rgba(255,255,255,0.55);
+      font: 500 9.5px/1 'JetBrains Mono', ui-monospace, monospace;
       letter-spacing: 0;
       text-transform: none;
       box-shadow:
@@ -3249,22 +3207,14 @@
 
     .hx-cc-mic-menu {
       position: absolute; bottom: calc(100% + 10px); left: -6px;
-      min-width: 280px; max-width: 340px;
-      padding: 6px;
+      min-width: 260px; max-width: 320px;
+      padding: 5px;
       z-index: 30;
       color: #e8e8ea;
-      background:
-        radial-gradient(120% 80% at 0% 0%, rgba(201,162,39,0.04) 0%, transparent 50%),
-        linear-gradient(180deg, #18181d 0%, #131318 100%);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 14px;
-      box-shadow:
-        0 32px 80px -12px rgba(0,0,0,0.65),
-        0 12px 24px -8px rgba(0,0,0,0.45),
-        0 1px 0 rgba(255,255,255,0.04) inset,
-        0 -1px 0 rgba(0,0,0,0.4) inset;
-      backdrop-filter: blur(24px) saturate(160%);
-      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      background: #161618;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      box-shadow: 0 20px 50px -16px rgba(0,0,0,0.55);
     }
     .hx-cc-mic-menu[hidden] { display: none; }
     .hx-cc-mic-list { display: flex; flex-direction: column; }
@@ -5743,9 +5693,21 @@
           clearVoiceError();
           setVoiceState('starting');
 
-          // Real OS/browser permission prompt
+          // Real OS/browser permission prompt — honours the device
+          // chosen in the mic-settings dropdown so the user's selection
+          // actually drives which microphone records.
           try {
-            micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            var selectedDeviceId = '';
+            try { selectedDeviceId = localStorage.getItem('hx-mic-device') || ''; } catch (e) {}
+            var constraints = (selectedDeviceId && selectedDeviceId !== 'default')
+              ? { audio: { deviceId: { exact: selectedDeviceId } } }
+              : { audio: true };
+            try {
+              micStream = await navigator.mediaDevices.getUserMedia(constraints);
+            } catch (e) {
+              // Fall back to default device if the saved one is gone
+              micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            }
           } catch (err) {
             setVoiceState('idle');
             var name = (err && err.name) || '';
@@ -6515,6 +6477,19 @@
               }
               var all = await navigator.mediaDevices.enumerateDevices();
               var mics = all.filter(function (d) { return d.kind === 'audioinput'; });
+              // Browser only reveals device labels once the user has
+              // granted mic permission at least once. If labels are
+              // empty, request a one-shot stream to unlock the names,
+              // then re-enumerate.
+              var hasLabels = mics.some(function (d) { return !!d.label; });
+              if (!hasLabels && navigator.mediaDevices.getUserMedia) {
+                try {
+                  var probe = await navigator.mediaDevices.getUserMedia({ audio: true });
+                  probe.getTracks().forEach(function (t) { t.stop(); });
+                  var fresh = await navigator.mediaDevices.enumerateDevices();
+                  mics = fresh.filter(function (d) { return d.kind === 'audioinput'; });
+                } catch (e) { /* user denied — fall through with anonymous labels */ }
+              }
               rebuildList(mics);
             } catch (e) { rebuildList(null); }
           }
