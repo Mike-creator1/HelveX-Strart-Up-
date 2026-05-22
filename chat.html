@@ -2823,58 +2823,32 @@
     .hx-cc-model-pick.is-busy .hx-cc-model-spinner { display: inline-block; }
     .hx-cc-model-pick.is-busy .hx-cc-model-caret   { display: none; }
     @keyframes hx-cc-spin { to { transform: rotate(360deg); } }
-    /* ════════════════════════════════════════════════════════════════
-       PREMIUM model dropdown — layered surface, gold brand accents,
-       refined typography, micro-interactions. Replaces the previous
-       flat dark menu.
-       ════════════════════════════════════════════════════════════════ */
 
-    /* Container — glass-morphism surface with layered depth */
-    .hx-cc-model-menu {
-      position: absolute; bottom: calc(100% + 12px); right: 0;
-      min-width: 340px;
-      max-width: 380px;
-      max-height: 600px;
-      overflow-y: auto;
-      padding: 10px;
-      z-index: 30;
-      color: #e8e8ea;
-      /* Layered background: dark base + gradient + faint warm tint */
-      background:
-        radial-gradient(120% 80% at 100% 0%, rgba(201,162,39,0.04) 0%, transparent 50%),
-        linear-gradient(180deg, #18181d 0%, #131318 100%);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 16px;
-      box-shadow:
-        0 32px 80px -12px rgba(0,0,0,0.65),
-        0 12px 24px -8px rgba(0,0,0,0.45),
-        0 1px 0 rgba(255,255,255,0.04) inset,
-        0 -1px 0 rgba(0,0,0,0.4) inset;
-      backdrop-filter: blur(24px) saturate(160%);
-      -webkit-backdrop-filter: blur(24px) saturate(160%);
-      /* Hairline gradient ring overlay */
-    }
-    .hx-cc-model-menu::before {
-      content: '';
-      position: absolute; inset: 0;
-      border-radius: 16px;
-      padding: 1px;
-      background: linear-gradient(135deg, rgba(201,162,39,0.20) 0%, rgba(255,255,255,0.04) 30%, transparent 70%);
-      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-              mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor; mask-composite: exclude;
-      pointer-events: none;
-    }
-    /* Scrollbar — restrained, brand-tinted */
-    .hx-cc-model-menu::-webkit-scrollbar { width: 6px; }
-    .hx-cc-model-menu::-webkit-scrollbar-track { background: transparent; }
-    .hx-cc-model-menu::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.06);
+    /* Usage indicator — circular ring button beside the model pick */
+    .hx-cc-usage-pick {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px;
+      padding: 0;
+      background: transparent;
+      border: 1px solid var(--hx-line);
       border-radius: 999px;
+      color: var(--hx-text);
+      cursor: pointer;
+      position: relative;
+      transition: background 0.15s, border-color 0.15s;
     }
-    .hx-cc-model-menu::-webkit-scrollbar-thumb:hover { background: rgba(201,162,39,0.18); }
+    .hx-cc-usage-pick:hover { background: var(--hx-surface); border-color: rgba(201,162,39,0.35); }
+    .hx-cc-usage-pick[aria-expanded="true"] { border-color: rgba(201,162,39,0.5); background: var(--hx-surface); }
+    .hx-cc-usage-ring { width: 16px; height: 16px; display: block; transform: rotate(-90deg); }
+    .hx-cc-usage-ring-track { stroke: rgba(255,255,255,0.10); }
+    .hx-cc-usage-ring-fill {
+      stroke: var(--hx-yellow, #C9A227);
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: drop-shadow(0 0 3px rgba(201,162,39,0.5));
+    }
 
-    /* ── Context window card ───────────────────────────────────────── */
+    /* ── Context window card (usage menu) ───────────────────────────── */
     .hx-cc-ctx-card {
       display: block; width: 100%;
       text-align: left;
@@ -2939,7 +2913,7 @@
       100% { background-position: -200% 0; }
     }
 
-    /* ── Plan usage ─────────────────────────────────────────────────── */
+    /* ── Plan usage (usage menu) ────────────────────────────────────── */
     .hx-cc-plan-head {
       display: flex; align-items: center; justify-content: space-between;
       padding: 12px 12px 8px;
@@ -2957,10 +2931,7 @@
     }
     .hx-cc-plan-link:hover { color: var(--hx-yellow, #C9A227); transform: translateX(2px); }
     .hx-cc-plan-link svg { width: 12px; height: 12px; }
-
-    .hx-cc-plan-row {
-      padding: 8px 12px 10px;
-    }
+    .hx-cc-plan-row { padding: 8px 12px 10px; }
     .hx-cc-plan-row-last { padding-bottom: 8px; }
     .hx-cc-plan-line {
       display: flex; align-items: baseline; justify-content: space-between;
@@ -2990,12 +2961,58 @@
       box-shadow: 0 0 8px rgba(201,162,39,0.35);
     }
 
-    /* Premium gradient divider */
-    .hx-cc-menu-divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%);
-      margin: 8px 8px 4px;
+    /* Usage menu — slightly narrower than the model menu */
+    .hx-cc-usage-menu { min-width: 320px; max-width: 360px; }
+    /* ════════════════════════════════════════════════════════════════
+       PREMIUM model dropdown — layered surface, gold brand accents,
+       refined typography, micro-interactions. Replaces the previous
+       flat dark menu.
+       ════════════════════════════════════════════════════════════════ */
+
+    /* Container — glass-morphism surface with layered depth */
+    .hx-cc-model-menu {
+      position: absolute; bottom: calc(100% + 12px); right: 0;
+      min-width: 340px;
+      max-width: 380px;
+      max-height: 600px;
+      overflow-y: auto;
+      padding: 10px;
+      z-index: 30;
+      color: #e8e8ea;
+      /* Layered background: dark base + gradient + faint warm tint */
+      background:
+        radial-gradient(120% 80% at 100% 0%, rgba(201,162,39,0.04) 0%, transparent 50%),
+        linear-gradient(180deg, #18181d 0%, #131318 100%);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 16px;
+      box-shadow:
+        0 32px 80px -12px rgba(0,0,0,0.65),
+        0 12px 24px -8px rgba(0,0,0,0.45),
+        0 1px 0 rgba(255,255,255,0.04) inset,
+        0 -1px 0 rgba(0,0,0,0.4) inset;
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      /* Hairline gradient ring overlay */
     }
+    .hx-cc-model-menu::before {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 16px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(201,162,39,0.20) 0%, rgba(255,255,255,0.04) 30%, transparent 70%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+              mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      pointer-events: none;
+    }
+    /* Scrollbar — restrained, brand-tinted */
+    .hx-cc-model-menu::-webkit-scrollbar { width: 6px; }
+    .hx-cc-model-menu::-webkit-scrollbar-track { background: transparent; }
+    .hx-cc-model-menu::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+    }
+    .hx-cc-model-menu::-webkit-scrollbar-thumb:hover { background: rgba(201,162,39,0.18); }
 
     /* ── Section headers (Models / Effort / Fast mode) ──────────────── */
     .hx-cc-menu-section {
@@ -3440,7 +3457,14 @@
                     <svg class="hx-cc-model-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     <span class="hx-cc-model-spinner" id="hx-cc-model-spinner" aria-hidden="true"></span>
                   </button>
-                  <div class="hx-cc-model-menu" id="hx-cc-model-menu" role="menu" hidden>
+                  <button class="hx-cc-usage-pick" type="button" id="hx-cc-usage-pick" aria-haspopup="menu" aria-expanded="false" aria-label="Usage" title="Usage">
+                    <svg class="hx-cc-usage-ring" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <circle class="hx-cc-usage-ring-track" cx="12" cy="12" r="9" stroke-width="2.4"/>
+                      <circle class="hx-cc-usage-ring-fill" id="hx-cc-usage-ring-fill" cx="12" cy="12" r="9" stroke-width="2.4"
+                              stroke-dasharray="56.549" stroke-dashoffset="56.549"/>
+                    </svg>
+                  </button>
+                  <div class="hx-cc-model-menu hx-cc-usage-menu" id="hx-cc-usage-menu" role="menu" hidden>
                     <!-- Context window -->
                     <button class="hx-cc-ctx-card" type="button" id="hx-cc-ctx-card" aria-label="Context window details">
                       <div class="hx-cc-ctx-head">
@@ -3488,9 +3512,8 @@
                         <span class="hx-cc-plan-meta"><span id="hx-cc-pct-nx">0%</span></span>
                       </div>
                     </div>
-
-                    <div class="hx-cc-menu-divider"></div>
-
+                  </div>
+                  <div class="hx-cc-model-menu" id="hx-cc-model-menu" role="menu" hidden>
                     <!-- Models section -->
                     <div class="hx-cc-menu-section">
                       <span>Models</span>
@@ -6221,13 +6244,20 @@
           proxy('hx-cc-mic-proxy',    'hx-c-mic');
         })();
 
-        // ─── Live usage panel inside the model dropdown ───────────────
-        // Populates the Context window bar (estimated tokens used by the
-        // current conversation against the active model's ctx ceiling)
-        // and the Plan-usage bars (5-hour limit, weekly all-models,
-        // per-model weekly, etc.) from the credits_balance view and
-        // the recent model_calls window.
-        (function wireUsagePanel() {
+        // ─── Usage indicator — separate dropdown beside the model pick
+        // Shows the live Context window (estimated tokens against the
+        // active model's ctx ceiling) and Plan-usage bars (5-hour limit,
+        // weekly all-models, per-model weekly) sourced from the
+        // credits_balance view + recent model_calls window. The small
+        // ring on the trigger button mirrors the weekly all-models %.
+        (function wireUsagePick() {
+          var pick = document.getElementById('hx-cc-usage-pick');
+          var menu = document.getElementById('hx-cc-usage-menu');
+          var modelPick = document.getElementById('hx-cc-model-pick');
+          var modelMenu = document.getElementById('hx-cc-model-menu');
+          if (!pick || !menu) return;
+          var RING_C = 56.549; // 2π·9
+          var ringEl = document.getElementById('hx-cc-usage-ring-fill');
           var MODEL_CTX = { ether: 200000, nexus: 1000000, prometheus: 200000 };
           function fmtTokens(n) {
             if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
@@ -6264,23 +6294,29 @@
             if (pctEl) pctEl.textContent = Math.round(pct) + '%';
             if (rst && rstText) rst.textContent = rstText;
           }
+          function setRing(pct) {
+            if (!ringEl) return;
+            var clamped = Math.max(0, Math.min(100, pct));
+            ringEl.setAttribute('stroke-dashoffset', String(RING_C * (1 - clamped / 100)));
+          }
           async function refreshUsage() {
             try {
-              // Pull credit balance — fraction consumed becomes the weekly bar
+              var weeklyPct = 0;
               var r = await sb.from('credits_balance').select('credits_total,credits_used').maybeSingle();
               if (r && r.data) {
                 var total = r.data.credits_total || 0;
                 var used  = r.data.credits_used  || 0;
-                var pct   = total > 0 ? (used / total) * 100 : 0;
-                setBar('hx-cc-bar-wk', 'hx-cc-pct-wk', pct, 'hx-cc-rst-wk', '7d');
+                weeklyPct = total > 0 ? (used / total) * 100 : 0;
+                setBar('hx-cc-bar-wk', 'hx-cc-pct-wk', weeklyPct, 'hx-cc-rst-wk', '7d');
               }
+              setRing(weeklyPct);
               // 5-hour rolling window — count model_calls in the last 5h
               var since = new Date(Date.now() - 5 * 3600 * 1000).toISOString();
               var calls = await sb.from('model_calls')
                 .select('id,model', { count: 'exact', head: false })
                 .gte('created_at', since);
               var n = (calls && calls.data) ? calls.data.length : 0;
-              // Rough limit: 100 calls / 5h for visual scale
+              // Rough scale: 100 calls / 5h
               setBar('hx-cc-bar-5h', 'hx-cc-pct-5h', (n / 100) * 100, 'hx-cc-rst-5h', '3h');
               // Per-model breakdown for the last 7d
               var weekAgo = new Date(Date.now() - 7 * 86400 * 1000).toISOString();
@@ -6298,17 +6334,40 @@
               if (nxEl) nxEl.textContent = Math.round(((byModel.nexus      || 0) / totalWeek) * 100) + '%';
             } catch (e) { /* usage panel is informational — never block boot */ }
           }
-          // Refresh whenever the dropdown opens
-          var pick = document.getElementById('hx-cc-model-pick');
-          if (pick) {
-            pick.addEventListener('click', function () {
-              refreshContext();
-              refreshUsage();
+          function open() {
+            // Close the model menu first so only one popover is open
+            if (modelMenu && !modelMenu.hidden) {
+              modelMenu.hidden = true;
+              if (modelPick) modelPick.setAttribute('aria-expanded', 'false');
+            }
+            menu.hidden = false;
+            pick.setAttribute('aria-expanded', 'true');
+            refreshContext();
+            refreshUsage();
+          }
+          function close() {
+            menu.hidden = true;
+            pick.setAttribute('aria-expanded', 'false');
+          }
+          pick.addEventListener('click', function (e) {
+            e.stopPropagation();
+            menu.hidden ? open() : close();
+          });
+          document.addEventListener('click', function (e) {
+            if (menu.hidden) return;
+            if (!menu.contains(e.target) && e.target !== pick && !pick.contains(e.target)) close();
+          });
+          document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !menu.hidden) close();
+          });
+          // Mutual exclusion the other way — close us when the model menu opens
+          if (modelPick) {
+            modelPick.addEventListener('click', function () {
+              if (!menu.hidden) close();
             });
           }
-          // Initial paint
+          // Initial paint + steady context refresh (cheap, local)
           setTimeout(function () { refreshContext(); refreshUsage(); }, 800);
-          // Context bar follows new messages without re-opening the menu
           setInterval(refreshContext, 4000);
         })();
       });
