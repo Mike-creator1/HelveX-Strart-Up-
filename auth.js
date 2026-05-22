@@ -313,6 +313,38 @@
     setTimeout(wireLogout, 0);
     setTimeout(wireLogout, 250);
 
+    /* ---------- session keepalive ----------------------------------
+       User explicitly does not want to retype their password 27 times
+       a day. While the tab is open we proactively refresh the access
+       token every 10 minutes so the underlying refresh token never
+       has a chance to lapse from inactivity. autoRefreshToken handles
+       this too, but only when the access token is about to expire —
+       this loop also keeps the refresh-token clock ticking.
+
+       Also refreshes when the tab regains focus after sleep / lock so
+       returning to an idle tab never lands on a dead session. */
+    function keepalive() {
+      if (!sb || !sb.auth || !sb.auth.refreshSession) return;
+      sb.auth.refreshSession().catch(function () { /* silent — autoRefresh will retry */ });
+    }
+    setInterval(keepalive, 10 * 60 * 1000); // every 10 min
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') keepalive();
+    });
+    window.addEventListener('focus', keepalive);
+    /* And remember the email on every successful sign-in so the signup
+       page can pre-fill it next time (in addition to whatever the
+       browser's password manager does). */
+    try {
+      sb.auth.onAuthStateChange(function (ev, session) {
+        try {
+          if (ev === 'SIGNED_IN' && session && session.user && session.user.email) {
+            localStorage.setItem('helvex.remembered_email', String(session.user.email).trim().toLowerCase());
+          }
+        } catch (_) {}
+      });
+    } catch (_) {}
+
     document.dispatchEvent(new CustomEvent('hx:auth-ready'));
   }
 

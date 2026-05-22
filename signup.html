@@ -222,6 +222,49 @@
 
       whenAuthReady(function () {
 
+        // ─── Auto-redirect if user is ALREADY signed in ────────────────
+        // 27 sign-ins/day was the user's complaint. The session is persisted
+        // by Supabase (persistSession:true), so if a valid one exists we
+        // skip the form entirely. Falls through silently on any error so
+        // the form is always available as a backup.
+        (async function autoRedirectIfSignedIn() {
+          try {
+            var r = await window.HX.supabase.auth.getSession();
+            if (r && r.data && r.data.session && r.data.session.access_token) {
+              // Verify it's actually live (not just stale localStorage data)
+              var u = await window.HX.supabase.auth.getUser();
+              if (u && u.data && u.data.user) {
+                window.location.replace('/dashboard');
+                return;
+              }
+            }
+          } catch (_) { /* fall through to the form */ }
+        })();
+
+        // ─── Pre-fill email from localStorage ──────────────────────────
+        // Saves the typing half of every sign-in. Survives browser restarts
+        // independently of the Supabase session (so even after token expiry
+        // the user just types their password and goes).
+        var REMEMBERED_EMAIL = 'helvex.remembered_email';
+        try {
+          var saved = localStorage.getItem(REMEMBERED_EMAIL);
+          if (saved) {
+            var emailInput = document.getElementById('signin-email');
+            if (emailInput && !emailInput.value) {
+              emailInput.value = saved;
+              // Focus the password field so the user starts typing immediately
+              var pw = document.getElementById('signin-password');
+              if (pw) setTimeout(function () { pw.focus(); }, 50);
+            }
+          }
+        } catch (_) {}
+
+        // Default "Keep me signed in" to checked — it's what the user wants.
+        try {
+          var keepCb = document.querySelector('#form-signin input[type="checkbox"]');
+          if (keepCb) keepCb.checked = true;
+        } catch (_) {}
+
         // ─── SIGN IN form ───
         document.getElementById('form-signin').addEventListener('submit', async function (ev) {
           ev.preventDefault();
@@ -233,6 +276,8 @@
           try {
             var res = await window.HX.auth.signInPassword(email, password);
             if (res.error) throw res.error;
+            // Remember the email locally — so next visit pre-fills.
+            try { localStorage.setItem(REMEMBERED_EMAIL, String(email || '').trim().toLowerCase()); } catch (_) {}
             window.location.replace('/dashboard');
           } catch (err) {
             var msg = err && err.message ? err.message : 'Could not sign in.';
