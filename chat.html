@@ -2765,8 +2765,8 @@
 
     /* 2. Compose bottom strip — Accept edits chip + model picker */
     .hx-cc-compose-bar {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 6px 2px;
+      display: flex; align-items: center; gap: 6px;
+      padding: 0 4px;
       position: relative;
     }
     .hx-cc-compose-bar-spacer { flex: 1; }
@@ -3178,10 +3178,25 @@
     /* 2b. Hide the icons that used to live INSIDE the input row — they
        now live in the bottom compose bar (proxies) to match Claude Code. */
     body[data-active="chat"] #hx-c-attach,
-    body[data-active="chat"] .hx-chat-tools-wrap,
+    body[data-active="chat"] .hx-chat-input-bar > .hx-chat-tools-wrap,
     body[data-active="chat"] #hx-c-mic {
       display: none !important;
     }
+    /* Tools chevron in the compose strip is a small caret icon — match
+       the other compose-strip icons (.hx-cc-iconbtn). */
+    .hx-cc-tools-chevron { color: var(--hx-text-mid); }
+    .hx-cc-tools-chevron:hover { color: var(--hx-text); }
+    .hx-cc-tools-chevron svg { width: 12px; height: 12px; opacity: 0.7; }
+    .hx-cc-tools-chevron[aria-expanded="true"] {
+      background: var(--hx-surface);
+      border-color: var(--hx-line);
+      color: var(--hx-text);
+    }
+    .hx-cc-tools-chevron[aria-expanded="true"] svg { opacity: 1; transform: rotate(180deg); }
+    .hx-cc-tools-chevron svg { transition: transform 0.18s ease, opacity 0.18s; }
+    .hx-cc-tools-chevron.has-active { color: var(--hx-yellow); }
+    /* The tools menu is anchored to the chevron in the compose strip;
+       its absolute positioning (bottom 100% +10, left -8) is intact. */
 
     /* 2c. Proxy icon buttons in the bottom bar */
     .hx-cc-iconbtn {
@@ -3380,41 +3395,6 @@
                     rows="1"
                     autocomplete="off"
                     spellcheck="true"></textarea>
-                  <div class="hx-chat-tools-wrap">
-                    <button
-                      class="hx-chat-tool-btn"
-                      id="hx-c-tools-btn"
-                      type="button"
-                      aria-haspopup="menu"
-                      aria-expanded="false"
-                      aria-label="Tools"
-                      title="Web search · code execution">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg>
-                      <span class="hx-chat-tools-count" id="hx-c-tools-count" hidden>0</span>
-                    </button>
-                    <div class="hx-chat-tools-menu" id="hx-c-tools-menu" role="menu" hidden>
-                      <button class="hx-chat-tools-item" id="hx-c-web" type="button" role="menuitemcheckbox" aria-checked="false">
-                        <span class="hx-chat-tools-ico">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg>
-                        </span>
-                        <span class="hx-chat-tools-body">
-                          <span class="hx-chat-tools-title">Browse the web</span>
-                          <span class="hx-chat-tools-desc">Fresh info, current news, live data</span>
-                        </span>
-                        <span class="hx-chat-tools-check" aria-hidden="true"></span>
-                      </button>
-                      <button class="hx-chat-tools-item" id="hx-c-code" type="button" role="menuitemcheckbox" aria-checked="false">
-                        <span class="hx-chat-tools-ico">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                        </span>
-                        <span class="hx-chat-tools-body">
-                          <span class="hx-chat-tools-title">Run code</span>
-                          <span class="hx-chat-tools-desc">Python · math · data analysis · charts</span>
-                        </span>
-                        <span class="hx-chat-tools-check" aria-hidden="true"></span>
-                      </button>
-                    </div>
-                  </div>
                   <button
                     class="hx-chat-tool-btn"
                     id="hx-c-mic"
@@ -3443,6 +3423,41 @@
                   <button class="hx-cc-iconbtn" type="button" id="hx-cc-mic-proxy" aria-label="Voice" title="Voice input">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
                   </button>
+                  <div class="hx-chat-tools-wrap hx-cc-tools-wrap">
+                    <button
+                      class="hx-cc-iconbtn hx-cc-tools-chevron"
+                      id="hx-c-tools-btn"
+                      type="button"
+                      aria-haspopup="menu"
+                      aria-expanded="false"
+                      aria-label="Tools"
+                      title="Web search · code execution">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                      <span class="hx-chat-tools-count" id="hx-c-tools-count" hidden>0</span>
+                    </button>
+                    <div class="hx-chat-tools-menu" id="hx-c-tools-menu" role="menu" hidden>
+                      <button class="hx-chat-tools-item" id="hx-c-web" type="button" role="menuitemcheckbox" aria-checked="false">
+                        <span class="hx-chat-tools-ico">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg>
+                        </span>
+                        <span class="hx-chat-tools-body">
+                          <span class="hx-chat-tools-title">Browse the web</span>
+                          <span class="hx-chat-tools-desc">Fresh info, current news, live data</span>
+                        </span>
+                        <span class="hx-chat-tools-check" aria-hidden="true"></span>
+                      </button>
+                      <button class="hx-chat-tools-item" id="hx-c-code" type="button" role="menuitemcheckbox" aria-checked="false">
+                        <span class="hx-chat-tools-ico">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        </span>
+                        <span class="hx-chat-tools-body">
+                          <span class="hx-chat-tools-title">Run code</span>
+                          <span class="hx-chat-tools-desc">Python · math · data analysis · charts</span>
+                        </span>
+                        <span class="hx-chat-tools-check" aria-hidden="true"></span>
+                      </button>
+                    </div>
+                  </div>
                   <span class="hx-cc-compose-bar-spacer"></span>
                   <button class="hx-cc-model-pick" type="button" id="hx-cc-model-pick" aria-haspopup="menu" aria-expanded="false">
                     <span class="hx-cc-model-glyph" aria-hidden="true">
