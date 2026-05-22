@@ -787,64 +787,183 @@
       line-height: 1.55;
     }
     /* ─────── PREMIUM CONVERSATIONS RAIL — overrides ─────── */
-    /* Date-group header */
-    .hx-rail-group { padding: 6px 0 4px; }
-    .hx-rail-group:first-child { padding-top: 10px; }
-    .hx-rail-group-head {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 8px 12px 6px;
-      font: 600 9.5px/1 var(--hx-sans, 'Inter'), sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.13em;
+
+    /* Rail itself becomes a layered surface */
+    .hx-chat-rail { position: relative; }
+    /* Ambient gold glow behind the header */
+    .hx-rail-aura {
+      position: absolute;
+      top: -40px; left: -30px; right: -30px;
+      height: 220px;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 30%,
+          color-mix(in srgb, var(--hx-yellow, #C9A227) 12%, transparent) 0%,
+          color-mix(in srgb, var(--hx-yellow, #C9A227) 4%, transparent) 35%,
+          transparent 70%);
+      pointer-events: none;
+      filter: blur(8px);
+      opacity: 0.85;
+      z-index: 0;
+    }
+    .hx-chat-rail-head,
+    .hx-rail-search-row,
+    .hx-chat-list { position: relative; z-index: 1; }
+
+    /* Premium search row */
+    .hx-rail-search-row {
+      display: flex; align-items: center; gap: 8px;
+      margin: 10px 12px 4px;
+      padding: 0 10px;
+      height: 32px;
+      background: color-mix(in srgb, var(--hx-bg-2, #f5f5f7) 60%, transparent);
+      border: 1px solid var(--hx-line);
+      border-radius: 8px;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+    .hx-rail-search-row:focus-within {
+      border-color: color-mix(in srgb, var(--hx-yellow, #C9A227) 38%, var(--hx-line));
+      background: var(--hx-bg-elev, #fff);
+      box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--hx-yellow, #C9A227) 12%, transparent),
+        var(--hx-shadow-xs);
+    }
+    .hx-rail-search-ico {
+      color: var(--hx-text-faint, #999);
+      display: inline-flex; align-items: center; flex-shrink: 0;
+      transition: color 0.18s ease;
+    }
+    .hx-rail-search-row:focus-within .hx-rail-search-ico { color: var(--hx-text-dim); }
+    .hx-rail-search-ico svg { width: 13px; height: 13px; }
+    .hx-rail-search {
+      flex: 1; min-width: 0;
+      border: 0; outline: 0;
+      background: transparent;
+      font: 500 12.5px/1 var(--hx-sans, 'Inter'), sans-serif;
+      letter-spacing: -0.005em;
+      color: var(--hx-text);
+    }
+    .hx-rail-search::placeholder { color: var(--hx-text-faint, #aaa); font-weight: 400; }
+    .hx-rail-search-kbd {
+      display: inline-flex; gap: 2px;
+      font: 600 9.5px/1 'JetBrains Mono', ui-monospace, monospace;
       color: var(--hx-text-faint, #aaa);
+      transition: opacity 0.18s ease;
+    }
+    .hx-rail-search-kbd > span {
+      min-width: 16px; height: 16px;
+      padding: 0 4px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--hx-bg-elev, #fff);
+      border: 1px solid var(--hx-line);
+      border-radius: 4px;
+      box-shadow: inset 0 -1px 0 var(--hx-line);
+    }
+    .hx-rail-search-row:focus-within .hx-rail-search-kbd { opacity: 0; }
+
+    /* Date-group header — Instrument Serif for the premium feel */
+    .hx-rail-group {
+      padding: 14px 0 4px;
+      animation: hx-rail-stagger 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    .hx-rail-group:nth-child(1) { animation-delay: 0.03s; }
+    .hx-rail-group:nth-child(2) { animation-delay: 0.07s; }
+    .hx-rail-group:nth-child(3) { animation-delay: 0.11s; }
+    .hx-rail-group:nth-child(4) { animation-delay: 0.15s; }
+    @keyframes hx-rail-stagger {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0);   }
+    }
+    .hx-rail-group:first-child { padding-top: 14px; }
+    .hx-rail-group-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      padding: 4px 14px 8px;
+      font-family: 'Instrument Serif', 'Cormorant Garamond', Georgia, serif;
+      font-size: 14.5px;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--hx-text);
     }
     .hx-rail-group-count {
       min-width: 18px; height: 16px;
-      padding: 0 5px;
+      padding: 0 6px;
       display: inline-flex; align-items: center; justify-content: center;
-      background: var(--hx-bg-2, rgba(0,0,0,0.04));
+      background: transparent;
       border: 1px solid var(--hx-line);
       border-radius: 999px;
       color: var(--hx-text-dim);
       font: 600 9.5px/1 'JetBrains Mono', ui-monospace, monospace;
       letter-spacing: 0;
     }
-    /* Item — refined */
+
+    /* Item — refined spacing + entrance */
     .hx-rail-group .hx-chat-item {
-      gap: 10px;
-      padding: 10px 8px 10px 14px;
-      margin: 1px 0;
+      gap: 12px;
+      padding: 11px 8px 11px 15px;
+      margin: 2px 0;
       border-radius: 10px;
       will-change: transform, background;
     }
-    /* Model glyph mark — small left-side dot, colour per model */
+
+    /* Model glyph mark — real SVG icon, tinted per model, in a soft tinted disc */
     .hx-chat-item-glyph {
-      width: 7px; height: 7px;
-      border-radius: 50%;
+      width: 22px; height: 22px;
+      border-radius: 7px;
       flex-shrink: 0;
-      background: var(--hx-yellow, #C9A227);
-      box-shadow: 0 0 0 2px color-mix(in srgb, var(--hx-yellow, #C9A227) 18%, transparent);
-      transition: transform 0.18s ease;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: color-mix(in srgb, var(--hx-yellow, #C9A227) 8%, var(--hx-bg-2, rgba(0,0,0,0.04)));
+      color: color-mix(in srgb, var(--hx-yellow, #C9A227) 75%, var(--hx-text-mid));
+      border: 1px solid color-mix(in srgb, var(--hx-yellow, #C9A227) 18%, var(--hx-line));
+      transition: transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1),
+                  background 0.18s, border-color 0.18s, box-shadow 0.22s;
+      box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 60%, transparent);
     }
+    .hx-chat-item-glyph svg { width: 12px; height: 12px; }
     .hx-chat-item-glyph.hx-mg-nexus {
-      background: #C2410C;
-      box-shadow: 0 0 0 2px rgba(194, 65, 12, 0.18);
+      background: rgba(194, 65, 12, 0.07);
+      color: #C2410C;
+      border-color: rgba(194, 65, 12, 0.22);
     }
     .hx-chat-item-glyph.hx-mg-prometheus {
-      background: #6B6B6F;
-      box-shadow: 0 0 0 2px rgba(107, 107, 111, 0.18);
+      background: rgba(107, 107, 111, 0.07);
+      color: #4b4b4f;
+      border-color: rgba(107, 107, 111, 0.22);
     }
-    .hx-chat-item:hover .hx-chat-item-glyph { transform: scale(1.18); }
+    .hx-chat-item:hover .hx-chat-item-glyph {
+      transform: scale(1.06) rotate(-2deg);
+    }
     .hx-chat-item.is-active .hx-chat-item-glyph {
-      transform: scale(1.18);
-      box-shadow: 0 0 0 2px color-mix(in srgb, var(--hx-yellow, #C9A227) 28%, transparent),
-                  0 0 8px color-mix(in srgb, var(--hx-yellow, #C9A227) 60%, transparent);
+      background: color-mix(in srgb, var(--hx-yellow, #C9A227) 18%, var(--hx-bg-elev, #fff));
+      border-color: color-mix(in srgb, var(--hx-yellow, #C9A227) 38%, var(--hx-line));
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 70%, transparent),
+        0 0 14px -2px color-mix(in srgb, var(--hx-yellow, #C9A227) 55%, transparent);
+      animation: hx-glyph-pulse 2.6s ease-in-out infinite;
     }
     .hx-chat-item.is-active .hx-chat-item-glyph.hx-mg-nexus {
-      box-shadow: 0 0 0 2px rgba(194, 65, 12, 0.28), 0 0 8px rgba(194, 65, 12, 0.55);
+      background: rgba(194, 65, 12, 0.16);
+      border-color: rgba(194, 65, 12, 0.42);
+      box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 70%, transparent), 0 0 14px -2px rgba(194,65,12,0.55);
     }
     .hx-chat-item.is-active .hx-chat-item-glyph.hx-mg-prometheus {
-      box-shadow: 0 0 0 2px rgba(107, 107, 111, 0.28), 0 0 8px rgba(107, 107, 111, 0.5);
+      background: rgba(107, 107, 111, 0.16);
+      border-color: rgba(107, 107, 111, 0.42);
+      box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 70%, transparent), 0 0 14px -2px rgba(107,107,111,0.5);
+    }
+    @keyframes hx-glyph-pulse {
+      0%, 100% { box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 70%, transparent),
+                              0 0 12px -2px color-mix(in srgb, var(--hx-yellow, #C9A227) 45%, transparent); }
+      50%      { box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 70%, transparent),
+                              0 0 18px -1px color-mix(in srgb, var(--hx-yellow, #C9A227) 70%, transparent); }
+    }
+
+    /* Item hover — gentle lift */
+    .hx-rail-group .hx-chat-item:hover {
+      transform: translateX(1px);
+    }
+    .hx-rail-group .hx-chat-item:active {
+      transform: translateX(1px) scale(0.99);
     }
     /* Title — sharper */
     .hx-chat-item-title {
@@ -3122,6 +3241,8 @@
 
         <!-- Conversation rail -->
         <aside class="hx-chat-rail" id="hx-c-rail">
+          <!-- Ambient gold glow behind the head -->
+          <div class="hx-rail-aura" aria-hidden="true"></div>
           <div class="hx-chat-rail-head">
             <p class="hx-chat-rail-title">Conversations</p>
             <button class="hx-chat-rail-collapse" type="button" id="hx-c-rail-collapse" aria-label="Collapse sidebar" title="Hide conversations">
@@ -3130,6 +3251,14 @@
             <button class="hx-chat-new" type="button" id="hx-c-new" aria-label="New chat" title="Start a new conversation">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
+          </div>
+          <!-- Premium search row -->
+          <div class="hx-rail-search-row">
+            <span class="hx-rail-search-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.65" y2="16.65"/></svg>
+            </span>
+            <input type="text" id="hx-c-search" class="hx-rail-search" placeholder="Search sessions…" autocomplete="off" spellcheck="false" />
+            <span class="hx-rail-search-kbd" aria-hidden="true"><span>⌘</span><span>F</span></span>
           </div>
           <div class="hx-chat-list" id="hx-c-list">
             <div class="hx-chat-empty-list" id="hx-c-empty">Your conversations will appear here.</div>
@@ -4008,6 +4137,22 @@
               '</div>';
             return;
           }
+          // Apply current search filter (if any)
+          var searchEl = document.getElementById('hx-c-search');
+          var q = searchEl && searchEl.value ? searchEl.value.trim().toLowerCase() : '';
+          var sourceList = state.conversations;
+          if (q) {
+            sourceList = state.conversations.filter(function (c) {
+              return (c.title || '').toLowerCase().indexOf(q) !== -1;
+            });
+            if (!sourceList.length) {
+              host.innerHTML =
+                '<div class="hx-chat-empty-list hx-rail-empty">' +
+                  '<span class="hx-rail-empty-title">No sessions match <em>' + escape(q) + '</em></span>' +
+                '</div>';
+              return;
+            }
+          }
           // Group conversations by recency bucket: Today / Yesterday / Last 7 days / Older
           var buckets = [
             { key: 'today',     label: 'Today',        items: [] },
@@ -4020,7 +4165,7 @@
           var startOfToday = startOfDay.getTime();
           var startOfYday  = startOfToday - 86400000;
           var sevenDaysAgo = now - 7 * 86400000;
-          state.conversations.forEach(function (c) {
+          sourceList.forEach(function (c) {
             var t = new Date(c.updated_at).getTime();
             if      (t >= startOfToday) buckets[0].items.push(c);
             else if (t >= startOfYday)  buckets[1].items.push(c);
@@ -4028,10 +4173,16 @@
             else                         buckets[3].items.push(c);
           });
 
-          // Model glyph (small mark in the row's leading edge)
+          // Model glyph — real icons (lightning / network / flame) tinted per model
+          var MODEL_ICONS = {
+            ether:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 4 14 12 14 11 22 20 10 12 10 13 2"/></svg>',
+            nexus:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="18" r="2.4"/><circle cx="12" cy="12" r="2.4"/><path d="M8 7.5 L10.3 10.5 M16 7.5 L13.7 10.5 M8 16.5 L10.3 13.5 M16 16.5 L13.7 13.5"/></svg>',
+            prometheus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c0 4-4 5-4 9a4 4 0 0 0 8 0c0-2-1-3-1-5 2 1 3 3 3 6a6 6 0 1 1-12 0c0-5 6-6 6-10z"/></svg>'
+          };
           function modelDot(model) {
             var m = (model || 'ether').toLowerCase();
-            return '<span class="hx-chat-item-glyph hx-mg-' + escape(m) + '" aria-hidden="true"></span>';
+            var ico = MODEL_ICONS[m] || MODEL_ICONS.ether;
+            return '<span class="hx-chat-item-glyph hx-mg-' + escape(m) + '" aria-hidden="true">' + ico + '</span>';
           }
           function modelChip(model) {
             var m = (model || 'ether').toLowerCase();
@@ -5911,6 +6062,32 @@
         window.addEventListener('beforeunload', function () {
           try { if (state.msgChannel) state.msgChannel.unsubscribe(); } catch (e) {}
         });
+
+        // ─── Premium search input on the rail ──────────────────────────
+        (function wireRailSearch() {
+          var input = document.getElementById('hx-c-search');
+          if (!input) return;
+          var debounce;
+          input.addEventListener('input', function () {
+            clearTimeout(debounce);
+            debounce = setTimeout(function () { renderList(); }, 80);
+          });
+          // ⌘F / Ctrl+F → focus the search input
+          document.addEventListener('keydown', function (e) {
+            var inField = /input|textarea/i.test((e.target.tagName || ''));
+            if ((e.metaKey || e.ctrlKey) && (e.key === 'f' || e.key === 'F') && !inField) {
+              e.preventDefault();
+              input.focus();
+              input.select();
+            }
+            // Esc clears the search when focused
+            if (e.key === 'Escape' && document.activeElement === input) {
+              input.value = '';
+              renderList();
+              input.blur();
+            }
+          });
+        })();
 
         // ─── Collapsible conversation rail ─────────────────────────────
         (function wireRailCollapse() {
