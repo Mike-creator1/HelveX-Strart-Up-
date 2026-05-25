@@ -9904,6 +9904,190 @@
       body[data-active="chat"] .hx-voice-cancel,
       body[data-active="chat"] .hx-voice-done { width: 30px; height: 30px; }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V20 — PREMIUM RESPONSE COMPOSITION
+       Every assistant response now reads with editorial hierarchy:
+       a quiet gold identity mark, an emphasised lead paragraph, refined
+       strong-text accents, polished bullet rhythm, and proper visual
+       cadence between blocks. The answer feels considered, not stacked.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* Assistant message gets a quiet vertical identity rail — anchors
+       the response visually without resorting to a noisy avatar */
+    body[data-active="chat"] .hx-msg.is-assistant {
+      position: relative;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant > .hx-msg-body {
+      position: relative;
+      padding-left: 18px;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant > .hx-msg-body::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 8px;
+      width: 2px;
+      height: 22px;
+      border-radius: 2px;
+      background: linear-gradient(180deg,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 80%, transparent) 0%,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 0%, transparent) 100%);
+      pointer-events: none;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant > .hx-msg-body::after {
+      content: '';
+      position: absolute;
+      left: -3px; top: 7px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--hx-accent, var(--hx-yellow-deep));
+      box-shadow:
+        0 0 0 3px var(--hx-bg),
+        0 0 6px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 50%, transparent);
+      pointer-events: none;
+    }
+
+    /* Lead paragraph — the first answer line carries the punch. Slightly
+       larger, tighter colour, refined letter-spacing for instant
+       legibility before the user even scans the rest. */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p:first-child,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > details.hx-rsn + p {
+      font-size: 16.5px;
+      line-height: 1.55;
+      letter-spacing: -0.012em;
+      color: var(--t1);
+      font-weight: 450;
+    }
+
+    /* Reasoning preamble + lead paragraph spacing */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > details.hx-rsn + p {
+      margin-top: 14px;
+    }
+
+    /* Strong / bold inside prose — refined weight + tabular numerals,
+       no garish black, more like editorial emphasis */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content strong,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content b {
+      font-weight: 600;
+      color: var(--t1);
+      letter-spacing: -0.005em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Inline italic — slightly muted for natural editorial rhythm */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content em,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content i {
+      color: var(--t2);
+      font-style: italic;
+    }
+
+    /* Quoted strings ("Astronomical Unit", etc.) get refined typography
+       via the existing curly-quote characters — ensure they're not
+       broken by aggressive letter-spacing */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content {
+      font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'cv11' 1, 'ss01' 1, 'tnum' 1;
+    }
+
+    /* ── Lists — refined gold bullet markers, proper rhythm ────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-md-list {
+      margin: 14px 0 0 0;
+      padding: 0;
+      list-style: none;
+      display: flex; flex-direction: column;
+      gap: 8px;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-md-list > li {
+      position: relative;
+      padding-left: 22px;
+      font-size: 15.25px;
+      line-height: 1.62;
+      letter-spacing: -0.005em;
+      color: var(--t1);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-md-list > li::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 0.72em;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--hx-accent, var(--hx-yellow-deep));
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 8%, transparent);
+    }
+    /* Numbered lists get refined mono numbers in gold */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-md-list.hx-md-list-num > li::before {
+      content: counter(list-item, decimal);
+      counter-increment: list-item;
+      left: 0;
+      top: 0;
+      width: auto; height: auto;
+      background: transparent;
+      box-shadow: none;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 78%, transparent);
+      letter-spacing: 0.04em;
+      line-height: 1.62;
+      padding-top: 0.25em;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-md-list.hx-md-list-num {
+      counter-reset: list-item;
+    }
+
+    /* ── Inline code — premium, more visually distinct ─────────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-md-inline {
+      font-family: var(--mono);
+      font-size: 0.86em;
+      padding: 1.5px 6px;
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 8%, transparent);
+      border: 1px solid color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 18%, transparent);
+      border-radius: 5px;
+      color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 80%, var(--hx-text));
+      letter-spacing: -0.005em;
+      font-variant-ligatures: none;
+    }
+
+    /* ── Block spacing rhythm — editorial cadence ──────────────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > * { margin: 0; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p { line-height: 1.7; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p + p { margin-top: 14px; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p + ul,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p + ol,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > ul + p,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > ol + p { margin-top: 12px; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h1.hx-md-h,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h2.hx-md-h,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h3.hx-md-h { margin-top: 24px; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h1.hx-md-h + *,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h2.hx-md-h + *,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h3.hx-md-h + * { margin-top: 8px; }
+
+    /* ── User bubble — refined, more architectural ─────────────────── */
+    body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+      background: color-mix(in srgb, var(--hx-text) 4%, var(--hx-surface));
+      border: 0;
+      border-radius: 16px;
+      border-top-right-radius: 6px;
+      padding: 11px 16px;
+      font-family: var(--sans);
+      font-size: 14.75px;
+      line-height: 1.55;
+      letter-spacing: -0.004em;
+      color: var(--t1);
+      max-width: min(540px, 76%);
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 40%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-text) 4%, transparent);
+    }
+
+    /* Mobile — preserve hierarchy on small screens */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-msg.is-assistant > .hx-msg-body { padding-left: 16px; }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p:first-child { font-size: 16px; }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-md-list > li { font-size: 14.75px; }
+    }
   </style>
 </head>
 <body data-active="chat">
