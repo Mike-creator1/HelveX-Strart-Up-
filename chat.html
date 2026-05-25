@@ -10407,6 +10407,166 @@
       body[data-active="chat"] .hx-md-table thead th { padding: 9px 12px; font-size: 10px; }
       body[data-active="chat"] .hx-md-table tbody td { padding: 10px 12px; }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V23 — LUXURY RESPONSE COMPONENTS
+       Premium structures that no other AI chat ships by default:
+       editorial callouts (Note / Tip / Insight / Warning / Important /
+       Key / Success / Danger), pull quotes with display glyph, and an
+       ornamental section divider with a gold marker.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* ── Callout card ─────────────────────────────────────────────── */
+    body[data-active="chat"] .hx-md-callout {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: 12px;
+      align-items: flex-start;
+      margin: 18px 0;
+      padding: 13px 16px 13px 14px;
+      background: var(--hx-surface);
+      border: 1px solid var(--b1);
+      border-left: 3px solid var(--callout-accent, var(--hx-accent, var(--hx-yellow-deep)));
+      border-radius: 12px;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 35%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-text) 3%, transparent);
+      position: relative;
+    }
+    body[data-active="chat"] .hx-md-callout::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(180deg,
+        color-mix(in srgb, var(--callout-accent, var(--hx-accent, var(--hx-yellow-deep))) 5%, transparent) 0%,
+        transparent 70%);
+      pointer-events: none;
+    }
+    body[data-active="chat"] .hx-md-callout-ico {
+      width: 28px; height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--callout-accent, var(--hx-accent, var(--hx-yellow-deep))) 12%, transparent);
+      color: var(--callout-accent, var(--hx-accent, var(--hx-yellow-deep)));
+      flex-shrink: 0;
+      position: relative;
+    }
+    body[data-active="chat"] .hx-md-callout-ico svg {
+      width: 16px; height: 16px;
+    }
+    body[data-active="chat"] .hx-md-callout-body {
+      min-width: 0;
+      position: relative;
+    }
+    body[data-active="chat"] .hx-md-callout-title {
+      margin: 0;
+      font-family: var(--sans);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--callout-accent, var(--hx-accent, var(--hx-yellow-deep)));
+      line-height: 1.2;
+    }
+    body[data-active="chat"] .hx-md-callout-text {
+      margin: 4px 0 0;
+      font-family: var(--sans);
+      font-size: 14.5px;
+      line-height: 1.6;
+      letter-spacing: -0.004em;
+      color: var(--t1);
+    }
+    /* No body text — vertically center the title with the icon */
+    body[data-active="chat"] .hx-md-callout-body:not(:has(.hx-md-callout-text)) .hx-md-callout-title {
+      padding-top: 6px;
+    }
+
+    /* Type-specific accent colours */
+    body[data-active="chat"] .hx-md-callout.is-note     { --callout-accent: #6B7280; }
+    body[data-active="chat"] .hx-md-callout.is-info     { --callout-accent: #2563EB; }
+    body[data-active="chat"] .hx-md-callout.is-tip      { --callout-accent: #059669; }
+    body[data-active="chat"] .hx-md-callout.is-success  { --callout-accent: #059669; }
+    body[data-active="chat"] .hx-md-callout.is-important{ --callout-accent: #7C3AED; }
+    body[data-active="chat"] .hx-md-callout.is-warning  { --callout-accent: #D97706; }
+    body[data-active="chat"] .hx-md-callout.is-caution  { --callout-accent: #D97706; }
+    body[data-active="chat"] .hx-md-callout.is-danger   { --callout-accent: #DC2626; }
+    body[data-active="chat"] .hx-md-callout.is-key      { --callout-accent: var(--hx-accent, #B8911E); }
+
+    /* ── Pull quote — editorial display treatment ────────────────── */
+    body[data-active="chat"] .hx-md-pull {
+      margin: 26px 0;
+      padding: 4px 0 4px 30px;
+      position: relative;
+      border: 0;
+    }
+    body[data-active="chat"] .hx-md-pull-glyph {
+      position: absolute;
+      left: 0;
+      top: -10px;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 56px;
+      line-height: 1;
+      font-style: italic;
+      color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 70%, transparent);
+      user-select: none;
+      pointer-events: none;
+    }
+    body[data-active="chat"] .hx-md-pull-quote {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      font-family: var(--sans);
+      font-size: 18px;
+      line-height: 1.55;
+      letter-spacing: -0.014em;
+      font-weight: 450;
+      font-style: italic;
+      color: var(--t1);
+    }
+
+    /* ── Ornamental section divider ──────────────────────────────── */
+    body[data-active="chat"] .hx-md-hr {
+      height: 1px;
+      border: 0;
+      margin: 28px 0;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        var(--b2) 30%,
+        var(--b2) 70%,
+        transparent 100%);
+      position: relative;
+      overflow: visible;
+    }
+    body[data-active="chat"] .hx-md-hr::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--hx-bg);
+      box-shadow:
+        inset 0 0 0 1px var(--hx-accent, var(--hx-yellow-deep)),
+        0 0 0 5px var(--hx-bg),
+        0 0 0 6px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 22%, transparent);
+    }
+
+    /* Mobile */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-md-callout { padding: 11px 14px 11px 12px; gap: 10px; grid-template-columns: 26px 1fr; }
+      body[data-active="chat"] .hx-md-callout-ico { width: 26px; height: 26px; }
+      body[data-active="chat"] .hx-md-callout-ico svg { width: 14.5px; height: 14.5px; }
+      body[data-active="chat"] .hx-md-callout-text { font-size: 14px; }
+      body[data-active="chat"] .hx-md-pull { padding-left: 24px; }
+      body[data-active="chat"] .hx-md-pull-glyph { font-size: 44px; top: -8px; }
+      body[data-active="chat"] .hx-md-pull-quote { font-size: 16.5px; }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -10975,9 +11135,11 @@
           return (lead || '') + '\x00TABLE_' + idx + '\x00';
         });
 
-        // Blockquotes (> text)
+        // Blockquotes (> text) — with GitHub-style callouts and auto pull-quote
         var quoteRe = /(^|\n)((?:[ \t]*>[^\n]*(?:\n|$))+)/g;
-        var quotes = [];
+        var quotes   = [];   // plain blockquotes
+        var callouts = [];   // [!type] callouts — premium cards
+        var pulls    = [];   // pull quotes — large editorial italic
         stripped = stripped.replace(quoteRe, function (m, lead, block) {
           var lines = [];
           block.split(/\n/).forEach(function (line) {
@@ -10985,9 +11147,30 @@
             if (im) lines.push(im[1]);
           });
           if (!lines.length) return m;
-          var idx = quotes.length;
-          quotes.push(lines.join(' '));
-          return (lead || '') + '\x00QUOTE_' + idx + '\x00';
+
+          // [!type] callout — first line begins with the marker
+          var calloutMatch = lines[0].match(/^\s*\[!(note|tip|info|warning|important|success|danger|caution|key)\]\s*(.*)$/i);
+          if (calloutMatch) {
+            var type   = calloutMatch[1].toLowerCase();
+            var inlineTitle = (calloutMatch[2] || '').trim();
+            var rest   = lines.slice(1).join(' ').trim();
+            var idx    = callouts.length;
+            callouts.push({ type: type, title: inlineTitle, body: rest });
+            return (lead || '') + '\x00CALLOUT_' + idx + '\x00';
+          }
+
+          var joined = lines.join(' ').trim();
+          // Pull quote — long, opens with " or « or " or starts with "—"
+          var isPull = /^[«"„""]/.test(joined) && joined.length > 60;
+          if (isPull) {
+            var idx2 = pulls.length;
+            pulls.push(joined);
+            return (lead || '') + '\x00PULL_' + idx2 + '\x00';
+          }
+
+          var idx3 = quotes.length;
+          quotes.push(joined);
+          return (lead || '') + '\x00QUOTE_' + idx3 + '\x00';
         });
 
         // Horizontal rule on its own line
@@ -11035,6 +11218,44 @@
         s = s.replace(/\x00QUOTE_(\d+)\x00/g, function (_, n) {
           var content = quotes[parseInt(n, 10)] || '';
           return '<blockquote class="hx-md-quote">' + renderInlineFragments(content) + '</blockquote>';
+        });
+        // Expand callouts — premium GitHub-style accent cards
+        s = s.replace(/\x00CALLOUT_(\d+)\x00/g, function (_, n) {
+          var c = callouts[parseInt(n, 10)];
+          if (!c) return '';
+          var meta = {
+            note:      { label: 'Note',      icon: '<path d="M12 17h.01"/><path d="M12 13V8"/><circle cx="12" cy="12" r="9"/>' },
+            info:      { label: 'Insight',   icon: '<circle cx="12" cy="12" r="9"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>' },
+            tip:       { label: 'Tip',       icon: '<path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.4 1 1 1 1.7V18h6v-1.6c0-.7.4-1.3 1-1.7A7 7 0 0 0 12 2z"/>' },
+            important: { label: 'Important', icon: '<path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>' },
+            warning:   { label: 'Warning',   icon: '<path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>' },
+            caution:   { label: 'Caution',   icon: '<path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>' },
+            danger:    { label: 'Danger',    icon: '<circle cx="12" cy="12" r="9"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>' },
+            success:   { label: 'Success',   icon: '<circle cx="12" cy="12" r="9"/><polyline points="9 12 11 14 15 10"/>' },
+            key:       { label: 'Key',       icon: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>' }
+          };
+          var info = meta[c.type] || meta.note;
+          var title = c.title || info.label;
+          return '<aside class="hx-md-callout is-' + c.type + '">' +
+            '<span class="hx-md-callout-ico" aria-hidden="true">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + info.icon + '</svg>' +
+            '</span>' +
+            '<div class="hx-md-callout-body">' +
+              '<p class="hx-md-callout-title">' + renderInlineFragments(title) + '</p>' +
+              (c.body ? '<p class="hx-md-callout-text">' + renderInlineFragments(c.body) + '</p>' : '') +
+            '</div>' +
+          '</aside>';
+        });
+        // Expand pull quotes — editorial italic pulled from long " blockquotes
+        s = s.replace(/\x00PULL_(\d+)\x00/g, function (_, n) {
+          var content = pulls[parseInt(n, 10)] || '';
+          // Strip leading/trailing curly + straight quotes since we render
+          // our own typographic quotation marks
+          content = content.replace(/^[«"„""'']+|[»"""''']+$/g, '').trim();
+          return '<figure class="hx-md-pull">' +
+            '<span class="hx-md-pull-glyph" aria-hidden="true">"</span>' +
+            '<blockquote class="hx-md-pull-quote">' + renderInlineFragments(content) + '</blockquote>' +
+          '</figure>';
         });
         // Expand tables — premium HTML table inside a horizontal-scroll wrap
         s = s.replace(/\x00TABLE_(\d+)\x00/g, function (_, n) {
