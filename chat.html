@@ -5885,6 +5885,537 @@
       body[data-active="chat"] .hx-md-plan-eyebrow { font-size: 10px; }
       .hx-md-plan-label { font-size: 13.5px; }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V9 — FINAL REFINEMENT PASS
+       Tight 4px spacing scale, restrained typography, calmer surfaces.
+       Reduces remaining UI noise; tightens every section's rhythm to
+       match Apple / Linear / ChatGPT desktop-level discipline.
+       ═════════════════════════════════════════════════════════════════ */
+
+    body[data-active="chat"] {
+      --hx-s-1: 4px;
+      --hx-s-2: 8px;
+      --hx-s-3: 12px;
+      --hx-s-4: 16px;
+      --hx-s-5: 20px;
+      --hx-s-6: 24px;
+      --hx-s-7: 32px;
+      --hx-s-8: 40px;
+      --hx-line-1: color-mix(in srgb, var(--hx-text) 7%, transparent);
+      --hx-line-2: color-mix(in srgb, var(--hx-text) 12%, transparent);
+      --hx-line-3: color-mix(in srgb, var(--hx-text) 22%, transparent);
+      --hx-text-1: var(--hx-text);
+      --hx-text-2: color-mix(in srgb, var(--hx-text) 68%, transparent);
+      --hx-text-3: color-mix(in srgb, var(--hx-text) 44%, transparent);
+      --hx-text-4: color-mix(in srgb, var(--hx-text) 28%, transparent);
+      --hx-msg-max: 720px;
+      --hx-pad-x: 28px;
+    }
+
+    /* ── Toolbar — 52px, no separator, no in-header model badge ─────── */
+    body[data-active="chat"] .hx-chat-toolbar {
+      min-height: 52px;
+      padding: 0 var(--hx-s-5) 0 var(--hx-s-3);
+      gap: var(--hx-s-3);
+      background: color-mix(in srgb, var(--hx-bg) 82%, transparent);
+      border-bottom: 1px solid var(--hx-line-1);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+    body[data-active="chat"] .hx-chat-toolbar::before,
+    body[data-active="chat"] .hx-chat-toolbar::after {
+      content: none !important;
+    }
+    body[data-active="chat"] .hx-chat-toolbar .hx-chat-title {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-weight: 600;
+      font-size: 13.5px;
+      letter-spacing: -0.007em;
+      color: var(--hx-text-1);
+    }
+    /* Hide noisy in-header model badge + separator — model is in bottom strip */
+    body[data-active="chat"] .hx-chat-title-sep,
+    body[data-active="chat"] .hx-chat-model-badge {
+      display: none !important;
+    }
+    /* Share collapses to icon-only, more refined kebab */
+    body[data-active="chat"] .hx-chat-head-actions { gap: var(--hx-s-1); }
+    body[data-active="chat"] .hx-chat-head-divider { display: none !important; }
+    body[data-active="chat"] .hx-chat-head-btn {
+      width: 30px; height: 30px;
+      padding: 0;
+      border-radius: 7px;
+      color: var(--hx-text-3);
+      background: transparent;
+      border: 0;
+    }
+    body[data-active="chat"] .hx-chat-head-btn:hover {
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent);
+      color: var(--hx-text-1);
+    }
+    body[data-active="chat"] .hx-chat-head-btn span { display: none; }
+    body[data-active="chat"] .hx-chat-head-btn svg { width: 15px; height: 15px; opacity: 1; }
+    body[data-active="chat"] .hx-chat-drawer-toggle {
+      width: 30px; height: 30px;
+      border-radius: 7px;
+      color: var(--hx-text-3);
+    }
+    body[data-active="chat"] .hx-chat-drawer-toggle:hover {
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent);
+      color: var(--hx-text-1);
+    }
+    body[data-active="chat"] .hx-chat-drawer-toggle svg { width: 16px; height: 16px; }
+
+    /* ── Empty state — quieter mark, plain greeting, tighter rhythm ── */
+    body[data-active="chat"] .hx-chat-blank {
+      padding: var(--hx-s-6) var(--hx-s-6) var(--hx-s-7);
+    }
+    .hx-chat-blank-inner {
+      gap: var(--hx-s-4);
+      max-width: 560px;
+    }
+    .hx-chat-blank-mark-v3 {
+      width: 36px; height: 36px;
+      color: var(--hx-accent, var(--hx-yellow-deep));
+      filter: drop-shadow(0 0 10px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 22%, transparent));
+      margin-bottom: 0;
+    }
+    .hx-chat-blank-greet {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-weight: 600;
+      font-size: 26px;
+      letter-spacing: -0.020em;
+      line-height: 1.18;
+      color: var(--hx-text-1);
+      background: none;
+      -webkit-background-clip: initial;
+      background-clip: initial;
+      -webkit-text-fill-color: initial;
+    }
+    .hx-chat-blank-lede {
+      font-size: 14px;
+      line-height: 1.55;
+      max-width: 440px;
+      color: var(--hx-text-2);
+      letter-spacing: -0.003em;
+    }
+    body[data-active="chat"] .hx-chat-blank-chips {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--hx-s-2);
+      max-width: 480px;
+      margin-top: var(--hx-s-2);
+    }
+    body[data-active="chat"] .hx-chat-blank-chip {
+      padding: var(--hx-s-3) var(--hx-s-3);
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line-1);
+      border-radius: 10px;
+      color: var(--hx-text-1);
+      font-weight: 500;
+      font-size: 12.5px;
+      letter-spacing: -0.004em;
+      box-shadow: none;
+      gap: var(--hx-s-2);
+    }
+    body[data-active="chat"] .hx-chat-blank-chip:hover {
+      background: color-mix(in srgb, var(--hx-text) 3%, var(--hx-surface));
+      border-color: var(--hx-line-2);
+      transform: none;
+      box-shadow: 0 1px 2px color-mix(in srgb, var(--hx-text) 6%, transparent);
+    }
+    body[data-active="chat"] .hx-chat-blank-chip svg {
+      width: 14px; height: 14px;
+      color: var(--hx-text-3);
+    }
+
+    /* ── Thread proportions — tighter, more disciplined ────────────── */
+    body[data-active="chat"] .hx-chat-thread-inner {
+      max-width: var(--hx-msg-max);
+      padding: var(--hx-s-7) var(--hx-pad-x) var(--hx-s-6);
+      gap: var(--hx-s-7);
+    }
+
+    /* ── Messages — smaller avatar, no labels, refined bubble ────── */
+    body[data-active="chat"] .hx-msg {
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: var(--hx-s-3);
+    }
+    body[data-active="chat"] .hx-msg-avatar {
+      width: 28px; height: 28px;
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line-1);
+      box-shadow: none;
+      color: var(--hx-text-1);
+    }
+    body[data-active="chat"] .hx-msg-avatar.is-assistant {
+      color: var(--hx-accent, var(--hx-yellow-deep));
+    }
+    body[data-active="chat"] .hx-msg-avatar svg { width: 16px; height: 16px; }
+
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content {
+      font-size: 14.75px;
+      line-height: 1.68;
+      letter-spacing: -0.005em;
+      color: var(--hx-text-1);
+      padding-top: 4px;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > * + * {
+      margin-top: var(--hx-s-3);
+    }
+    body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+      background: color-mix(in srgb, var(--hx-text) 4%, var(--hx-surface));
+      border: 0;
+      border-radius: 14px;
+      padding: 9px 13px;
+      font-size: 14.25px;
+      line-height: 1.55;
+      max-width: min(560px, 78%);
+      color: var(--hx-text-1);
+      letter-spacing: -0.003em;
+      box-shadow: none;
+    }
+
+    /* Action row — icon-only with tooltip on hover */
+    body[data-active="chat"] .hx-msg-actions {
+      margin-top: var(--hx-s-2);
+      margin-left: -6px;
+      gap: 0;
+      opacity: 0;
+      transition: opacity 0.16s ease;
+    }
+    body[data-active="chat"] .hx-msg:hover .hx-msg-actions,
+    body[data-active="chat"] .hx-msg-actions:focus-within { opacity: 1; }
+    body[data-active="chat"] .hx-msg-act {
+      width: 28px; height: 28px;
+      padding: 0;
+      border-radius: 6px;
+      color: var(--hx-text-3);
+      font-size: 0;
+      gap: 0;
+      justify-content: center;
+      position: relative;
+    }
+    body[data-active="chat"] .hx-msg-act:hover {
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent);
+      color: var(--hx-text-1);
+    }
+    body[data-active="chat"] .hx-msg-act svg { width: 14px; height: 14px; opacity: 0.85; }
+    body[data-active="chat"] .hx-msg-act > :not(svg):not(.hx-msg-speak-ico) {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+    body[data-active="chat"] .hx-msg-speak-ico svg { width: 13px; height: 13px; }
+
+    /* ── Heading hierarchy — stronger contrast ─────────────────────── */
+    body[data-active="chat"] .hx-md-h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.020em;
+      line-height: 1.22;
+      margin-top: var(--hx-s-6);
+    }
+    body[data-active="chat"] .hx-md-h2 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.014em;
+      line-height: 1.28;
+      margin-top: var(--hx-s-5);
+    }
+    body[data-active="chat"] .hx-md-h3 {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.006em;
+      line-height: 1.35;
+      margin-top: var(--hx-s-4);
+    }
+    body[data-active="chat"] .hx-md-h4 {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--hx-text-3);
+      margin-top: var(--hx-s-4);
+    }
+
+    /* ── Plan timeline — simpler header, tighter rhythm ────────────── */
+    body[data-active="chat"] .hx-md-plan {
+      margin: var(--hx-s-3) 0;
+      padding: var(--hx-s-3) var(--hx-s-3) var(--hx-s-2);
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line-1);
+      border-radius: 10px;
+      box-shadow: none;
+    }
+    body[data-active="chat"] .hx-md-plan-head {
+      padding-bottom: var(--hx-s-2);
+      margin-bottom: var(--hx-s-1);
+      border-bottom: 1px solid var(--hx-line-1);
+    }
+    .hx-md-plan-eyebrow {
+      font-size: 9.5px;
+      letter-spacing: 0.10em;
+      color: var(--hx-text-3);
+      gap: 6px;
+    }
+    .hx-md-plan-icon {
+      width: 10px; height: 10px;
+      opacity: 0.7;
+    }
+    .hx-md-plan-progress-track {
+      width: 48px;
+      background: var(--hx-line-1);
+    }
+    .hx-md-plan-count {
+      font-size: 9.5px;
+      color: var(--hx-text-3);
+    }
+    body[data-active="chat"] .hx-md-plan-step {
+      grid-template-columns: 18px 1fr;
+      gap: var(--hx-s-2);
+      padding: 5px 0;
+    }
+    body[data-active="chat"] .hx-md-plan-steps::before {
+      left: 8px;
+      top: 12px; bottom: 12px;
+      background: var(--hx-line-1);
+    }
+    .hx-md-plan-status {
+      width: 17px; height: 17px;
+      background: var(--hx-bg-2);
+      border: 1px solid var(--hx-line-2);
+      box-shadow: 0 0 0 2px var(--hx-surface);
+    }
+    .hx-md-plan-step.is-active .hx-md-plan-status {
+      box-shadow:
+        0 0 0 2px var(--hx-surface),
+        0 0 0 3px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 22%, transparent);
+    }
+    .hx-md-plan-check { width: 9px; height: 9px; }
+    .hx-md-plan-pulse { width: 6px; height: 6px; }
+    .hx-md-plan-num {
+      font-size: 9.5px;
+      color: var(--hx-text-4);
+    }
+    .hx-md-plan-label {
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--hx-text-1);
+    }
+    .hx-md-plan-step.is-done .hx-md-plan-label {
+      color: var(--hx-text-3);
+    }
+    .hx-md-plan-step.is-pending .hx-md-plan-label {
+      color: var(--hx-text-2);
+    }
+
+    /* ── Lists — tighter rhythm ───────────────────────────────────── */
+    body[data-active="chat"] .hx-md-list {
+      margin: var(--hx-s-2) 0;
+      gap: 4px;
+    }
+    body[data-active="chat"] .hx-md-list > li {
+      padding-left: 20px;
+      line-height: 1.65;
+    }
+    body[data-active="chat"] .hx-md-list > li::before {
+      top: 10px;
+      width: 3px; height: 3px;
+      background: var(--hx-text-3);
+    }
+
+    /* ── Inline code — tighter ────────────────────────────────────── */
+    body[data-active="chat"] .hx-md-inline {
+      font-size: 0.85em;
+      padding: 1px 5px;
+      background: color-mix(in srgb, var(--hx-text) 4%, transparent);
+      border: 1px solid var(--hx-line-1);
+      border-radius: 4px;
+    }
+
+    /* ── Composer — refined border, no shadow, calmer ─────────────── */
+    body[data-active="chat"] .hx-chat-compose {
+      padding: var(--hx-s-1) var(--hx-pad-x) var(--hx-s-3);
+      background: linear-gradient(180deg, transparent 0%, var(--hx-bg) 50%, var(--hx-bg) 100%);
+    }
+    body[data-active="chat"] .hx-chat-compose-inner {
+      max-width: var(--hx-msg-max);
+      gap: var(--hx-s-1);
+    }
+    body[data-active="chat"] .hx-chat-input-row {
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line-2);
+      border-radius: 12px;
+      padding: 4px 5px 4px 12px;
+      box-shadow: none;
+    }
+    body[data-active="chat"] .hx-chat-input-row:hover {
+      border-color: var(--hx-line-3);
+    }
+    body[data-active="chat"] .hx-chat-input-row:focus-within {
+      border-color: color-mix(in srgb, var(--hx-text) 35%, transparent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--hx-text) 4%, transparent);
+    }
+    body[data-active="chat"] .hx-chat-input-bar { min-height: 30px; gap: 2px; }
+    body[data-active="chat"] .hx-chat-textarea {
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 5px 4px;
+    }
+    body[data-active="chat"] .hx-chat-textarea::placeholder {
+      color: var(--hx-text-4);
+    }
+    body[data-active="chat"] .hx-chat-tool-btn {
+      width: 26px; height: 26px;
+      border-radius: 6px;
+      color: var(--hx-text-3);
+    }
+    body[data-active="chat"] .hx-chat-tool-btn:hover {
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent);
+      color: var(--hx-text-1);
+    }
+    body[data-active="chat"] .hx-chat-tool-btn svg { width: 15px; height: 15px; stroke-width: 1.6; }
+    body[data-active="chat"] .hx-chat-send {
+      width: 26px; height: 26px;
+      border-radius: 6px;
+      box-shadow: none;
+    }
+    body[data-active="chat"] .hx-chat-send:not(:disabled) {
+      background: var(--hx-text);
+      color: var(--hx-bg);
+      box-shadow: 0 1px 2px color-mix(in srgb, var(--hx-text) 18%, transparent);
+    }
+    body[data-active="chat"] .hx-chat-send:not(:disabled):hover {
+      box-shadow:
+        0 2px 4px color-mix(in srgb, var(--hx-text) 22%, transparent),
+        0 0 0 3px color-mix(in srgb, var(--hx-text) 6%, transparent);
+    }
+    body[data-active="chat"] .hx-chat-send svg { width: 14px; height: 14px; }
+
+    /* ── Bottom strip — quieter, tighter ──────────────────────────── */
+    body[data-active="chat"] .hx-cc-compose-bar {
+      padding: 0 var(--hx-s-1);
+      min-height: 18px;
+    }
+    body[data-active="chat"] .hx-cc-compose-bar::before {
+      font-size: 10px;
+      color: var(--hx-text-3);
+    }
+    body[data-active="chat"] .hx-cc-model-pick {
+      height: 18px;
+      padding: 0 6px 0 7px;
+      font-size: 10px;
+      color: var(--hx-text-3);
+      gap: 4px;
+    }
+    body[data-active="chat"] .hx-cc-model-pick:hover {
+      background: color-mix(in srgb, var(--hx-text) 4%, transparent);
+      color: var(--hx-text-1);
+    }
+    body[data-active="chat"] .hx-cc-model-name {
+      font-size: 10px;
+      color: var(--hx-text-2);
+    }
+    body[data-active="chat"] .hx-cc-model-tier {
+      font-size: 8px;
+      padding: 1px 3px;
+    }
+
+    /* ── Dropdown — lighter, more integrated ──────────────────────── */
+    body[data-active="chat"] .hx-cc-model-menu,
+    body[data-active="chat"] .hx-cc-mode-menu,
+    body[data-active="chat"] .hx-cc-mic-menu,
+    body[data-active="chat"] .hx-cc-usage-menu {
+      min-width: 220px;
+      max-width: 240px;
+      padding: 3px;
+      border-radius: 11px;
+      background: rgba(22, 22, 24, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow:
+        0 0 0 0.5px rgba(0, 0, 0, 0.35),
+        0 8px 24px -6px rgba(0, 0, 0, 0.45);
+    }
+    body[data-active="chat"] .hx-cc-menu-section {
+      padding: 7px 8px 3px;
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.34);
+    }
+    body[data-active="chat"] .hx-cc-menu-section-top {
+      margin-top: 2px;
+      padding-top: 10px;
+    }
+    body[data-active="chat"] .hx-cc-menu-kbd > span {
+      min-width: 15px; height: 14px;
+      font-size: 8.5px;
+    }
+    body[data-active="chat"] .hx-cc-model-opt,
+    body[data-active="chat"] .hx-cc-effort-opt,
+    body[data-active="chat"] .hx-cc-mode-opt {
+      height: 28px;
+      padding: 0 7px;
+      gap: 8px;
+      font-size: 12px;
+      border-radius: 6px;
+    }
+    body[data-active="chat"] .hx-cc-num {
+      min-width: 15px; height: 14px;
+      font-size: 8.5px;
+    }
+    body[data-active="chat"] .hx-cc-fast-row {
+      padding: 6px 7px 7px;
+    }
+    .hx-cc-fast-title { font-size: 12px; }
+    .hx-cc-fast-sub { font-size: 10px; }
+    body[data-active="chat"] .hx-cc-fast-switch {
+      width: 26px; height: 15px;
+    }
+    body[data-active="chat"] .hx-cc-fast-switch::after {
+      width: 10px; height: 10px;
+      top: 1.5px; left: 1.5px;
+    }
+    body[data-active="chat"] .hx-cc-fast-switch.is-on::after {
+      transform: translateX(11px);
+    }
+    body[data-active="chat"] .hx-cc-effort-bars > i { width: 2px; }
+    body[data-active="chat"] .hx-cc-effort-bars { height: 9px; gap: 1.5px; }
+    body[data-active="chat"] .hx-cc-effort-bars > i:nth-child(1) { height: 3px; }
+    body[data-active="chat"] .hx-cc-effort-bars > i:nth-child(2) { height: 4.5px; }
+    body[data-active="chat"] .hx-cc-effort-bars > i:nth-child(3) { height: 6px; }
+    body[data-active="chat"] .hx-cc-effort-bars > i:nth-child(4) { height: 7.5px; }
+    body[data-active="chat"] .hx-cc-effort-bars > i:nth-child(5) { height: 9px; }
+
+    /* ── Scrollbar — barely there ─────────────────────────────────── */
+    body[data-active="chat"] .hx-chat-thread::-webkit-scrollbar { width: 8px; }
+    body[data-active="chat"] .hx-chat-thread::-webkit-scrollbar-thumb {
+      background: transparent;
+      background-clip: padding-box;
+      border: 2px solid transparent;
+      border-radius: 999px;
+    }
+    body[data-active="chat"] .hx-chat-thread:hover::-webkit-scrollbar-thumb {
+      background: color-mix(in srgb, var(--hx-text) 10%, transparent);
+      background-clip: padding-box;
+    }
+
+    /* Mobile final pass */
+    @media (max-width: 720px) {
+      body[data-active="chat"] {
+        --hx-pad-x: 16px;
+        --hx-msg-max: 100%;
+      }
+      body[data-active="chat"] .hx-chat-toolbar { min-height: 48px; padding: 0 var(--hx-s-3); }
+      body[data-active="chat"] .hx-chat-thread-inner { padding: var(--hx-s-6) var(--hx-s-4) var(--hx-s-5); gap: var(--hx-s-5); }
+      body[data-active="chat"] .hx-msg { grid-template-columns: 26px 1fr; gap: var(--hx-s-2); }
+      body[data-active="chat"] .hx-msg-avatar { width: 26px; height: 26px; }
+      body[data-active="chat"] .hx-msg-avatar svg { width: 15px; height: 15px; }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content { font-size: 14.5px; }
+      .hx-chat-blank-greet { font-size: 22px; }
+      body[data-active="chat"] .hx-chat-blank-chip { font-size: 12px; padding: 11px 12px; }
+    }
   </style>
 </head>
 <body data-active="chat">
