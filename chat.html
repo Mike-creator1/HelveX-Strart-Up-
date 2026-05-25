@@ -4910,6 +4910,312 @@
       body[data-active="chat"] .hx-chat-send { width: 28px; height: 28px; }
       body[data-active="chat"] .hx-cc-compose-bar::before { font-size: 10px; text-align: left; }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V5 — PREMIUM MODEL & SETTINGS DROPDOWN
+       Frosted dark panel, refined typography, premium switches, kbd
+       chips that feel real. Comparable in feel to Linear / Arc / Notion
+       command palettes and ChatGPT model picker.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* Container — frosted dark glass, multi-layer depth */
+    body[data-active="chat"] .hx-cc-model-menu,
+    body[data-active="chat"] .hx-cc-mode-menu,
+    body[data-active="chat"] .hx-cc-mic-menu,
+    body[data-active="chat"] .hx-cc-usage-menu {
+      min-width: 280px;
+      max-width: 320px;
+      padding: 6px;
+      background: rgba(20, 20, 22, 0.94);
+      backdrop-filter: saturate(180%) blur(28px);
+      -webkit-backdrop-filter: saturate(180%) blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.35),
+        0 24px 56px -16px rgba(0, 0, 0, 0.55),
+        0 6px 16px -8px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.92);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-feature-settings: 'cv11', 'ss01', 'kern';
+      animation: hx-menu-pop 0.16s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    @keyframes hx-menu-pop {
+      from { opacity: 0; transform: translateY(4px) scale(0.985); }
+      to   { opacity: 1; transform: translateY(0)  scale(1); }
+    }
+    body[data-active="chat"] .hx-cc-model-menu::-webkit-scrollbar { width: 8px; }
+    body[data-active="chat"] .hx-cc-model-menu::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.06);
+      background-clip: padding-box;
+      border: 2px solid transparent;
+      border-radius: 999px;
+    }
+    body[data-active="chat"] .hx-cc-model-menu::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.12);
+      background-clip: padding-box;
+    }
+
+    /* Section headers — refined uppercase eyebrow + kbd */
+    body[data-active="chat"] .hx-cc-menu-section {
+      padding: 12px 10px 6px;
+      color: rgba(255, 255, 255, 0.42);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    body[data-active="chat"] .hx-cc-menu-section:first-child { padding-top: 6px; }
+    body[data-active="chat"] .hx-cc-menu-section-top {
+      margin-top: 6px;
+      padding-top: 14px;
+      position: relative;
+    }
+    body[data-active="chat"] .hx-cc-menu-section-top::before {
+      content: '';
+      position: absolute;
+      top: 4px; left: 8px; right: 8px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+    }
+
+    /* Kbd chips — refined, slightly inset, real-feeling */
+    body[data-active="chat"] .hx-cc-menu-kbd { gap: 4px; }
+    body[data-active="chat"] .hx-cc-menu-kbd > span {
+      min-width: 18px; height: 17px;
+      padding: 0 5px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 100%);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 4px;
+      color: rgba(255, 255, 255, 0.62);
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.30),
+        0 1px 0 rgba(0, 0, 0, 0.30);
+    }
+
+    /* Model / Effort row — taller, refined typography, premium hover */
+    body[data-active="chat"] .hx-cc-model-opt,
+    body[data-active="chat"] .hx-cc-effort-opt,
+    body[data-active="chat"] .hx-cc-mode-opt {
+      gap: 12px;
+      padding: 0 10px;
+      height: 36px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      color: rgba(255, 255, 255, 0.88);
+      position: relative;
+      transition:
+        background 0.14s ease,
+        color 0.14s ease;
+    }
+    body[data-active="chat"] .hx-cc-model-opt:hover,
+    body[data-active="chat"] .hx-cc-effort-opt:hover,
+    body[data-active="chat"] .hx-cc-mode-opt:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+    body[data-active="chat"] .hx-cc-model-opt.is-active,
+    body[data-active="chat"] .hx-cc-effort-opt.is-active,
+    body[data-active="chat"] .hx-cc-mode-opt.is-active {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+    /* Subtle gold accent rail on the active row — a refined product mark */
+    body[data-active="chat"] .hx-cc-model-opt.is-active::before,
+    body[data-active="chat"] .hx-cc-effort-opt.is-active::before,
+    body[data-active="chat"] .hx-cc-mode-opt.is-active::before {
+      content: '';
+      position: absolute;
+      left: 4px; top: 50%;
+      transform: translateY(-50%);
+      width: 2px; height: 18px;
+      border-radius: 2px;
+      background: var(--hx-accent, #C9A227);
+      box-shadow: 0 0 8px rgba(201, 162, 39, 0.45);
+    }
+    body[data-active="chat"] .hx-cc-opt-name {
+      flex: 1;
+      letter-spacing: -0.005em;
+    }
+    body[data-active="chat"] .hx-cc-check {
+      width: 13px; height: 13px;
+      color: rgba(255, 255, 255, 0.92);
+      visibility: hidden;
+      flex-shrink: 0;
+    }
+    /* Numeric shortcut — small mono pill that mirrors the section kbd */
+    body[data-active="chat"] .hx-cc-num {
+      min-width: 18px; height: 17px;
+      padding: 0 5px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 4px;
+      color: rgba(255, 255, 255, 0.42);
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        inset 0 -1px 0 rgba(0,0,0,0.25);
+      transition: color 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+    }
+    body[data-active="chat"] .hx-cc-model-opt:hover .hx-cc-num,
+    body[data-active="chat"] .hx-cc-model-opt.is-active .hx-cc-num,
+    body[data-active="chat"] .hx-cc-mode-opt:hover .hx-cc-num,
+    body[data-active="chat"] .hx-cc-mode-opt.is-active .hx-cc-num {
+      color: rgba(255, 255, 255, 0.72);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%);
+    }
+
+    /* Effort intensity bars — 5-bar SaaS indicator */
+    body[data-active="chat"] .hx-cc-effort-bars {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 12px;
+      flex-shrink: 0;
+    }
+    body[data-active="chat"] .hx-cc-effort-bars > i {
+      display: block;
+      width: 3px;
+      border-radius: 1px;
+      background: rgba(255, 255, 255, 0.10);
+      transition: background 0.14s ease, height 0.18s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-cc-effort-bars > i:nth-child(1) { height: 4px; }
+    body[data-active="chat"] .hx-cc-effort-bars > i:nth-child(2) { height: 6px; }
+    body[data-active="chat"] .hx-cc-effort-bars > i:nth-child(3) { height: 8px; }
+    body[data-active="chat"] .hx-cc-effort-bars > i:nth-child(4) { height: 10px; }
+    body[data-active="chat"] .hx-cc-effort-bars > i:nth-child(5) { height: 12px; }
+    body[data-active="chat"] .hx-cc-effort-bars[data-level="1"] > i:nth-child(-n+1),
+    body[data-active="chat"] .hx-cc-effort-bars[data-level="2"] > i:nth-child(-n+2),
+    body[data-active="chat"] .hx-cc-effort-bars[data-level="3"] > i:nth-child(-n+3),
+    body[data-active="chat"] .hx-cc-effort-bars[data-level="4"] > i:nth-child(-n+4),
+    body[data-active="chat"] .hx-cc-effort-bars[data-level="5"] > i:nth-child(-n+5) {
+      background: rgba(255, 255, 255, 0.50);
+    }
+    body[data-active="chat"] .hx-cc-effort-opt.is-active .hx-cc-effort-bars[data-level="1"] > i:nth-child(-n+1),
+    body[data-active="chat"] .hx-cc-effort-opt.is-active .hx-cc-effort-bars[data-level="2"] > i:nth-child(-n+2),
+    body[data-active="chat"] .hx-cc-effort-opt.is-active .hx-cc-effort-bars[data-level="3"] > i:nth-child(-n+3),
+    body[data-active="chat"] .hx-cc-effort-opt.is-active .hx-cc-effort-bars[data-level="4"] > i:nth-child(-n+4),
+    body[data-active="chat"] .hx-cc-effort-opt.is-active .hx-cc-effort-bars[data-level="5"] > i:nth-child(-n+5) {
+      background: var(--hx-accent, #E3B947);
+      box-shadow: 0 0 4px rgba(227, 185, 71, 0.55);
+    }
+    body[data-active="chat"] .hx-cc-effort-opt:hover .hx-cc-effort-bars[data-level="1"] > i:nth-child(-n+1),
+    body[data-active="chat"] .hx-cc-effort-opt:hover .hx-cc-effort-bars[data-level="2"] > i:nth-child(-n+2),
+    body[data-active="chat"] .hx-cc-effort-opt:hover .hx-cc-effort-bars[data-level="3"] > i:nth-child(-n+3),
+    body[data-active="chat"] .hx-cc-effort-opt:hover .hx-cc-effort-bars[data-level="4"] > i:nth-child(-n+4),
+    body[data-active="chat"] .hx-cc-effort-opt:hover .hx-cc-effort-bars[data-level="5"] > i:nth-child(-n+5) {
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    /* Fast-mode row — two-line label + premium toggle */
+    body[data-active="chat"] .hx-cc-fast-row {
+      padding: 10px 10px 12px;
+      align-items: center;
+      gap: 12px;
+      border-radius: 8px;
+      margin-top: 2px;
+    }
+    .hx-cc-fast-label {
+      display: flex; flex-direction: column;
+      gap: 2px;
+      flex: 1; min-width: 0;
+    }
+    .hx-cc-fast-title {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      color: rgba(255, 255, 255, 0.92);
+      line-height: 1.2;
+    }
+    .hx-cc-fast-sub {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: -0.002em;
+      color: rgba(255, 255, 255, 0.38);
+      line-height: 1.3;
+    }
+    /* Premium toggle — refined dimensions, smooth thumb, true off/on depth */
+    body[data-active="chat"] .hx-cc-fast-switch {
+      width: 32px; height: 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 999px;
+      box-shadow:
+        inset 0 1px 2px rgba(0, 0, 0, 0.45),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+      transition:
+        background 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.22s ease,
+        box-shadow 0.22s ease;
+    }
+    body[data-active="chat"] .hx-cc-fast-switch::after {
+      width: 12px; height: 12px;
+      top: 2px; left: 2px;
+      background: linear-gradient(180deg, #FAFAFA 0%, #DCDCDE 100%);
+      box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.40),
+        0 0 0 0.5px rgba(0, 0, 0, 0.08);
+      transition: transform 0.24s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.22s ease;
+    }
+    body[data-active="chat"] .hx-cc-fast-switch.is-on {
+      background: linear-gradient(180deg, #E3B947 0%, #B8911E 100%);
+      border-color: rgba(201, 162, 39, 0.40);
+      box-shadow:
+        0 0 12px rgba(201, 162, 39, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.20),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+    }
+    body[data-active="chat"] .hx-cc-fast-switch.is-on::after {
+      transform: translateX(14px);
+      box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.30),
+        0 0 0 0.5px rgba(0, 0, 0, 0.06),
+        0 0 6px rgba(255, 255, 255, 0.35);
+    }
+
+    /* Mode menu hint at bottom — quieter */
+    body[data-active="chat"] .hx-cc-mode-hint {
+      padding: 6px 10px 4px;
+      color: rgba(255, 255, 255, 0.34);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: -0.002em;
+    }
+    body[data-active="chat"] .hx-cc-mode-opt.is-disabled,
+    body[data-active="chat"] .hx-cc-mode-opt:disabled {
+      color: rgba(255, 255, 255, 0.28);
+    }
+
+    /* Mic menu mirrors the same premium dark surface */
+    body[data-active="chat"] .hx-cc-mic-opt {
+      gap: 12px;
+      padding: 0 10px;
+      height: 36px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      color: rgba(255, 255, 255, 0.88);
+    }
+    body[data-active="chat"] .hx-cc-mic-row {
+      padding: 10px 10px 12px;
+      font-size: 13px;
+      letter-spacing: -0.005em;
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -5276,22 +5582,27 @@
                     </div>
                     <button class="hx-cc-effort-opt" data-effort="low" role="menuitemradio">
                       <span>Low</span>
+                      <span class="hx-cc-effort-bars" aria-hidden="true" data-level="1"><i></i><i></i><i></i><i></i><i></i></span>
                       <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </button>
                     <button class="hx-cc-effort-opt" data-effort="medium" role="menuitemradio">
                       <span>Medium</span>
+                      <span class="hx-cc-effort-bars" aria-hidden="true" data-level="2"><i></i><i></i><i></i><i></i><i></i></span>
                       <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </button>
                     <button class="hx-cc-effort-opt" data-effort="high" role="menuitemradio">
                       <span>High</span>
+                      <span class="hx-cc-effort-bars" aria-hidden="true" data-level="3"><i></i><i></i><i></i><i></i><i></i></span>
                       <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </button>
                     <button class="hx-cc-effort-opt" data-effort="extra" role="menuitemradio">
                       <span>Extra high</span>
+                      <span class="hx-cc-effort-bars" aria-hidden="true" data-level="4"><i></i><i></i><i></i><i></i><i></i></span>
                       <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </button>
                     <button class="hx-cc-effort-opt is-active" data-effort="max" role="menuitemradio">
                       <span>Max</span>
+                      <span class="hx-cc-effort-bars" aria-hidden="true" data-level="5"><i></i><i></i><i></i><i></i><i></i></span>
                       <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </button>
                     <!-- Fast mode -->
@@ -5299,7 +5610,10 @@
                       <span>Fast mode</span>
                     </div>
                     <div class="hx-cc-fast-row">
-                      <span>Enable fast mode</span>
+                      <span class="hx-cc-fast-label">
+                        <span class="hx-cc-fast-title">Enable fast mode</span>
+                        <span class="hx-cc-fast-sub">Faster replies, lighter reasoning</span>
+                      </span>
                       <span class="hx-cc-fast-switch" id="hx-cc-fast" role="switch" aria-checked="false" tabindex="0"></span>
                     </div>
                   </div>
