@@ -10755,6 +10755,361 @@
       body[data-active="chat"] .hx-chat-send { width: 30px; height: 30px; }
       body[data-active="chat"] .hx-cc-compose-bar::before { font-size: 10px; }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V25 — PREMIUM SIDEBAR + REFINED ACTION TOOLBAR
+       Conversations rail rebuilt as a real AI workspace surface with a
+       brand wordmark, refined controls, unified date headers, elegant
+       conversation cards. Action toolbar grouped with hairline dividers.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* ── Rail surface ───────────────────────────────────────────── */
+    body[data-active="chat"] .hx-chat-rail {
+      background: var(--hx-bg);
+      border-right: 1px solid color-mix(in srgb, var(--hx-text) 7%, transparent);
+    }
+    /* Kill the gold ambient aura — it reads as gimmick */
+    body[data-active="chat"] .hx-rail-aura { display: none !important; }
+
+    /* ── Header — brand wordmark + minimal controls ────────────── */
+    body[data-active="chat"] .hx-chat-rail-head {
+      padding: 14px 14px 12px;
+      background: var(--hx-bg);
+      border-bottom: 0;
+    }
+    body[data-active="chat"] .hx-chat-rail-head::after {
+      display: none !important;
+    }
+    body[data-active="chat"] .hx-chat-rail-title {
+      font-size: 0;
+      gap: 0;
+      color: var(--t1);
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 600;
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      flex: 1;
+      min-width: 0;
+    }
+    body[data-active="chat"] .hx-chat-rail-title::before {
+      /* Replace the pulsing dot with the Helix orbital mark + wordmark */
+      content: '';
+      width: 18px; height: 18px;
+      border-radius: 0;
+      background:
+        radial-gradient(circle at 50% 50%,
+          var(--hx-accent, var(--hx-yellow-deep)) 0% 18%,
+          transparent 19%),
+        conic-gradient(from 0deg at 50% 50%,
+          color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 95%, transparent) 0%,
+          color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 65%, transparent) 35%,
+          color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 35%, transparent) 70%,
+          color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 95%, transparent) 100%);
+      -webkit-mask:
+        radial-gradient(circle at 50% 50%, #000 0% 18%, transparent 19%),
+        repeating-conic-gradient(from 0deg at 50% 50%,
+          #000 0deg 4deg, transparent 4deg 60deg);
+      mask:
+        radial-gradient(circle at 50% 50%, #000 0% 18%, transparent 19%),
+        repeating-conic-gradient(from 0deg at 50% 50%,
+          #000 0deg 4deg, transparent 4deg 60deg);
+      box-shadow: none;
+      animation: none;
+      margin-right: 9px;
+      flex-shrink: 0;
+    }
+    body[data-active="chat"] .hx-chat-rail-title::after {
+      content: 'Helix';
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.014em;
+      color: var(--t1);
+    }
+    /* Controls — consistent 28×28 ghost buttons */
+    body[data-active="chat"] .hx-chat-rail-collapse,
+    body[data-active="chat"] .hx-chat-new {
+      width: 28px; height: 28px;
+      border-radius: 7px;
+      transition: background 140ms ease, color 140ms ease, border-color 140ms ease, transform 120ms ease;
+    }
+    body[data-active="chat"] .hx-chat-rail-collapse {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--t3);
+      box-shadow: none;
+    }
+    body[data-active="chat"] .hx-chat-rail-collapse:hover {
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent);
+      color: var(--t1);
+      transform: none;
+    }
+    body[data-active="chat"] .hx-chat-rail-collapse svg { width: 13px; height: 13px; }
+    body[data-active="chat"] .hx-chat-new {
+      background: var(--t1);
+      border-color: var(--t1);
+      color: var(--hx-bg);
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 14%, transparent),
+        0 1px 2px rgba(0,0,0,0.10);
+    }
+    body[data-active="chat"] .hx-chat-new:hover {
+      background: color-mix(in srgb, var(--t1) 88%, #000);
+      border-color: color-mix(in srgb, var(--t1) 88%, #000);
+      transform: translateY(-1px);
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 18%, transparent),
+        0 4px 10px -2px rgba(0, 0, 0, 0.20);
+    }
+    body[data-active="chat"] .hx-chat-new:active { transform: translateY(0); }
+    body[data-active="chat"] .hx-chat-new svg { width: 13px; height: 13px; }
+
+    /* ── Search — minimal premium input ────────────────────────── */
+    body[data-active="chat"] .hx-rail-search-row {
+      margin: 2px 14px 8px;
+      padding: 0 12px;
+      height: 34px;
+      background: color-mix(in srgb, var(--hx-text) 4%, transparent);
+      border: 1px solid transparent;
+      border-radius: 9px;
+      transition: background 140ms ease, border-color 140ms ease, box-shadow 200ms ease;
+    }
+    body[data-active="chat"] .hx-rail-search-row:hover {
+      background: color-mix(in srgb, var(--hx-text) 6%, transparent);
+    }
+    body[data-active="chat"] .hx-rail-search-row:focus-within {
+      background: var(--hx-surface);
+      border-color: color-mix(in srgb, var(--hx-text) 18%, transparent);
+      box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--hx-text) 4%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-text) 4%, transparent);
+    }
+    body[data-active="chat"] .hx-rail-search-ico { color: var(--t4); }
+    body[data-active="chat"] .hx-rail-search-ico svg { width: 14px; height: 14px; stroke-width: 1.7; }
+    body[data-active="chat"] .hx-rail-search {
+      font-family: var(--sans);
+      font-size: 13px;
+      letter-spacing: -0.005em;
+      color: var(--t1);
+      font-weight: 500;
+    }
+    body[data-active="chat"] .hx-rail-search::placeholder {
+      color: var(--t4);
+      font-weight: 400;
+    }
+    body[data-active="chat"] .hx-rail-search-kbd > span {
+      min-width: 16px; height: 15px;
+      padding: 0 4px;
+      background: var(--hx-bg);
+      border: 1px solid color-mix(in srgb, var(--hx-text) 8%, transparent);
+      border-radius: 4px;
+      color: var(--t4);
+      font-size: 9px;
+      box-shadow: none;
+    }
+
+    /* ── Date group headers — unified eyebrow ──────────────────── */
+    body[data-active="chat"] .hx-rail-group {
+      padding: 16px 0 6px;
+    }
+    body[data-active="chat"] .hx-rail-group:first-child {
+      padding-top: 10px;
+    }
+    body[data-active="chat"] .hx-rail-group-head {
+      padding: 0 18px 8px;
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 600;
+      font-style: normal;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--t3);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    body[data-active="chat"] .hx-rail-group-count {
+      min-width: 18px; height: 16px;
+      padding: 0 5px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: color-mix(in srgb, var(--hx-text) 4%, transparent);
+      border: 1px solid color-mix(in srgb, var(--hx-text) 7%, transparent);
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0;
+      color: var(--t3);
+    }
+
+    /* ── Conversation card — refined, no random flame ──────────── */
+    body[data-active="chat"] .hx-chat-list {
+      padding: 4px 10px 14px;
+    }
+    body[data-active="chat"] .hx-rail-group .hx-chat-item,
+    body[data-active="chat"] .hx-chat-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 24px;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 6px 10px 14px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      transition: background 140ms ease, border-color 140ms ease;
+    }
+    body[data-active="chat"] .hx-chat-item-glyph {
+      display: none !important;
+    }
+    body[data-active="chat"] .hx-chat-item-body {
+      gap: 4px;
+      min-width: 0;
+    }
+    body[data-active="chat"] .hx-chat-item-title {
+      font-family: var(--sans);
+      font-size: 13.25px;
+      font-weight: 500;
+      letter-spacing: -0.006em;
+      color: var(--t1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    body[data-active="chat"] .hx-chat-item.is-active .hx-chat-item-title {
+      font-weight: 600;
+    }
+    body[data-active="chat"] .hx-chat-item-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--sans);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--t3);
+    }
+    body[data-active="chat"] .hx-chat-item-meta .dot {
+      width: 2.5px; height: 2.5px;
+      background: var(--t4);
+    }
+    /* Model name inside meta becomes a subtle uppercase eyebrow chip */
+    body[data-active="chat"] .hx-chat-item-meta > span:last-child,
+    body[data-active="chat"] .hx-chat-item-meta strong {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--t3);
+      padding: 1px 5px;
+      background: color-mix(in srgb, var(--hx-text) 4%, transparent);
+      border: 1px solid color-mix(in srgb, var(--hx-text) 6%, transparent);
+      border-radius: 3px;
+      line-height: 1.4;
+    }
+
+    /* Hover + active states — quiet and refined */
+    body[data-active="chat"] .hx-chat-item:hover {
+      background: color-mix(in srgb, var(--hx-text) 4%, transparent);
+      border-color: transparent;
+      transform: none;
+    }
+    body[data-active="chat"] .hx-chat-item.is-active {
+      background: color-mix(in srgb, var(--hx-text) 5%, var(--hx-surface));
+      border-color: color-mix(in srgb, var(--hx-text) 10%, transparent);
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 35%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-text) 4%, transparent);
+    }
+    /* Active accent rail — refined 2px gold */
+    body[data-active="chat"] .hx-chat-item::before {
+      content: '';
+      position: absolute;
+      left: 6px; top: 50%;
+      transform: translateY(-50%) scaleY(0);
+      width: 2px; height: 18px;
+      background: var(--hx-accent, var(--hx-yellow-deep));
+      border-radius: 2px;
+      box-shadow: 0 0 6px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 50%, transparent);
+      transition: transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      opacity: 1;
+    }
+    body[data-active="chat"] .hx-chat-item.is-active::before {
+      transform: translateY(-50%) scaleY(1);
+    }
+
+    /* 3-dots — refined */
+    body[data-active="chat"] .hx-chat-item-more {
+      width: 24px; height: 24px;
+      border-radius: 5px;
+      color: var(--t4);
+      border: 0;
+    }
+    body[data-active="chat"] .hx-chat-item-more:hover {
+      background: color-mix(in srgb, var(--hx-text) 6%, transparent);
+      color: var(--t1);
+      border-color: transparent;
+    }
+    body[data-active="chat"] .hx-chat-item-more svg { width: 13px; height: 13px; }
+
+    /* Empty list */
+    body[data-active="chat"] .hx-chat-empty-list {
+      padding: 32px 18px;
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--t3);
+      letter-spacing: -0.003em;
+    }
+
+    /* ── Refined assistant action toolbar — subtle grouping ────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions {
+      gap: 2px;
+      padding: 4px;
+      margin-top: 12px;
+      margin-left: -8px;
+      background: transparent;
+      border-radius: 9px;
+      opacity: 0.7;
+      transition: opacity 180ms ease, background 200ms ease;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant:hover .hx-msg-actions {
+      opacity: 1;
+      background: color-mix(in srgb, var(--hx-text) 2.5%, transparent);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act {
+      width: 30px; height: 30px;
+      border-radius: 7px;
+      color: var(--t3);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:hover {
+      background: color-mix(in srgb, var(--hx-text) 7%, transparent);
+      color: var(--t1);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act svg { width: 15px; height: 15px; }
+    /* Divider after the first 3 buttons (Copy / Like / Dislike) */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(3) {
+      margin-right: 6px;
+      position: relative;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(3)::after {
+      content: '';
+      position: absolute;
+      right: -4px; top: 6px; bottom: 6px;
+      width: 1px;
+      background: color-mix(in srgb, var(--hx-text) 8%, transparent);
+    }
+
+    /* Mobile */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-chat-rail-head { padding: 12px 12px 10px; }
+      body[data-active="chat"] .hx-rail-search-row { margin: 2px 12px 6px; height: 32px; padding: 0 10px; }
+      body[data-active="chat"] .hx-chat-list { padding: 4px 8px 14px; }
+      body[data-active="chat"] .hx-chat-item { padding: 9px 6px 9px 12px; }
+    }
   </style>
 </head>
 <body data-active="chat">
