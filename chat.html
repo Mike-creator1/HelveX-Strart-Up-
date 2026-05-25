@@ -8522,6 +8522,66 @@
       body[data-active="chat"] .hx-voice-wave { height: 20px; gap: 2px; }
       body[data-active="chat"] .hx-voice-wave span:nth-child(n+12) { display: none; }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V15 — REAL AUDIO WAVEFORM
+       Bars are driven by --amp (0..1) written by an AnalyserNode at
+       60fps. No CSS keyframes — every motion is physically tied to
+       what the microphone actually hears. Silence = calm 6% baseline.
+       ═════════════════════════════════════════════════════════════════ */
+
+    body[data-active="chat"] .hx-voice-wave {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 22px;
+      gap: 3px;
+      flex: 1;
+    }
+    body[data-active="chat"] .hx-voice-wave > span {
+      --amp: 0.06;
+      width: 2px;
+      height: 22px;
+      border-radius: 1px;
+      background: var(--hx-accent, var(--hx-yellow-deep));
+      transform-origin: center center;
+      transform: scaleY(var(--amp));
+      animation: none !important;
+      opacity: calc(0.55 + (var(--amp) * 0.45));
+      transition:
+        transform 90ms cubic-bezier(0.22, 0.61, 0.36, 1),
+        opacity   140ms ease;
+      will-change: transform, opacity;
+    }
+    /* Each bar gets a slight phase offset via a tiny base height
+       so even at idle the meter reads like a real audio device,
+       not 15 identical lines. */
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(1)  { height: 18px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(2)  { height: 20px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(3)  { height: 22px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(4)  { height: 20px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(5)  { height: 22px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(6)  { height: 22px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(7)  { height: 22px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(8)  { height: 22px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(9)  { height: 22px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(10) { height: 22px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(11) { height: 22px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(12) { height: 20px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(13) { height: 22px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(14) { height: 20px; }
+    body[data-active="chat"] .hx-voice-wave > span:nth-child(15) { height: 18px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-voice-wave > span {
+        transition: transform 220ms ease, opacity 220ms ease;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-voice-wave { height: 20px; gap: 2.5px; }
+      body[data-active="chat"] .hx-voice-wave > span { height: 20px; }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -10751,6 +10811,112 @@
         var voiceStartedAt   = 0;
         var inputRowEl    = document.querySelector('.hx-chat-input-row');
 
+        // Real-time audio analysis — the waveform reacts ONLY to the
+        // user's voice. AnalyserNode samples the mic stream at 60fps;
+        // RMS amplitude drives each bar's --amp CSS variable. Silence
+        // resolves to a calm ~5% bar height; speech swells smoothly.
+        var voiceAudioCtx = null;
+        var voiceAnalyser = null;
+        var voiceSource   = null;
+        var voiceRafId    = null;
+        var voiceBars     = null;     // cached NodeList of .hx-voice-wave > span
+        var voiceBarLevels = null;    // float per bar, smoothed
+        var voicePeak     = 0;        // adaptive normaliser
+
+        function startVoiceAnalyser(stream) {
+          stopVoiceAnalyser();
+          try {
+            var Ctx = window.AudioContext || window.webkitAudioContext;
+            if (!Ctx) return;
+            voiceAudioCtx = new Ctx();
+            voiceSource   = voiceAudioCtx.createMediaStreamSource(stream);
+            voiceAnalyser = voiceAudioCtx.createAnalyser();
+            voiceAnalyser.fftSize = 1024;            // 512 frequency bins
+            voiceAnalyser.smoothingTimeConstant = 0.78;
+            voiceSource.connect(voiceAnalyser);
+            // Do NOT connect to destination — we don't want to hear the mic
+          } catch (e) {
+            try { console.warn('[voice] analyser init failed', e); } catch (_) {}
+            return;
+          }
+
+          if (!voiceBars || !voiceBars.length) {
+            voiceBars = voicePanel ? voicePanel.querySelectorAll('.hx-voice-wave > span') : null;
+          }
+          var n = voiceBars ? voiceBars.length : 0;
+          if (!n) return;
+          voiceBarLevels = new Float32Array(n);
+          voicePeak = 0.08;          // start at calm baseline so silence reads idle
+
+          var timeBuf = new Uint8Array(voiceAnalyser.fftSize);
+          var freqBuf = new Uint8Array(voiceAnalyser.frequencyBinCount);
+
+          function tick() {
+            if (voiceState !== 'recording' || !voiceAnalyser) {
+              voiceRafId = null;
+              return;
+            }
+
+            // Overall RMS from time-domain — drives a slow adaptive peak
+            voiceAnalyser.getByteTimeDomainData(timeBuf);
+            var sum = 0;
+            for (var i = 0; i < timeBuf.length; i++) {
+              var v = (timeBuf[i] - 128) / 128;
+              sum += v * v;
+            }
+            var rms = Math.sqrt(sum / timeBuf.length);
+
+            // Auto-gain: track recent peak so a quiet voice fills the bars too
+            voicePeak = Math.max(voicePeak * 0.985, rms * 1.35, 0.04);
+
+            // Per-bar frequency envelopes — voice energy concentrates in
+            // 80–4000Hz, so we sample a log-spaced slice of the spectrum.
+            voiceAnalyser.getByteFrequencyData(freqBuf);
+            var binsTotal = freqBuf.length;
+            // Map first ~28% of bins (the speech band for 44.1kHz / 1024 fft)
+            var usable = Math.max(8, Math.floor(binsTotal * 0.28));
+            var perBar = Math.max(1, Math.floor(usable / n));
+
+            for (var b = 0; b < n; b++) {
+              var start = b * perBar;
+              var end   = Math.min(usable, start + perBar);
+              var acc = 0, cnt = 0;
+              for (var k = start; k < end; k++) { acc += freqBuf[k]; cnt++; }
+              var avg = cnt ? (acc / cnt) / 255 : 0;
+              // Normalise against the adaptive peak; clamp 0..1
+              var normalised = Math.min(1, avg / Math.max(0.06, voicePeak * 1.6));
+              // Subtle natural variation between adjacent bars
+              normalised *= 0.7 + 0.3 * Math.sin((b / n) * Math.PI);
+              // Smoothing — feels like a real meter, not a CSS animation
+              var prev = voiceBarLevels[b];
+              var target = Math.max(0.05, normalised);    // idle baseline
+              var smoothed = prev + (target - prev) * (target > prev ? 0.55 : 0.18);
+              voiceBarLevels[b] = smoothed;
+              voiceBars[b].style.setProperty('--amp', smoothed.toFixed(3));
+            }
+
+            voiceRafId = requestAnimationFrame(tick);
+          }
+          voiceRafId = requestAnimationFrame(tick);
+        }
+
+        function stopVoiceAnalyser() {
+          if (voiceRafId) { try { cancelAnimationFrame(voiceRafId); } catch (e) {} voiceRafId = null; }
+          if (voiceSource)   { try { voiceSource.disconnect(); } catch (e) {} voiceSource = null; }
+          if (voiceAnalyser) { try { voiceAnalyser.disconnect(); } catch (e) {} voiceAnalyser = null; }
+          if (voiceAudioCtx) {
+            try { voiceAudioCtx.close(); } catch (e) {}
+            voiceAudioCtx = null;
+          }
+          // Settle bars to calm idle
+          if (voiceBars && voiceBars.length) {
+            for (var i = 0; i < voiceBars.length; i++) {
+              voiceBars[i].style.setProperty('--amp', '0.06');
+            }
+          }
+          voiceBarLevels = null;
+        }
+
         function fmtVoiceTime(ms) {
           var s = Math.max(0, Math.floor(ms / 1000));
           var mm = Math.floor(s / 60);
@@ -10842,6 +11008,7 @@
         }
 
         function cleanupMicStream() {
+          stopVoiceAnalyser();
           if (micStream) {
             try { micStream.getTracks().forEach(function (t) { try { t.stop(); } catch (e) {} }); }
             catch (e) {}
@@ -11059,6 +11226,10 @@
             return;
           }
           setVoiceState('recording');
+          // Hook up real-time audio analysis after the panel is visible
+          // so the bar elements exist in the DOM and the AnalyserNode can
+          // start writing amplitudes immediately.
+          startVoiceAnalyser(micStream);
         }
 
         async function transcribeAudio(blob) {
