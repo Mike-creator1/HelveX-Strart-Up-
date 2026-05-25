@@ -5359,6 +5359,170 @@
       padding: 7px 8px 8px;
       font-size: 12.5px;
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V7 — COMPACT, REFINED COMPOSER
+       Slim card, premium send button, tight icon rhythm. Inspired by
+       ChatGPT desktop / Claude / Arc / Linear composers but distinctly
+       Helix. Replaces the chunky rounded mockup feel with a real,
+       production-grade input.
+       ═════════════════════════════════════════════════════════════════ */
+
+    body[data-active="chat"] .hx-chat-compose {
+      padding: 6px 24px 14px;
+    }
+    body[data-active="chat"] .hx-chat-compose-inner {
+      gap: 5px;
+    }
+
+    /* Input card — slimmer, thinner outline, refined depth */
+    body[data-active="chat"] .hx-chat-input-row {
+      background: var(--hx-surface);
+      border: 1px solid color-mix(in srgb, var(--hx-text) 9%, transparent);
+      border-radius: 12px;
+      padding: 4px 5px 4px 12px;
+      box-shadow:
+        0 1px 0 rgba(20, 18, 12, 0.015),
+        0 2px 8px -4px rgba(20, 18, 12, 0.07);
+      transition:
+        border-color 0.16s ease,
+        box-shadow 0.20s cubic-bezier(0.2, 0.7, 0.2, 1),
+        background 0.16s ease;
+    }
+    body[data-active="chat"] .hx-chat-input-row:hover {
+      border-color: color-mix(in srgb, var(--hx-text) 15%, transparent);
+    }
+    body[data-active="chat"] .hx-chat-input-row:focus-within {
+      border-color: color-mix(in srgb, var(--hx-text) 28%, transparent);
+      box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--hx-text) 4%, transparent),
+        0 4px 12px -6px rgba(20, 18, 12, 0.10);
+    }
+
+    /* Input bar internals — tight, centred, refined */
+    body[data-active="chat"] .hx-chat-input-bar {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      min-height: 30px;
+    }
+    body[data-active="chat"] .hx-chat-textarea {
+      font-size: 14px;
+      line-height: 1.5;
+      letter-spacing: -0.005em;
+      padding: 5px 4px;
+      color: var(--hx-text);
+      min-height: 20px;
+      font-feature-settings: 'kern', 'liga', 'cv11';
+    }
+    body[data-active="chat"] .hx-chat-textarea::placeholder {
+      color: color-mix(in srgb, var(--hx-text) 36%, transparent);
+      font-weight: 400;
+      letter-spacing: -0.003em;
+      opacity: 1;
+    }
+
+    /* Quiet icon buttons — refined, smaller, properly aligned */
+    body[data-active="chat"] .hx-chat-tool-btn {
+      width: 26px; height: 26px;
+      border-radius: 7px;
+      color: color-mix(in srgb, var(--hx-text) 55%, transparent);
+      background: transparent;
+      border: 0;
+      transition: background 0.14s ease, color 0.14s ease;
+    }
+    body[data-active="chat"] .hx-chat-tool-btn:hover {
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent);
+      color: var(--hx-text);
+    }
+    body[data-active="chat"] .hx-chat-tool-btn svg {
+      width: 15px; height: 15px;
+      stroke-width: 1.7;
+    }
+
+    /* Send button — small, premium, always reads as "ready" */
+    body[data-active="chat"] .hx-chat-send {
+      width: 26px; height: 26px;
+      border-radius: 7px;
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent);
+      color: color-mix(in srgb, var(--hx-text) 45%, transparent);
+      border: 0;
+      box-shadow: none;
+      margin-left: 2px;
+      transition:
+        background 0.16s ease,
+        color 0.16s ease,
+        transform 0.14s cubic-bezier(0.2, 0.7, 0.2, 1),
+        box-shadow 0.18s ease;
+      cursor: pointer;
+      flex-shrink: 0;
+      opacity: 1 !important;
+    }
+    body[data-active="chat"] .hx-chat-send svg {
+      width: 15px; height: 15px;
+      stroke-width: 2;
+      transition: transform 0.18s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-chat-send:disabled {
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent);
+      color: color-mix(in srgb, var(--hx-text) 32%, transparent);
+      cursor: default;
+    }
+    body[data-active="chat"] .hx-chat-send:not(:disabled) {
+      background: var(--hx-text);
+      color: var(--hx-bg);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.10);
+    }
+    body[data-active="chat"] .hx-chat-send:not(:disabled):hover {
+      background: color-mix(in srgb, var(--hx-text) 92%, #000);
+      box-shadow:
+        0 2px 6px -1px rgba(0, 0, 0, 0.18),
+        0 0 0 3px color-mix(in srgb, var(--hx-text) 6%, transparent);
+    }
+    body[data-active="chat"] .hx-chat-send:not(:disabled):hover svg {
+      transform: translateX(1px);
+    }
+    body[data-active="chat"] .hx-chat-send:not(:disabled):active {
+      transform: scale(0.96);
+    }
+
+    /* Compose bar bottom strip — even quieter, tighter rhythm */
+    body[data-active="chat"] .hx-cc-compose-bar {
+      padding: 0 2px;
+      gap: 8px;
+      min-height: 20px;
+    }
+    body[data-active="chat"] .hx-cc-compose-bar::before {
+      font-size: 10px;
+      color: color-mix(in srgb, var(--hx-text) 34%, transparent);
+      letter-spacing: -0.001em;
+    }
+    body[data-active="chat"] .hx-cc-model-pick {
+      height: 20px;
+      padding: 0 6px 0 8px;
+      gap: 5px;
+      font-size: 10.5px;
+    }
+    body[data-active="chat"] .hx-cc-model-name {
+      font-size: 10.5px;
+      color: color-mix(in srgb, var(--hx-text) 78%, transparent);
+    }
+    body[data-active="chat"] .hx-cc-model-tier {
+      font-size: 8.5px;
+      padding: 1px 4px;
+    }
+    body[data-active="chat"] .hx-cc-model-caret {
+      width: 8px; height: 8px;
+    }
+
+    /* Mobile composer */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-chat-compose { padding: 6px 14px 12px; }
+      body[data-active="chat"] .hx-chat-input-row { border-radius: 11px; padding: 4px 5px 4px 10px; }
+      body[data-active="chat"] .hx-chat-tool-btn,
+      body[data-active="chat"] .hx-chat-send { width: 26px; height: 26px; }
+      body[data-active="chat"] .hx-chat-textarea { font-size: 14px; }
+    }
   </style>
 </head>
 <body data-active="chat">
