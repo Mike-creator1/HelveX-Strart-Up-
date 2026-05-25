@@ -3314,6 +3314,362 @@
     .hx-chat-rail-reopen:not([hidden]) { display: inline-flex; }
     .hx-chat-rail-reopen:hover { background: var(--hx-surface); color: var(--hx-text); }
     .hx-chat-rail-reopen svg { width: 15px; height: 15px; }
+
+    /* ═════════════════════════════════════════════════════════════════
+       PREMIUM SESSION REDESIGN — overrides everything above to deliver
+       a real, production-grade AI chat: clean modern header, calm
+       message flow, refined composer. Strips the Claude-Code-CLI
+       affordances that made it feel like a mockup.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* Re-enable the toolbar — it's the modern chat header now */
+    body[data-active="chat"] .hx-chat-toolbar {
+      display: flex !important;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      min-height: 60px;
+      background: color-mix(in srgb, var(--hx-surface) 96%, transparent);
+      border-bottom: 1px solid var(--hx-line-soft, var(--hx-line));
+      backdrop-filter: saturate(160%) blur(14px);
+      -webkit-backdrop-filter: saturate(160%) blur(14px);
+      flex-wrap: nowrap;
+      position: sticky; top: 0; z-index: 6;
+    }
+    body[data-active="chat"] .hx-chat-toolbar::after {
+      content: none;
+    }
+    body[data-active="chat"] .hx-chat-thread { padding-top: 28px; }
+
+    /* Title block — clean Inter, two lines (title + status) */
+    .hx-chat-toolbar .hx-chat-head {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column;
+      gap: 2px;
+      padding-left: 2px;
+    }
+    body[data-active="chat"] .hx-chat-toolbar .hx-chat-title {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14.5px;
+      letter-spacing: -0.008em;
+      color: var(--hx-text);
+      margin: 0;
+      max-width: 100%;
+      padding-left: 0;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    body[data-active="chat"] .hx-chat-toolbar .hx-chat-title::before {
+      content: none;
+    }
+    .hx-chat-sub {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 11.5px;
+      color: var(--hx-text-dim);
+      font-weight: 500;
+      letter-spacing: 0;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .hx-chat-sub-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--hx-text-mid);
+    }
+    .hx-chat-sub-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 0 2px rgba(16,185,129,0.16), 0 0 6px rgba(16,185,129,0.45);
+    }
+    .hx-chat-sub-sep {
+      color: var(--hx-text-faint);
+      opacity: 0.6;
+    }
+    .hx-chat-sub-model {
+      color: var(--hx-text);
+      font-weight: 600;
+    }
+
+    /* Right-side action buttons (Share / kebab) */
+    .hx-chat-head-actions {
+      display: inline-flex; align-items: center; gap: 6px;
+      flex-shrink: 0;
+    }
+    .hx-chat-head-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 32px;
+      padding: 0 11px;
+      background: transparent;
+      border: 1px solid var(--hx-line);
+      border-radius: 8px;
+      color: var(--hx-text-mid);
+      font: 500 12.5px/1 'Inter', system-ui, sans-serif;
+      letter-spacing: -0.005em;
+      cursor: pointer;
+      transition: background 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+    }
+    .hx-chat-head-btn:hover {
+      background: var(--hx-bg-2);
+      color: var(--hx-text);
+      border-color: var(--hx-line-strong);
+    }
+    .hx-chat-head-btn svg { width: 14px; height: 14px; opacity: 0.85; }
+    .hx-chat-head-btn.hx-icon {
+      width: 32px; padding: 0;
+      justify-content: center;
+    }
+    .hx-chat-head-btn.hx-icon svg { width: 16px; height: 16px; }
+    @media (max-width: 640px) {
+      .hx-chat-head-btn:not(.hx-icon) span { display: none; }
+      .hx-chat-head-btn:not(.hx-icon) { width: 32px; padding: 0; justify-content: center; }
+      .hx-chat-head-btn:not(.hx-icon) svg { width: 15px; height: 15px; }
+    }
+
+    /* Kill heavy ambient/morph chrome — distracting in real use */
+    body[data-active="chat"] .hx-chat-pane::before,
+    body[data-active="chat"] .hx-chat-pane::after,
+    body[data-active="chat"] .hx-chat-ambient {
+      display: none !important;
+    }
+
+    /* Strip the Claude-Code-CLI bottom strip down to essentials.
+       Hide: Accept-edits mode picker, Usage ring + popover, mic chevron.
+       Keep: attach proxy, mic proxy, model pick, plus a clean send-hint. */
+    body[data-active="chat"] .hx-cc-edits,
+    body[data-active="chat"] .hx-cc-mode-menu,
+    body[data-active="chat"] .hx-cc-usage-pick,
+    body[data-active="chat"] .hx-cc-usage-menu,
+    body[data-active="chat"] .hx-cc-mic-wrap {
+      display: none !important;
+    }
+
+    /* Redesigned bottom compose bar — quiet, real */
+    body[data-active="chat"] .hx-cc-compose-bar {
+      padding: 6px 4px 0;
+      gap: 8px;
+      align-items: center;
+    }
+    body[data-active="chat"] .hx-cc-iconbtn {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      color: var(--hx-text-dim);
+    }
+    body[data-active="chat"] .hx-cc-iconbtn:hover {
+      background: var(--hx-bg-2);
+      border-color: var(--hx-line);
+      color: var(--hx-text);
+    }
+    body[data-active="chat"] .hx-cc-iconbtn svg { width: 15px; height: 15px; }
+    body[data-active="chat"] .hx-cc-model-pick {
+      padding: 5px 10px 5px 9px;
+      border-radius: 8px;
+      border-color: var(--hx-line);
+      gap: 7px;
+      background: transparent;
+      font-size: 12px;
+      color: var(--hx-text-mid);
+    }
+    body[data-active="chat"] .hx-cc-model-pick:hover {
+      background: var(--hx-bg-2);
+      border-color: var(--hx-line-strong);
+      color: var(--hx-text);
+    }
+    body[data-active="chat"] .hx-cc-model-name { font-weight: 600; color: var(--hx-text); }
+    body[data-active="chat"] .hx-cc-model-tier {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--hx-text-dim);
+      padding: 1px 6px;
+      background: var(--hx-bg-2);
+      border-radius: 4px;
+    }
+    body[data-active="chat"] .hx-cc-model-sep { display: none; }
+
+    /* Tiny send-hint that anchors the compose bar — feels like a real product */
+    .hx-cc-send-hint {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px;
+      color: var(--hx-text-faint);
+      font-weight: 500;
+      letter-spacing: 0;
+      margin-right: auto;
+      padding-left: 2px;
+    }
+    .hx-cc-send-hint .hx-kbd {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 16px; height: 17px;
+      padding: 0 5px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      background: var(--hx-bg-2);
+      border: 1px solid var(--hx-line);
+      border-radius: 4px;
+      color: var(--hx-text-mid);
+      box-shadow: 0 1px 0 var(--hx-line);
+      line-height: 1;
+    }
+    @media (max-width: 700px) { .hx-cc-send-hint { display: none; } }
+
+    /* Composer — softer, more breathing room */
+    body[data-active="chat"] .hx-chat-compose {
+      padding: 14px 24px 22px;
+      background: linear-gradient(180deg, transparent 0%, var(--hx-bg) 24%, var(--hx-bg) 100%);
+      border-top: 0;
+    }
+    body[data-active="chat"] .hx-chat-compose::before { display: none; }
+    body[data-active="chat"] .hx-chat-compose-inner {
+      max-width: 760px;
+      gap: 8px;
+    }
+    body[data-active="chat"] .hx-chat-input-row {
+      border-radius: 16px;
+      padding: 10px 12px 10px 14px;
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line);
+      box-shadow:
+        0 1px 2px rgba(20,18,12,0.03),
+        0 8px 24px -14px rgba(20,18,12,0.10);
+    }
+    body[data-active="chat"] .hx-chat-input-row:focus-within {
+      border-color: color-mix(in srgb, var(--hx-text) 45%, var(--hx-line));
+      box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--hx-text) 6%, transparent),
+        0 10px 28px -14px rgba(20,18,12,0.14);
+    }
+    body[data-active="chat"] .hx-chat-textarea {
+      font-size: 14.5px;
+      line-height: 1.55;
+      padding: 6px 4px;
+    }
+    body[data-active="chat"] .hx-chat-textarea::placeholder {
+      color: var(--hx-text-faint);
+    }
+    body[data-active="chat"] .hx-chat-send {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+    }
+
+    /* Thread — premium spacing + neutral max-width */
+    body[data-active="chat"] .hx-chat-thread {
+      padding: 28px 0 24px;
+    }
+    body[data-active="chat"] .hx-chat-thread-inner {
+      max-width: 760px;
+      padding: 0 32px;
+      gap: 28px;
+    }
+
+    /* Message meta — quiet uppercase label, no decorative trailing line */
+    body[data-active="chat"] .hx-msg-meta {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--hx-text-dim);
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-meta {
+      color: var(--hx-text);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-meta::before {
+      width: 5px; height: 5px;
+      background: var(--hx-text);
+      box-shadow: none;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-meta::after {
+      display: none;
+    }
+    body[data-active="chat"] .hx-msg-content {
+      font-size: 15px;
+      line-height: 1.72;
+      letter-spacing: -0.003em;
+    }
+    /* Kill editorial drop-cap on assistant messages — feels like a magazine, not a chat */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content::first-letter {
+      font-family: inherit;
+      font-style: normal;
+      font-size: inherit;
+      letter-spacing: inherit;
+    }
+
+    /* User bubble — calm neutral with a subtle accent edge, not a yellow gradient */
+    body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+      background: var(--hx-bg-2);
+      border: 1px solid var(--hx-line);
+      border-radius: 16px;
+      border-bottom-right-radius: 4px;
+      padding: 12px 16px;
+      font-size: 14.5px;
+      line-height: 1.6;
+      max-width: 76%;
+      box-shadow: none;
+      color: var(--hx-text);
+    }
+    body[data-active="chat"] .hx-msg.is-user .hx-msg-meta {
+      letter-spacing: 0.14em;
+      color: var(--hx-text-dim);
+    }
+
+    /* Empty state — refined, less marketing-hero */
+    body[data-active="chat"] .hx-chat-blank {
+      padding: 40px 24px 24px;
+      gap: 16px;
+      justify-content: center;
+    }
+    body[data-active="chat"] .hx-chat-blank-eyebrow {
+      display: none;
+    }
+    body[data-active="chat"] .hx-chat-blank h2 {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 26px;
+      letter-spacing: -0.018em;
+      line-height: 1.2;
+      color: var(--hx-text);
+    }
+    body[data-active="chat"] .hx-chat-blank h2::after {
+      content: none;
+    }
+    body[data-active="chat"] .hx-chat-blank p {
+      font-size: 14px;
+      max-width: 460px;
+      line-height: 1.6;
+      color: var(--hx-text-mid);
+    }
+    body[data-active="chat"] .hx-chat-blank-mark {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    body[data-active="chat"] .hx-chat-blank-mark::before {
+      display: none;
+    }
+    body[data-active="chat"] .hx-chat-blank-mark::after {
+      width: 9px; height: 9px;
+      background: var(--hx-text);
+      box-shadow: 0 0 0 4px var(--hx-bg-2);
+    }
+
+    /* Mobile — keep the header tight */
+    @media (max-width: 700px) {
+      body[data-active="chat"] .hx-chat-toolbar { padding: 10px 14px; min-height: 56px; }
+      body[data-active="chat"] .hx-chat-toolbar .hx-chat-title { font-size: 13.5px; }
+      .hx-chat-sub { font-size: 10.5px; gap: 6px; }
+      body[data-active="chat"] .hx-chat-thread-inner { padding: 0 18px; gap: 24px; }
+      body[data-active="chat"] .hx-chat-compose { padding: 10px 14px 16px; }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -3363,32 +3719,41 @@
           <div class="hx-chat-ambient is-ether"      id="hx-c-ambient-ether"      aria-hidden="true"></div>
           <div class="hx-chat-ambient is-nexus"      id="hx-c-ambient-nexus"      aria-hidden="true"></div>
           <div class="hx-chat-ambient is-prometheus" id="hx-c-ambient-prometheus" aria-hidden="true"></div>
-          <div class="hx-chat-toolbar">
+          <header class="hx-chat-toolbar" id="hx-c-toolbar">
             <button class="hx-chat-drawer-toggle" id="hx-c-drawer-toggle" type="button" aria-label="Open conversations">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
-            <p class="hx-chat-title" id="hx-c-title">New chat</p>
-            <label class="hx-chat-pill" title="Model">
-              <span style="color:var(--hx-text-dim);font-size:11.5px;">Model</span>
-              <select id="hx-c-model">
-                <option value="ether">Ether</option>
-                <option value="nexus">Nexus</option>
-                <option value="prometheus">Prometheus</option>
-              </select>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </label>
-            <label class="hx-chat-pill" title="Project">
-              <span style="color:var(--hx-text-dim);font-size:11.5px;">Project</span>
-              <select id="hx-c-project">
-                <option value="">None</option>
-              </select>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </label>
-            <!-- Delete moved to each conversation's 3-dots menu in the rail.
-                 Credit balance moved to the workspace/account header (not here). -->
-            <button class="hx-chat-pill" type="button" id="hx-c-clear" hidden aria-hidden="true"></button>
-            <span class="hx-chat-balance" id="hx-c-balance" hidden aria-hidden="true">—</span>
-          </div>
+            <div class="hx-chat-head">
+              <p class="hx-chat-title" id="hx-c-title">New chat</p>
+              <div class="hx-chat-sub" aria-hidden="true">
+                <span class="hx-chat-sub-status"><span class="hx-chat-sub-dot"></span>Helix · ready</span>
+                <span class="hx-chat-sub-sep">·</span>
+                <span class="hx-chat-sub-model" id="hx-c-head-model">Ether</span>
+                <span class="hx-chat-sub-sep">·</span>
+                <span class="hx-chat-sub-meta">Private</span>
+              </div>
+            </div>
+            <!-- Selects kept in DOM for existing JS readers (.value) but hidden from view -->
+            <select id="hx-c-model" hidden aria-hidden="true">
+              <option value="ether">Ether</option>
+              <option value="nexus">Nexus</option>
+              <option value="prometheus">Prometheus</option>
+            </select>
+            <select id="hx-c-project" hidden aria-hidden="true">
+              <option value="">None</option>
+            </select>
+            <div class="hx-chat-head-actions">
+              <button class="hx-chat-head-btn" type="button" id="hx-c-share-btn" title="Share this conversation">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                <span>Share</span>
+              </button>
+              <button class="hx-chat-head-btn hx-icon" type="button" id="hx-c-more-btn" aria-label="More" title="More options">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="12" cy="19" r="1.3"/></svg>
+              </button>
+            </div>
+            <button class="hx-chat-pill" type="button" id="hx-c-clear" hidden aria-hidden="true" style="display:none !important;"></button>
+            <span class="hx-chat-balance" id="hx-c-balance" hidden aria-hidden="true" style="display:none !important;">—</span>
+          </header>
 
           <div class="hx-chat-thread" id="hx-c-thread">
             <div class="hx-chat-blank" id="hx-c-blank">
@@ -3466,6 +3831,14 @@
                    The [+] and [🎤] buttons here are proxies for the real
                    (hidden) #hx-c-attach / #hx-c-mic buttons inside the card. -->
               <div class="hx-cc-compose-bar">
+                  <span class="hx-cc-send-hint" aria-hidden="true">
+                    <span class="hx-kbd">⏎</span>
+                    <span>to send</span>
+                    <span style="opacity:0.5;margin:0 4px;">·</span>
+                    <span class="hx-kbd">⇧</span>
+                    <span class="hx-kbd">⏎</span>
+                    <span>new line</span>
+                  </span>
                   <button class="hx-cc-edits" type="button" id="hx-cc-edits" aria-haspopup="menu" aria-expanded="false">
                     <span class="hx-cc-edits-dot" aria-hidden="true"></span>
                     <span id="hx-cc-edits-label">Accept edits</span>
@@ -6242,6 +6615,36 @@
           reopen.addEventListener('click', function () { setCollapsed(false); });
         })();
 
+        // ─── Header Share + More buttons ─────────────────────────────
+        (function wireHeaderActions() {
+          var shareBtn = document.getElementById('hx-c-share-btn');
+          var moreBtn  = document.getElementById('hx-c-more-btn');
+          function flash(btn, text) {
+            var span = btn.querySelector('span');
+            if (!span) return;
+            var orig = span.textContent;
+            span.textContent = text;
+            setTimeout(function () { span.textContent = orig; }, 1600);
+          }
+          if (shareBtn) {
+            shareBtn.addEventListener('click', function () {
+              var convId = (state && state.conversation && state.conversation.id) || '';
+              var url = location.origin + location.pathname + (convId ? ('?c=' + encodeURIComponent(convId)) : '');
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(function () { flash(shareBtn, 'Link copied'); });
+              } else {
+                flash(shareBtn, 'Link ready');
+              }
+            });
+          }
+          if (moreBtn) {
+            moreBtn.addEventListener('click', function () {
+              var rail = document.getElementById('hx-c-rail');
+              if (rail) rail.classList.toggle('is-open');
+            });
+          }
+        })();
+
         // ─── Claude-Code-style model picker on the compose bar ─────────
         (function wireModelPick() {
           var pick = document.getElementById('hx-cc-model-pick');
@@ -6249,9 +6652,12 @@
           var sel  = document.getElementById('hx-c-model');
           if (!pick || !menu || !sel) return;
           var nameEl = document.getElementById('hx-cc-model-name');
+          var headEl = document.getElementById('hx-c-head-model');
           function sync() {
             var v = sel.value || 'ether';
-            if (nameEl) nameEl.textContent = v.charAt(0).toUpperCase() + v.slice(1);
+            var pretty = v.charAt(0).toUpperCase() + v.slice(1);
+            if (nameEl) nameEl.textContent = pretty;
+            if (headEl) headEl.textContent = pretty;
             menu.querySelectorAll('.hx-cc-model-opt').forEach(function (b) {
               b.classList.toggle('is-active', b.getAttribute('data-model') === v);
             });
