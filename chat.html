@@ -7476,6 +7476,393 @@
       .hx-chat-blank-greet { font-size: 22px; }
       body[data-active="chat"] .hx-chat-compose { padding: 0 var(--col-x) var(--s4); }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V12 — DOCUMENT-GRADE CHAT
+       Removes the last remaining "designed" details. The chat reads
+       like a beautifully typeset document. Reasoning is invisible until
+       summoned and presents as muted italic prose. The composer is a
+       single quiet card. Nothing here advertises itself.
+       ═════════════════════════════════════════════════════════════════ */
+
+    body[data-active="chat"] {
+      --col: 720px;
+      --col-x: 36px;
+    }
+
+    /* Toolbar — fully transparent, just a hairline */
+    body[data-active="chat"] .hx-chat-toolbar {
+      min-height: 44px;
+      padding: 0 var(--s4);
+      background: var(--hx-bg);
+      border-bottom: 1px solid var(--b1);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    body[data-active="chat"] .hx-chat-toolbar .hx-chat-head {
+      max-width: var(--col);
+      margin: 0 auto;
+      padding: 0 var(--col-x);
+    }
+    body[data-active="chat"] .hx-chat-toolbar .hx-chat-title {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.006em;
+      color: var(--t2);
+    }
+    body[data-active="chat"] .hx-chat-drawer-toggle,
+    body[data-active="chat"] .hx-chat-head-btn {
+      width: 26px; height: 26px;
+      border-radius: 6px;
+      color: var(--t3);
+    }
+    body[data-active="chat"] .hx-chat-drawer-toggle svg,
+    body[data-active="chat"] .hx-chat-head-btn svg { width: 14.5px; height: 14.5px; stroke-width: 1.6; }
+
+    /* Thread — wider gutters, document-style proportions */
+    body[data-active="chat"] .hx-chat-thread-inner {
+      max-width: var(--col);
+      padding: 48px var(--col-x) 28px;
+      gap: 44px;
+    }
+
+    /* Messages — text-first, no avatars, no metadata chrome */
+    body[data-active="chat"] .hx-msg { display: block; }
+    body[data-active="chat"] .hx-msg.is-user { display: flex; justify-content: flex-end; }
+    body[data-active="chat"] .hx-msg-avatar { display: none !important; }
+    body[data-active="chat"] .hx-msg-body { width: 100%; max-width: 100%; }
+    body[data-active="chat"] .hx-msg.is-user .hx-msg-body { width: auto; max-width: 76%; }
+
+    /* Assistant — typeset reading */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 15.25px;
+      line-height: 1.75;
+      letter-spacing: -0.006em;
+      color: var(--t1);
+      font-feature-settings: 'kern', 'liga', 'calt', 'cv11';
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > * { margin: 0; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > * + * { margin-top: 16px; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h1.hx-md-h + *,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h2.hx-md-h + *,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h3.hx-md-h + * { margin-top: 8px; }
+
+    body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+      background: var(--bg-soft);
+      border: 0;
+      border-radius: 14px;
+      padding: 11px 15px;
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: var(--t1);
+      letter-spacing: -0.004em;
+    }
+
+    /* Action row — invisible until message hover, icons only */
+    body[data-active="chat"] .hx-msg-actions {
+      margin-top: 14px;
+      margin-left: -4px;
+      gap: 0;
+      opacity: 0;
+      transition: opacity 120ms ease;
+    }
+    body[data-active="chat"] .hx-msg:hover .hx-msg-actions { opacity: 1; }
+    body[data-active="chat"] .hx-msg-act {
+      width: 26px; height: 26px;
+      padding: 0;
+      border-radius: 5px;
+      color: var(--t3);
+      font-size: 0;
+      gap: 0;
+      justify-content: center;
+    }
+    body[data-active="chat"] .hx-msg-act:hover { background: var(--bg-hover); color: var(--t1); }
+    body[data-active="chat"] .hx-msg-act svg { width: 13px; height: 13px; opacity: 0.85; }
+
+    /* Headings — disciplined harmony */
+    body[data-active="chat"] .hx-md-h1 {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.022em;
+      line-height: 1.22;
+      color: var(--t1);
+    }
+    body[data-active="chat"] .hx-md-h2 {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.014em;
+      line-height: 1.28;
+      color: var(--t1);
+      border: 0; padding: 0; text-transform: none;
+    }
+    body[data-active="chat"] .hx-md-h3 {
+      font-size: 14.5px;
+      font-weight: 600;
+      letter-spacing: -0.006em;
+      line-height: 1.35;
+      color: var(--t1);
+    }
+
+    /* Cognition — single italic line that expands to italic prose */
+    body[data-active="chat"] .hx-rsn {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      border: 0;
+    }
+    body[data-active="chat"] .hx-rsn > summary {
+      list-style: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px 4px 6px;
+      margin-left: -6px;
+      margin-bottom: 2px;
+      border-radius: 5px;
+      cursor: pointer;
+      color: var(--t3);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: -0.004em;
+      user-select: none;
+      transition: background 120ms ease, color 120ms ease;
+    }
+    body[data-active="chat"] .hx-rsn > summary::-webkit-details-marker { display: none; }
+    body[data-active="chat"] .hx-rsn > summary::marker { content: ''; }
+    body[data-active="chat"] .hx-rsn > summary:hover {
+      background: var(--bg-hover);
+      color: var(--t2);
+    }
+    .hx-rsn-label {
+      display: inline-flex; align-items: baseline; gap: 1px;
+    }
+    .hx-rsn-ellipsis {
+      display: inline-block;
+      width: 12px;
+      animation: hx-rsn-ellipsis 1.4s steps(4, end) infinite;
+      overflow: hidden;
+      vertical-align: bottom;
+    }
+    @keyframes hx-rsn-ellipsis {
+      0%   { width: 0; }
+      100% { width: 12px; }
+    }
+    .hx-rsn-caret {
+      width: 10px; height: 10px;
+      color: var(--t4);
+      transition: transform 180ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      flex-shrink: 0;
+      margin-left: 2px;
+    }
+    body[data-active="chat"] .hx-rsn[open] > summary .hx-rsn-caret { transform: rotate(180deg); }
+
+    body[data-active="chat"] .hx-rsn-body {
+      padding: 4px 0 8px 14px;
+      margin: 2px 0 0 6px;
+      border-left: 1px solid var(--b1);
+    }
+    body[data-active="chat"] .hx-rsn-line {
+      margin: 0;
+      padding: 3px 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 13.5px;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.6;
+      letter-spacing: -0.004em;
+      color: var(--t3);
+    }
+    body[data-active="chat"] .hx-rsn-line + .hx-rsn-line { padding-top: 4px; }
+    body[data-active="chat"] .hx-rsn-line.is-done { color: var(--t3); }
+    body[data-active="chat"] .hx-rsn-line.is-pending { color: var(--t4); }
+
+    /* Empty state — pure greeting */
+    body[data-active="chat"] .hx-chat-blank {
+      padding: 48px var(--col-x);
+      align-items: center; justify-content: center;
+    }
+    .hx-chat-blank-inner { gap: 0; max-width: 540px; text-align: center; }
+    .hx-chat-blank-mark-v3 { display: none !important; }
+    .hx-chat-blank-greet {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-weight: 500;
+      font-size: 28px;
+      letter-spacing: -0.024em;
+      line-height: 1.18;
+      color: var(--t2);
+    }
+    .hx-chat-blank-lede { display: none !important; }
+    body[data-active="chat"] .hx-chat-blank-chips { display: none !important; }
+
+    /* Lists — calm rhythm */
+    body[data-active="chat"] .hx-md-list {
+      margin: 8px 0;
+      gap: 4px;
+    }
+    body[data-active="chat"] .hx-md-list > li {
+      padding-left: 20px;
+      line-height: 1.68;
+      letter-spacing: -0.004em;
+    }
+    body[data-active="chat"] .hx-md-list > li::before {
+      top: 11px;
+      width: 3px; height: 3px;
+      background: var(--t4);
+    }
+
+    /* Inline elements */
+    body[data-active="chat"] .hx-md-inline {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.84em;
+      padding: 1.5px 5px;
+      background: var(--bg-soft);
+      border: 0;
+      border-radius: 4px;
+      color: var(--t1);
+    }
+    body[data-active="chat"] .hx-md-link {
+      color: var(--t1);
+      border-bottom: 1px solid var(--b2);
+      transition: border-color 120ms ease;
+    }
+    body[data-active="chat"] .hx-md-link:hover { border-bottom-color: var(--t1); }
+    body[data-active="chat"] .hx-md-quote {
+      margin: 16px 0;
+      padding: 2px 0 2px 14px;
+      border-left: 2px solid var(--b2);
+      background: transparent;
+      color: var(--t2);
+      font-size: 14.5px;
+      font-style: normal;
+    }
+
+    /* Composer — single soft card, no borders unless focused */
+    body[data-active="chat"] .hx-chat-compose {
+      padding: 8px var(--col-x) 18px;
+      background: linear-gradient(180deg, transparent 0%, var(--hx-bg) 40%);
+    }
+    body[data-active="chat"] .hx-chat-compose-inner {
+      max-width: var(--col);
+      gap: 4px;
+    }
+    body[data-active="chat"] .hx-chat-input-row {
+      background: var(--bg-soft);
+      border: 1px solid transparent;
+      border-radius: 14px;
+      padding: 4px 5px 4px 12px;
+      box-shadow: none;
+      transition: background 180ms cubic-bezier(0.2, 0.7, 0.2, 1),
+                  border-color 180ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-chat-input-row:hover {
+      background: var(--bg-hover);
+    }
+    body[data-active="chat"] .hx-chat-input-row:focus-within {
+      background: var(--hx-surface);
+      border-color: var(--b2);
+      box-shadow: none;
+    }
+    body[data-active="chat"] .hx-chat-input-bar { min-height: 28px; gap: 2px; }
+    body[data-active="chat"] .hx-chat-textarea {
+      font-size: 14.5px;
+      line-height: 1.55;
+      padding: 4px;
+      color: var(--t1);
+    }
+    body[data-active="chat"] .hx-chat-textarea::placeholder {
+      color: var(--t4);
+      font-weight: 400;
+    }
+    body[data-active="chat"] .hx-chat-tool-btn {
+      width: 26px; height: 26px;
+      border-radius: 5px;
+      color: var(--t3);
+    }
+    body[data-active="chat"] .hx-chat-tool-btn:hover {
+      background: color-mix(in srgb, var(--hx-text) 6%, transparent);
+      color: var(--t1);
+    }
+    body[data-active="chat"] .hx-chat-tool-btn svg { width: 14.5px; height: 14.5px; stroke-width: 1.6; }
+    body[data-active="chat"] .hx-chat-send {
+      width: 26px; height: 26px;
+      border-radius: 5px;
+      transition: background 120ms ease, color 120ms ease, transform 120ms ease;
+    }
+    body[data-active="chat"] .hx-chat-send:disabled {
+      background: transparent;
+      color: var(--t4);
+    }
+    body[data-active="chat"] .hx-chat-send:not(:disabled) {
+      background: var(--t1);
+      color: var(--hx-bg);
+    }
+    body[data-active="chat"] .hx-chat-send:not(:disabled):hover {
+      background: color-mix(in srgb, var(--t1) 90%, #000);
+    }
+    body[data-active="chat"] .hx-chat-send:not(:disabled):active { transform: scale(0.95); }
+    body[data-active="chat"] .hx-chat-send svg { width: 13.5px; height: 13.5px; stroke-width: 2; }
+
+    /* Bottom strip — invisible chrome */
+    body[data-active="chat"] .hx-cc-compose-bar {
+      padding: 0 4px;
+      min-height: 16px;
+      gap: 8px;
+    }
+    body[data-active="chat"] .hx-cc-compose-bar::before {
+      content: '';
+      font-size: 0;
+    }
+    body[data-active="chat"] .hx-cc-compose-bar-spacer { display: block; flex: 1; }
+    body[data-active="chat"] .hx-cc-model-pick {
+      height: 18px;
+      padding: 0 5px 0 6px;
+      gap: 4px;
+      font-size: 10px;
+      color: var(--t3);
+      background: transparent;
+      border: 0;
+      border-radius: 4px;
+    }
+    body[data-active="chat"] .hx-cc-model-pick:hover {
+      background: var(--bg-hover);
+      color: var(--t1);
+    }
+    body[data-active="chat"] .hx-cc-model-name { font-size: 10px; font-weight: 500; color: var(--t2); }
+    body[data-active="chat"] .hx-cc-model-tier { font-size: 8px; padding: 0 3px; background: transparent; color: var(--t4); }
+    body[data-active="chat"] .hx-cc-model-caret { width: 8px; height: 8px; opacity: 0.4; }
+
+    /* Scrollbar — minimal */
+    body[data-active="chat"] .hx-chat-thread::-webkit-scrollbar { width: 6px; }
+    body[data-active="chat"] .hx-chat-thread::-webkit-scrollbar-thumb {
+      background: transparent;
+      background-clip: padding-box;
+      border: 1.5px solid transparent;
+      border-radius: 999px;
+    }
+    body[data-active="chat"] .hx-chat-thread:hover::-webkit-scrollbar-thumb {
+      background: color-mix(in srgb, var(--hx-text) 12%, transparent);
+      background-clip: padding-box;
+    }
+
+    /* Mobile */
+    @media (max-width: 720px) {
+      body[data-active="chat"] {
+        --col: 100%;
+        --col-x: 18px;
+      }
+      body[data-active="chat"] .hx-chat-toolbar { min-height: 42px; padding: 0 var(--s3); }
+      body[data-active="chat"] .hx-chat-thread-inner { padding: 32px var(--s4) 24px; gap: 32px; }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content { font-size: 14.75px; line-height: 1.7; }
+      body[data-active="chat"] .hx-rsn-line { font-size: 13px; }
+      body[data-active="chat"] .hx-chat-compose { padding: 6px var(--col-x) 14px; }
+      .hx-chat-blank-greet { font-size: 22px; }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -8070,37 +8457,30 @@
           var content = quotes[parseInt(n, 10)] || '';
           return '<blockquote class="hx-md-quote">' + renderInlineFragments(content) + '</blockquote>';
         });
-        // Expand checklist placeholders — Helix reasoning, rendered as
-        // a collapsible "Reasoned · N steps" summary that expands into a
-        // quiet step list. Matches the Claude / ChatGPT cognition pattern
-        // — feels like part of the response, not a developer-tool widget.
+        // Helix cognition layer — rendered as a single italic muted
+        // summary line ("Reasoning" while active, "Thought through N
+        // steps" when done) that expands into quiet italic body prose.
+        // No dots, no colors, no card chrome. Just text that breathes.
         s = s.replace(/\x00CHECKLIST_(\d+)\x00/g, function (_, n) {
           var items = checklists[parseInt(n, 10)] || [];
           var total = items.length;
           var doneCount = items.filter(function (it) { return it.done; }).length;
           var inProgress = doneCount < total;
           var summaryText = inProgress
-            ? ('Reasoning · ' + doneCount + ' of ' + total + ' steps')
-            : ('Reasoned · ' + total + ' step' + (total === 1 ? '' : 's'));
+            ? 'Reasoning'
+            : ('Thought through ' + total + ' step' + (total === 1 ? '' : 's'));
           var openAttr = inProgress ? ' open' : '';
-          var statePulse = inProgress
-            ? '<span class="hx-rsn-pulse" aria-hidden="true"></span>'
-            : '<svg class="hx-rsn-done" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 6.4l2.2 2.2 3.8-4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
           var html = '<details class="hx-rsn' + (inProgress ? ' is-active' : ' is-done') + '"' + openAttr + '>' +
             '<summary class="hx-rsn-summary">' +
-              '<span class="hx-rsn-state">' + statePulse + '</span>' +
-              '<span class="hx-rsn-label">' + escape(summaryText) + '</span>' +
-              '<svg class="hx-rsn-caret" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4 5l2 2 2-2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              '<span class="hx-rsn-label">' + escape(summaryText) + (inProgress ? '<span class="hx-rsn-ellipsis" aria-hidden="true">…</span>' : '') + '</span>' +
+              '<svg class="hx-rsn-caret" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4 4.5l2 2 2-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
             '</summary>' +
-            '<ol class="hx-rsn-steps">';
+            '<div class="hx-rsn-body">';
           items.forEach(function (it) {
             var status = it.done ? 'done' : 'pending';
-            html += '<li class="hx-rsn-step is-' + status + '">' +
-              '<span class="hx-rsn-dot" aria-hidden="true"></span>' +
-              '<span class="hx-rsn-text">' + renderInlineFragments(it.label) + '</span>' +
-            '</li>';
+            html += '<p class="hx-rsn-line is-' + status + '">' + renderInlineFragments(it.label) + '</p>';
           });
-          html += '</ol></details>';
+          html += '</div></details>';
           return html;
         });
         // Expand tool cards LAST so they survive other transformations.
