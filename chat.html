@@ -4697,6 +4697,219 @@
       body[data-active="chat"] .hx-chat-blank-chip { padding: 12px 14px; font-size: 12.5px; }
       body[data-active="chat"] .hx-cc-compose-bar::before { font-size: 10.5px; }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V4 — COMPOSER REFINEMENT
+       Real-product input bar: compact, refined icons, send button that
+       reads as "ready" not "broken", integrated model picker, polished
+       disclaimer. Inspired by Claude / Linear / Perplexity but distinctly
+       Helix.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* Composer container — tighter, more anchored */
+    body[data-active="chat"] .hx-chat-compose {
+      padding: 8px 24px 14px;
+      background:
+        linear-gradient(180deg,
+          color-mix(in srgb, var(--hx-bg) 0%, transparent) 0%,
+          color-mix(in srgb, var(--hx-bg) 70%, transparent) 30%,
+          var(--hx-bg) 100%);
+    }
+    body[data-active="chat"] .hx-chat-compose-inner {
+      max-width: var(--hx-msg-max);
+      margin: 0 auto;
+      gap: 6px;
+    }
+
+    /* Input card — tighter radius, restrained shadow, premium feel */
+    body[data-active="chat"] .hx-chat-input-row {
+      background: var(--hx-surface);
+      border: 1px solid var(--hx-line);
+      border-radius: 14px;
+      padding: 6px 6px 6px 12px;
+      box-shadow:
+        0 1px 0 rgba(20,18,12,0.02),
+        0 4px 14px -8px rgba(20,18,12,0.10);
+      transition: border-color 0.18s ease, box-shadow 0.22s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-chat-input-row:hover {
+      border-color: var(--hx-line-strong);
+    }
+    body[data-active="chat"] .hx-chat-input-row:focus-within {
+      border-color: color-mix(in srgb, var(--hx-text) 32%, var(--hx-line));
+      box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--hx-text) 5%, transparent),
+        0 6px 18px -10px rgba(20,18,12,0.14);
+    }
+
+    /* Input row internal layout — proper alignment baseline */
+    body[data-active="chat"] .hx-chat-input-bar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 32px;
+    }
+    body[data-active="chat"] .hx-chat-textarea {
+      font-size: 14.5px;
+      line-height: 1.55;
+      letter-spacing: -0.005em;
+      padding: 6px 6px;
+      color: var(--hx-text);
+      font-feature-settings: 'kern', 'liga';
+      min-height: 22px;
+    }
+    body[data-active="chat"] .hx-chat-textarea::placeholder {
+      color: var(--hx-text-faint);
+      font-weight: 400;
+      letter-spacing: -0.004em;
+      opacity: 0.85;
+    }
+
+    /* Icon buttons in the input row — quiet, refined, properly sized */
+    body[data-active="chat"] .hx-chat-tool-btn {
+      width: 28px; height: 28px;
+      border-radius: 7px;
+      color: var(--hx-text-mid);
+      border: 0;
+      background: transparent;
+      flex-shrink: 0;
+    }
+    body[data-active="chat"] .hx-chat-tool-btn:hover {
+      background: var(--hx-bg-2);
+      color: var(--hx-text);
+    }
+    body[data-active="chat"] .hx-chat-tool-btn svg {
+      width: 16px; height: 16px;
+      stroke-width: 1.7;
+    }
+
+    /* Send button — always reads as "ready", never as broken/disabled.
+       Empty state: subtle outlined arrow on neutral bg.
+       Active state: filled gradient dark, with arrow micro-translate. */
+    body[data-active="chat"] .hx-chat-send {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      background: var(--hx-bg-2);
+      color: var(--hx-text-mid);
+      border: 1px solid var(--hx-line);
+      box-shadow: none;
+      transition:
+        background 0.16s ease,
+        color 0.16s ease,
+        border-color 0.16s ease,
+        transform 0.14s cubic-bezier(0.2, 0.7, 0.2, 1),
+        box-shadow 0.18s ease;
+      cursor: pointer;
+      flex-shrink: 0;
+      opacity: 1 !important;
+    }
+    body[data-active="chat"] .hx-chat-send svg {
+      width: 16px; height: 16px;
+      transition: transform 0.18s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-chat-send:disabled {
+      background: var(--hx-bg-2);
+      color: var(--hx-text-faint);
+      border-color: var(--hx-line);
+      cursor: default;
+    }
+    /* Active (has text) — dark filled, premium */
+    body[data-active="chat"] .hx-chat-send:not(:disabled) {
+      background: linear-gradient(180deg, var(--hx-text) 0%, color-mix(in srgb, var(--hx-text) 86%, #000) 100%);
+      color: var(--hx-bg);
+      border-color: var(--hx-text);
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 14%, transparent),
+        0 1px 2px rgba(0,0,0,0.10);
+    }
+    body[data-active="chat"] .hx-chat-send:not(:disabled):hover {
+      transform: translateY(-1px);
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 18%, transparent),
+        0 2px 4px rgba(0,0,0,0.14),
+        0 6px 14px -4px rgba(0,0,0,0.24),
+        0 0 0 3px color-mix(in srgb, var(--hx-text) 7%, transparent);
+    }
+    body[data-active="chat"] .hx-chat-send:not(:disabled):hover svg {
+      transform: translateX(1px);
+    }
+    body[data-active="chat"] .hx-chat-send:not(:disabled):active {
+      transform: translateY(0);
+    }
+
+    /* Mic — keep voice action recognisable but quieter */
+    body[data-active="chat"] .hx-chat-mic-btn svg { stroke-width: 1.6; }
+
+    /* Bottom strip — model picker integrated, disclaimer subtle ─────── */
+    body[data-active="chat"] .hx-cc-compose-bar {
+      padding: 0 4px;
+      gap: 10px;
+      min-height: 22px;
+      align-items: center;
+    }
+    /* Disclaimer text — much smaller, neutral, true production tone */
+    body[data-active="chat"] .hx-cc-compose-bar::before {
+      content: 'Helix can make mistakes. Check important information.';
+      flex: 1;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 10.5px;
+      font-weight: 400;
+      color: color-mix(in srgb, var(--hx-text) 38%, transparent);
+      letter-spacing: -0.002em;
+      text-align: center;
+      line-height: 1.4;
+    }
+    /* Model picker — subtle chip, anchored right */
+    body[data-active="chat"] .hx-cc-model-pick {
+      padding: 3px 7px 3px 9px;
+      border-radius: 6px;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--hx-text-dim);
+      border: 0;
+      background: transparent;
+      height: 22px;
+      order: 2;
+    }
+    body[data-active="chat"] .hx-cc-model-pick:hover {
+      background: var(--hx-bg-2);
+      color: var(--hx-text);
+    }
+    body[data-active="chat"] .hx-cc-model-glyph { display: none !important; }
+    body[data-active="chat"] .hx-cc-model-name {
+      color: var(--hx-text);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: -0.002em;
+    }
+    body[data-active="chat"] .hx-cc-model-tier {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 1px 4px;
+      background: var(--hx-bg-2);
+      border-radius: 3px;
+      color: var(--hx-text-dim);
+    }
+    body[data-active="chat"] .hx-cc-model-pick:hover .hx-cc-model-tier {
+      background: var(--hx-surface);
+    }
+    body[data-active="chat"] .hx-cc-model-caret {
+      width: 9px; height: 9px;
+      opacity: 0.45;
+    }
+    body[data-active="chat"] .hx-cc-model-pick:hover .hx-cc-model-caret { opacity: 0.7; }
+
+    /* Mobile — composer stays tight */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-chat-compose { padding: 8px 14px 12px; }
+      body[data-active="chat"] .hx-chat-input-row { border-radius: 12px; padding: 6px 6px 6px 10px; }
+      body[data-active="chat"] .hx-chat-tool-btn { width: 28px; height: 28px; }
+      body[data-active="chat"] .hx-chat-send { width: 28px; height: 28px; }
+      body[data-active="chat"] .hx-cc-compose-bar::before { font-size: 10px; text-align: left; }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -4850,7 +5063,7 @@
                     type="button"
                     aria-label="Attach files"
                     title="Attach an image or document">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5l-8.59 8.59a5.5 5.5 0 1 1-7.78-7.78l8.59-8.59a3.5 3.5 0 1 1 4.95 4.95l-8.59 8.59a1.5 1.5 0 1 1-2.12-2.12l7.88-7.88"/></svg>
                   </button>
                   <input
                     type="file"
@@ -4861,20 +5074,20 @@
                   <textarea
                     id="hx-c-input"
                     class="hx-chat-textarea"
-                    placeholder="Type / for commands"
+                    placeholder="Message Helix"
                     rows="1"
                     autocomplete="off"
                     spellcheck="true"></textarea>
                   <button
-                    class="hx-chat-tool-btn"
+                    class="hx-chat-tool-btn hx-chat-mic-btn"
                     id="hx-c-mic"
                     type="button"
                     aria-label="Voice input"
                     title="Voice input">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><line x1="12" y1="18" x2="12" y2="22"/></svg>
                   </button>
                   <button class="hx-chat-send" id="hx-c-send" type="button" disabled aria-label="Send">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
                   </button>
                 </div>
               </div>
