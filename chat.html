@@ -11249,6 +11249,108 @@
         animation: none !important;
       }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V27 — RAIL COLLAPSE EXPANDS THE CHAT
+       Fix two bugs at once:
+       (1) When the conversations rail collapses, the chat pane stays
+           pinned to the 280px column because hx-main uses grid-template-
+           columns: 280px minmax(0, 1fr). Now the column itself collapses.
+       (2) The reopen tab was getting covered by the topbar and was
+           visually unfindable. Now it sits clearly above the topbar and
+           is anchored to the chat surface.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* Grid recomputes when the rail goes to .is-collapsed */
+    body[data-active="chat"] .hx-main {
+      transition: grid-template-columns 240ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-main:has(.hx-chat-rail.is-collapsed) {
+      grid-template-columns: 0 minmax(0, 1fr);
+    }
+
+    /* Rail width + padding animate together with the grid */
+    body[data-active="chat"] .hx-chat-rail {
+      transition:
+        width 240ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        min-width 240ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        padding 240ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        opacity 180ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-chat-rail.is-collapsed {
+      width: 0 !important;
+      min-width: 0 !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      border-right: 0 !important;
+      opacity: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    body[data-active="chat"] .hx-chat-rail.is-collapsed > * {
+      visibility: hidden;
+    }
+
+    /* Reopen tab — premium, clearly visible, sits on the chat surface */
+    body[data-active="chat"] .hx-chat-rail-reopen {
+      position: fixed;
+      top: calc(var(--hx-topbar-h, 56px) + 10px);
+      left: 14px;
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: var(--hx-surface);
+      border: 1px solid color-mix(in srgb, var(--hx-text) 10%, transparent);
+      color: var(--t3);
+      cursor: pointer;
+      z-index: 95;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 40%, transparent),
+        0 4px 12px -4px color-mix(in srgb, var(--hx-text) 14%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-text) 6%, transparent);
+      transition:
+        background 140ms ease,
+        color 140ms ease,
+        border-color 140ms ease,
+        transform 160ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        box-shadow 180ms ease,
+        opacity 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      opacity: 1;
+    }
+    body[data-active="chat"] .hx-chat-rail-reopen:not([hidden]) {
+      display: inline-flex;
+      animation: hx-reopen-in 320ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    @keyframes hx-reopen-in {
+      from { opacity: 0; transform: translateX(-6px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    body[data-active="chat"] .hx-chat-rail-reopen:hover {
+      background: var(--hx-surface);
+      color: var(--t1);
+      border-color: color-mix(in srgb, var(--hx-text) 18%, transparent);
+      transform: translateX(2px);
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 45%, transparent),
+        0 6px 16px -4px color-mix(in srgb, var(--hx-text) 18%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-text) 6%, transparent);
+    }
+    body[data-active="chat"] .hx-chat-rail-reopen:active {
+      transform: translateX(0) scale(0.96);
+    }
+    body[data-active="chat"] .hx-chat-rail-reopen svg {
+      width: 15px;
+      height: 15px;
+      stroke-width: 1.7;
+    }
+
+    /* Mobile — the reopen tab is unnecessary because the burger menu in
+       the toolbar already opens the drawer. Hide it on small screens. */
+    @media (max-width: 920px) {
+      body[data-active="chat"] .hx-chat-rail-reopen { display: none !important; }
+    }
   </style>
 </head>
 <body data-active="chat">
