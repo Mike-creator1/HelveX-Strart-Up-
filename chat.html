@@ -13332,6 +13332,120 @@
         margin-right: 7px !important;
       }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V43 — TOOLBAR FINAL POLISH
+       Strip the container backdrop + divider that read as "ugly grey
+       box". Per-button hover is the only feedback. Larger 30×30 grid,
+       16px icons, refined per-action accent on press. Linear / Raycast
+       / Notion / Apple toolbar quality.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* Toolbar container — completely chrome-less; spacing alone groups */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 2px !important;
+      padding: 0 !important;
+      margin: 16px 0 0 -7px !important;
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions:hover,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions:focus-within {
+      background: transparent !important;
+      border-color: transparent !important;
+    }
+
+    /* No dividers at all — spacing alone provides cluster rhythm */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(1)::after,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(3)::after,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(6)::after {
+      content: none !important;
+      display: none !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(1),
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(6) {
+      margin-right: 0 !important;
+    }
+    /* A larger gap between feedback (1–3) and actions (4–7) does the
+       grouping invisibly — no divider line needed. */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(3) {
+      margin-right: 8px !important;
+      position: relative;
+    }
+
+    /* Buttons — 30×30 with refined 8px radius, premium ghost feel */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act {
+      width: 30px !important;
+      height: 30px !important;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: transparent;
+      border: 0;
+      border-radius: 8px;
+      color: color-mix(in srgb, var(--hx-text) 48%, transparent);
+      font-size: 0;
+      cursor: pointer;
+      position: relative;
+      transition:
+        background 160ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        color 160ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        transform 110ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:hover {
+      background: color-mix(in srgb, var(--hx-text) 6%, transparent);
+      color: var(--t1);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:active {
+      transform: scale(0.92);
+      background: color-mix(in srgb, var(--hx-text) 9%, transparent);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:focus-visible {
+      outline: 0;
+      background: color-mix(in srgb, var(--hx-text) 6%, transparent);
+      box-shadow:
+        0 0 0 2px var(--hx-bg),
+        0 0 0 3.5px color-mix(in srgb, var(--hx-text) 22%, transparent);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act svg {
+      width: 15.5px !important;
+      height: 15.5px !important;
+      stroke-width: 1.65 !important;
+      display: block;
+    }
+
+    /* Speak button — keep the play / pause / load state machine */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-speak-ico {
+      width: 15.5px;
+      height: 15.5px;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-speak-ico svg {
+      width: 15.5px;
+      height: 15.5px;
+    }
+
+    /* Mobile — slightly larger for thumb hits */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions {
+        opacity: 1 !important;
+        gap: 1px !important;
+        margin-left: -8px !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act {
+        width: 34px !important;
+        height: 34px !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act svg {
+        width: 16.5px !important;
+        height: 16.5px !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
