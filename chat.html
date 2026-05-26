@@ -13206,6 +13206,132 @@
       body[data-active="chat"] .hx-cc-model-name { font-size: 10.5px; }
       body[data-active="chat"] .hx-cc-model-tier { font-size: 8px; padding: 1.5px 4px; }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V42 — TOOLBAR REBUILD (speak fix + breathing + one divider)
+       (a) Speak button was rendering all 3 icon variants at once
+           (play + pause + 3 loading dots) — gave the "00..." artifact
+       (b) Buttons were cramped — bump gap to 3px + frame on hover
+       (c) Three dividers felt random — collapsed to a single divider
+           between the feedback cluster and the action cluster
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* (a) Speak button — show only the correct icon for each state */
+    body[data-active="chat"] .hx-msg-speak-ico {
+      display: none !important;
+      align-items: center;
+      justify-content: center;
+      width: 14.5px; height: 14.5px;
+    }
+    body[data-active="chat"] .hx-msg-speak .hx-msg-speak-play {
+      display: inline-flex !important;
+    }
+    body[data-active="chat"] .hx-msg-speak.is-loading .hx-msg-speak-play,
+    body[data-active="chat"] .hx-msg-speak.is-playing .hx-msg-speak-play {
+      display: none !important;
+    }
+    body[data-active="chat"] .hx-msg-speak.is-loading .hx-msg-speak-load {
+      display: inline-flex !important;
+    }
+    body[data-active="chat"] .hx-msg-speak.is-playing .hx-msg-speak-pause {
+      display: inline-flex !important;
+    }
+
+    /* (b) + (c) Toolbar rebuild — generous spacing, one clean divider */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 3px !important;
+      padding: 4px !important;
+      margin: 16px 0 0 -4px !important;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 11px;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions:hover,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions:focus-within {
+      background: color-mix(in srgb, var(--hx-text) 2.5%, transparent);
+      border-color: color-mix(in srgb, var(--hx-text) 7%, transparent);
+    }
+
+    /* Wipe V40 three-divider pattern */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(1)::after,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(6)::after {
+      content: none !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(1),
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(6) {
+      margin-right: 0 !important;
+    }
+    /* Single divider after Dislike (3) — separates feedback from actions */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(3) {
+      margin-right: 9px !important;
+      position: relative;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(3)::after {
+      content: '' !important;
+      position: absolute;
+      right: -5px;
+      top: 7px;
+      bottom: 7px;
+      width: 1px;
+      background: color-mix(in srgb, var(--hx-text) 10%, transparent);
+      pointer-events: none;
+      display: block !important;
+    }
+
+    /* Refined buttons — 28×28 with calmer hover */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act {
+      width: 28px !important;
+      height: 28px !important;
+      border-radius: 7px;
+      color: color-mix(in srgb, var(--hx-text) 46%, transparent);
+      transition:
+        background 140ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        color 140ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        transform 110ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:hover {
+      background: color-mix(in srgb, var(--hx-text) 8%, transparent);
+      color: var(--t1);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:active {
+      transform: scale(0.93);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act svg {
+      width: 14.5px;
+      height: 14.5px;
+      stroke-width: 1.7;
+    }
+
+    /* Speak loading 3-dot pulse — smaller, refined */
+    body[data-active="chat"] .hx-msg-speak-load span {
+      width: 2.5px; height: 2.5px;
+      border-radius: 50%;
+      background: currentColor;
+      display: inline-block;
+      margin: 0 0.5px;
+      animation: hx-speak-load-v42 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    body[data-active="chat"] .hx-msg-speak-load span:nth-child(2) { animation-delay: 0.16s; }
+    body[data-active="chat"] .hx-msg-speak-load span:nth-child(3) { animation-delay: 0.32s; }
+    @keyframes hx-speak-load-v42 {
+      0%, 80%, 100% { opacity: 0.32; transform: scale(0.7); }
+      40%           { opacity: 1;    transform: scale(1); }
+    }
+
+    /* Mobile */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions {
+        opacity: 1 !important;
+        gap: 2px !important;
+        padding: 3px !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act { width: 32px !important; height: 32px !important; }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(3) {
+        margin-right: 7px !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
