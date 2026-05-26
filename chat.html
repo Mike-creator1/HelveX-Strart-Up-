@@ -11110,6 +11110,145 @@
       body[data-active="chat"] .hx-chat-list { padding: 4px 8px 14px; }
       body[data-active="chat"] .hx-chat-item { padding: 9px 6px 9px 12px; }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V26 — REFINED MODEL-SWITCH ANIMATION
+       Replaces the cinematic 11-layer "boss fight" morph with a single
+       elegant gesture: a subtle radial light wash from the composer
+       model badge, a brief opacity dip on the thread, and a refined
+       pulse on both model badges. ~700ms total. No screen shake, no
+       particles, no aurora, no wordmark display, no flame burst.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* Hide every old morph layer entirely */
+    body[data-active="chat"] .hx-morph,
+    body[data-active="chat"] .hx-morph * {
+      display: none !important;
+      animation: none !important;
+    }
+    /* Kill the camera shake on body during a model swap */
+    body[data-active="chat"].hx-screen-shake,
+    body.hx-screen-shake {
+      animation: none !important;
+      transform: none !important;
+    }
+
+    /* Pane uses position: relative for the ::before/::after wash */
+    body[data-active="chat"] .hx-chat-pane {
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* A tiny radial wash that briefly tints the chat with the new
+       model's accent. Origin: bottom-right (composer model badge).
+       Spreads + fades within 700ms. Pointer-events none so reading
+       continues seamlessly. */
+    body[data-active="chat"] .hx-chat-pane::before {
+      content: '';
+      position: absolute;
+      right: -10%;
+      bottom: -10%;
+      width: 70%;
+      height: 70%;
+      background: radial-gradient(circle at 100% 100%,
+        color-mix(in srgb, var(--hx-mc, var(--hx-accent, var(--hx-yellow-deep))) 18%, transparent) 0%,
+        color-mix(in srgb, var(--hx-mc, var(--hx-accent, var(--hx-yellow-deep))) 8%, transparent) 30%,
+        transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(40px);
+      transform: scale(0.85);
+      transition: opacity 280ms cubic-bezier(0.2, 0.7, 0.2, 1),
+                  transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    /* On model swap, .hx-chat-pane gets .is-morphing for ~700ms */
+    body[data-active="chat"] .hx-chat-pane.is-morphing::before {
+      opacity: 1;
+      transform: scale(1);
+      animation: hx-recalibrate-wash 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    @keyframes hx-recalibrate-wash {
+      0%   { opacity: 0;    transform: scale(0.85); }
+      30%  { opacity: 1;    transform: scale(1.0); }
+      100% { opacity: 0;    transform: scale(1.05); }
+    }
+
+    /* Thread does a barely-there opacity dip while the model recalibrates.
+       Reading is uninterrupted; the eye just feels a soft "breath". */
+    body[data-active="chat"] .hx-chat-thread {
+      transition: opacity 280ms cubic-bezier(0.2, 0.7, 0.2, 1),
+                  filter 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-chat-pane.is-morphing .hx-chat-thread {
+      animation: hx-recalibrate-breath 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    @keyframes hx-recalibrate-breath {
+      0%   { opacity: 1;    filter: blur(0); }
+      25%  { opacity: 0.78; filter: blur(0.5px); }
+      55%  { opacity: 0.94; filter: blur(0.2px); }
+      100% { opacity: 1;    filter: blur(0); }
+    }
+
+    /* Composer model badge pulses gold when the new model engages.
+       The pulse rides on box-shadow so layout never reflows. */
+    body[data-active="chat"] .hx-cc-model-pick {
+      transition: box-shadow 280ms cubic-bezier(0.2, 0.7, 0.2, 1),
+                  border-color 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-chat-pane.is-morphing .hx-cc-model-pick {
+      animation: hx-recalibrate-badge 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    @keyframes hx-recalibrate-badge {
+      0%   { box-shadow: 0 0 0 0   color-mix(in srgb, var(--hx-mc, var(--hx-accent)) 0%, transparent),
+                          0 1px 1px color-mix(in srgb, var(--hx-text) 3%, transparent); }
+      30%  { box-shadow: 0 0 0 6px color-mix(in srgb, var(--hx-mc, var(--hx-accent)) 12%, transparent),
+                          0 4px 14px -4px color-mix(in srgb, var(--hx-mc, var(--hx-accent)) 30%, transparent); }
+      100% { box-shadow: 0 0 0 0   color-mix(in srgb, var(--hx-mc, var(--hx-accent)) 0%, transparent),
+                          0 1px 1px color-mix(in srgb, var(--hx-text) 3%, transparent); }
+    }
+    /* The new model name fades in instead of being typed/exploded */
+    body[data-active="chat"] .hx-cc-model-name {
+      transition: opacity 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+                  color 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-chat-pane.is-morphing .hx-cc-model-name {
+      animation: hx-recalibrate-name 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    @keyframes hx-recalibrate-name {
+      0%   { opacity: 0.4; transform: translateY(2px); }
+      40%  { opacity: 0.8; transform: translateY(0); }
+      100% { opacity: 1;   transform: translateY(0); }
+    }
+
+    /* Header model badge gets the same restrained pulse */
+    body[data-active="chat"] .hx-chat-pane.is-morphing .hx-chat-model-badge {
+      animation: hx-recalibrate-badge 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+
+    /* Empty state mark briefly intensifies the gold glow */
+    body[data-active="chat"] .hx-chat-pane.is-morphing .hx-chat-blank-mark-v3 {
+      animation: hx-recalibrate-mark 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    @keyframes hx-recalibrate-mark {
+      0%   { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--hx-mc, var(--hx-accent)) 22%, transparent)); }
+      40%  { filter: drop-shadow(0 0 18px color-mix(in srgb, var(--hx-mc, var(--hx-accent)) 55%, transparent)); }
+      100% { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--hx-mc, var(--hx-accent)) 22%, transparent)); }
+    }
+
+    /* Reduced motion: just a clean opacity fade, no wash, no blur */
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-chat-pane.is-morphing::before { display: none !important; }
+      body[data-active="chat"] .hx-chat-pane.is-morphing .hx-chat-thread {
+        animation: none !important;
+        opacity: 0.92;
+      }
+      body[data-active="chat"] .hx-chat-pane.is-morphing .hx-cc-model-pick,
+      body[data-active="chat"] .hx-chat-pane.is-morphing .hx-chat-model-badge,
+      body[data-active="chat"] .hx-chat-pane.is-morphing .hx-chat-blank-mark-v3 {
+        animation: none !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
