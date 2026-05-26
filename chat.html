@@ -12120,6 +12120,81 @@
     body[data-active="chat"] .hx-chat-blank-inner::after {
       content: none !important;
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V31 — REOPEN TAB POSITIONING FIX
+       The reopen arrow was rendering via position:fixed at left:14px,
+       which landed inside the global HelveX sidebar — visually floating
+       and confusing. Now it's anchored absolutely inside .hx-main at
+       the exact horizontal location where the rail's collapse button
+       used to sit, so opening/closing happens in one consistent place.
+       ═════════════════════════════════════════════════════════════════ */
+
+    body[data-active="chat"] .hx-main {
+      position: relative;
+    }
+    body[data-active="chat"] .hx-chat-rail-reopen {
+      position: absolute !important;
+      top: 8px !important;
+      left: 10px !important;
+      z-index: 20 !important;
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: var(--hx-bg);
+      border: 1px solid color-mix(in srgb, var(--hx-text) 9%, transparent);
+      color: color-mix(in srgb, var(--hx-text) 48%, transparent);
+      cursor: pointer;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 38%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-text) 4%, transparent);
+      transition:
+        background 140ms ease,
+        color 140ms ease,
+        border-color 140ms ease,
+        transform 160ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        box-shadow 180ms ease,
+        opacity 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      opacity: 1;
+    }
+    body[data-active="chat"] .hx-chat-rail-reopen:not([hidden]) {
+      display: inline-flex !important;
+      animation: hx-reopen-slide 280ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    @keyframes hx-reopen-slide {
+      from { opacity: 0; transform: translateX(-4px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    body[data-active="chat"] .hx-chat-rail-reopen:hover {
+      background: color-mix(in srgb, var(--hx-text) 4%, var(--hx-bg));
+      color: var(--t1);
+      border-color: color-mix(in srgb, var(--hx-text) 16%, transparent);
+      transform: translateX(1px);
+    }
+    body[data-active="chat"] .hx-chat-rail-reopen:active {
+      transform: translateX(0) scale(0.96);
+    }
+    body[data-active="chat"] .hx-chat-rail-reopen svg {
+      width: 15px; height: 15px;
+      stroke-width: 1.7;
+    }
+
+    /* When the rail is collapsed, drop the chat-toolbar drawer-toggle so it
+       doesn't sit beside the new reopen tab (mobile burger is unaffected). */
+    body[data-active="chat"] .hx-main:has(.hx-chat-rail.is-collapsed) .hx-chat-toolbar .hx-chat-head {
+      padding-left: 48px;
+    }
+
+    /* Mobile: keep using the burger menu in the toolbar */
+    @media (max-width: 920px) {
+      body[data-active="chat"] .hx-chat-rail-reopen { display: none !important; }
+      body[data-active="chat"] .hx-main:has(.hx-chat-rail.is-collapsed) .hx-chat-toolbar .hx-chat-head {
+        padding-left: 0;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
