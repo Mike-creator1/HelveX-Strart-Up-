@@ -13139,7 +13139,7 @@
                       <span class="hx-chat-tools-count" id="hx-c-tools-count" hidden>0</span>
                     </button>
                     <div class="hx-chat-tools-menu" id="hx-c-tools-menu" role="menu" hidden>
-                      <button class="hx-chat-tools-item" id="hx-c-web" type="button" role="menuitemcheckbox" aria-checked="false"><span class="hx-chat-tools-title">Browse the web</span></button>
+                      <button class="hx-chat-tools-item" id="hx-c-web" type="button" role="menuitemcheckbox" aria-checked="true"><span class="hx-chat-tools-title">Browse the web</span></button>
                       <button class="hx-chat-tools-item" id="hx-c-code" type="button" role="menuitemcheckbox" aria-checked="false"><span class="hx-chat-tools-title">Run code</span></button>
                     </div>
                   </div>
@@ -13829,7 +13829,7 @@
         streaming: false,      // first delta received, actively streaming
         msgChannel: null,
         attachments: [],       // composer's pending attachments
-        webEnabled: false,     // when true, model gets Anthropic web_search tool
+        webEnabled: true,      // web_search on by default — answers stay current
         codeEnabled: false,    // when true, model gets Anthropic code_execution tool
       };
 
@@ -15883,10 +15883,7 @@
         async function transcribeAudio(blob) {
           setVoiceState('transcribing');
 
-          // Snapshot the live browser-transcript BEFORE we stop it, then
-          // commit it to the composer immediately so the user sees their
-          // words appear without waiting for the network round-trip to
-          // Whisper. The accurate Whisper result will replace it.
+          // Snapshot the live browser-transcript BEFORE we stop it.
           var livePreview = (liveTranscript || '').trim();
           stopLiveRecognition();
           var liveInserted = false;
@@ -15895,9 +15892,18 @@
             liveLength = livePreview.length;
             insertTranscript(livePreview);
             liveInserted = true;
-            // The voice panel shows the same preview text during the
-            // upload — visual continuity from speech → composer
             if (liveEl) liveEl.classList.add('is-final-preview');
+          }
+
+          // Browser-first path: when Web Speech API gave us a usable
+          // transcript (≥ 2 words for typical sentences), skip the
+          // backend Whisper round-trip entirely. Instant result, zero
+          // server cost, no provider-billing failure modes. The backend
+          // is only the fallback for browsers without SpeechRecognition.
+          var wordCount = livePreview ? livePreview.split(/\s+/).filter(Boolean).length : 0;
+          if (hasLiveRecognition() && wordCount >= 2) {
+            setVoiceState('idle');
+            return;
           }
 
           var sess = (await sb.auth.getSession()).data.session;
