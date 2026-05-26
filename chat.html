@@ -12875,6 +12875,162 @@
       background: var(--hx-accent, var(--hx-yellow-deep));
       box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 22%, transparent);
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V40 — PREMIUM ACTION TOOLBAR
+       Linear / Notion / Arc-style icon row. Strict 28×28 grid, refined
+       hover surface, hairline cluster dividers, calm interactions.
+       ═════════════════════════════════════════════════════════════════ */
+
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 1px;
+      padding: 3px;
+      margin: 14px 0 0 -4px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      opacity: 0;
+      transition:
+        opacity 240ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        background 200ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        border-color 200ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant:hover .hx-msg-actions,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions:focus-within,
+    body[data-active="chat"] .hx-msg.is-assistant:last-child .hx-msg-actions {
+      opacity: 1;
+    }
+    /* Subtle container backdrop on hover — frames the cluster */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions:hover,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions:focus-within {
+      background: color-mix(in srgb, var(--hx-text) 3%, transparent);
+      border-color: color-mix(in srgb, var(--hx-text) 6%, transparent);
+    }
+
+    /* Buttons — 28×28 strict grid, 7px radius, subtle hover */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      gap: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: transparent;
+      border: 0;
+      border-radius: 7px;
+      color: color-mix(in srgb, var(--hx-text) 44%, transparent);
+      font-size: 0;
+      cursor: pointer;
+      position: relative;
+      transition:
+        background 140ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        color 140ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        transform 120ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:hover {
+      background: color-mix(in srgb, var(--hx-text) 7%, transparent);
+      color: var(--t1);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:active {
+      transform: scale(0.94);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:focus-visible {
+      outline: 0;
+      box-shadow:
+        0 0 0 2px var(--hx-bg),
+        0 0 0 3px color-mix(in srgb, var(--hx-text) 18%, transparent);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act svg {
+      width: 14px;
+      height: 14px;
+      stroke-width: 1.7;
+      opacity: 1;
+      transition: transform 140ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:hover svg {
+      transform: scale(1.06);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:active svg {
+      transform: scale(0.96);
+    }
+    /* Visually hidden labels (already in markup) — keep accessible */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act > :not(svg):not(.hx-msg-speak-ico):not(.hx-msg-speak-load) {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* Hairline cluster dividers — separate Copy / Like+Dislike /
+       Listen+Share+Regen / More into four logical groups */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(1),
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(3),
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(6) {
+      margin-right: 5px;
+      position: relative;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(1)::after,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(3)::after,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:nth-child(6)::after {
+      content: '';
+      position: absolute;
+      right: -3px;
+      top: 6px;
+      bottom: 6px;
+      width: 1px;
+      background: color-mix(in srgb, var(--hx-text) 8%, transparent);
+      pointer-events: none;
+    }
+    /* Hide divider after Copy (cluster 1 → cluster 2) on container hover
+       for a calmer look — V40 keeps them visible but soft */
+
+    /* Active states: liked / disliked persistence */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act[aria-pressed="true"][data-act="like"] {
+      color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 90%, transparent);
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 9%, transparent);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act[aria-pressed="true"][data-act="dislike"] {
+      color: color-mix(in srgb, #C2410C 88%, transparent);
+      background: color-mix(in srgb, #C2410C 8%, transparent);
+    }
+    /* Speak (TTS) playing state — gold accent fill */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-speak.is-playing {
+      color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 92%, transparent);
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 10%, transparent);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-speak.is-loading {
+      color: color-mix(in srgb, var(--hx-text) 70%, transparent);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-speak-ico {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px; height: 14px;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-speak-load span {
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: currentColor;
+      display: inline-block;
+      margin: 0 1px;
+      animation: hx-speak-load 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-speak-load span:nth-child(2) { animation-delay: 0.18s; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-speak-load span:nth-child(3) { animation-delay: 0.36s; }
+
+    /* Mobile — slightly more breathing on small screens */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions {
+        opacity: 1;
+        gap: 0;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act { width: 32px; height: 32px; }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act svg { width: 15px; height: 15px; }
+    }
   </style>
 </head>
 <body data-active="chat">
