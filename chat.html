@@ -12349,6 +12349,137 @@
         opacity: 0.6;
       }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V33 — STREAMING CROSS-FADE + SCROLL EDGES + AMBIENT PRESENCE
+       Three deep, system-grade refinements:
+       (a) View Transitions API cross-fades streaming re-renders in
+           browsers that support it — content updates feel cinematic
+           instead of stuttering
+       (b) A soft fade gradient at the top of the scrollable thread
+           when content scrolls underneath — premium scroll feel
+       (c) Refined last-message spacing so the AI's most recent reply
+           always breathes above the composer
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* ── View Transitions for streaming content ────────────────────── */
+    @supports (view-transition-name: hx-stream) {
+      body[data-active="chat"] .hx-msg.is-streaming .hx-msg-content {
+        view-transition-name: hx-stream-content;
+      }
+      ::view-transition-old(hx-stream-content) {
+        animation: hx-vt-fade-out 140ms ease both;
+      }
+      ::view-transition-new(hx-stream-content) {
+        animation: hx-vt-fade-in 220ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      }
+      @keyframes hx-vt-fade-out {
+        from { opacity: 1; }
+        to   { opacity: 0.92; }
+      }
+      @keyframes hx-vt-fade-in {
+        from { opacity: 0.96; transform: translateY(1px); }
+        to   { opacity: 1;    transform: translateY(0); }
+      }
+    }
+
+    /* ── Thread edges — soft fades at top and bottom ───────────────── */
+    body[data-active="chat"] .hx-chat-pane {
+      position: relative;
+    }
+    body[data-active="chat"] .hx-chat-thread {
+      position: relative;
+      mask-image: linear-gradient(180deg,
+        transparent 0%,
+        #000 24px,
+        #000 calc(100% - 24px),
+        transparent 100%);
+      -webkit-mask-image: linear-gradient(180deg,
+        transparent 0%,
+        #000 24px,
+        #000 calc(100% - 24px),
+        transparent 100%);
+    }
+    /* Safari < 18 fallback: no mask, just a top hairline shadow on scroll */
+    @supports not (mask-image: linear-gradient(180deg, transparent 0%, #000 24px, #000 100%)) {
+      body[data-active="chat"] .hx-chat-thread {
+        mask-image: none;
+        -webkit-mask-image: none;
+      }
+    }
+
+    /* ── Last message — more breathing room before composer ────────── */
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg:last-child {
+      margin-bottom: 24px;
+    }
+
+    /* ── Scrollbar — truly invisible at rest ──────────────────────── */
+    body[data-active="chat"] .hx-chat-thread::-webkit-scrollbar { width: 0; }
+    body[data-active="chat"] .hx-chat-thread:hover::-webkit-scrollbar { width: 6px; }
+    body[data-active="chat"] .hx-chat-thread::-webkit-scrollbar-thumb {
+      background: color-mix(in srgb, var(--hx-text) 10%, transparent);
+      background-clip: padding-box;
+      border: 2px solid transparent;
+      border-radius: 999px;
+      transition: background 240ms ease;
+    }
+    body[data-active="chat"] .hx-chat-thread::-webkit-scrollbar-thumb:hover {
+      background: color-mix(in srgb, var(--hx-text) 18%, transparent);
+      background-clip: padding-box;
+    }
+
+    /* ── Ambient presence trace — bottom-right of chat pane ───────── */
+    body[data-active="chat"] .hx-chat-pane::after {
+      content: '';
+      position: absolute;
+      right: 48px;
+      bottom: 116px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle at 100% 100%,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 7%, transparent) 0%,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 3%, transparent) 30%,
+        transparent 70%);
+      filter: blur(28px);
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: 0;
+      transition: opacity 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    /* Intensifies while sending/streaming — signals active intelligence */
+    body[data-active="chat"] .hx-chat-pane:has(.hx-msg.is-streaming)::after,
+    body[data-active="chat"] .hx-chat-pane:has(.hx-msg-thinking)::after {
+      opacity: 1;
+      animation: hx-presence-breathe 4.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes hx-presence-breathe {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50%      { opacity: 1.0; transform: scale(1.06); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-chat-pane:has(.hx-msg.is-streaming)::after,
+      body[data-active="chat"] .hx-chat-pane:has(.hx-msg-thinking)::after {
+        animation: none;
+        opacity: 0.85;
+      }
+    }
+    /* Hide on mobile — too much atmosphere in a small column */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-chat-pane::after { display: none; }
+    }
+
+    /* ── Smooth height transition for message body during streaming ─── */
+    body[data-active="chat"] .hx-msg.is-streaming .hx-msg-content {
+      transition: min-height 180ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    /* ── Refined composer focus — gentler, no halo flash ──────────── */
+    body[data-active="chat"] .hx-chat-input-row {
+      transition:
+        background 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        border-color 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        box-shadow 260ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -14222,12 +14353,33 @@
           }
           function runStreamRender() {
             if (!streamNode) return;
+            var apply = function () {
+              try {
+                streamNode.innerHTML = renderRichContent(assistantText, true);
+              } catch (e) {
+                streamNode.textContent = assistantText;
+              }
+            };
+            // Use the View Transitions API where available so the freshly
+            // rendered HTML cross-fades into place instead of snapping —
+            // the same primitive Linear / Arc use for content updates.
             try {
-              streamNode.innerHTML = renderRichContent(assistantText, true);
-            } catch (e) {
-              // Fallback: at least show the raw text rather than crashing
-              streamNode.textContent = assistantText;
-            }
+              if (document.startViewTransition && !document.documentElement.classList.contains('hx-rsn-vt-disabled')) {
+                document.documentElement.classList.add('hx-vt-stream');
+                var vt = document.startViewTransition(apply);
+                if (vt && vt.finished && vt.finished.finally) {
+                  vt.finished.finally(function () {
+                    document.documentElement.classList.remove('hx-vt-stream');
+                  });
+                } else {
+                  setTimeout(function () {
+                    document.documentElement.classList.remove('hx-vt-stream');
+                  }, 260);
+                }
+                return;
+              }
+            } catch (e) { /* fall through to plain apply */ }
+            apply();
           }
 
           function finalizeError(msg) {
