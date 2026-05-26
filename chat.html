@@ -11830,6 +11830,296 @@
         animation: none;
       }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V30 — PREMIUM CODE + THINKING + EMPTY-STATE PRESENCE
+       Three substantive upgrades that make the system feel like a
+       flagship AI surface, not a marketed-up webpage:
+       (a) Dark premium code blocks with refined chrome
+       (b) Cinematic thinking indicator before the first stream chunk
+       (c) Subtle "Ready" presence under the empty greeting
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* ── Premium code block — dark, refined, monospace done right ─── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-block {
+      margin: 18px 0;
+      border-radius: 12px;
+      background: #0E0F11;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 14%, transparent);
+      overflow: hidden;
+      box-shadow:
+        0 1px 0 color-mix(in srgb, var(--hx-text) 4%, transparent),
+        0 6px 20px -10px color-mix(in srgb, var(--hx-text) 18%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      position: relative;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-block::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.06) 30%,
+        rgba(255, 255, 255, 0.06) 70%,
+        transparent 100%);
+      pointer-events: none;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px 9px 14px;
+      background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.025) 0%,
+        rgba(255, 255, 255, 0) 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    /* Helix mark dot — gold orbit-style identity */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-head::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 85%, transparent);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        0 0 6px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 60%, transparent);
+      flex-shrink: 0;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-lang {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: lowercase;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-streaming {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 80%, transparent);
+      padding: 1px 6px;
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 12%, transparent);
+      border-radius: 4px;
+      border: 1px solid color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 22%, transparent);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-actions {
+      margin-left: auto;
+      display: inline-flex;
+      gap: 2px;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 8px;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: -0.003em;
+      color: rgba(255, 255, 255, 0.55);
+      background: transparent;
+      border: 0;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 140ms ease, color 140ms ease;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.92);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-btn svg {
+      width: 13px; height: 13px;
+      stroke-width: 1.7;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-btn.is-active {
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 14%, transparent);
+      color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 90%, #fff);
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body {
+      margin: 0;
+      padding: 16px 18px;
+      overflow-x: auto;
+      background: transparent;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.88);
+      font-feature-settings: 'liga' 0, 'calt' 0;
+      tab-size: 2;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.10) transparent;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body::-webkit-scrollbar { height: 8px; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.08);
+      background-clip: padding-box;
+      border: 2px solid transparent;
+      border-radius: 999px;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.16);
+      background-clip: padding-box;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body code {
+      font-family: inherit;
+      color: inherit;
+      background: transparent;
+      padding: 0;
+      border: 0;
+    }
+    /* Subtle syntactic colour for the most common tokens — a single pass
+       via the platform's <span> if it ever wraps them; safe fallback if
+       not. We don't ship a full highlighter; the colour palette is just
+       restrained editorial accents. */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-kw,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-keyword {
+      color: #C39BFF;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-str,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-string {
+      color: #B7E1A1;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-num,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-number {
+      color: #F4C56C;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-comment {
+      color: rgba(255, 255, 255, 0.40);
+      font-style: italic;
+    }
+
+    /* ── Cinematic thinking indicator — appears before first chunk ─── */
+    body[data-active="chat"] .hx-msg.hx-msg-thinking {
+      animation: hx-msg-assist-in 520ms cubic-bezier(0.2, 0.65, 0.2, 1) both;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-msg-content,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-msg-avatar,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-thinking-typing {
+      display: inline-flex;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking > .hx-msg-body {
+      padding-left: 22px;
+      position: relative;
+    }
+    /* Reuse the identity dot+rail for the thinking state */
+    body[data-active="chat"] .hx-msg.hx-msg-thinking > .hx-msg-body::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 9px; bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 40%, transparent) 0%,
+        transparent 12%);
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking > .hx-msg-body::after {
+      content: '';
+      position: absolute;
+      left: -3.5px; top: 7px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--hx-accent, var(--hx-yellow-deep));
+      box-shadow:
+        0 0 0 3px var(--hx-bg),
+        0 0 8px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 60%, transparent);
+      animation: hx-think-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes hx-think-dot {
+      0%, 100% { box-shadow:
+        0 0 0 3px var(--hx-bg),
+        0 0 6px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 40%, transparent); }
+      50%      { box-shadow:
+        0 0 0 3px var(--hx-bg),
+        0 0 16px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 85%, transparent); }
+    }
+
+    body[data-active="chat"] .hx-thinking-typing {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 0 4px;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-style: italic;
+      letter-spacing: -0.004em;
+      color: color-mix(in srgb, var(--hx-text) 44%, transparent);
+    }
+    body[data-active="chat"] .hx-thinking-typing::before {
+      content: '— Thinking';
+      margin-right: 2px;
+    }
+    body[data-active="chat"] .hx-thinking-typing > span {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 70%, transparent);
+      opacity: 0.4;
+      animation: hx-thinking-dot 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    body[data-active="chat"] .hx-thinking-typing > span:nth-child(1) { animation-delay: 0s; }
+    body[data-active="chat"] .hx-thinking-typing > span:nth-child(2) { animation-delay: 0.18s; }
+    body[data-active="chat"] .hx-thinking-typing > span:nth-child(3) { animation-delay: 0.36s; }
+    @keyframes hx-thinking-dot {
+      0%, 80%, 100% { opacity: 0.3; transform: scale(0.85); }
+      40%           { opacity: 1;   transform: scale(1.0); }
+    }
+
+    /* ── Empty state — refined "Ready" presence indicator ──────────── */
+    body[data-active="chat"] .hx-chat-blank-inner::after {
+      content: '';
+      display: block;
+      margin-top: 16px;
+      padding: 4px 11px 4px 9px;
+      background: color-mix(in srgb, var(--hx-text) 3%, transparent);
+      border: 1px solid color-mix(in srgb, var(--hx-text) 6%, transparent);
+      border-radius: 999px;
+      font: 0/0 var(--sans);
+      animation: hx-ready-pop 580ms cubic-bezier(0.2, 0.65, 0.2, 1) 280ms both;
+      width: max-content;
+      align-self: center;
+      position: relative;
+    }
+    body[data-active="chat"] .hx-chat-blank-inner {
+      position: relative;
+    }
+    body[data-active="chat"] .hx-chat-blank-inner > .hx-chat-blank-ready {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      padding: 4px 12px 4px 10px;
+      background: color-mix(in srgb, var(--hx-text) 3%, transparent);
+      border: 1px solid color-mix(in srgb, var(--hx-text) 6%, transparent);
+      border-radius: 999px;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: -0.002em;
+      color: color-mix(in srgb, var(--hx-text) 56%, transparent);
+      animation: hx-ready-pop 580ms cubic-bezier(0.2, 0.65, 0.2, 1) 280ms both;
+    }
+    body[data-active="chat"] .hx-chat-blank-inner > .hx-chat-blank-ready::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--hx-accent, var(--hx-yellow-deep));
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 50%, transparent);
+      animation: hx-ready-breath 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      flex-shrink: 0;
+    }
+    @keyframes hx-ready-pop {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes hx-ready-breath {
+      0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 40%, transparent); }
+      50%      { box-shadow: 0 0 0 5px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 0%, transparent); }
+    }
+    /* Kill the V29 ::after pseudo I had injected; we use a real element now */
+    body[data-active="chat"] .hx-chat-blank-inner::after {
+      content: none !important;
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -11921,6 +12211,7 @@
             <div class="hx-chat-blank" id="hx-c-blank">
               <div class="hx-chat-blank-inner">
                 <h2 class="hx-chat-blank-greet">How can I help, today?</h2>
+                <span class="hx-chat-blank-ready" aria-hidden="true">Helix · ready</span>
                 <div class="hx-chat-blank-chips" role="list" hidden aria-hidden="true">
                   <button class="hx-chat-blank-chip" type="button" role="listitem" data-prompt="Draft a short, professional launch email announcing ">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
