@@ -13031,6 +13031,181 @@
       body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act { width: 32px; height: 32px; }
       body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act svg { width: 15px; height: 15px; }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V41 — PREMIUM COMPOSER FOOTER (disclaimer + model selector)
+       Refined disclaimer with hairline + leading dot. Model selector
+       becomes a polished chip: gold status dot + name + monospace
+       tier badge + subtle caret. Modern macOS-native feel.
+       ═════════════════════════════════════════════════════════════════ */
+
+    body[data-active="chat"] .hx-cc-compose-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 4px 0;
+      min-height: 26px;
+    }
+    /* Disclaimer — left-anchored, refined leading dot, calmer chroma */
+    body[data-active="chat"] .hx-cc-compose-bar::before {
+      content: 'Helix can make mistakes — verify important information.';
+      flex: 1;
+      min-width: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding-left: 14px;
+      font-family: var(--sans);
+      font-size: 10.5px;
+      font-weight: 400;
+      letter-spacing: -0.002em;
+      line-height: 1.4;
+      color: color-mix(in srgb, var(--hx-text) 40%, transparent);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      position: relative;
+    }
+    /* Subtle 3px leading dot — gives the line visual weight without chrome */
+    body[data-active="chat"] .hx-cc-compose-bar > .hx-cc-disclaimer-dot,
+    body[data-active="chat"] .hx-cc-compose-bar::after {
+      content: '';
+    }
+    /* Position a dot via CSS — pseudo before-element trick */
+    body[data-active="chat"] .hx-cc-compose-bar {
+      position: relative;
+    }
+    body[data-active="chat"] .hx-cc-compose-bar > .hx-cc-disc-dot {
+      display: none;
+    }
+    /* The dot is created via a background gradient on ::before since we
+       use ::before for the text. So we reposition with a left-padded dot. */
+    body[data-active="chat"] .hx-cc-compose-bar::before {
+      background: radial-gradient(circle at 5px center,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 75%, transparent) 0%,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 75%, transparent) 2.5px,
+        transparent 3px);
+      background-repeat: no-repeat;
+    }
+
+    /* Model selector — premium chip with monospace tier badge */
+    body[data-active="chat"] .hx-cc-model-pick {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 26px;
+      padding: 0 7px 0 10px;
+      background: var(--hx-surface);
+      border: 1px solid color-mix(in srgb, var(--hx-text) 9%, transparent);
+      border-radius: 999px;
+      color: var(--t1);
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: -0.003em;
+      cursor: pointer;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 38%, transparent),
+        0 1px 1px color-mix(in srgb, var(--hx-text) 3%, transparent);
+      transition:
+        background 160ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        border-color 160ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        box-shadow 180ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        transform 140ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      flex-shrink: 0;
+      position: relative;
+    }
+    /* Gold status dot at the start */
+    body[data-active="chat"] .hx-cc-model-pick::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--hx-accent, var(--hx-yellow-deep));
+      box-shadow:
+        0 0 0 1.5px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 18%, transparent),
+        0 0 4px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 40%, transparent);
+      flex-shrink: 0;
+    }
+    body[data-active="chat"] .hx-cc-model-pick:hover {
+      background: color-mix(in srgb, var(--hx-text) 2%, var(--hx-surface));
+      border-color: color-mix(in srgb, var(--hx-text) 16%, transparent);
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 42%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-text) 6%, transparent),
+        0 4px 12px -4px color-mix(in srgb, var(--hx-text) 10%, transparent);
+      transform: translateY(-0.5px);
+    }
+    body[data-active="chat"] .hx-cc-model-pick:active {
+      transform: translateY(0);
+      box-shadow:
+        inset 0 1px 1px color-mix(in srgb, var(--hx-text) 6%, transparent),
+        0 1px 1px color-mix(in srgb, var(--hx-text) 3%, transparent);
+    }
+    body[data-active="chat"] .hx-cc-model-pick:focus-visible {
+      outline: 0;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 42%, transparent),
+        0 0 0 3px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 16%, transparent);
+    }
+    /* Hide the old glyph (replaced by gold status dot) */
+    body[data-active="chat"] .hx-cc-model-glyph { display: none !important; }
+    body[data-active="chat"] .hx-cc-model-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--t1);
+      letter-spacing: -0.005em;
+      line-height: 1;
+    }
+    body[data-active="chat"] .hx-cc-model-sep { display: none !important; }
+    body[data-active="chat"] .hx-cc-model-tier {
+      font-family: var(--mono);
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 5px;
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent);
+      border-radius: 3px;
+      color: color-mix(in srgb, var(--hx-text) 50%, transparent);
+      line-height: 1;
+      transition: background 140ms ease, color 140ms ease;
+    }
+    body[data-active="chat"] .hx-cc-model-pick:hover .hx-cc-model-tier {
+      background: color-mix(in srgb, var(--hx-text) 8%, transparent);
+      color: color-mix(in srgb, var(--hx-text) 64%, transparent);
+    }
+    body[data-active="chat"] .hx-cc-model-caret {
+      width: 11px;
+      height: 11px;
+      color: color-mix(in srgb, var(--hx-text) 38%, transparent);
+      transition: transform 180ms cubic-bezier(0.2, 0.7, 0.2, 1), color 140ms ease;
+      margin-left: 2px;
+    }
+    body[data-active="chat"] .hx-cc-model-pick:hover .hx-cc-model-caret {
+      color: color-mix(in srgb, var(--hx-text) 62%, transparent);
+    }
+    body[data-active="chat"] .hx-cc-model-pick[aria-expanded="true"] .hx-cc-model-caret {
+      transform: rotate(180deg);
+      color: color-mix(in srgb, var(--hx-text) 80%, transparent);
+    }
+    body[data-active="chat"] .hx-cc-model-pick[aria-expanded="true"] {
+      background: color-mix(in srgb, var(--hx-text) 3%, var(--hx-surface));
+      border-color: color-mix(in srgb, var(--hx-text) 20%, transparent);
+    }
+
+    /* Mobile — collapse the dot, tighten everything */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-cc-compose-bar { gap: 8px; padding: 6px 4px 0; }
+      body[data-active="chat"] .hx-cc-compose-bar::before {
+        font-size: 10px;
+        padding-left: 12px;
+        background-position: 4px center;
+      }
+      body[data-active="chat"] .hx-cc-model-pick { height: 24px; padding: 0 6px 0 9px; }
+      body[data-active="chat"] .hx-cc-model-name { font-size: 10.5px; }
+      body[data-active="chat"] .hx-cc-model-tier { font-size: 8px; padding: 1.5px 4px; }
+    }
   </style>
 </head>
 <body data-active="chat">
