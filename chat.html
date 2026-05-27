@@ -22086,6 +22086,408 @@
     }
 
     /* ═════════════════════════════════════════════════════════════════
+       V95 — PREMIUM MODEL SELECTOR REDESIGN
+       The "Nexus ▾" pill at the bottom-right was a generic dropdown.
+       V95 rebuilds it as a premium model-identity component with:
+         - real per-model glyph in the pill (the same atom/network/
+           flame icons used in the cognition state)
+         - refined typography hierarchy
+         - cinematic open animation (scale + opacity from below)
+         - premium dropdown surface (glass, hairline borders,
+           layered shadow)
+         - each option shows: glyph + name + subtitle (Real-time /
+           Reasoning / Agentic) + check
+         - active option has gold left rule + bold name + glyph glow
+         - hover state with subtle gold tint
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* ── (1) PILL — premium identity component ──────────────────────── */
+    body[data-active="chat"] .hx-cc-model-pick {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      height: 34px !important;
+      padding: 0 11px 0 11px !important;
+      background: linear-gradient(180deg,
+        color-mix(in srgb, var(--hx-text) 2.5%, transparent) 0%,
+        color-mix(in srgb, var(--hx-text) 5%, transparent) 100%) !important;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 12%, transparent) !important;
+      border-radius: 999px !important;
+      color: var(--hx-text) !important;
+      font-family: var(--sans) !important;
+      cursor: pointer !important;
+      transition:
+        background 220ms var(--hx-ease),
+        border-color 220ms var(--hx-ease),
+        box-shadow 280ms var(--hx-ease),
+        transform 160ms cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 40%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-text) 4%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-cc-model-pick:hover {
+      background: linear-gradient(180deg,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 6%, transparent) 0%,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 3%, transparent) 100%) !important;
+      border-color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 35%, transparent) !important;
+      transform: translateY(-1px) !important;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 50%, transparent),
+        0 2px 4px color-mix(in srgb, var(--hx-text) 6%, transparent),
+        0 8px 22px -8px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 24%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-cc-model-pick[aria-expanded="true"] {
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 10%, transparent) !important;
+      border-color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 50%, transparent) !important;
+    }
+
+    /* Glyph in the pill — the active model's signature icon */
+    body[data-active="chat"] .hx-cc-model-pick::before {
+      content: '' !important;
+      width: 8px !important;
+      height: 8px !important;
+      border-radius: 50% !important;
+      background: var(--hx-accent, var(--hx-yellow-deep)) !important;
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 18%, transparent),
+                  0 0 6px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 50%, transparent) !important;
+      flex-shrink: 0 !important;
+    }
+    /* Hide the V62 dropped glyph slot (we use ::before instead) */
+    body[data-active="chat"] .hx-cc-model-glyph,
+    body[data-active="chat"] .hx-cc-model-sep,
+    body[data-active="chat"] .hx-cc-model-tier {
+      display: none !important;
+    }
+    body[data-active="chat"] .hx-cc-model-name {
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      letter-spacing: -0.006em !important;
+      color: var(--hx-text) !important;
+      line-height: 1 !important;
+    }
+    body[data-active="chat"] .hx-cc-model-caret {
+      width: 12px !important;
+      height: 12px !important;
+      color: color-mix(in srgb, var(--hx-text) 55%, transparent) !important;
+      transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+      flex-shrink: 0 !important;
+    }
+    body[data-active="chat"] .hx-cc-model-pick[aria-expanded="true"] .hx-cc-model-caret {
+      transform: rotate(180deg) !important;
+      color: var(--hx-text) !important;
+    }
+
+    /* Per-model accent color on the dot */
+    body[data-model="nexus"] .hx-cc-model-pick::before {
+      background: #d04a14 !important;
+      box-shadow: 0 0 0 2px color-mix(in srgb, #d04a14 18%, transparent),
+                  0 0 6px color-mix(in srgb, #d04a14 55%, transparent) !important;
+    }
+    body[data-model="prometheus"] .hx-cc-model-pick::before {
+      background: #CC1016 !important;
+      box-shadow: 0 0 0 2px color-mix(in srgb, #CC1016 20%, transparent),
+                  0 0 8px color-mix(in srgb, #CC1016 60%, transparent) !important;
+    }
+
+    /* ── (2) DROPDOWN MENU — premium glass surface ─────────────── */
+    body[data-active="chat"] .hx-cc-model-menu {
+      position: absolute !important;
+      bottom: calc(100% + 10px) !important;
+      right: 0 !important;
+      min-width: 280px !important;
+      max-width: 320px !important;
+      background: color-mix(in srgb, #ffffff 95%, transparent) !important;
+      backdrop-filter: saturate(160%) blur(20px) !important;
+      -webkit-backdrop-filter: saturate(160%) blur(20px) !important;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 9%, transparent) !important;
+      border-radius: 14px !important;
+      padding: 6px !important;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-text) 4%, transparent),
+        0 16px 40px -14px color-mix(in srgb, var(--hx-text) 14%, transparent),
+        0 32px 80px -32px color-mix(in srgb, var(--hx-text) 18%, transparent) !important;
+      z-index: 50 !important;
+      transform-origin: bottom right !important;
+      animation: hx-modelmenu-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+    }
+    @keyframes hx-modelmenu-in {
+      from { opacity: 0; transform: translateY(8px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0)   scale(1); }
+    }
+
+    /* Section headers in the menu */
+    body[data-active="chat"] .hx-cc-model-menu .hx-cc-menu-section {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 8px 10px 6px !important;
+      font-family: var(--sans) !important;
+      font-size: 10px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.14em !important;
+      text-transform: uppercase !important;
+      color: color-mix(in srgb, var(--hx-text) 44%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-cc-model-menu .hx-cc-menu-section-top {
+      margin-top: 4px !important;
+      border-top: 1px solid color-mix(in srgb, var(--hx-text) 7%, transparent) !important;
+      padding-top: 12px !important;
+    }
+    body[data-active="chat"] .hx-cc-model-menu .hx-cc-menu-kbd {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 2px !important;
+    }
+    body[data-active="chat"] .hx-cc-model-menu .hx-cc-menu-kbd > span {
+      display: inline-block !important;
+      padding: 1px 5px !important;
+      background: color-mix(in srgb, var(--hx-text) 6%, transparent) !important;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 8%, transparent) !important;
+      border-radius: 4px !important;
+      font-family: var(--mono) !important;
+      font-size: 9px !important;
+      font-weight: 600 !important;
+      color: color-mix(in srgb, var(--hx-text) 60%, transparent) !important;
+    }
+
+    /* Model options */
+    body[data-active="chat"] .hx-cc-model-opt {
+      display: flex !important;
+      align-items: center !important;
+      gap: 11px !important;
+      width: 100% !important;
+      padding: 9px 10px 9px 10px !important;
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 9px !important;
+      cursor: pointer !important;
+      color: var(--hx-text) !important;
+      text-align: left !important;
+      position: relative !important;
+      transition: background 160ms var(--hx-ease) !important;
+    }
+    body[data-active="chat"] .hx-cc-model-opt:hover {
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-cc-model-opt.is-active {
+      background: linear-gradient(90deg,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 10%, transparent) 0%,
+        color-mix(in srgb, var(--hx-text) 3%, transparent) 100%) !important;
+    }
+    body[data-active="chat"] .hx-cc-model-opt.is-active::before {
+      content: '' !important;
+      position: absolute !important;
+      left: 0 !important;
+      top: 9px !important;
+      bottom: 9px !important;
+      width: 2.5px !important;
+      background: var(--hx-accent, var(--hx-yellow-deep)) !important;
+      border-radius: 2px !important;
+    }
+
+    /* Inject glyph slot before name via the .hx-cc-opt-glyph element JS adds */
+    body[data-active="chat"] .hx-cc-opt-glyph {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 28px !important;
+      height: 28px !important;
+      flex-shrink: 0 !important;
+      border-radius: 8px !important;
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent) !important;
+      color: color-mix(in srgb, var(--hx-text) 60%, transparent) !important;
+      transition: background 200ms var(--hx-ease), color 200ms var(--hx-ease) !important;
+    }
+    body[data-active="chat"] .hx-cc-opt-glyph svg {
+      width: 15px !important;
+      height: 15px !important;
+    }
+    body[data-active="chat"] .hx-cc-model-opt:hover .hx-cc-opt-glyph,
+    body[data-active="chat"] .hx-cc-model-opt.is-active .hx-cc-opt-glyph {
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 16%, transparent) !important;
+      color: var(--hx-accent, var(--hx-yellow-deep)) !important;
+    }
+    body[data-active="chat"] .hx-cc-model-opt[data-model="nexus"]:hover .hx-cc-opt-glyph,
+    body[data-active="chat"] .hx-cc-model-opt[data-model="nexus"].is-active .hx-cc-opt-glyph {
+      background: color-mix(in srgb, #d04a14 16%, transparent) !important;
+      color: #d04a14 !important;
+    }
+    body[data-active="chat"] .hx-cc-model-opt[data-model="prometheus"]:hover .hx-cc-opt-glyph,
+    body[data-active="chat"] .hx-cc-model-opt[data-model="prometheus"].is-active .hx-cc-opt-glyph {
+      background: color-mix(in srgb, #CC1016 14%, transparent) !important;
+      color: #CC1016 !important;
+    }
+
+    /* Option text body — name + subtitle */
+    body[data-active="chat"] .hx-cc-opt-body {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 1px !important;
+      flex: 1 !important;
+      min-width: 0 !important;
+    }
+    body[data-active="chat"] .hx-cc-opt-name {
+      font-size: 13.5px !important;
+      font-weight: 600 !important;
+      letter-spacing: -0.006em !important;
+      color: var(--hx-text) !important;
+      line-height: 1.3 !important;
+    }
+    body[data-active="chat"] .hx-cc-model-opt.is-active .hx-cc-opt-name {
+      font-weight: 700 !important;
+    }
+    body[data-active="chat"] .hx-cc-opt-sub {
+      font-size: 11px !important;
+      font-weight: 500 !important;
+      letter-spacing: -0.002em !important;
+      color: color-mix(in srgb, var(--hx-text) 56%, transparent) !important;
+      line-height: 1.3 !important;
+    }
+
+    /* Check + number badge */
+    body[data-active="chat"] .hx-cc-check {
+      width: 14px !important;
+      height: 14px !important;
+      color: var(--hx-accent, var(--hx-yellow-deep)) !important;
+      opacity: 0 !important;
+      flex-shrink: 0 !important;
+      margin-left: auto !important;
+      transition: opacity 180ms var(--hx-ease) !important;
+    }
+    body[data-active="chat"] .hx-cc-model-opt.is-active .hx-cc-check {
+      opacity: 1 !important;
+    }
+    body[data-active="chat"] .hx-cc-num {
+      display: inline-block !important;
+      padding: 1px 5px !important;
+      font-family: var(--mono) !important;
+      font-size: 9.5px !important;
+      font-weight: 700 !important;
+      color: color-mix(in srgb, var(--hx-text) 40%, transparent) !important;
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent) !important;
+      border-radius: 4px !important;
+      margin-left: 4px !important;
+      flex-shrink: 0 !important;
+    }
+    body[data-active="chat"] .hx-cc-model-opt.is-active .hx-cc-num {
+      background: transparent !important;
+    }
+
+    /* Effort options — keep similar styling */
+    body[data-active="chat"] .hx-cc-effort-opt {
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      width: 100% !important;
+      padding: 8px 10px !important;
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 9px !important;
+      cursor: pointer !important;
+      color: var(--hx-text) !important;
+      font-size: 12.5px !important;
+      font-weight: 500 !important;
+      text-align: left !important;
+      transition: background 160ms var(--hx-ease) !important;
+    }
+    body[data-active="chat"] .hx-cc-effort-opt:hover {
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-cc-effort-bars {
+      display: inline-flex !important;
+      align-items: flex-end !important;
+      gap: 2px !important;
+      margin-left: auto !important;
+      height: 12px !important;
+    }
+    body[data-active="chat"] .hx-cc-effort-bars i {
+      width: 3px !important;
+      background: color-mix(in srgb, var(--hx-text) 18%, transparent) !important;
+      border-radius: 1px !important;
+    }
+    body[data-active="chat"] .hx-cc-effort-bars i:nth-child(1) { height: 30% !important; }
+    body[data-active="chat"] .hx-cc-effort-bars i:nth-child(2) { height: 45% !important; }
+    body[data-active="chat"] .hx-cc-effort-bars i:nth-child(3) { height: 60% !important; }
+    body[data-active="chat"] .hx-cc-effort-bars i:nth-child(4) { height: 78% !important; }
+    body[data-active="chat"] .hx-cc-effort-bars i:nth-child(5) { height: 100% !important; }
+    body[data-active="chat"] .hx-cc-effort-bars[data-level="1"] i:nth-child(-n+1),
+    body[data-active="chat"] .hx-cc-effort-bars[data-level="2"] i:nth-child(-n+3),
+    body[data-active="chat"] .hx-cc-effort-bars[data-level="3"] i:nth-child(-n+5) {
+      background: var(--hx-accent, var(--hx-yellow-deep)) !important;
+    }
+
+    /* ── (3) DARK MODE PARITY ───────────────────────────────────── */
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-pick {
+      background: linear-gradient(180deg, #1a1a1a 0%, #141414 100%) !important;
+      border-color: rgba(255, 255, 255, 0.12) !important;
+      color: #ffffff !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-pick:hover {
+      background: linear-gradient(180deg,
+        color-mix(in srgb, var(--hx-accent, #C9A227) 12%, #1a1a1a) 0%,
+        color-mix(in srgb, var(--hx-accent, #C9A227) 6%, #141414) 100%) !important;
+      border-color: color-mix(in srgb, var(--hx-accent, #C9A227) 45%, transparent) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-pick[aria-expanded="true"] {
+      background: color-mix(in srgb, var(--hx-accent, #C9A227) 18%, #141414) !important;
+      border-color: color-mix(in srgb, var(--hx-accent, #C9A227) 55%, transparent) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-name { color: #ffffff !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-caret { color: #d0cabb !important; }
+
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu {
+      background: #161514 !important;
+      backdrop-filter: saturate(160%) blur(20px) !important;
+      border-color: rgba(255, 255, 255, 0.12) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 1px 2px rgba(0, 0, 0, 0.4),
+        0 24px 64px -16px rgba(0, 0, 0, 0.7),
+        0 48px 120px -40px rgba(0, 0, 0, 0.5) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu .hx-cc-menu-section { color: #a8a293 !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu .hx-cc-menu-section-top {
+      border-top-color: rgba(255, 255, 255, 0.07) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu .hx-cc-menu-kbd > span {
+      background: rgba(255, 255, 255, 0.06) !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+      color: #d0cabb !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-opt { color: #ffffff !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-opt:hover {
+      background: rgba(255, 255, 255, 0.06) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-opt.is-active {
+      background: linear-gradient(90deg,
+        color-mix(in srgb, var(--hx-accent, #C9A227) 14%, transparent) 0%,
+        rgba(255, 255, 255, 0.04) 100%) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-opt-glyph {
+      background: rgba(255, 255, 255, 0.07) !important;
+      color: #d0cabb !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-opt-name { color: #ffffff !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-opt-sub { color: #a8a293 !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-num {
+      background: rgba(255, 255, 255, 0.07) !important;
+      color: #a8a293 !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-effort-opt { color: #ffffff !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-effort-opt:hover {
+      background: rgba(255, 255, 255, 0.06) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-effort-bars i {
+      background: rgba(255, 255, 255, 0.15) !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-cc-model-menu { animation: none !important; }
+      body[data-active="chat"] .hx-cc-model-pick:hover { transform: none !important; }
+    }
+
+    /* ═════════════════════════════════════════════════════════════════
        V94 — COLLAPSIBLE CONDUCTOR
        Toggle (chevron) is always visible. Click reveals the chips
        horizontally with smooth slide+fade. Click again collapses.
@@ -26368,6 +26770,54 @@
           // Bend the presence pill copy to show active mode
           try { updatePresence(); } catch (e) {}
         }
+
+        // V95 — Premium model selector: inject glyphs + subtitle for
+        // each option, restructure the option markup so the new CSS
+        // layout works (.hx-cc-opt-glyph + .hx-cc-opt-body{.name+.sub}).
+        (function wireModelSelectorPremium() {
+          var MODEL_SVGS = {
+            ether: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="10" ry="3.5"/><ellipse cx="12" cy="12" rx="10" ry="3.5" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="3.5" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/></svg>',
+            nexus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><circle cx="4"  cy="6"  r="1.5"/><circle cx="20" cy="6"  r="1.5"/><circle cx="4"  cy="18" r="1.5"/><circle cx="20" cy="18" r="1.5"/><line x1="6"  y1="7"  x2="10.5" y2="10.5"/><line x1="18" y1="7"  x2="13.5" y2="10.5"/><line x1="6"  y1="17" x2="10.5" y2="13.5"/><line x1="18" y1="17" x2="13.5" y2="13.5"/></svg>',
+            prometheus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-2 3-4 5-3 9a3 3 0 0 0 6 0c0-1.5-.7-2.2-.7-3.5 1.4.7 2.2 2 2.2 4a4.5 4.5 0 1 1-9 0c0-4 4.5-5 4.5-9.5z"/></svg>',
+          };
+          var MODEL_META = {
+            ether:      { tier: 'Real-time', desc: 'Fast, low-latency answers' },
+            nexus:      { tier: 'Reasoning', desc: 'Thinks step-by-step, uses tools' },
+            prometheus: { tier: 'Agentic',   desc: 'Flagship deep reasoning agent' },
+          };
+          document.querySelectorAll('.hx-cc-model-opt').forEach(function (opt) {
+            var key = opt.getAttribute('data-model');
+            var glyphSVG = MODEL_SVGS[key] || MODEL_SVGS.ether;
+            var meta = MODEL_META[key] || MODEL_META.ether;
+            var nameEl = opt.querySelector('.hx-cc-opt-name');
+            var nameTxt = nameEl ? nameEl.textContent : key;
+            // Rebuild the option content: glyph + body(name+sub) + check + num
+            var existingCheck = opt.querySelector('.hx-cc-check');
+            var existingNum   = opt.querySelector('.hx-cc-num');
+            var checkHTML = existingCheck ? existingCheck.outerHTML :
+              '<svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+            var numHTML = existingNum ? existingNum.outerHTML : '';
+            opt.innerHTML =
+              '<span class="hx-cc-opt-glyph" aria-hidden="true">' + glyphSVG + '</span>' +
+              '<span class="hx-cc-opt-body">' +
+                '<span class="hx-cc-opt-name">' + nameTxt + '</span>' +
+                '<span class="hx-cc-opt-sub">' + meta.tier + ' · ' + meta.desc + '</span>' +
+              '</span>' +
+              checkHTML +
+              numHTML;
+          });
+          // Reflect active model on body[data-model] so the pill dot
+          // can color-shift per model
+          function syncBodyModel() {
+            var sel = document.getElementById('hx-c-model');
+            if (sel) document.body.setAttribute('data-model', sel.value || 'ether');
+          }
+          var modelSel = document.getElementById('hx-c-model');
+          if (modelSel) {
+            syncBodyModel();
+            modelSel.addEventListener('change', syncBodyModel);
+          }
+        })();
 
         // V94 — Conductor collapsible toggle. Default collapsed.
         // State persisted in localStorage so it survives navigation.
