@@ -13813,6 +13813,175 @@
         animation: none !important;
       }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V49 — DEEP EMOTIONAL WARMTH
+       Sub-greeting tagline + warm starter-prompt chips. A subtle gold
+       ambient halo behind the empty state. Friendlier microcopy
+       everywhere. Staggered welcome animation that feels human.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* Empty state — ambient warmth + breathing greeting */
+    body[data-active="chat"] .hx-chat-blank {
+      position: relative;
+      overflow: hidden;
+    }
+    body[data-active="chat"] .hx-chat-blank::before {
+      content: '' !important;
+      display: block !important;
+      position: absolute;
+      left: 50%;
+      top: 38%;
+      transform: translate(-50%, -50%);
+      width: 720px;
+      height: 540px;
+      background: radial-gradient(ellipse at center,
+        color-mix(in srgb, #C9A227 8%, transparent) 0%,
+        color-mix(in srgb, #C9A227 3.5%, transparent) 28%,
+        transparent 65%);
+      filter: blur(48px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.85;
+      animation: hx-warmth-breathe 12s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+    }
+    @keyframes hx-warmth-breathe {
+      0%, 100% { opacity: 0.72; transform: translate(-50%, -50%) scale(0.96); }
+      50%      { opacity: 1.0;  transform: translate(-50%, -50%) scale(1.04); }
+    }
+    body[data-active="chat"] .hx-chat-blank > * {
+      position: relative;
+      z-index: 1;
+    }
+    .hx-chat-blank-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0 !important;
+      max-width: 620px;
+      width: 100%;
+    }
+
+    /* Greeting — larger, warmer */
+    .hx-chat-blank-greet {
+      font-size: 32px !important;
+      font-weight: 500 !important;
+      letter-spacing: -0.028em !important;
+      line-height: 1.16 !important;
+      color: color-mix(in srgb, var(--hx-text) 86%, transparent) !important;
+      margin: 0 0 12px !important;
+    }
+
+    /* Sub-greeting — italic friendly tagline */
+    .hx-chat-blank-sub {
+      font-family: var(--sans);
+      font-size: 14.5px;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: -0.002em;
+      line-height: 1.5;
+      color: color-mix(in srgb, var(--hx-text) 48%, transparent);
+      margin: 0 0 28px;
+      max-width: 460px;
+      animation: hx-sub-warm 720ms cubic-bezier(0.22, 0.61, 0.36, 1) 120ms both;
+    }
+    @keyframes hx-sub-warm {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Starter suggestion chips — warm, friendly, tactile */
+    body[data-active="chat"] .hx-chat-suggest {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      width: 100%;
+      max-width: 520px;
+      animation: hx-chips-warm 720ms cubic-bezier(0.22, 0.61, 0.36, 1) 240ms both;
+    }
+    @keyframes hx-chips-warm {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hx-chat-suggest-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: color-mix(in srgb, var(--hx-text) 2%, var(--hx-surface));
+      border: 1px solid color-mix(in srgb, var(--hx-text) 7%, transparent);
+      border-radius: 12px;
+      color: color-mix(in srgb, var(--hx-text) 78%, transparent);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      text-align: left;
+      cursor: pointer;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 40%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-text) 3%, transparent);
+      transition:
+        background 200ms cubic-bezier(0.22, 0.61, 0.36, 1),
+        border-color 200ms cubic-bezier(0.22, 0.61, 0.36, 1),
+        transform 180ms cubic-bezier(0.34, 1.36, 0.64, 1),
+        box-shadow 220ms ease,
+        color 200ms ease;
+    }
+    .hx-chat-suggest-chip:hover {
+      background: color-mix(in srgb, #C9A227 4%, var(--hx-surface));
+      border-color: color-mix(in srgb, #C9A227 26%, transparent);
+      color: var(--hx-text);
+      transform: translateY(-1px);
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 50%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-text) 5%, transparent),
+        0 6px 16px -6px color-mix(in srgb, #C9A227 22%, transparent);
+    }
+    .hx-chat-suggest-chip:active {
+      transform: translateY(0) scale(0.98);
+    }
+    .hx-chat-suggest-chip:focus-visible {
+      outline: 0;
+      border-color: color-mix(in srgb, #C9A227 38%, transparent);
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 45%, transparent),
+        0 0 0 3px color-mix(in srgb, #C9A227 14%, transparent);
+    }
+    .hx-chat-suggest-chip svg {
+      width: 16px;
+      height: 16px;
+      color: color-mix(in srgb, #C9A227 80%, transparent);
+      flex-shrink: 0;
+    }
+    .hx-chat-suggest-chip span {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Mobile — chips become a single column for thumb-friendly tap */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-chat-suggest {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+      }
+      .hx-chat-blank-greet { font-size: 26px !important; }
+      .hx-chat-blank-sub { font-size: 13.5px; }
+      body[data-active="chat"] .hx-chat-blank::before {
+        width: 480px;
+        height: 380px;
+      }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-chat-blank::before { animation: none !important; opacity: 0.6 !important; }
+      .hx-chat-blank-sub,
+      body[data-active="chat"] .hx-chat-suggest {
+        animation: none !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -13904,6 +14073,29 @@
             <div class="hx-chat-blank" id="hx-c-blank">
               <div class="hx-chat-blank-inner">
                 <h2 class="hx-chat-blank-greet" id="hx-c-blank-greet">Hi there — how can I help?</h2>
+                <p class="hx-chat-blank-sub" id="hx-c-blank-sub">Take your time. I'm here whenever you're ready.</p>
+                <div class="hx-chat-suggest" id="hx-c-blank-suggest" role="list" aria-label="Suggestions">
+                  <button class="hx-chat-suggest-chip" type="button" role="listitem"
+                    data-suggest="Help me draft a thoughtful reply to ">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+                    <span>Draft a reply</span>
+                  </button>
+                  <button class="hx-chat-suggest-chip" type="button" role="listitem"
+                    data-suggest="Help me think through ">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.66 17h4.68"/><path d="M12 21v-1"/><path d="M12 3a7 7 0 0 0-4 12.7c.6.4 1 1.1 1 1.8V18h6v-.5c0-.7.4-1.4 1-1.8A7 7 0 0 0 12 3z"/></svg>
+                    <span>Think through a decision</span>
+                  </button>
+                  <button class="hx-chat-suggest-chip" type="button" role="listitem"
+                    data-suggest="Summarise this for me:\n\n">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg>
+                    <span>Summarise something</span>
+                  </button>
+                  <button class="hx-chat-suggest-chip" type="button" role="listitem"
+                    data-suggest="Plan a small project for ">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+                    <span>Plan something</span>
+                  </button>
+                </div>
                 <span class="hx-chat-blank-ready" aria-hidden="true">Helix · ready</span>
                 <div class="hx-chat-blank-chips" role="list" hidden aria-hidden="true">
                   <button class="hx-chat-blank-chip" type="button" role="listitem" data-prompt="Draft a short, professional launch email announcing ">
@@ -13974,7 +14166,7 @@
                   <textarea
                     id="hx-c-input"
                     class="hx-chat-textarea"
-                    placeholder="Message Helix"
+                    placeholder="What's on your mind?"
                     rows="1"
                     autocomplete="off"
                     spellcheck="true"></textarea>
@@ -17612,25 +17804,57 @@
         // ─── Friendly, time-aware empty-state greeting ───────────────
         (function wireGreeting() {
           var greetEl = document.getElementById('hx-c-blank-greet');
+          var subEl   = document.getElementById('hx-c-blank-sub');
           if (!greetEl) return;
           var h = new Date().getHours();
-          var greet;
-          if (h >= 5 && h < 12)       greet = ["Good morning. What's on your mind?", "Morning — how can I help?", "Good morning. Where would you like to begin?"];
-          else if (h >= 12 && h < 17) greet = ["Good afternoon. How can I help?", "Hi — what can I help with?", "Good afternoon. What are you working on?"];
-          else if (h >= 17 && h < 22) greet = ["Good evening. What can I do for you?", "Evening — how can I help?", "Good evening. Where shall we start?"];
-          else                         greet = ["Working late? I'm here.", "Hi — what's on your mind?", "Still here. How can I help?"];
-          // Pick one stable for the session
-          var pick;
+          var greet, subs;
+          if (h >= 5 && h < 12) {
+            greet = ["Good morning. What's on your mind?", "Morning — how can I help?", "Good morning. Where would you like to begin?"];
+            subs  = ["Take your time. I'm here whenever you're ready.", "No rush — let's start when you are.", "Whenever you're ready, just say the word."];
+          } else if (h >= 12 && h < 17) {
+            greet = ["Good afternoon. How can I help?", "Hi — what can I help with?", "Good afternoon. What are you working on?"];
+            subs  = ["I'm fully focused. Just let me know what you need.", "Tell me a bit more and I'll take it from there.", "Whatever you're working on — I'm in."];
+          } else if (h >= 17 && h < 22) {
+            greet = ["Good evening. What can I do for you?", "Evening — how can I help?", "Good evening. Where shall we start?"];
+            subs  = ["I've got time. Walk me through what you need.", "Whatever you're thinking, I'm listening.", "Take a breath — then tell me what's up."];
+          } else {
+            greet = ["Working late? I'm here.", "Hi — what's on your mind?", "Still here. How can I help?"];
+            subs  = ["Late nights are good thinking time. I'm with you.", "Quiet hours. Tell me what you're working on.", "I'm wide awake whenever you need me."];
+          }
+          var pick = greet[0], subPick = subs[0];
           try {
             var stamp = sessionStorage.getItem('hx-greet-h-' + h);
-            if (stamp != null) pick = greet[parseInt(stamp, 10) % greet.length];
+            var idx;
+            if (stamp != null) idx = parseInt(stamp, 10) % greet.length;
             else {
-              var idx = Math.floor(Math.random() * greet.length);
+              idx = Math.floor(Math.random() * greet.length);
               sessionStorage.setItem('hx-greet-h-' + h, String(idx));
-              pick = greet[idx];
             }
-          } catch (e) { pick = greet[0]; }
+            pick = greet[idx];
+            subPick = subs[idx % subs.length];
+          } catch (e) {}
           greetEl.textContent = pick;
+          if (subEl) subEl.textContent = subPick;
+        })();
+
+        // ─── Wire empty-state suggestion chips ───────────────────────
+        (function wireSuggest() {
+          var chips = document.querySelectorAll('.hx-chat-suggest-chip');
+          var input = document.getElementById('hx-c-input');
+          if (!chips.length || !input) return;
+          chips.forEach(function (chip) {
+            chip.addEventListener('click', function () {
+              var seed = (chip.getAttribute('data-suggest') || '').replace(/\\n/g, '\n');
+              input.value = seed;
+              if (typeof autoSize === 'function') autoSize(input);
+              if (typeof refreshSendDisabled === 'function') refreshSendDisabled();
+              input.focus();
+              try {
+                var pos = seed.length;
+                input.selectionStart = input.selectionEnd = pos;
+              } catch (e) {}
+            });
+          });
         })();
 
         (function wireRailCollapse() {
