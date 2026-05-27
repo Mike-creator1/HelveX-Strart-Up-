@@ -22330,6 +22330,243 @@
       }
     }
 
+    /* ═════════════════════════════════════════════════════════════════
+       V89 — WORKSPACE PANE (Claude-Artifacts split layout)
+       When the user opens an artifact in the workspace, the chat pane
+       narrows and a dedicated right-side pane takes over for the
+       artifact. The conversation becomes a real two-column workspace.
+       ═════════════════════════════════════════════════════════════════ */
+
+    body[data-active="chat"] .hx-workspace {
+      position: fixed !important;
+      top: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 56vw !important;
+      max-width: 920px !important;
+      min-width: 480px !important;
+      z-index: 40 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      background: var(--hx-bg, #fbf8f1) !important;
+      border-left: 1px solid color-mix(in srgb, var(--hx-text) 9%, transparent) !important;
+      box-shadow: -24px 0 60px -24px rgba(20, 18, 12, 0.18) !important;
+      transform: translateX(8px) !important;
+      opacity: 0 !important;
+      transition:
+        transform 360ms cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 280ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    body[data-active="chat"] .hx-workspace.is-open {
+      transform: translateX(0) !important;
+      opacity: 1 !important;
+    }
+
+    /* Chat pane narrows when workspace open (desktop only) */
+    @media (min-width: 1100px) {
+      body[data-active="chat"][data-workspace="open"] .hx-chat-pane {
+        margin-right: 56vw !important;
+      }
+      body[data-active="chat"][data-workspace="open"] .hx-chat-thread-inner,
+      body[data-active="chat"][data-workspace="open"] .hx-chat-compose-inner {
+        max-width: 620px !important;
+      }
+    }
+    @media (max-width: 1099px) {
+      /* On smaller viewports, workspace takes full width over the chat */
+      body[data-active="chat"] .hx-workspace {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        min-width: 0 !important;
+      }
+    }
+
+    /* Workspace head */
+    body[data-active="chat"] .hx-ws-head {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 18px 28px !important;
+      border-bottom: 1px solid color-mix(in srgb, var(--hx-text) 8%, transparent) !important;
+      background: color-mix(in srgb, var(--hx-text) 1.5%, transparent) !important;
+      flex-shrink: 0 !important;
+    }
+    body[data-active="chat"] .hx-ws-head-left {
+      display: flex !important;
+      align-items: baseline !important;
+      gap: 14px !important;
+      min-width: 0 !important;
+    }
+    body[data-active="chat"] .hx-ws-type {
+      font-family: var(--sans) !important;
+      font-size: 10.5px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.16em !important;
+      text-transform: uppercase !important;
+      color: var(--hx-accent, var(--hx-yellow-deep)) !important;
+      flex-shrink: 0 !important;
+    }
+    body[data-active="chat"] .hx-ws-title {
+      font-family: var(--sans) !important;
+      font-size: 15px !important;
+      font-weight: 500 !important;
+      letter-spacing: -0.008em !important;
+      color: var(--hx-text) !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+    body[data-active="chat"] .hx-ws-actions {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      flex-shrink: 0 !important;
+    }
+    body[data-active="chat"] .hx-ws-act {
+      width: 32px !important;
+      height: 32px !important;
+      padding: 0 !important;
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 7px !important;
+      color: color-mix(in srgb, var(--hx-text) 50%, transparent) !important;
+      cursor: pointer !important;
+      transition: background 160ms var(--hx-ease), color 160ms var(--hx-ease) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    body[data-active="chat"] .hx-ws-act:hover {
+      background: color-mix(in srgb, var(--hx-text) 7%, transparent) !important;
+      color: var(--hx-text) !important;
+    }
+    body[data-active="chat"] .hx-ws-act svg {
+      width: 15px !important;
+      height: 15px !important;
+    }
+    body[data-active="chat"] .hx-ws-act.is-flash {
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 24%, transparent) !important;
+      color: var(--hx-accent, var(--hx-yellow-deep)) !important;
+    }
+
+    /* Workspace body — large artifact rendering area */
+    body[data-active="chat"] .hx-ws-body {
+      flex: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 40px 48px 56px !important;
+    }
+    body[data-active="chat"] .hx-ws-body .hx-art {
+      margin: 0 !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      transform: none !important;
+    }
+    /* Suppress the inline-style Open button inside the workspace —
+       it doesn't make sense to "open" what's already open */
+    body[data-active="chat"] .hx-ws-body .hx-art-open {
+      display: none !important;
+    }
+    /* Hero scale-up for big artifacts in the workspace */
+    body[data-active="chat"] .hx-ws-body .hx-art-stat-value {
+      font-size: clamp(56px, 7vw, 96px) !important;
+    }
+    body[data-active="chat"] .hx-ws-body .hx-art-stat-label {
+      font-size: 18px !important;
+    }
+    body[data-active="chat"] .hx-ws-body .hx-art-tl-title,
+    body[data-active="chat"] .hx-ws-body .hx-art-wf-title,
+    body[data-active="chat"] .hx-ws-body .hx-art-fw-desc {
+      font-size: 16px !important;
+    }
+    body[data-active="chat"] .hx-ws-body .hx-art-tl-body,
+    body[data-active="chat"] .hx-ws-body .hx-art-wf-sub {
+      font-size: 14.5px !important;
+    }
+    body[data-active="chat"] .hx-ws-body .hx-art-cmp {
+      font-size: 14px !important;
+    }
+    body[data-active="chat"] .hx-ws-body .hx-art-cmp th,
+    body[data-active="chat"] .hx-ws-body .hx-art-cmp td {
+      padding: 14px 16px !important;
+    }
+
+    /* Inline "Open in workspace" button on each artifact */
+    body[data-active="chat"] .hx-art {
+      position: relative !important;
+    }
+    body[data-active="chat"] .hx-art-open {
+      position: absolute !important;
+      top: 12px !important;
+      right: 12px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      padding: 5px 9px !important;
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent) !important;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 10%, transparent) !important;
+      border-radius: 6px !important;
+      font-family: var(--mono) !important;
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.06em !important;
+      text-transform: uppercase !important;
+      color: color-mix(in srgb, var(--hx-text) 56%, transparent) !important;
+      cursor: pointer !important;
+      opacity: 0 !important;
+      transition:
+        opacity 200ms var(--hx-ease),
+        background 160ms var(--hx-ease),
+        border-color 160ms var(--hx-ease),
+        color 160ms var(--hx-ease) !important;
+      z-index: 2 !important;
+    }
+    body[data-active="chat"] .hx-art:hover .hx-art-open,
+    body[data-active="chat"] .hx-art:focus-within .hx-art-open {
+      opacity: 1 !important;
+    }
+    body[data-active="chat"] .hx-art-open:hover {
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 14%, transparent) !important;
+      border-color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 38%, transparent) !important;
+      color: var(--hx-accent, var(--hx-yellow-deep)) !important;
+      opacity: 1 !important;
+    }
+    body[data-active="chat"] .hx-art-open svg {
+      width: 11px !important;
+      height: 11px !important;
+    }
+
+    /* Dark mode parity */
+    html[data-theme="dark"] body[data-active="chat"] .hx-workspace {
+      background: #000000 !important;
+      border-left-color: rgba(255, 255, 255, 0.08) !important;
+      box-shadow: -24px 0 80px -24px rgba(0, 0, 0, 0.7) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-ws-head {
+      background: rgba(255, 255, 255, 0.02) !important;
+      border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-ws-title { color: #ffffff !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-ws-act { color: #d0cabb !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-ws-act:hover {
+      background: rgba(255, 255, 255, 0.08) !important;
+      color: #ffffff !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-art-open {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border-color: rgba(255, 255, 255, 0.12) !important;
+      color: #d0cabb !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-art-open:hover {
+      background: color-mix(in srgb, var(--hx-accent, #C9A227) 22%, transparent) !important;
+      border-color: color-mix(in srgb, var(--hx-accent, #C9A227) 45%, transparent) !important;
+      color: var(--hx-accent, #C9A227) !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-workspace { transition: none !important; }
+    }
+
     /* (3) Refined message entrance — softer curve, slight stagger
        on initial load (when 5+ messages render at once). The
        individual message animations already exist from V66; V88
@@ -22826,6 +23063,35 @@
         </section>
 
         <!-- ════════════════════════════════════════════════════════════
+             V89 — WORKSPACE PANE (Claude-Artifacts-style split layout)
+             When the AI produces a structured artifact, it can be
+             "opened in the workspace" — a right-side pane that scales
+             the artifact up and gives it actions. The chat narrows.
+             The conversation becomes a real two-column workspace
+             instead of a single scrolling column.
+             ════════════════════════════════════════════════════════════ -->
+        <aside class="hx-workspace" id="hx-c-workspace" hidden aria-label="Workspace">
+          <header class="hx-ws-head">
+            <div class="hx-ws-head-left">
+              <span class="hx-ws-type" id="hx-c-ws-type">Artifact</span>
+              <span class="hx-ws-title" id="hx-c-ws-title">—</span>
+            </div>
+            <div class="hx-ws-actions">
+              <button type="button" class="hx-ws-act" id="hx-c-ws-copy" title="Copy artifact" aria-label="Copy">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+              <button type="button" class="hx-ws-act" id="hx-c-ws-print" title="Print / save as PDF" aria-label="Print">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="0.5"/></svg>
+              </button>
+              <button type="button" class="hx-ws-act hx-ws-close" id="hx-c-ws-close" title="Close workspace" aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          </header>
+          <div class="hx-ws-body" id="hx-c-ws-body"></div>
+        </aside>
+
+        <!-- ════════════════════════════════════════════════════════════
              V73 — Universal Command Palette (⌘K / Ctrl+K)
              A single floating glass surface that puts every action
              Helix can do behind one keyboard shortcut. The palette
@@ -23253,6 +23519,22 @@
         });
         return { text: result, artifacts: registry };
       }
+      // V89 — Artifacts get an inline "Open in workspace" button so the
+      // user can pop any structured artifact into the right-side
+      // workspace pane. Major types (timeline/workflow/compare/
+      // framework) auto-suggest the workspace through the button being
+      // visible at higher opacity by default.
+      function artifactOpenBtn(art) {
+        // Encode the artifact so the workspace can re-render it cleanly
+        var encoded = encodeURIComponent(JSON.stringify({
+          type: art.type, header: art.header, body: art.body
+        }));
+        return '<button type="button" class="hx-art-open" data-art="' + encoded + '" title="Open in workspace" aria-label="Open in workspace">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>' +
+          '<span>Open</span>' +
+        '</button>';
+      }
+
       function renderArtifact(art) {
         var t = art.type;
         var head = art.header;
@@ -23414,9 +23696,14 @@
           out += renderInlineMarkdown(src.slice(idx));
         }
         // V69: re-insert artifact HTML for every token we extracted
+        // V89: each artifact gets an "Open in workspace" button injected
+        //      right after its opening tag.
         if (pre.artifacts.length) {
           pre.artifacts.forEach(function (art) {
             var artHTML = renderArtifact(art);
+            // Inject the workspace-open button after the first tag
+            var btn = artifactOpenBtn(art);
+            artHTML = artHTML.replace(/^(<[a-z]+[^>]*>)/i, '$1' + btn);
             // The token may have been wrapped in a <p> by the markdown
             // renderer — replace both wrapped and bare occurrences.
             var bare = art.token;
@@ -25643,6 +25930,118 @@
         }
         // Initial paint so any pre-set mode shows the right active chip
         try { refreshModeUI(); } catch (e) {}
+
+        // ═══════════════════════════════════════════════════════════════
+        // V89 — WORKSPACE PANE controller
+        // Opens any artifact as a full-width right-side surface (Claude
+        // Artifacts pattern). Click "Open" on any inline :::stat /
+        // :::timeline / :::workflow / etc. → workspace pane slides in,
+        // chat column narrows, the artifact gets the spotlight.
+        // ═══════════════════════════════════════════════════════════════
+        var workspaceEl  = document.getElementById('hx-c-workspace');
+        var wsBodyEl     = document.getElementById('hx-c-ws-body');
+        var wsTitleEl    = document.getElementById('hx-c-ws-title');
+        var wsTypeEl     = document.getElementById('hx-c-ws-type');
+        var wsCloseEl    = document.getElementById('hx-c-ws-close');
+        var wsCopyEl     = document.getElementById('hx-c-ws-copy');
+        var wsPrintEl    = document.getElementById('hx-c-ws-print');
+        var ARTIFACT_TYPE_LABELS = {
+          stat: 'Hero metric', tradeoff: 'Tradeoff', timeline: 'Timeline',
+          workflow: 'Workflow', framework: 'Framework', compare: 'Comparison',
+          note: 'Insight', insight: 'Insight', quote: 'Pull quote'
+        };
+
+        function openWorkspace(art) {
+          if (!workspaceEl || !wsBodyEl) return;
+          // Render the artifact at workspace scale (no Open button inside)
+          var artHTML = renderArtifact(art);
+          wsBodyEl.innerHTML = artHTML;
+          wsBodyEl.setAttribute('data-art-type', art.type);
+          if (wsTypeEl)  wsTypeEl.textContent  = ARTIFACT_TYPE_LABELS[art.type] || 'Artifact';
+          if (wsTitleEl) wsTitleEl.textContent = (art.header || '').trim() || '';
+          workspaceEl.hidden = false;
+          document.body.setAttribute('data-workspace', 'open');
+          // store current artifact for copy/print actions
+          workspaceEl._currentArt = art;
+          requestAnimationFrame(function () {
+            workspaceEl.classList.add('is-open');
+          });
+        }
+        function closeWorkspace() {
+          if (!workspaceEl) return;
+          workspaceEl.classList.remove('is-open');
+          document.body.removeAttribute('data-workspace');
+          setTimeout(function () {
+            workspaceEl.hidden = true;
+            if (wsBodyEl) wsBodyEl.innerHTML = '';
+          }, 320);
+        }
+
+        if (wsCloseEl) {
+          wsCloseEl.addEventListener('click', closeWorkspace);
+        }
+        if (wsCopyEl) {
+          wsCopyEl.addEventListener('click', function () {
+            var art = workspaceEl && workspaceEl._currentArt;
+            if (!art) return;
+            var txt = ':::' + art.type + (art.header ? ' ' + art.header : '') + '\n' + art.body + '\n:::';
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(txt).then(function () {
+                wsCopyEl.classList.add('is-flash');
+                setTimeout(function () { wsCopyEl.classList.remove('is-flash'); }, 900);
+              });
+            }
+          });
+        }
+        if (wsPrintEl) {
+          wsPrintEl.addEventListener('click', function () {
+            // Open a clean print window with just the artifact rendered
+            var art = workspaceEl && workspaceEl._currentArt;
+            if (!art) return;
+            var w = window.open('', '_blank', 'width=820,height=900');
+            if (!w) return;
+            var styles =
+              '<style>' +
+                'body{margin:48px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#1a1812;line-height:1.6;}' +
+                '.hx-art{border:1px solid rgba(0,0,0,0.08);border-radius:12px;padding:24px;margin:0;background:#fff;}' +
+                'table{width:100%;border-collapse:collapse;font-size:14px;}th,td{padding:10px 12px;border-bottom:1px solid rgba(0,0,0,0.08);text-align:left;}thead th{font-weight:600;}' +
+                '.hx-art-stat-value{font-size:48px;font-weight:500;letter-spacing:-0.03em;margin-bottom:8px;}.hx-art-stat-label{font-size:16px;color:#4a463c;}' +
+                '.hx-art-head{font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#76705f;margin-bottom:14px;display:block;}' +
+                'ul,ol{padding-left:20px;}li{margin:6px 0;}h1,h2,h3{margin:14px 0 4px;}' +
+              '</style>';
+            w.document.write('<!doctype html><html><head><title>' + (wsTitleEl ? wsTitleEl.textContent : 'Helix Artifact') + '</title>' + styles + '</head><body>' + renderArtifact(art) + '</body></html>');
+            w.document.close();
+            setTimeout(function () { try { w.print(); } catch (e) {} }, 250);
+          });
+        }
+
+        // Delegate clicks on inline "Open" buttons (they appear inside
+        // every artifact in the chat). Decode the encoded artifact spec
+        // and pop it open in the workspace.
+        document.addEventListener('click', function (e) {
+          var btn = e.target.closest && e.target.closest('.hx-art-open');
+          if (!btn) return;
+          e.preventDefault();
+          e.stopPropagation();
+          try {
+            var spec = JSON.parse(decodeURIComponent(btn.getAttribute('data-art') || ''));
+            if (spec && spec.type) openWorkspace(spec);
+          } catch (err) { /* malformed encoding — skip */ }
+        });
+
+        // Esc closes the workspace pane (lower priority than palette)
+        document.addEventListener('keydown', function (e) {
+          if (e.key !== 'Escape') return;
+          if (document.body.getAttribute('data-workspace') === 'open') {
+            // Only close if no other overlay (palette) is open
+            var paletteOpen = document.getElementById('hx-c-palette') &&
+                              !document.getElementById('hx-c-palette').hidden;
+            if (!paletteOpen) {
+              e.preventDefault();
+              closeWorkspace();
+            }
+          }
+        });
         // Watch typing to update both
         if (inputEl) {
           inputEl.addEventListener('input', function () {
