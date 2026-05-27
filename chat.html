@@ -14963,6 +14963,169 @@
         opacity: 0.5 !important;
       }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V58 — CONVERSATIONAL DENSITY + COMPOSER INTEGRATION
+       The chat read as a series of disconnected pages: 48px top
+       padding, 28–40px gaps between messages, 28px floor above a
+       composer with its own border-top and background gradient. The
+       eye had to traverse empty bands to get from one element to the
+       next. The composer felt like a separate widget docked at the
+       bottom, not part of the conversation.
+
+       V58 makes the entire chat — thread, messages, composer — read
+       as one continuous, dense, calm column. Spacing rhythm follows
+       the Claude / ChatGPT density target.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* ── Thread: tight top, tight gaps, breathing floor before composer ── */
+    body[data-active="chat"] .hx-chat-thread-inner {
+      padding-top: 20px !important;
+      padding-bottom: 12px !important;
+      gap: 18px !important;
+    }
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg:first-child {
+      margin-top: 0 !important;
+    }
+    /* Last message keeps a small cushion — composer fade handles the rest */
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg:last-child {
+      margin-bottom: 8px !important;
+    }
+
+    /* ── Message grouping — user + assistant pair as one unit ───────── */
+    /* Assistant directly after user: pull close (they're a turn-pair) */
+    body[data-active="chat"] .hx-msg.is-user + .hx-msg.is-assistant {
+      margin-top: -6px !important;
+    }
+    /* Assistant followed by user (next turn): still a real beat */
+    body[data-active="chat"] .hx-msg.is-assistant + .hx-msg.is-user {
+      margin-top: 6px !important;
+    }
+    /* Thinking indicator sits tight against the user message above */
+    body[data-active="chat"] .hx-msg.is-user + .hx-msg.hx-msg-thinking,
+    body[data-active="chat"] .hx-msg.is-user + .hx-msg.is-assistant.is-streaming {
+      margin-top: -8px !important;
+    }
+
+    /* ── User bubble — slightly tighter internal padding ─────────────── */
+    body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+      padding: 11px 16px !important;
+    }
+
+    /* ── Assistant content — tighten the spacing between blocks ──────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > * + * {
+      margin-top: 10px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h1.hx-md-h,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h2.hx-md-h,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h3.hx-md-h,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h4.hx-md-h {
+      margin-top: 18px !important;
+      margin-bottom: 2px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h1.hx-md-h:first-child,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h2.hx-md-h:first-child,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h3.hx-md-h:first-child {
+      margin-top: 0 !important;
+    }
+
+    /* ── Action toolbar under each message — sits close to the prose ─── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions {
+      margin-top: 6px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-user .hx-msg-user-actions,
+    body[data-active="chat"] .hx-msg.is-user .hx-msg-actions {
+      margin-top: 4px !important;
+    }
+
+    /* ── Composer integration — no border, no background slab ────────── */
+    /* The composer was a visually separate block (border-top + gradient
+       + padding). Remove all of that so it floats inside the same
+       canvas as the conversation. The :focus-within state on the input
+       card already provides plenty of visual definition. */
+    body[data-active="chat"] .hx-chat-compose {
+      border-top: 0 !important;
+      background: transparent !important;
+      padding-top: 4px !important;
+      padding-bottom: 14px !important;
+      position: relative;
+      z-index: 2;
+    }
+    /* A taller, softer fade above the composer that blends thread →
+       composer without a hard line. */
+    body[data-active="chat"] .hx-chat-compose::before {
+      content: '' !important;
+      position: absolute !important;
+      left: 0; right: 0;
+      top: -48px !important;
+      height: 48px !important;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        color-mix(in srgb, var(--hx-bg) 55%, transparent) 45%,
+        var(--hx-bg) 100%) !important;
+      pointer-events: none !important;
+      z-index: 1;
+    }
+    body[data-active="chat"] .hx-chat-compose-inner {
+      gap: 6px !important;
+    }
+
+    /* ── Bottom compose strip (hint + mode picker) — tighter ─────────── */
+    body[data-active="chat"] .hx-cc-compose-bar {
+      padding-top: 4px !important;
+      padding-bottom: 0 !important;
+      min-height: 0 !important;
+    }
+
+    /* ── Empty state — tighter vertical rhythm ───────────────────────── */
+    body[data-active="chat"] .hx-chat-blank {
+      padding-top: 60px !important;
+      padding-bottom: 24px !important;
+    }
+    body[data-active="chat"] .hx-chat-blank-inner {
+      gap: 8px !important;
+    }
+
+    /* ── Reasoning details summary — sits close to prose, not floating ─ */
+    body[data-active="chat"] details.hx-rsn {
+      margin-top: 0 !important;
+      margin-bottom: 2px !important;
+    }
+
+    /* ── Toolbar/title bar — reduce vertical chrome above thread ─────── */
+    body[data-active="chat"] .hx-chat-toolbar {
+      padding-top: 10px !important;
+      padding-bottom: 10px !important;
+    }
+
+    /* ── Mobile: same density rules, slightly tighter ────────────────── */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-chat-thread-inner {
+        padding-top: 14px !important;
+        padding-bottom: 10px !important;
+        gap: 16px !important;
+      }
+      body[data-active="chat"] .hx-msg.is-user + .hx-msg.is-assistant {
+        margin-top: -4px !important;
+      }
+      body[data-active="chat"] .hx-chat-compose {
+        padding-top: 4px !important;
+        padding-bottom: 10px !important;
+      }
+      body[data-active="chat"] .hx-chat-blank {
+        padding-top: 36px !important;
+        padding-bottom: 16px !important;
+      }
+    }
+
+    /* ── Wide screens (≥1280px): keep density, no extra padding ──────── */
+    @media (min-width: 1280px) {
+      body[data-active="chat"] .hx-chat-thread-inner {
+        padding-top: 24px !important;
+        padding-bottom: 14px !important;
+        gap: 20px !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
