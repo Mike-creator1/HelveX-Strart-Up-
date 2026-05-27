@@ -15513,6 +15513,293 @@
     }
 
     /* ═════════════════════════════════════════════════════════════════
+       V71 — STAGE LAYOUT (radical rebuild #2)
+       Stops treating the conversation as a chat log entirely. Treats
+       it as a STAGE — the latest exchange is the focal scene, older
+       turns are visibly past tense (dimmed in the background). The
+       composer is a floating glass command bar, not a docked
+       widget. The right edge gets a slim turn rail with numbered
+       dots so the user can navigate cinematically.
+
+       Inspirations: Final Cut Pro timeline, Notion gallery, Linear
+       cycle view, an opera stage.
+
+       The principle: at any moment, exactly ONE thing has the user's
+       full attention — the current scene. Everything else recedes.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* ───── STAGE — wider column, generous breath ──────────────────── */
+    body[data-active="chat"] .hx-chat-thread-inner {
+      max-width: 880px !important;
+      padding-top: 28px !important;
+      padding-bottom: 24px !important;
+      gap: 72px !important; /* operatic breath between scenes */
+      position: relative !important;
+    }
+    @media (min-width: 1440px) {
+      body[data-active="chat"] .hx-chat-thread-inner {
+        max-width: 960px !important;
+        gap: 88px !important;
+      }
+    }
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-chat-thread-inner {
+        max-width: 100% !important;
+        gap: 44px !important;
+      }
+    }
+    /* The composer column matches the stage exactly */
+    body[data-active="chat"] .hx-chat-compose-inner {
+      max-width: 880px !important;
+    }
+    @media (min-width: 1440px) {
+      body[data-active="chat"] .hx-chat-compose-inner {
+        max-width: 960px !important;
+      }
+    }
+
+    /* ───── SCENE — past turns recede, current turn holds attention ── */
+    /* Every message default to "past" (dimmed) */
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg {
+      opacity: 0.38 !important;
+      filter: saturate(0.85) !important;
+      transition:
+        opacity 420ms var(--hx-ease),
+        filter 420ms var(--hx-ease) !important;
+    }
+    /* The MOST RECENT exchange (last user + last assistant + streaming/
+       thinking) stays at full attention */
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg:nth-last-child(-n+2) {
+      opacity: 1 !important;
+      filter: none !important;
+    }
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg.is-streaming,
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg.hx-msg-thinking,
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg.hx-msg-thinking + .hx-msg.is-user,
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg.is-streaming + .hx-msg.is-user {
+      opacity: 1 !important;
+      filter: none !important;
+    }
+    /* Hover any past turn to bring it back to attention */
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg:hover,
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg:focus-within,
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg:hover + .hx-msg.is-assistant {
+      opacity: 1 !important;
+      filter: none !important;
+    }
+
+    /* ───── HERO RESPONSE TYPOGRAPHY ──────────────────────────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p {
+      font-size: 16px !important;
+      line-height: 1.72 !important;
+      letter-spacing: -0.008em !important;
+    }
+    /* H1 gets cinematic scale — used sparingly by the model */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h1.hx-md-h {
+      font-size: clamp(26px, 3.2vw, 32px) !important;
+      font-weight: 500 !important;
+      letter-spacing: -0.022em !important;
+      line-height: 1.12 !important;
+      margin-top: 24px !important;
+      margin-bottom: 8px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h1.hx-md-h:first-child {
+      margin-top: 0 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h2.hx-md-h {
+      font-size: 19px !important;
+      font-weight: 600 !important;
+      letter-spacing: -0.016em !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h2.hx-md-h::before {
+      width: 3px !important;
+      height: 18px !important;
+    }
+
+    /* User turn — bigger, more confident pull-quote */
+    body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+      font-size: 20px !important;
+      line-height: 1.36 !important;
+      letter-spacing: -0.018em !important;
+      padding-left: 22px !important;
+      border-left-width: 3px !important;
+    }
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+        font-size: 17px !important;
+        padding-left: 16px !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content,
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p {
+        font-size: 15px !important;
+      }
+    }
+
+    /* ───── FLOATING GLASS COMPOSER ───────────────────────────────── */
+    body[data-active="chat"] .hx-chat-compose {
+      padding-top: 16px !important;
+      padding-bottom: 22px !important;
+      position: relative !important;
+    }
+    /* The fade above the composer becomes a much taller cinematic
+       gradient — the stage darkens slightly toward the command bar */
+    body[data-active="chat"] .hx-chat-compose::before {
+      content: '' !important;
+      position: absolute !important;
+      left: 0 !important;
+      right: 0 !important;
+      top: -80px !important;
+      height: 80px !important;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        color-mix(in srgb, var(--hx-bg) 30%, transparent) 35%,
+        color-mix(in srgb, var(--hx-bg) 80%, transparent) 75%,
+        var(--hx-bg) 100%) !important;
+      pointer-events: none !important;
+      z-index: 1 !important;
+    }
+    body[data-active="chat"] .hx-chat-input-row {
+      background: color-mix(in srgb, #ffffff 88%, transparent) !important;
+      backdrop-filter: saturate(140%) blur(20px) !important;
+      -webkit-backdrop-filter: saturate(140%) blur(20px) !important;
+      border-radius: 18px !important;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 10%, transparent) !important;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 65%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-text) 4%, transparent),
+        0 12px 36px -16px color-mix(in srgb, var(--hx-text) 14%, transparent),
+        0 24px 64px -32px color-mix(in srgb, var(--hx-text) 18%, transparent) !important;
+      transition:
+        background 320ms var(--hx-ease),
+        border-color 320ms var(--hx-ease),
+        box-shadow 380ms var(--hx-ease),
+        transform 320ms var(--hx-ease) !important;
+    }
+    body[data-active="chat"] .hx-chat-input-row:focus-within {
+      background: #ffffff !important;
+      border-color: color-mix(in srgb, var(--hx-text) 18%, transparent) !important;
+      box-shadow:
+        inset 0 1px 0 #ffffff,
+        0 0 0 4px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 10%, transparent),
+        0 14px 40px -14px color-mix(in srgb, var(--hx-text) 18%, transparent),
+        0 28px 72px -32px color-mix(in srgb, var(--hx-text) 20%, transparent) !important;
+      transform: translateY(-1px) !important;
+    }
+
+    /* ───── TURN RAIL — slim numbered dots on the right edge ──────── */
+    /* CSS-only navigation hint: a dot for each turn anchored to the
+       message via ::after. They appear only when hovering near the
+       right edge of the column. */
+    body[data-active="chat"] .hx-chat-thread-inner {
+      counter-reset: hx-stage-turn !important;
+    }
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg.is-user {
+      counter-increment: hx-stage-turn !important;
+    }
+    /* The numbered eyebrow on user turns already says "You asked · 01"
+       so we reuse that as the navigation hint — no extra rail needed. */
+
+    /* ───── PRESENCE — slim badge in the top-right of the pane ─────── */
+    /* The V70 left-anchored presence pill is replaced with a discreet
+       glass badge in the top-right that doesn't compete with the
+       editorial column. */
+    body[data-active="chat"] .hx-presence {
+      position: fixed !important;
+      top: 18px !important;
+      right: 22px !important;
+      left: auto !important;
+      margin: 0 !important;
+      z-index: 50 !important;
+      padding: 5px 13px 5px 11px !important;
+      font-size: 11px !important;
+      background: color-mix(in srgb, #ffffff 78%, transparent) !important;
+    }
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-presence {
+        top: 12px !important;
+        right: 12px !important;
+        padding: 4px 10px 4px 9px !important;
+        font-size: 10.5px !important;
+      }
+      body[data-active="chat"] .hx-presence-label {
+        max-width: 130px !important;
+      }
+    }
+
+    /* ───── CONDUCTOR — single row, sits closer to the composer ───── */
+    body[data-active="chat"] .hx-conductor {
+      flex-wrap: nowrap !important;
+      overflow-x: auto !important;
+      scrollbar-width: none !important;
+      padding-bottom: 8px !important;
+      mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%) !important;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%) !important;
+    }
+    body[data-active="chat"] .hx-conductor::-webkit-scrollbar { display: none !important; }
+    body[data-active="chat"] .hx-conductor-chip {
+      flex-shrink: 0 !important;
+    }
+
+    /* ───── SCENE DIVIDER — wider, more cinematic ──────────────────── */
+    body[data-active="chat"] .hx-msg.is-user:not(:first-of-type)::after,
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg.is-user:not(:first-child)::after {
+      top: -38px !important;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        color-mix(in srgb, var(--hx-text) 9%, transparent) 12%,
+        color-mix(in srgb, var(--hx-text) 14%, transparent) 50%,
+        color-mix(in srgb, var(--hx-text) 9%, transparent) 88%,
+        transparent 100%) !important;
+    }
+
+    /* ───── ARTIFACT — match the wider stage with stronger presence ── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art {
+      margin: 22px 0 !important;
+      box-shadow:
+        inset 0 1px 0 #ffffff,
+        0 1px 2px color-mix(in srgb, var(--hx-text) 4%, transparent),
+        0 12px 36px -18px color-mix(in srgb, var(--hx-text) 12%, transparent) !important;
+    }
+
+    /* ───── EMPTY STATE — cinematic opener ────────────────────────── */
+    body[data-active="chat"] .hx-chat-blank {
+      max-width: 880px !important;
+      padding: 140px var(--col-x-left, 56px) 80px var(--col-x-left, 56px) !important;
+    }
+    body[data-active="chat"] .hx-chat-blank h2 {
+      font-size: clamp(46px, 6vw, 68px) !important;
+      font-weight: 420 !important;
+      letter-spacing: -0.034em !important;
+      line-height: 1.02 !important;
+    }
+    body[data-active="chat"] .hx-chat-blank p {
+      font-size: 18px !important;
+      max-width: 600px !important;
+      margin-top: 26px !important;
+    }
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-chat-blank {
+        padding: 72px 20px 40px !important;
+      }
+      body[data-active="chat"] .hx-chat-blank h2 {
+        font-size: 36px !important;
+      }
+      body[data-active="chat"] .hx-chat-blank p {
+        font-size: 15px !important;
+      }
+    }
+
+    /* ───── REDUCED MOTION ───────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-chat-thread-inner > .hx-msg {
+        opacity: 1 !important;
+        filter: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* ═════════════════════════════════════════════════════════════════
        V70 — PRESENCE + CONDUCTOR
        Two pieces that make the chat feel like a living intelligence
        partner instead of a text input/output box:
