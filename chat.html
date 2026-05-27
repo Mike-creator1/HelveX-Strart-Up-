@@ -15513,6 +15513,322 @@
     }
 
     /* ═════════════════════════════════════════════════════════════════
+       V67 — DEEP REFINEMENT: SOUL, MATERIALITY, RHYTHM
+       The product had calmness from V66 but no SOUL. This pass adds
+       the small things that distinguish a tool from an environment:
+       material texture, refined editorial typography, a poetic
+       greeting copy, a hairline finale rule under each thought, a
+       confident wordmark in the empty state, breathing entrances
+       on cold-load. Nothing flashy — every change is the quiet kind
+       that you don't notice individually but feel collectively.
+
+       Inspirations: Apple News (typography), Linear (silent motion),
+       Arc (environmental presence), Things 3 (restraint).
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* (1) Materiality — barely-there paper grain on the canvas.
+       1.5% noise via inline SVG, applied to the chat pane only.
+       Almost subliminal — the eye registers "real surface" without
+       being able to point to why. */
+    body[data-active="chat"] .hx-chat-pane::after {
+      content: '' !important;
+      position: absolute !important;
+      inset: 0 !important;
+      pointer-events: none !important;
+      z-index: 0 !important;
+      opacity: 0.4 !important;
+      mix-blend-mode: multiply !important;
+      background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.12 0 0 0 0 0.10 0 0 0 0 0.07 0 0 0 0.025 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") !important;
+      background-size: 200px 200px !important;
+    }
+
+    /* (2) EMPTY STATE — confident editorial composition.
+       The greeting becomes the room's signature: oversized, light
+       weight, tight tracking, soft warm color. A single line of
+       invitation below. No chips, no decorative mark — just an
+       address to the user. */
+    body[data-active="chat"] .hx-chat-blank {
+      max-width: 720px !important;
+      align-items: flex-start !important;
+      text-align: left !important;
+      padding: 96px var(--col-x-left, 56px) 48px var(--col-x-left, 56px) !important;
+    }
+    body[data-active="chat"] .hx-chat-blank-inner {
+      align-items: flex-start !important;
+      text-align: left !important;
+      gap: 0 !important;
+      max-width: 640px !important;
+      width: 100% !important;
+    }
+    body[data-active="chat"] .hx-chat-blank-eyebrow {
+      font-family: var(--sans) !important;
+      font-size: 10.5px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.14em !important;
+      text-transform: uppercase !important;
+      color: color-mix(in srgb, var(--hx-text) 40%, transparent) !important;
+      margin: 0 0 28px 0 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+    body[data-active="chat"] .hx-chat-blank-eyebrow::before {
+      content: '' !important;
+      width: 5px !important;
+      height: 5px !important;
+      border-radius: 50% !important;
+      background: var(--hx-accent, var(--hx-yellow-deep)) !important;
+      box-shadow: 0 0 6px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 50%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-chat-blank h2 {
+      font-family: var(--sans) !important;
+      font-size: clamp(36px, 5vw, 52px) !important;
+      font-weight: 460 !important;
+      letter-spacing: -0.028em !important;
+      line-height: 1.06 !important;
+      color: var(--hx-text) !important;
+      margin: 0 !important;
+      text-align: left !important;
+      animation: hx-blank-rise 720ms var(--hx-ease) both !important;
+    }
+    body[data-active="chat"] .hx-chat-blank p {
+      font-family: var(--sans) !important;
+      font-size: 16px !important;
+      font-weight: 400 !important;
+      letter-spacing: -0.005em !important;
+      line-height: 1.55 !important;
+      color: color-mix(in srgb, var(--hx-text) 56%, transparent) !important;
+      margin: 18px 0 0 0 !important;
+      max-width: 520px !important;
+      text-align: left !important;
+      animation: hx-blank-rise 720ms var(--hx-ease) 120ms both !important;
+    }
+    body[data-active="chat"] .hx-chat-blank p strong {
+      color: color-mix(in srgb, var(--hx-text) 75%, transparent) !important;
+      font-weight: 500 !important;
+    }
+    @keyframes hx-blank-rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-chat-blank h2,
+      body[data-active="chat"] .hx-chat-blank p {
+        animation: none !important;
+      }
+    }
+
+    /* (3) HAIRLINE FINALE — a 1px gold-tinted line that appears
+       under each COMPLETED assistant message. Signals "this thought
+       is whole". 32px wide, left-anchored, very faint. The kind of
+       detail you don't notice but unconsciously register. */
+    body[data-active="chat"] .hx-msg.is-assistant:not(.is-streaming):not(.hx-msg-thinking) .hx-msg-content::before {
+      content: '' !important;
+      display: block !important;
+      width: 32px !important;
+      height: 1px !important;
+      background: linear-gradient(90deg,
+        var(--hx-accent, var(--hx-yellow-deep)) 0%,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 0%, transparent) 100%) !important;
+      opacity: 0.5 !important;
+      margin-bottom: 12px !important;
+      animation: hx-finale-draw 600ms var(--hx-ease) both !important;
+    }
+    /* During streaming, no finale (response not yet whole) */
+    body[data-active="chat"] .hx-msg.is-assistant.is-streaming .hx-msg-content::before {
+      content: none !important;
+    }
+    @keyframes hx-finale-draw {
+      from { transform: scaleX(0); transform-origin: left center; opacity: 0; }
+      to   { transform: scaleX(1); opacity: 0.5; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-msg.is-assistant:not(.is-streaming):not(.hx-msg-thinking) .hx-msg-content::before {
+        animation: none !important;
+      }
+    }
+
+    /* (4) ASSISTANT PROSE — refined editorial typography.
+       Smaller body size with more refined tracking. Reads as a
+       publication, not a chat log. */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p {
+      font-family: var(--sans) !important;
+      font-size: 15px !important;
+      line-height: 1.7 !important;
+      letter-spacing: -0.008em !important;
+      color: color-mix(in srgb, var(--hx-text) 92%, transparent) !important;
+      font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1 !important;
+      -webkit-font-smoothing: antialiased !important;
+      -moz-osx-font-smoothing: grayscale !important;
+    }
+    /* The first paragraph after the finale line gets a slightly
+       expressive lead — like an article's lead. */
+    body[data-active="chat"] .hx-msg.is-assistant:not(.is-streaming) .hx-msg-content > p:first-of-type,
+    body[data-active="chat"] .hx-msg.is-assistant:not(.is-streaming) .hx-msg-content > details.hx-rsn + p {
+      font-size: 15.5px !important;
+      line-height: 1.66 !important;
+      color: var(--hx-text) !important;
+    }
+
+    /* (5) USER BUBBLE — refined cream surface with a hairline
+       inset shadow that gives it real material weight */
+    body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+      background: linear-gradient(180deg,
+        #fcfaf3 0%,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 2.5%, #f8f4eb) 100%) !important;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 8%, transparent) !important;
+      border-radius: 14px !important;
+      padding: 12px 18px !important;
+      color: var(--hx-text) !important;
+      font-size: 14.5px !important;
+      line-height: 1.5 !important;
+      letter-spacing: -0.005em !important;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
+        0 1px 1px color-mix(in srgb, var(--hx-text) 3%, transparent) !important;
+    }
+
+    /* (6) COMPOSER — singular focal piece of the bottom region.
+       Slightly raised at rest, settles into focus with gold inflection. */
+    body[data-active="chat"] .hx-chat-input-row {
+      background: linear-gradient(180deg,
+        #ffffff 0%,
+        #fdfbf5 100%) !important;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 11%, transparent) !important;
+      border-radius: 16px !important;
+      padding: 8px 10px 8px 14px !important;
+      box-shadow:
+        inset 0 1px 0 #ffffff,
+        0 1px 2px color-mix(in srgb, var(--hx-text) 4%, transparent),
+        0 12px 32px -16px color-mix(in srgb, var(--hx-text) 9%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-chat-input-row:focus-within {
+      border-color: color-mix(in srgb, var(--hx-text) 18%, transparent) !important;
+      background: #ffffff !important;
+      box-shadow:
+        inset 0 1px 0 #ffffff,
+        0 0 0 4px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 10%, transparent),
+        0 12px 36px -12px color-mix(in srgb, var(--hx-text) 14%, transparent) !important;
+    }
+    /* Refined placeholder */
+    body[data-active="chat"] .hx-chat-textarea {
+      font-family: var(--sans) !important;
+      font-size: 15px !important;
+      line-height: 1.55 !important;
+      letter-spacing: -0.007em !important;
+      color: var(--hx-text) !important;
+    }
+    body[data-active="chat"] .hx-chat-textarea::placeholder {
+      color: color-mix(in srgb, var(--hx-text) 38%, transparent) !important;
+      font-weight: 400 !important;
+    }
+
+    /* (7) Conversation rail — refined editorial item rhythm.
+       Show the timestamp on hover (subtle revelation). */
+    body[data-active="chat"] .hx-chat-item-title {
+      font-size: 13.25px !important;
+      letter-spacing: -0.006em !important;
+      color: color-mix(in srgb, var(--hx-text) 88%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-chat-item.is-active .hx-chat-item-title {
+      color: var(--hx-text) !important;
+    }
+
+    /* (8) Action toolbar — even quieter buttons */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act {
+      color: color-mix(in srgb, var(--hx-text) 38%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act svg {
+      stroke-width: 1.6 !important;
+    }
+
+    /* (9) Follow-up chips — refined to almost type-only buttons.
+       Border barely there at rest, brightens on hover. */
+    body[data-active="chat"] .hx-msg-followup-chip {
+      padding: 6px 12px !important;
+      background: transparent !important;
+      border-color: color-mix(in srgb, var(--hx-text) 10%, transparent) !important;
+      font-size: 12.5px !important;
+      letter-spacing: -0.004em !important;
+      color: color-mix(in srgb, var(--hx-text) 68%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg-followup-chip:hover {
+      background: color-mix(in srgb, var(--hx-text) 3.5%, transparent) !important;
+      border-color: color-mix(in srgb, var(--hx-text) 20%, transparent) !important;
+      color: var(--hx-text) !important;
+    }
+
+    /* (10) Send button — refined gold pill with single shadow */
+    body[data-active="chat"] .hx-chat-send {
+      background: linear-gradient(180deg,
+        var(--hx-accent, var(--hx-yellow-deep)) 0%,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 88%, #000) 100%) !important;
+      border: 0 !important;
+      color: #fff !important;
+      width: 32px !important;
+      height: 32px !important;
+      border-radius: 10px !important;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 26%, transparent),
+        0 1px 2px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 28%, transparent),
+        0 6px 16px -6px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 36%, transparent) !important;
+      transition:
+        background 240ms var(--hx-ease),
+        box-shadow 280ms var(--hx-ease),
+        opacity 220ms var(--hx-ease) !important;
+    }
+    body[data-active="chat"] .hx-chat-send:hover:not(:disabled) {
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 30%, transparent),
+        0 2px 4px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 34%, transparent),
+        0 10px 24px -8px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 48%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-chat-send:disabled {
+      background: color-mix(in srgb, var(--hx-text) 10%, transparent) !important;
+      color: color-mix(in srgb, var(--hx-text) 30%, transparent) !important;
+      box-shadow: none !important;
+      opacity: 0.7 !important;
+    }
+    body[data-active="chat"] .hx-chat-send svg {
+      width: 15px !important;
+      height: 15px !important;
+      stroke-width: 2.4 !important;
+    }
+
+    /* (11) Cinematic cold-load: composer breathes in once, on first paint */
+    body[data-active="chat"] .hx-chat-input-row {
+      animation: hx-composer-rise 700ms var(--hx-ease) 180ms both !important;
+    }
+    @keyframes hx-composer-rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-chat-input-row {
+        animation: none !important;
+      }
+    }
+
+    /* (12) Mobile — preserved refinement at scale */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-chat-blank {
+        padding: 56px 20px 28px !important;
+      }
+      body[data-active="chat"] .hx-chat-blank h2 {
+        font-size: 30px !important;
+      }
+      body[data-active="chat"] .hx-chat-blank p {
+        font-size: 14px !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content,
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p {
+        font-size: 14.5px !important;
+        line-height: 1.66 !important;
+      }
+    }
+
+    /* ═════════════════════════════════════════════════════════════════
        V66 — ORCHESTRATION PASS (no new features, only restraint)
        The platform had been accumulating "improvements" — each one
        defensible alone, all of them together still reading as a
@@ -16612,7 +16928,7 @@
                   <textarea
                     id="hx-c-input"
                     class="hx-chat-textarea"
-                    placeholder="What's on your mind?"
+                    placeholder="Ask Helix anything…"
                     rows="1"
                     autocomplete="off"
                     spellcheck="true"></textarea>
@@ -17891,9 +18207,9 @@
             thread.innerHTML =
               '<div class="hx-chat-blank">' +
                 '<span class="hx-chat-blank-mark" aria-hidden="true"></span>' +
-                '<span class="hx-chat-blank-eyebrow">HelveX &middot; Helix</span>' +
-                '<h2>Helix</h2>' +
-                '<p>Working on <strong>' + escape(active.name || 'Unnamed project') + '</strong>. Send your first message below.</p>' +
+                '<span class="hx-chat-blank-eyebrow">' + escape(active.name || 'Workspace') + '</span>' +
+                '<h2>How can I help today?</h2>' +
+                '<p>Ask anything — or share a document, a file, a thought you want me to think through with you.</p>' +
               '</div>';
             return;
           }
@@ -17901,9 +18217,9 @@
             thread.innerHTML =
               '<div class="hx-chat-blank">' +
                 '<span class="hx-chat-blank-mark" aria-hidden="true"></span>' +
-                '<span class="hx-chat-blank-eyebrow">New chat</span>' +
-                '<h2>' + escape(state.conversation.title || 'New chat') + '</h2>' +
-                '<p>Type a question, or <strong>drop a PDF, image, contract, or code file</strong> and ask Helix to analyze it.</p>' +
+                '<span class="hx-chat-blank-eyebrow">' + escape(state.conversation.title || 'New session') + '</span>' +
+                '<h2>What are we working on?</h2>' +
+                '<p>Start typing, paste a question, or drop a file. I will adapt to whatever you bring.</p>' +
                 '<div class="hx-chat-blank-chips">' +
                   '<button type="button" class="hx-chat-blank-chip" data-prompt="Summarize the key points in plain language.">' +
                     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>' +
