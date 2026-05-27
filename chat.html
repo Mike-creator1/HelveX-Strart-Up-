@@ -14424,6 +14424,100 @@
       body[data-active="chat"] .hx-chat-list { padding: 4px 8px 14px !important; }
       body[data-active="chat"] .hx-chat-item { padding: 10px 6px 10px 12px !important; }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V53 — LEFT-ALIGNED CONVERSATION COLUMN
+       Stops the chat from feeling like a small centered column floating
+       in a wide pane. Conversation flow now anchors to the left side of
+       the chat pane with generous reading width, refined right gutter
+       so it doesn't run flush to the edge. ChatGPT-desktop alignment.
+       ═════════════════════════════════════════════════════════════════ */
+
+    body[data-active="chat"] {
+      --col: 760px;
+      --col-x-left: 56px;
+      --col-x-right: 32px;
+    }
+
+    /* Thread — left-anchored with generous left padding */
+    body[data-active="chat"] .hx-chat-thread-inner {
+      max-width: var(--col) !important;
+      margin: 0 !important;
+      padding-left: var(--col-x-left) !important;
+      padding-right: var(--col-x-right) !important;
+    }
+
+    /* Composer — same left anchor for visual continuity */
+    body[data-active="chat"] .hx-chat-compose {
+      padding-left: var(--col-x-left) !important;
+      padding-right: var(--col-x-right) !important;
+    }
+    body[data-active="chat"] .hx-chat-compose-inner {
+      max-width: var(--col) !important;
+      margin: 0 !important;
+    }
+
+    /* Toolbar title — anchored to the same column */
+    body[data-active="chat"] .hx-chat-toolbar .hx-chat-head {
+      max-width: var(--col) !important;
+      margin: 0 !important;
+      padding-left: var(--col-x-left) !important;
+      padding-right: var(--col-x-right) !important;
+    }
+
+    /* Empty state — also left-aligned column but centered content within */
+    body[data-active="chat"] .hx-chat-blank {
+      padding-left: var(--col-x-left) !important;
+      padding-right: var(--col-x-right) !important;
+      max-width: var(--col);
+      margin: 0 !important;
+      justify-content: center !important;
+    }
+    body[data-active="chat"] .hx-chat-blank-inner {
+      align-items: flex-start !important;
+      text-align: left !important;
+    }
+    .hx-chat-blank-greet { text-align: left !important; }
+    .hx-chat-blank-sub  { text-align: left !important; }
+    body[data-active="chat"] .hx-chat-suggest {
+      justify-self: flex-start;
+    }
+
+    /* User bubble — still right-aligned within the now-left-anchored column,
+       which gives the natural ChatGPT-desktop pairing rhythm */
+    /* (no override needed; the .is-user flex justify-content: flex-end
+       already aligns it to the right within the thread-inner column) */
+
+    /* Wider screens — keep the column near the left even as viewport grows.
+       At very wide viewports we want a small gentle indent rather than
+       pushing all the way to the sidebar edge. */
+    @media (min-width: 1280px) {
+      body[data-active="chat"] {
+        --col-x-left: 72px;
+      }
+    }
+    @media (min-width: 1600px) {
+      body[data-active="chat"] {
+        --col-x-left: 96px;
+      }
+    }
+
+    /* Mobile — collapse the asymmetric pads */
+    @media (max-width: 720px) {
+      body[data-active="chat"] {
+        --col-x-left: 18px;
+        --col-x-right: 18px;
+      }
+      body[data-active="chat"] .hx-chat-thread-inner {
+        max-width: 100% !important;
+      }
+      body[data-active="chat"] .hx-chat-compose-inner {
+        max-width: 100% !important;
+      }
+      body[data-active="chat"] .hx-chat-toolbar .hx-chat-head {
+        max-width: 100% !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
