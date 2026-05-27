@@ -15513,6 +15513,537 @@
     }
 
     /* ═════════════════════════════════════════════════════════════════
+       V74 — DEDICATED DARK MODE DESIGN SYSTEM
+       Everything that was hardcoded to #ffffff / cream gradients in
+       V64-V73 is now properly themed for dark mode. Dark mode is NOT
+       an inverted light theme — it has its own materials: charcoal
+       surfaces, warm-cream text at controlled opacity, hairline
+       borders, gold accents that read against dark, real shadows.
+
+       Light mode keeps everything from V67 onwards untouched.
+
+       Inspirations: Linear dark, Arc dark, Things 3 dark, Apple
+       Reminders dark.
+       ═════════════════════════════════════════════════════════════════ */
+
+    @media (prefers-color-scheme: dark) {
+      body[data-active="chat"] {
+        /* Dedicated dark palette — warm-cream text on charcoal, not
+           bluish-gray text on near-black. Avoids the "VS Code with
+           text inverted" feel. */
+        --hx-text:       #f0eadb;
+        --hx-text-mid:   #c8c1ad;
+        --hx-text-dim:   #8d8676;
+        --hx-text-faint: #5e584d;
+        --hx-dark-bg:        #0f0e0c;
+        --hx-dark-surface:   #181715;
+        --hx-dark-surface-2: #1f1d1a;
+        --hx-dark-line:      rgba(255, 246, 220, 0.08);
+        --hx-dark-line-2:    rgba(255, 246, 220, 0.14);
+      }
+
+      /* ── Environmental: kill the light paper grain ─────────────── */
+      body[data-active="chat"] .hx-chat-pane::after {
+        opacity: 0.18 !important;
+        mix-blend-mode: screen !important;
+      }
+      body[data-active="chat"] .hx-chat-pane::before {
+        opacity: 0.55 !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         ARTIFACTS — charcoal cards, not white blocks on black
+         ─────────────────────────────────────────────────────────── */
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art {
+        background: var(--hx-dark-surface) !important;
+        border-color: var(--hx-dark-line) !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 246, 220, 0.04),
+          0 1px 2px rgba(0, 0, 0, 0.4),
+          0 12px 32px -16px rgba(0, 0, 0, 0.7) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-head {
+        color: var(--hx-text-dim) !important;
+      }
+      /* Stat — dark gold-tinted gradient */
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-stat {
+        background: linear-gradient(180deg,
+          var(--hx-dark-surface) 0%,
+          color-mix(in srgb, var(--hx-accent, #C9A227) 8%, var(--hx-dark-surface)) 100%) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-stat-value {
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-stat-label {
+        color: var(--hx-text-mid) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-stat-sub {
+        color: var(--hx-text-dim) !important;
+      }
+      /* Tradeoff — two-column with dark cells */
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-col-win {
+        background: color-mix(in srgb, var(--hx-accent, #C9A227) 5%, var(--hx-dark-surface)) !important;
+        border-right-color: var(--hx-dark-line) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-col-risk {
+        background: var(--hx-dark-surface) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-col-win .hx-art-col-head {
+        color: #d4ad3c !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-col-risk .hx-art-col-head {
+        color: #e07b3d !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-col li {
+        color: var(--hx-text) !important;
+      }
+      /* Timeline — dark spine + bright gold dots */
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl::before {
+        background: var(--hx-dark-line-2) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-dot {
+        box-shadow:
+          0 0 0 3px var(--hx-dark-surface),
+          0 0 0 4px color-mix(in srgb, var(--hx-accent, #C9A227) 30%, transparent) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-title {
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-body {
+        color: var(--hx-text-dim) !important;
+      }
+      /* Workflow — dark step rows */
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-step {
+        border-bottom-color: var(--hx-dark-line) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-num {
+        background: var(--hx-dark-line) !important;
+        color: var(--hx-text-mid) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-title {
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-sub {
+        color: var(--hx-text-dim) !important;
+      }
+      /* Framework — dark cells, gold key letters */
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-fw {
+        background: var(--hx-dark-line) !important;
+        border-color: var(--hx-dark-line) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-fw-cell {
+        background: var(--hx-dark-surface) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-fw-desc {
+        color: var(--hx-text) !important;
+      }
+      /* Compare — dark table */
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp thead th {
+        color: var(--hx-text-dim) !important;
+        border-bottom-color: var(--hx-dark-line) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp tbody th {
+        color: var(--hx-text) !important;
+        border-bottom-color: var(--hx-dark-line) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp tbody td {
+        color: var(--hx-text-mid) !important;
+        border-bottom-color: var(--hx-dark-line) !important;
+      }
+      /* Note — gold-tinted dark */
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-note {
+        background: linear-gradient(180deg,
+          color-mix(in srgb, var(--hx-accent, #C9A227) 8%, var(--hx-dark-surface)) 0%,
+          color-mix(in srgb, var(--hx-accent, #C9A227) 5%, var(--hx-dark-surface)) 100%) !important;
+        border-color: color-mix(in srgb, var(--hx-accent, #C9A227) 25%, transparent) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-note-body {
+        color: var(--hx-text) !important;
+      }
+      /* Quote — dark left rule */
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-quote {
+        border-left-color: var(--hx-dark-line-2) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-quote blockquote {
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-quote figcaption {
+        color: var(--hx-text-dim) !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         MARKDOWN TABLES — dark surface
+         ─────────────────────────────────────────────────────────── */
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content table,
+      body[data-active="chat"] .hx-msg.is-assistant .hx-md-table {
+        background: var(--hx-dark-surface) !important;
+        border-color: var(--hx-dark-line) !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content thead,
+      body[data-active="chat"] .hx-msg.is-assistant .hx-md-table thead {
+        background: var(--hx-dark-surface-2) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content th,
+      body[data-active="chat"] .hx-msg.is-assistant .hx-md-table thead th {
+        color: var(--hx-text) !important;
+        border-bottom-color: var(--hx-dark-line) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content td,
+      body[data-active="chat"] .hx-msg.is-assistant .hx-md-table tbody td {
+        color: var(--hx-text-mid) !important;
+        border-bottom-color: var(--hx-dark-line) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content tbody tr:nth-child(even) td {
+        background: rgba(255, 246, 220, 0.015) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content tbody tr:hover td {
+        background: rgba(255, 246, 220, 0.035) !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         USER BUBBLE — dark cream replacement
+         ─────────────────────────────────────────────────────────── */
+      body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+        background: transparent !important;
+        border-left: 3px solid color-mix(in srgb, var(--hx-accent, #C9A227) 70%, transparent) !important;
+        color: var(--hx-text) !important;
+        box-shadow: none !important;
+      }
+      body[data-active="chat"] .hx-msg.is-user::before {
+        color: var(--hx-text-dim) !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         COMPOSER — dark glass, gold-on-focus
+         ─────────────────────────────────────────────────────────── */
+      body[data-active="chat"] .hx-chat-input-row {
+        background: color-mix(in srgb, var(--hx-dark-surface) 92%, transparent) !important;
+        border-color: var(--hx-dark-line) !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 246, 220, 0.03),
+          0 1px 2px rgba(0, 0, 0, 0.4),
+          0 12px 36px -16px rgba(0, 0, 0, 0.8),
+          0 24px 64px -32px rgba(0, 0, 0, 0.6) !important;
+      }
+      body[data-active="chat"] .hx-chat-input-row:focus-within {
+        background: var(--hx-dark-surface-2) !important;
+        border-color: color-mix(in srgb, var(--hx-accent, #C9A227) 35%, transparent) !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 246, 220, 0.05),
+          0 0 0 4px color-mix(in srgb, var(--hx-accent, #C9A227) 14%, transparent),
+          0 14px 40px -14px rgba(0, 0, 0, 0.7),
+          0 28px 72px -32px rgba(0, 0, 0, 0.6) !important;
+      }
+      body[data-active="chat"] .hx-chat-textarea {
+        color: var(--hx-text) !important;
+        background: transparent !important;
+      }
+      body[data-active="chat"] .hx-chat-textarea::placeholder {
+        color: var(--hx-text-dim) !important;
+      }
+      body[data-active="chat"] .hx-chat-tool-btn {
+        color: var(--hx-text-mid) !important;
+      }
+      body[data-active="chat"] .hx-chat-tool-btn:hover {
+        background: rgba(255, 246, 220, 0.06) !important;
+        color: var(--hx-text) !important;
+      }
+      /* The composer fade gradient — needs to go to dark bg, not light */
+      body[data-active="chat"] .hx-chat-compose::before {
+        background: linear-gradient(180deg,
+          transparent 0%,
+          color-mix(in srgb, var(--hx-dark-bg) 30%, transparent) 35%,
+          color-mix(in srgb, var(--hx-dark-bg) 80%, transparent) 75%,
+          var(--hx-dark-bg) 100%) !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         PRESENCE — dark glass pill
+         ─────────────────────────────────────────────────────────── */
+      body[data-active="chat"] .hx-presence {
+        background: color-mix(in srgb, var(--hx-dark-surface) 80%, transparent) !important;
+        border-color: var(--hx-dark-line) !important;
+        color: var(--hx-text-mid) !important;
+        box-shadow:
+          0 1px 2px rgba(0, 0, 0, 0.4),
+          0 6px 18px -10px rgba(0, 0, 0, 0.6) !important;
+      }
+      body[data-active="chat"] .hx-presence[data-state="thinking"],
+      body[data-active="chat"] .hx-presence[data-state="drafting"] {
+        color: var(--hx-text) !important;
+        border-color: color-mix(in srgb, var(--hx-accent, #C9A227) 30%, transparent) !important;
+      }
+      body[data-active="chat"] .hx-presence[data-state="done"] {
+        color: var(--hx-text) !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         CONDUCTOR — chips read against dark
+         ─────────────────────────────────────────────────────────── */
+      body[data-active="chat"] .hx-conductor-chip {
+        background: transparent !important;
+        border-color: var(--hx-dark-line) !important;
+        color: var(--hx-text-mid) !important;
+      }
+      body[data-active="chat"] .hx-conductor-chip:hover {
+        background: rgba(255, 246, 220, 0.04) !important;
+        border-color: var(--hx-dark-line-2) !important;
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-conductor-chip svg {
+        color: var(--hx-text-dim) !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         FOLLOW-UP CHIPS — dark equivalents
+         ─────────────────────────────────────────────────────────── */
+      body[data-active="chat"] .hx-msg-followup-chip {
+        background: transparent !important;
+        border-color: var(--hx-dark-line) !important;
+        color: var(--hx-text-mid) !important;
+      }
+      body[data-active="chat"] .hx-msg-followup-chip:hover {
+        background: rgba(255, 246, 220, 0.04) !important;
+        border-color: var(--hx-dark-line-2) !important;
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-msg-followup-chip svg {
+        color: var(--hx-text-dim) !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         ACTION TOOLBAR — dark button states
+         ─────────────────────────────────────────────────────────── */
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act {
+        color: var(--hx-text-dim) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-act:hover {
+        background: rgba(255, 246, 220, 0.06) !important;
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-user .hx-msg-user-act {
+        color: var(--hx-text-dim) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-user .hx-msg-user-act:hover {
+        background: rgba(255, 246, 220, 0.06) !important;
+        color: var(--hx-text) !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         COMMAND PALETTE — full dark theme
+         ─────────────────────────────────────────────────────────── */
+      .hx-palette-backdrop {
+        background: rgba(0, 0, 0, 0.6) !important;
+      }
+      .hx-palette {
+        background: color-mix(in srgb, #181715 95%, transparent) !important;
+        border-color: var(--hx-dark-line) !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 246, 220, 0.04),
+          0 2px 6px rgba(0, 0, 0, 0.4),
+          0 24px 60px -20px rgba(0, 0, 0, 0.7),
+          0 48px 120px -40px rgba(0, 0, 0, 0.6) !important;
+      }
+      .hx-palette-head {
+        border-bottom-color: var(--hx-dark-line) !important;
+      }
+      .hx-palette-ico {
+        color: var(--hx-text-dim) !important;
+      }
+      .hx-palette-input {
+        color: var(--hx-text) !important;
+      }
+      .hx-palette-input::placeholder {
+        color: var(--hx-text-dim) !important;
+      }
+      .hx-palette-kbd-close,
+      .hx-palette-foot-hint kbd,
+      .hx-palette-empty kbd {
+        background: rgba(255, 246, 220, 0.05) !important;
+        border-color: var(--hx-dark-line) !important;
+        color: var(--hx-text-dim) !important;
+      }
+      .hx-palette-group-label {
+        color: var(--hx-text-dim) !important;
+      }
+      .hx-palette-row {
+        color: var(--hx-text) !important;
+      }
+      .hx-palette-row:hover,
+      .hx-palette-row.is-active {
+        background: color-mix(in srgb, var(--hx-accent, #C9A227) 10%, rgba(255, 246, 220, 0.03)) !important;
+      }
+      .hx-palette-row.is-active {
+        box-shadow: inset 0 0 0 1px var(--hx-dark-line-2) !important;
+      }
+      .hx-palette-row-ico {
+        background: rgba(255, 246, 220, 0.05) !important;
+        color: var(--hx-text-mid) !important;
+      }
+      .hx-palette-row.is-active .hx-palette-row-ico,
+      .hx-palette-row:hover .hx-palette-row-ico {
+        background: color-mix(in srgb, var(--hx-accent, #C9A227) 25%, transparent) !important;
+        color: color-mix(in srgb, var(--hx-accent, #C9A227) 80%, var(--hx-text)) !important;
+      }
+      .hx-palette-row-label {
+        color: var(--hx-text) !important;
+      }
+      .hx-palette-row-hint {
+        color: var(--hx-text-dim) !important;
+      }
+      .hx-palette-empty {
+        color: var(--hx-text-dim) !important;
+      }
+      .hx-palette-foot {
+        background: rgba(0, 0, 0, 0.2) !important;
+        border-top-color: var(--hx-dark-line) !important;
+      }
+      .hx-palette-foot-hint {
+        color: var(--hx-text-dim) !important;
+      }
+      .hx-palette-foot-brand {
+        color: var(--hx-text-dim) !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         BLOCKQUOTE / DETAILS / CODE — dark surfaces
+         ─────────────────────────────────────────────────────────── */
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content blockquote {
+        border-left-color: var(--hx-dark-line-2) !important;
+        color: var(--hx-text-mid) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content details:not(.hx-rsn) {
+        background: var(--hx-dark-surface) !important;
+        border-color: var(--hx-dark-line) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content details:not(.hx-rsn)[open] {
+        background: var(--hx-dark-surface-2) !important;
+        border-color: var(--hx-dark-line-2) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content details:not(.hx-rsn) > summary {
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content details:not(.hx-rsn) > summary::before {
+        border-color: var(--hx-text-mid) !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         BOTTOM STRIP — disclaimer + model picker
+         ─────────────────────────────────────────────────────────── */
+      body[data-active="chat"] .hx-cc-compose-bar::before {
+        color: var(--hx-text-dim) !important;
+      }
+      body[data-active="chat"] .hx-cc-compose-bar::after {
+        background: rgba(255, 246, 220, 0.05) !important;
+        border-color: var(--hx-dark-line) !important;
+        color: var(--hx-text-dim) !important;
+      }
+      body[data-active="chat"] .hx-cc-model-pick {
+        background: var(--hx-dark-surface) !important;
+        border-color: var(--hx-dark-line-2) !important;
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-cc-model-pick:hover {
+        background: var(--hx-dark-surface-2) !important;
+        border-color: color-mix(in srgb, var(--hx-accent, #C9A227) 28%, transparent) !important;
+      }
+      body[data-active="chat"] .hx-cc-model-name {
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-cc-model-caret {
+        color: var(--hx-text-dim) !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         SIDEBAR / RAIL — dark items
+         ─────────────────────────────────────────────────────────── */
+      body[data-active="chat"] .hx-chat-rail {
+        background: var(--hx-dark-bg) !important;
+        border-right-color: var(--hx-dark-line) !important;
+      }
+      body[data-active="chat"] .hx-chat-rail-title::after {
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-chat-new {
+        border-color: var(--hx-dark-line-2) !important;
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-chat-new:hover {
+        background: rgba(255, 246, 220, 0.05) !important;
+        border-color: rgba(255, 246, 220, 0.2) !important;
+      }
+      body[data-active="chat"] .hx-chat-rail-collapse {
+        color: var(--hx-text-dim) !important;
+      }
+      body[data-active="chat"] .hx-chat-rail-collapse:hover {
+        background: rgba(255, 246, 220, 0.05) !important;
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-rail-search-row {
+        background: rgba(255, 246, 220, 0.04) !important;
+      }
+      body[data-active="chat"] .hx-rail-search-row:focus-within {
+        background: var(--hx-dark-surface) !important;
+        border-color: var(--hx-dark-line-2) !important;
+      }
+      body[data-active="chat"] .hx-rail-search {
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-rail-search::placeholder {
+        color: var(--hx-text-dim) !important;
+      }
+      body[data-active="chat"] .hx-chat-item:hover {
+        background: rgba(255, 246, 220, 0.05) !important;
+      }
+      body[data-active="chat"] .hx-chat-item.is-active {
+        background: rgba(255, 246, 220, 0.08) !important;
+      }
+      body[data-active="chat"] .hx-chat-item-title {
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-rail-group-head {
+        color: var(--hx-text-dim) !important;
+      }
+      body[data-active="chat"] .hx-chat-item-more {
+        color: var(--hx-text-dim) !important;
+      }
+      body[data-active="chat"] .hx-chat-item-more:hover {
+        background: rgba(255, 246, 220, 0.08) !important;
+        color: var(--hx-text) !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         SECTION DIVIDER — slightly brighter to read on dark
+         ─────────────────────────────────────────────────────────── */
+      body[data-active="chat"] .hx-msg.is-user:not(:first-of-type)::after,
+      body[data-active="chat"] .hx-chat-thread-inner > .hx-msg.is-user:not(:first-child)::after {
+        background: linear-gradient(90deg,
+          transparent 0%,
+          rgba(255, 246, 220, 0.06) 12%,
+          rgba(255, 246, 220, 0.10) 50%,
+          rgba(255, 246, 220, 0.06) 88%,
+          transparent 100%) !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────
+         EMPTY STATE — text color
+         ─────────────────────────────────────────────────────────── */
+      body[data-active="chat"] .hx-chat-blank h2 {
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-chat-blank p {
+        color: var(--hx-text-mid) !important;
+      }
+      body[data-active="chat"] .hx-chat-blank p strong {
+        color: var(--hx-text) !important;
+      }
+      body[data-active="chat"] .hx-chat-blank-eyebrow {
+        color: var(--hx-text-dim) !important;
+      }
+    }
+
+    /* ═════════════════════════════════════════════════════════════════
        V73 — UNIVERSAL COMMAND PALETTE (⌘K)
        The spine of the experience. A floating glass surface that
        puts every Helix action behind one keyboard shortcut. Search
@@ -19292,6 +19823,10 @@
       // so we don't recursively re-process block-level markdown.
       function renderInlineFragments(text) {
         var s = escape(String(text || ''));
+        // V74: restore <br> tags — models commonly emit them inside table
+        // cells for hard line breaks. Without this, the user sees the
+        // literal text "<br>" in their tables.
+        s = s.replace(/&lt;br\s*\/?\s*&gt;/gi, '<br>');
         s = s.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
         s = s.replace(/(^|[^*\w])\*([^*\n]+?)\*(?!\*)/g, '$1<em>$2</em>');
         s = s.replace(/`([^`\n]+)`/g, '<code class="hx-md-inline">$1</code>');
