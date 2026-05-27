@@ -18243,6 +18243,49 @@
         })();
 
         // ─── Collapsible conversation rail ─────────────────────────────
+        // ─── Sidebar search — debounced live filter + ⌘F/CtrlF focus ─
+        (function wireSidebarSearch() {
+          var searchEl = document.getElementById('hx-c-search');
+          if (!searchEl) return;
+          // Live filter as the user types (debounced 60ms so renderList
+          // doesn't fire on every keystroke)
+          var t = null;
+          searchEl.addEventListener('input', function () {
+            if (t) clearTimeout(t);
+            t = setTimeout(function () {
+              if (typeof renderList === 'function') renderList();
+              t = null;
+            }, 60);
+          });
+          // Escape clears the filter
+          searchEl.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && searchEl.value) {
+              searchEl.value = '';
+              if (typeof renderList === 'function') renderList();
+              e.stopPropagation();
+            }
+            // Enter on a single result → open it
+            if (e.key === 'Enter' && searchEl.value) {
+              var firstCard = document.querySelector('.hx-chat-list .hx-chat-item');
+              if (firstCard) {
+                firstCard.click();
+                searchEl.blur();
+              }
+            }
+          });
+          // ⌘F / CtrlF (when not in an input field) — focus the search
+          document.addEventListener('keydown', function (e) {
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'f') {
+              var target = e.target;
+              var isEditable = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+              if (isEditable && target !== searchEl) return;
+              e.preventDefault();
+              searchEl.focus();
+              searchEl.select();
+            }
+          });
+        })();
+
         // ─── Friendly, time-aware empty-state greeting ───────────────
         (function wireGreeting() {
           var greetEl = document.getElementById('hx-c-blank-greet');
