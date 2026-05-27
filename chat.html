@@ -22268,6 +22268,90 @@
         opacity: 0.78 !important;
       }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V88 — CINEMATIC TRANSITIONS PASS
+       Three additions that smooth out the rough state transitions:
+
+       (1) Conversation switch fade — when openConversation() runs, the
+           thread fades out (220ms) then back in (340ms) instead of
+           snapping. The user feels a real "switching rooms" beat.
+
+       (2) Mode activation glow — when a workflow mode is activated,
+           the chat pane edges briefly glow with the gold accent
+           (800ms expo-out). Reads as the room reacting to the mode.
+
+       (3) Refined message entrance curve — the V66 hx-msg-settle
+           animation gets a softer easing so messages drift in
+           instead of pop-in. Plus a slight stagger when many
+           messages render at once (conversation load).
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* (1) Thread switch fade — applied by JS via .hx-thread-switching */
+    body[data-active="chat"] #hx-c-thread {
+      transition: opacity 340ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    body[data-active="chat"] #hx-c-thread.hx-thread-switching {
+      opacity: 0 !important;
+      transition: opacity 220ms cubic-bezier(0.4, 0, 0.6, 1) !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] #hx-c-thread,
+      body[data-active="chat"] #hx-c-thread.hx-thread-switching {
+        transition: none !important;
+        opacity: 1 !important;
+      }
+    }
+
+    /* (2) Mode activation glow — gold edge glow on the chat pane */
+    body[data-active="chat"] .hx-chat-pane.hx-mode-activating {
+      animation: hx-mode-activate 900ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+    }
+    @keyframes hx-mode-activate {
+      0% {
+        box-shadow:
+          inset 0 0 0 0 color-mix(in srgb, var(--hx-accent, #C9A227) 0%, transparent),
+          inset 0 0 0 0 color-mix(in srgb, var(--hx-accent, #C9A227) 0%, transparent);
+      }
+      30% {
+        box-shadow:
+          inset 0 0 60px 0 color-mix(in srgb, var(--hx-accent, #C9A227) 16%, transparent),
+          inset 0 0 120px 0 color-mix(in srgb, var(--hx-accent, #C9A227) 6%, transparent);
+      }
+      100% {
+        box-shadow:
+          inset 0 0 0 0 color-mix(in srgb, var(--hx-accent, #C9A227) 0%, transparent),
+          inset 0 0 0 0 color-mix(in srgb, var(--hx-accent, #C9A227) 0%, transparent);
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-chat-pane.hx-mode-activating {
+        animation: none !important;
+      }
+    }
+
+    /* (3) Refined message entrance — softer curve, slight stagger
+       on initial load (when 5+ messages render at once). The
+       individual message animations already exist from V66; V88
+       just calibrates the curve and adds stagger nth-child rules. */
+    body[data-active="chat"] .hx-msg.is-assistant,
+    body[data-active="chat"] .hx-msg.is-user {
+      animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    /* Stagger the first 6 messages of an initial conversation load.
+       After that, real-time additions render with no delay. */
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg:nth-child(1) { animation-delay: 0ms !important; }
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg:nth-child(2) { animation-delay: 40ms !important; }
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg:nth-child(3) { animation-delay: 80ms !important; }
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg:nth-child(4) { animation-delay: 120ms !important; }
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg:nth-child(5) { animation-delay: 160ms !important; }
+    body[data-active="chat"] .hx-chat-thread-inner > .hx-msg:nth-child(6) { animation-delay: 200ms !important; }
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-chat-thread-inner > .hx-msg {
+        animation-delay: 0ms !important;
+        animation: none !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -24007,13 +24091,24 @@
           // Tear down previous realtime channel
           if (state.msgChannel) { try { state.msgChannel.unsubscribe(); } catch (e) {} state.msgChannel = null; }
 
+          // V88 — Cinematic switch transition: fade the thread out
+          // before loading, then fade in once the new messages render.
+          var threadEl = document.getElementById('hx-c-thread');
+          if (threadEl) threadEl.classList.add('hx-thread-switching');
+
           var conv = state.conversations.find(function (c) { return c.id === id; });
           if (!conv) {
             var r = await sb.from('conversations').select('*').eq('id', id).maybeSingle();
             conv = r.data;
           }
-          if (!conv) return;
+          if (!conv) {
+            if (threadEl) threadEl.classList.remove('hx-thread-switching');
+            return;
+          }
           state.conversation = conv;
+          // V88 — workflow mode is conversation-scoped; reset on switch
+          state.workflowMode = null;
+          try { refreshModeUI(); } catch (e) {}
 
           // Sync toolbar
           $('hx-c-title').textContent = conv.title || 'New chat';
@@ -24025,6 +24120,12 @@
             .order('created_at', { ascending: true });
           state.messages = m.data || [];
           renderThread();
+          // V88 — fade back in on next frame
+          if (threadEl) {
+            requestAnimationFrame(function () {
+              threadEl.classList.remove('hx-thread-switching');
+            });
+          }
 
           // Realtime subscription — new messages stream in live. The dedup
           // walks back through state.messages to find the most recent
@@ -25484,6 +25585,21 @@
               }
               state.workflowMode = action;
               refreshModeUI();
+
+              // V88 — Cinematic mode activation: the whole chat pane
+              // briefly glows with the gold accent edge to signal the
+              // workflow state change. Removes itself after 800ms.
+              var paneEl = document.querySelector('.hx-chat-pane');
+              if (paneEl) {
+                paneEl.classList.remove('hx-mode-activating');
+                // Force reflow so animation restarts even if user
+                // switches modes rapidly
+                void paneEl.offsetWidth;
+                paneEl.classList.add('hx-mode-activating');
+                setTimeout(function () {
+                  paneEl.classList.remove('hx-mode-activating');
+                }, 900);
+              }
 
               // ── (2) Send the contextual or wrap-text prompt ──────
               // The mode is now ON — even if the user doesn't send a
