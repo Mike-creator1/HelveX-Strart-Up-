@@ -21948,6 +21948,18 @@
         rgba(0, 0, 0, 0.9) 75%,
         #000000 100%) !important;
     }
+
+    /* V84 — Remove the V73 "⌘K commands" hint chip from the bottom
+       strip. User flagged it as clutter — the command palette is
+       still triggered with the keyboard shortcut, no UI hint needed. */
+    body[data-active="chat"] .hx-cc-compose-bar::after {
+      content: none !important;
+      display: none !important;
+      background: none !important;
+      border: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
   </style>
 </head>
 <body data-active="chat">
