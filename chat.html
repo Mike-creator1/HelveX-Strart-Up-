@@ -15513,6 +15513,235 @@
     }
 
     /* ═════════════════════════════════════════════════════════════════
+       V64 — INTELLIGENT RESPONSE SURFACE
+       Three things ship together:
+         (a) Follow-up suggestion chips under each completed assistant
+             message — generated client-side from heuristics, click to
+             auto-send. The chat actively guides the conversation
+             instead of waiting on you.
+         (b) Premium polish for the rich markdown components the model
+             is now instructed to use: tables, callouts, blockquotes,
+             code blocks, collapsible details. These read as deliberate
+             premium components, not "default markdown styling".
+         (c) Section dividers + heading hierarchy that signal a real
+             editorial product, not a chatbot transcript.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* ───── (a) FOLLOW-UP CHIPS ────────────────────────────────────── */
+    body[data-active="chat"] .hx-msg-followups {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+      margin-top: 14px !important;
+      padding-top: 12px !important;
+      border-top: 1px solid color-mix(in srgb, var(--hx-text) 6%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg-followup-chip {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 7px !important;
+      padding: 7px 12px !important;
+      background: color-mix(in srgb, var(--hx-text) 3%, var(--hx-surface)) !important;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 10%, transparent) !important;
+      border-radius: 999px !important;
+      font-family: var(--sans) !important;
+      font-size: 12.5px !important;
+      font-weight: 500 !important;
+      letter-spacing: -0.003em !important;
+      color: var(--hx-text) !important;
+      cursor: pointer !important;
+      box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 28%, transparent) !important;
+      transition: background 140ms ease, border-color 140ms ease,
+                  transform 120ms cubic-bezier(0.2, 0.7, 0.2, 1),
+                  box-shadow 180ms ease !important;
+    }
+    body[data-active="chat"] .hx-msg-followup-chip:hover {
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 5%, var(--hx-surface)) !important;
+      border-color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 28%, transparent) !important;
+      transform: translateY(-1px) !important;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 36%, transparent),
+        0 4px 12px -6px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 24%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg-followup-chip:active {
+      transform: translateY(0) !important;
+    }
+    body[data-active="chat"] .hx-msg-followup-chip.is-sent {
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 18%, var(--hx-surface)) !important;
+      border-color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 50%, transparent) !important;
+      pointer-events: none !important;
+      opacity: 0.7 !important;
+    }
+    body[data-active="chat"] .hx-msg-followup-chip svg {
+      width: 14px !important;
+      height: 14px !important;
+      flex-shrink: 0 !important;
+      color: color-mix(in srgb, var(--hx-text) 50%, transparent) !important;
+      transition: color 140ms ease !important;
+    }
+    body[data-active="chat"] .hx-msg-followup-chip:hover svg {
+      color: var(--hx-accent, var(--hx-yellow-deep)) !important;
+    }
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-msg-followups {
+        gap: 6px !important;
+      }
+      body[data-active="chat"] .hx-msg-followup-chip {
+        font-size: 11.5px !important;
+        padding: 6px 10px !important;
+      }
+    }
+
+    /* ───── (b) PREMIUM RICH COMPONENTS ────────────────────────────── */
+
+    /* Markdown tables — refined, scannable, premium */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content table {
+      width: 100% !important;
+      border-collapse: separate !important;
+      border-spacing: 0 !important;
+      font-family: var(--sans) !important;
+      font-size: 13.5px !important;
+      line-height: 1.5 !important;
+      background: var(--hx-surface) !important;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 10%, transparent) !important;
+      border-radius: 10px !important;
+      overflow: hidden !important;
+      box-shadow:
+        0 1px 2px color-mix(in srgb, var(--hx-text) 3%, transparent),
+        0 6px 16px -8px color-mix(in srgb, var(--hx-text) 6%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content thead {
+      background: color-mix(in srgb, var(--hx-text) 4%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content th {
+      padding: 10px 14px !important;
+      font-weight: 600 !important;
+      font-size: 12.5px !important;
+      letter-spacing: 0.01em !important;
+      color: var(--hx-text) !important;
+      text-align: left !important;
+      border-bottom: 1px solid color-mix(in srgb, var(--hx-text) 10%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content td {
+      padding: 10px 14px !important;
+      color: color-mix(in srgb, var(--hx-text) 88%, transparent) !important;
+      border-bottom: 1px solid color-mix(in srgb, var(--hx-text) 5%, transparent) !important;
+      vertical-align: top !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content tbody tr:last-child td {
+      border-bottom: 0 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content tbody tr:nth-child(even) td {
+      background: color-mix(in srgb, var(--hx-text) 1.5%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content tbody tr:hover td {
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 4%, transparent) !important;
+    }
+
+    /* Blockquotes — premium left rule + serif italic */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content blockquote {
+      margin: 0 !important;
+      padding: 8px 16px !important;
+      border-left: 3px solid color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 60%, transparent) !important;
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 3%, transparent) !important;
+      border-radius: 0 8px 8px 0 !important;
+      font-style: italic !important;
+      color: color-mix(in srgb, var(--hx-text) 82%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content blockquote > * + * {
+      margin-top: 6px !important;
+    }
+
+    /* Collapsible details — premium expandable card */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content details:not(.hx-rsn) {
+      background: color-mix(in srgb, var(--hx-text) 2.5%, var(--hx-surface)) !important;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 8%, transparent) !important;
+      border-radius: 10px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      transition: border-color 160ms ease, box-shadow 200ms ease !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content details:not(.hx-rsn):hover {
+      border-color: color-mix(in srgb, var(--hx-text) 14%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content details:not(.hx-rsn)[open] {
+      border-color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 28%, transparent) !important;
+      box-shadow: 0 4px 14px -8px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 20%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content details:not(.hx-rsn) > summary {
+      list-style: none !important;
+      padding: 12px 16px !important;
+      cursor: pointer !important;
+      font-weight: 600 !important;
+      font-size: 13.5px !important;
+      color: var(--hx-text) !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      user-select: none !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content details:not(.hx-rsn) > summary::-webkit-details-marker {
+      display: none !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content details:not(.hx-rsn) > summary::before {
+      content: '' !important;
+      width: 8px !important;
+      height: 8px !important;
+      border-right: 2px solid color-mix(in srgb, var(--hx-text) 60%, transparent) !important;
+      border-bottom: 2px solid color-mix(in srgb, var(--hx-text) 60%, transparent) !important;
+      transform: rotate(-45deg) !important;
+      transition: transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1) !important;
+      flex-shrink: 0 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content details:not(.hx-rsn)[open] > summary::before {
+      transform: rotate(45deg) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content details:not(.hx-rsn) > *:not(summary) {
+      padding: 0 16px 14px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content details:not(.hx-rsn) > *:not(summary):first-of-type {
+      padding-top: 4px !important;
+    }
+
+    /* Refined section heading — small accent bar before the text */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h2.hx-md-h {
+      font-size: 17px !important;
+      font-weight: 650 !important;
+      letter-spacing: -0.014em !important;
+      color: var(--hx-text) !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h2.hx-md-h::before {
+      content: '' !important;
+      width: 3px !important;
+      height: 16px !important;
+      background: var(--hx-accent, var(--hx-yellow-deep)) !important;
+      border-radius: 2px !important;
+      flex-shrink: 0 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h3.hx-md-h {
+      font-size: 15.5px !important;
+      font-weight: 600 !important;
+      color: var(--hx-text) !important;
+    }
+
+    /* ───── (c) MOBILE TUNING ──────────────────────────────────────── */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content table {
+        font-size: 12.5px !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content th,
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content td {
+        padding: 8px 10px !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > h2.hx-md-h {
+        font-size: 16px !important;
+      }
+    }
+
+    /* ═════════════════════════════════════════════════════════════════
        V63 — EDITORIAL TYPOGRAPHY LOCKDOWN
        The assistant prose was producing gigantic gaps between
        headings, paragraphs, and lists — 60–80px of dead air where
@@ -16633,6 +16862,22 @@
         'Be substantive. Lead with the actual answer or the most useful idea, then add only the context the user genuinely needs. Skip preamble. Do not narrate what you are about to do — just do it.',
         'When you are uncertain, say so plainly and briefly, then offer your best take. Don\'t hide behind disclaimers.',
 
+        // — Intelligent formatting (V64) —
+        // Pick the response SHAPE based on the task. Don\'t default to
+        // plain prose for everything — the surface renders rich
+        // markdown, so use it when it genuinely helps the reader.
+        'Choose the response format that fits the task — never default to plain prose for everything.',
+        'Use a Markdown TABLE when the user asks for a comparison, a list of options with attributes, a schedule, a pricing breakdown, or any data with parallel columns. Pipe-syntax tables. Headers in bold.',
+        'Use SECTION HEADINGS ("## Section") when a response has 3+ distinct parts the reader will want to scan or come back to. Don\'t use headings for short answers.',
+        'Use ORDERED LISTS (1. 2. 3.) for steps, processes, instructions, workflows, or anything sequenced. Use bullet lists for parallel non-sequenced items.',
+        'Use FENCED CODE BLOCKS with a language tag (```python, ```bash, ```sql) for ANY code, command, or config. Never inline-code more than a few words.',
+        'Use BLOCKQUOTES ("> ") for quoted text, key takeaways, or callouts ("> [!note]", "> [!warning]", "> [!tip]", "> [!important]") when something genuinely deserves attention.',
+        'Use COLLAPSIBLE DETAILS ("<details><summary>Title</summary>…</details>") for long supporting material, derivations, or "show your work" content the user can expand if they want it.',
+        'Use BOLD sparingly for the 1–3 most important phrases per response. Italics for definitions or terms of art. Never style everything.',
+        'For analyses with pros/cons, use a two-column table. For decisions, end with a one-line recommendation. For plans, end with the next concrete step.',
+        'Match format to user effort: a casual question gets a calm one-paragraph reply. A request for a report gets sections, tables, and a clear conclusion. Don\'t over-structure trivial answers, don\'t under-structure substantive ones.',
+        'Keep formatting purposeful — every heading, table, or list must earn its place. Plain prose is still right for many answers.',
+
         // — Language —
         'Always reply in the same language the user writes in. If the user writes in Greek, reply in Greek with the same natural warmth and ease — never stiffer in Greek than in English.'
       ].join(' ');
@@ -17294,6 +17539,29 @@
               }
             });
           });
+          // V64 — Wire follow-up suggestion chips under each assistant
+          // message. Click sends the prompt directly (no manual editing
+          // needed) — feels like the chat is actively guiding the
+          // conversation, not waiting on you.
+          thread.querySelectorAll('.hx-msg-followup-chip').forEach(function (chip) {
+            chip.addEventListener('click', function () {
+              var prompt = chip.getAttribute('data-prompt') || '';
+              if (!prompt) return;
+              // Visual confirmation — chip flashes active before send
+              chip.classList.add('is-sent');
+              var inputEl = $('hx-c-input');
+              if (inputEl) {
+                inputEl.value = prompt;
+                try { autoSize(inputEl); } catch (e) {}
+                try { refreshSendDisabled(); } catch (e) {}
+                // Send immediately — the user already chose
+                try { send(); } catch (e) {
+                  // If send() isn't ready, leave the text in the composer
+                  inputEl.focus();
+                }
+              }
+            });
+          });
           // Lazy-load signed URLs for any attachment thumbnails / file links
           hydrateAttachmentLinks(thread);
           // Scroll to bottom
@@ -17390,6 +17658,29 @@
               '</div>'
             : '';
 
+          // V64 — Smart follow-up chips for completed assistant
+          // responses. Heuristic-driven so they feel contextual without
+          // round-tripping to the model. Suppressed on errors, while
+          // streaming, on very short replies, and on the last message
+          // only (so old responses don't keep showing stale prompts).
+          var followups = '';
+          var isLast = isAssist && i === state.messages.length - 1;
+          if (isLast && isAssist && m.content && !m.__error && !m.__streaming) {
+            var picks = generateFollowups(m.content);
+            if (picks && picks.length) {
+              followups = '<div class="hx-msg-followups" role="group" aria-label="Suggested follow-ups">';
+              picks.forEach(function (chip) {
+                followups +=
+                  '<button type="button" class="hx-msg-followup-chip" data-prompt="' +
+                    escape(chip.prompt) + '">' +
+                    chip.icon +
+                    '<span>' + escape(chip.label) + '</span>' +
+                  '</button>';
+              });
+              followups += '</div>';
+            }
+          }
+
           var classes = 'hx-msg ' + (isAssist ? 'is-assistant' : 'is-user') +
             (m.__error ? ' hx-msg-error' : '') +
             (isAssist && m.__streaming ? ' is-streaming' : '');
@@ -17399,8 +17690,95 @@
               renderAttachmentsForMsg(atts) +
               contentHtml +
               actions +
+              followups +
             '</div>' +
           '</div>';
+        }
+
+        // V64 — Heuristic follow-up generator. Picks 3 contextual chips
+        // based on what the response actually contains. Designed to feel
+        // smart without needing a second model call.
+        function generateFollowups(content) {
+          var text = (content || '').trim();
+          if (!text || text.length < 60) return null;
+
+          // Detect the user's language so chips speak the same one
+          var greekChars = text.match(/[Ͱ-Ͽἀ-῿]/g);
+          var isGreek = !!(greekChars && greekChars.length > text.length * 0.15);
+
+          // Strip code/tables for pattern detection on prose
+          var prose = text
+            .replace(/```[\s\S]*?```/g, '')
+            .replace(/`[^`]+`/g, '');
+
+          var hasCode      = /```[\s\S]*?```/.test(text);
+          var hasTable     = /\|[^\n]+\|[^\n]+\|/.test(text);
+          var hasHeadings  = /(^|\n)#{1,4}\s+\S/.test(text);
+          var bulletCount  = (prose.match(/(^|\n)\s*[-*•]\s+/g) || []).length;
+          var orderedCount = (prose.match(/(^|\n)\s*\d+\.\s+/g) || []).length;
+          var hasList      = bulletCount >= 3 || orderedCount >= 3;
+          var isQuestion   = /[?;]\s*$/.test(text); // ends asking the user back
+          var isLong       = text.length > 1200;
+
+          // Lucide-style mini icons (16px viewBox)
+          var ICONS = {
+            spark:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><path d="M12 16v6"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="M2 12h6"/><path d="M16 12h6"/></svg>',
+            example:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/></svg>',
+            deeper:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>',
+            shorter:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>',
+            compare:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="m5 8 4 4-4 4"/><path d="m19 8-4 4 4 4"/></svg>',
+            code:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+            list:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+            step:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
+            summary:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/></svg>',
+            why:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+          };
+
+          var L = isGreek
+            ? {
+                deeper:    { label: 'Πες μου περισσότερα',           prompt: 'Πες μου περισσότερα γι\' αυτό. Εμβάθυνε στα πιο σημαντικά σημεία.', icon: ICONS.deeper  },
+                example:   { label: 'Δώσε μου ένα παράδειγμα',      prompt: 'Δώσε μου ένα συγκεκριμένο, πρακτικό παράδειγμα που το δείχνει.',       icon: ICONS.example },
+                shorter:   { label: 'Συντόμευσέ το',                prompt: 'Σύνοψε αυτή την απάντηση σε 3 σύντομα bullets.',                       icon: ICONS.shorter },
+                why:       { label: 'Γιατί συμβαίνει αυτό;',        prompt: 'Γιατί συμβαίνει αυτό; Εξήγησέ μου την υποκείμενη λογική.',              icon: ICONS.why     },
+                explain:   { label: 'Εξήγησέ μου τον κώδικα',       prompt: 'Εξήγησέ μου τον κώδικα βήμα-βήμα.',                                   icon: ICONS.code    },
+                alt:       { label: 'Δείξε διαφορετική προσέγγιση', prompt: 'Δείξε μου μια διαφορετική προσέγγιση για να γίνει αυτό.',              icon: ICONS.code    },
+                compare:   { label: 'Σύγκρινε τις επιλογές',        prompt: 'Σύγκρινέ τις σε πίνακα: πλεονεκτήματα, μειονεκτήματα, για ποιον είναι.', icon: ICONS.compare },
+                pickBest:  { label: 'Ποια είναι η καλύτερη;',       prompt: 'Με βάση τα παραπάνω, ποια είναι η καλύτερη επιλογή και γιατί;',         icon: ICONS.spark   },
+                next:      { label: 'Ποιο είναι το επόμενο βήμα;',  prompt: 'Ποιο είναι το επόμενο συγκεκριμένο βήμα που πρέπει να κάνω;',          icon: ICONS.step    },
+                summary:   { label: 'Σύνοψη σε 3 bullets',          prompt: 'Δώσε μου τη σύνοψη σε ακριβώς 3 bullets.',                            icon: ICONS.summary },
+              }
+            : {
+                deeper:    { label: 'Tell me more',          prompt: 'Tell me more about this. Go deeper on the most important parts.',     icon: ICONS.deeper  },
+                example:   { label: 'Give me an example',    prompt: 'Give me a concrete, practical example that demonstrates this.',        icon: ICONS.example },
+                shorter:   { label: 'Make it shorter',       prompt: 'Summarise this response in 3 short bullets.',                          icon: ICONS.shorter },
+                why:       { label: 'Why is that?',          prompt: 'Why is that the case? Explain the underlying reasoning.',              icon: ICONS.why     },
+                explain:   { label: 'Walk through the code', prompt: 'Walk me through the code step by step.',                               icon: ICONS.code    },
+                alt:       { label: 'Show a different way',  prompt: 'Show me a different approach to accomplish this.',                     icon: ICONS.code    },
+                compare:   { label: 'Compare them',          prompt: 'Compare these in a table: pros, cons, and who each is best for.',      icon: ICONS.compare },
+                pickBest:  { label: 'Which is best for me?', prompt: 'Based on the above, which one would you recommend and why?',           icon: ICONS.spark   },
+                next:      { label: 'What\'s the next step?',prompt: 'What\'s the next concrete step I should take?',                         icon: ICONS.step    },
+                summary:   { label: 'Summarise in 3 bullets',prompt: 'Give me the summary in exactly 3 bullets.',                            icon: ICONS.summary },
+              };
+
+          // Pick the best 3 based on signals
+          var picks = [];
+          if (isQuestion) {
+            // The model asked the user something — don't push back-questions
+            picks = [L.example, L.deeper, L.shorter];
+          } else if (hasCode) {
+            picks = [L.explain, L.alt, L.example];
+          } else if (hasTable) {
+            picks = [L.pickBest, L.deeper, L.next];
+          } else if (hasList && bulletCount >= 3) {
+            picks = [L.compare, L.deeper, L.example];
+          } else if (orderedCount >= 3) {
+            picks = [L.next, L.example, L.shorter];
+          } else if (hasHeadings || isLong) {
+            picks = [L.summary, L.deeper, L.example];
+          } else {
+            picks = [L.deeper, L.example, L.why];
+          }
+          return picks.slice(0, 3);
         }
 
         // After a renderThread call, walk image/file attachments that need a
