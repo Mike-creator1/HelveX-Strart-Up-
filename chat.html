@@ -15513,6 +15513,295 @@
     }
 
     /* ═════════════════════════════════════════════════════════════════
+       V73 — UNIVERSAL COMMAND PALETTE (⌘K)
+       The spine of the experience. A floating glass surface that
+       puts every Helix action behind one keyboard shortcut. Search
+       across quick actions, models, recent sessions. Arrow keys to
+       navigate, Enter to execute, Escape to close.
+
+       Visual language: glass-blurred surface (Apple Spotlight feel),
+       soft elevated shadow, grouped rows with accent on hover/active.
+       ═════════════════════════════════════════════════════════════════ */
+
+    .hx-palette-backdrop {
+      position: fixed !important;
+      inset: 0 !important;
+      z-index: 998 !important;
+      background: color-mix(in srgb, #1a1812 38%, transparent) !important;
+      backdrop-filter: blur(2px) !important;
+      -webkit-backdrop-filter: blur(2px) !important;
+      opacity: 0 !important;
+      transition: opacity 220ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .hx-palette-backdrop.is-open { opacity: 1 !important; }
+
+    .hx-palette {
+      position: fixed !important;
+      left: 50% !important;
+      top: 18vh !important;
+      transform: translateX(-50%) translateY(8px) scale(0.97) !important;
+      width: min(620px, calc(100vw - 32px)) !important;
+      max-height: 64vh !important;
+      z-index: 999 !important;
+      background: color-mix(in srgb, #ffffff 92%, transparent) !important;
+      backdrop-filter: saturate(160%) blur(28px) !important;
+      -webkit-backdrop-filter: saturate(160%) blur(28px) !important;
+      border: 1px solid color-mix(in srgb, #1a1812 9%, transparent) !important;
+      border-radius: 16px !important;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 60%, transparent),
+        0 2px 6px rgba(20, 18, 12, 0.06),
+        0 24px 60px -20px rgba(20, 18, 12, 0.32),
+        0 48px 120px -40px rgba(20, 18, 12, 0.20) !important;
+      opacity: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow: hidden !important;
+      transition:
+        opacity 240ms cubic-bezier(0.16, 1, 0.3, 1),
+        transform 320ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .hx-palette.is-open {
+      opacity: 1 !important;
+      transform: translateX(-50%) translateY(0) scale(1) !important;
+    }
+
+    .hx-palette-head {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      padding: 14px 16px !important;
+      border-bottom: 1px solid color-mix(in srgb, #1a1812 7%, transparent) !important;
+    }
+    .hx-palette-ico {
+      width: 18px !important;
+      height: 18px !important;
+      color: color-mix(in srgb, #1a1812 44%, transparent) !important;
+      flex-shrink: 0 !important;
+    }
+    .hx-palette-input {
+      flex: 1 !important;
+      min-width: 0 !important;
+      border: 0 !important;
+      background: transparent !important;
+      outline: 0 !important;
+      font-family: var(--sans) !important;
+      font-size: 16px !important;
+      font-weight: 400 !important;
+      letter-spacing: -0.008em !important;
+      color: #1a1812 !important;
+    }
+    .hx-palette-input::placeholder {
+      color: color-mix(in srgb, #1a1812 38%, transparent) !important;
+      font-weight: 400 !important;
+    }
+    .hx-palette-kbd-close {
+      font-family: var(--mono) !important;
+      font-size: 9.5px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.08em !important;
+      padding: 3px 7px !important;
+      background: color-mix(in srgb, #1a1812 5%, transparent) !important;
+      border: 1px solid color-mix(in srgb, #1a1812 9%, transparent) !important;
+      border-radius: 5px !important;
+      color: color-mix(in srgb, #1a1812 48%, transparent) !important;
+      flex-shrink: 0 !important;
+    }
+
+    .hx-palette-body {
+      flex: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 6px 6px 8px !important;
+      scrollbar-width: thin !important;
+    }
+    .hx-palette-body::-webkit-scrollbar { width: 6px !important; }
+    .hx-palette-body::-webkit-scrollbar-thumb {
+      background: color-mix(in srgb, #1a1812 12%, transparent) !important;
+      border-radius: 999px !important;
+    }
+
+    .hx-palette-group { padding: 6px 0 4px !important; }
+    .hx-palette-group:first-child { padding-top: 4px !important; }
+    .hx-palette-group-label {
+      font-family: var(--sans) !important;
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.12em !important;
+      text-transform: uppercase !important;
+      color: color-mix(in srgb, #1a1812 42%, transparent) !important;
+      padding: 4px 14px 6px !important;
+    }
+
+    .hx-palette-row {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      width: 100% !important;
+      padding: 9px 12px !important;
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 8px !important;
+      cursor: pointer !important;
+      text-align: left !important;
+      color: #1a1812 !important;
+      transition: background 140ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .hx-palette-row:hover,
+    .hx-palette-row.is-active {
+      background: color-mix(in srgb, #C9A227 8%, color-mix(in srgb, #1a1812 4%, transparent)) !important;
+    }
+    .hx-palette-row.is-active {
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, #1a1812 7%, transparent) !important;
+    }
+    .hx-palette-row-ico {
+      width: 30px !important;
+      height: 30px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: color-mix(in srgb, #1a1812 5%, transparent) !important;
+      border-radius: 7px !important;
+      color: color-mix(in srgb, #1a1812 64%, transparent) !important;
+      flex-shrink: 0 !important;
+      transition: background 160ms ease, color 160ms ease !important;
+    }
+    .hx-palette-row-ico svg {
+      width: 15px !important;
+      height: 15px !important;
+    }
+    .hx-palette-row.is-active .hx-palette-row-ico,
+    .hx-palette-row:hover .hx-palette-row-ico {
+      background: color-mix(in srgb, #C9A227 22%, transparent) !important;
+      color: color-mix(in srgb, #C9A227 70%, #1a1812) !important;
+    }
+    .hx-palette-row-body {
+      flex: 1 !important;
+      min-width: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 1px !important;
+    }
+    .hx-palette-row-label {
+      font-family: var(--sans) !important;
+      font-size: 13.5px !important;
+      font-weight: 500 !important;
+      letter-spacing: -0.005em !important;
+      color: #1a1812 !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+    .hx-palette-row-hint {
+      font-family: var(--sans) !important;
+      font-size: 11.5px !important;
+      font-weight: 400 !important;
+      color: color-mix(in srgb, #1a1812 50%, transparent) !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+    .hx-palette-empty {
+      padding: 28px 18px !important;
+      text-align: center !important;
+      font-size: 13px !important;
+      color: color-mix(in srgb, #1a1812 50%, transparent) !important;
+    }
+    .hx-palette-empty kbd {
+      display: inline-block !important;
+      padding: 2px 6px !important;
+      margin: 0 2px !important;
+      background: color-mix(in srgb, #1a1812 6%, transparent) !important;
+      border: 1px solid color-mix(in srgb, #1a1812 10%, transparent) !important;
+      border-radius: 4px !important;
+      font-family: var(--mono) !important;
+      font-size: 11px !important;
+      color: color-mix(in srgb, #1a1812 64%, transparent) !important;
+    }
+
+    .hx-palette-foot {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 9px 14px !important;
+      border-top: 1px solid color-mix(in srgb, #1a1812 6%, transparent) !important;
+      background: color-mix(in srgb, #1a1812 2%, transparent) !important;
+    }
+    .hx-palette-foot-hint {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      font-size: 10.5px !important;
+      color: color-mix(in srgb, #1a1812 48%, transparent) !important;
+    }
+    .hx-palette-foot-hint kbd {
+      display: inline-block !important;
+      padding: 1.5px 5px !important;
+      background: color-mix(in srgb, #1a1812 7%, transparent) !important;
+      border: 1px solid color-mix(in srgb, #1a1812 11%, transparent) !important;
+      border-radius: 4px !important;
+      font-family: var(--mono) !important;
+      font-size: 9.5px !important;
+      font-weight: 600 !important;
+      color: color-mix(in srgb, #1a1812 60%, transparent) !important;
+      line-height: 1 !important;
+    }
+    .hx-palette-foot-hint span:not([class]) {
+      margin: 0 6px 0 2px !important;
+    }
+    .hx-palette-foot-hint span:last-child {
+      margin-right: 0 !important;
+    }
+    .hx-palette-foot-brand {
+      font-family: var(--sans) !important;
+      font-size: 10.5px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.1em !important;
+      text-transform: uppercase !important;
+      color: color-mix(in srgb, #1a1812 38%, transparent) !important;
+    }
+
+    @media (max-width: 720px) {
+      .hx-palette {
+        top: 8vh !important;
+        max-height: 78vh !important;
+        width: calc(100vw - 18px) !important;
+      }
+      .hx-palette-foot-hint span:not([class]) { display: none !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hx-palette, .hx-palette-backdrop {
+        transition: none !important;
+      }
+      .hx-palette { transform: translateX(-50%) translateY(0) scale(1) !important; }
+    }
+
+    /* ───── Composer ⌘K hint ──────────────────────────────────────── */
+    /* Small text hint appended to the bottom strip telling the user
+       a command palette exists. Quiet so it doesn't crowd the model
+       picker, but discoverable. */
+    body[data-active="chat"] .hx-cc-compose-bar::after {
+      content: '⌘K commands' !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      padding: 3px 8px !important;
+      margin-left: 6px !important;
+      background: color-mix(in srgb, var(--hx-text) 4%, transparent) !important;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 8%, transparent) !important;
+      border-radius: 6px !important;
+      font-family: var(--mono) !important;
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.04em !important;
+      color: color-mix(in srgb, var(--hx-text) 50%, transparent) !important;
+      flex-shrink: 0 !important;
+      order: 999 !important; /* push to the right */
+    }
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-cc-compose-bar::after { display: none !important; }
+    }
+
+    /* ═════════════════════════════════════════════════════════════════
        V72 — PREMIUM STREAMING REVEAL
        Token bursts no longer dump instantly. A 60fps RAF loop pulls
        characters from a buffer at ~220 chars/sec (accelerating to
@@ -18605,6 +18894,31 @@
             </div>
           </div>
         </section>
+
+        <!-- ════════════════════════════════════════════════════════════
+             V73 — Universal Command Palette (⌘K / Ctrl+K)
+             A single floating glass surface that puts every action
+             Helix can do behind one keyboard shortcut. The palette
+             is the spine of the experience — once a user has used
+             it twice, they never go back to clicking.
+             ════════════════════════════════════════════════════════════ -->
+        <div class="hx-palette-backdrop" id="hx-c-palette-backdrop" hidden></div>
+        <div class="hx-palette" id="hx-c-palette" role="dialog" aria-modal="true" aria-label="Helix command palette" hidden>
+          <div class="hx-palette-head">
+            <svg class="hx-palette-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="hx-c-palette-input" class="hx-palette-input" placeholder="Ask Helix or type a command…" autocomplete="off" spellcheck="false" />
+            <kbd class="hx-palette-kbd-close" aria-hidden="true">ESC</kbd>
+          </div>
+          <div class="hx-palette-body" id="hx-c-palette-body" role="listbox" aria-label="Suggestions"></div>
+          <div class="hx-palette-foot">
+            <span class="hx-palette-foot-hint">
+              <kbd>↑</kbd><kbd>↓</kbd><span>navigate</span>
+              <kbd>↵</kbd><span>select</span>
+              <kbd>ESC</kbd><span>close</span>
+            </span>
+            <span class="hx-palette-foot-brand">Helix</span>
+          </div>
+        </div>
 
       </main>
     </div>
@@ -22593,6 +22907,279 @@
               e.preventDefault();
               searchEl.focus();
               searchEl.select();
+            }
+          });
+        })();
+
+        // ═══════════════════════════════════════════════════════════════
+        // V73 — Universal Command Palette (⌘K / Ctrl+K)
+        // The spine of Helix. Opens with ⌘K from anywhere. Search box
+        // filters across: quick actions, model switches, recent
+        // conversations. Arrow keys navigate, Enter executes, Esc
+        // closes. The whole thing is keyboard-first — once a user
+        // learns ⌘K they never click again.
+        // ═══════════════════════════════════════════════════════════════
+        (function wireCommandPalette() {
+          var paletteEl    = document.getElementById('hx-c-palette');
+          var backdropEl   = document.getElementById('hx-c-palette-backdrop');
+          var paletteInput = document.getElementById('hx-c-palette-input');
+          var paletteBody  = document.getElementById('hx-c-palette-body');
+          if (!paletteEl || !paletteInput || !paletteBody) return;
+
+          var isOpen = false;
+          var activeIdx = 0;
+          var currentItems = [];
+
+          // SVG icons for command rows
+          var I = {
+            spark:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6M12 16v6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M16 12h6"/></svg>',
+            plan:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',
+            search:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+            compare:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="m5 8 4 4-4 4"/><path d="m19 8-4 4 4 4"/></svg>',
+            draft:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+            explain:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+            sum:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg>',
+            model:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/></svg>',
+            convo:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+            send:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>',
+            attach:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5l-8.59 8.59a5.5 5.5 0 1 1-7.78-7.78l8.59-8.59a3.5 3.5 0 1 1 4.95 4.95l-8.59 8.59a1.5 1.5 0 1 1-2.12-2.12l7.88-7.88"/></svg>',
+            voice:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/></svg>',
+            newchat:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+          };
+
+          // Static action catalogue. Each entry: kind, label, hint, icon,
+          // run callback. Conversations are added dynamically.
+          function buildActions() {
+            var inputEl2 = document.getElementById('hx-c-input');
+            var modelSel = document.getElementById('hx-c-model');
+
+            function prefill(text) {
+              if (!inputEl2) return;
+              inputEl2.value = text;
+              try { autoSize(inputEl2); } catch (e) {}
+              try { refreshSendDisabled(); } catch (e) {}
+              inputEl2.focus();
+              try { inputEl2.selectionStart = inputEl2.selectionEnd = inputEl2.value.length; } catch (e) {}
+            }
+            function setModel(m) {
+              if (!modelSel) return;
+              modelSel.value = m;
+              try { modelSel.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
+            }
+
+            var actions = [
+              { kind: 'action', label: 'Plan a project', hint: 'Outline goals, milestones, owners', icon: I.plan,    run: function () { prefill('Help me plan '); } },
+              { kind: 'action', label: 'Research a topic', hint: 'Gather sources and synthesize', icon: I.search,  run: function () { prefill('Research '); } },
+              { kind: 'action', label: 'Compare options', hint: 'Side-by-side comparison table', icon: I.compare, run: function () { prefill('Compare '); } },
+              { kind: 'action', label: 'Draft a document', hint: 'Email, message, proposal, post', icon: I.draft,   run: function () { prefill('Draft a '); } },
+              { kind: 'action', label: 'Explain simply', hint: 'Plain-language breakdown', icon: I.explain, run: function () { prefill('Explain simply: '); } },
+              { kind: 'action', label: 'Summarize text', hint: 'Distil a long passage', icon: I.sum,     run: function () { prefill('Summarize the following:\n\n'); } },
+              { kind: 'action', label: 'Attach a file', hint: 'PDF, image, doc, code', icon: I.attach,  run: function () { var b = document.getElementById('hx-c-attach'); if (b) b.click(); } },
+              { kind: 'action', label: 'Voice input',   hint: 'Speak instead of typing',  icon: I.voice,   run: function () { var b = document.getElementById('hx-c-mic'); if (b) b.click(); } },
+              { kind: 'action', label: 'New chat',      hint: 'Start a fresh session',    icon: I.newchat, run: function () { try { newConversation(); } catch (e) {} } },
+              { kind: 'model',  label: 'Switch to Ether',      hint: 'Real-time, no agent',     icon: I.model, run: function () { setModel('ether'); } },
+              { kind: 'model',  label: 'Switch to Nexus',      hint: 'Reasoning agent',         icon: I.model, run: function () { setModel('nexus'); } },
+              { kind: 'model',  label: 'Switch to Prometheus', hint: 'Flagship reasoning agent', icon: I.model, run: function () { setModel('prometheus'); } },
+            ];
+
+            // Recent conversations (up to 5)
+            if (state.conversations && state.conversations.length) {
+              state.conversations.slice(0, 6).forEach(function (c) {
+                if (state.conversation && c.id === state.conversation.id) return;
+                actions.push({
+                  kind: 'conversation',
+                  label: c.title || 'Untitled session',
+                  hint: 'Open this session',
+                  icon: I.convo,
+                  run: function () { try { openConversation(c.id); } catch (e) {} },
+                });
+              });
+            }
+            return actions;
+          }
+
+          function score(item, q) {
+            if (!q) return 0;
+            var hay = (item.label + ' ' + (item.hint || '')).toLowerCase();
+            var needle = q.toLowerCase().trim();
+            if (!needle) return 0;
+            if (hay.indexOf(needle) === 0) return 100;
+            if (hay.indexOf(' ' + needle) > -1) return 80;
+            if (hay.indexOf(needle) > -1) return 50;
+            // fuzzy: every char of needle exists in hay in order
+            var hi = 0, count = 0;
+            for (var i = 0; i < needle.length; i++) {
+              hi = hay.indexOf(needle[i], hi);
+              if (hi === -1) return -1;
+              hi++; count++;
+            }
+            return count > 0 ? 20 : -1;
+          }
+
+          function render() {
+            var q = paletteInput.value.trim();
+            var all = buildActions();
+            var items;
+            if (!q) {
+              items = all;
+            } else {
+              items = all
+                .map(function (it) { return { it: it, s: score(it, q) }; })
+                .filter(function (x) { return x.s >= 0; })
+                .sort(function (a, b) { return b.s - a.s; })
+                .map(function (x) { return x.it; });
+              // Always include "Ask Helix" with the raw query as the first item
+              items.unshift({
+                kind: 'ask',
+                label: 'Ask Helix: ' + (q.length > 60 ? q.slice(0, 60) + '…' : q),
+                hint: 'Send this question to the current chat',
+                icon: I.send,
+                run: function () {
+                  var inputEl2 = document.getElementById('hx-c-input');
+                  if (inputEl2) {
+                    inputEl2.value = q;
+                    try { autoSize(inputEl2); } catch (e) {}
+                    try { refreshSendDisabled(); } catch (e) {}
+                    try { send(); } catch (e) { inputEl2.focus(); }
+                  }
+                },
+              });
+            }
+            currentItems = items;
+            if (activeIdx >= items.length) activeIdx = items.length - 1;
+            if (activeIdx < 0) activeIdx = 0;
+
+            // Group by kind
+            var groups = {};
+            items.forEach(function (it, i) {
+              var g = it.kind === 'conversation' ? 'Recent sessions'
+                    : it.kind === 'model'        ? 'Switch model'
+                    : it.kind === 'ask'          ? 'Ask'
+                    :                              'Quick actions';
+              (groups[g] = groups[g] || []).push({ it: it, i: i });
+            });
+
+            // Render
+            var html = '';
+            var order = ['Ask', 'Quick actions', 'Switch model', 'Recent sessions'];
+            order.forEach(function (g) {
+              if (!groups[g] || !groups[g].length) return;
+              html += '<div class="hx-palette-group" role="group" aria-label="' + g + '">' +
+                '<div class="hx-palette-group-label">' + g + '</div>';
+              groups[g].forEach(function (row) {
+                var it = row.it;
+                var i  = row.i;
+                html += '<button type="button" class="hx-palette-row' + (i === activeIdx ? ' is-active' : '') + '" data-idx="' + i + '" role="option" aria-selected="' + (i === activeIdx ? 'true' : 'false') + '">' +
+                  '<span class="hx-palette-row-ico">' + it.icon + '</span>' +
+                  '<span class="hx-palette-row-body">' +
+                    '<span class="hx-palette-row-label">' + escape(it.label) + '</span>' +
+                    (it.hint ? '<span class="hx-palette-row-hint">' + escape(it.hint) + '</span>' : '') +
+                  '</span>' +
+                '</button>';
+              });
+              html += '</div>';
+            });
+            if (!items.length) {
+              html = '<div class="hx-palette-empty">No matches. Press <kbd>↵</kbd> to send anyway.</div>';
+            }
+            paletteBody.innerHTML = html;
+            paletteBody.querySelectorAll('.hx-palette-row').forEach(function (b) {
+              b.addEventListener('click', function () {
+                var idx = parseInt(b.getAttribute('data-idx'), 10);
+                if (!Number.isNaN(idx) && currentItems[idx]) {
+                  executeItem(currentItems[idx]);
+                }
+              });
+              b.addEventListener('mouseenter', function () {
+                var idx = parseInt(b.getAttribute('data-idx'), 10);
+                if (!Number.isNaN(idx)) {
+                  activeIdx = idx;
+                  highlightActive();
+                }
+              });
+            });
+            highlightActive();
+          }
+
+          function highlightActive() {
+            paletteBody.querySelectorAll('.hx-palette-row').forEach(function (r) {
+              var i = parseInt(r.getAttribute('data-idx'), 10);
+              r.classList.toggle('is-active', i === activeIdx);
+              r.setAttribute('aria-selected', i === activeIdx ? 'true' : 'false');
+              if (i === activeIdx) {
+                try { r.scrollIntoView({ block: 'nearest' }); } catch (e) {}
+              }
+            });
+          }
+
+          function executeItem(it) {
+            try { it.run(); } catch (e) {}
+            close();
+          }
+
+          function open() {
+            if (isOpen) return;
+            isOpen = true;
+            paletteEl.hidden = false;
+            backdropEl.hidden = false;
+            // Allow the browser to paint before adding the open class
+            // so the entrance transition fires.
+            requestAnimationFrame(function () {
+              paletteEl.classList.add('is-open');
+              backdropEl.classList.add('is-open');
+            });
+            paletteInput.value = '';
+            activeIdx = 0;
+            render();
+            // Focus after the entrance animation kicks in
+            setTimeout(function () { paletteInput.focus(); }, 50);
+          }
+          function close() {
+            if (!isOpen) return;
+            isOpen = false;
+            paletteEl.classList.remove('is-open');
+            backdropEl.classList.remove('is-open');
+            setTimeout(function () {
+              if (!isOpen) {
+                paletteEl.hidden = true;
+                backdropEl.hidden = true;
+              }
+            }, 220);
+          }
+
+          paletteInput.addEventListener('input', function () {
+            activeIdx = 0;
+            render();
+          });
+          paletteInput.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              if (currentItems.length) {
+                activeIdx = (activeIdx + 1) % currentItems.length;
+                highlightActive();
+              }
+            } else if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              if (currentItems.length) {
+                activeIdx = (activeIdx - 1 + currentItems.length) % currentItems.length;
+                highlightActive();
+              }
+            } else if (e.key === 'Enter') {
+              e.preventDefault();
+              if (currentItems[activeIdx]) executeItem(currentItems[activeIdx]);
+            } else if (e.key === 'Escape') {
+              e.preventDefault();
+              close();
+            }
+          });
+          backdropEl.addEventListener('click', close);
+
+          // Global ⌘K / Ctrl+K — opens from anywhere except inside other
+          // text fields (where ⌘K could mean other things)
+          document.addEventListener('keydown', function (e) {
+            if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+              e.preventDefault();
+              if (isOpen) close(); else open();
             }
           });
         })();
