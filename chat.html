@@ -22024,6 +22024,91 @@
       border-color: color-mix(in srgb, var(--hx-accent, #C9A227) 60%, transparent) !important;
       color: #ffffff !important;
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V86 — ACTIVE WORKFLOW MODE VISUAL
+       When the user activates a mode, the chip shows a solid gold
+       "active" state + a small pulsing dot. The presence pill picks
+       up a "mode" attribute so it can also signal the active mode.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* Active chip — strong gold fill, white text, leading dot */
+    body[data-active="chat"] .hx-conductor-chip.is-active-mode {
+      background: linear-gradient(180deg,
+        var(--hx-accent, #C9A227) 0%,
+        color-mix(in srgb, var(--hx-accent, #C9A227) 88%, #000) 100%) !important;
+      border-color: color-mix(in srgb, var(--hx-accent, #C9A227) 90%, #000) !important;
+      color: #ffffff !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        0 1px 2px color-mix(in srgb, var(--hx-accent, #C9A227) 30%, transparent),
+        0 6px 18px -6px color-mix(in srgb, var(--hx-accent, #C9A227) 38%, transparent) !important;
+      position: relative !important;
+    }
+    body[data-active="chat"] .hx-conductor-chip.is-active-mode svg {
+      color: #ffffff !important;
+      stroke: #ffffff !important;
+    }
+    body[data-active="chat"] .hx-conductor-chip.is-active-mode::before {
+      content: '' !important;
+      width: 5px !important;
+      height: 5px !important;
+      border-radius: 50% !important;
+      background: #ffffff !important;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.85) !important;
+      animation: hx-mode-pulse 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+      flex-shrink: 0 !important;
+      margin-right: 2px !important;
+      display: inline-block !important;
+    }
+    body[data-active="chat"] .hx-conductor-chip.is-active-mode:hover {
+      background: linear-gradient(180deg,
+        color-mix(in srgb, var(--hx-accent, #C9A227) 96%, #fff) 0%,
+        color-mix(in srgb, var(--hx-accent, #C9A227) 80%, #000) 100%) !important;
+      border-color: color-mix(in srgb, var(--hx-accent, #C9A227) 95%, #000) !important;
+    }
+    @keyframes hx-mode-pulse {
+      0%, 100% { opacity: 0.9;  transform: scale(1); }
+      50%      { opacity: 0.55; transform: scale(0.78); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-conductor-chip.is-active-mode::before {
+        animation: none !important;
+        opacity: 0.85 !important;
+      }
+    }
+
+    /* Dark-mode active chip — same gold strength */
+    html[data-theme="dark"] body[data-active="chat"] .hx-conductor-chip.is-active-mode {
+      background: linear-gradient(180deg,
+        var(--hx-accent, #C9A227) 0%,
+        color-mix(in srgb, var(--hx-accent, #C9A227) 82%, #000) 100%) !important;
+      border-color: color-mix(in srgb, var(--hx-accent, #C9A227) 90%, transparent) !important;
+      color: #1a1612 !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        0 1px 2px rgba(0, 0, 0, 0.5),
+        0 6px 22px -6px color-mix(in srgb, var(--hx-accent, #C9A227) 45%, transparent) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-conductor-chip.is-active-mode svg {
+      color: #1a1612 !important;
+      stroke: #1a1612 !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-conductor-chip.is-active-mode::before {
+      background: #1a1612 !important;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    /* Presence pill — when a mode is active, accent the border + dot */
+    body[data-active="chat"] .hx-presence:not([data-mode="none"]) {
+      border-color: color-mix(in srgb, var(--hx-accent, #C9A227) 38%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-presence:not([data-mode="none"]) .hx-presence-dot {
+      animation: hx-presence-pulse-active 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+      box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--hx-accent, #C9A227) 22%, transparent),
+        0 0 12px color-mix(in srgb, var(--hx-accent, #C9A227) 70%, transparent) !important;
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -23306,6 +23391,86 @@
         'Make decisions on your own; only ask the user clarifying questions if a critical piece of information is missing.'
       ].join(' ');
 
+      // V86 — Workflow MODES. When the user activates a mode via the
+      // Conductor (Plan / Research / Compare / Draft / Explain /
+      // Summarize), the mode's system addendum is appended to every
+      // request UNTIL the user deactivates the mode. Each mode forces
+      // a distinct response shape so the user feels "I activated a
+      // different AI workflow", not "I sent a slightly different
+      // prompt". The shapes lean on V69 artifact blocks where possible
+      // so the output looks visibly different per mode.
+      var HELIX_MODE_SYSTEM = {
+        plan: [
+          '',
+          'MODE: PLAN. Every response MUST be a structured execution plan, not a chat reply.',
+          'Required shape:',
+          '  1) Open with ONE short sentence framing the goal.',
+          '  2) Emit a :::timeline artifact with 3–7 phases (PHASE | TITLE | DESCRIPTION).',
+          '  3) Emit a :::workflow artifact with the concrete next steps (numbered, each with TITLE | one-line SUBTITLE).',
+          '  4) End with "**Next step:**" naming the single most important action to start today.',
+          'Do not write long prose. Plans are tables and steps. If a clarifying question is critical, ask EXACTLY ONE before planning.'
+        ].join(' '),
+
+        research: [
+          '',
+          'MODE: RESEARCH. Every response MUST behave like a research brief, not a conversational answer.',
+          'Required shape:',
+          '  1) Use web_search whenever the question is factual, time-sensitive, or about specific entities/events. Cite sources inline ("according to [outlet]", "per [doc]").',
+          '  2) Emit a :::note artifact at the top with the single most important finding.',
+          '  3) Use "## Confirmed" and "## Likely / Inferred" headings to separate facts from inferences. Use "## Open questions" if anything is uncertain.',
+          '  4) For any numeric or named claim, mark "(source)" or "(unverified)" inline.',
+          '  5) End with "**Bottom line:**" — one sentence the user can quote.',
+          'Never fabricate citations. If you do not have a source, say so.'
+        ].join(' '),
+
+        compare: [
+          '',
+          'MODE: COMPARE. Every response MUST be a structured comparison, not prose.',
+          'Required shape:',
+          '  1) Open with ONE short sentence naming what is being compared.',
+          '  2) Emit a :::compare artifact with the options as rows and the most decision-relevant attributes as columns (typical: Cost, Effort, Risk, Best for).',
+          '  3) Emit a :::tradeoff artifact summarising the strongest "+" advantage and "-" risk for the leading option.',
+          '  4) End with "**Best fit:**" — one line naming the recommendation and the single most important reason why.',
+          'No long paragraphs of prose between the structured blocks.'
+        ].join(' '),
+
+        draft: [
+          '',
+          'MODE: DRAFT. Every response MUST be a polished, ready-to-send deliverable, not a discussion about one.',
+          'Required shape:',
+          '  1) ONE-line preface naming the deliverable type ("Here\'s a short email…").',
+          '  2) The actual draft, in a fenced block of the appropriate type (Markdown, plain text, or HTML). Match the tone to the implied context (professional/casual). No placeholders unless the user genuinely cannot supply them.',
+          '  3) Below the draft, a short "**Choices I made:**" line explaining 1–3 key decisions (tone, length, calls to action).',
+          '  4) "**Next step:**" naming exactly what to do with the draft (send, customise X, get Y\'s approval).',
+          'Do not lecture about how drafts work. Ship the draft.'
+        ].join(' '),
+
+        explain: [
+          '',
+          'MODE: EXPLAIN. Every response MUST be a layered explanation that a thoughtful non-expert can follow, then go deeper if they want.',
+          'Required shape:',
+          '  1) "## The short version" — 2-3 sentences in plain language. No jargon.',
+          '  2) "## A concrete example" — one specific example or analogy showing how it works in practice.',
+          '  3) "## Going deeper" — the underlying mechanism, edge cases, or expert nuance for the reader who wants more.',
+          '  4) If the concept has steps, use an ordered list. If it has parallel parts, use a table. If it has cause/effect, say so explicitly.',
+          'No definitions without examples. No abstract prose for its own sake.'
+        ].join(' '),
+
+        summarize: [
+          '',
+          'MODE: SUMMARIZE. Every response MUST be a condensed extraction, not new analysis.',
+          'Required shape:',
+          '  1) Exactly 3 bullets, each starting with a bolded label:',
+          '     • "**Established:**" — what is confirmed/agreed/known.',
+          '     • "**Open:**" — outstanding questions, blockers, or unknowns.',
+          '     • "**Takeaway:**" — the single most important point.',
+          '  2) Then "## Decisions" listing any concrete decisions made in the conversation (bullet list, one line each). Skip if none.',
+          '  3) Then "## Action items" — a checklist of next actions in "- [ ] " markdown format with the owner in parentheses if known.',
+          '  4) End with "**Next step:**" — the single most important next move.',
+          'Do not introduce new opinions. Summarize what is already there.'
+        ].join(' '),
+      };
+
       var state = {
         owner: null,
         conversation: null,    // current conversation row
@@ -23317,6 +23482,7 @@
         attachments: [],       // composer's pending attachments
         webEnabled: true,      // web_search on by default — answers stay current
         codeEnabled: false,    // when true, model gets Anthropic code_execution tool
+        workflowMode: null,    // V86 — null | 'plan' | 'research' | 'compare' | 'draft' | 'explain' | 'summarize'
       };
 
       // Agent capability is derived from the model — not a separate toggle.
@@ -24611,7 +24777,7 @@
               body: JSON.stringify({
                 model:           $('hx-c-model').value || 'ether',
                 conversation_id: state.conversation.id,
-                system:          HELIX_SYSTEM + (currentlyAgentic() ? HELIX_AGENT_SYSTEM : ''),
+                system:          HELIX_SYSTEM + (currentlyAgentic() ? HELIX_AGENT_SYSTEM : '') + (HELIX_MODE_SYSTEM[state.workflowMode] || ''),
                 messages:        send_msgs,
                 user_attachments: persistAttachs,
                 max_tokens:      currentlyAgentic() ? 8192 : 2048,
@@ -25031,20 +25197,27 @@
           if (!presenceEl) return;
           var s = 'idle';
           var label = 'Helix · Ready';
+          // V86: mode tag prefix on the label
+          var modeTag = '';
+          if (state.workflowMode) {
+            var modeName = state.workflowMode.charAt(0).toUpperCase() + state.workflowMode.slice(1);
+            modeTag = ' · ' + modeName + ' mode';
+          }
           if (state.streaming) {
             s = 'drafting';
-            label = 'Helix · Drafting…';
+            label = 'Helix · Drafting…' + modeTag;
           } else if (state.sending) {
             s = 'thinking';
-            label = 'Helix · Thinking…';
+            label = 'Helix · Thinking…' + modeTag;
           } else if (inputEl && inputEl.value.trim()) {
             s = 'listening';
-            label = 'Helix · Listening…';
+            label = 'Helix · Listening…' + modeTag;
           } else {
             s = 'idle';
-            label = 'Helix · Ready';
+            label = 'Helix · Ready' + modeTag;
           }
           presenceEl.setAttribute('data-state', s);
+          presenceEl.setAttribute('data-mode', state.workflowMode || 'none');
           if (presenceLab && presenceLab.textContent !== label) {
             presenceLab.textContent = label;
           }
@@ -25118,34 +25291,63 @@
             onEmpty:   'Summarize: ',
           },
         };
+        // V86 — Mode badge state reflects the workflowMode on the
+        // active chip + the presence pill ("Helix · Plan mode").
+        function refreshModeUI() {
+          if (!conductorEl) return;
+          conductorEl.querySelectorAll('.hx-conductor-chip').forEach(function (c) {
+            var a = c.getAttribute('data-conduct');
+            c.classList.toggle('is-active-mode', state.workflowMode === a);
+            c.setAttribute('aria-pressed', state.workflowMode === a ? 'true' : 'false');
+          });
+          // Bend the presence pill copy to show active mode
+          try { updatePresence(); } catch (e) {}
+        }
+
         if (conductorEl) {
           conductorEl.querySelectorAll('.hx-conductor-chip').forEach(function (chip) {
+            chip.setAttribute('role', 'switch');
+            chip.setAttribute('aria-pressed', 'false');
             chip.addEventListener('click', function () {
               var action = chip.getAttribute('data-conduct');
               var spec = COMMAND_PROMPTS[action];
               if (!spec) return;
-              if (state.sending || state.streaming) return; // ignore mid-turn
+              if (state.sending || state.streaming) return;
 
+              // ── (1) Toggle the persistent workflow mode ──────────
+              // Clicking an active chip again deactivates it.
+              if (state.workflowMode === action) {
+                state.workflowMode = null;
+                refreshModeUI();
+                chip.classList.add('is-sent');
+                setTimeout(function () { chip.classList.remove('is-sent'); }, 400);
+                return;
+              }
+              state.workflowMode = action;
+              refreshModeUI();
+
+              // ── (2) Send the contextual or wrap-text prompt ──────
+              // The mode is now ON — even if the user doesn't send a
+              // prompt right away, the next message they write will
+              // use the new mode's system addendum. But to make the
+              // mode IMMEDIATELY produce a different output, we send
+              // the meta-prompt now.
               var text = (inputEl && inputEl.value || '').trim();
               var hasMessages = !!(state.messages && state.messages.length);
               var prompt;
               var autoSend = false;
 
               if (text) {
-                // Mode A: wrap user's draft with the action
                 prompt = spec.onText(text);
                 autoSend = true;
               } else if (hasMessages) {
-                // Mode B: act on the conversation context
                 prompt = spec.onContext();
                 autoSend = true;
               } else {
-                // Mode C: empty everything — prefill a starter
                 prompt = spec.onEmpty;
                 autoSend = false;
               }
 
-              // Visual feedback
               chip.classList.add('is-sent');
               setTimeout(function () { chip.classList.remove('is-sent'); }, 600);
 
@@ -25164,6 +25366,8 @@
             });
           });
         }
+        // Initial paint so any pre-set mode shows the right active chip
+        try { refreshModeUI(); } catch (e) {}
         // Watch typing to update both
         if (inputEl) {
           inputEl.addEventListener('input', function () {
