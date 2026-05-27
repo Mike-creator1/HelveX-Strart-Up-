@@ -15513,6 +15513,368 @@
     }
 
     /* ═════════════════════════════════════════════════════════════════
+       V76 — CINEMATIC CHOREOGRAPHY + CODE BLOCK PREMIUM
+       After V75 locked the rhythm, V76 adds the small cinematic
+       touches that distinguish a tool from a film:
+
+         • Each artifact card has a cinematic entrance — stat scales
+           in, tradeoff slides up, timeline draws its spine, framework
+           cells stagger, compare table rises. The premium feel is
+           in the choreography, not just the static composition.
+
+         • Subtle hover lift on artifact cards (2px translate, gold
+           border accent). Reads as "this is a real component you
+           can interact with", not flat ink.
+
+         • Premium code blocks: refined dark slab with hairline
+           border, smaller language chip, ghost copy button that
+           materializes on hover. The Linear/Vercel docs feel.
+
+         • Adaptive composer: max-height bumped so long drafts have
+           room to breathe (was capping at ~120px, now 240px).
+
+         • Action toolbar choreography: when a response completes,
+           the toolbar fades in once at 0.5 opacity (acknowledgment),
+           then stays subtle until hover lifts it to 1.
+
+       Nothing experimental. Every change is the "small thing you
+       feel" kind that compounds into perceived premium.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* ───── (1) ARTIFACT ENTRANCE CHOREOGRAPHY ────────────────────── */
+    /* Base: every artifact card rises with opacity + small translate.
+       Type-specific overrides add their signature motion. */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art {
+      animation: hx-art-rise 540ms var(--hx-ease) both !important;
+      transform-origin: top left !important;
+    }
+    @keyframes hx-art-rise {
+      from { opacity: 0; transform: translateY(8px) scale(0.985); }
+      to   { opacity: 1; transform: translateY(0)   scale(1); }
+    }
+
+    /* Stat — scale in from the value */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-stat {
+      animation: hx-art-stat-in 620ms var(--hx-ease) both !important;
+      transform-origin: 0 50% !important;
+    }
+    @keyframes hx-art-stat-in {
+      from { opacity: 0; transform: translateY(6px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0)   scale(1); }
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-stat-value {
+      animation: hx-art-stat-num-in 720ms var(--hx-ease) 60ms both !important;
+    }
+    @keyframes hx-art-stat-num-in {
+      from { opacity: 0; transform: translateY(8px); letter-spacing: -0.05em; }
+      to   { opacity: 1; transform: translateY(0);   letter-spacing: -0.030em; }
+    }
+
+    /* Tradeoff — columns slide from sides */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tradeoff .hx-art-col-win {
+      animation: hx-art-slide-l 540ms var(--hx-ease) 60ms both !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tradeoff .hx-art-col-risk {
+      animation: hx-art-slide-r 540ms var(--hx-ease) 60ms both !important;
+    }
+    @keyframes hx-art-slide-l {
+      from { opacity: 0; transform: translateX(-6px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes hx-art-slide-r {
+      from { opacity: 0; transform: translateX(6px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col li {
+      animation: hx-art-row-rise 420ms var(--hx-ease) both !important;
+      animation-delay: calc(120ms + 50ms * var(--i, 0)) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col li:nth-child(1) { --i: 0; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col li:nth-child(2) { --i: 1; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col li:nth-child(3) { --i: 2; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col li:nth-child(4) { --i: 3; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col li:nth-child(5) { --i: 4; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col li:nth-child(6) { --i: 5; }
+    @keyframes hx-art-row-rise {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Timeline — spine draws first, then dots + content stagger */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl::before {
+      animation: hx-art-tl-line 800ms cubic-bezier(0.65, 0, 0.35, 1) both !important;
+      transform-origin: top !important;
+    }
+    @keyframes hx-art-tl-line {
+      from { transform: scaleY(0); opacity: 0; }
+      to   { transform: scaleY(1); opacity: 1; }
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-item {
+      animation: hx-art-tl-row 500ms var(--hx-ease) both !important;
+      animation-delay: calc(300ms + 90ms * var(--i, 0)) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-item:nth-child(1) { --i: 0; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-item:nth-child(2) { --i: 1; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-item:nth-child(3) { --i: 2; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-item:nth-child(4) { --i: 3; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-item:nth-child(5) { --i: 4; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-item:nth-child(6) { --i: 5; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-item:nth-child(7) { --i: 6; }
+    @keyframes hx-art-tl-row {
+      from { opacity: 0; transform: translateX(6px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Workflow — steps stagger top-to-bottom */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-step {
+      animation: hx-art-row-rise 480ms var(--hx-ease) both !important;
+      animation-delay: calc(80ms + 65ms * var(--i, 0)) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-step:nth-child(1) { --i: 0; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-step:nth-child(2) { --i: 1; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-step:nth-child(3) { --i: 2; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-step:nth-child(4) { --i: 3; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-step:nth-child(5) { --i: 4; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-step:nth-child(6) { --i: 5; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-step:nth-child(7) { --i: 6; }
+
+    /* Framework — 4 cells diagonal stagger */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-fw-cell {
+      animation: hx-art-cell-in 540ms var(--hx-ease) both !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-fw-cell:nth-child(1) { animation-delay: 100ms !important; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-fw-cell:nth-child(2) { animation-delay: 180ms !important; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-fw-cell:nth-child(3) { animation-delay: 180ms !important; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-fw-cell:nth-child(4) { animation-delay: 260ms !important; }
+    @keyframes hx-art-cell-in {
+      from { opacity: 0; transform: scale(0.96); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* Compare table rows stagger */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp tbody tr {
+      animation: hx-art-row-rise 420ms var(--hx-ease) both !important;
+      animation-delay: calc(140ms + 60ms * var(--i, 0)) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp tbody tr:nth-child(1) { --i: 0; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp tbody tr:nth-child(2) { --i: 1; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp tbody tr:nth-child(3) { --i: 2; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp tbody tr:nth-child(4) { --i: 3; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp tbody tr:nth-child(5) { --i: 4; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp tbody tr:nth-child(6) { --i: 5; }
+
+    /* Suppress entrance animations while STREAMING — would re-trigger
+       on every reveal tick and flicker. They play once when the
+       response settles. */
+    body[data-active="chat"] .hx-msg.is-assistant.is-streaming .hx-art,
+    body[data-active="chat"] .hx-msg.is-assistant.is-streaming .hx-art * {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art,
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art * {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+
+    /* ───── (2) ARTIFACT HOVER LIFT ───────────────────────────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art {
+      transition:
+        transform 320ms var(--hx-ease),
+        border-color 240ms var(--hx-ease),
+        box-shadow 320ms var(--hx-ease) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art:hover {
+      transform: translateY(-2px) !important;
+      border-color: color-mix(in srgb, var(--hx-text) 14%, transparent) !important;
+      box-shadow:
+        inset 0 1px 0 #ffffff,
+        0 1px 2px color-mix(in srgb, var(--hx-text) 4%, transparent),
+        0 14px 36px -16px color-mix(in srgb, var(--hx-text) 14%, transparent) !important;
+    }
+    /* Quote doesn't lift (it's a textual element, not a card) */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-quote:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* ───── (3) PREMIUM CODE BLOCK ────────────────────────────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-block {
+      background: #0e0d0b !important;
+      border: 1px solid rgba(255, 246, 220, 0.08) !important;
+      border-radius: 10px !important;
+      overflow: hidden !important;
+      margin-top: 20px !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 246, 220, 0.05),
+        0 1px 2px rgba(0, 0, 0, 0.3),
+        0 8px 24px -14px rgba(0, 0, 0, 0.5) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-block::before {
+      content: none !important;
+      display: none !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-head {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 8px 12px !important;
+      background: rgba(255, 246, 220, 0.025) !important;
+      border-bottom: 1px solid rgba(255, 246, 220, 0.06) !important;
+      min-height: 32px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-head::before {
+      content: none !important;
+      display: none !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-lang {
+      font-family: var(--mono) !important;
+      font-size: 10.5px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.08em !important;
+      text-transform: uppercase !important;
+      color: rgba(255, 246, 220, 0.5) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-actions {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      opacity: 0 !important;
+      transition: opacity 200ms var(--hx-ease) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-block:hover .hx-code-actions,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-block:focus-within .hx-code-actions {
+      opacity: 1 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      padding: 4px 8px !important;
+      background: transparent !important;
+      border: 1px solid rgba(255, 246, 220, 0.1) !important;
+      border-radius: 5px !important;
+      font-family: var(--mono) !important;
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.04em !important;
+      text-transform: uppercase !important;
+      color: rgba(255, 246, 220, 0.6) !important;
+      cursor: pointer !important;
+      transition: background 160ms var(--hx-ease), color 160ms var(--hx-ease), border-color 160ms var(--hx-ease) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-btn:hover {
+      background: rgba(255, 246, 220, 0.08) !important;
+      color: rgba(255, 246, 220, 0.95) !important;
+      border-color: rgba(255, 246, 220, 0.18) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-btn svg {
+      width: 11px !important;
+      height: 11px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body {
+      padding: 14px 16px !important;
+      margin: 0 !important;
+      overflow-x: auto !important;
+      background: transparent !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body code {
+      font-family: var(--mono, 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace) !important;
+      font-size: 12.5px !important;
+      line-height: 1.6 !important;
+      letter-spacing: -0.002em !important;
+      color: #f0eadb !important;
+      tab-size: 2 !important;
+      -webkit-font-smoothing: antialiased !important;
+      white-space: pre !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body::-webkit-scrollbar {
+      height: 6px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body::-webkit-scrollbar-thumb {
+      background: rgba(255, 246, 220, 0.1) !important;
+      border-radius: 999px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-body::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 246, 220, 0.2) !important;
+    }
+    /* Hover: subtle gold glow on the code block as a whole */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-block {
+      transition: box-shadow 280ms var(--hx-ease), border-color 240ms var(--hx-ease) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-code-block:hover {
+      border-color: rgba(255, 246, 220, 0.14) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 246, 220, 0.06),
+        0 1px 2px rgba(0, 0, 0, 0.3),
+        0 12px 32px -14px rgba(0, 0, 0, 0.5),
+        0 0 0 1px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 8%, transparent) !important;
+    }
+
+    /* ───── (4) ADAPTIVE COMPOSER — taller max for long drafts ────── */
+    body[data-active="chat"] .hx-chat-textarea {
+      max-height: 240px !important;
+      min-height: 24px !important;
+      resize: none !important;
+      overflow-y: auto !important;
+      scrollbar-width: thin !important;
+    }
+    body[data-active="chat"] .hx-chat-textarea::-webkit-scrollbar {
+      width: 6px !important;
+    }
+    body[data-active="chat"] .hx-chat-textarea::-webkit-scrollbar-thumb {
+      background: color-mix(in srgb, var(--hx-text) 12%, transparent) !important;
+      border-radius: 999px !important;
+    }
+
+    /* ───── (5) ACTION TOOLBAR — quiet acknowledgment when response settles ─ */
+    /* Currently 0 → 1 on hover. V76: when a response completes,
+       fade in once to 0.4 (acknowledgment that actions exist), then
+       hover lifts to 1. */
+    body[data-active="chat"] .hx-msg.is-assistant:not(.is-streaming):not(.hx-msg-thinking) .hx-msg-actions {
+      opacity: 0.4 !important;
+      animation: hx-act-settle 520ms var(--hx-ease) 220ms both !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant:not(.is-streaming):not(.hx-msg-thinking):hover .hx-msg-actions,
+    body[data-active="chat"] .hx-msg.is-assistant:not(.is-streaming):not(.hx-msg-thinking):focus-within .hx-msg-actions {
+      opacity: 1 !important;
+    }
+    @keyframes hx-act-settle {
+      from { opacity: 0; transform: translateY(2px); }
+      to   { opacity: 0.4; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions {
+        animation: none !important;
+      }
+    }
+
+    /* ───── (6) FOLLOWUP CHIPS — stagger entrance ─────────────────── */
+    body[data-active="chat"] .hx-msg-followup-chip {
+      animation: hx-art-row-rise 440ms var(--hx-ease) both !important;
+      animation-delay: calc(440ms + 80ms * var(--i, 0)) !important;
+    }
+    body[data-active="chat"] .hx-msg-followup-chip:nth-child(1) { --i: 0; }
+    body[data-active="chat"] .hx-msg-followup-chip:nth-child(2) { --i: 1; }
+    body[data-active="chat"] .hx-msg-followup-chip:nth-child(3) { --i: 2; }
+    body[data-active="chat"] .hx-msg-followup-chip:nth-child(4) { --i: 3; }
+
+    /* ─── DARK MODE PARITY: artifact hover state needs dark shadow ─── */
+    @media (prefers-color-scheme: dark) {
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art:hover {
+        border-color: rgba(255, 246, 220, 0.16) !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 246, 220, 0.05),
+          0 1px 2px rgba(0, 0, 0, 0.4),
+          0 14px 36px -16px rgba(0, 0, 0, 0.7) !important;
+      }
+    }
+
+    /* ═════════════════════════════════════════════════════════════════
        V75 — ULTRA-PREMIUM RHYTHM + STABILITY LOCKDOWN
        Final pass. After 14 layers of overrides, the spacing rhythm
        had drifted (10px here, 14px there, 18px elsewhere). V75 sets
