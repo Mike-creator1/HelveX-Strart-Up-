@@ -15259,6 +15259,66 @@
         padding-top: 96px !important;
       }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V60 — BOTTOM STRIP READABILITY
+       The disclaimer line and the Ether MAX chip were rendered at
+       40–50% opacity / 10.5–11px — so faded the user couldn't read
+       them. Bump every element in the bottom strip to legible weight
+       + size + opacity. Still calm, but now actually readable.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* Disclaimer text — bolder, darker, slightly bigger */
+    body[data-active="chat"] .hx-cc-compose-bar::before {
+      font-size: 12px !important;
+      font-weight: 500 !important;
+      color: color-mix(in srgb, var(--hx-text) 78%, transparent) !important;
+      letter-spacing: -0.003em !important;
+    }
+    /* Refresh the leading gold dot so it stays visually balanced
+       against the now-stronger text */
+    body[data-active="chat"] .hx-cc-compose-bar::before {
+      background: radial-gradient(circle at 5px center,
+        var(--hx-accent, var(--hx-yellow-deep)) 0%,
+        var(--hx-accent, var(--hx-yellow-deep)) 3px,
+        transparent 3.5px) no-repeat !important;
+    }
+
+    /* Model picker chip — proper visibility */
+    body[data-active="chat"] .hx-cc-model-pick {
+      height: 30px !important;
+      padding: 0 9px 0 12px !important;
+      border-color: color-mix(in srgb, var(--hx-text) 16%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-cc-model-name {
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      color: var(--hx-text) !important;
+    }
+    body[data-active="chat"] .hx-cc-model-tier {
+      font-size: 9.5px !important;
+      font-weight: 700 !important;
+      padding: 3px 6px !important;
+      color: color-mix(in srgb, var(--hx-text) 72%, transparent) !important;
+      background: color-mix(in srgb, var(--hx-text) 8%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-cc-model-caret {
+      width: 13px !important;
+      height: 13px !important;
+      color: color-mix(in srgb, var(--hx-text) 60%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-cc-model-pick::before {
+      width: 7px !important;
+      height: 7px !important;
+    }
+
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-cc-compose-bar::before {
+        font-size: 11.5px !important;
+      }
+      body[data-active="chat"] .hx-cc-model-name { font-size: 12px !important; }
+      body[data-active="chat"] .hx-cc-model-tier { font-size: 9px !important; }
+    }
   </style>
 </head>
 <body data-active="chat">
