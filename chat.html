@@ -22109,6 +22109,165 @@
         0 0 0 3px color-mix(in srgb, var(--hx-accent, #C9A227) 22%, transparent),
         0 0 12px color-mix(in srgb, var(--hx-accent, #C9A227) 70%, transparent) !important;
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V87 — RESTORE MODEL-SPECIFIC COGNITION ANIMATIONS
+       V54 built three signature thinking animations (Ether atom orbits,
+       Nexus radial network burst, Prometheus flame flicker). V66 + V82
+       killed them with display:none because the user said "stop
+       announcing features". The user now WANTS them back as the
+       premium thinking-state. V87 re-enables them at the absolute
+       end of the stylesheet so nothing upstream can re-hide them.
+       Each model has its own identity icon + signature motion —
+       this is the live AI cognition presence.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* Container layout — mark + label sit side by side, premium size */
+    body[data-active="chat"] .hx-msg.hx-msg-thinking > .hx-msg-body {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      padding: 0 !important;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-think-mark {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 32px !important;
+      height: 32px !important;
+      flex-shrink: 0 !important;
+      opacity: 1 !important;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-think-mark svg {
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+      overflow: visible !important;
+    }
+
+    /* Un-hide EVERY per-model SVG element that V66 / V82 had display:none-d */
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-tm-ether,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-tm-nexus,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-tm-prom,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-tm-outer,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-tm-inner,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-tm-o1,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-tm-o2,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-tm-o3,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-tm-nucleus,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-tm-ray,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-tm-node,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-tm-core,
+    body[data-active="chat"] .hx-msg.hx-msg-thinking [class*="hx-tm-"] {
+      display: initial !important;
+    }
+
+    /* ── ETHER — atom orbits (gold) ──────────────────────────────── */
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-ether .hx-think-mark {
+      color: var(--hx-accent, #C9A227) !important;
+      filter:
+        drop-shadow(0 0 8px color-mix(in srgb, var(--hx-accent, #C9A227) 38%, transparent))
+        drop-shadow(0 0 20px color-mix(in srgb, var(--hx-accent, #C9A227) 18%, transparent)) !important;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-ether .hx-tm-o1 {
+      animation: hx-tm-ether-spin1 3.6s linear infinite !important;
+      transform-origin: 16px 16px !important;
+      transform-box: fill-box !important;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-ether .hx-tm-o2 {
+      animation: hx-tm-ether-spin2 4.6s linear infinite !important;
+      transform-origin: 16px 16px !important;
+      transform-box: fill-box !important;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-ether .hx-tm-o3 {
+      animation: hx-tm-ether-spin3 5.4s linear infinite !important;
+      transform-origin: 16px 16px !important;
+      transform-box: fill-box !important;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-ether .hx-tm-nucleus {
+      animation: hx-tm-ether-pulse 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+      transform-origin: 16px 16px !important;
+      transform-box: fill-box !important;
+    }
+
+    /* ── NEXUS — radial network burst (rust) ─────────────────── */
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-think-mark {
+      color: #d04a14 !important;
+      filter:
+        drop-shadow(0 0 8px color-mix(in srgb, #d04a14 38%, transparent))
+        drop-shadow(0 0 20px color-mix(in srgb, #d04a14 20%, transparent)) !important;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-tm-ray {
+      animation: hx-tm-nexus-ray 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+      stroke-opacity: 0.4;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-tm-ray:nth-child(2) { animation-delay: 0.05s !important; }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-tm-ray:nth-child(3) { animation-delay: 0.10s !important; }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-tm-ray:nth-child(4) { animation-delay: 0.15s !important; }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-tm-ray:nth-child(5) { animation-delay: 0.20s !important; }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-tm-ray:nth-child(6) { animation-delay: 0.25s !important; }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-tm-node {
+      animation: hx-tm-nexus-node 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+      transform-origin: center !important;
+      transform-box: fill-box !important;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-tm-n2 { animation-delay: 0.10s !important; }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-tm-n3 { animation-delay: 0.20s !important; }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-tm-n4 { animation-delay: 0.30s !important; }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-tm-n5 { animation-delay: 0.40s !important; }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-tm-n6 { animation-delay: 0.50s !important; }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-nexus .hx-tm-core {
+      animation: hx-tm-nexus-core 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+      transform-origin: 16px 16px !important;
+      transform-box: fill-box !important;
+    }
+
+    /* ── PROMETHEUS — flame flicker (warm white) ──────────────── */
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-prometheus .hx-think-mark {
+      color: #f6efdf !important;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-prometheus .hx-tm-prom {
+      transform-origin: 16px 28px !important;
+      transform-box: fill-box !important;
+      animation: hx-tm-prom-breath 1.4s cubic-bezier(0.4, 0, 0.4, 1) infinite !important;
+      filter:
+        drop-shadow(0 -2px 10px color-mix(in srgb, #CC1016 42%, transparent))
+        drop-shadow(0 -4px 22px color-mix(in srgb, #CC1016 24%, transparent))
+        drop-shadow(0 0 16px color-mix(in srgb, #f0c450 30%, transparent)) !important;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-prometheus .hx-tm-outer {
+      animation: hx-tm-prom-flicker 1.4s cubic-bezier(0.4, 0, 0.4, 1) infinite !important;
+    }
+    body[data-active="chat"] .hx-msg.hx-msg-thinking.is-prometheus .hx-tm-inner {
+      animation: hx-tm-prom-inner 0.9s cubic-bezier(0.4, 0, 0.4, 1) infinite !important;
+      transform-origin: 16px 28px !important;
+      transform-box: fill-box !important;
+    }
+
+    /* Label sits beside the mark — italic, breathing */
+    body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-think-label {
+      font-family: var(--sans) !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      font-style: italic !important;
+      letter-spacing: -0.004em !important;
+      color: color-mix(in srgb, var(--hx-text) 64%, transparent) !important;
+      animation: hx-think-label-breath 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-think-label {
+      color: #d0cabb !important;
+    }
+
+    /* Reduced motion: keep icon visible but stop the animations */
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-msg.hx-msg-thinking [class*="hx-tm-"] {
+        animation: none !important;
+      }
+      body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-think-label {
+        animation: none !important;
+        opacity: 0.78 !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
