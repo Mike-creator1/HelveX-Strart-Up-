@@ -14829,6 +14829,140 @@
         max-width: 86% !important;
       }
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V57 — STREAMING STABILITY (root fix)
+       The chat was breaking during AI response generation: text grew
+       oversized, the container jumped, content flickered, and the
+       whole layout felt unstable. Five stacked "polish" effects were
+       re-firing on every streamed token burst (~120ms):
+
+         (1) View Transitions API cross-fade over the entire content
+         (2) p:first-child font-size:16px while body is 15.5px — every
+             time the "first child" rotated as new blocks arrived, the
+             lead paragraph resized
+         (3) min-height transition on .hx-msg-content (180ms)
+         (4) Ambient halo with scale(1 → 1.06) animation behind the
+             streaming bubble
+         (5) Mask gradient on the thread fading the bottom edge
+
+       V57 neutralizes all five at the source. The streaming experience
+       is now: stable container, stable typography, no flicker, no
+       oversized text, no overflow. Premium reading flow.
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* (1) Cancel View Transitions on streaming content — defensive in
+        case any other code still triggers a transition. */
+    body[data-active="chat"] .hx-msg.is-streaming .hx-msg-content,
+    body[data-active="chat"] .hx-msg.is-streaming {
+      view-transition-name: none !important;
+    }
+
+    /* (2) Lock typography. The lead-paragraph enlargement was elegant
+        in a finished message but a layout grenade during streaming.
+        Same size + line-height for every paragraph, every state. */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p:first-child,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > details.hx-rsn + p {
+      font-size: 15.5px !important;
+      line-height: 1.72 !important;
+      letter-spacing: -0.005em !important;
+      font-weight: 400 !important;
+    }
+
+    /* (3) No transitions on the streaming content box itself — height,
+        width, min-height, transform changes must NOT animate. The caret
+        keeps its blink (it's on ::after, not the content box). */
+    body[data-active="chat"] .hx-msg.is-streaming .hx-msg-content,
+    body[data-active="chat"] .hx-msg.is-streaming .hx-msg-content > * {
+      transition: none !important;
+      animation-name: none !important;
+    }
+    /* Re-allow the caret blink which lives on ::after */
+    body[data-active="chat"] .hx-msg.is-streaming .hx-msg-content::after {
+      animation: hx-stream-caret-32 1s steps(2, end) infinite !important;
+    }
+
+    /* (4) Freeze the ambient halo during streaming. The scale(1.06)
+        breathe behind the bubble was reading as the chat resizing. */
+    body[data-active="chat"] .hx-chat-pane:has(.hx-msg.is-streaming)::after,
+    body[data-active="chat"] .hx-chat-pane:has(.hx-msg-thinking)::after {
+      animation: none !important;
+      transform: none !important;
+      opacity: 0.55 !important;
+    }
+
+    /* (5) Remove the thread mask gradient. It was fading the bottom
+        edge of streaming text, which combined with the cross-fade
+        looked like the response was disappearing into the floor. */
+    body[data-active="chat"] .hx-chat-thread {
+      mask-image: none !important;
+      -webkit-mask-image: none !important;
+    }
+
+    /* Pin assistant content box width so the bubble doesn't grow as
+        tokens arrive. Width is governed by the column, not the prose. */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+      overflow-wrap: break-word !important;
+      word-break: normal !important;
+      hyphens: none !important;
+      contain: layout style !important;
+    }
+
+    /* Prevent block children from overflowing the column horizontally —
+        long code lines, wide tables, etc. get a horizontal scroll instead
+        of pushing the layout. */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content pre,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content table,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content img,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content figure {
+      max-width: 100% !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content pre {
+      overflow-x: auto !important;
+      white-space: pre !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content img {
+      height: auto !important;
+    }
+
+    /* Don't replay the entrance animation (blur + translate) while
+        the message is streaming. The class can switch back and forth
+        on first delta, which retriggered the blur. */
+    body[data-active="chat"] .hx-msg.is-assistant.is-streaming,
+    body[data-active="chat"] .hx-msg.is-assistant.is-streaming * {
+      animation-play-state: running;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant.is-streaming {
+      animation: none !important;
+      filter: none !important;
+      transform: none !important;
+      opacity: 1 !important;
+    }
+
+    /* Mobile parity — same stability, just tighter padding allowed */
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content,
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p,
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p:first-child {
+        font-size: 15px !important;
+        line-height: 1.7 !important;
+      }
+    }
+
+    /* Respect reduced motion — fully strip anything that moves while
+        streaming, including the caret. */
+    @media (prefers-reduced-motion: reduce) {
+      body[data-active="chat"] .hx-msg.is-streaming .hx-msg-content::after {
+        animation: none !important;
+        opacity: 0.5 !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -16822,33 +16956,17 @@
           }
           function runStreamRender() {
             if (!streamNode) return;
-            var apply = function () {
-              try {
-                streamNode.innerHTML = renderRichContent(assistantText, true);
-              } catch (e) {
-                streamNode.textContent = assistantText;
-              }
-            };
-            // Use the View Transitions API where available so the freshly
-            // rendered HTML cross-fades into place instead of snapping —
-            // the same primitive Linear / Arc use for content updates.
+            // V57: NEVER wrap streaming updates in View Transitions.
+            // Cross-fading every token burst (~120ms) caused full-page
+            // snapshots + opacity flicker that the user perceives as the
+            // whole chat "breaking" during a response. Plain re-render
+            // is fast, stable, and produces a continuous reading flow —
+            // the same approach Claude and ChatGPT use.
             try {
-              if (document.startViewTransition && !document.documentElement.classList.contains('hx-rsn-vt-disabled')) {
-                document.documentElement.classList.add('hx-vt-stream');
-                var vt = document.startViewTransition(apply);
-                if (vt && vt.finished && vt.finished.finally) {
-                  vt.finished.finally(function () {
-                    document.documentElement.classList.remove('hx-vt-stream');
-                  });
-                } else {
-                  setTimeout(function () {
-                    document.documentElement.classList.remove('hx-vt-stream');
-                  }, 260);
-                }
-                return;
-              }
-            } catch (e) { /* fall through to plain apply */ }
-            apply();
+              streamNode.innerHTML = renderRichContent(assistantText, true);
+            } catch (e) {
+              streamNode.textContent = assistantText;
+            }
           }
 
           function finalizeError(msg) {
