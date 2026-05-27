@@ -15513,6 +15513,441 @@
     }
 
     /* ═════════════════════════════════════════════════════════════════
+       V69 — SMART ARTIFACTS (visual outputs, not just text)
+       The AI can now emit nine visual artifact components — stat,
+       tradeoff, timeline, workflow, framework, compare, note, quote.
+       Each one renders as a premium component the user could screenshot
+       and ship in a deck. Plus task-flow directives in the system
+       prompt that make Helix open complex requests with a plan and end
+       deliverables with a "Next step:" line.
+
+       The artifacts are the architectural break — Helix stops being
+       "AI that writes text" and starts being "AI that ships visual
+       outputs you can use".
+       ═════════════════════════════════════════════════════════════════ */
+
+    /* All artifacts share a baseline editorial card style */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art {
+      margin: 18px 0 !important;
+      background: #ffffff !important;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 9%, transparent) !important;
+      border-radius: 12px !important;
+      padding: 18px 20px !important;
+      box-shadow:
+        inset 0 1px 0 #ffffff,
+        0 1px 2px color-mix(in srgb, var(--hx-text) 3%, transparent),
+        0 8px 24px -14px color-mix(in srgb, var(--hx-text) 9%, transparent) !important;
+      position: relative !important;
+      overflow: hidden !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-head {
+      font-family: var(--sans) !important;
+      font-size: 10.5px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.16em !important;
+      text-transform: uppercase !important;
+      color: color-mix(in srgb, var(--hx-text) 44%, transparent) !important;
+      margin: 0 0 14px 0 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-head::before {
+      content: '' !important;
+      width: 12px !important;
+      height: 1px !important;
+      background: var(--hx-accent, var(--hx-yellow-deep)) !important;
+    }
+
+    /* ── (1) STAT — single hero number ─────────────────────────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-stat {
+      padding: 26px 24px !important;
+      background: linear-gradient(180deg,
+        #ffffff 0%,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 4%, #fbf8f1) 100%) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-stat-value {
+      font-family: var(--sans) !important;
+      font-size: clamp(40px, 5vw, 56px) !important;
+      font-weight: 500 !important;
+      letter-spacing: -0.030em !important;
+      line-height: 1 !important;
+      color: var(--hx-text) !important;
+      margin-bottom: 8px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-stat-label {
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      color: color-mix(in srgb, var(--hx-text) 70%, transparent) !important;
+      letter-spacing: -0.003em !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-stat-sub {
+      font-size: 13px !important;
+      color: color-mix(in srgb, var(--hx-text) 50%, transparent) !important;
+      margin-top: 10px !important;
+      line-height: 1.5 !important;
+    }
+
+    /* ── (2) TRADEOFF — two columns: strengths / risks ─────────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tradeoff {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 0 !important;
+      padding: 0 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col {
+      padding: 16px 18px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col-win {
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 3%, #ffffff) !important;
+      border-right: 1px solid color-mix(in srgb, var(--hx-text) 8%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col-risk {
+      background: #ffffff !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col-head {
+      font-size: 10.5px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.14em !important;
+      text-transform: uppercase !important;
+      margin-bottom: 12px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 7px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col-win .hx-art-col-head {
+      color: #8a6e1a !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col-win .hx-art-col-head::before {
+      content: '+' !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      width: 16px !important;
+      height: 16px !important;
+      border-radius: 4px !important;
+      background: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 22%, transparent) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col-risk .hx-art-col-head {
+      color: #9a3a09 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col-risk .hx-art-col-head::before {
+      content: '−' !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      width: 16px !important;
+      height: 16px !important;
+      border-radius: 4px !important;
+      background: color-mix(in srgb, #c2410c 18%, transparent) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col ul {
+      list-style: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 8px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-col li {
+      font-size: 13.5px !important;
+      line-height: 1.5 !important;
+      color: var(--hx-text) !important;
+      padding-left: 0 !important;
+    }
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-tradeoff {
+        grid-template-columns: 1fr !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-col-win {
+        border-right: 0 !important;
+        border-bottom: 1px solid color-mix(in srgb, var(--hx-text) 8%, transparent) !important;
+      }
+    }
+
+    /* ── (3) TIMELINE — vertical phases with gold dots ─────────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-timeline {
+      padding: 18px 22px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl {
+      list-style: none !important;
+      margin: 0 !important;
+      padding: 0 0 0 18px !important;
+      position: relative !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 18px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl::before {
+      content: '' !important;
+      position: absolute !important;
+      left: 5px !important;
+      top: 6px !important;
+      bottom: 6px !important;
+      width: 1px !important;
+      background: color-mix(in srgb, var(--hx-text) 10%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-item {
+      position: relative !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-dot {
+      position: absolute !important;
+      left: -16px !important;
+      top: 6px !important;
+      width: 9px !important;
+      height: 9px !important;
+      border-radius: 50% !important;
+      background: var(--hx-accent, var(--hx-yellow-deep)) !important;
+      box-shadow:
+        0 0 0 3px #ffffff,
+        0 0 0 4px color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 22%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-meta {
+      font-family: var(--mono) !important;
+      font-size: 10.5px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.06em !important;
+      color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 70%, var(--hx-text)) !important;
+      text-transform: uppercase !important;
+      margin-bottom: 2px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-title {
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      color: var(--hx-text) !important;
+      line-height: 1.3 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-tl-body {
+      font-size: 13px !important;
+      color: color-mix(in srgb, var(--hx-text) 64%, transparent) !important;
+      margin-top: 4px !important;
+      line-height: 1.5 !important;
+    }
+
+    /* ── (4) WORKFLOW — numbered process steps ─────────────────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-workflow {
+      padding: 18px 22px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf {
+      list-style: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 0 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-step {
+      display: flex !important;
+      align-items: flex-start !important;
+      gap: 14px !important;
+      padding: 12px 0 !important;
+      border-bottom: 1px dashed color-mix(in srgb, var(--hx-text) 8%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-step:last-child {
+      border-bottom: 0 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-num {
+      font-family: var(--mono) !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.05em !important;
+      width: 28px !important;
+      height: 24px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: color-mix(in srgb, var(--hx-text) 5%, transparent) !important;
+      color: color-mix(in srgb, var(--hx-text) 64%, transparent) !important;
+      border-radius: 5px !important;
+      flex-shrink: 0 !important;
+      margin-top: 2px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-body {
+      flex: 1 !important;
+      min-width: 0 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-title {
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      color: var(--hx-text) !important;
+      line-height: 1.4 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-wf-sub {
+      font-size: 13px !important;
+      color: color-mix(in srgb, var(--hx-text) 60%, transparent) !important;
+      margin-top: 3px !important;
+      line-height: 1.5 !important;
+    }
+
+    /* ── (5) FRAMEWORK — 2x2 grid (SWOT / etc) ─────────────────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-framework {
+      padding: 18px 22px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-fw {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 1px !important;
+      background: color-mix(in srgb, var(--hx-text) 9%, transparent) !important;
+      border: 1px solid color-mix(in srgb, var(--hx-text) 9%, transparent) !important;
+      border-radius: 8px !important;
+      overflow: hidden !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-fw-cell {
+      background: #ffffff !important;
+      padding: 14px 16px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 6px !important;
+      min-height: 100px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-fw-key {
+      font-family: var(--mono) !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.04em !important;
+      color: var(--hx-accent, var(--hx-yellow-deep)) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-fw-desc {
+      font-size: 13px !important;
+      line-height: 1.5 !important;
+      color: var(--hx-text) !important;
+    }
+    @media (max-width: 720px) {
+      body[data-active="chat"] .hx-msg.is-assistant .hx-art-fw {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    /* ── (6) COMPARE — multi-option attribute table ────────────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-compare {
+      padding: 18px 20px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp-wrap {
+      overflow-x: auto !important;
+      margin: 0 -20px !important;
+      padding: 0 20px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp {
+      width: 100% !important;
+      border-collapse: separate !important;
+      border-spacing: 0 !important;
+      font-size: 13px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp thead th {
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.06em !important;
+      text-transform: uppercase !important;
+      color: color-mix(in srgb, var(--hx-text) 56%, transparent) !important;
+      padding: 0 12px 10px !important;
+      text-align: left !important;
+      border-bottom: 1px solid color-mix(in srgb, var(--hx-text) 10%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp tbody th {
+      font-size: 13.5px !important;
+      font-weight: 600 !important;
+      color: var(--hx-text) !important;
+      padding: 12px !important;
+      text-align: left !important;
+      border-bottom: 1px solid color-mix(in srgb, var(--hx-text) 5%, transparent) !important;
+      white-space: nowrap !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp tbody td {
+      font-size: 13px !important;
+      color: color-mix(in srgb, var(--hx-text) 78%, transparent) !important;
+      padding: 12px !important;
+      border-bottom: 1px solid color-mix(in srgb, var(--hx-text) 5%, transparent) !important;
+      vertical-align: top !important;
+      line-height: 1.45 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp tbody tr:last-child th,
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-cmp tbody tr:last-child td {
+      border-bottom: 0 !important;
+    }
+
+    /* ── (7) NOTE — single highlighted insight ─────────────────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-note {
+      padding: 16px 20px 16px 22px !important;
+      background: linear-gradient(180deg,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 5%, #ffffff) 0%,
+        color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 3%, #ffffff) 100%) !important;
+      border-color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 22%, transparent) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-note::before {
+      content: '' !important;
+      position: absolute !important;
+      left: 0 !important;
+      top: 0 !important;
+      bottom: 0 !important;
+      width: 3px !important;
+      background: var(--hx-accent, var(--hx-yellow-deep)) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-note-mark { display: none !important; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-note-head {
+      font-family: var(--sans) !important;
+      font-size: 10.5px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.14em !important;
+      text-transform: uppercase !important;
+      color: color-mix(in srgb, var(--hx-accent, var(--hx-yellow-deep)) 65%, var(--hx-text)) !important;
+      margin-bottom: 6px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-note-body {
+      font-size: 14.5px !important;
+      line-height: 1.55 !important;
+      color: var(--hx-text) !important;
+      font-weight: 450 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-note-body > p { margin: 0 !important; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-note-body > p + p { margin-top: 6px !important; }
+
+    /* ── (8) QUOTE — pull quote with attribution ───────────────────── */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-quote {
+      border-left: 3px solid color-mix(in srgb, var(--hx-text) 25%, transparent) !important;
+      border-top: 0 !important;
+      border-right: 0 !important;
+      border-bottom: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      padding: 4px 0 4px 20px !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-quote blockquote {
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      background: transparent !important;
+      font-family: var(--sans) !important;
+      font-size: 17px !important;
+      font-weight: 400 !important;
+      font-style: italic !important;
+      line-height: 1.45 !important;
+      letter-spacing: -0.010em !important;
+      color: var(--hx-text) !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-quote blockquote > p {
+      margin: 0 !important;
+    }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-art-quote figcaption {
+      margin-top: 8px !important;
+      font-size: 12px !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.04em !important;
+      color: color-mix(in srgb, var(--hx-text) 54%, transparent) !important;
+      font-style: normal !important;
+    }
+
+    /* Suppress entrance margins on artifacts so they don't double-up
+       with the > * + * 10px rule */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > .hx-art {
+      margin-top: 18px !important;
+    }
+
+    /* ═════════════════════════════════════════════════════════════════
        V68 — EDITORIAL SPREAD (radical rebuild of the conversation shape)
        Stops treating the chat as a stack of speech bubbles. Rebuilds
        it as a continuous editorial spread, the way a long-form
@@ -17884,9 +18319,167 @@
         s = s.replace(/(https?:\/\/[^\s<]+[^\s<.,!?)\];:])/g, '<a href="$1" target="_blank" rel="noopener" class="hx-md-link">$1</a>');
         return s;
       }
+      // V69 — Smart Artifact preprocessor.
+      // The model can emit `:::type ... :::` blocks for visual components
+      // (stat, tradeoff, timeline, workflow, framework, compare, note,
+      // quote). We extract them BEFORE markdown rendering, swap them for
+      // unique tokens, then re-insert the rendered HTML after markdown
+      // runs. This lets the AI generate real visual artifacts inline.
+      function preprocessArtifacts(src) {
+        // Only extract a known set of types — any other ":::" stays as text
+        var KNOWN = /^(stat|tradeoff|timeline|workflow|framework|compare|note|quote|insight)\b/i;
+        var registry = [];
+        var counter = 0;
+        // Match `:::type[ name]\n...body...\n:::`
+        var re = /:::([a-zA-Z]+)([^\n]*)\n([\s\S]*?)\n:::/g;
+        var result = src.replace(re, function (whole, type, header, body) {
+          if (!KNOWN.test(type)) return whole;
+          var token = '\n__HX_ART_' + (counter++) + '__\n';
+          registry.push({ token: token.trim(), type: type.toLowerCase(), header: (header || '').trim(), body: body });
+          return token;
+        });
+        return { text: result, artifacts: registry };
+      }
+      function renderArtifact(art) {
+        var t = art.type;
+        var head = art.header;
+        var lines = art.body.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+
+        if (t === 'stat') {
+          // First line: "VALUE | LABEL"
+          var parts = (lines[0] || '').split('|').map(function (s) { return s.trim(); });
+          var val = escape(parts[0] || '');
+          var lab = escape(parts[1] || head || '');
+          var sub = lines.slice(1).map(function (l) { return escape(l); }).join(' ');
+          return '<div class="hx-art hx-art-stat" role="figure">' +
+            '<div class="hx-art-stat-value">' + val + '</div>' +
+            (lab ? '<div class="hx-art-stat-label">' + lab + '</div>' : '') +
+            (sub ? '<div class="hx-art-stat-sub">' + sub + '</div>' : '') +
+          '</div>';
+        }
+
+        if (t === 'tradeoff') {
+          var wins = [], risks = [];
+          lines.forEach(function (l) {
+            if (l[0] === '+') wins.push(l.slice(1).trim());
+            else if (l[0] === '-') risks.push(l.slice(1).trim());
+          });
+          var winHTML = wins.map(function (w) {
+            return '<li>' + renderInlineMarkdown(w).replace(/^<p>|<\/p>$/g, '') + '</li>';
+          }).join('');
+          var riskHTML = risks.map(function (r) {
+            return '<li>' + renderInlineMarkdown(r).replace(/^<p>|<\/p>$/g, '') + '</li>';
+          }).join('');
+          return '<div class="hx-art hx-art-tradeoff" role="figure">' +
+            '<div class="hx-art-col hx-art-col-win"><div class="hx-art-col-head">Strengths</div><ul>' + winHTML + '</ul></div>' +
+            '<div class="hx-art-col hx-art-col-risk"><div class="hx-art-col-head">Risks</div><ul>' + riskHTML + '</ul></div>' +
+          '</div>';
+        }
+
+        if (t === 'timeline') {
+          var rows = lines.map(function (l, i) {
+            var p = l.split('|').map(function (s) { return s.trim(); });
+            var k = escape(p[0] || ('Step ' + (i + 1)));
+            var ti = escape(p[1] || '');
+            var bo = escape(p[2] || '');
+            return '<li class="hx-art-tl-item">' +
+              '<span class="hx-art-tl-dot" aria-hidden="true"></span>' +
+              '<div class="hx-art-tl-meta">' + k + '</div>' +
+              '<div class="hx-art-tl-title">' + ti + '</div>' +
+              (bo ? '<div class="hx-art-tl-body">' + bo + '</div>' : '') +
+            '</li>';
+          }).join('');
+          return '<div class="hx-art hx-art-timeline" role="figure">' +
+            (head ? '<div class="hx-art-head">' + escape(head) + '</div>' : '') +
+            '<ul class="hx-art-tl">' + rows + '</ul>' +
+          '</div>';
+        }
+
+        if (t === 'workflow') {
+          var steps = lines.map(function (l, i) {
+            var clean = l.replace(/^\d+[.)]\s*/, '');
+            var p = clean.split('|').map(function (s) { return s.trim(); });
+            var ti = escape(p[0] || clean);
+            var bo = escape(p[1] || '');
+            return '<li class="hx-art-wf-step">' +
+              '<span class="hx-art-wf-num">' + String(i + 1).padStart(2, '0') + '</span>' +
+              '<div class="hx-art-wf-body">' +
+                '<div class="hx-art-wf-title">' + ti + '</div>' +
+                (bo ? '<div class="hx-art-wf-sub">' + bo + '</div>' : '') +
+              '</div>' +
+            '</li>';
+          }).join('');
+          return '<div class="hx-art hx-art-workflow" role="figure">' +
+            (head ? '<div class="hx-art-head">' + escape(head) + '</div>' : '') +
+            '<ol class="hx-art-wf">' + steps + '</ol>' +
+          '</div>';
+        }
+
+        if (t === 'framework') {
+          // Header is the framework name; lines are "Letter | Description"
+          var cells = lines.map(function (l) {
+            var p = l.split('|').map(function (s) { return s.trim(); });
+            var key = escape(p[0] || '');
+            var desc = escape(p[1] || '');
+            return '<div class="hx-art-fw-cell">' +
+              '<div class="hx-art-fw-key">' + key + '</div>' +
+              '<div class="hx-art-fw-desc">' + desc + '</div>' +
+            '</div>';
+          }).join('');
+          return '<div class="hx-art hx-art-framework" role="figure">' +
+            (head ? '<div class="hx-art-head">' + escape(head) + '</div>' : '') +
+            '<div class="hx-art-fw">' + cells + '</div>' +
+          '</div>';
+        }
+
+        if (t === 'compare') {
+          // First line: column headers; subsequent: rows
+          if (!lines.length) return '';
+          var firstCols = lines[0].split('|').map(function (s) { return s.trim(); });
+          var headHTML = '<tr>' + firstCols.map(function (c, i) {
+            return '<th>' + escape(c) + '</th>';
+          }).join('') + '</tr>';
+          var bodyHTML = lines.slice(1).map(function (l) {
+            var cs = l.split('|').map(function (s) { return s.trim(); });
+            return '<tr>' + cs.map(function (c, i) {
+              var inner = renderInlineMarkdown(c).replace(/^<p>|<\/p>$/g, '');
+              return (i === 0 ? '<th>' + escape(c) + '</th>' : '<td>' + inner + '</td>');
+            }).join('') + '</tr>';
+          }).join('');
+          return '<div class="hx-art hx-art-compare" role="figure">' +
+            (head ? '<div class="hx-art-head">' + escape(head) + '</div>' : '') +
+            '<div class="hx-art-cmp-wrap"><table class="hx-art-cmp"><thead>' + headHTML + '</thead><tbody>' + bodyHTML + '</tbody></table></div>' +
+          '</div>';
+        }
+
+        if (t === 'note' || t === 'insight') {
+          var body = renderInlineMarkdown(art.body.trim());
+          return '<aside class="hx-art hx-art-note" role="note">' +
+            '<span class="hx-art-note-mark" aria-hidden="true"></span>' +
+            (head ? '<div class="hx-art-note-head">' + escape(head) + '</div>' : '') +
+            '<div class="hx-art-note-body">' + body + '</div>' +
+          '</aside>';
+        }
+
+        if (t === 'quote') {
+          // Body is the quote; header is attribution
+          var quoteBody = renderInlineMarkdown(art.body.trim());
+          return '<figure class="hx-art hx-art-quote">' +
+            '<blockquote>' + quoteBody + '</blockquote>' +
+            (head ? '<figcaption>— ' + escape(head) + '</figcaption>' : '') +
+          '</figure>';
+        }
+
+        // Unknown — render the raw body to avoid losing content
+        return '<div class="hx-art hx-art-unknown"><pre>' + escape(art.body) + '</pre></div>';
+      }
+
       function renderRichContent(text, isAssistant) {
         if (!text) return '';
         var src = String(text);
+        // V69: pull out artifact blocks FIRST so markdown doesn't garble them
+        var pre = preprocessArtifacts(src);
+        src = pre.text;
         var fence = /```([a-zA-Z0-9+_.\-]*)\n([\s\S]*?)```/g;
         var out = '';
         var idx = 0;
@@ -17906,6 +18499,17 @@
         // Trailing prose
         if (idx < src.length) {
           out += renderInlineMarkdown(src.slice(idx));
+        }
+        // V69: re-insert artifact HTML for every token we extracted
+        if (pre.artifacts.length) {
+          pre.artifacts.forEach(function (art) {
+            var artHTML = renderArtifact(art);
+            // The token may have been wrapped in a <p> by the markdown
+            // renderer — replace both wrapped and bare occurrences.
+            var bare = art.token;
+            out = out.split('<p>' + bare + '</p>').join(artHTML);
+            out = out.split(bare).join(artHTML);
+          });
         }
         // If the model is still streaming an open fence, render whatever
         // came after the opening ``` as a partial code block so the user
@@ -18062,6 +18666,33 @@
         'For analyses with pros/cons, use a two-column table. For decisions, end with a one-line recommendation. For plans, end with the next concrete step.',
         'Match format to user effort: a casual question gets a calm one-paragraph reply. A request for a report gets sections, tables, and a clear conclusion. Don\'t over-structure trivial answers, don\'t under-structure substantive ones.',
         'Keep formatting purposeful — every heading, table, or list must earn its place. Plain prose is still right for many answers.',
+
+        // — Visual artifacts (V69) —
+        // The surface renders nine special block types as premium
+        // visual components. Use them when they SHARPEN the answer —
+        // never as decoration.
+        'You can emit visual artifact blocks that the surface renders as premium components. Syntax: a line that begins with ":::TYPE[ optional-header]", then content, then a closing ":::" on its own line. Use these AS NEEDED — only when they make the answer clearer than prose.',
+        'Available artifact types:',
+        '  :::stat — a single hero number. Body: "VALUE | LABEL", optional follow-up line for context. Use when ONE number is the headline of the answer (a key metric, a percent, a price). Example: ":::stat\\n42% | Annual growth\\n:::"',
+        '  :::tradeoff — strengths vs risks comparison. Body: lines starting with "+" for strengths, "-" for risks. Use for go/no-go decisions, pros/cons, build-vs-buy reviews. Example: ":::tradeoff\\n+ Lower cost\\n+ Faster onboarding\\n- Vendor lock-in\\n:::"',
+        '  :::timeline — phased plan or schedule. Body: lines of "PHASE | TITLE | DESCRIPTION". Use for roadmaps, implementation plans, project schedules. Example: ":::timeline\\nQ1 | Discovery | User interviews + audit\\nQ2 | Design | Prototype + testing\\n:::"',
+        '  :::workflow — numbered process steps. Body: each line is a step (optionally "TITLE | SUBTITLE"). Use for procedures, methods, runbooks, step-by-step instructions where the order matters AND each step deserves visual weight. Example: ":::workflow\\nIdentify | Find the root cause\\nValidate | Confirm with data\\nFix | Ship and monitor\\n:::"',
+        '  :::framework[ NAME] — 2x2 or grid framework. Body: lines of "KEY | DESCRIPTION". The header is the framework name (SWOT, RACI, BCG, Eisenhower, etc). Use when you\'re applying a known strategic framework. Example: ":::framework SWOT\\nS | Strong brand recognition\\nW | Limited product diversity\\nO | Emerging markets\\nT | Established competitors\\n:::"',
+        '  :::compare — multi-option comparison table. First body line is column headers ("LABEL | COL1 | COL2 | COL3"); subsequent lines are rows. Use when comparing 2-5 options across multiple attributes. Example: ":::compare\\nOption | Cost | Effort | Risk\\nPlan A | Low | High | Medium\\nPlan B | High | Low | Low\\n:::"',
+        '  :::note[ TITLE] — single highlighted insight. Body: a short prose insight that deserves visual attention. Use sparingly for the ONE thing the user must take away. Example: ":::note Key insight\\nThe bottleneck is not throughput — it is approval latency.\\n:::"',
+        '  :::quote[ ATTRIBUTION] — pulled quote. Body: the quote. Use when quoting a source. Example: ":::quote Stripe API docs\\nIdempotency keys make safe retries possible.\\n:::"',
+        'Hard rules for artifacts:',
+        '  • Open and close with exactly ":::" on its own line.',
+        '  • Pipe ("|") is the only column delimiter inside artifact bodies.',
+        '  • Do NOT wrap an artifact in code fences (```). They are not code.',
+        '  • Use AT MOST 2 artifacts per response. If you need more structure, fall back to a regular Markdown table.',
+        '  • If a single sentence of prose works, prefer the sentence. Artifacts have visual weight — don\'t spend it cheaply.',
+
+        // — Collaborative task flow (V69) —
+        'For complex requests (multi-step plans, strategy, research, analysis): start with ONE short line saying what you\'re going to do (e.g. "Let me think this through in three parts — context, options, then a recommendation."), then do it. Don\'t skip it for short answers.',
+        'When the request is ambiguous in a way that genuinely affects the answer, ask ONE sharp clarifying question FIRST — don\'t guess and produce a wrong-shaped answer. When ambiguous in a way that doesn\'t change the answer, just answer.',
+        'For requests that produce a deliverable (a plan, a draft, a report, a proposal), end with a single bold line under "**Next step:**" naming the concrete next move. Makes the conversation feel collaborative, not transactional.',
+        'For ongoing work across a session, refer back to earlier turns naturally — "as you mentioned earlier", "building on the framework above". Helix has session memory; sound like you have it.',
 
         // — Language —
         'Always reply in the same language the user writes in. If the user writes in Greek, reply in Greek with the same natural warmth and ease — never stiffer in Greek than in English.'
