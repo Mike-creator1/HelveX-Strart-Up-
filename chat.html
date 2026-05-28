@@ -24487,6 +24487,129 @@
       display: none !important;
       pointer-events: none !important;
     }
+
+    /* ═════════════════════════════════════════════════════════════════
+       V104 — DEFINITIVE MOBILE CHAT SHELL (opt out of dashboard layout)
+       ROOT CAUSE of the broken mobile chat: platform.css V101 applied
+       a generic dashboard mobile layout to EVERY page's .hx-main —
+       `display: flex; flex-direction: column; padding: 16px; gap: 28px`.
+       But the chat's .hx-main is a full-bleed app shell (rail + pane),
+       NOT a padded scrolling dashboard. The padding/gap/flex-column
+       broke the chat: the pane lost its height, the thread didn't
+       scroll, the composer floated wrong, everything misaligned.
+
+       V104 makes the chat page OPT OUT with a higher-specificity,
+       last-in-file rule set that establishes a clean, bulletproof
+       mobile chat shell: full-bleed, 100dvh, thread scrolls, composer
+       pinned at the bottom.
+       ═════════════════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      /* (1) Chat shell — full bleed, NO dashboard padding/gap/flex */
+      html body[data-active="chat"] .hx-app {
+        display: block !important;
+        min-height: 0 !important;
+      }
+      html body[data-active="chat"] .hx-app > div {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100dvh !important;
+        height: 100vh !important;
+        min-height: 0 !important;
+      }
+      html body[data-active="chat"] .hx-main {
+        display: block !important;          /* override V101 flex */
+        flex: 1 1 auto !important;
+        grid-template-columns: none !important;
+        padding: 0 !important;              /* override V101 16px */
+        gap: 0 !important;                  /* override V101 28px */
+        margin: 0 !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        position: relative !important;
+      }
+
+      /* (2) Chat pane — fills the shell, flex column */
+      html body[data-active="chat"] .hx-chat-pane {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+      }
+
+      /* (3) Thread — the ONLY scroll area, fills remaining space */
+      html body[data-active="chat"] .hx-chat-thread {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+        width: 100% !important;
+        padding: 0 !important;
+      }
+      html body[data-active="chat"] .hx-chat-thread-inner {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 60px 16px 16px !important;  /* top clears floating btns */
+        gap: 28px !important;
+        box-sizing: border-box !important;
+      }
+
+      /* (4) Composer — pinned at the bottom, never scrolls away */
+      html body[data-active="chat"] .hx-chat-compose {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 8px 14px calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+        box-sizing: border-box !important;
+        position: relative !important;
+        z-index: 5 !important;
+      }
+      html body[data-active="chat"] .hx-chat-compose-inner {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+      }
+
+      /* (5) Composer fade above it — confine to the composer width */
+      html body[data-active="chat"] .hx-chat-compose::before {
+        left: 0 !important;
+        right: 0 !important;
+      }
+
+      /* (6) Empty state fills the thread, scrolls if needed */
+      html body[data-active="chat"] .hx-chat-blank {
+        min-height: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 64px 20px 32px !important;
+      }
+
+      /* (7) Rail drawer stays fixed + above (already set, reinforce
+         so the dashboard flex can't pull it into flow) */
+      html body[data-active="chat"] .hx-chat-rail {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        height: 100dvh !important;
+        height: 100vh !important;
+      }
+
+      /* (8) Defensive: the chat page must never show the generic
+         dashboard section gaps from platform.css V101 */
+      html body[data-active="chat"] .hx-main > * { margin: 0 !important; }
+    }
   </style>
 </head>
 <body data-active="chat">
