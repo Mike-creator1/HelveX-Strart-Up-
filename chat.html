@@ -25035,6 +25035,54 @@
         color: #d8d2c2 !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V112 — PREMIUM POPOVERS, SELECTION & FOCUS
+       Menus floated on a weak 1px shadow and the selected option had NO
+       highlight (transparent). Real elevation + a clear accent-tinted
+       active state. Plus a premium text-selection colour and keyboard
+       focus rings (global — these read "expensive" everywhere).
+       ═══════════════════════════════════════════════════════════════════ */
+    body[data-active="chat"] ::selection {
+      background: color-mix(in srgb, var(--hx-accent, #C9A227) 28%, transparent);
+    }
+    body[data-active="chat"] .hx-chat-textarea:focus-visible,
+    body[data-active="chat"] .hx-chat-suggest-chip:focus-visible,
+    body[data-active="chat"] .hx-cc-model-pick:focus-visible,
+    body[data-active="chat"] .hx-chat-send:focus-visible,
+    .hx-mobile-menu-btn:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--hx-accent, #C9A227) 60%, transparent) !important;
+      outline-offset: 2px !important;
+    }
+    @media (max-width: 720px) {
+      /* Real floating elevation for popovers */
+      html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu,
+      html[data-theme="dark"] body[data-active="chat"] .hx-cc-usage-menu,
+      html[data-theme="dark"] body[data-active="chat"] .hx-cc-mic-menu,
+      html[data-theme="dark"] body[data-active="chat"] .hx-cc-mode-menu {
+        border-radius: 16px !important;
+        box-shadow: 0 10px 28px -8px rgba(0,0,0,0.6), 0 28px 70px -18px rgba(0,0,0,0.7) !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] .hx-cc-model-menu,
+      html[data-theme="light"] body[data-active="chat"] .hx-cc-usage-menu,
+      html[data-theme="light"] body[data-active="chat"] .hx-cc-mic-menu,
+      html[data-theme="light"] body[data-active="chat"] .hx-cc-mode-menu {
+        border-radius: 16px !important;
+        box-shadow: 0 10px 28px -10px rgba(15,14,12,0.20), 0 28px 70px -22px rgba(15,14,12,0.26) !important;
+      }
+      /* Selected option is clearly highlighted */
+      body[data-active="chat"] .hx-cc-model-opt.is-active,
+      body[data-active="chat"] .hx-cc-effort-opt.is-active,
+      body[data-active="chat"] .hx-cc-mode-opt.is-active {
+        background: color-mix(in srgb, var(--hx-accent, #C9A227) 14%, transparent) !important;
+      }
+      /* Option press feedback */
+      body[data-active="chat"] .hx-cc-model-opt:active,
+      body[data-active="chat"] .hx-cc-effort-opt:active,
+      body[data-active="chat"] .hx-cc-mode-opt:active {
+        transform: scale(0.985) !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
