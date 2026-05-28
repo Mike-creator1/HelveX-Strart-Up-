@@ -24917,6 +24917,72 @@
       body[data-active="chat"] .hx-chat-input-row:focus-within,
       .hx-mobile-menu-btn:active { transform: none !important; }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V109 — CONVERSATIONS DRAWER FIX + PREMIUM, MESSAGE DENSITY (<=720px)
+       Bug: tapping the menu button showed the backdrop but the rail never
+       slid in — a more-specific closed-transform rule beat .is-open. Force
+       the open transform here, then make the drawer premium and open up the
+       reading rhythm (headings/paragraphs/lists were cramped together).
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 720px) {
+      /* ── FIX: the drawer actually opens now ─────────────────────── */
+      body[data-active="chat"][data-drawer="open"] .hx-chat-rail,
+      body[data-active="chat"] .hx-chat-rail.is-open {
+        transform: translateX(0) !important;
+      }
+
+      /* ── Premium conversations drawer ───────────────────────────── */
+      body[data-active="chat"] .hx-chat-rail-head {
+        padding: calc(14px + env(safe-area-inset-top, 0px)) 14px 10px !important;
+      }
+      body[data-active="chat"] .hx-chat-new {
+        width: 34px !important; height: 34px !important;
+        border-radius: 10px !important;
+      }
+      html[data-theme="dark"] body[data-active="chat"] .hx-chat-new {
+        background: rgba(255,255,255,0.06) !important;
+        border: 1px solid rgba(255,255,255,0.12) !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] .hx-chat-new {
+        background: rgba(15,14,12,0.04) !important;
+        border: 1px solid rgba(15,14,12,0.10) !important;
+      }
+      body[data-active="chat"] .hx-rail-search-row {
+        border-radius: 12px !important;
+        min-height: 40px !important;
+      }
+      body[data-active="chat"] .hx-chat-item {
+        min-height: 44px !important;
+        padding: 10px 12px !important;
+        border-radius: 11px !important;
+        font-size: 14px !important;
+      }
+      html[data-theme="dark"] body[data-active="chat"] .hx-chat-item.is-active {
+        background: rgba(201,162,39,0.15) !important;
+        box-shadow: inset 2px 0 0 var(--hx-accent, #C9A227) !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] .hx-chat-item.is-active {
+        background: rgba(201,162,39,0.12) !important;
+        box-shadow: inset 2px 0 0 var(--hx-accent, #C9A227) !important;
+      }
+
+      /* ── Message density — premium reading rhythm ───────────────── */
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > .hx-md-h {
+        margin-top: 22px !important;
+        margin-bottom: 8px !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p + p {
+        margin-top: 15px !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > .hx-md-list {
+        margin-top: 12px !important;
+        margin-bottom: 4px !important;
+      }
+      body[data-active="chat"] .hx-msg.is-assistant .hx-md-list > li {
+        margin-bottom: 7px !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
