@@ -2485,3 +2485,144 @@ html[data-theme="dark"] .hx-cmdp-foot kbd {
   .hx-metric-value { font-size: 42px; }
   .hx-spotlight h3 { font-size: 28px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE HARDENING SYSTEM (shared across every platform page)
+   One authoritative responsive layer at the end of platform.css so
+   ALL 40 dashboard/session pages get a stable mobile layout from the
+   shared design system — no per-page patching. Catches the common
+   failure modes: horizontal overflow, multi-column grids that don't
+   collapse, unwrapped wide tables, oversized hero type, dropdowns
+   that overflow, and dark-mode white leaks.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* (0) GLOBAL OVERFLOW GUARD — nothing pushes the viewport sideways */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+* { min-width: 0; }
+img, svg, video, canvas, iframe, table, pre {
+  max-width: 100%;
+}
+img, video, canvas { height: auto; }
+
+@media (max-width: 900px) {
+  /* (1) APP SHELL — single column already handled, but force the
+     main content to never exceed the viewport */
+  .hx-app { grid-template-columns: minmax(0, 1fr) !important; }
+  .hx-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  /* (2) ANY multi-column grid collapses gracefully. Catches custom
+     per-page grids that don't use the .hx-grid-* utilities. */
+  .hx-grid-2, .hx-grid-3, .hx-grid-4,
+  .hx-cols-2, .hx-cols-3, .hx-cols-4,
+  .hx-two-col, .hx-three-col,
+  .hx-pg-hero-grid, .hx-split, .hx-feature-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* (3) HERO / DISPLAY TYPE — cap oversized headings on phones so
+     they don't overflow or dominate the screen */
+  .hx-metric-value { font-size: clamp(32px, 11vw, 44px) !important; }
+  .hx-spotlight h3, .hx-pg-hero h1, .hx-hero h1, .hx-display {
+    font-size: clamp(26px, 8vw, 36px) !important;
+    line-height: 1.12 !important;
+    letter-spacing: -0.02em !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+  }
+  .hx-pg-hero p, .hx-hero p, .hx-lede { font-size: 15px !important; line-height: 1.55 !important; }
+
+  /* (4) CARDS — full width, comfortable padding, no fixed widths */
+  .hx-card, .hx-stat, .hx-panel, .hx-tile, .hx-surface-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .hx-main { padding: 16px 14px 56px !important; }
+
+  /* (5) TABLES — always horizontally scrollable, never break the page.
+     Catches tables NOT wrapped in .hx-table-wrap by auto-wrapping
+     overflow on the table's own scroll container where present. */
+  .hx-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+  .hx-table { min-width: 520px !important; }
+  .hx-table th, .hx-table td {
+    white-space: nowrap !important;
+    padding: 10px 12px !important;
+  }
+  /* A bare table (no wrap) gets its own scroll so it can't overflow */
+  table:not(.hx-table) {
+    display: block !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    max-width: 100% !important;
+  }
+
+  /* (6) DROPDOWNS / MENUS / POPOVERS — never wider than the viewport */
+  .hx-menu, .hx-dropdown, .hx-popover, .hx-select-menu,
+  [role="menu"], [role="listbox"] {
+    max-width: calc(100vw - 24px) !important;
+  }
+
+  /* (7) FLEX ROWS that should stack — toolbars, headers with actions */
+  .hx-toolbar, .hx-page-head, .hx-section-head, .hx-card-head-row,
+  .hx-filters, .hx-btn-row {
+    flex-wrap: wrap !important;
+  }
+
+  /* (8) BUTTONS — comfortable tap targets, no overflow */
+  .hx-btn, button.hx-btn, .hx-btn-primary, .hx-btn-secondary {
+    max-width: 100% !important;
+  }
+
+  /* (9) Settings / tab strips scroll horizontally instead of wrapping */
+  .hx-settings-tabs, .hx-tabs, .hx-segmented {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none !important;
+  }
+  .hx-settings-tabs::-webkit-scrollbar,
+  .hx-tabs::-webkit-scrollbar,
+  .hx-segmented::-webkit-scrollbar { display: none !important; }
+
+  /* (10) Long unbroken strings (IDs, URLs, API keys) wrap instead of
+     overflowing */
+  .hx-mono, code, .hx-code, .hx-key, .hx-id {
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+}
+
+/* (11) DARK MODE — kill any white-background leaks on mobile cards.
+   Some pages hardcode #fff backgrounds; map them to the dark surface
+   so dark mode stays consistent across every page. */
+html[data-theme="dark"] .hx-card,
+html[data-theme="dark"] .hx-stat,
+html[data-theme="dark"] .hx-panel,
+html[data-theme="dark"] .hx-tile,
+html[data-theme="dark"] .hx-surface-card,
+html[data-theme="dark"] .hx-menu,
+html[data-theme="dark"] .hx-dropdown,
+html[data-theme="dark"] .hx-popover {
+  background-color: var(--hx-surface-2, #0A0A0A);
+  color: var(--hx-text, #fff);
+  border-color: var(--hx-line, #222);
+}
+html[data-theme="dark"] .hx-table th {
+  background-color: var(--hx-bg-2, #0A0A0A);
+  color: var(--hx-text-mid, #B5B5B5);
+}
+html[data-theme="dark"] .hx-table td { color: var(--hx-text, #fff); }
