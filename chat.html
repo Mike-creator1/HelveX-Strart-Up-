@@ -26011,6 +26011,40 @@
     html body[data-active="chat"] .hx-cc-effort-seg.hx-cc-effort-seg .hx-cc-effort-opt,
     html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-opt { height: 28px !important; font-size: 11.5px !important; }
     html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-fast-row { padding: 6px 12px 9px !important; }
+
+    /* ════════════════════════════════════════════════════════════════════
+       V204 — SELECTOR: small footprint + extra premium
+       Drop the path line, shrink the card to a tight premium row (~47px),
+       centre the badge, narrow the menu, gentle per-model hover glow.
+       ════════════════════════════════════════════════════════════════════ */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu { min-width: 286px !important; max-width: min(312px, calc(100vw - 24px)) !important; padding: 6px !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-menu-section { padding: 9px 11px 4px !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-menu-section:first-child { padding-top: 5px !important; }
+
+    /* compact 2-line card */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-path { display: none !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt { padding: 8px 12px 9px !important; margin: 0 1px 6px !important; border-radius: 14px !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-glyph { top: 50% !important; left: 10px !important; transform: translateY(-50%) !important; width: 32px !important; height: 32px !important; border-radius: 9px !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-glyph svg { width: 16px !important; height: 16px !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-head { margin-left: 42px !important; gap: 1px !important; min-height: 0 !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-eyebrow { font-size: 8.5px !important; letter-spacing: 0.13em !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-name,
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt.is-active .hx-cc-opt-name { font-size: 16px !important; line-height: 1.12 !important; margin: 0 !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-badge { top: 50% !important; right: 11px !important; transform: translateY(-50%) !important; padding: 3px 8px !important; font-size: 7.5px !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-badge::before { width: 4px !important; height: 4px !important; }
+
+    /* tighter effort + fast */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg { margin: 0 8px 6px !important; padding: 2.5px !important; }
+    html body[data-active="chat"] .hx-cc-effort-seg.hx-cc-effort-seg .hx-cc-effort-opt,
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-opt { height: 26px !important; font-size: 11px !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-fast-row { padding: 5px 12px 8px !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-fast-title { font-size: 12.5px !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-fast-sub { font-size: 11px !important; }
+
+    /* extra premium — gentle per-model hover glow */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="ether"]:hover { background: radial-gradient(140% 100% at 100% 0%, rgba(227,185,71,0.16), transparent 56%), #1d1d23 !important; border-color: rgba(227,185,71,0.30) !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="nexus"]:hover { background: radial-gradient(140% 100% at 100% 0%, rgba(229,72,77,0.16), transparent 56%), #1d1d23 !important; border-color: rgba(229,72,77,0.30) !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="prometheus"]:hover { background: radial-gradient(140% 100% at 100% 0%, rgba(231,227,217,0.12), transparent 56%), #1d1d23 !important; border-color: rgba(231,227,217,0.22) !important; }
   </style>
 </head>
 <body data-active="chat">
