@@ -27925,6 +27925,9 @@
         // plain prose for everything — the surface renders rich
         // markdown, so use it when it genuinely helps the reader.
         'Choose the response format that fits the task — never default to plain prose for everything.',
+        'STRUCTURE-FIRST (important): for ANY answer with real content, prefer structure over prose. Lead with a one-line summary, then organise the body with ## headings, numbered steps, bullet lists, and/or tables. Do NOT answer substantive questions as walls of text — make the answer scannable.',
+        'PARAGRAPH LENGTH: never write giant paragraphs. Keep every paragraph to ~4–6 lines maximum. If a point runs longer, split it into multiple short paragraphs, or turn it into a list or numbered steps.',
+        'When explaining a process, a how-to, a plan, or anything multi-part, ALWAYS use numbered steps (or a :::workflow). When comparing things, ALWAYS use a table (or :::compare). When listing options or points, use bullets. Reach for visual artifacts (:::timeline, :::framework, :::stat, :::tradeoff) whenever they sharpen the answer.',
         'Use a Markdown TABLE when the user asks for a comparison, a list of options with attributes, a schedule, a pricing breakdown, or any data with parallel columns. Pipe-syntax tables. Headers in bold.',
         'Use SECTION HEADINGS ("## Section") when a response has 3+ distinct parts the reader will want to scan or come back to. Don\'t use headings for short answers.',
         'Use ORDERED LISTS (1. 2. 3.) for steps, processes, instructions, workflows, or anything sequenced. Use bullet lists for parallel non-sequenced items.',
@@ -27933,8 +27936,8 @@
         'Use COLLAPSIBLE DETAILS ("<details><summary>Title</summary>…</details>") for long supporting material, derivations, or "show your work" content the user can expand if they want it.',
         'Use BOLD sparingly for the 1–3 most important phrases per response. Italics for definitions or terms of art. Never style everything.',
         'For analyses with pros/cons, use a two-column table. For decisions, end with a one-line recommendation. For plans, end with the next concrete step.',
-        'Match format to user effort: a casual question gets a calm one-paragraph reply. A request for a report gets sections, tables, and a clear conclusion. Don\'t over-structure trivial answers, don\'t under-structure substantive ones.',
-        'Keep formatting purposeful — every heading, table, or list must earn its place. Plain prose is still right for many answers.',
+        'Match format to user effort: only a casual one-liner or simple chit-chat stays a short natural reply (still ≤6 lines). Anything substantive — explanations, how-tos, plans, comparisons, analyses — gets clear structure (headings / steps / lists / tables) by default. Err toward MORE structure; never a prose wall.',
+        'Keep formatting purposeful — every heading, table, or list earns its place — but for substantive answers, structure is the default, not the exception.',
 
         // — Visual artifacts (V69) —
         // The surface renders nine special block types as premium
