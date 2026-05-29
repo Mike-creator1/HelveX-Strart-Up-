@@ -26343,6 +26343,42 @@
     }
     /* premium ordered-list numbers — gold, medium weight */
     html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content ol > li::marker { color: var(--hx-accent, #C9A227) !important; font-weight: 600 !important; }
+
+    /* ════════════════════════════════════════════════════════════════════
+       V216 — BOLD conversation fix: clean right-aligned user turn, drop the
+       buggy turn-number, kill the ring-dot <hr>, bolder confident answers.
+       ════════════════════════════════════════════════════════════════════ */
+    /* clean eyebrow (no buggy "· 64"), right-aligned */
+    html body[data-active="chat"] .hx-msg.is-user::before { display: none !important; }
+    /* force the user bubble to the right (flex end beats the stuck left layout) */
+    html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-user { text-align: right !important; margin-top: 52px !important; }
+    html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-user .hx-msg-body { display: flex !important; flex-direction: column !important; align-items: flex-end !important; width: 100% !important; }
+    html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-user .hx-msg-content { display: inline-block !important; max-width: 78% !important; text-align: left !important; }
+    /* clean full-width hairline instead of the 2px ring-dot */
+    html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content hr { width: 100% !important; height: 1px !important; border: 0 !important; padding: 0 !important; margin: 1.7em 0 !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content hr { background: linear-gradient(90deg, transparent, rgba(20,18,15,0.12) 24%, rgba(20,18,15,0.12) 76%, transparent) !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content hr { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.13) 24%, rgba(255,255,255,0.13) 76%, transparent) !important; }
+    /* bolder, more confident answer text */
+    html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content { font-size: 16.5px !important; line-height: 1.78 !important; }
+
+    /* ════════════════════════════════════════════════════════════════════
+       V216b — ChatGPT / Claude / Linear restraint: calm, neutral, spacious.
+       Strip the gold-drama from the READING area (keep gold for model
+       identity in the controls). Clean neutral user bubble, neutral markers.
+       ════════════════════════════════════════════════════════════════════ */
+    /* clean neutral user bubble — no gold border/glow/lift */
+    html[data-theme="light"] body[data-active="chat"] .hx-msg.is-user .hx-msg-content { background: #f3f0ea !important; border: 1px solid rgba(20,18,15,0.05) !important; box-shadow: none !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-msg.is-user .hx-msg-content:hover { transform: none !important; border-color: rgba(20,18,15,0.05) !important; box-shadow: none !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-msg.is-user .hx-msg-content { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(255,255,255,0.07) !important; box-shadow: none !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-msg.is-user .hx-msg-content:hover { transform: none !important; border-color: rgba(255,255,255,0.07) !important; box-shadow: none !important; }
+    /* neutral, calm list markers (not gold) */
+    html[data-theme="light"] body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content ul > li::before { background: rgba(26,23,20,0.34) !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content ul > li::before { background: rgba(240,238,232,0.36) !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content ol > li::marker { color: rgba(26,23,20,0.5) !important; font-weight: 600 !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content ol > li::marker { color: rgba(240,238,232,0.5) !important; font-weight: 600 !important; }
+    /* generous, calm turn spacing */
+    html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-user { margin-top: 56px !important; }
+    html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant { margin-top: 26px !important; }
   </style>
 </head>
 <body data-active="chat">
