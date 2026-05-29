@@ -26234,6 +26234,61 @@
     html[data-theme="dark"]  body[data-active="chat"] .hx-msg-actions .hx-msg-act[aria-pressed="true"][data-act="like"] { background: rgba(227,185,71,0.16) !important; color: #E3B947 !important; }
     html[data-theme="light"] body[data-active="chat"] .hx-msg-actions .hx-msg-act.is-copied { background: rgba(201,162,39,0.14) !important; color: #9A7B1A !important; }
     html[data-theme="dark"]  body[data-active="chat"] .hx-msg-actions .hx-msg-act.is-copied { background: rgba(227,185,71,0.16) !important; color: #E3B947 !important; }
+
+    /* ════════════════════════════════════════════════════════════════════
+       V212 — CONVERSATION STRUCTURE · premium rebuild
+       Right-aligned premium user bubble, fixed turn counter, editorial
+       prose rhythm for answers, elegant turn dividers + generous spacing.
+       ════════════════════════════════════════════════════════════════════ */
+    /* turn rhythm + FIX the "· 00" counter (re-assert reset + increment) */
+    html body[data-active="chat"] .hx-chat-thread-inner { counter-reset: hx-stage-turn !important; }
+    html body[data-active="chat"] .hx-msg.is-user { counter-increment: hx-stage-turn !important; text-align: right !important; margin-top: 46px !important; position: relative !important; }
+    html body[data-active="chat"] .hx-chat-thread-inner > .hx-msg.is-user:first-child { margin-top: 6px !important; }
+
+    /* eyebrow — refined, right-aligned */
+    html body[data-active="chat"] .hx-msg.is-user::before {
+      content: 'You asked · ' counter(hx-stage-turn, decimal-leading-zero) !important;
+      display: block !important; text-align: right !important;
+      font-family: var(--sans) !important; font-size: 10px !important; font-weight: 600 !important;
+      letter-spacing: 0.16em !important; text-transform: uppercase !important; margin: 0 0 11px 0 !important;
+    }
+    html[data-theme="light"] body[data-active="chat"] .hx-msg.is-user::before { color: rgba(26,23,20,0.40) !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-msg.is-user::before { color: rgba(240,238,232,0.42) !important; }
+
+    /* user bubble — premium, right-aligned */
+    html body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+      display: inline-block !important; max-width: 80% !important; text-align: left !important;
+      border-radius: 20px 20px 7px 20px !important; border-left: 0 !important;
+      padding: 12px 17px !important; margin: 0 !important;
+      font-family: var(--sans) !important; font-size: 16px !important; font-weight: 400 !important;
+      line-height: 1.5 !important; letter-spacing: -0.011em !important;
+    }
+    html[data-theme="light"] body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+      background: #f6f1e7 !important; color: #1a1714 !important;
+      border: 1px solid rgba(20,18,15,0.05) !important;
+      box-shadow: 0 1px 2px rgba(20,18,15,0.05), inset 0 1px 0 rgba(255,255,255,0.55) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+      background: rgba(255,255,255,0.055) !important; color: #f0eee8 !important;
+      border: 1px solid rgba(255,255,255,0.08) !important; box-shadow: none !important;
+    }
+
+    /* assistant — editorial prose rhythm */
+    html body[data-active="chat"] .hx-msg.is-assistant { margin-top: 22px !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content { font-size: 16px !important; line-height: 1.75 !important; letter-spacing: -0.006em !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p { margin: 0 0 1.05em 0 !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p:last-child { margin-bottom: 0 !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h1 { font-size: 1.4em !important; font-weight: 650 !important; letter-spacing: -0.02em !important; margin: 1.3em 0 0.5em !important; line-height: 1.25 !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h2 { font-size: 1.22em !important; font-weight: 650 !important; letter-spacing: -0.017em !important; margin: 1.25em 0 0.45em !important; line-height: 1.3 !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h3 { font-size: 1.08em !important; font-weight: 650 !important; margin: 1.1em 0 0.4em !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content ul,
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content ol { margin: 0.5em 0 1.05em 0 !important; padding-left: 1.45em !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content li { margin: 0.32em 0 !important; padding-left: 0.25em !important; line-height: 1.7 !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content li::marker { color: var(--hx-accent, #C9A227) !important; }
+
+    /* elegant turn divider */
+    html[data-theme="light"] body[data-active="chat"] .hx-msg.is-user:not(:first-of-type)::after { top: -23px !important; background: linear-gradient(90deg, transparent 0%, rgba(20,18,15,0.09) 18%, rgba(20,18,15,0.09) 82%, transparent 100%) !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-msg.is-user:not(:first-of-type)::after { top: -23px !important; background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.10) 18%, rgba(255,255,255,0.10) 82%, transparent 100%) !important; }
   </style>
 </head>
 <body data-active="chat">
