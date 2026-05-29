@@ -25198,6 +25198,61 @@
       body[data-active="chat"] #hx-c-blank-sub { margin-top: 10px !important; }
       body[data-active="chat"] .hx-chat-suggest { margin-top: 24px !important; }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V116 — PREMIUM COMPOSER (desktop/tablet >=721px) — from screenshots
+       Chips read as flat faint pills, the input was transparent, and the
+       send button had no presence when ready. Crisp elevated chips with
+       accent icons + tactile hover/press, a solid input surface, and a
+       confident gold send with a soft glow. (Mobile already has its own
+       premium composer, so this is scoped to >=721px to avoid conflict.)
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (min-width: 721px) {
+      body[data-active="chat"] .hx-conductor-chip {
+        border-radius: 10px !important;
+        padding: 8px 13px !important;
+        font-size: 13px !important;
+        transition: transform .15s cubic-bezier(.2,.8,.2,1), background .2s ease, border-color .2s ease, box-shadow .2s ease !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] .hx-conductor-chip {
+        background: #ffffff !important;
+        border-color: rgba(15,14,12,0.12) !important;
+        box-shadow: 0 1px 2px rgba(15,14,12,0.05) !important;
+      }
+      html[data-theme="dark"] body[data-active="chat"] .hx-conductor-chip {
+        background: #1c1b1a !important;
+        border-color: rgba(255,255,255,0.12) !important;
+      }
+      body[data-active="chat"] .hx-conductor-chip:hover {
+        transform: translateY(-1px) !important;
+        border-color: color-mix(in srgb, var(--hx-accent,#C9A227) 45%, transparent) !important;
+        box-shadow: 0 4px 14px -6px color-mix(in srgb, var(--hx-accent,#C9A227) 40%, transparent) !important;
+      }
+      body[data-active="chat"] .hx-conductor-chip:active { transform: translateY(0) scale(.98) !important; }
+      body[data-active="chat"] .hx-conductor-chip svg { color: var(--hx-accent,#C9A227) !important; }
+
+      /* Solid, crisp input surface */
+      html[data-theme="light"] body[data-active="chat"] .hx-chat-input-row { background: #ffffff !important; }
+      html[data-theme="dark"]  body[data-active="chat"] .hx-chat-input-row { background: #1c1b1a !important; }
+      body[data-active="chat"] .hx-chat-input-row {
+        transition: border-color .2s ease, box-shadow .25s ease !important;
+      }
+      body[data-active="chat"] .hx-chat-input-row:focus-within {
+        border-color: color-mix(in srgb, var(--hx-accent,#C9A227) 50%, transparent) !important;
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--hx-accent,#C9A227) 12%, transparent),
+                    0 8px 28px -14px rgba(15,14,12,0.18) !important;
+      }
+
+      /* Confident send button with a soft gold glow when ready */
+      body[data-active="chat"] .hx-chat-send {
+        transition: transform .15s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease, filter .2s ease !important;
+      }
+      body[data-active="chat"] #hx-c-send:not(:disabled) {
+        box-shadow: 0 2px 12px -2px color-mix(in srgb, var(--hx-accent,#C9A227) 55%, transparent) !important;
+      }
+      body[data-active="chat"] #hx-c-send:not(:disabled):hover { transform: translateY(-1px) !important; filter: brightness(1.05) !important; }
+      body[data-active="chat"] #hx-c-send:not(:disabled):active { transform: scale(.92) !important; }
+    }
   </style>
 </head>
 <body data-active="chat">
