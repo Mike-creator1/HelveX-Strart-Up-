@@ -25359,6 +25359,72 @@
     body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h2.hx-md-h { font-size: 18px !important; font-weight: 640 !important; letter-spacing: -0.014em !important; margin: 24px 0 8px !important; }
     body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h3.hx-md-h { font-size: 15.5px !important; font-weight: 640 !important; margin: 20px 0 6px !important; }
     body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content strong { font-weight: 640 !important; }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V120 — BOLD PREMIUM PASS (model selector, markdown, composer)
+       Not timid tweaks: a substantial model pill, a real markdown hierarchy,
+       and a definitively gold-free composer.
+       ═══════════════════════════════════════════════════════════════════ */
+
+    /* (A) Composer — zero gold, rest AND focus; refined neutral depth */
+    body[data-active="chat"] .hx-chat-input-row,
+    body[data-active="chat"] .hx-chat-input-row:focus-within {
+      border-color: rgba(15,14,12,0.14) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-chat-input-row,
+    html[data-theme="dark"] body[data-active="chat"] .hx-chat-input-row:focus-within {
+      border-color: rgba(255,255,255,0.16) !important;
+    }
+    body[data-active="chat"] .hx-chat-input-row:focus-within {
+      box-shadow: 0 1px 2px rgba(15,14,12,0.05), 0 12px 32px -18px rgba(15,14,12,0.16) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-chat-input-row:focus-within {
+      box-shadow: 0 1px 2px rgba(0,0,0,0.5), 0 14px 34px -18px rgba(0,0,0,0.7) !important;
+    }
+
+    /* (B) Model selector — substantial, premium pill (was cheap/childish) */
+    body[data-active="chat"] .hx-cc-model-pick {
+      height: 38px !important;
+      padding: 0 10px 0 13px !important;
+      border-radius: 12px !important;
+      gap: 9px !important;
+    }
+    body[data-active="chat"] .hx-cc-model-name {
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      letter-spacing: -0.006em !important;
+    }
+    html[data-theme="light"] body[data-active="chat"] .hx-cc-model-pick {
+      background: #ffffff !important;
+      border: 1px solid rgba(15,14,12,0.12) !important;
+      box-shadow: 0 1px 2px rgba(15,14,12,0.05), 0 6px 16px -10px rgba(15,14,12,0.18) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-pick {
+      background: #1c1b1a !important;
+      border: 1px solid rgba(255,255,255,0.13) !important;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+    }
+    body[data-active="chat"] .hx-cc-model-pick:hover { transform: translateY(-1px) !important; }
+    body[data-active="chat"] .hx-cc-model-pick { transition: transform .15s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease, border-color .2s ease !important; }
+    /* show the model tier ("Max") as a refined badge for substance */
+    body[data-active="chat"] .hx-cc-model-tier {
+      display: inline-flex !important; align-items: center !important;
+      font-size: 9.5px !important; font-weight: 700 !important;
+      letter-spacing: 0.06em !important; text-transform: uppercase !important;
+      padding: 2px 6px !important; border-radius: 6px !important;
+    }
+    html[data-theme="light"] body[data-active="chat"] .hx-cc-model-tier { background: rgba(15,14,12,0.07) !important; color: rgba(15,14,12,0.6) !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-cc-model-tier { background: rgba(255,255,255,0.08) !important; color: rgba(255,255,255,0.62) !important; }
+
+    /* (E) Markdown — a real hierarchy (was flat/dense) */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h1.hx-md-h { font-size: 23px !important; font-weight: 680 !important; letter-spacing: -0.022em !important; margin: 28px 0 12px !important; line-height: 1.25 !important; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h2.hx-md-h { font-size: 18.5px !important; font-weight: 660 !important; letter-spacing: -0.016em !important; margin: 26px 0 9px !important; }
+    body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h3.hx-md-h { font-size: 15.5px !important; font-weight: 660 !important; margin: 22px 0 7px !important; }
+    /* refined, accent bullet markers (premium, not faint dots) */
+    body[data-active="chat"] .hx-msg.is-assistant .hx-md-list > li::before {
+      background: color-mix(in srgb, var(--hx-accent, #C9A227) 70%, transparent) !important;
+      opacity: 1 !important;
+    }
   </style>
 </head>
 <body data-active="chat">
