@@ -26600,6 +26600,56 @@
     html[data-theme="dark"]  body[data-active="chat"] #hx-cc-model-pick .hx-cc-model-sep,
     html[data-theme="dark"]  body[data-active="chat"] #hx-cc-model-pick .hx-cc-model-tier { color: rgba(240,238,232,0.5) !important; }
     html body[data-active="chat"] #hx-cc-model-pick .hx-cc-model-caret { width: 14px !important; height: 14px !important; opacity: 0.5 !important; }
+
+    /* ════════════════════════════════════════════════════════════════════
+       V226 — RESPONSE PROSE like ChatGPT / Claude
+       Clean editorial typography across every element: comfortable type,
+       heading hierarchy, tidy lists, inline code, blockquotes, tables,
+       links. Neutral palette, generous rhythm.
+       ════════════════════════════════════════════════════════════════════ */
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content { font-size: 16px !important; line-height: 1.72 !important; letter-spacing: -0.003em !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > :first-child { margin-top: 0 !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > :last-child { margin-bottom: 0 !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content p { margin: 0 0 1em !important; }
+    /* headings */
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h1 { font-size: 1.5em !important; font-weight: 650 !important; line-height: 1.25 !important; margin: 1.4em 0 0.6em !important; letter-spacing: -0.021em !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h2 { font-size: 1.3em !important; font-weight: 650 !important; line-height: 1.3 !important; margin: 1.35em 0 0.5em !important; letter-spacing: -0.017em !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h3 { font-size: 1.12em !important; font-weight: 650 !important; margin: 1.15em 0 0.4em !important; letter-spacing: -0.012em !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h4 { font-size: 1em !important; font-weight: 650 !important; margin: 1.1em 0 0.35em !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h1:first-child,
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h2:first-child,
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h3:first-child { margin-top: 0 !important; }
+    /* lists */
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content ul,
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content ol { margin: 0.5em 0 1em !important; padding-left: 1.5em !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content li { margin: 0.35em 0 !important; line-height: 1.7 !important; padding-left: 0.25em !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content li > ul,
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content li > ol { margin: 0.35em 0 0.4em !important; }
+    /* emphasis */
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content strong { font-weight: 650 !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content em { font-style: italic !important; }
+    /* inline code */
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content :not(pre) > code { font-family: 'JetBrains Mono', ui-monospace, monospace !important; font-size: 0.86em !important; padding: 1.5px 5px !important; border-radius: 5px !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content :not(pre) > code { background: rgba(20,18,15,0.06) !important; color: #1a1714 !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content :not(pre) > code { background: rgba(255,255,255,0.09) !important; color: #f0eee8 !important; }
+    /* blockquote */
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content blockquote { margin: 1em 0 !important; padding: 2px 0 2px 1em !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content blockquote { border-left: 3px solid rgba(20,18,15,0.18) !important; color: rgba(26,23,20,0.72) !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content blockquote { border-left: 3px solid rgba(255,255,255,0.2) !important; color: rgba(240,238,232,0.72) !important; }
+    /* tables */
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content table { border-collapse: collapse !important; width: 100% !important; margin: 1em 0 !important; font-size: 0.95em !important; }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content th,
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content td { padding: 8px 12px !important; text-align: left !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content th,
+    html[data-theme="light"] body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content td { border: 1px solid rgba(20,18,15,0.12) !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content th,
+    html[data-theme="dark"]  body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content td { border: 1px solid rgba(255,255,255,0.13) !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content th { font-weight: 650 !important; background: rgba(20,18,15,0.04) !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content th { font-weight: 650 !important; background: rgba(255,255,255,0.05) !important; }
+    /* links */
+    html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content a { text-decoration: underline !important; text-underline-offset: 2px !important; text-decoration-thickness: 1px !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content a { color: #1a1714 !important; text-decoration-color: rgba(20,18,15,0.4) !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content a { color: #f0eee8 !important; text-decoration-color: rgba(240,238,232,0.42) !important; }
   </style>
 </head>
 <body data-active="chat">
