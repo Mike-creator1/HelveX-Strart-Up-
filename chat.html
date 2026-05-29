@@ -26680,6 +26680,67 @@
     html body[data-active="chat"] .hx-source-domain { font-size: 11px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
     html[data-theme="light"] body[data-active="chat"] .hx-source-domain { color: rgba(26,23,20,0.45) !important; }
     html[data-theme="dark"]  body[data-active="chat"] .hx-source-domain { color: rgba(240,238,232,0.45) !important; }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V232 — KEYBOARD-AWARE MOBILE SHELL (last-in-file, authoritative)
+       ───────────────────────────────────────────────────────────────────
+       iOS Safari does NOT shrink 100dvh/100vh when the software keyboard
+       opens, so the bottom-pinned composer slid behind the keyboard and the
+       user could not see what they were typing. The companion JS publishes
+       the live visible height from window.visualViewport into --hx-vvh; here
+       the shell honours it so the composer always sits just above the
+       keyboard. Page scroll is locked so iOS can't drag the composer out of
+       view. Falls back to 100dvh when the var is unset (desktop / no JS),
+       so nothing regresses.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      html, body[data-active="chat"] {
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
+        height: var(--hx-vvh, 100dvh) !important;
+      }
+      html body[data-active="chat"] .hx-app > div {
+        height: var(--hx-vvh, 100dvh) !important;
+        max-height: var(--hx-vvh, 100dvh) !important;
+        min-height: 0 !important;
+      }
+      /* When the keyboard is up, fade the floating menu button out of the
+         way so it never overlaps what the user is typing. */
+      body[data-active="chat"].hx-kb-open .hx-mobile-menu-btn {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: opacity 0.18s ease !important;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V233 — KEYBOARD-OPEN SPACE RECLAIM (companion to V232)
+       ───────────────────────────────────────────────────────────────────
+       When the keyboard opened, the menu-clearance top gap + composer footer
+       ate the little remaining room, so only a sliver of the conversation
+       showed above what you typed. Reclaim that vertical space while typing
+       and tighten the turn rhythm slightly so more of the thread is visible.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 720px) {
+      /* A touch tighter between turns so more of the thread is visible */
+      html body[data-active="chat"] #hx-c-thread .hx-msg + .hx-msg {
+        margin-top: 20px !important;
+      }
+    }
+
+    /* While the keyboard is open: the floating menu button is hidden, so
+       reclaim its clearance gap, drop the footer, and slim the composer
+       padding — maximising the conversation visible above the input. */
+    @media (max-width: 900px) {
+      body[data-active="chat"].hx-kb-open .hx-chat-thread-inner {
+        padding-top: 16px !important;
+      }
+      body[data-active="chat"].hx-kb-open .hx-chat-foot { display: none !important; }
+      body[data-active="chat"].hx-kb-open .hx-chat-compose {
+        padding-top: 4px !important;
+        padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -32816,6 +32877,60 @@
           setInterval(refreshContext, 4000);
         })();
       });
+    })();
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V232 — KEYBOARD-AWARE MOBILE SHELL HEIGHT (companion to V232 CSS)
+       iOS keeps 100dvh at full height when the software keyboard opens, so
+       the bottom-pinned composer slid behind the keyboard. Publish the live
+       visible height from window.visualViewport into --hx-vvh; the CSS
+       shrinks the shell to match, keeping the composer just above the
+       keyboard with the textarea visible while typing. Harmless on desktop
+       (the var is only consumed under the <=900px media query).
+       ═══════════════════════════════════════════════════════════════════ */
+    (function () {
+      var root = document.documentElement;
+      var vv = window.visualViewport;
+      if (!vv) {
+        // No visualViewport API — keep the var defined from innerHeight; the
+        // CSS 100dvh fallback still applies regardless.
+        var setIH = function () { root.style.setProperty('--hx-vvh', window.innerHeight + 'px'); };
+        setIH();
+        window.addEventListener('resize', setIH, { passive: true });
+        return;
+      }
+      var raf = 0;
+      function apply() {
+        raf = 0;
+        root.style.setProperty('--hx-vvh', Math.round(vv.height) + 'px');
+        var kbOpen = (window.innerHeight - vv.height) > 110;
+        document.body.classList.toggle('hx-kb-open', kbOpen);
+      }
+      function schedule() { if (!raf) raf = requestAnimationFrame(apply); }
+      vv.addEventListener('resize', schedule, { passive: true });
+      vv.addEventListener('scroll', schedule, { passive: true });
+      window.addEventListener('orientationchange', function () { setTimeout(apply, 250); });
+      apply();
+      // iOS can leave the document scrolled after focusing an input near the
+      // bottom; pin it back to the top so the fixed-height shell lines up,
+      // and keep the latest message in view above the composer.
+      var ta = document.getElementById('hx-c-input');
+      if (ta) {
+        ta.addEventListener('focus', function () {
+          setTimeout(function () {
+            try { window.scrollTo(0, 0); } catch (e) {}
+            apply();
+            try {
+              var thread = document.getElementById('hx-c-thread') ||
+                           document.querySelector('.hx-chat-thread');
+              if (thread) thread.scrollTop = thread.scrollHeight;
+            } catch (e) {}
+          }, 280);
+        }, { passive: true });
+        ta.addEventListener('blur', function () {
+          setTimeout(function () { try { window.scrollTo(0, 0); } catch (e) {} apply(); }, 60);
+        }, { passive: true });
+      }
     })();
   </script>
 </body>
