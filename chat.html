@@ -25692,6 +25692,216 @@
       background: linear-gradient(180deg, #D9B341 0%, #C9A227 100%) !important; border: none !important; box-shadow: none !important;
     }
     html[data-theme="light"] body[data-active="chat"] .hx-cc-model-menu .hx-cc-fast-switch.is-on::after { transform: translateX(16px) !important; }
+
+    /* ════════════════════════════════════════════════════════════════════
+       V201 — MODEL SELECTOR · DRAMATIC DARK CARDS + STRONG ANIMATION
+       The selector becomes a dark command surface (both page themes).
+       Each model is a bold card: glyph tile + coloured eyebrow + mono path
+       + BIG name + outlined badge + per-model colour glow. Plus a strong
+       open animation and a premium, model-coloured external trigger.
+       Specificity bumped via doubled .hx-cc-model-menu to beat V200.
+       ════════════════════════════════════════════════════════════════════ */
+
+    @keyframes hx-menu-pop-strong {
+      0%   { opacity: 0; transform: translateY(12px) scale(0.93); filter: blur(7px); }
+      55%  { opacity: 1; filter: blur(0); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+    @keyframes hx-card-rise {
+      0%   { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Dark surface ────────────────────────────────────────────────── */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu {
+      min-width: 308px !important; max-width: min(372px, calc(100vw - 24px)) !important;
+      padding: 8px !important;
+      background: #131316 !important;
+      -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+      border: 1px solid rgba(255,255,255,0.09) !important;
+      border-radius: 22px !important;
+      color: #f3f1ec !important;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.55),
+        0 28px 70px -18px rgba(0,0,0,0.72),
+        0 10px 28px -14px rgba(0,0,0,0.6) !important;
+      animation: hx-menu-pop-strong 0.36s cubic-bezier(0.16,1,0.3,1) both !important;
+    }
+
+    /* ── Section eyebrow + divider ───────────────────────────────────── */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-menu-section {
+      padding: 15px 12px 9px !important;
+      color: rgba(243,241,236,0.40) !important;
+      font-size: 10.5px !important; font-weight: 600 !important;
+      letter-spacing: 0.11em !important; text-transform: uppercase !important;
+    }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-menu-section:first-child { padding-top: 9px !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-menu-section-top::before { background: rgba(255,255,255,0.09) !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-menu-kbd > span {
+      background: rgba(255,255,255,0.07) !important; border: none !important;
+      color: rgba(243,241,236,0.55) !important; box-shadow: none !important;
+    }
+
+    /* ── Model CARD ──────────────────────────────────────────────────── */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt {
+      position: relative !important; display: block !important;
+      height: auto !important; min-height: 96px !important;
+      padding: 14px 15px 15px !important; margin: 0 1px 9px !important;
+      border-radius: 17px !important;
+      background: #1b1b21 !important;
+      border: 1px solid rgba(255,255,255,0.07) !important;
+      overflow: hidden !important;
+      animation: hx-card-rise 0.4s cubic-bezier(0.16,1,0.3,1) both !important;
+      transition: transform 0.2s cubic-bezier(0.2,0.7,0.2,1), border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+    }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt:nth-child(2) { animation-delay: 0.04s !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt:nth-child(3) { animation-delay: 0.08s !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt:hover {
+      transform: translateY(-2px) !important; border-color: rgba(255,255,255,0.14) !important;
+      box-shadow: 0 12px 28px -12px rgba(0,0,0,0.6) !important;
+    }
+
+    /* glyph tile (top-left) */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-glyph {
+      position: absolute !important; top: 13px !important; left: 14px !important;
+      width: 42px !important; height: 42px !important; border-radius: 12px !important;
+      background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.08) !important;
+      box-shadow: none !important;
+      display: flex !important; align-items: center !important; justify-content: center !important;
+    }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-glyph svg { width: 21px !important; height: 21px !important; }
+
+    /* badge (top-right) */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-badge {
+      position: absolute !important; top: 16px !important; right: 14px !important;
+      display: inline-flex !important; align-items: center !important; gap: 5px !important;
+      padding: 4px 10px !important; border-radius: 999px !important;
+      border: 1px solid rgba(255,255,255,0.18) !important;
+      font: 700 8.5px/1 var(--mono,'JetBrains Mono'), ui-monospace, monospace !important;
+      letter-spacing: 0.11em !important; text-transform: uppercase !important;
+      color: rgba(243,241,236,0.72) !important;
+    }
+
+    /* head (eyebrow + path) next to glyph */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-head {
+      margin-left: 56px !important; min-height: 42px !important;
+      display: flex !important; flex-direction: column !important; justify-content: center !important; gap: 4px !important;
+    }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-eyebrow {
+      font: 700 10px/1 var(--mono,'JetBrains Mono'), ui-monospace, monospace !important;
+      letter-spacing: 0.15em !important; text-transform: uppercase !important; color: rgba(243,241,236,0.62) !important;
+    }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-path {
+      font: 500 10.5px/1 var(--mono,'JetBrains Mono'), ui-monospace, monospace !important;
+      letter-spacing: 0.02em !important; color: rgba(243,241,236,0.36) !important;
+    }
+
+    /* BIG name (bottom) */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-name,
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt.is-active .hx-cc-opt-name {
+      display: block !important; flex: none !important; margin-top: 13px !important;
+      font-size: 26px !important; font-weight: 700 !important; letter-spacing: -0.022em !important;
+      line-height: 1 !important; color: #f6f4ef !important;
+    }
+    /* retire old sub + check + number on cards */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-opt-sub,
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-check,
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-num { display: none !important; }
+
+    /* ── Per-model colour identity ───────────────────────────────────── */
+    /* Ether — gold */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="ether"] { background: radial-gradient(135% 95% at 100% 0%, rgba(227,185,71,0.13), transparent 56%), #1b1b21 !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="ether"] .hx-cc-opt-glyph svg { color: #E3B947 !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="ether"] .hx-cc-opt-eyebrow { color: #E3B947 !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="ether"] .hx-cc-opt-badge { color: #E3B947 !important; border-color: rgba(227,185,71,0.42) !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="ether"].is-active { border-color: rgba(227,185,71,0.55) !important; box-shadow: 0 0 0 1px rgba(227,185,71,0.40), 0 12px 34px -12px rgba(227,185,71,0.38) !important; }
+    /* Nexus — red */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="nexus"] { background: radial-gradient(135% 95% at 100% 0%, rgba(229,72,77,0.13), transparent 56%), #1b1b21 !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="nexus"] .hx-cc-opt-glyph svg { color: #E5484D !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="nexus"] .hx-cc-opt-eyebrow { color: #F0676B !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="nexus"] .hx-cc-opt-badge { color: #F0676B !important; border-color: rgba(229,72,77,0.42) !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="nexus"].is-active { border-color: rgba(229,72,77,0.55) !important; box-shadow: 0 0 0 1px rgba(229,72,77,0.40), 0 12px 34px -12px rgba(229,72,77,0.40) !important; }
+    /* Prometheus — platinum flagship */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="prometheus"] { background: radial-gradient(135% 95% at 100% 0%, rgba(214,210,200,0.10), transparent 56%), #1b1b21 !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="prometheus"] .hx-cc-opt-glyph svg { color: #D9D4C8 !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="prometheus"] .hx-cc-opt-eyebrow { color: #D9D4C8 !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="prometheus"] .hx-cc-opt-badge { color: #E7E3D9 !important; border-color: rgba(231,227,217,0.30) !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="prometheus"] .hx-cc-opt-badge::before { content: '' !important; width: 5px !important; height: 5px !important; border-radius: 50% !important; background: #E7E3D9 !important; box-shadow: 0 0 6px rgba(231,227,217,0.6) !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-model-opt[data-model="prometheus"].is-active { border-color: rgba(231,227,217,0.40) !important; box-shadow: 0 0 0 1px rgba(231,227,217,0.28), 0 12px 34px -12px rgba(0,0,0,0.6) !important; }
+
+    /* ── Effort — dark refined segmented control ─────────────────────── */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg {
+      display: flex !important; gap: 3px !important; margin: 2px 8px 8px !important; padding: 3px !important;
+      background: rgba(255,255,255,0.05) !important; border: none !important; border-radius: 12px !important;
+    }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-opt {
+      flex: 1 1 0 !important; height: 30px !important; padding: 0 !important;
+      display: flex !important; align-items: center !important; justify-content: center !important;
+      background: transparent !important; border: none !important; border-radius: 9px !important;
+      color: rgba(243,241,236,0.55) !important;
+      font-size: 12px !important; font-weight: 600 !important; letter-spacing: -0.01em !important; box-shadow: none !important;
+    }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-opt > span:first-child { flex: 0 0 auto !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-bars { display: none !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-opt.is-active::before { content: none !important; display: none !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-opt .hx-cc-check { display: none !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-opt:hover { background: rgba(255,255,255,0.07) !important; color: #f3f1ec !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-opt.is-active { background: rgba(255,255,255,0.13) !important; color: #ffffff !important; box-shadow: 0 1px 2px rgba(0,0,0,0.45) !important; }
+
+    /* ── Fast mode — dark ────────────────────────────────────────────── */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-fast-row { padding: 8px 12px 12px !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-fast-title { color: #f3f1ec !important; font-size: 13.5px !important; font-weight: 600 !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-fast-sub { color: rgba(243,241,236,0.44) !important; font-size: 11.5px !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-fast-switch { width: 38px !important; height: 22px !important; background: rgba(255,255,255,0.14) !important; border: none !important; box-shadow: none !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-fast-switch::after { width: 18px !important; height: 18px !important; top: 2px !important; left: 2px !important; background: #fff !important; box-shadow: 0 1px 3px rgba(0,0,0,0.5) !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-fast-switch.is-on { background: linear-gradient(180deg, #E3B947 0%, #C9A227 100%) !important; }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-fast-switch.is-on::after { transform: translateX(16px) !important; }
+
+    /* ════════════════════════════════════════════════════════════════════
+       V201b — EXTERNAL TRIGGER · premium, model-coloured
+       ════════════════════════════════════════════════════════════════════ */
+    html body[data-active="chat"] .hx-cc-model-pick {
+      height: 32px !important; padding: 0 10px 0 13px !important; gap: 9px !important;
+      border-radius: 999px !important;
+      border: 1px solid rgba(20,18,15,0.10) !important;
+      box-shadow: 0 1px 2px rgba(20,18,15,0.05), inset 0 1px 0 rgba(255,255,255,0.6) !important;
+      transition: transform 0.16s cubic-bezier(0.2,0.7,0.2,1), border-color 0.18s ease, box-shadow 0.2s ease !important;
+    }
+    html body[data-active="chat"] .hx-cc-model-pick:hover { transform: translateY(-1px) !important; }
+    html body[data-active="chat"] .hx-cc-model-pick .hx-cc-model-name { font-size: 12px !important; font-weight: 650 !important; }
+    html body[data-active="chat"] .hx-cc-model-pick .hx-cc-model-tier {
+      font-size: 8.5px !important; font-weight: 700 !important; padding: 2.5px 7px !important; border-radius: 999px !important; letter-spacing: 0.08em !important;
+    }
+    html body[data-active="chat"] .hx-cc-model-pick::before { width: 7px !important; height: 7px !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-pick .hx-cc-model-name { color: #f0eee8 !important; }
+
+    /* Per-model trigger identity (body[data-model]) */
+    html body[data-active="chat"][data-model="ether"] .hx-cc-model-pick::before { background: #E3B947 !important; box-shadow: 0 0 0 2px rgba(227,185,71,0.20), 0 0 9px rgba(227,185,71,0.65) !important; }
+    html body[data-active="chat"][data-model="ether"] .hx-cc-model-pick .hx-cc-model-tier { color: #8C6F12 !important; background: rgba(227,185,71,0.18) !important; }
+    html body[data-active="chat"][data-model="ether"] .hx-cc-model-pick:hover { border-color: rgba(227,185,71,0.45) !important; box-shadow: 0 3px 12px -3px rgba(227,185,71,0.35), inset 0 1px 0 rgba(255,255,255,0.6) !important; }
+    html[data-theme="dark"] body[data-active="chat"][data-model="ether"] .hx-cc-model-pick .hx-cc-model-tier { color: #E3B947 !important; }
+
+    html body[data-active="chat"][data-model="nexus"] .hx-cc-model-pick::before { background: #E5484D !important; box-shadow: 0 0 0 2px rgba(229,72,77,0.20), 0 0 9px rgba(229,72,77,0.65) !important; }
+    html body[data-active="chat"][data-model="nexus"] .hx-cc-model-pick .hx-cc-model-tier { color: #C0392B !important; background: rgba(229,72,77,0.16) !important; }
+    html body[data-active="chat"][data-model="nexus"] .hx-cc-model-pick:hover { border-color: rgba(229,72,77,0.45) !important; box-shadow: 0 3px 12px -3px rgba(229,72,77,0.35), inset 0 1px 0 rgba(255,255,255,0.6) !important; }
+    html[data-theme="dark"] body[data-active="chat"][data-model="nexus"] .hx-cc-model-pick .hx-cc-model-tier { color: #F0676B !important; }
+
+    html body[data-active="chat"][data-model="prometheus"] .hx-cc-model-pick::before { background: #8A8D93 !important; box-shadow: 0 0 0 2px rgba(138,141,147,0.20), 0 0 9px rgba(138,141,147,0.5) !important; }
+    html body[data-active="chat"][data-model="prometheus"] .hx-cc-model-pick .hx-cc-model-tier { color: #55585E !important; background: rgba(85,88,94,0.12) !important; }
+    html body[data-active="chat"][data-model="prometheus"] .hx-cc-model-pick:hover { border-color: rgba(85,88,94,0.32) !important; }
+    html[data-theme="dark"] body[data-active="chat"][data-model="prometheus"] .hx-cc-model-pick .hx-cc-model-tier { color: #D9D4C8 !important; }
+
+    /* V201c — lock the trigger pill surface (kill the harsh opaque border) */
+    html[data-theme="light"] body[data-active="chat"] .hx-cc-model-pick.hx-cc-model-pick {
+      background: rgba(255,255,255,0.74) !important;
+      border: 1px solid rgba(20,18,15,0.10) !important;
+      box-shadow: 0 1px 2px rgba(20,18,15,0.05), inset 0 1px 0 rgba(255,255,255,0.7) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-pick.hx-cc-model-pick {
+      background: rgba(255,255,255,0.055) !important;
+      border: 1px solid rgba(255,255,255,0.11) !important;
+      box-shadow: none !important;
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -29007,9 +29217,9 @@
             prometheus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-2 3-4 5-3 9a3 3 0 0 0 6 0c0-1.5-.7-2.2-.7-3.5 1.4.7 2.2 2 2.2 4a4.5 4.5 0 1 1-9 0c0-4 4.5-5 4.5-9.5z"/></svg>',
           };
           var MODEL_META = {
-            ether:      { tier: 'Real-time', desc: 'Fast, low-latency answers' },
-            nexus:      { tier: 'Reasoning', desc: 'Thinks step-by-step, uses tools' },
-            prometheus: { tier: 'Agentic',   desc: 'Flagship deep reasoning agent' },
+            ether:      { tier: 'Real-time', desc: 'Fast, low-latency answers',       speed: 'fast',     badge: 'Low latency' },
+            nexus:      { tier: 'Reasoning', desc: 'Thinks step-by-step, uses tools',  speed: 'balanced', badge: 'Deep think' },
+            prometheus: { tier: 'Agentic',   desc: 'Flagship deep reasoning agent',    speed: 'deep',     badge: 'Flagship' },
           };
           document.querySelectorAll('.hx-cc-model-opt').forEach(function (opt) {
             var key = opt.getAttribute('data-model');
@@ -29025,10 +29235,12 @@
             var numHTML = existingNum ? existingNum.outerHTML : '';
             opt.innerHTML =
               '<span class="hx-cc-opt-glyph" aria-hidden="true">' + glyphSVG + '</span>' +
-              '<span class="hx-cc-opt-body">' +
-                '<span class="hx-cc-opt-name">' + nameTxt + '</span>' +
-                '<span class="hx-cc-opt-sub">' + meta.tier + ' · ' + meta.desc + '</span>' +
+              '<span class="hx-cc-opt-badge">' + (meta.badge || '') + '</span>' +
+              '<span class="hx-cc-opt-head">' +
+                '<span class="hx-cc-opt-eyebrow">' + meta.tier + '</span>' +
+                '<span class="hx-cc-opt-path">/ ' + key + ' · ' + (meta.speed || '') + '</span>' +
               '</span>' +
+              '<span class="hx-cc-opt-name">' + nameTxt + '</span>' +
               checkHTML +
               numHTML;
           });
