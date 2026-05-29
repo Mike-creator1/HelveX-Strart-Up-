@@ -28213,24 +28213,43 @@
               else if (act === 'delete')  deleteConversationById(convId);
             });
           });
-          // Outside / Esc close
+          // Store target for the keyboard shortcuts (P/R/C/A/D/O)
+          menu._convId = convId; menu._conv = conv;
+          // Outside / Esc / shortcut keys
           setTimeout(function () {
             document.addEventListener('click', _cmenuOutsideClose, true);
-            document.addEventListener('keydown', _cmenuEscClose);
+            document.addEventListener('keydown', _cmenuKeyHandler);
           }, 0);
         }
         function _cmenuOutsideClose(e) {
           var m = document.querySelector('.hx-cmenu');
           if (m && !m.contains(e.target)) closeConversationMenu();
         }
-        function _cmenuEscClose(e) {
-          if (e.key === 'Escape') closeConversationMenu();
+        function _cmenuKeyHandler(e) {
+          if (e.key === 'Escape') { closeConversationMenu(); return; }
+          var ae = document.activeElement;
+          if (ae && /^(input|textarea)$/i.test(ae.tagName)) return;  // don't hijack typing
+          var menu = document.querySelector('.hx-cmenu');
+          if (!menu) return;
+          var cid = menu._convId, conv = menu._conv;
+          if (!cid) return;
+          var map = { o: 'open', p: 'pin', r: 'rename', c: 'copy', a: 'archive', d: 'delete' };
+          var act = map[(e.key || '').toLowerCase()];
+          if (!act) return;
+          e.preventDefault();
+          closeConversationMenu();
+          if (act === 'open')         openConversation(cid);
+          else if (act === 'pin')     togglePin(cid);
+          else if (act === 'rename')  renameConversation(cid, conv && conv.title);
+          else if (act === 'copy')    copyConversationLink(cid);
+          else if (act === 'archive') archiveConversation(cid);
+          else if (act === 'delete')  deleteConversationById(cid);
         }
         function closeConversationMenu() {
           var m = document.querySelector('.hx-cmenu');
           if (m) m.remove();
           document.removeEventListener('click', _cmenuOutsideClose, true);
-          document.removeEventListener('keydown', _cmenuEscClose);
+          document.removeEventListener('keydown', _cmenuKeyHandler);
         }
         function svgInline(name) {
           var paths = {
