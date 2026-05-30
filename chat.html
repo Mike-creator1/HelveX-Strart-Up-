@@ -27316,6 +27316,90 @@
         background: rgba(255,255,255,0.05) !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V236 — CLAUDE CODE-STYLE HEADER + COMPOSER (mobile)
+       ───────────────────────────────────────────────────────────────────
+       Keeps the current theme, but reshapes the header + composer to feel
+       like the Claude Code app:
+         · header = a plain centred two-line title (conversation name +
+           a dim model/context subtitle), no pill
+         · composer = a calm rounded box with a circular UP-arrow send
+           (the Claude Code signature) instead of the right arrow
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+
+      /* ── HEADER — title + dim subtitle (Claude Code) ──────────────── */
+      body[data-active="chat"] #hx-c-toolbar { min-height: 54px !important; }
+      body[data-active="chat"] #hx-c-toolbar .hx-chat-head {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 1px !important;
+        max-width: 62vw !important;
+      }
+      body[data-active="chat"] #hx-c-toolbar .hx-chat-title,
+      html[data-theme="light"] body[data-active="chat"] #hx-c-toolbar .hx-chat-title,
+      html[data-theme="dark"]  body[data-active="chat"] #hx-c-toolbar .hx-chat-title {
+        background: transparent !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        font-size: 15.5px !important;
+        font-weight: 600 !important;
+        line-height: 1.2 !important;
+        max-width: 62vw !important;
+      }
+      /* Re-show the model badge as a dim context subtitle (strip the pill) */
+      body[data-active="chat"] #hx-c-toolbar .hx-chat-model-badge {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 11px !important;
+        font-weight: 500 !important;
+        line-height: 1.2 !important;
+        box-shadow: none !important;
+      }
+      body[data-active="chat"] #hx-c-toolbar .hx-chat-model-badge-dot {
+        width: 5px !important;
+        height: 5px !important;
+      }
+      body[data-active="chat"] #hx-c-toolbar .hx-chat-model-badge-tier {
+        opacity: 0.7 !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] #hx-c-toolbar .hx-chat-model-badge,
+      html[data-theme="light"] body[data-active="chat"] #hx-c-toolbar .hx-chat-model-badge-name,
+      html[data-theme="light"] body[data-active="chat"] #hx-c-toolbar .hx-chat-model-badge-tier {
+        color: #8a857c !important;
+      }
+      html[data-theme="dark"] body[data-active="chat"] #hx-c-toolbar .hx-chat-model-badge,
+      html[data-theme="dark"] body[data-active="chat"] #hx-c-toolbar .hx-chat-model-badge-name,
+      html[data-theme="dark"] body[data-active="chat"] #hx-c-toolbar .hx-chat-model-badge-tier {
+        color: #9a9a9a !important;
+      }
+
+      /* ── COMPOSER — calm rounded box + circular UP-arrow send ─────── */
+      body[data-active="chat"] .hx-chat-input-bar {
+        border-radius: 22px !important;
+        padding: 7px 7px 7px 10px !important;
+      }
+      /* Swap the right-arrow glyph for an up-arrow (Claude Code) */
+      body[data-active="chat"] .hx-chat-send svg { display: none !important; }
+      body[data-active="chat"] .hx-chat-send,
+      html[data-theme="light"] body[data-active="chat"] .hx-chat-send,
+      html[data-theme="light"] body[data-active="chat"] .hx-chat-send:disabled,
+      html[data-theme="dark"]  body[data-active="chat"] .hx-chat-send,
+      html[data-theme="dark"]  body[data-active="chat"] .hx-chat-send:disabled {
+        background-color: var(--cg-orange) !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='20' x2='12' y2='5'/%3E%3Cpolyline points='6 11 12 5 18 11'/%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: 20px 20px !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
