@@ -27209,6 +27209,113 @@
       body[data-active="chat"] .hx-chat-suggest-chip { font-size: 15px !important; padding: 13px 8px !important; }
       body[data-active="chat"] .hx-chat-send { width: 38px !important; height: 38px !important; }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V235 — MOBILE FIXES (live-device feedback)
+       ───────────────────────────────────────────────────────────────────
+       (1) Keyboard bug: the composer flew to the top + the page went blank
+           when typing, because .hx-main was pinned to 100vh and ignored the
+           keyboard-aware --hx-vvh shell. Honour --hx-vvh so the shell shrinks
+           with the keyboard and the composer stays pinned above it.
+       (2) Header: stop the top-right "more" button from clipping — centre the
+           title with flexbox and pin the action absolutely, mid-height.
+       (3) Hamburger: minimal Claude/ChatGPT-style icon button (no heavy
+           white disc).
+       (4) Drawer: ChatGPT-style — drop the redundant "Helix" wordmark, make
+           the conversation rows clean/borderless with a subtle active state.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+
+      /* (1) KEYBOARD-AWARE SHELL — the missing link in the height chain */
+      body[data-active="chat"] .hx-main {
+        height: var(--hx-vvh, 100dvh) !important;
+        max-height: var(--hx-vvh, 100dvh) !important;
+        min-height: 0 !important;
+      }
+      body[data-active="chat"] .hx-chat-pane { min-height: 0 !important; }
+      /* While typing, don't bottom-anchor/stretch the empty state (keeps the
+         composer + a sliver of thread visible instead of a tall blank). */
+      body[data-active="chat"].hx-kb-open #hx-c-thread > .hx-chat-blank:has(.hx-chat-blank-chips),
+      body[data-active="chat"].hx-kb-open #hx-c-thread > .hx-chat-blank:has(.hx-chat-suggest) {
+        min-height: 0 !important;
+        justify-content: flex-start !important;
+        padding-top: 16px !important;
+      }
+
+      /* (2) HEADER — centred title, pinned right action, nothing clipped */
+      body[data-active="chat"] #hx-c-toolbar {
+        position: sticky !important;
+        justify-content: center !important;
+        overflow: visible !important;
+        min-height: 50px !important;
+        padding: calc(7px + env(safe-area-inset-top, 0px)) 56px 7px 56px !important;
+      }
+      body[data-active="chat"] #hx-c-toolbar .hx-chat-head {
+        position: static !important;
+        transform: none !important;
+        left: auto !important;
+        margin: 0 auto !important;
+      }
+      body[data-active="chat"] #hx-c-toolbar .hx-chat-head-actions {
+        position: absolute !important;
+        right: 12px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        margin: 0 !important;
+      }
+
+      /* (3) HAMBURGER — minimal Claude/ChatGPT icon button */
+      .hx-mobile-menu-btn {
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 10px !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+      }
+      html[data-theme="light"] .hx-mobile-menu-btn { color: #1a1a1a !important; background: rgba(0,0,0,0.04) !important; }
+      html[data-theme="dark"]  .hx-mobile-menu-btn { color: #ececec !important; background: rgba(255,255,255,0.05) !important; }
+      .hx-mobile-menu-btn svg { width: 22px !important; height: 22px !important; }
+
+      /* (4) DRAWER — ChatGPT-style conversations panel */
+      /* Solid panel background so nothing bleeds through behind the drawer */
+      html[data-theme="light"] body[data-active="chat"] .hx-chat-rail {
+        background: var(--hx-bg, #faf9f5) !important;
+      }
+      /* Drop the redundant "Helix" wordmark next to "Conversations" */
+      body[data-active="chat"] .hx-chat-rail-title::after {
+        content: none !important;
+        display: none !important;
+      }
+      body[data-active="chat"] .hx-chat-rail-title { gap: 0 !important; }
+      /* Clean, borderless conversation rows */
+      body[data-active="chat"] .hx-chat-item {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 10px !important;
+      }
+      body[data-active="chat"] .hx-chat-item.is-active::before {
+        content: none !important;
+        display: none !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] .hx-chat-item.is-active {
+        background: rgba(0,0,0,0.05) !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+      }
+      html[data-theme="dark"] body[data-active="chat"] .hx-chat-item.is-active {
+        background: rgba(255,255,255,0.08) !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] .hx-chat-item:active {
+        background: rgba(0,0,0,0.04) !important;
+      }
+      html[data-theme="dark"] body[data-active="chat"] .hx-chat-item:active {
+        background: rgba(255,255,255,0.05) !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
