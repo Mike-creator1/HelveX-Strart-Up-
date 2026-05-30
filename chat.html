@@ -28109,6 +28109,45 @@
       }
       html body[data-active="chat"] .hx-msg-followup-chip:active { transform: scale(0.97) !important; }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V243 — BRANDED MODEL AVATAR per answer (mobile, ChatGPT/Claude)
+       Each assistant turn opens with a small header: the active model's
+       mark in a tinted tile + the "Helix" name.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-head {
+        display: flex !important;
+        align-items: center !important;
+        gap: 9px !important;
+        margin: 0 0 11px !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-head .hx-msg-avatar {
+        display: inline-flex !important;
+        width: 30px !important; height: 30px !important;
+        min-width: 30px !important;
+        border-radius: 9px !important;
+        align-items: center !important; justify-content: center !important;
+        flex-shrink: 0 !important;
+        opacity: 1 !important;
+        margin: 0 !important;
+      }
+      html body[data-active="chat"] .hx-msg-head .hx-msg-avatar svg { width: 19px !important; height: 19px !important; display: block !important; }
+      /* Per-model tint (light) */
+      html[data-theme="light"] body[data-active="chat"] .hx-msg-head .hx-msg-avatar.hx-mg-ether      { color: #b3870f !important; background: rgba(201,162,39,0.15) !important; box-shadow: inset 0 0 0 1px rgba(201,162,39,0.22) !important; }
+      html[data-theme="light"] body[data-active="chat"] .hx-msg-head .hx-msg-avatar.hx-mg-nexus      { color: #c2410c !important; background: rgba(194,65,12,0.12) !important; box-shadow: inset 0 0 0 1px rgba(194,65,12,0.20) !important; }
+      html[data-theme="light"] body[data-active="chat"] .hx-msg-head .hx-msg-avatar.hx-mg-prometheus { color: #44444c !important; background: rgba(68,68,76,0.11) !important; box-shadow: inset 0 0 0 1px rgba(68,68,76,0.18) !important; }
+      /* Per-model tint (dark) */
+      html[data-theme="dark"] body[data-active="chat"] .hx-msg-head .hx-msg-avatar.hx-mg-ether      { color: #e8c45a !important; background: rgba(201,162,39,0.18) !important; box-shadow: inset 0 0 0 1px rgba(201,162,39,0.28) !important; }
+      html[data-theme="dark"] body[data-active="chat"] .hx-msg-head .hx-msg-avatar.hx-mg-nexus      { color: #ff7a4d !important; background: rgba(194,65,12,0.20) !important; box-shadow: inset 0 0 0 1px rgba(194,65,12,0.30) !important; }
+      html[data-theme="dark"] body[data-active="chat"] .hx-msg-head .hx-msg-avatar.hx-mg-prometheus { color: #c9c9d2 !important; background: rgba(160,160,170,0.16) !important; box-shadow: inset 0 0 0 1px rgba(160,160,170,0.22) !important; }
+      html body[data-active="chat"] .hx-msg-author {
+        font-size: 14px !important; font-weight: 650 !important;
+        letter-spacing: -0.01em !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] .hx-msg-author { color: #1a1714 !important; }
+      html[data-theme="dark"]  body[data-active="chat"] .hx-msg-author { color: #f0ede6 !important; }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -30409,14 +30448,15 @@
           if (m.content) contentHtml = '<div class="hx-msg-content">' + renderRichContent(m.content, isAssist) + '</div>';
           else if (!atts.length) contentHtml = '<div class="hx-msg-content"></div>';
 
+          var msgModel = (m && m.model) ||
+                         (state.conversation && state.conversation.model) ||
+                         ($('hx-c-model') && $('hx-c-model').value) || 'ether';
           var avatar = isAssist
-            ? '<div class="hx-msg-avatar is-assistant" aria-hidden="true">' +
-                '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
-                  '<ellipse cx="12" cy="12" rx="9" ry="3.2" stroke="currentColor" stroke-width="1.3" stroke-opacity=".95"/>' +
-                  '<ellipse cx="12" cy="12" rx="9" ry="3.2" stroke="currentColor" stroke-width="1.3" stroke-opacity=".6"  transform="rotate(60 12 12)"/>' +
-                  '<ellipse cx="12" cy="12" rx="9" ry="3.2" stroke="currentColor" stroke-width="1.3" stroke-opacity=".4"  transform="rotate(120 12 12)"/>' +
-                  '<circle cx="12" cy="12" r="2.1" fill="currentColor"/>' +
-                '</svg>' +
+            ? '<div class="hx-msg-head">' +
+                '<span class="hx-msg-avatar is-assistant hx-mg-' + escape(msgModel) + '" aria-hidden="true">' +
+                  modelLogoSvg(msgModel) +
+                '</span>' +
+                '<span class="hx-msg-author">Helix</span>' +
               '</div>'
             : '';
 
