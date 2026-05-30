@@ -28586,6 +28586,45 @@
         padding: 13px 16px !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V250 — SLIMMER COMPOSER (mobile) — the input bar took too much height
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      html body[data-active="chat"] .hx-chat-compose {
+        padding-top: 5px !important;
+        padding-bottom: calc(9px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+      html body[data-active="chat"] .hx-chat-input-bar {
+        padding: 4px 5px 4px 8px !important;
+        border-radius: 21px !important;
+        gap: 2px !important;
+        align-items: center !important;
+      }
+      html body[data-active="chat"] .hx-chat-textarea {
+        padding: 6px 4px !important;
+        font-size: 16px !important;   /* keep ≥16 so iOS doesn't zoom on focus */
+        line-height: 1.35 !important;
+        min-height: 0 !important;
+      }
+      html body[data-active="chat"] #hx-c-attach.hx-chat-tool-btn,
+      html body[data-active="chat"] #hx-c-mic.hx-chat-tool-btn {
+        width: 30px !important; height: 30px !important;
+      }
+      html body[data-active="chat"] #hx-c-attach.hx-chat-tool-btn svg,
+      html body[data-active="chat"] #hx-c-mic.hx-chat-tool-btn svg {
+        width: 19px !important; height: 19px !important;
+      }
+      html body[data-active="chat"] .hx-chat-send,
+      html[data-theme="light"] body[data-active="chat"] .hx-chat-send,
+      html[data-theme="light"] body[data-active="chat"] .hx-chat-send:disabled,
+      html[data-theme="dark"]  body[data-active="chat"] .hx-chat-send,
+      html[data-theme="dark"]  body[data-active="chat"] .hx-chat-send:disabled {
+        width: 34px !important; height: 34px !important;
+        background-size: 17px 17px !important;
+      }
+      html body[data-active="chat"] .hx-chat-send svg { width: 17px !important; height: 17px !important; }
+    }
   </style>
 </head>
 <body data-active="chat">
