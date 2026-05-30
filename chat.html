@@ -28676,6 +28676,81 @@
         content: none !important; display: none !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V252 — CINEMATIC DRAWER OPEN ANIMATION (mobile) — high-impact
+       When the conversations drawer opens: a light sweeps across it, the
+       header/search pop down, and the chats cascade in with a spring +
+       blur-in, the active one flares, and the New-chat bar launches up.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Diagonal light sweep across the panel */
+      html body[data-active="chat"] .hx-chat-rail.is-open::after {
+        content: '' !important;
+        position: absolute !important; inset: 0 !important;
+        pointer-events: none !important;
+        z-index: 4 !important;
+        background: linear-gradient(115deg,
+          transparent 28%,
+          color-mix(in srgb, var(--cg-orange,#ff5a1f) 16%, transparent) 46%,
+          rgba(255,255,255,0.10) 50%,
+          transparent 64%) !important;
+        transform: translateX(-130%) skewX(-8deg) !important;
+        animation: hx-rail-sweep 0.95s 0.08s cubic-bezier(0.4,0,0.15,1) 1 both !important;
+      }
+      @keyframes hx-rail-sweep { to { transform: translateX(130%) skewX(-8deg); } }
+
+      /* Header + search + section label drop in */
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-rail-title { animation: hx-rail-drop 0.5s cubic-bezier(0.2,0.85,0.25,1.25) both !important; }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-rail-search-row { animation: hx-rail-drop 0.5s 0.07s cubic-bezier(0.2,0.85,0.25,1.25) both !important; }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-rail-group-head { animation: hx-rail-drop 0.5s 0.13s cubic-bezier(0.2,0.85,0.25,1.25) both !important; }
+      @keyframes hx-rail-drop { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+
+      /* The chats cascade in — spring slide + scale + blur-in */
+      @keyframes hx-rail-cascade {
+        0%   { opacity: 0; transform: translateX(-50px) scale(0.86) rotate(-2.2deg); filter: blur(8px); }
+        55%  { opacity: 1; filter: blur(0); transform: translateX(7px) scale(1.035) rotate(0.5deg); }
+        78%  { transform: translateX(-3px) scale(0.99); }
+        100% { opacity: 1; transform: translateX(0) scale(1) rotate(0); filter: blur(0); }
+      }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-item {
+        animation: hx-rail-cascade 0.64s cubic-bezier(0.16,1,0.3,1) both !important;
+        will-change: transform, opacity, filter;
+      }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-item:nth-child(2)  { animation-delay: 0.16s !important; }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-item:nth-child(3)  { animation-delay: 0.215s !important; }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-item:nth-child(4)  { animation-delay: 0.27s !important; }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-item:nth-child(5)  { animation-delay: 0.325s !important; }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-item:nth-child(6)  { animation-delay: 0.38s !important; }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-item:nth-child(7)  { animation-delay: 0.435s !important; }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-item:nth-child(8)  { animation-delay: 0.49s !important; }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-item:nth-child(9)  { animation-delay: 0.545s !important; }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-item:nth-child(10) { animation-delay: 0.6s !important; }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-item:nth-child(11) { animation-delay: 0.655s !important; }
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-item:nth-child(n+12) { animation-delay: 0.71s !important; }
+
+      /* The active chat flares with an accent glow as it lands */
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-item.is-active {
+        animation: hx-rail-cascade 0.64s 0.16s cubic-bezier(0.16,1,0.3,1) both,
+                   hx-rail-flare 0.9s 0.42s ease-out both !important;
+      }
+      @keyframes hx-rail-flare {
+        0%   { box-shadow: 0 0 0 0 transparent; }
+        45%  { box-shadow: 0 0 0 2px color-mix(in srgb, var(--cg-orange,#ff5a1f) 55%, transparent), 0 6px 26px 0 color-mix(in srgb, var(--cg-orange,#ff5a1f) 45%, transparent); }
+        100% { box-shadow: 0 0 0 0 transparent; }
+      }
+
+      /* The New-chat bar launches up with an overshoot + glow */
+      html body[data-active="chat"] .hx-chat-rail.is-open .hx-chat-new-fab {
+        animation: hx-fab-launch 0.72s 0.34s cubic-bezier(0.18,0.9,0.25,1.35) both !important;
+      }
+      @keyframes hx-fab-launch {
+        0%   { opacity: 0; transform: translateY(64px) scale(0.7); }
+        55%  { opacity: 1; transform: translateY(-11px) scale(1.07); }
+        76%  { transform: translateY(4px) scale(0.98); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
