@@ -28226,6 +28226,61 @@
     }
     .hx-diagram-arrow { color: var(--cg-orange, #ff5a1f); height: 26px; display: flex; align-items: center; justify-content: center; }
     .hx-diagram-arrow svg { width: 20px; height: 20px; }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V245 — PROFESSIONAL CODE BLOCKS + polish (mobile)
+       The light theme rendered code blocks almost invisible (surface ≈ page).
+       Give them a proper, premium dark "terminal" card with a clear header,
+       a visible Copy button and readable monospace — unmistakably code.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code {
+        margin: 16px 0 !important;
+        border-radius: 14px !important;
+        overflow: hidden !important;
+        border: 1px solid rgba(0,0,0,0.10) !important;
+        box-shadow: 0 14px 34px -20px rgba(15,14,12,0.45) !important;
+        background: #1c1c21 !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-head {
+        background: #26262d !important;
+        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+        padding: 9px 9px 9px 15px !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-lang {
+        color: #9b9ba6 !important;
+        font-size: 11px !important;
+        letter-spacing: 0.16em !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-streaming {
+        color: #ffb494 !important;
+        background: rgba(255,90,31,0.16) !important;
+        border: 1px solid rgba(255,90,31,0.3) !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-btn {
+        color: #cfcfd8 !important;
+        background: rgba(255,255,255,0.07) !important;
+        border: 1px solid rgba(255,255,255,0.11) !important;
+        padding: 6px 11px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-btn svg { width: 13px !important; height: 13px !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-btn:active { background: rgba(255,255,255,0.16) !important; transform: scale(0.96) !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body {
+        background: #1c1c21 !important;
+        color: #e9e7e1 !important;
+        padding: 15px 16px !important;
+        font-size: 12.75px !important;
+        line-height: 1.62 !important;
+        max-height: 420px !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body code { color: #e9e7e1 !important; }
+      /* tidy the avatar's residual hairline so the turn header reads clean */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-head::before,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-head::after { display: none !important; }
+    }
   </style>
 </head>
 <body data-active="chat">
