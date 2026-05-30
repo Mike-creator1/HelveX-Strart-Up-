@@ -28019,6 +28019,96 @@
         background: linear-gradient(180deg, var(--cg-orange,#ff5a1f), #d2410c) !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V242 — PREMIUM CHAT SHELL DETAILS (mobile)
+       Elevate the surrounding experience: a refined user bubble, premium
+       inline-code chips, accent links, and tactile message-action buttons.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* ── USER BUBBLE — refined, elevated, with a tail ───────────── */
+      html body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+        border-radius: 20px 20px 6px 20px !important;
+        padding: 12px 16px !important;
+        font-size: 14.5px !important;
+        line-height: 1.5 !important;
+        border: none !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+        background: linear-gradient(165deg, #ffffff 0%, #f4f1ea 100%) !important;
+        color: #221d18 !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,0.9),
+          0 1px 2px rgba(15,14,12,0.05),
+          0 12px 26px -14px rgba(15,14,12,0.22) !important;
+      }
+      html[data-theme="dark"] body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+        background: linear-gradient(165deg, #2a2a2c 0%, #202022 100%) !important;
+        color: #f1efe9 !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,0.06),
+          0 12px 28px -16px rgba(0,0,0,0.7) !important;
+      }
+
+      /* ── INLINE CODE — premium accent chip ──────────────────────── */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content :not(pre) > code {
+        font-size: 0.85em !important;
+        padding: 2px 6px !important;
+        border-radius: 6px !important;
+        font-weight: 500 !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content :not(pre) > code {
+        background: color-mix(in srgb, var(--cg-orange,#ff5a1f) 9%, #fff) !important;
+        color: #b3400f !important;
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cg-orange,#ff5a1f) 18%, transparent) !important;
+      }
+      html[data-theme="dark"] body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content :not(pre) > code {
+        background: color-mix(in srgb, var(--cg-orange,#ff5a1f) 16%, #1d1d1f) !important;
+        color: #ffb494 !important;
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cg-orange,#ff5a1f) 26%, transparent) !important;
+      }
+
+      /* ── LINKS — accent with a refined underline ────────────────── */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-link,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content a {
+        color: var(--cg-orange,#ff5a1f) !important;
+        text-decoration: none !important;
+        font-weight: 550 !important;
+        border-bottom: 1.5px solid color-mix(in srgb, var(--cg-orange,#ff5a1f) 35%, transparent) !important;
+        padding-bottom: 0.5px !important;
+      }
+
+      /* ── ACTION BUTTONS — tactile, premium ──────────────────────── */
+      html body[data-active="chat"] .hx-msg-actions {
+        gap: 2px !important;
+        margin-top: 10px !important;
+      }
+      html body[data-active="chat"] .hx-msg-act {
+        width: 36px !important; height: 36px !important;
+        border-radius: 10px !important;
+        border: none !important;
+        background: transparent !important;
+        transition: background 0.14s ease, transform 0.1s ease, color 0.14s ease !important;
+      }
+      html body[data-active="chat"] .hx-msg-act svg { width: 17px !important; height: 17px !important; }
+      html body[data-active="chat"] .hx-msg-act:active { transform: scale(0.9) !important; }
+      html[data-theme="light"] body[data-active="chat"] .hx-msg-act:active { background: rgba(15,14,12,0.06) !important; }
+      html[data-theme="dark"]  body[data-active="chat"] .hx-msg-act:active { background: rgba(255,255,255,0.08) !important; }
+      html body[data-active="chat"] .hx-msg-act.is-active,
+      html body[data-active="chat"] .hx-msg-act[aria-pressed="true"] {
+        color: var(--cg-orange,#ff5a1f) !important;
+        background: color-mix(in srgb, var(--cg-orange,#ff5a1f) 12%, transparent) !important;
+      }
+
+      /* ── FOLLOW-UP CHIPS — premium pills ────────────────────────── */
+      html body[data-active="chat"] .hx-msg-followup-chip {
+        border-radius: 999px !important;
+        font-size: 13.5px !important;
+        padding: 9px 15px !important;
+        transition: transform 0.1s ease, background 0.14s ease !important;
+      }
+      html body[data-active="chat"] .hx-msg-followup-chip:active { transform: scale(0.97) !important; }
+    }
   </style>
 </head>
 <body data-active="chat">
