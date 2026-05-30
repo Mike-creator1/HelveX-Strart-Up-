@@ -28528,6 +28528,64 @@
       }
       html[data-theme="dark"] .hx-mobile-menu-btn:active { background: rgba(255,255,255,0.12) !important; }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V249 — BREATHING ROOM (mobile) — make answers read airy like ChatGPT
+       Comfortable size + line-height and generous spacing between
+       paragraphs, list items, sections and turns. (Supersedes the tighter
+       V238 sizing.)
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Prose — comfortable size + generous line-height */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content,
+      html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content {
+        font-size: 15px !important;
+        line-height: 1.72 !important;
+        letter-spacing: -0.002em !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content li,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-md-list > li {
+        font-size: 15px !important;
+        line-height: 1.72 !important;
+      }
+      /* Air between paragraphs */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p {
+        margin: 0 0 15px !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p:last-child { margin-bottom: 0 !important; }
+
+      /* Lists breathe */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-list {
+        gap: 10px !important;
+        margin: 16px 0 !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-list.hx-md-list-num {
+        gap: 18px !important;
+        margin: 18px 0 !important;
+      }
+
+      /* Headings get real breathing space above */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h1,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h1.hx-md-h { margin: 26px 0 11px !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h2,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h2.hx-md-h { margin: 24px 0 10px !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h3,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h3.hx-md-h { margin: 20px 0 8px !important; }
+      /* …but not a giant gap before the very first block */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > :first-child { margin-top: 0 !important; }
+
+      /* Turn header → content, and space between turns */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-head { margin-bottom: 13px !important; }
+      html body[data-active="chat"] .hx-chat-thread-inner { gap: 34px !important; }
+
+      /* User bubble breathes a touch more too */
+      html body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+        font-size: 15px !important;
+        line-height: 1.58 !important;
+        padding: 13px 16px !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
