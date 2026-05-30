@@ -27400,6 +27400,128 @@
         background-size: 20px 20px !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V237 — EFFORT scale → premium "reasoning level" cards
+       ───────────────────────────────────────────────────────────────────
+       The old Low/Med/High/Extra/Max segmented control read like a
+       benchmark dial. Replace it with a vertical list of named reasoning
+       levels (⚡ Fast · ⚖️ Balanced · 🧠 Deep · 🎯 Strategic · 👑 Elite),
+       each with a one-line description so the choice is self-explanatory.
+       Mirrors the model-option card (glyph + name + sub) and gives the
+       selected level a special gold treatment — tinted glyph, soft gold
+       ring, gold check — so it reads as a deliberate premium pick, not a
+       toggled button. data-effort values are unchanged so persistence and
+       routing keep working. Specificity is doubled on .hx-cc-model-menu
+       and placed last so it beats every earlier effort pass.
+       Accent gold: #C9A227 (light) / #E3B947 (dark).
+       ═══════════════════════════════════════════════════════════════════ */
+    /* container → vertical list, no segmented-pill background */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 2px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: transparent !important;
+      border-radius: 0 !important;
+    }
+    /* each level → borderless card (glyph · info · check) */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 13px !important;
+      height: auto !important;
+      min-height: 0 !important;
+      padding: 9px 12px !important;
+      border: none !important;
+      background: transparent !important;
+      border-radius: 14px !important;
+      text-align: left !important;
+      box-shadow: none !important;
+      transition: background .18s ease, box-shadow .18s ease, transform .12s cubic-bezier(.2,.8,.2,1) !important;
+    }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt::before { content: none !important; display: none !important; }
+    /* glyph tile */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-glyph {
+      flex: 0 0 auto !important;
+      width: 34px !important; height: 34px !important;
+      display: grid !important; place-items: center !important;
+      border-radius: 10px !important;
+      font-size: 17px !important; line-height: 1 !important;
+      transition: background .18s ease, box-shadow .18s ease !important;
+    }
+    /* text column */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-info {
+      flex: 1 1 auto !important; min-width: 0 !important;
+      display: flex !important; flex-direction: column !important; gap: 1px !important;
+    }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-name {
+      font-size: 14px !important; font-weight: 640 !important; letter-spacing: -0.008em !important;
+      line-height: 1.25 !important; white-space: nowrap !important;
+    }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-desc {
+      font-size: 12px !important; line-height: 1.3 !important;
+      white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;
+    }
+    /* check → hidden until selected */
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt .hx-cc-check {
+      flex: 0 0 auto !important;
+      display: block !important; visibility: visible !important;
+      width: 17px !important; height: 17px !important;
+      opacity: 0 !important;
+      transition: opacity .16s ease !important;
+    }
+    html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt.is-active .hx-cc-check {
+      opacity: 1 !important;
+    }
+
+    /* ── LIGHT ── */
+    html[data-theme="light"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-glyph { background: rgba(15,14,12,0.05) !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-name { color: #1a1714 !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-desc { color: rgba(15,14,12,0.48) !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt:hover { background: rgba(15,14,12,0.04) !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt:active { transform: scale(.99) !important; }
+    /* selected → gold */
+    html[data-theme="light"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt.is-active {
+      background: color-mix(in srgb, #C9A227 9%, transparent) !important;
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, #C9A227 38%, transparent) !important;
+    }
+    html[data-theme="light"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt.is-active .hx-cc-effort-glyph {
+      background: color-mix(in srgb, #C9A227 18%, transparent) !important;
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, #C9A227 30%, transparent) !important;
+    }
+    html[data-theme="light"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt.is-active .hx-cc-effort-name { color: #5e4a06 !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt.is-active .hx-cc-check { color: #b8901c !important; }
+
+    /* ── DARK ── */
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-glyph { background: rgba(255,255,255,0.07) !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-name { color: #f3f1ec !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-desc { color: rgba(255,255,255,0.46) !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt:hover { background: rgba(255,255,255,0.05) !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt:active { transform: scale(.99) !important; }
+    /* selected → gold */
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt.is-active {
+      background: color-mix(in srgb, #E3B947 12%, transparent) !important;
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, #E3B947 34%, transparent) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt.is-active .hx-cc-effort-glyph {
+      background: color-mix(in srgb, #E3B947 22%, transparent) !important;
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, #E3B947 30%, transparent) !important;
+    }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt.is-active .hx-cc-effort-name { color: #f4dd9a !important; }
+    html[data-theme="dark"] body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt.is-active .hx-cc-check { color: #E3B947 !important; }
+
+    /* ── MOBILE — comfortable tap targets ── */
+    @media (max-width: 720px) {
+      html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-opt { padding: 11px 12px !important; gap: 14px !important; }
+      html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-glyph { width: 38px !important; height: 38px !important; font-size: 19px !important; }
+      html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-name { font-size: 15px !important; }
+      html body[data-active="chat"] .hx-cc-model-menu.hx-cc-model-menu .hx-cc-effort-seg .hx-cc-effort-desc { font-size: 12.5px !important; }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -27744,7 +27866,7 @@
                     </span>
                     <span class="hx-cc-model-name" id="hx-cc-model-name">Ether</span>
                     <span class="hx-cc-model-sep">·</span>
-                    <span class="hx-cc-model-tier">Max</span>
+                    <span class="hx-cc-model-tier">Elite</span>
                     <svg class="hx-cc-model-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     <span class="hx-cc-model-spinner" id="hx-cc-model-spinner" aria-hidden="true"></span>
                   </button>
@@ -27830,30 +27952,45 @@
                       <span>Effort</span>
                       <span class="hx-cc-menu-kbd"><span>⇧</span><span>Ctrl</span><span>E</span></span>
                     </div>
-                    <div class="hx-cc-effort-seg">
-                    <button class="hx-cc-effort-opt" data-effort="low" role="menuitemradio">
-                      <span>Low</span>
-                      <span class="hx-cc-effort-bars" aria-hidden="true" data-level="1"><i></i><i></i><i></i><i></i><i></i></span>
+                    <div class="hx-cc-effort-seg" role="radiogroup" aria-label="Reasoning effort">
+                    <button class="hx-cc-effort-opt" data-effort="low" role="menuitemradio" aria-checked="false" title="Quick answers, minimal reasoning, optimized for speed">
+                      <span class="hx-cc-effort-glyph" aria-hidden="true">⚡</span>
+                      <span class="hx-cc-effort-info">
+                        <span class="hx-cc-effort-name">Fast</span>
+                        <span class="hx-cc-effort-desc">Quick answers, built for speed</span>
+                      </span>
                       <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </button>
-                    <button class="hx-cc-effort-opt" data-effort="medium" role="menuitemradio">
-                      <span>Med</span>
-                      <span class="hx-cc-effort-bars" aria-hidden="true" data-level="2"><i></i><i></i><i></i><i></i><i></i></span>
+                    <button class="hx-cc-effort-opt" data-effort="medium" role="menuitemradio" aria-checked="false" title="Everyday usage, best mix of speed and quality">
+                      <span class="hx-cc-effort-glyph" aria-hidden="true">⚖️</span>
+                      <span class="hx-cc-effort-info">
+                        <span class="hx-cc-effort-name">Balanced</span>
+                        <span class="hx-cc-effort-desc">Best mix of speed &amp; quality</span>
+                      </span>
                       <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </button>
-                    <button class="hx-cc-effort-opt" data-effort="high" role="menuitemradio">
-                      <span>High</span>
-                      <span class="hx-cc-effort-bars" aria-hidden="true" data-level="3"><i></i><i></i><i></i><i></i><i></i></span>
+                    <button class="hx-cc-effort-opt" data-effort="high" role="menuitemradio" aria-checked="false" title="More analysis, better reasoning, stronger accuracy">
+                      <span class="hx-cc-effort-glyph" aria-hidden="true">🧠</span>
+                      <span class="hx-cc-effort-info">
+                        <span class="hx-cc-effort-name">Deep</span>
+                        <span class="hx-cc-effort-desc">Deeper analysis and accuracy</span>
+                      </span>
                       <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </button>
-                    <button class="hx-cc-effort-opt" data-effort="extra" role="menuitemradio">
-                      <span>Extra</span>
-                      <span class="hx-cc-effort-bars" aria-hidden="true" data-level="4"><i></i><i></i><i></i><i></i><i></i></span>
+                    <button class="hx-cc-effort-opt" data-effort="extra" role="menuitemradio" aria-checked="false" title="Complex problems, planning, decision-making, multi-step thinking">
+                      <span class="hx-cc-effort-glyph" aria-hidden="true">🎯</span>
+                      <span class="hx-cc-effort-info">
+                        <span class="hx-cc-effort-name">Strategic</span>
+                        <span class="hx-cc-effort-desc">Planning &amp; multi-step thinking</span>
+                      </span>
                       <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </button>
-                    <button class="hx-cc-effort-opt is-active" data-effort="max" role="menuitemradio">
-                      <span>Max</span>
-                      <span class="hx-cc-effort-bars" aria-hidden="true" data-level="5"><i></i><i></i><i></i><i></i><i></i></span>
+                    <button class="hx-cc-effort-opt is-active" data-effort="max" role="menuitemradio" aria-checked="true" title="Maximum reasoning depth, highest quality output, no shortcuts">
+                      <span class="hx-cc-effort-glyph" aria-hidden="true">👑</span>
+                      <span class="hx-cc-effort-info">
+                        <span class="hx-cc-effort-name">Elite</span>
+                        <span class="hx-cc-effort-desc">Maximum depth, no shortcuts</span>
+                      </span>
                       <svg class="hx-cc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </button>
                     </div>
@@ -33175,10 +33312,13 @@
               e.stopPropagation();
               menu.querySelectorAll('.hx-cc-effort-opt').forEach(function (o) {
                 o.classList.remove('is-active');
+                o.setAttribute('aria-checked', 'false');
               });
               opt.classList.add('is-active');
+              opt.setAttribute('aria-checked', 'true');
               var tierEl = pick.querySelector('.hx-cc-model-tier');
-              var label = opt.querySelector('span').textContent.trim();
+              var nameEl = opt.querySelector('.hx-cc-effort-name');
+              var label = (nameEl || opt.querySelector('span')).textContent.trim();
               if (tierEl) tierEl.textContent = label;
               try { localStorage.setItem('hx-effort', opt.getAttribute('data-effort')); } catch (e) {}
             });
