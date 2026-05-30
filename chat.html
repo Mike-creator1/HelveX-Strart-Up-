@@ -27638,6 +27638,47 @@
     html[data-theme="light"] .hx-c-brand-config:active { background: rgba(0,0,0,0.05); }
     html[data-theme="dark"]  .hx-c-brand-config:active { background: rgba(255,255,255,0.06); }
     .hx-c-brand-config svg { width: 19px; height: 19px; opacity: 0.7; flex-shrink: 0; }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V238 — SMALLER, DENSER MESSAGE TEXT (mobile)
+       ───────────────────────────────────────────────────────────────────
+       The answer prose was 16.5px / 1.78 line-height — readable but it ate
+       the screen. Drop it to a compact 14.5px with a tighter rhythm so more
+       of the conversation is visible, while staying easy to read. Scales the
+       in-message headings + list items down to match. Mobile only.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content,
+      html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content {
+        font-size: 14.5px !important;
+        line-height: 1.6 !important;
+        letter-spacing: -0.003em !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content li,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-md-list > li {
+        font-size: 14.5px !important;
+        line-height: 1.6 !important;
+      }
+      /* In-message headings scale down to match the body */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h1,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h1.hx-md-h {
+        font-size: 18px !important; margin: 18px 0 8px !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h2,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h2.hx-md-h {
+        font-size: 15.5px !important; margin: 16px 0 6px !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h3,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content h3.hx-md-h {
+        font-size: 14.5px !important; margin: 14px 0 5px !important;
+      }
+      /* User message in step with the assistant prose */
+      html body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+        font-size: 14.5px !important;
+        line-height: 1.5 !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
