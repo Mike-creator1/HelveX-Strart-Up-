@@ -29922,6 +29922,97 @@
         border: 1px solid rgba(255,255,255,0.16) !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V264 — "+" TOOLS SHEET — premium action menu from the composer
+       Same idea as ChatGPT's "+" menu, but our own: a bottom sheet with a
+       grabber, branded icon tiles, and label+hint rows. Slides up over a
+       blurred backdrop. Fully functional (attach + workflow tools).
+       ═══════════════════════════════════════════════════════════════════ */
+    html body[data-active="chat"] .hx-plus-backdrop {
+      position: fixed !important; inset: 0 !important;
+      z-index: 1400 !important;
+      background: rgba(8,7,6,0.42) !important;
+      -webkit-backdrop-filter: blur(3px) !important; backdrop-filter: blur(3px) !important;
+      opacity: 0 !important;
+      transition: opacity .26s ease !important;
+    }
+    html body[data-active="chat"] .hx-plus-backdrop.is-open { opacity: 1 !important; }
+
+    html body[data-active="chat"] .hx-plus-sheet {
+      position: fixed !important;
+      left: 0 !important; right: 0 !important; bottom: 0 !important;
+      z-index: 1401 !important;
+      margin: 0 auto !important;
+      max-width: 560px !important;
+      padding: 8px 14px calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+      border-radius: 24px 24px 0 0 !important;
+      transform: translateY(102%) !important;
+      transition: transform .34s cubic-bezier(.22,1,.3,1) !important;
+      will-change: transform !important;
+      box-shadow: 0 -18px 50px -20px rgba(0,0,0,0.5) !important;
+    }
+    html body[data-active="chat"] .hx-plus-sheet.is-open { transform: translateY(0) !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-plus-sheet { background: #ffffff !important; border-top: 1px solid rgba(20,18,15,0.08) !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-plus-sheet { background: #1b1b21 !important; border-top: 1px solid rgba(255,255,255,0.08) !important; }
+
+    html body[data-active="chat"] .hx-plus-grabber {
+      display: block !important;
+      width: 40px !important; height: 4px !important;
+      margin: 6px auto 10px !important;
+      border-radius: 4px !important;
+    }
+    html[data-theme="light"] body[data-active="chat"] .hx-plus-grabber { background: rgba(20,18,15,0.16) !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-plus-grabber { background: rgba(255,255,255,0.18) !important; }
+
+    html body[data-active="chat"] .hx-plus-title {
+      margin: 0 0 6px !important; padding: 0 6px !important;
+      font-size: 11.5px !important; font-weight: 700 !important;
+      letter-spacing: 0.1em !important; text-transform: uppercase !important;
+    }
+    html[data-theme="light"] body[data-active="chat"] .hx-plus-title { color: #9a948c !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-plus-title { color: #76767f !important; }
+
+    html body[data-active="chat"] .hx-plus-list { display: flex !important; flex-direction: column !important; gap: 2px !important; }
+    html body[data-active="chat"] .hx-plus-item {
+      display: flex !important; align-items: center !important; gap: 13px !important;
+      width: 100% !important;
+      padding: 11px 8px !important;
+      border: none !important; background: transparent !important;
+      border-radius: 14px !important;
+      text-align: left !important; cursor: pointer !important;
+      transition: background .14s ease, transform .12s ease !important;
+    }
+    html[data-theme="light"] body[data-active="chat"] .hx-plus-item:active { background: rgba(20,18,15,0.05) !important; transform: scale(0.99) !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-plus-item:active { background: rgba(255,255,255,0.06) !important; transform: scale(0.99) !important; }
+
+    html body[data-active="chat"] .hx-plus-ico {
+      flex-shrink: 0 !important;
+      width: 40px !important; height: 40px !important;
+      border-radius: 12px !important;
+      display: flex !important; align-items: center !important; justify-content: center !important;
+    }
+    html body[data-active="chat"] .hx-plus-ico svg { width: 19px !important; height: 19px !important; }
+    /* branded icon tiles — tasteful distinct tints per tool */
+    html body[data-active="chat"] .hx-plus-ico.hx-pi-attach  { background: rgba(120,120,128,0.16) !important; color: #8a8a92 !important; }
+    html body[data-active="chat"] .hx-plus-ico.hx-pi-web     { background: rgba(45,120,255,0.15) !important;  color: #4a8cff !important; }
+    html body[data-active="chat"] .hx-plus-ico.hx-pi-plan    { background: rgba(16,170,110,0.15) !important;  color: #15b074 !important; }
+    html body[data-active="chat"] .hx-plus-ico.hx-pi-compare { background: rgba(150,90,240,0.15) !important;  color: #9a6bf0 !important; }
+    html body[data-active="chat"] .hx-plus-ico.hx-pi-sum     { background: rgba(255,90,31,0.14) !important;   color: var(--cg-orange,#ff5a1f) !important; }
+    html body[data-active="chat"] .hx-plus-ico.hx-pi-draft   { background: rgba(20,180,180,0.15) !important;  color: #14b4b4 !important; }
+
+    html body[data-active="chat"] .hx-plus-text { display: flex !important; flex-direction: column !important; gap: 2px !important; min-width: 0 !important; }
+    html body[data-active="chat"] .hx-plus-label { font-size: 15.5px !important; font-weight: 600 !important; letter-spacing: -0.01em !important; }
+    html body[data-active="chat"] .hx-plus-hint  { font-size: 12.5px !important; font-weight: 450 !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-plus-label { color: #1a1714 !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-plus-label { color: #f0eee8 !important; }
+    html[data-theme="light"] body[data-active="chat"] .hx-plus-hint  { color: #8f8a82 !important; }
+    html[data-theme="dark"]  body[data-active="chat"] .hx-plus-hint  { color: #82828b !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html body[data-active="chat"] .hx-plus-sheet,
+      html body[data-active="chat"] .hx-plus-backdrop { transition: none !important; }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -30166,6 +30257,41 @@
                   </button>
                   <button class="hx-chat-send" id="hx-c-send" type="button" disabled aria-label="Send">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- V264 — "+" tools sheet. Opens from the composer "+" with a
+                   premium action menu (attach + workflow tools). Reuses the
+                   conductor workflow-mode logic under the hood. -->
+              <div class="hx-plus-backdrop" id="hx-c-plus-backdrop" hidden></div>
+              <div class="hx-plus-sheet" id="hx-c-plus-sheet" role="menu" aria-label="Tools" aria-hidden="true" hidden>
+                <span class="hx-plus-grabber" aria-hidden="true"></span>
+                <p class="hx-plus-title">Εργαλεία</p>
+                <div class="hx-plus-list">
+                  <button class="hx-plus-item" type="button" role="menuitem" data-plus="attach">
+                    <span class="hx-plus-ico hx-pi-attach" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5l-8.59 8.59a5.5 5.5 0 1 1-7.78-7.78l8.59-8.59a3.5 3.5 0 1 1 4.95 4.95l-8.59 8.59a1.5 1.5 0 1 1-2.12-2.12l7.88-7.88"/></svg></span>
+                    <span class="hx-plus-text"><span class="hx-plus-label">Προσθήκη αρχείων</span><span class="hx-plus-hint">PDF, εικόνα, έγγραφο ή κώδικας</span></span>
+                  </button>
+                  <button class="hx-plus-item" type="button" role="menuitem" data-plus="research">
+                    <span class="hx-plus-ico hx-pi-web" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg></span>
+                    <span class="hx-plus-text"><span class="hx-plus-label">Αναζήτηση στον ιστό</span><span class="hx-plus-hint">Ζωντανές πληροφορίες με πηγές</span></span>
+                  </button>
+                  <button class="hx-plus-item" type="button" role="menuitem" data-plus="plan">
+                    <span class="hx-plus-ico hx-pi-plan" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+                    <span class="hx-plus-text"><span class="hx-plus-label">Σχέδιο βήμα-βήμα</span><span class="hx-plus-hint">Μετατροπή σε πλάνο δράσης</span></span>
+                  </button>
+                  <button class="hx-plus-item" type="button" role="menuitem" data-plus="compare">
+                    <span class="hx-plus-ico hx-pi-compare" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="m5 8 4 4-4 4"/><path d="m19 8-4 4 4 4"/></svg></span>
+                    <span class="hx-plus-text"><span class="hx-plus-label">Σύγκριση επιλογών</span><span class="hx-plus-hint">Πίνακας με υπέρ, κατά & πρόταση</span></span>
+                  </button>
+                  <button class="hx-plus-item" type="button" role="menuitem" data-plus="summarize">
+                    <span class="hx-plus-ico hx-pi-sum" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span>
+                    <span class="hx-plus-text"><span class="hx-plus-label">Σύνοψη</span><span class="hx-plus-hint">Τα κύρια σημεία σε λίγα bullets</span></span>
+                  </button>
+                  <button class="hx-plus-item" type="button" role="menuitem" data-plus="draft">
+                    <span class="hx-plus-ico hx-pi-draft" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
+                    <span class="hx-plus-text"><span class="hx-plus-label">Σύνταξη κειμένου</span><span class="hx-plus-hint">Έτοιμο draft email, μήνυμα ή doc</span></span>
                   </button>
                 </div>
               </div>
@@ -35202,7 +35328,49 @@
         }
 
         // File picker + drag-drop on the composer
-        attachBtn.addEventListener('click', function () { fileInput.click(); });
+        // V264 — the "+" now opens the tools sheet; "Attach files" inside it
+        // opens the real picker.
+        function openPlusSheet() {
+          var sheet = document.getElementById('hx-c-plus-sheet');
+          var back  = document.getElementById('hx-c-plus-backdrop');
+          if (!sheet || !back) { fileInput.click(); return; }
+          back.hidden = false;
+          sheet.hidden = false;
+          sheet.setAttribute('aria-hidden', 'false');
+          requestAnimationFrame(function () {
+            back.classList.add('is-open');
+            sheet.classList.add('is-open');
+          });
+        }
+        function closePlusSheet() {
+          var sheet = document.getElementById('hx-c-plus-sheet');
+          var back  = document.getElementById('hx-c-plus-backdrop');
+          if (!sheet || !back) return;
+          back.classList.remove('is-open');
+          sheet.classList.remove('is-open');
+          sheet.setAttribute('aria-hidden', 'true');
+          setTimeout(function () {
+            if (!sheet.classList.contains('is-open')) { sheet.hidden = true; back.hidden = true; }
+          }, 300);
+        }
+        attachBtn.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); openPlusSheet(); });
+        (function bindPlusSheet() {
+          var back = document.getElementById('hx-c-plus-backdrop');
+          var sheet = document.getElementById('hx-c-plus-sheet');
+          if (back) back.addEventListener('click', closePlusSheet);
+          if (sheet) sheet.querySelectorAll('.hx-plus-item').forEach(function (item) {
+            item.addEventListener('click', function () {
+              var kind = item.getAttribute('data-plus');
+              closePlusSheet();
+              setTimeout(function () {
+                if (kind === 'attach') { fileInput.click(); return; }
+                var chip = conductorEl && conductorEl.querySelector('.hx-conductor-chip[data-conduct="' + kind + '"]');
+                if (chip) { chip.click(); }
+                else if (inputEl) { inputEl.focus(); }
+              }, 70);
+            });
+          });
+        })();
         fileInput.addEventListener('change', function (e) {
           handleFiles(e.target.files);
           fileInput.value = '';
@@ -35549,7 +35717,7 @@
               { kind: 'action', label: 'Draft a document', hint: 'Email, message, proposal, post', icon: I.draft,   run: function () { prefill('Draft a '); } },
               { kind: 'action', label: 'Explain simply', hint: 'Plain-language breakdown', icon: I.explain, run: function () { prefill('Explain simply: '); } },
               { kind: 'action', label: 'Summarize text', hint: 'Distil a long passage', icon: I.sum,     run: function () { prefill('Summarize the following:\n\n'); } },
-              { kind: 'action', label: 'Attach a file', hint: 'PDF, image, doc, code', icon: I.attach,  run: function () { var b = document.getElementById('hx-c-attach'); if (b) b.click(); } },
+              { kind: 'action', label: 'Attach a file', hint: 'PDF, image, doc, code', icon: I.attach,  run: function () { var f = document.getElementById('hx-c-file'); if (f) f.click(); } },
               { kind: 'action', label: 'Voice input',   hint: 'Speak instead of typing',  icon: I.voice,   run: function () { var b = document.getElementById('hx-c-mic'); if (b) b.click(); } },
               { kind: 'action', label: 'New chat',      hint: 'Start a fresh session',    icon: I.newchat, run: function () { try { newConversation(); } catch (e) {} } },
               { kind: 'model',  label: 'Switch to Ether',      hint: 'Real-time, no agent',     icon: I.model, run: function () { setModel('ether'); } },
