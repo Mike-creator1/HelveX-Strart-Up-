@@ -30044,8 +30044,11 @@
         box-shadow: 0 0 0 4px color-mix(in srgb, var(--cg-orange,#ff5a1f) 8%, transparent), 0 10px 28px -14px color-mix(in srgb, var(--cg-orange,#ff5a1f) 40%, transparent) !important;
       }
 
-      /* (3) Panel layout */
-      html body[data-active="chat"] .hx-voice-panel {
+      /* (3) Panel layout — ONLY visible while recording. The hidden attr
+         must always win so it never overlaps the composer on load. */
+      html body[data-active="chat"] .hx-voice-panel[hidden] { display: none !important; }
+      html body[data-active="chat"] .hx-chat-input-row:not(.is-recording-mode) .hx-voice-panel { display: none !important; }
+      html body[data-active="chat"] .hx-chat-input-row.is-recording-mode .hx-voice-panel:not([hidden]) {
         display: flex !important;
         align-items: center !important;
         gap: 12px !important;
