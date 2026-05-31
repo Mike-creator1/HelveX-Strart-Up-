@@ -2051,23 +2051,21 @@
       // Per-state dot + grid, scaled to that state's auto-fit font size so
       // the texture (dots-per-letter) stays identical at every screen size.
       //
-      // Two things make the type read as a crisp LED-style dot-matrix
-      // rather than a smeared mush:
-      //   • COARSE grid (≈0.10·fontSize) — fewer, larger, clearly distinct
-      //     dots per letter (~6 across the cap-height), so each dot is its
-      //     own shape instead of a haze of overlapping mini-dots.
-      //   • A real GAP between dots — radius is 0.42·grid, so the diameter
-      //     is 0.84·grid and ~16% of the spacing stays as clean background
-      //     between every dot. Dots never touch or overlap → sharp edges.
-      // A grid floor of 3 guarantees the dot diameter never falls below
-      // ~2.5px even on the smallest long-word fonts, so dots always render
-      // as solid black circles and never thin out into faint grey specks.
+      // Thin, normal-weight dots — NOT chunky. A fine grid (≈0.05·fontSize)
+      // keeps the original delicate dotted look, and the radius is 0.40·grid
+      // so the dot diameter is only 0.80·grid: every dot keeps a clean 20%
+      // gap from its neighbours and never touches or overlaps. That gap is
+      // the whole point — it's what makes the words read sharp and clear
+      // instead of the dots merging into a muddy smear (the original bug had
+      // a 3.4px dot on a 3px grid, so they overlapped into a solid blob).
+      // A grid floor of 3 keeps the dot diameter at/above ~2.4px so the thin
+      // dots still render as solid black, never faint grey specks.
       DOT_BY_STATE = [];
       statePts    = [];
       for (var sx = 0; sx < STATES.length; sx++) {
         var gfs  = fsPerState[sx];
-        var grid = Math.max(3, Math.round(gfs * 0.10)); // coarse → big distinct dots
-        var dotR = grid * 0.42;                         // ~16% gap → crisp, separated
+        var grid = Math.max(3, Math.round(gfs * 0.05)); // fine grid → thin, delicate dots
+        var dotR = grid * 0.40;                         // diameter 0.80·grid → 20% gap, no overlap
         DOT_BY_STATE.push(dotR);
         statePts.push(buildPointsFor(STATES[sx].text, STATES[sx].font, grid, gfs).pts);
       }
