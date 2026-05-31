@@ -30481,6 +30481,91 @@
         top: calc(19px + 0.18em) !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V300 — CLASSIC CHAT ALIGNMENT (final; wins on source order)
+       The messages I send → right-aligned bubble. The AI's messages and the
+       "thinking" state → left, led by the model's small classic logo. No
+       centered or animated mark.
+       ═══════════════════════════════════════════════════════════════════ */
+    /* ── My messages: right ──────────────────────────────────────────── */
+    html body[data-active="chat"] .hx-msg.is-user {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-end !important;
+      text-align: right !important;
+    }
+    html body[data-active="chat"] .hx-msg.is-user::before,
+    html body[data-active="chat"] .hx-msg.is-user::after { content: none !important; display: none !important; }
+    html body[data-active="chat"] .hx-msg.is-user .hx-msg-body {
+      display: flex !important;
+      justify-content: flex-end !important;
+      width: 100% !important;
+    }
+    html body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+      display: inline-block !important;
+      width: auto !important;
+      max-width: 82% !important;
+      margin-left: auto !important;
+      margin-right: 0 !important;
+      padding-left: 15px !important;
+      border-left: 0 !important;
+      text-align: left !important;
+    }
+    html body[data-active="chat"] .hx-msg.is-user .hx-msg-user-actions,
+    html body[data-active="chat"] .hx-msg.is-user .hx-msg-actions { justify-content: flex-end !important; }
+
+    /* ── AI messages: left ───────────────────────────────────────────── */
+    html body[data-active="chat"] .hx-msg.is-assistant {
+      display: block !important;
+      text-align: left !important;
+    }
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-body,
+    html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content {
+      text-align: left !important;
+      margin-right: auto !important;
+    }
+
+    /* ── Thinking: laid out like an assistant message — classic logo +
+          "Helix" on top, three quiet dots below, on the LEFT ──────────── */
+    html body[data-active="chat"] .hx-msg.hx-msg-thinking {
+      display: block !important;
+      text-align: left !important;
+      grid-template-columns: none !important;
+    }
+    html body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-msg-head {
+      display: flex !important;
+      align-items: center !important;
+      gap: 9px !important;
+      margin-bottom: 8px !important;
+    }
+    html body[data-active="chat"] .hx-msg.hx-msg-thinking .hx-msg-avatar { display: inline-flex !important; }
+    html body[data-active="chat"] .hx-msg.hx-msg-thinking > .hx-msg-body {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      gap: 8px !important;
+      padding: 0 !important;
+    }
+    html body[data-active="chat"] .hx-msg.hx-msg-thinking > .hx-msg-body::before,
+    html body[data-active="chat"] .hx-msg.hx-msg-thinking > .hx-msg-body::after { content: none !important; display: none !important; }
+    /* retire the old animated mark/label if any stale node remains */
+    html body[data-active="chat"] .hx-think-mark,
+    html body[data-active="chat"] .hx-think-label,
+    html body[data-active="chat"] .hx-thinking-solo { display: none !important; }
+    /* quiet three-dot indicator */
+    html body[data-active="chat"] .hx-thinking-dots { display: inline-flex !important; align-items: center; gap: 5px; }
+    html body[data-active="chat"] .hx-thinking-dots > span {
+      width: 6px !important; height: 6px !important; border-radius: 50% !important;
+      background: color-mix(in srgb, var(--hx-text) 42%, transparent) !important;
+      animation: hx-tdot300 1.2s ease-in-out infinite !important;
+    }
+    html body[data-active="chat"] .hx-thinking-dots > span:nth-child(2) { animation-delay: 0.15s !important; }
+    html body[data-active="chat"] .hx-thinking-dots > span:nth-child(3) { animation-delay: 0.30s !important; }
+    @keyframes hx-tdot300 { 0%,80%,100% { opacity: .35; transform: scale(.8); } 40% { opacity: 1; transform: scale(1.1); } }
+    /* calm the ambient presence glow so nothing "moves" in the center */
+    html body[data-active="chat"] .hx-chat-pane:has(.hx-msg-thinking)::after,
+    html body[data-active="chat"] .hx-chat-pane:has(.hx-msg.is-streaming)::after { animation: none !important; }
   </style>
 </head>
 <body data-active="chat">
@@ -32867,12 +32952,19 @@
                   '</g>' +
                 '</svg>';
             }
+            // Thinking indicator: the model's own small CLASSIC logo (same
+            // mark as the assistant avatar) on the LEFT, with three quiet
+            // dots — no elaborate animated atom/flame. Laid out exactly like
+            // an assistant message so it reads consistently on the left.
             html += '<div class="hx-msg is-assistant hx-msg-thinking is-' + escape(activeModel) + '">' +
+              '<div class="hx-msg-head">' +
+                '<span class="hx-msg-avatar is-assistant hx-mg-' + escape(activeModel) + '" aria-hidden="true">' +
+                  modelLogoSvg(activeModel) +
+                '</span>' +
+                '<span class="hx-msg-author">Helix</span>' +
+              '</div>' +
               '<div class="hx-msg-body">' +
-                '<span class="hx-think-mark" aria-hidden="true">' + thinkMark + '</span>' +
-                // V91 — label rendered visually-hidden for screen readers only.
-                // The animated model logo IS the visible state.
-                '<span class="hx-think-label hx-sr-only" aria-label="' + escape(thinkLabel) + '">' + escape(thinkLabel) + '</span>' +
+                '<span class="hx-thinking-dots" role="status" aria-label="' + escape(thinkLabel) + '"><span></span><span></span><span></span></span>' +
               '</div>' +
             '</div>';
           }
