@@ -2854,10 +2854,10 @@ html[data-theme="dark"] .hx-table td { color: var(--hx-text, #fff); }
    ════════════════════════════════════════════════════════════════════ */
 .hx-nav-item[data-hx-helix]{
   position:relative;
-  margin:6px 2px;
-  padding:12px 14px;
+  margin:14px 2px;          /* extra breathing room above & below */
+  padding:14px 14px;
   font-weight:800;
-  font-size:15.5px;
+  font-size:17.5px;          /* a touch larger than the rest */
   letter-spacing:0.01em;
   color:#fff !important;
   border-radius:14px;
