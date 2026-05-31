@@ -29805,6 +29805,63 @@
         padding-top: 10px !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V262 — COMPOSER EXACTLY LIKE CLAUDE (mobile)
+       Reshape the single-line pill into Claude's tall rounded card: the
+       text sits on its own line at the top, and a control row below holds
+       a "+" (attach) on the left and the mic + send on the right.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* The card */
+      html body[data-active="chat"] .hx-chat-input-bar {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        column-gap: 7px !important;
+        row-gap: 4px !important;
+        padding: 11px 11px 11px 13px !important;
+        border-radius: 25px !important;
+      }
+      /* a touch more depth on the card so it reads as Claude's input box */
+      html[data-theme="dark"]  body[data-active="chat"] .hx-chat-input-bar { background: #26262b !important; box-shadow: 0 2px 14px -8px rgba(0,0,0,0.6) !important; }
+      html[data-theme="light"] body[data-active="chat"] .hx-chat-input-bar { background: #ffffff !important; box-shadow: 0 2px 12px -6px rgba(20,18,15,0.12) !important; }
+
+      /* Text = full first row */
+      html body[data-active="chat"] .hx-chat-input-bar .hx-chat-textarea {
+        order: 0 !important;
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        padding: 6px 6px 2px 6px !important;
+        min-height: 30px !important;
+        max-height: 184px !important;
+        line-height: 1.42 !important;
+        font-size: 16px !important;
+      }
+
+      /* Control row: + on the left, mic + send pushed right */
+      html body[data-active="chat"] .hx-chat-input-bar #hx-c-attach.hx-chat-tool-btn { order: 1 !important; }
+      html body[data-active="chat"] .hx-chat-input-bar #hx-c-mic.hx-chat-tool-btn   { order: 2 !important; margin-left: auto !important; }
+      html body[data-active="chat"] .hx-chat-input-bar #hx-c-send                    { order: 3 !important; }
+
+      /* The "+" attach — a clean bordered round button (Claude signature) */
+      html body[data-active="chat"] .hx-chat-input-bar #hx-c-attach.hx-chat-tool-btn {
+        width: 34px !important; height: 34px !important;
+        border-radius: 50% !important;
+      }
+      html[data-theme="dark"]  body[data-active="chat"] .hx-chat-input-bar #hx-c-attach.hx-chat-tool-btn { border: 1px solid rgba(255,255,255,0.18) !important; color: #d8d8de !important; background: transparent !important; }
+      html[data-theme="light"] body[data-active="chat"] .hx-chat-input-bar #hx-c-attach.hx-chat-tool-btn { border: 1px solid rgba(20,18,15,0.18) !important; color: #44403a !important; background: transparent !important; }
+      html body[data-active="chat"] .hx-chat-input-bar #hx-c-attach.hx-chat-tool-btn svg { width: 18px !important; height: 18px !important; }
+
+      /* mic — quiet ghost button */
+      html body[data-active="chat"] .hx-chat-input-bar #hx-c-mic.hx-chat-tool-btn {
+        width: 34px !important; height: 34px !important;
+      }
+
+      /* the focus ring follows the taller card */
+      html body[data-active="chat"] #hx-c-input-row { border-radius: 27px !important; }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -30024,7 +30081,7 @@
                     type="button"
                     aria-label="Attach files"
                     title="Attach an image or document">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5l-8.59 8.59a5.5 5.5 0 1 1-7.78-7.78l8.59-8.59a3.5 3.5 0 1 1 4.95 4.95l-8.59 8.59a1.5 1.5 0 1 1-2.12-2.12l7.88-7.88"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                   </button>
                   <input
                     type="file"
