@@ -1927,7 +1927,13 @@
        To keep the dot weight uniform across states (no halftone vs
        solid mismatch), the dot radius and sampling density are scaled
        proportionally to the font size in build() below. */
-    function buildPointsFor(text, fontTemplate, baseDensity, fontSize) {
+    // Renders one OR more lines of text, stacked and centred, then samples
+    // the dark pixels to a sparse grid of (x,y) dots centred on the origin.
+    // Multi-line support is what keeps long phrases legible: a phrase like
+    // "Intelligent Workflows" on a single line auto-fits tiny on a phone and
+    // turns to mush, but split across two lines it renders at a much larger
+    // font, so its dots are big and the letters stay sharp.
+    function buildPointsFor(lines, fontTemplate, baseDensity, fontSize) {
       var SCALE = 3;
       var off = document.createElement('canvas');
       var oc  = off.getContext('2d');
@@ -1935,10 +1941,18 @@
       var fs = fontSize;
       var spec = fontTemplate.replace('PX', String(fs));
       oc.font = spec;
-      var textW = oc.measureText(text).width;
+      try { oc.letterSpacing = '-0.02em'; } catch (e) { /* unsupported */ }
+
+      // Widest line drives the canvas width; line count drives the height.
+      var textW = 0;
+      for (var li = 0; li < lines.length; li++) {
+        var lw = oc.measureText(lines[li]).width;
+        if (lw > textW) textW = lw;
+      }
+      var lineH = fs * 1.18;
 
       var logicalW = Math.max(Math.ceil(textW) + 24, 32);
-      var logicalH = Math.max(Math.ceil(fs * 1.3),   32);
+      var logicalH = Math.max(Math.ceil(lineH * lines.length + fs * 0.34), 32);
       off.width  = logicalW * SCALE;
       off.height = logicalH * SCALE;
 
@@ -1947,29 +1961,32 @@
       c.font = spec;
       c.fillStyle = '#000';
       c.textBaseline = 'middle';
-      c.textAlign = 'left';
+      c.textAlign = 'center';
       // Sharper text rendering + tight tech tracking. letterSpacing
       // is widely supported in modern browsers; when it's not, the
       // assignment no-ops and we render at default tracking.
       if ('textRendering' in c) { c.textRendering = 'geometricPrecision'; }
       try { c.letterSpacing = '-0.02em'; } catch (e) { /* unsupported */ }
-      c.fillText(text, 12, logicalH / 2);
+
+      // Stack the lines, vertically centred within the canvas.
+      var totalH = lineH * lines.length;
+      var startY = (logicalH - totalH) / 2 + lineH / 2;
+      for (var ln = 0; ln < lines.length; ln++) {
+        c.fillText(lines[ln], logicalW / 2, startY + ln * lineH);
+      }
 
       var data = c.getImageData(0, 0, logicalW * SCALE, logicalH * SCALE).data;
       var stride = baseDensity * SCALE;
       var rowW = logicalW * SCALE;
       var pts = [];
-      // Alpha threshold 95 — captures the solid letter cores AND most of
-      // the antialiased edge, so dots fill the letterforms more fully:
-      // thin strokes and curves get covered edge-to-edge, the type reads
-      // richer and blacker and is easier to read — all WITHOUT changing
-      // the dot size or grid (same delicate dots, just more of them where
-      // the letter actually is). Dropping below ~80 would start catching
-      // the hazy outline halo, so 95 stays clean.
+      // Alpha threshold 130 — captures the solid letter cores plus a little
+      // of the antialiased edge, so dots fill the letterforms fully (rich,
+      // black, legible) without picking up the hazy outline halo that made
+      // small text look ragged.
       for (var y = 0; y < logicalH * SCALE; y += stride) {
         for (var x = 0; x < logicalW * SCALE; x += stride) {
           var i = (y * rowW + x) * 4;
-          if (data[i + 3] > 95) {
+          if (data[i + 3] > 130) {
             pts.push({
               x: (x / SCALE - logicalW / 2),
               y: (y / SCALE - logicalH / 2)
@@ -1977,10 +1994,6 @@
           }
         }
       }
-      // Return both the sample points and the resolved font spec so
-      // render() can call fillText with the exact same sized font
-      // and keep the hold-phase solid render perfectly aligned with
-      // where the dots will land.
       return { pts: pts, spec: spec };
     }
 
@@ -2028,19 +2041,55 @@
       var measureCtx    = measureCanvas.getContext('2d');
       try { measureCtx.letterSpacing = '-0.02em'; } catch (e) {}
 
-      // 1) Decide each state's auto-fit font size.
-      var fsPerState = [];
-      var smallestFs = Infinity;
-      for (var s = 0; s < STATES.length; s++) {
-        var fs = maxFs;
-        var spec = STATES[s].font.replace('PX', String(fs));
-        measureCtx.font = spec;
-        var w = measureCtx.measureText(STATES[s].text).width;
-        if (w > maxW) {
-          fs = Math.max(20, Math.floor(maxFs * maxW / w));
+      // Largest font at which a given set of lines fits both the width
+      // (widest line ≤ maxW) and the height (all lines stacked ≤ maxH).
+      function fitLines(lines, fontTemplate) {
+        var specAtMax = fontTemplate.replace('PX', String(maxFs));
+        measureCtx.font = specAtMax;
+        var widest = 0;
+        for (var i = 0; i < lines.length; i++) {
+          var w = measureCtx.measureText(lines[i]).width;
+          if (w > widest) widest = w;
         }
+        var byWidth  = widest > 0 ? Math.floor(maxFs * maxW / widest) : maxFs;
+        var byHeight = Math.floor(maxH / (lines.length * 1.18));
+        return Math.max(20, Math.min(maxFs, byWidth, byHeight));
+      }
+
+      // Split a phrase into two balanced lines on a word boundary.
+      function splitTwo(text) {
+        var words = text.split(' ');
+        if (words.length < 2) return [text];
+        var best = 1, bestDiff = Infinity, total = text.length;
+        for (var k = 1; k < words.length; k++) {
+          var left = words.slice(0, k).join(' ').length;
+          var diff = Math.abs(left - (total - left));
+          if (diff < bestDiff) { bestDiff = diff; best = k; }
+        }
+        return [words.slice(0, best).join(' '), words.slice(best).join(' ')];
+      }
+
+      // 1) Decide each state's line layout + auto-fit font size. Short words
+      //    stay on one line; long phrases wrap to two lines when that lets
+      //    them render at a meaningfully larger (clearer) font.
+      var fsPerState    = [];
+      var linesPerState = [];
+      for (var s = 0; s < STATES.length; s++) {
+        var text = STATES[s].text;
+        var tmpl = STATES[s].font;
+        var oneFs = fitLines([text], tmpl);
+        var lines = [text], fs = oneFs;
+        if (text.indexOf(' ') !== -1 && oneFs < 46) {
+          var two = splitTwo(text);
+          if (two.length === 2) {
+            var twoFs = fitLines(two, tmpl);
+            // Only wrap if two lines are clearly bigger — avoids stacking
+            // short words like "AI Agents" that already read fine on one line.
+            if (twoFs > oneFs * 1.15) { lines = two; fs = twoFs; }
+          }
+        }
+        linesPerState.push(lines);
         fsPerState.push(fs);
-        if (fs < smallestFs) smallestFs = fs;
       }
 
       /* 2) Fixed dot radius + fixed grid spacing across every state.
@@ -2070,7 +2119,7 @@
         var grid = Math.max(3, Math.round(gfs * 0.05)); // fine grid → thin, delicate dots
         var dotR = grid * 0.40;                         // diameter 0.80·grid → 20% gap, no overlap
         DOT_BY_STATE.push(dotR);
-        statePts.push(buildPointsFor(STATES[sx].text, STATES[sx].font, grid, gfs).pts);
+        statePts.push(buildPointsFor(linesPerState[sx], STATES[sx].font, grid, gfs).pts);
       }
 
       // Equalize lengths
