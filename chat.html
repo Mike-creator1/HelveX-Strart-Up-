@@ -29738,6 +29738,73 @@
       padding: 0 !important;
       font: inherit !important;
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V261 — LET THE CHAT BREATHE (mobile) — generous vertical rhythm
+       Big, calm whitespace everywhere: clear separation between turns, room
+       around the answer, air between every block, and space above the
+       composer. The thread should feel open and unhurried, like ChatGPT /
+       Claude — never cramped.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Thread: more side air + a generous top/bottom and predictable rhythm
+         (gap → 0 so the per-message margins below fully control spacing). */
+      html body[data-active="chat"] #hx-c-thread .hx-chat-thread-inner,
+      html body[data-active="chat"] .hx-chat-thread-inner {
+        gap: 0 !important;
+        padding: 30px 18px 60px !important;
+      }
+      /* Big breath BETWEEN turns (before each new question) */
+      html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-user {
+        margin-top: 60px !important;
+      }
+      html body[data-active="chat"] .hx-chat-thread-inner > .hx-msg.is-user:first-child {
+        margin-top: 8px !important;
+      }
+      /* Comfortable breath between a question and its answer */
+      html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant {
+        margin-top: 32px !important;
+      }
+      /* The model header gets room before the answer opens */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-head {
+        margin-bottom: 16px !important;
+      }
+
+      /* ── Air INSIDE the answer ── */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > .hx-md-p:first-child {
+        margin-bottom: 22px !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-p {
+        margin: 0 0 17px !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-h2 { margin: 38px 0 15px !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-h3 { margin: 28px 0 10px !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-h4 { margin: 26px 0 9px !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-list { margin: 20px 0 !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-list:not(.hx-md-list-num) { gap: 11px !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-list.hx-md-list-num { gap: 20px !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-md-table-wrap,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-md-callout,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-md-quote,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-block,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-chart,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-art {
+        margin: 24px 0 !important;
+      }
+      /* keep the very first/last block flush so the breath stays even */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > :first-child { margin-top: 0 !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > :last-child { margin-bottom: 0 !important; }
+
+      /* ── Air around the answer actions (copy / regenerate row) ── */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-actions {
+        margin-top: 18px !important;
+      }
+
+      /* ── Breath above the composer so the last turn isn't crammed ── */
+      html body[data-active="chat"] .hx-chat-compose {
+        padding-top: 10px !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
