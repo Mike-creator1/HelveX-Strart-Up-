@@ -30340,6 +30340,52 @@
         opacity: 0.9 !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V270 — SMALLER, BREATHABLE CHAT TEXT (mobile) — Claude-sized
+       The answer text was 16px+ which felt big. Bring it down to a calm,
+       easily-readable scale (~14.5px body) with comfortable line-height so
+       the answer breathes and reads effortlessly — like Claude/ChatGPT.
+       Last in the cascade so it wins; high specificity + !important.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Base answer text */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content {
+        font-size: 14.5px !important;
+        line-height: 1.66 !important;
+        letter-spacing: -0.002em !important;
+      }
+      /* Paragraphs */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-p,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > p {
+        font-size: 14.5px !important;
+        line-height: 1.66 !important;
+      }
+      /* Lead — a touch larger for presence, but not big */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content > .hx-md-p:first-child {
+        font-size: 15.5px !important;
+        line-height: 1.58 !important;
+      }
+      /* List items */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-list > li,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-list.hx-md-list-num > li {
+        font-size: 14.5px !important;
+        line-height: 1.6 !important;
+      }
+      /* Headings — scaled down to match */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-h2 { font-size: 17px !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-h3 { font-size: 14.5px !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-h4 { font-size: 11px !important; }
+      /* Tables + callouts a hair smaller to match the new scale */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-md-table tbody td,
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-md-table thead th { font-size: 13px !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-md-callout-text { font-size: 14px !important; }
+      /* User bubble matches the calmer scale too */
+      html body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+        font-size: 14.5px !important;
+        line-height: 1.55 !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
