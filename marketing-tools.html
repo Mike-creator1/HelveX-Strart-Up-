@@ -297,5 +297,15 @@
     </div>
   </footer>
   <script src="/helvex.js" defer></script>
+  <script>
+  (function(){
+    try{
+      if(localStorage.getItem('hx_intro_played')==='1'){
+        var ns=document.querySelectorAll('a.btn-primary span, a[href*="signup"] span');
+        ns.forEach(function(s){ if(/Try\s*HeliX/i.test(s.textContent)) s.textContent='HeliX'; });
+      }
+    }catch(e){}
+  })();
+  </script>
 </body>
 </html>

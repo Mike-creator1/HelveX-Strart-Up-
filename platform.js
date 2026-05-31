@@ -62,13 +62,11 @@
       label: 'Workspace',
       items: [
         { id: 'dashboard',   href: '/dashboard.html',   label: 'Overview',    icon: 'home' },
-        { id: 'chat',        href: '/chat.html',        label: 'Chat',        icon: 'chat' },
         { id: 'workbench',   href: '/workbench.html',   label: 'Workbench',   icon: 'workbench' },
         { id: 'memory',      href: '/memory.html',      label: 'Memory',      icon: 'memory' },
         { id: 'projects',    href: '/projects.html',    label: 'Projects',    icon: 'folder' },
         { id: 'deployments', href: '/deployments.html', label: 'Deployments', icon: 'cloud' },
-        { id: 'services',    href: '/services.html',    label: 'Services',    icon: 'grid' },
-        { id: 'consulting',  href: '/consulting.html',  label: 'Consulting',  icon: 'briefcase' }
+        { id: 'services',    href: '/services.html',    label: 'Services',    icon: 'grid' }
       ]
     },
     {
@@ -696,12 +694,10 @@
 
   var PAGES = [
     { title: 'Overview',          href: '/dashboard.html',  hint: 'Workspace' },
-    { title: 'Chat',              href: '/chat.html',       hint: 'Workspace' },
     { title: 'Workbench',         href: '/workbench.html',  hint: 'Workspace' },
     { title: 'Memory',            href: '/memory.html',     hint: 'Workspace' },
     { title: 'Projects',          href: '/projects.html',   hint: 'Workspace' },
     { title: 'Services',          href: '/services.html',   hint: 'Workspace' },
-    { title: 'Consulting',        href: '/consulting.html', hint: 'Workspace' },
     { title: 'CRM',               href: '/app-crm.html',         hint: 'Toolkit' },
     { title: 'Marketing Tools',   href: '/app-marketing.html',   hint: 'Toolkit' },
     { title: 'Automation',        href: '/app-automation.html',  hint: 'Toolkit' },
