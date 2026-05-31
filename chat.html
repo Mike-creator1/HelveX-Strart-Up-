@@ -29588,6 +29588,111 @@
       html body[data-active="chat"] #hx-c-send:not(:disabled),
       html body[data-active="chat"] #hx-c-input-row:focus-within { animation: none !important; }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V259 — PREMIUM CODE BLOCKS (mobile) — real syntax highlighting +
+       a polished terminal header. Professional editor feel: traffic-light
+       dots, a clean language badge, a clear Copy button, and a refined
+       monochrome-dark body with a tasteful token palette.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-block {
+        border-radius: 15px !important;
+        overflow: hidden !important;
+        margin: 20px 0 !important;
+        border: 1px solid rgba(255,255,255,0.08) !important;
+        background: #16161e !important;
+        box-shadow: 0 22px 50px -26px rgba(0,0,0,0.8), 0 2px 6px -3px rgba(0,0,0,0.4) !important;
+      }
+      /* ── Header: traffic lights + language badge + Copy ── */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-head {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 9px 10px 9px 14px !important;
+        background: linear-gradient(180deg, #20202b 0%, #1a1a23 100%) !important;
+        border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+        position: relative !important;
+      }
+      /* clean header — no fighting pseudo dot; a crisp lang badge instead */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-head::before {
+        content: none !important;
+        display: none !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-lang {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 7px !important;
+        color: #9aa0b3 !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.12em !important;
+        text-transform: uppercase !important;
+      }
+      /* a small accent dot as part of the badge (inline, no layout fight) */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-lang::before {
+        content: '' !important;
+        width: 8px !important; height: 8px !important;
+        border-radius: 50% !important;
+        background: var(--cg-orange,#ff5a1f) !important;
+        box-shadow: 0 0 8px color-mix(in srgb, var(--cg-orange,#ff5a1f) 75%, transparent) !important;
+        flex-shrink: 0 !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-actions {
+        margin-left: auto !important;
+        display: flex !important; gap: 6px !important;
+        opacity: 1 !important;   /* always visible on touch (no hover to reveal it) */
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-btn {
+        display: inline-flex !important; align-items: center !important; gap: 6px !important;
+        color: #d6d6e0 !important;
+        background: rgba(255,255,255,0.09) !important;
+        border: 1px solid rgba(255,255,255,0.14) !important;
+        padding: 6px 12px !important;
+        font-size: 11.5px !important; font-weight: 650 !important;
+        border-radius: 8px !important;
+        transition: background .15s ease, color .15s ease, transform .12s ease, border-color .15s ease !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-btn svg { width: 13px !important; height: 13px !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-btn:active {
+        background: color-mix(in srgb, var(--cg-orange,#ff5a1f) 70%, transparent) !important;
+        color: #fff !important;
+        transform: scale(0.95) !important;
+      }
+      /* ── Body ── */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body {
+        background: #16161e !important;
+        color: #c0caf5 !important;
+        padding: 15px 16px !important;
+        font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace !important;
+        font-size: 12.75px !important;
+        line-height: 1.7 !important;
+        max-height: 440px !important;
+        -webkit-overflow-scrolling: touch !important;
+        tab-size: 2 !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body::-webkit-scrollbar { height: 7px !important; width: 7px !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.14) !important; border-radius: 4px !important; }
+
+      /* ── Token palette (Tokyo Night-inspired, tuned for #16161e) ── */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-comment  { color: #565f89 !important; font-style: italic !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-keyword  { color: #bb9af7 !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-string   { color: #9ece6a !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-number   { color: #ff9e64 !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-function { color: #7aa2f7 !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-type     { color: #2ac3de !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-variable { color: #7dcfff !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-property { color: #7dcfff !important; }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-body .tok-punct    { color: #89ddff !important; }
+      /* streaming pill */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-code-streaming {
+        color: #ffb494 !important;
+        background: rgba(255,90,31,0.16) !important;
+        border: 1px solid rgba(255,90,31,0.3) !important;
+        font-size: 10px !important; padding: 2px 7px !important; border-radius: 6px !important;
+        letter-spacing: 0.04em !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -30872,6 +30977,101 @@
         return '<div class="hx-diagram">' + html + '</div>';
       }
 
+      // ── V259 — Syntax highlighter ──────────────────────────────────
+      // Lightweight, dependency-free tokenizer that wraps tokens in
+      // <span class="tok-*"> so the premium code theme can colour them.
+      // Covers C-like (JS/TS/JSON/Java/C/Go/Rust…), Python, shell, CSS and
+      // HTML/XML; anything else falls back to a safe escaped plain block.
+      function hxEsc(s){ return String(s).replace(/[&<>]/g, function (c){ return c === '&' ? '&amp;' : c === '<' ? '&lt;' : '&gt;'; }); }
+      function hxHighlight(code, lang) {
+        lang = (lang || '').toLowerCase();
+        var fam = 'c';
+        if (/^(py|python)$/.test(lang)) fam = 'py';
+        else if (/^(sh|bash|shell|zsh|console|shell-session)$/.test(lang)) fam = 'sh';
+        else if (/^(html|xml|svg|htm|vue)$/.test(lang)) return hxHlMarkup(code);
+        else if (/^(css|scss|sass|less)$/.test(lang)) return hxHlCss(code);
+        else if (/^(json|jsonc)$/.test(lang)) fam = 'json';
+        else if (!/^(js|jsx|ts|tsx|javascript|typescript|java|c|cpp|c\+\+|cs|csharp|go|golang|rust|rs|php|swift|kotlin|kt|scala|dart|)$/.test(lang)) {
+          // Unknown language — still tokenize as C-like (safe + usually fine)
+          fam = 'c';
+        }
+        var KW = {
+          c: 'const let var function return if else for while do switch case break continue new class extends super this typeof instanceof try catch finally throw async await yield import from export default delete void null undefined true false public private protected static readonly abstract interface type enum implements as namespace package func struct impl fn use mut pub match where defer chan select int8 int16 int32 int64 uint string bool byte rune float double long short char unsigned signed sizeof template typename virtual override final val fun when object companion',
+          py: 'def return if elif else for while in not and or is None True False class import from as with try except finally raise lambda yield global nonlocal pass break continue del assert async await match case',
+          sh: 'if then else elif fi for in do done while until case esac function return export local readonly declare echo cd read exit set unset source eval trap shift',
+          json: 'true false null'
+        };
+        var kwset = {}; (KW[fam] || '').split(' ').forEach(function (w){ if (w) kwset[w] = 1; });
+        function span(cls, txt){ return '<span class="tok-' + cls + '">' + hxEsc(txt) + '</span>'; }
+
+        var re;
+        if (fam === 'py')      re = /(#[^\n]*)|("""[\s\S]*?"""|'''[\s\S]*?'''|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[rfbu]?"(?:\\.|[^"\\])*"|[rfbu]?'(?:\\.|[^'\\])*')|(@[A-Za-z_]\w*)|(\b\d[\d_]*\.?\d*(?:[eE][+-]?\d+)?\b)|([A-Za-z_]\w*)|(\s+)|([\s\S])/g;
+        else if (fam === 'sh') re = /(#[^\n]*)|("(?:\\.|[^"\\])*"|'[^']*'|`[^`]*`)|(\$\{[^}]*\}|\$[A-Za-z_]\w*|\$\d)|(\b\d+\b)|([A-Za-z_][\w-]*)|(\s+)|([\s\S])/g;
+        else                   re = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/|#[^\n]*)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`)|(\b0[xX][0-9a-fA-F]+\b|\b\d[\d_]*\.?\d*(?:[eE][+-]?\d+)?\b)|([A-Za-z_$][\w$]*)|(\s+)|([\s\S])/g;
+
+        // The c/json regex has 6 groups (no "special" group); py/sh have 7.
+        // Normalise so the dispatch below is identical for every family.
+        var hasSpecial = (fam === 'py' || fam === 'sh');
+        var out = '', m;
+        while ((m = re.exec(code))) {
+          var comment = m[1], string = m[2];
+          var special = hasSpecial ? m[3] : null;
+          var number  = hasSpecial ? m[4] : m[3];
+          var ident   = hasSpecial ? m[5] : m[4];
+          var ws      = hasSpecial ? m[6] : m[5];
+          var other   = hasSpecial ? m[7] : m[6];
+          if (comment) { out += span('comment', comment); continue; }
+          if (string)  { out += span('string', string); continue; }
+          if (special) { out += span(fam === 'sh' ? 'variable' : 'function', special); continue; }
+          if (number)  { out += span('number', number); continue; }
+          if (ident) {
+            var word = ident;
+            if (kwset[word]) out += span('keyword', word);
+            else {
+              var after = code.slice(re.lastIndex);
+              if (/^\s*\(/.test(after)) out += span('function', word);
+              else if (/^[A-Z]/.test(word) && word.length > 1) out += span('type', word);
+              else out += hxEsc(word);
+            }
+            continue;
+          }
+          if (ws) { out += ws; continue; }
+          out += span('punct', other || m[0]);
+        }
+        return out;
+      }
+      // Markup (HTML/XML/SVG): colour tags, attrs, strings, comments
+      function hxHlMarkup(code) {
+        var re = /(<!--[\s\S]*?-->)|(<\/?)([A-Za-z][\w:-]*)|([A-Za-z_:][\w:.-]*)(=)("(?:[^"]*)"|'(?:[^']*)')|(>)|("(?:[^"]*)"|'(?:[^']*)')|(\s+)|([\s\S])/g;
+        var out = '', m;
+        while ((m = re.exec(code))) {
+          if (m[1]) out += '<span class="tok-comment">' + hxEsc(m[1]) + '</span>';
+          else if (m[3]) out += '<span class="tok-punct">' + hxEsc(m[2]) + '</span><span class="tok-keyword">' + hxEsc(m[3]) + '</span>';
+          else if (m[4]) out += '<span class="tok-variable">' + hxEsc(m[4]) + '</span><span class="tok-punct">' + hxEsc(m[5]) + '</span><span class="tok-string">' + hxEsc(m[6]) + '</span>';
+          else if (m[7]) out += '<span class="tok-punct">' + hxEsc(m[7]) + '</span>';
+          else if (m[8]) out += '<span class="tok-string">' + hxEsc(m[8]) + '</span>';
+          else if (m[9]) out += m[9];
+          else out += hxEsc(m[10] || m[0]);
+        }
+        return out;
+      }
+      // CSS / SCSS / LESS
+      function hxHlCss(code) {
+        var re = /(\/\*[\s\S]*?\*\/)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|(\b\d*\.?\d+(?:px|em|rem|%|vh|vw|vmin|vmax|s|ms|deg|fr|ch|ex|pt)?\b|#[0-9a-fA-F]{3,8}\b)|(@[A-Za-z-]+|\$[A-Za-z_][\w-]*|--[A-Za-z_][\w-]*)|([A-Za-z-]+)(\s*:)|([.#:%]?[A-Za-z_][\w-]*)|(\s+)|([\s\S])/g;
+        var out = '', m;
+        while ((m = re.exec(code))) {
+          if (m[1]) out += '<span class="tok-comment">' + hxEsc(m[1]) + '</span>';
+          else if (m[2]) out += '<span class="tok-string">' + hxEsc(m[2]) + '</span>';
+          else if (m[3]) out += '<span class="tok-number">' + hxEsc(m[3]) + '</span>';
+          else if (m[4]) out += '<span class="tok-variable">' + hxEsc(m[4]) + '</span>';
+          else if (m[5]) out += '<span class="tok-property">' + hxEsc(m[5]) + '</span>' + '<span class="tok-punct">' + hxEsc(m[6]) + '</span>';
+          else if (m[7]) out += '<span class="tok-keyword">' + hxEsc(m[7]) + '</span>';
+          else if (m[8]) out += m[8];
+          else out += hxEsc(m[9] || m[0]);
+        }
+        return out;
+      }
+
       function renderCodeBlock(id, lang, code, isAssistant, isStreaming) {
         var langLabel = lang ? lang : 'plain';
         var canPreview = isAssistant && (lang === 'html' || lang === 'htm' || lang === 'svg');
@@ -30884,7 +31084,7 @@
               '<button type="button" class="hx-code-btn hx-code-copy-btn" data-code="' + encoded + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy</button>' +
             '</div>' +
           '</div>';
-        var body = '<pre class="hx-code-body"><code class="hx-code-lang-' + escape(lang || 'plain') + '">' + escape(code) + '</code></pre>';
+        var body = '<pre class="hx-code-body"><code class="hx-code-lang-' + escape(lang || 'plain') + '">' + hxHighlight(code, lang) + '</code></pre>';
         var preview = canPreview
           ? '<div class="hx-code-preview" id="' + id + '-preview" hidden><div class="hx-code-preview-head"><span>Live preview</span><span class="hx-code-preview-sandbox">sandboxed</span></div><iframe sandbox="allow-scripts" loading="lazy" referrerpolicy="no-referrer"></iframe></div>'
           : '';
