@@ -30202,6 +30202,52 @@
         box-shadow: 0 4px 16px -10px rgba(0,0,0,0.5) !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V267 — FROSTED GLASS TOP BAR (mobile) — kill the white bar that cuts text
+       V251 painted the toolbar with a SOLID gradient (canvas colour for the
+       top 62%). That opaque bar covered/cut the chat when scrolling up. Make
+       the whole top bar frosted glass so the chat scrolls UNDER it blurred
+       (iOS nav style) instead of being hard-cut — and the buttons become
+       clean icons on the glass (no double-layer chips).
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* The top bar itself = frosted glass (overrides V251's solid gradient) */
+      html body[data-active="chat"] #hx-c-toolbar {
+        -webkit-backdrop-filter: blur(22px) saturate(1.7) !important;
+        backdrop-filter: blur(22px) saturate(1.7) !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] #hx-c-toolbar {
+        background: rgba(251,250,247,0.6) !important;
+        border-bottom: 1px solid rgba(20,18,15,0.05) !important;
+      }
+      html[data-theme="dark"] body[data-active="chat"] #hx-c-toolbar {
+        background: rgba(13,13,13,0.52) !important;
+        border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+      }
+      /* Buttons = clean icons on the glass (no own chip, no double frost) */
+      html[data-theme="light"] .hx-mobile-menu-btn,
+      html[data-theme="dark"]  .hx-mobile-menu-btn,
+      html[data-theme="light"] body[data-active="chat"] #hx-c-brand-pill,
+      html[data-theme="dark"]  body[data-active="chat"] #hx-c-brand-pill,
+      html[data-theme="light"] body[data-active="chat"] #hx-c-toolbar #hx-c-more-btn,
+      html[data-theme="dark"]  body[data-active="chat"] #hx-c-toolbar #hx-c-more-btn,
+      html[data-theme="light"] body[data-active="chat"] #hx-c-more-btn,
+      html[data-theme="dark"]  body[data-active="chat"] #hx-c-more-btn {
+        background: transparent !important;
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+      }
+      /* faint tap feedback only */
+      html[data-theme="light"] .hx-mobile-menu-btn:active,
+      html[data-theme="light"] body[data-active="chat"] #hx-c-brand-pill:active,
+      html[data-theme="light"] body[data-active="chat"] #hx-c-toolbar #hx-c-more-btn:active { background: rgba(20,18,15,0.06) !important; }
+      html[data-theme="dark"] .hx-mobile-menu-btn:active,
+      html[data-theme="dark"] body[data-active="chat"] #hx-c-brand-pill:active,
+      html[data-theme="dark"] body[data-active="chat"] #hx-c-toolbar #hx-c-more-btn:active { background: rgba(255,255,255,0.08) !important; }
+    }
   </style>
 </head>
 <body data-active="chat">
