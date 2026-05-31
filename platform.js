@@ -62,13 +62,12 @@
       label: 'Workspace',
       items: [
         { id: 'dashboard',   href: '/dashboard.html',   label: 'Overview',    icon: 'home' },
-        { id: 'chat',        href: '/chat.html',        label: 'Chat',        icon: 'chat' },
+        { id: 'chat',        href: '/chat.html',        label: 'HeliX',       icon: 'chat' },
         { id: 'workbench',   href: '/workbench.html',   label: 'Workbench',   icon: 'workbench' },
         { id: 'memory',      href: '/memory.html',      label: 'Memory',      icon: 'memory' },
         { id: 'projects',    href: '/projects.html',    label: 'Projects',    icon: 'folder' },
         { id: 'deployments', href: '/deployments.html', label: 'Deployments', icon: 'cloud' },
-        { id: 'services',    href: '/services.html',    label: 'Services',    icon: 'grid' },
-        { id: 'consulting',  href: '/consulting.html',  label: 'Consulting',  icon: 'briefcase' }
+        { id: 'services',    href: '/services.html',    label: 'Services',    icon: 'grid' }
       ]
     },
     {
@@ -236,7 +235,15 @@
       group.items.forEach(function (item) {
         var activeClass = (item.id === activeId) ? ' active' : '';
         var badge = item.badge ? '<span class="hx-nav-badge">' + item.badge + '</span>' : '';
-        html += '<a href="' + item.href + '" class="hx-nav-item' + activeClass + '">' + svg(item.icon) + '<span>' + item.label + '</span>' + badge + '</a>';
+        // The HeliX (chat) entry reads "Try HeliX" on a user's FIRST visit,
+        // then "HeliX" on every visit after.
+        var lbl = item.label;
+        if (item.id === 'chat') {
+          var seen = false;
+          try { seen = localStorage.getItem('hx_helix_visited') === '1'; } catch (e) {}
+          lbl = seen ? 'HeliX' : 'Try HeliX';
+        }
+        html += '<a href="' + item.href + '" class="hx-nav-item' + activeClass + '"' + (item.id === 'chat' ? ' data-hx-helix' : '') + '>' + svg(item.icon) + '<span>' + lbl + '</span>' + badge + '</a>';
       });
       html += '</div>';
     });
@@ -475,6 +482,15 @@
     var sidebar = document.querySelector('.hx-sidebar');
     if (sidebar) {
       sidebar.innerHTML = buildSidebar(activeId);
+      // First click on the HeliX (chat) entry flips its label from
+      // "Try HeliX" to "HeliX" for every future visit.
+      var helixLink = sidebar.querySelector('[data-hx-helix]');
+      if (helixLink) {
+        helixLink.addEventListener('click', function () {
+          try { localStorage.setItem('hx_helix_visited', '1'); } catch (e) {}
+          var sp = helixLink.querySelector('span'); if (sp) sp.textContent = 'HeliX';
+        });
+      }
       setupSidebarReveal(sidebar);
       wireWorkspaceMenu();           // workspace pill → dropdown
       // Persist the sidebar scroll position across page navigations.
@@ -696,12 +712,11 @@
 
   var PAGES = [
     { title: 'Overview',          href: '/dashboard.html',  hint: 'Workspace' },
-    { title: 'Chat',              href: '/chat.html',       hint: 'Workspace' },
+    { title: 'HeliX',             href: '/chat.html',       hint: 'Workspace' },
     { title: 'Workbench',         href: '/workbench.html',  hint: 'Workspace' },
     { title: 'Memory',            href: '/memory.html',     hint: 'Workspace' },
     { title: 'Projects',          href: '/projects.html',   hint: 'Workspace' },
     { title: 'Services',          href: '/services.html',   hint: 'Workspace' },
-    { title: 'Consulting',        href: '/consulting.html', hint: 'Workspace' },
     { title: 'CRM',               href: '/app-crm.html',         hint: 'Toolkit' },
     { title: 'Marketing Tools',   href: '/app-marketing.html',   hint: 'Toolkit' },
     { title: 'Automation',        href: '/app-automation.html',  hint: 'Toolkit' },

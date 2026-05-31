@@ -2846,3 +2846,75 @@ html[data-theme="dark"] .hx-table td { color: var(--hx-text, #fff); }
     scroll-behavior: auto !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   THE ACE — HeliX / Try HeliX nav item. Deliberately dominant: a dark
+   gradient pill, animated holographic sheen, breathing glow halo, and a
+   pulsing live dot. It must read as the platform's flagship at a glance.
+   ════════════════════════════════════════════════════════════════════ */
+.hx-nav-item[data-hx-helix]{
+  position:relative;
+  margin:14px 2px;          /* extra breathing room above & below */
+  padding:14px 14px;
+  font-weight:800;
+  font-size:17.5px;          /* a touch larger than the rest */
+  letter-spacing:0.01em;
+  color:#fff !important;
+  border-radius:14px;
+  overflow:visible;
+  background:linear-gradient(120deg,#15171c 0%,#23262e 38%,#0e0f13 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.06) inset,
+    0 8px 22px -10px rgba(10,12,16,.7);
+  isolation:isolate;
+  animation:hxAceBreath 3.2s ease-in-out infinite;
+}
+/* breathing glow halo behind the pill */
+.hx-nav-item[data-hx-helix]::before{
+  content:'';
+  position:absolute; inset:-2px;
+  border-radius:16px; z-index:-1;
+  background:linear-gradient(120deg,#7db4ff,#b388ff 35%,#ff8fd0 65%,#ffd27a);
+  filter:blur(11px); opacity:.5;
+  animation:hxAceHue 6s linear infinite, hxAceGlow 3.2s ease-in-out infinite;
+}
+/* moving holographic sheen sweeping across the text */
+.hx-nav-item[data-hx-helix]::after{
+  content:'';
+  position:absolute; inset:0; border-radius:14px; pointer-events:none;
+  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);
+  background-size:220% 100%;
+  transform:none;
+  mix-blend-mode:screen;
+  animation:hxAceSheen 2.6s ease-in-out infinite;
+}
+.hx-nav-item[data-hx-helix]:hover{ transform:translateY(-1px) scale(1.015); }
+.hx-nav-item[data-hx-helix] svg{ opacity:1; color:#cfe0ff;
+  filter:drop-shadow(0 0 6px rgba(150,190,255,.8)); }
+/* the label gets a bright chrome gradient */
+.hx-nav-item[data-hx-helix] span{
+  background:linear-gradient(180deg,#ffffff 0%,#dfe7f5 45%,#b9c6dd 75%,#ffffff 100%);
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent; color:transparent;
+  position:relative; z-index:1;
+}
+/* pulsing "live" dot at the far right */
+.hx-nav-item[data-hx-helix] span::after{
+  content:''; position:absolute; top:50%; right:-16px; width:7px; height:7px;
+  margin-top:-3.5px; border-radius:50%;
+  background:#7df0a0; box-shadow:0 0 0 0 rgba(125,240,160,.7);
+  -webkit-text-fill-color:#7df0a0;
+  animation:hxAceDot 1.8s ease-out infinite;
+}
+@keyframes hxAceBreath{ 0%,100%{ box-shadow:0 0 0 1px rgba(255,255,255,.06) inset,0 8px 22px -10px rgba(10,12,16,.7);} 50%{ box-shadow:0 0 0 1px rgba(255,255,255,.10) inset,0 10px 30px -8px rgba(40,70,140,.55);} }
+@keyframes hxAceGlow{ 0%,100%{ opacity:.4; } 50%{ opacity:.72; } }
+@keyframes hxAceHue{ 0%{ filter:blur(11px) hue-rotate(0deg);} 100%{ filter:blur(11px) hue-rotate(360deg);} }
+@keyframes hxAceSheen{ 0%{ background-position:140% 0; } 55%,100%{ background-position:-40% 0; } }
+@keyframes hxAceDot{ 0%{ box-shadow:0 0 0 0 rgba(125,240,160,.7);} 70%{ box-shadow:0 0 0 7px rgba(125,240,160,0);} 100%{ box-shadow:0 0 0 0 rgba(125,240,160,0);} }
+@media (prefers-reduced-motion: reduce){
+  .hx-nav-item[data-hx-helix],
+  .hx-nav-item[data-hx-helix]::before,
+  .hx-nav-item[data-hx-helix]::after,
+  .hx-nav-item[data-hx-helix] span::after{ animation:none !important; }
+  .hx-nav-item[data-hx-helix]::before{ opacity:.5; }
+}
