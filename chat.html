@@ -30386,6 +30386,70 @@
         line-height: 1.55 !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V271 — PROFESSIONAL POLISH (mobile) — calmer, product-grade chat
+       The chat read a touch "startup-decorated": a puffy gradient user
+       bubble with glow, a glowing orange heading bar, and a loud error
+       card. Make all three flat, quiet and professional like Claude/ChatGPT.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* ---- User bubble — flat, subtle, no puffy gradient/glow ---- */
+      html body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+        border-radius: 18px 18px 5px 18px !important;
+        padding: 11px 15px !important;
+        font-size: 14.5px !important;
+        line-height: 1.5 !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+        background: #efece5 !important;
+        color: #221d18 !important;
+        border: 1px solid rgba(20,18,15,0.05) !important;
+        box-shadow: none !important;
+      }
+      html[data-theme="dark"] body[data-active="chat"] .hx-msg.is-user .hx-msg-content {
+        background: rgba(255,255,255,0.07) !important;
+        color: #f1efe9 !important;
+        border: 1px solid rgba(255,255,255,0.08) !important;
+        box-shadow: none !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-user .hx-msg-content:hover {
+        transform: none !important;
+      }
+
+      /* ---- Heading accent bar — thinner, flat, no glow ---- */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-h2::before {
+        width: 3px !important;
+        top: 0.18em !important; bottom: 0.18em !important;
+        background: var(--cg-orange,#ff5a1f) !important;
+        box-shadow: none !important;
+        opacity: 0.9 !important;
+      }
+
+      /* ---- Error card — calm, professional, not alarming ---- */
+      html body[data-active="chat"] .hx-msg.hx-msg-error .hx-msg-content {
+        border-radius: 14px !important;
+        padding: 15px 16px 15px 46px !important;
+        font-size: 14px !important;
+        line-height: 1.55 !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] .hx-msg.hx-msg-error .hx-msg-content {
+        background: #fbf6f3 !important;
+        border: 1px solid rgba(194,65,12,0.18) !important;
+        color: #5a4a42 !important;
+      }
+      html[data-theme="dark"] body[data-active="chat"] .hx-msg.hx-msg-error .hx-msg-content {
+        background: rgba(194,65,12,0.10) !important;
+        border: 1px solid rgba(194,65,12,0.26) !important;
+        color: #e8ddd6 !important;
+      }
+      html body[data-active="chat"] .hx-msg.hx-msg-error .hx-msg-content::after {
+        width: 20px !important; height: 20px !important;
+        left: 15px !important; top: 15px !important;
+        font-size: 12px !important;
+        background: #c2410c !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
