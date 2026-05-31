@@ -30450,6 +30450,37 @@
         background: #c2410c !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       V272 — EDITORIAL SECTION SEPARATION (mobile) — quiet pro polish
+       A faint hairline above each ## heading (except the first) so distinct
+       sections read clearly, like a well-set document. Subtle, not loud.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Only h2s that FOLLOW another h2 (i.e. a 2nd+ section) get the rule —
+         the first section never has a divider above it. */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-h2 ~ .hx-md-h2 {
+        position: relative !important;
+        padding-top: 19px !important;
+        margin-top: 32px !important;
+      }
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-h2 ~ .hx-md-h2::after {
+        content: '' !important;
+        position: absolute !important;
+        left: 13px !important; right: 0 !important; top: 0 !important;
+        height: 1px !important;
+      }
+      html[data-theme="light"] body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-h2 ~ .hx-md-h2::after {
+        background: linear-gradient(90deg, rgba(20,18,15,0.09) 0%, rgba(20,18,15,0.04) 45%, transparent 80%) !important;
+      }
+      html[data-theme="dark"] body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-h2 ~ .hx-md-h2::after {
+        background: linear-gradient(90deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.05) 45%, transparent 80%) !important;
+      }
+      /* on a 2nd+ section, push the accent bar below the rule */
+      html body[data-active="chat"] .hx-msg.is-assistant .hx-msg-content .hx-md-h2 ~ .hx-md-h2::before {
+        top: calc(19px + 0.18em) !important;
+      }
+    }
   </style>
 </head>
 <body data-active="chat">
