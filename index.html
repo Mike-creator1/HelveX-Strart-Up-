@@ -1996,6 +1996,35 @@
           }
         }
       }
+
+      // Denoise: drop stray dots. Every dot sits on a regular grid of
+      // spacing `baseDensity`; a dot that belongs to a letter has occupied
+      // neighbours around it, while a stray (picked up on a faint halo or a
+      // lone antialiased speck) sits alone. Keep a dot only if at least two
+      // of its eight grid neighbours are also occupied — this removes the
+      // dots that float outside the letterforms without eroding the dense
+      // letter bodies.
+      var occ = {};
+      for (var pi = 0; pi < pts.length; pi++) {
+        var gxi = Math.round(pts[pi].x / baseDensity);
+        var gyi = Math.round(pts[pi].y / baseDensity);
+        occ[gxi + ',' + gyi] = true;
+      }
+      var clean = [];
+      for (var pj = 0; pj < pts.length; pj++) {
+        var cx = Math.round(pts[pj].x / baseDensity);
+        var cy = Math.round(pts[pj].y / baseDensity);
+        var nb = 0;
+        for (var ddx = -1; ddx <= 1; ddx++) {
+          for (var ddy = -1; ddy <= 1; ddy++) {
+            if (ddx === 0 && ddy === 0) continue;
+            if (occ[(cx + ddx) + ',' + (cy + ddy)]) nb++;
+          }
+        }
+        if (nb >= 2) clean.push(pts[pj]);
+      }
+      pts = clean;
+
       return { pts: pts, spec: spec };
     }
 
