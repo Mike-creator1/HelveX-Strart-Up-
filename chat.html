@@ -38421,8 +38421,11 @@
     @media (prefers-reduced-motion: reduce){
       body[data-active="chat"] .hx-mk-pulse{ animation:none; opacity:0; }
     }
-    /* Old chat hamburger (≡) belongs to the previous UI — hide it whenever the
-       home / screenshot prototype is showing so it never sits over the photos. */
+    /* Old chat hamburger (≡) belongs to the previous UI — remove it entirely.
+       Unconditional ID rule (highest specificity + !important) so it can never
+       show, in any state. It stays clickable programmatically for the drawer. */
+    #hx-c-drawer-toggle,
+    .hx-chat-drawer-toggle{ display:none !important; }
     body.hx-home-on .hx-chat-drawer-toggle{ display:none !important; }
     /* app bar */
     body[data-active="chat"] .hx-home-bar{
