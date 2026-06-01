@@ -34818,8 +34818,8 @@
             '</div>' +
             '<div class="hx-home-scroll">' +
               '<span class="hx-w-badge"><span class="hx-w-badge-dot"></span>HELIX PRO</span>' +
-              '<h1 class="hx-w-greet" id="hx-home-greet">Καλημέρα</h1>' +
-              '<p class="hx-w-sub" id="hx-home-sub">Τι θέλεις να πετύχεις σήμερα;</p>' +
+              '<h1 class="hx-w-greet" id="hx-home-greet">Good morning</h1>' +
+              '<p class="hx-w-sub" id="hx-home-sub">What would you like to achieve today?</p>' +
               '<div class="hx-w-presets hx-home-presets" role="group" aria-label="Λειτουργία Helix">' + tiles + '</div>' +
               '<div class="hx-home-composer">' +
                 '<div class="hx-home-inrow">' +
@@ -34918,12 +34918,20 @@
             var sug = document.getElementById('hx-home-sug');
             if (sug && typeof hxSuggestCards === 'function') sug.innerHTML = hxSuggestCards();
             if (input) input.setAttribute('placeholder', (hxMode && HX_MODES[hxMode]) ? (HX_MODES[hxMode].ph || 'Ask anything…') : 'Ask anything…');
-            var g = document.getElementById('hx-c-blank-greet'), gg = document.getElementById('hx-home-greet');
-            if (g && gg && g.textContent) gg.textContent = g.textContent.replace(/\.+$/, '');
-            var s = document.getElementById('hx-c-blank-sub'), ss = document.getElementById('hx-home-sub');
-            if (s && ss && s.textContent) ss.textContent = s.textContent;
+            var gg = document.getElementById('hx-home-greet');
+            if (gg) {
+              var h = new Date().getHours();
+              gg.textContent = (h >= 5 && h < 12) ? 'Good morning'
+                             : (h >= 12 && h < 18) ? 'Good afternoon'
+                             : 'Good evening';
+            }
           }
-          function show() { if (el.hidden) { el.hidden = false; document.body.classList.add('hx-home-on'); } sync(); }
+          var scrollEl = el.querySelector('.hx-home-scroll');
+          function show() {
+            if (el.hidden) { el.hidden = false; document.body.classList.add('hx-home-on'); }
+            sync();
+            if (scrollEl) { try { scrollEl.scrollTop = 0; } catch (e) {} }
+          }
           function hide() { if (!el.hidden) { el.hidden = true; document.body.classList.remove('hx-home-on'); } }
           function evaluate() { if (thread.querySelector('.hx-welcome')) show(); else hide(); }
 
@@ -38017,7 +38025,7 @@
     /* INTELLIGENCE PRESETS — compact mode tiles (icon medallion + label),
        all six visible in one calm row. One can be active at a time. */
     body[data-active="chat"] .hx-w-presets{
-      display:grid; grid-template-columns:repeat(6,1fr); gap:8px; margin-top:20px;
+      display:grid; grid-template-columns:repeat(6,1fr); gap:8px; margin-top:16px;
     }
     body[data-active="chat"] .hx-w-preset{
       display:flex; flex-direction:column; align-items:center; gap:7px;
@@ -38096,9 +38104,11 @@
     body[data-active="chat"] .hx-chat-pane{ position:relative; }
     body[data-active="chat"] #hx-home{
       --hx-violet:#6d5efc;
-      position:absolute; inset:0; z-index:60; display:flex; flex-direction:column;
+      position:fixed; inset:0; z-index:60; display:flex; flex-direction:column;
       background:var(--hx-bg); animation:hxHomeIn .4s cubic-bezier(.16,1,.3,1) both;
     }
+    /* desktop: stay within the chat pane so the sidebar remains usable */
+    @media (min-width:900px){ body[data-active="chat"] #hx-home{ position:absolute; } }
     body[data-active="chat"] #hx-home[hidden]{ display:none !important; }
     @keyframes hxHomeIn{ from{opacity:0;} to{opacity:1;} }
     /* app bar */
@@ -38125,13 +38135,13 @@
     /* scroll body */
     body[data-active="chat"] .hx-home-scroll{
       flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
-      display:flex; flex-direction:column; padding:10px 20px 20px;
+      display:flex; flex-direction:column; padding:4px 20px 20px;
     }
     body[data-active="chat"] .hx-home-scroll::-webkit-scrollbar{ display:none; }
     body[data-active="chat"] .hx-home-scroll .hx-w-badge{ align-self:flex-start; }
     /* composer card */
     body[data-active="chat"] .hx-home-composer{
-      margin-top:20px; border:1px solid var(--hx-line); border-radius:20px; background:var(--hx-surface);
+      margin-top:16px; border:1px solid var(--hx-line); border-radius:20px; background:var(--hx-surface);
       padding:14px 14px 12px; box-shadow:0 2px 10px -6px rgba(20,18,12,.12);
       transition:border-color .18s, box-shadow .18s;
     }
@@ -38161,14 +38171,14 @@
     body[data-active="chat"] .hx-home-send svg{ width:20px; height:20px; }
     body[data-active="chat"] .hx-home-pills{ display:flex; gap:8px; margin-top:12px; }
     body[data-active="chat"] .hx-home-pill{
-      flex:1; min-width:0; display:inline-flex; align-items:center; justify-content:center; gap:6px;
-      padding:9px 8px; border-radius:12px; background:var(--hx-bg-2); border:1px solid var(--hx-line);
-      color:var(--hx-text-mid); font-size:12.5px; font-weight:550; letter-spacing:-.01em;
-      transition:color .16s, border-color .16s, background .18s;
+      flex:1 1 auto; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      padding:9px 10px; border-radius:12px; background:var(--hx-bg-2); border:1px solid var(--hx-line);
+      color:var(--hx-text-mid); font-size:12.5px; font-weight:550; letter-spacing:-.012em;
+      transition:color .16s, border-color .16s, background .18s; white-space:nowrap;
     }
     body[data-active="chat"] .hx-home-pill > svg:first-child{ width:15px; height:15px; flex-shrink:0; }
     body[data-active="chat"] .hx-home-pill > svg:last-child{ width:12px; height:12px; opacity:.55; flex-shrink:0; }
-    body[data-active="chat"] .hx-home-pill span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    body[data-active="chat"] .hx-home-pill span{ white-space:nowrap; }
     body[data-active="chat"] .hx-home-pill.is-on{
       color:var(--hx-violet); border-color:color-mix(in srgb,var(--hx-violet) 45%, transparent);
       background:color-mix(in srgb,var(--hx-violet) 10%, var(--hx-bg-2));
@@ -38189,8 +38199,10 @@
     html[data-theme="dark"] body[data-active="chat"] .hx-home-composer{ background:var(--hx-bg-2); }
     html[data-theme="dark"] body[data-active="chat"] .hx-home-menu{ background:var(--hx-bg-2); }
     @media (max-width:380px){
-      body[data-active="chat"] .hx-home-pill{ font-size:11.5px; gap:5px; padding:9px 6px; }
-      body[data-active="chat"] .hx-home-pill > svg:first-child{ width:14px; height:14px; }
+      body[data-active="chat"] .hx-home-pills{ gap:6px; }
+      body[data-active="chat"] .hx-home-pill{ font-size:11px; gap:4px; padding:9px 7px; letter-spacing:-.02em; }
+      body[data-active="chat"] .hx-home-pill > svg:first-child{ width:13px; height:13px; }
+      body[data-active="chat"] .hx-home-pill > svg:last-child{ width:11px; height:11px; }
     }
 
     /* model presence */
