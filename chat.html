@@ -34807,7 +34807,7 @@
           var I = {
             research:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>',
             plan:'<path d="M14 5H7a3 3 0 0 0-3 3v9a3 3 0 0 0 3 3h9a3 3 0 0 0 3-3v-7"/><path d="M21 3l-9 9"/><path d="M15 3h6v6"/>',
-            analyze:'<rect x="3" y="13" width="3.4" height="7" rx="1.2" fill="currentColor" stroke="none"/><rect x="8.5" y="9" width="3.4" height="11" rx="1.2" fill="currentColor" stroke="none"/><rect x="14" y="6" width="3.4" height="14" rx="1.2" fill="currentColor" stroke="none"/><rect x="19.5" y="3" width="3.4" height="17" rx="1.2" fill="currentColor" stroke="none"/>',
+            analyze:'<defs><linearGradient id="hxbars" x1="3" y1="0" x2="23" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect x="3" y="13" width="3.4" height="7" rx="1.2" fill="url(#hxbars)" stroke="none"/><rect x="8.5" y="9" width="3.4" height="11" rx="1.2" fill="url(#hxbars)" stroke="none"/><rect x="14" y="6" width="3.4" height="14" rx="1.2" fill="url(#hxbars)" stroke="none"/><rect x="19.5" y="3" width="3.4" height="17" rx="1.2" fill="url(#hxbars)" stroke="none"/>',
             compare:'<path d="M4 9a8 8 0 0 1 13.5-3.4L20 8"/><path d="M20 3v5h-5"/><path d="M20 15a8 8 0 0 1-13.5 3.4L4 16"/><path d="M4 21v-5h5"/>',
             create:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/>',
             learn:'<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5"/>',
@@ -38351,9 +38351,21 @@
     body[data-active="chat"] .hx-home-card:hover{ box-shadow:0 14px 30px -18px color-mix(in srgb,var(--wc) 75%, transparent); }
     body[data-active="chat"] .hx-home-card.is-on{ border-color:color-mix(in srgb,var(--wc) 55%, transparent); box-shadow:0 0 0 1px color-mix(in srgb,var(--wc) 35%, transparent) inset; }
     body[data-active="chat"] .hx-home-card-ic{
-      color:var(--wc); margin-bottom:11px; filter:drop-shadow(0 0 12px color-mix(in srgb,var(--wc) 60%, transparent));
+      color:var(--wc); margin-bottom:11px;
+      filter:
+        drop-shadow(0 0 5px color-mix(in srgb,var(--wc) 90%, transparent))
+        drop-shadow(0 0 13px color-mix(in srgb,var(--wc) 62%, transparent))
+        drop-shadow(0 0 26px color-mix(in srgb,var(--wc) 42%, transparent));
     }
     body[data-active="chat"] .hx-home-card-ic svg{ width:27px; height:27px; }
+    /* dark mode: push the bloom further so it reads like the reference */
+    html[data-theme="dark"] body[data-active="chat"] .hx-home-card-ic,
+    html[data-theme="dark"] body[data-active="chat"] .hx-rs-ic{
+      filter:
+        drop-shadow(0 0 6px color-mix(in srgb,var(--wc, var(--hx-violet)) 100%, transparent))
+        drop-shadow(0 0 16px color-mix(in srgb,var(--wc, var(--hx-violet)) 75%, transparent))
+        drop-shadow(0 0 34px color-mix(in srgb,var(--wc, var(--hx-violet)) 50%, transparent));
+    }
     body[data-active="chat"] .hx-home-card-t{ font-size:15px; font-weight:750; letter-spacing:-.02em; color:var(--hx-text); line-height:1.1; }
     body[data-active="chat"] .hx-home-card-d{ font-size:11px; font-weight:450; color:var(--hx-text-mid); line-height:1.32; margin-top:6px; }
     /* recent sessions */
