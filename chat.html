@@ -34883,69 +34883,91 @@
             '</nav>';
           pane.appendChild(el);
 
-          // ── Screenshot mockup layer (scrollable page stack) ─────────
-          // Renders real screenshot pages full-width, stacked vertically and
-          // scrollable, each with transparent clickable hotspots aligned to
-          // that image (coords are % of THAT image). Add more screens later
-          // by pushing to PAGES. If the first image fails to load, the layer
-          // stays hidden and the CSS home shows (safe fallback).
+          // ── Screenshot prototype router ─────────────────────────────
+          // A clickable prototype built from the real HELVEX screenshots.
+          // Each screen is one full-width image with transparent hotspots
+          // (coords are % of THAT image). Tapping a card navigates to its
+          // screen; tapping the back arrow / Home tab returns to the home
+          // screen. Cards whose screen isn't uploaded yet simply do nothing
+          // until their image is added to SCREENS. If the home image can't
+          // load, the whole layer stays hidden and the CSS home shows.
           (function () {
-            // Hotspots measured off IMG_7886.png (1206×2622), as % of the image.
-            var P1 = [
-              { act:'avatar',     l:83,  t:4,    w:14,   h:5    },
-              { act:'composer',   l:4.5, t:23.5, w:91,   h:10.5 },
-              { act:'research',   l:4.5, t:36,   w:27.5, h:12.5 },
-              { act:'plan',       l:36,  t:36,   w:28,   h:12.5 },
-              { act:'analyze',    l:67.5,t:36,   w:27.5, h:12.5 },
-              { act:'compare',    l:4.5, t:48.7, w:27.5, h:13   },
-              { act:'create',     l:36,  t:48.7, w:28,   h:13   },
-              { act:'learn',      l:67.5,t:48.7, w:27.5, h:13   },
-              { act:'session',    l:4.5, t:75.5, w:91,   h:5.5  },
-              { act:'session',    l:4.5, t:81.5, w:91,   h:5.5  },
-              { act:'session',    l:4.5, t:87.5, w:91,   h:5.5  },
-              { act:'tabHome',    l:2,   t:92,   w:18,   h:7    },
-              { act:'tabProjects',l:21,  t:92,   w:18,   h:7    },
-              { act:'composer',   l:40,  t:91,   w:20,   h:8    },
-              { act:'tabHistory', l:60,  t:92,   w:18,   h:7    },
-              { act:'tabSettings',l:80,  t:92,   w:18,   h:7    }
-            ];
-            // Each entry is one full-screen screenshot stacked below the prev.
-            var PAGES = [
-              { img:'/IMG_7886.png', hots:P1 }
-            ];
+            var SCREENS = {
+              // ── Home ──────────────────────────────────────────────────
+              home: { img:'/IMG_7886.png', hots:[
+                { act:'x',          l:83,  t:4,    w:14,   h:5    }, // avatar
+                { act:'x',          l:4.5, t:23.5, w:91,   h:10.5 }, // composer
+                { act:'go:research',l:4.5, t:36,   w:27.5, h:12.5 },
+                { act:'go:plan',    l:36,  t:36,   w:28,   h:12.5 },
+                { act:'go:analyze', l:67.5,t:36,   w:27.5, h:12.5 },
+                { act:'go:compare', l:4.5, t:48.7, w:27.5, h:13   },
+                { act:'go:create',  l:36,  t:48.7, w:28,   h:13   },
+                { act:'go:learn',   l:67.5,t:48.7, w:27.5, h:13   },
+                { act:'x',          l:4.5, t:75.5, w:91,   h:5.5  }, // session 1
+                { act:'x',          l:4.5, t:81.5, w:91,   h:5.5  }, // session 2
+                { act:'x',          l:4.5, t:87.5, w:91,   h:5.5  }, // session 3
+                { act:'go:home',    l:2,   t:92,   w:18,   h:7    }, // nav: home
+                { act:'x',          l:21,  t:92,   w:18,   h:7    }, // nav: projects
+                { act:'x',          l:40,  t:91,   w:20,   h:8    }, // nav: orb
+                { act:'x',          l:60,  t:92,   w:18,   h:7    }, // nav: history
+                { act:'x',          l:80,  t:92,   w:18,   h:7    }  // nav: settings
+              ]},
+              // ── Research (IMG_7894) ───────────────────────────────────
+              research: { img:'/IMG_7894.png', hots:[
+                { act:'go:home', l:2,  t:8,    w:14, h:6   }, // back arrow
+                { act:'x',       l:82, t:7.5,  w:15, h:6   }, // avatar
+                { act:'x',       l:4,  t:40,   w:92, h:8.5 }, // composer
+                { act:'x',       l:4,  t:53.5, w:92, h:9.5 }, // suggestion 1
+                { act:'x',       l:4,  t:63.5, w:92, h:9.5 }, // suggestion 2
+                { act:'x',       l:4,  t:73.5, w:92, h:9.5 }, // suggestion 3
+                { act:'go:home', l:2,  t:88,   w:18, h:8   }, // nav: home
+                { act:'x',       l:21, t:88,   w:18, h:8   }, // nav: projects
+                { act:'x',       l:40, t:87,   w:20, h:9   }, // nav: orb
+                { act:'x',       l:60, t:88,   w:18, h:8   }, // nav: history
+                { act:'x',       l:80, t:88,   w:18, h:8   }  // nav: settings
+              ]}
+            };
+
             var mk = document.createElement('div');
             mk.className = 'hx-mockup'; mk.hidden = true;
-            mk.innerHTML = PAGES.map(function (pg) {
-              var hots = (pg.hots || []).map(function (h) {
+            function hotHTML(hots) {
+              return (hots || []).map(function (h) {
                 return '<button class="hx-mockup-hot" type="button" data-act="' + h.act +
                   '" style="left:' + h.l + '%;top:' + h.t + '%;width:' + h.w + '%;height:' + h.h + '%"></button>';
               }).join('');
-              return '<div class="hx-mockup-page"><img class="hx-mockup-img" src="' + pg.img + '" alt="">' + hots + '</div>';
+            }
+            mk.innerHTML = Object.keys(SCREENS).map(function (name) {
+              var s = SCREENS[name];
+              return '<div class="hx-mockup-screen" data-screen="' + name + '"' + (name === 'home' ? '' : ' hidden') + '>' +
+                '<img class="hx-mockup-img" src="' + s.img + '" alt="">' + hotHTML(s.hots) + '</div>';
             }).join('');
             el.appendChild(mk);
-            // Reveal as soon as the first screenshot is ready; if it can't load,
-            // stay hidden so the functional CSS home shows instead.
-            var first = mk.querySelector('.hx-mockup-img');
+
+            function showScreen(name) {
+              if (!SCREENS[name]) return false;
+              mk.querySelectorAll('.hx-mockup-screen').forEach(function (sc) {
+                sc.hidden = (sc.getAttribute('data-screen') !== name);
+              });
+              mk.scrollTop = 0;
+              return true;
+            }
+
+            // Reveal once the home image is ready; if it fails, fall back to
+            // the functional CSS home beneath.
+            var first = mk.querySelector('.hx-mockup-screen[data-screen="home"] .hx-mockup-img');
             if (first) {
               var reveal = function () { if (first.naturalWidth > 1) mk.hidden = false; };
               if (first.complete) reveal();
               first.addEventListener('load', reveal);
               first.addEventListener('error', function () { mk.hidden = true; });
             }
-            mk.querySelectorAll('.hx-mockup-hot').forEach(function (h) {
-              h.addEventListener('click', function () {
-                var act = h.getAttribute('data-act');
-                mk.hidden = true; // reveal the real, functional home beneath
-                if (act === 'research' && typeof window.hxShowResearch === 'function') { window.hxShowResearch(); return; }
-                if (/^(research|plan|analyze|compare|create|learn)$/.test(act)) {
-                  if (typeof setMode === 'function') setMode(act);
-                  var i = document.getElementById('hx-home-input'); if (i) i.focus();
-                  return;
-                }
-                if (act === 'composer') { var i2 = document.getElementById('hx-home-input'); if (i2) i2.focus(); return; }
-                if (act === 'menu') { var d = document.getElementById('hx-c-drawer-toggle'); if (d) d.click(); return; }
-                if (act === 'tabHistory') { var d2 = document.getElementById('hx-c-drawer-toggle'); if (d2) d2.click(); return; }
-              });
+
+            mk.addEventListener('click', function (e) {
+              var h = e.target && e.target.closest && e.target.closest('.hx-mockup-hot');
+              if (!h) return;
+              var act = h.getAttribute('data-act') || '';
+              if (act.indexOf('go:') === 0) { showScreen(act.slice(3)); return; }
+              // 'x' and anything else: not wired yet — intentionally no-op.
             });
           })();
 
@@ -38333,7 +38355,8 @@
     /* screenshot mockup layer + transparent hotspots */
     body[data-active="chat"] .hx-mockup{ position:absolute; inset:0; z-index:70; background:var(--hx-bg); overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
     body[data-active="chat"] .hx-mockup[hidden]{ display:none !important; }
-    body[data-active="chat"] .hx-mockup-page{ position:relative; width:100%; }
+    body[data-active="chat"] .hx-mockup-screen{ position:relative; width:100%; }
+    body[data-active="chat"] .hx-mockup-screen[hidden]{ display:none !important; }
     body[data-active="chat"] .hx-mockup-img{ display:block; width:100%; height:auto; }
     body[data-active="chat"] .hx-mockup-hot{ position:absolute; background:transparent; border:0; padding:0; margin:0; cursor:pointer; -webkit-tap-highlight-color:transparent; }
     body[data-active="chat"] .hx-mockup-hot:active{ background:rgba(255,255,255,.06); border-radius:16px; }
