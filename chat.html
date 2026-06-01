@@ -34774,6 +34774,165 @@
         // Paint the static welcome's suggestions on first load.
         try { hxRenderSuggest(); hxSyncPresetUI(); } catch (e) {}
 
+        // ═══════════════════════════════════════════════════════════════
+        // V99 — HOME SHELL
+        // On the empty welcome, present the full premium home exactly per
+        // design (logo lockup · inline composer + tool pills · smart
+        // suggestions · bottom tab bar) as an isolated overlay over the
+        // chat pane. Its composer proxies straight to the real send
+        // pipeline, so the working chat underneath is untouched.
+        // ═══════════════════════════════════════════════════════════════
+        (function hxHomeShell() {
+          var pane = document.querySelector('.hx-chat-pane');
+          var thread = document.getElementById('hx-c-thread');
+          if (!pane || !thread) return;
+
+          var S = {
+            menu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="14" y2="17"/></svg>',
+            mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><line x1="12" y1="18" x2="12" y2="22"/></svg>',
+            send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="6 11 12 5 18 11"/></svg>',
+            chevD:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>',
+            chevR:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
+            web:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg>',
+            doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><polyline points="14 3 14 8 19 8"/></svg>',
+            focus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>',
+            home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>',
+            clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/></svg>',
+            star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 3 15 9.5 22 10.3 17 15 18.3 22 12 18.5 5.7 22 7 15 2 10.3 9 9.5 12 3"/></svg>',
+            grid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="1.5"/><circle cx="12" cy="6" r="1.5"/><circle cx="18" cy="6" r="1.5"/><circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/><circle cx="6" cy="18" r="1.5"/><circle cx="12" cy="18" r="1.5"/><circle cx="18" cy="18" r="1.5"/></svg>'
+          };
+
+          var tiles = WELCOME_ACTIONS.map(function (a) {
+            return '<button class="hx-w-preset" type="button" data-mode="' + a.k + '" style="--wc:' + a.accent + '" aria-pressed="false">' +
+              '<span class="hx-w-preset-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + a.ic + '</svg></span>' +
+              '<span class="hx-w-preset-t">' + a.t + '</span></button>';
+          }).join('');
+
+          var el = document.createElement('div');
+          el.id = 'hx-home'; el.hidden = true;
+          el.innerHTML =
+            '<div class="hx-home-bar">' +
+              '<button class="hx-home-menu" type="button" id="hx-home-menu" aria-label="Menu">' + S.menu + '</button>' +
+              '<div class="hx-home-logo"><span class="hx-home-logo-name">Helix<i>.</i></span><span class="hx-home-logo-tag">AI that works with you</span></div>' +
+              '<button class="hx-home-avatar" type="button" id="hx-home-avatar" aria-label="Account"><span></span></button>' +
+            '</div>' +
+            '<div class="hx-home-scroll">' +
+              '<span class="hx-w-badge"><span class="hx-w-badge-dot"></span>HELIX PRO</span>' +
+              '<h1 class="hx-w-greet" id="hx-home-greet">Καλημέρα</h1>' +
+              '<p class="hx-w-sub" id="hx-home-sub">Τι θέλεις να πετύχεις σήμερα;</p>' +
+              '<div class="hx-w-presets hx-home-presets" role="group" aria-label="Λειτουργία Helix">' + tiles + '</div>' +
+              '<div class="hx-home-composer">' +
+                '<div class="hx-home-inrow">' +
+                  '<textarea class="hx-home-input" id="hx-home-input" rows="1" placeholder="Ask anything…" autocomplete="off" spellcheck="true"></textarea>' +
+                  '<div class="hx-home-inbtns">' +
+                    '<button class="hx-home-mic" type="button" id="hx-home-mic" aria-label="Voice input">' + S.mic + '</button>' +
+                    '<button class="hx-home-send" type="button" id="hx-home-send" aria-label="Send">' + S.send + '</button>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="hx-home-pills">' +
+                  '<button class="hx-home-pill" type="button" data-pill="web">' + S.web + '<span>Web search</span>' + S.chevD + '</button>' +
+                  '<button class="hx-home-pill" type="button" data-pill="sources">' + S.doc + '<span>Sources</span>' + S.chevD + '</button>' +
+                  '<button class="hx-home-pill" type="button" data-pill="focus">' + S.focus + '<span>Focus</span>' + S.chevD + '</button>' +
+                '</div>' +
+              '</div>' +
+              '<div class="hx-w-sughead">' +
+                '<span class="hx-w-sec-label">Smart suggestions</span>' +
+                '<button class="hx-w-seeall" type="button">See all' + S.chevR + '</button>' +
+              '</div>' +
+              '<div class="hx-w-examples hx-home-sug" id="hx-home-sug"></div>' +
+            '</div>' +
+            '<nav class="hx-home-tabs" aria-label="Sections">' +
+              '<button class="hx-home-tab is-on" type="button" data-tab="home" aria-label="Home">' + S.home + '</button>' +
+              '<button class="hx-home-tab" type="button" data-tab="history" aria-label="History">' + S.clock + '</button>' +
+              '<button class="hx-home-tab" type="button" data-tab="fav" aria-label="Favorites">' + S.star + '</button>' +
+              '<button class="hx-home-tab" type="button" data-tab="apps" aria-label="Apps">' + S.grid + '</button>' +
+            '</nav>';
+          pane.appendChild(el);
+
+          var input = document.getElementById('hx-home-input');
+          var realInput = document.getElementById('hx-c-input');
+          var realSend = document.getElementById('hx-c-send');
+
+          function autosize() { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 140) + 'px'; }
+          function mirror() {
+            if (!realInput) return;
+            realInput.value = input.value;
+            try { realInput.dispatchEvent(new Event('input', { bubbles: true })); } catch (e) {}
+          }
+          function doSend() {
+            if (!input.value.trim()) return;
+            mirror();
+            input.value = ''; autosize();
+            if (realSend) { realSend.removeAttribute('disabled'); realSend.click(); }
+          }
+          input.addEventListener('input', function () { autosize(); mirror(); });
+          input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doSend(); }
+          });
+          document.getElementById('hx-home-send').addEventListener('click', doSend);
+          document.getElementById('hx-home-mic').addEventListener('click', function () { var m = document.getElementById('hx-c-mic'); if (m) m.click(); });
+          document.getElementById('hx-home-menu').addEventListener('click', function () { var d = document.getElementById('hx-c-drawer-toggle'); if (d) d.click(); });
+
+          // Mode tiles → engage the preset (reuses setMode), then reflect here.
+          el.querySelectorAll('.hx-home-presets .hx-w-preset[data-mode]').forEach(function (p) {
+            p.addEventListener('click', function () {
+              var k = p.getAttribute('data-mode');
+              if (typeof setMode === 'function') setMode(k);
+              sync();
+            });
+          });
+          // Tool pills.
+          var webPill = el.querySelector('[data-pill="web"]');
+          webPill.addEventListener('click', function () {
+            this.classList.toggle('is-on');
+            try { state.webEnabled = this.classList.contains('is-on'); } catch (e) {}
+          });
+          el.querySelector('[data-pill="sources"]').addEventListener('click', function () { var a = document.getElementById('hx-c-attach'); if (a) a.click(); });
+          el.querySelector('[data-pill="focus"]').addEventListener('click', function () {
+            var row = el.querySelector('.hx-home-presets'); if (row) row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          });
+          try { if (state.webEnabled) webPill.classList.add('is-on'); } catch (e) {}
+
+          // Smart-suggestion rows → load into the shell composer.
+          document.getElementById('hx-home-sug').addEventListener('click', function (e) {
+            var b = e.target.closest && e.target.closest('[data-ws-suggest]'); if (!b) return;
+            e.preventDefault(); e.stopPropagation();
+            input.value = b.getAttribute('data-ws-suggest') || '';
+            autosize(); mirror(); input.focus();
+            try { input.selectionStart = input.selectionEnd = input.value.length; } catch (_) {}
+          });
+          // Bottom tabs.
+          el.querySelectorAll('.hx-home-tab').forEach(function (t) {
+            t.addEventListener('click', function () {
+              var tab = t.getAttribute('data-tab');
+              if (tab === 'history') { var d = document.getElementById('hx-c-drawer-toggle'); if (d) d.click(); return; }
+              el.querySelectorAll('.hx-home-tab').forEach(function (x) { x.classList.toggle('is-on', x === t); });
+            });
+          });
+
+          function sync() {
+            el.querySelectorAll('.hx-home-presets .hx-w-preset[data-mode]').forEach(function (p) {
+              var on = p.getAttribute('data-mode') === hxMode;
+              p.classList.toggle('is-on', on); p.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
+            var sug = document.getElementById('hx-home-sug');
+            if (sug && typeof hxSuggestCards === 'function') sug.innerHTML = hxSuggestCards();
+            if (input) input.setAttribute('placeholder', (hxMode && HX_MODES[hxMode]) ? (HX_MODES[hxMode].ph || 'Ask anything…') : 'Ask anything…');
+            var g = document.getElementById('hx-c-blank-greet'), gg = document.getElementById('hx-home-greet');
+            if (g && gg && g.textContent) gg.textContent = g.textContent.replace(/\.+$/, '');
+            var s = document.getElementById('hx-c-blank-sub'), ss = document.getElementById('hx-home-sub');
+            if (s && ss && s.textContent) ss.textContent = s.textContent;
+          }
+          function show() { if (el.hidden) { el.hidden = false; document.body.classList.add('hx-home-on'); } sync(); }
+          function hide() { if (!el.hidden) { el.hidden = true; document.body.classList.remove('hx-home-on'); } }
+          function evaluate() { if (thread.querySelector('.hx-welcome')) show(); else hide(); }
+
+          evaluate();
+          setTimeout(function () { if (!el.hidden) sync(); }, 0);
+          try { new MutationObserver(evaluate).observe(thread, { childList: true }); } catch (e) {}
+        })();
+
+
 
         // ═══════════════════════════════════════════════════════════════
         // V89 — WORKSPACE PANE controller
@@ -37927,6 +38086,113 @@
     html[data-theme="dark"] body[data-active="chat"] .hx-w-preset.is-on .hx-w-preset-ic{
       background:color-mix(in srgb,var(--wc) 20%, var(--hx-bg-2));
     }
+
+    /* ═══════════════════════════════════════════════════════════════
+       HOME SHELL (V99) — the full premium home, shown over the chat pane
+       on the empty state. Isolated overlay; the working chat lives
+       underneath untouched. Renders in both light and the pure-black dark
+       theme via design tokens; the brand accent is violet.
+       ═══════════════════════════════════════════════════════════════ */
+    body[data-active="chat"] .hx-chat-pane{ position:relative; }
+    body[data-active="chat"] #hx-home{
+      --hx-violet:#6d5efc;
+      position:absolute; inset:0; z-index:60; display:flex; flex-direction:column;
+      background:var(--hx-bg); animation:hxHomeIn .4s cubic-bezier(.16,1,.3,1) both;
+    }
+    body[data-active="chat"] #hx-home[hidden]{ display:none !important; }
+    @keyframes hxHomeIn{ from{opacity:0;} to{opacity:1;} }
+    /* app bar */
+    body[data-active="chat"] .hx-home-bar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:calc(env(safe-area-inset-top, 0px) + 12px) 18px 8px; flex-shrink:0;
+    }
+    body[data-active="chat"] .hx-home-menu{
+      width:40px; height:40px; flex-shrink:0; border-radius:13px; display:grid; place-items:center;
+      background:var(--hx-surface); border:1px solid var(--hx-line); color:var(--hx-text);
+    }
+    body[data-active="chat"] .hx-home-menu svg{ width:19px; height:19px; }
+    body[data-active="chat"] .hx-home-logo{ display:flex; flex-direction:column; align-items:center; gap:3px; min-width:0; }
+    body[data-active="chat"] .hx-home-logo-name{
+      font-family:'Instrument Serif','Iowan Old Style',Georgia,serif; font-size:26px; line-height:.9; color:var(--hx-text);
+    }
+    body[data-active="chat"] .hx-home-logo-name i{ color:var(--hx-violet); font-style:normal; }
+    body[data-active="chat"] .hx-home-logo-tag{ font-size:8px; letter-spacing:.22em; font-weight:700; color:var(--hx-text-dim); text-transform:uppercase; }
+    body[data-active="chat"] .hx-home-avatar{
+      width:40px; height:40px; flex-shrink:0; border-radius:50%; overflow:hidden; border:1px solid var(--hx-line); padding:0;
+      background:linear-gradient(140deg,#c4b5fd,#6d5efc 75%);
+    }
+    body[data-active="chat"] .hx-home-avatar span{ display:block; width:100%; height:100%; }
+    /* scroll body */
+    body[data-active="chat"] .hx-home-scroll{
+      flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+      display:flex; flex-direction:column; padding:10px 20px 20px;
+    }
+    body[data-active="chat"] .hx-home-scroll::-webkit-scrollbar{ display:none; }
+    body[data-active="chat"] .hx-home-scroll .hx-w-badge{ align-self:flex-start; }
+    /* composer card */
+    body[data-active="chat"] .hx-home-composer{
+      margin-top:20px; border:1px solid var(--hx-line); border-radius:20px; background:var(--hx-surface);
+      padding:14px 14px 12px; box-shadow:0 2px 10px -6px rgba(20,18,12,.12);
+      transition:border-color .18s, box-shadow .18s;
+    }
+    body[data-active="chat"] .hx-home-composer:focus-within{
+      border-color:color-mix(in srgb,var(--hx-violet) 50%, var(--hx-line));
+      box-shadow:0 0 0 3px color-mix(in srgb,var(--hx-violet) 14%, transparent);
+    }
+    body[data-active="chat"] .hx-home-inrow{ display:flex; align-items:flex-end; gap:10px; }
+    body[data-active="chat"] .hx-home-input{
+      flex:1; min-width:0; border:0; background:transparent; resize:none; outline:none; color:var(--hx-text);
+      font-family:inherit; font-size:16px; line-height:1.4; padding:6px 2px; max-height:140px;
+    }
+    body[data-active="chat"] .hx-home-input::placeholder{ color:var(--hx-text-dim); }
+    body[data-active="chat"] .hx-home-inbtns{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    body[data-active="chat"] .hx-home-mic{
+      width:38px; height:38px; border-radius:50%; display:grid; place-items:center;
+      background:var(--hx-bg-2); border:1px solid var(--hx-line); color:var(--hx-text-mid);
+    }
+    body[data-active="chat"] .hx-home-mic svg{ width:18px; height:18px; }
+    body[data-active="chat"] .hx-home-send{
+      width:42px; height:42px; border-radius:50%; display:grid; place-items:center; border:0; color:#fff;
+      background:linear-gradient(150deg, color-mix(in srgb,var(--hx-violet) 86%,#fff), var(--hx-violet));
+      box-shadow:0 10px 20px -8px color-mix(in srgb,var(--hx-violet) 70%, transparent);
+      transition:transform .14s;
+    }
+    body[data-active="chat"] .hx-home-send:active{ transform:scale(.93); }
+    body[data-active="chat"] .hx-home-send svg{ width:20px; height:20px; }
+    body[data-active="chat"] .hx-home-pills{ display:flex; gap:8px; margin-top:12px; }
+    body[data-active="chat"] .hx-home-pill{
+      flex:1; min-width:0; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      padding:9px 8px; border-radius:12px; background:var(--hx-bg-2); border:1px solid var(--hx-line);
+      color:var(--hx-text-mid); font-size:12.5px; font-weight:550; letter-spacing:-.01em;
+      transition:color .16s, border-color .16s, background .18s;
+    }
+    body[data-active="chat"] .hx-home-pill > svg:first-child{ width:15px; height:15px; flex-shrink:0; }
+    body[data-active="chat"] .hx-home-pill > svg:last-child{ width:12px; height:12px; opacity:.55; flex-shrink:0; }
+    body[data-active="chat"] .hx-home-pill span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    body[data-active="chat"] .hx-home-pill.is-on{
+      color:var(--hx-violet); border-color:color-mix(in srgb,var(--hx-violet) 45%, transparent);
+      background:color-mix(in srgb,var(--hx-violet) 10%, var(--hx-bg-2));
+    }
+    /* bottom tab bar */
+    body[data-active="chat"] .hx-home-tabs{
+      flex-shrink:0; display:flex; align-items:center; justify-content:space-around; gap:6px;
+      padding:9px 22px calc(env(safe-area-inset-bottom, 0px) + 11px);
+      border-top:1px solid var(--hx-line); background:var(--hx-bg);
+    }
+    body[data-active="chat"] .hx-home-tab{
+      width:56px; height:40px; border-radius:14px; display:grid; place-items:center;
+      background:transparent; border:0; color:var(--hx-text-dim); transition:color .16s, background .18s;
+    }
+    body[data-active="chat"] .hx-home-tab svg{ width:22px; height:22px; }
+    body[data-active="chat"] .hx-home-tab.is-on{ color:var(--hx-violet); background:color-mix(in srgb,var(--hx-violet) 13%, transparent); }
+    /* dark: lift composer + mic off the pure-black page */
+    html[data-theme="dark"] body[data-active="chat"] .hx-home-composer{ background:var(--hx-bg-2); }
+    html[data-theme="dark"] body[data-active="chat"] .hx-home-menu{ background:var(--hx-bg-2); }
+    @media (max-width:380px){
+      body[data-active="chat"] .hx-home-pill{ font-size:11.5px; gap:5px; padding:9px 6px; }
+      body[data-active="chat"] .hx-home-pill > svg:first-child{ width:14px; height:14px; }
+    }
+
     /* model presence */
     body[data-active="chat"] .hx-w-models{ display:flex; gap:10px; }
     body[data-active="chat"] .hx-w-model{
