@@ -37622,15 +37622,18 @@
 
     /* ═══════════════ PREMIUM WELCOME (empty chat) — flagship ═══════════════ */
     body[data-active="chat"] .hx-welcome{
-      width:100%; max-width:680px; margin:0 auto; padding:30px 20px 40px;
+      width:100%; max-width:680px; margin:0 auto; padding:24px 20px 40px;
       box-sizing:border-box; display:flex; flex-direction:column; min-width:0;
       animation:hxwIn .6s cubic-bezier(.16,1,.3,1) both;
     }
     body[data-active="chat"] .hx-welcome *{ box-sizing:border-box; }
-    /* the blank container must not force its own width/centering that pushes the grid out */
-    body[data-active="chat"] .hx-chat-blank:has(.hx-welcome){
-      display:block !important; width:100% !important; max-width:100% !important;
-      padding:0 !important; align-items:stretch !important;
+    /* CRITICAL: the blank container is flex-centered elsewhere, which floats
+       the welcome with a huge top gap. Force it to TOP-ALIGN, full-width. */
+    body[data-active="chat"] #hx-c-blank,
+    body[data-active="chat"] .hx-chat-blank{
+      display:block !important; align-items:stretch !important;
+      justify-content:flex-start !important; min-height:0 !important;
+      width:100% !important; max-width:100% !important; padding:0 !important; flex:none !important;
     }
     body[data-active="chat"] .hx-w-grid{ min-width:0; }
     body[data-active="chat"] .hx-w-card{ min-width:0; }
