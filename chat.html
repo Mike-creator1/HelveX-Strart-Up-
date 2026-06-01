@@ -34990,7 +34990,14 @@
             // the functional CSS home beneath.
             var first = mk.querySelector('.hx-mockup-screen[data-screen="home"] .hx-mockup-img');
             if (first) {
-              var reveal = function () { if (first.naturalWidth > 1) mk.hidden = false; };
+              var hideBurger = function () {
+                // The legacy chat hamburger (≡) floats in its own layer above
+                // the prototype — kill it imperatively too, in case CSS/class
+                // timing leaves it visible.
+                var dt = document.getElementById('hx-c-drawer-toggle');
+                if (dt) dt.style.setProperty('display', 'none', 'important');
+              };
+              var reveal = function () { if (first.naturalWidth > 1) { mk.hidden = false; hideBurger(); } };
               if (first.complete) reveal();
               first.addEventListener('load', reveal);
               first.addEventListener('error', function () { mk.hidden = true; });
