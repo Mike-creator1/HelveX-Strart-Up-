@@ -34964,15 +34964,23 @@
             var g1 = document.querySelector('#hx-home-greet .hx-home-greet-1');
             var g2 = document.querySelector('#hx-home-greet .hx-home-greet-2');
             if (g1 && g2) {
-              if (name) { g1.textContent = part + ','; g2.textContent = name + '.'; g2.style.display = ''; }
-              else { g1.innerHTML = part + '<span style="color:var(--hx-violet)">.</span>'; g2.textContent = ''; g2.style.display = 'none'; }
+              if (name) { g1.style.whiteSpace = 'nowrap'; g1.textContent = part + ','; g2.textContent = name + '.'; g2.style.display = ''; }
+              else { g1.style.whiteSpace = 'normal'; g1.innerHTML = part + '<span style="color:var(--hx-violet)">.</span>'; g2.textContent = ''; g2.style.display = 'none'; }
             }
           }
           var scrollEl = el.querySelector('.hx-home-scroll');
+          function pinTop() {
+            if (!scrollEl) return;
+            var n = 0;
+            (function f(){ scrollEl.scrollTop = 0; if (++n < 10) requestAnimationFrame(f); })();
+            setTimeout(function(){ scrollEl.scrollTop = 0; }, 220);
+            setTimeout(function(){ scrollEl.scrollTop = 0; }, 480);
+          }
           function show() {
+            var wasHidden = el.hidden;
             if (el.hidden) { el.hidden = false; document.body.classList.add('hx-home-on'); }
             sync();
-            if (scrollEl) { try { scrollEl.scrollTop = 0; } catch (e) {} }
+            if (wasHidden) pinTop();
           }
           function hide() { if (!el.hidden) { el.hidden = true; document.body.classList.remove('hx-home-on'); } }
           function evaluate() { if (thread.querySelector('.hx-welcome')) show(); else hide(); }
@@ -38278,8 +38286,8 @@
     body[data-active="chat"] .hx-home-avatar svg{ display:block; width:100%; height:100%; }
     /* scroll body */
     body[data-active="chat"] .hx-home-scroll{
-      flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
-      display:flex; flex-direction:column; padding:12px 20px 20px;
+      flex:1; min-height:0; overflow-y:auto; overflow-anchor:none; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+      display:flex; flex-direction:column; padding:16px 20px 20px;
     }
     body[data-active="chat"] .hx-home-scroll::-webkit-scrollbar{ display:none; }
     /* greeting — bold sans, two lines, name in violet */
