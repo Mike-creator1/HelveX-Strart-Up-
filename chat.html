@@ -30745,6 +30745,49 @@
       border-color:color-mix(in srgb, var(--hx-mc) 55%, var(--hx-line)) !important;
       box-shadow:0 0 0 3px var(--hx-mc-soft) !important;
     }
+
+    /* ===================================================================
+       ASSISTANT IDENTITY MARK + GENERATING STATE
+       No model logo, no "Helix" label, no 3-dot typing. Each reply is led by
+       a small category-matching logo; while generating it breathes with a
+       rotating accent ring, and a soft shimmer line stands in for the dots.
+       =================================================================== */
+    body[data-active="chat"] .hx-msg-head-mark{ display:flex; align-items:center; margin-bottom:7px; }
+    .hx-amk{
+      position:relative; width:30px; height:30px; border-radius:9px; flex:0 0 auto;
+      display:inline-flex; align-items:center; justify-content:center; color:#fff;
+      background:linear-gradient(145deg, color-mix(in srgb, var(--hx-mc,#7c5cff) 88%, #fff), var(--hx-mc,#7c5cff) 55%, color-mix(in srgb, var(--hx-mc,#7c5cff) 76%, #000));
+      box-shadow:0 4px 12px var(--hx-mc-glow, rgba(124,92,255,.38)), inset 0 1px 0 rgba(255,255,255,.35);
+    }
+    .hx-amk svg{ width:17px; height:17px; position:relative; z-index:1; }
+    .hx-amk.is-generic{
+      background:linear-gradient(145deg, #9aa0ad, #5b6270);
+      box-shadow:0 4px 12px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.3);
+    }
+    .hx-amk.is-thinking{ animation:hxAmkBreathe 1.4s ease-in-out infinite; }
+    .hx-amk.is-thinking::before{
+      content:''; position:absolute; inset:-3px; border-radius:12px; z-index:-1;
+      background:conic-gradient(from 0deg, transparent 0deg, var(--hx-mc,#7c5cff) 95deg, transparent 210deg);
+      animation:hxAmkSpin 1.05s linear infinite;
+    }
+    @keyframes hxAmkBreathe{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.07); } }
+    @keyframes hxAmkSpin{ to{ transform:rotate(360deg); } }
+    body[data-active="chat"] .hx-amk-shimmer{
+      display:block; width:140px; max-width:62%; height:11px; border-radius:6px; margin-top:4px;
+      background:linear-gradient(90deg, var(--hx-mc-soft, rgba(124,92,255,.16)) 0%, color-mix(in srgb, var(--hx-mc,#7c5cff) 32%, transparent) 50%, var(--hx-mc-soft, rgba(124,92,255,.16)) 100%);
+      background-size:200% 100%; animation:hxShimmer 1.25s ease-in-out infinite;
+    }
+    @keyframes hxShimmer{ 0%{ background-position:200% 0; } 100%{ background-position:-200% 0; } }
+    @media (prefers-reduced-motion: reduce){
+      .hx-amk.is-thinking, .hx-amk.is-thinking::before, .hx-amk-shimmer{ animation:none; }
+    }
+    /* smaller, airier assistant text — more room to breathe (specificity is
+       raised to override the existing html …thread-inner !important rules) */
+    html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content{ font-size:13.5px !important; line-height:1.78 !important; }
+    html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content > p:first-child{ font-size:14px !important; }
+    html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content h1.hx-md-h{ font-size:19px !important; }
+    html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content h2.hx-md-h{ font-size:16px !important; }
+    html body[data-active="chat"] .hx-chat-thread-inner .hx-msg.is-assistant .hx-msg-content h3.hx-md-h{ font-size:14.5px !important; }
   </style>
 </head>
 <body data-active="chat">
@@ -33285,14 +33328,11 @@
             // dots — no elaborate animated atom/flame. Laid out exactly like
             // an assistant message so it reads consistently on the left.
             html += '<div class="hx-msg is-assistant hx-msg-thinking is-' + escape(activeModel) + '">' +
-              '<div class="hx-msg-head">' +
-                '<span class="hx-msg-avatar is-assistant hx-mg-' + escape(activeModel) + '" aria-hidden="true">' +
-                  modelLogoSvg(activeModel) +
-                '</span>' +
-                '<span class="hx-msg-author">Helix</span>' +
+              '<div class="hx-msg-head hx-msg-head-mark">' +
+                hxAssistMark(true) +
               '</div>' +
               '<div class="hx-msg-body">' +
-                '<span class="hx-thinking-dots" role="status" aria-label="' + escape(thinkLabel) + '"><span></span><span></span><span></span></span>' +
+                '<span class="hx-amk-shimmer" role="status" aria-label="' + escape(thinkLabel) + '"></span>' +
               '</div>' +
             '</div>';
           }
@@ -33496,12 +33536,7 @@
                          (state.conversation && state.conversation.model) ||
                          ($('hx-c-model') && $('hx-c-model').value) || 'ether';
           var avatar = isAssist
-            ? '<div class="hx-msg-head">' +
-                '<span class="hx-msg-avatar is-assistant hx-mg-' + escape(msgModel) + '" aria-hidden="true">' +
-                  modelLogoSvg(msgModel) +
-                '</span>' +
-                '<span class="hx-msg-author">Helix</span>' +
-              '</div>'
+            ? '<div class="hx-msg-head hx-msg-head-mark">' + hxAssistMark(!!(m && m.__streaming)) + '</div>'
             : '';
 
           // V64 — Smart follow-up chips for completed assistant
@@ -35054,6 +35089,18 @@
               '<span>' + t.l + '</span></button>';
           }).join('');
           band.setAttribute('data-on', '1');
+        }
+        // Build the assistant identity mark — a category-matching animated
+        // logo instead of the model avatar + "Helix" label. In a workspace it
+        // uses that category's icon + accent; on the general chat a neutral orb.
+        // thinking=true adds the breathing + rotating-ring "generating" state.
+        function hxAssistMark(thinking) {
+          var id = (typeof hxMode !== 'undefined' && hxMode && HX_WS_IDENTITY[hxMode]) ? HX_WS_IDENTITY[hxMode] : null;
+          var ic = id ? id.ic : '<circle cx="12" cy="12" r="3.4"/><path d="M12 4.5v2M12 17.5v2M4.5 12h2M17.5 12h2"/>';
+          var cls = 'hx-amk' + (id ? '' : ' is-generic') + (thinking ? ' is-thinking' : '');
+          return '<span class="' + cls + '" aria-hidden="true">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' + ic + '</svg>' +
+          '</span>';
         }
         // Run a workspace quick-tool as a REAL action: engage its engine mode
         // (+ web search), build a task prompt from the composer text / context,
