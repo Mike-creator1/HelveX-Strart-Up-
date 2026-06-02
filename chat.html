@@ -34907,20 +34907,16 @@
               '<span class="hx-home-card-t">' + a.t + '</span>' +
               '<span class="hx-home-card-d">' + a.d + '</span></button>';
           }).join('');
-          var RECENT = [
-            { t:'AI trends in 2026',   cat:'Research', time:'2 min ago',  c:'#7c5cff', ic:I.research, act:'restore' },
-            { t:'Product roadmap Q1',  cat:'Plan',     time:'1 hour ago', c:'#22c55e', ic:'<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/>', act:'restore' },
-            { t:'Q4 Sales analysis',   cat:'Analyze',  time:'3 hours ago',c:'#3b82f6', ic:I.analyze, act:'star' }
-          ];
-          var recent = RECENT.map(function (r) {
-            var trail = r.act === 'star'
-              ? '<span class="hx-home-rec-act" aria-hidden="true">' + S.star + '</span>'
-              : '<span class="hx-home-rec-act" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + I.restore + '</svg></span>';
-            return '<button class="hx-home-rec" type="button" data-ws-suggest="' + r.t + '" style="--wc:' + r.c + '">' +
-              '<span class="hx-home-rec-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' + r.ic + '</svg></span>' +
-              '<span class="hx-home-rec-body"><span class="hx-home-rec-t">' + r.t + '</span><span class="hx-home-rec-m">' + r.cat + ' &middot; ' + r.time + '</span></span>' +
-              trail + '</button>';
-          }).join('');
+          // Real sessions only — no fabricated history. Until the user has
+          // actual conversations, show a clean empty state. (Wired to live
+          // conversations in hxSyncRecent below.)
+          var RECENT = [];
+          var recent = RECENT.length ? RECENT.map(function (r) {
+            return '<button class="hx-home-rec" type="button" data-ws-suggest="' + r.t + '" style="--wc:' + (r.c || '#7c5cff') + '">' +
+              '<span class="hx-home-rec-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' + (r.ic || I.research) + '</svg></span>' +
+              '<span class="hx-home-rec-body"><span class="hx-home-rec-t">' + r.t + '</span><span class="hx-home-rec-m">' + (r.cat || '') + '</span></span></button>';
+          }).join('') :
+            '<div class="hx-ws-empty"><span class="hx-ws-empty-t">No sessions yet</span><span class="hx-ws-empty-d">Start a conversation above and it will appear here.</span></div>';
 
           var el = document.createElement('div');
           el.id = 'hx-home'; el.hidden = true;
@@ -35113,115 +35109,46 @@
             chart:'<path d="M3 3v18h18"/><path d="m7 14 3-3 3 3 4-6"/>',
             bug:'<rect x="8" y="6" width="8" height="12" rx="4"/><path d="M12 6V3"/><path d="M5 9l3 1"/><path d="M19 9l-3 1"/><path d="M5 15l3-1"/><path d="M19 15l-3-1"/>'
           };
+          // No fabricated data — this is a launch product. Each category shows
+          // example starter prompts (suggestions, not history) + a clean empty
+          // state. Real items appear here only after the user actually creates
+          // them.
           var WS = {
             research: { accent:'#7c5cff', icon:I.research, title:'Research', sub:'Find, verify and explore anything — with cited sources.', ph:'Research any topic…',
-              chips:['All','Web','Academic','News','Code','Docs'],
-              blocks:[
-                {type:'list', label:'Sources', seeall:true, items:[
-                  {t:'OpenAI — model roadmap 2026', m:'openai.com · verified', ic:'globe'},
-                  {t:'Nature — quantum error correction', m:'nature.com · peer-reviewed', ic:'doc'},
-                  {t:'IMF — global economic outlook', m:'imf.org · report', ic:'doc'} ]},
-                {type:'list', label:'Knowledge base', items:[
-                  {t:'Market landscape brief', m:'12 sources · 8 citations', ic:'doc'},
-                  {t:'Competitor teardown', m:'9 sources · 5 citations', ic:'doc'} ]},
-                {type:'list', label:'Research sessions', items:[
-                  {t:'AI trends to watch in 2026', m:'8 sources · 2h ago', ic:'globe'},
-                  {t:'Longevity & healthspan', m:'9 sources · yesterday', ic:'globe'} ]}
-              ]},
+              starters:['What are the latest developments in AI?','Research this topic and cite your sources','Compare two options with evidence'],
+              empty:{ ic:'globe', title:'Nothing here yet', text:'Your sources, citations and saved research will appear here as you work.' } },
             plan: { accent:'#22c55e', icon:I.plan, title:'Plan', sub:'Turn ideas into roadmaps, milestones and tasks.', ph:'What do you want to plan?',
-              chips:['All','Roadmaps','Goals','Tasks','Projects'],
-              blocks:[
-                {type:'stats', items:[ {v:'4', k:'Active goals'}, {v:'12', k:'Milestones'}, {v:'68%', k:'Tasks done'} ]},
-                {type:'board', label:'Roadmap', cols:[
-                  {name:'To do', items:['Define Q1 OKRs','Hire 2 engineers','Pricing research']},
-                  {name:'In progress', items:['MVP onboarding','Design system v2']},
-                  {name:'Done', items:['Brand refresh','Landing page']} ]},
-                {type:'list', label:'Projects', seeall:true, items:[
-                  {t:'Product roadmap Q1', m:'18 tasks · 4 milestones', ic:'flag'},
-                  {t:'Go-to-market plan', m:'9 tasks · due Mar 30', ic:'target'} ]}
-              ]},
+              starters:['Create a 30-day launch plan','Break this goal into milestones','Plan my week around 3 priorities'],
+              empty:{ ic:'flag', title:'No plans yet', text:'Your goals, roadmaps and tasks will appear here once you create them.' } },
             analyze: { accent:'#3b82f6', icon:WIC.chart, title:'Analyze', sub:'Dashboards, metrics and insights from your data.', ph:'What data would you like to analyze?',
-              chips:['Overview','Revenue','Growth','Retention','Funnel'],
-              blocks:[
-                {type:'stats', items:[ {v:'€48.2k', k:'MRR', d:'+12%'}, {v:'3,920', k:'Active users', d:'+8%'}, {v:'2.4%', k:'Churn', d:'-0.3%'} ]},
-                {type:'chart', label:'Revenue · last 7 months', bars:[ {l:'Sep',v:42},{l:'Oct',v:55},{l:'Nov',v:48},{l:'Dec',v:70},{l:'Jan',v:65},{l:'Feb',v:82},{l:'Mar',v:96} ]},
-                {type:'list', label:'Reports', seeall:true, items:[
-                  {t:'Q4 sales analysis', m:'updated 3h ago', ic:'chart'},
-                  {t:'Cohort retention', m:'updated yesterday', ic:'chart'} ]}
-              ]},
-            code: { accent:'#f59e0b', icon:WIC.repo, title:'Code', sub:'A real coding workspace — repos, files, debugging.', ph:'Describe what to build, fix or refactor…',
-              chips:['All','Repositories','Files','Issues','PRs'],
-              blocks:[
-                {type:'stats', items:[ {v:'7', k:'Repos'}, {v:'3', k:'Open PRs'}, {v:'11', k:'Issues'} ]},
-                {type:'list', label:'Repositories', seeall:true, items:[
-                  {t:'helix-web', m:'TypeScript · main · 2h ago', ic:'repo'},
-                  {t:'helix-api', m:'Python · main · yesterday', ic:'repo'},
-                  {t:'helix-infra', m:'Terraform · 3d ago', ic:'repo'} ]},
-                {type:'list', label:'Recent files', items:[
-                  {t:'src/app/home.tsx', m:'edited 12 min ago', ic:'file'},
-                  {t:'api/routes/auth.py', m:'edited 1h ago', ic:'file'} ]},
-                {type:'list', label:'Sessions', items:[
-                  {t:'Refactor auth flow', m:'debugging · 30 min ago', ic:'bug'} ]}
-              ]},
+              starters:['Analyze this data and find the trend','Turn these numbers into insights','Summarize a report into key metrics'],
+              empty:{ ic:'chart', title:'No analysis yet', text:'Share data or ask a question — your dashboards and reports will appear here.' } },
+            code: { accent:'#f59e0b', icon:WIC.repo, title:'Code', sub:'Build, debug and ship — your coding workspace.', ph:'Describe what to build, fix or refactor…',
+              starters:['Build a React component for…','Find and fix the bug in this code','Refactor this function to be cleaner'],
+              empty:{ ic:'code', title:'No projects yet', text:'Your repositories, files and coding sessions will appear here.' } },
             create: { accent:'#ec4899', icon:I.create, title:'Create', sub:'Generate content, assets and campaigns.', ph:'What do you want to create?',
-              chips:['All','Documents','Images','Campaigns','Social'],
-              blocks:[
-                {type:'tiles', label:'New', items:[
-                  {t:'Document', d:'Article, post, doc', ic:'doc'},
-                  {t:'Image', d:'Visuals & assets', ic:'image'},
-                  {t:'Email', d:'Outreach', ic:'mail'},
-                  {t:'Campaign', d:'Multi-channel', ic:'mega'} ]},
-                {type:'list', label:'Recent assets', seeall:true, items:[
-                  {t:'Launch announcement', m:'document · 1h ago', ic:'doc'},
-                  {t:'Q1 ad creatives', m:'6 images · yesterday', ic:'image'} ]},
-                {type:'list', label:'Campaigns', items:[
-                  {t:'Spring product launch', m:'4 assets · scheduled', ic:'mega'} ]}
-              ]},
+              starters:['Write a launch announcement','Draft a cold outreach email','Generate social posts for a campaign'],
+              empty:{ ic:'doc', title:'Nothing created yet', text:'Your documents, assets and campaigns will appear here.' } },
             learn: { accent:'#22d3ee', icon:I.learn, title:'Learn', sub:'Courses, learning paths and AI tutoring.', ph:'What do you want to learn?',
-              chips:['All','Courses','Paths','Saved','Tutor'],
-              blocks:[
-                {type:'stats', items:[ {v:'6', k:'Day streak'}, {v:'3', k:'Courses'}, {v:'24h', k:'Learned'} ]},
-                {type:'list', label:'Continue learning', seeall:true, items:[
-                  {t:'Machine learning foundations', m:'62% · lesson 8 of 14', ic:'play'},
-                  {t:'Financial literacy', m:'30% · lesson 3 of 10', ic:'play'} ]},
-                {type:'list', label:'Learning paths', items:[
-                  {t:'Become an AI engineer', m:'5 courses · 40h', ic:'book'},
-                  {t:'Startup founder track', m:'4 courses · 28h', ic:'book'} ]}
-              ]}
+              starters:['Explain a concept simply, with an example','Create a learning path for me','Quiz me on what I just learned'],
+              empty:{ ic:'book', title:'Nothing here yet', text:'Your courses, saved lessons and progress will appear here.' } }
           };
 
-          function renderBlocks(c){
-            return c.blocks.map(function(b){
-              if(b.type==='stats'){
-                return '<div class="hx-ws-stats">' + b.items.map(function(s){
-                  return '<div class="hx-ws-stat"><span class="hx-ws-stat-v">' + s.v + '</span><span class="hx-ws-stat-k">' + s.k + '</span>' + (s.d ? '<span class="hx-ws-stat-d ' + (s.d.charAt(0) === '-' ? 'is-dn' : 'is-up') + '">' + s.d + '</span>' : '') + '</div>';
-                }).join('') + '</div>';
-              }
-              if(b.type==='chart'){
-                var mx = Math.max.apply(null, b.bars.map(function(x){ return x.v; }));
-                return '<div class="hx-w-sughead"><span class="hx-w-sec-label">' + b.label + '</span></div>' +
-                  '<div class="hx-ws-chart">' + b.bars.map(function(x){
-                    return '<div class="hx-ws-bar"><span class="hx-ws-bar-fill" style="height:' + Math.round(x.v / mx * 100) + '%"></span><span class="hx-ws-bar-l">' + x.l + '</span></div>';
-                  }).join('') + '</div>';
-              }
-              if(b.type==='board'){
-                return '<div class="hx-w-sughead"><span class="hx-w-sec-label">' + b.label + '</span></div>' +
-                  '<div class="hx-ws-board">' + b.cols.map(function(col){
-                    return '<div class="hx-ws-col"><div class="hx-ws-col-h">' + col.name + '<span>' + col.items.length + '</span></div>' +
-                      col.items.map(function(t){ return '<div class="hx-ws-card">' + t + '</div>'; }).join('') + '</div>';
-                  }).join('') + '</div>';
-              }
-              if(b.type==='tiles'){
-                return '<div class="hx-w-sughead"><span class="hx-w-sec-label">' + b.label + '</span></div>' +
-                  '<div class="hx-ws-tiles">' + b.items.map(function(t){
-                    return '<button class="hx-ws-tile" type="button" data-seed="Create a ' + t.t.toLowerCase() + '"><span class="hx-ws-tile-ic">' + sg(WIC[t.ic] || c.icon) + '</span><span class="hx-ws-tile-t">' + t.t + '</span><span class="hx-ws-tile-d">' + t.d + '</span></button>';
-                  }).join('') + '</div>';
-              }
-              return '<div class="hx-w-sughead"><span class="hx-w-sec-label">' + b.label + '</span>' + (b.seeall ? '<button class="hx-w-seeall" type="button">View all' + S.chevR + '</button>' : '') + '</div>' +
-                '<div class="hx-home-recent">' + b.items.map(function(it){
-                  return '<button class="hx-home-rec" type="button" data-seed="' + it.t + '" style="--wc:' + c.accent + '"><span class="hx-home-rec-ic">' + sg(WIC[it.ic] || c.icon) + '</span><span class="hx-home-rec-body"><span class="hx-home-rec-t">' + it.t + '</span><span class="hx-home-rec-m">' + it.m + '</span></span><span class="hx-home-rec-act">' + sg('<path d="M9 18l6-6-6-6"/>', 2) + '</span></button>';
-                }).join('') + '</div>';
+          function renderBody(c){
+            var starters = (c.starters || []).map(function(s){
+              return '<button class="hx-home-rec" type="button" data-seed="' + s + '" style="--wc:' + c.accent + '">' +
+                '<span class="hx-home-rec-ic">' + sg(c.icon) + '</span>' +
+                '<span class="hx-home-rec-body"><span class="hx-home-rec-t">' + s + '</span></span>' +
+                '<span class="hx-home-rec-act">' + sg('<path d="M9 18l6-6-6-6"/>', 2) + '</span></button>';
             }).join('');
+            var e = c.empty || {};
+            return '<div class="hx-w-sughead"><span class="hx-w-sec-label">Start with</span></div>' +
+              '<div class="hx-home-recent">' + starters + '</div>' +
+              '<div class="hx-ws-empty">' +
+                '<span class="hx-ws-empty-ic" aria-hidden="true">' + sg(WIC[e.ic] || c.icon, 1.8) + '</span>' +
+                '<span class="hx-ws-empty-t">' + (e.title || 'Nothing here yet') + '</span>' +
+                '<span class="hx-ws-empty-d">' + (e.text || '') + '</span>' +
+              '</div>';
           }
 
           var ws = document.createElement('div');
@@ -35233,7 +35160,6 @@
             var c = WS[key]; if(!c) return;
             wsKey = key;
             ws.style.setProperty('--hx-violet', c.accent);
-            var chips = c.chips.map(function(f,i){ return '<button class="hx-rs-chip' + (i === 0 ? ' is-on' : '') + '" type="button">' + f + '</button>'; }).join('');
             ws.innerHTML =
               '<div class="hx-home-bar">' +
                 '<button class="hx-home-menu" type="button" id="hx-ws-back" aria-label="Back">' + back + '</button>' +
@@ -35257,8 +35183,7 @@
                     '<button class="hx-home-pill" type="button">' + S.focus + '<span>Focus</span></button>' +
                   '</div>' +
                 '</div>' +
-                '<div class="hx-rs-chips">' + chips + '</div>' +
-                renderBlocks(c) +
+                renderBody(c) +
               '</div>' +
               '<nav class="hx-home-tabs" aria-label="Sections">' +
                 '<button class="hx-home-tab" type="button" data-tab="home" aria-label="Home">' + S.home + '</button>' +
@@ -38711,6 +38636,16 @@
       position:fixed; inset:0; z-index:61; display:flex; flex-direction:column;
       background:var(--hx-bg); animation:hxHomeIn .35s cubic-bezier(.16,1,.3,1) both;
     }
+    /* Honest empty state (no fabricated data) */
+    body[data-active="chat"] .hx-ws-empty{
+      display:flex; flex-direction:column; align-items:center; text-align:center; gap:7px;
+      padding:32px 24px; margin-top:18px; border:1px dashed var(--hx-line); border-radius:20px;
+      background:color-mix(in srgb, var(--hx-text) 2%, transparent);
+    }
+    body[data-active="chat"] .hx-ws-empty-ic{ color:var(--hx-text-dim); display:inline-flex; opacity:.7; margin-bottom:2px; }
+    body[data-active="chat"] .hx-ws-empty-ic svg{ width:30px; height:30px; }
+    body[data-active="chat"] .hx-ws-empty-t{ font-size:15px; font-weight:650; color:var(--hx-text); letter-spacing:-.01em; }
+    body[data-active="chat"] .hx-ws-empty-d{ font-size:12.5px; color:var(--hx-text-mid); line-height:1.45; max-width:300px; }
     @media (min-width:900px){ body[data-active="chat"] #hx-ws{ position:absolute; } }
     body[data-active="chat"] #hx-ws[hidden]{ display:none !important; }
     body[data-active="chat"] .hx-ws-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:22px; }
