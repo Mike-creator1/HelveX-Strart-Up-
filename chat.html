@@ -35823,27 +35823,57 @@
           var WS = {
             research: { accent:'#7c5cff', icon:I.research, title:'Research', sub:'Find, verify and explore anything — with cited sources.', ph:'Research any topic…',
               cats:[{l:'Market scan',s:'Scan the market for '},{l:'Deep dive',s:'Do a deep dive on '},{l:'Fact-check',s:'Fact-check this claim: '},{l:'Compare',s:'Compare these options: '},{l:'Sources',s:'Find credible sources on '}],
-              starters:['Map the competitive landscape for…','Fact-check this claim with sources','What changed in this space this year?','Compare two options with evidence'],
+              starters:[
+                {l:'Χάρτης ανταγωνισμού', p:'Κάνε έρευνα στο web και φτιάξε χάρτη ανταγωνισμού για [αγορά/προϊόν]. Δώσε markdown πίνακα με 5-7 βασικούς players (θέση, δυνατά, αδύναμα, ενδεικτική τιμολόγηση), εντόπισε τα κενά της αγοράς με πηγές, και κλείσε με Bottom line: την πιο καθαρή ευκαιρία.'},
+                {l:'Έλεγχος ισχυρισμού (fact-check)', p:'Έλεγξε με web search τον ισχυρισμό: [ισχυρισμός]. Πες ΑΛΗΘΕΣ/ΨΕΥΔΕΣ/ΜΕΡΙΚΩΣ, δώσε 2-3 αξιόπιστες πρόσφατες πηγές με σύνδεσμο, και μία πρόταση συμπέρασμα.'},
+                {l:'Βαθιά ανάλυση θέματος', p:'Κάνε deep dive στο [θέμα] με web search: τι είναι, γιατί έχει σημασία τώρα, 5 βασικά facts με πηγές, οι διαφορετικές οπτικές, τι να προσέξω. Κλείσε με Bottom line:.'},
+                {l:'Σύγκριση με στοιχεία', p:'Σύγκρινε με στοιχεία [A] vs [B]: markdown πίνακας (κόστος, χρόνος, ρίσκο, καταλληλότητα) με πηγές, και Καλύτερη επιλογή: + λόγος.'}
+              ],
               empty:{ ic:'globe', title:'Nothing here yet', text:'Your sources, citations and saved research will appear here as you work.' } },
             plan: { accent:'#22c55e', icon:I.plan, title:'Plan', sub:'Turn ideas into roadmaps, milestones and tasks.', ph:'What do you want to plan?',
               cats:[{l:'Roadmap',s:'Build a roadmap for '},{l:'Milestones',s:'Break this into milestones: '},{l:'Weekly focus',s:'Plan my week around: '},{l:'Launch',s:'Plan a launch for '},{l:'OKRs',s:'Draft OKRs for '}],
-              starters:['Build a 30-day go-to-market plan','Break this goal into milestones','Plan my week around 3 priorities','Draft OKRs for this quarter'],
+              starters:[
+                {l:'30ήμερο go-to-market plan', p:'Φτιάξε ένα 30ήμερο go-to-market plan για [προϊόν]. Δώσε :::timeline με τις 4 εβδομάδες (φάση/τίτλος/ενέργειες), μετά :::workflow με τα συγκεκριμένα επόμενα βήματα, και κλείσε με Επόμενο βήμα:.'},
+                {l:'Roadmap με milestones', p:'Φτιάξε roadmap για [στόχο]: :::timeline με φάσεις & milestones, εξαρτήσεις, ρεαλιστικό χρονοδιάγραμμα, και Επόμενο βήμα:.'},
+                {l:'Πλάνο εβδομάδας', p:'Φτιάξε εβδομαδιαίο πλάνο γύρω από [προτεραιότητες]: έναν κύριο στόχο ανά ημέρα (Δευτέρα-Παρασκευή), ρεαλιστικό φόρτο, σε checkbox λίστα.'},
+                {l:'OKRs τριμήνου', p:'Φτιάξε OKRs για [ομάδα/στόχο] αυτό το τρίμηνο: 1 Objective + 3 μετρήσιμα Key Results (αρχική→στόχο) σε markdown πίνακα.'}
+              ],
               empty:{ ic:'flag', title:'No plans yet', text:'Your goals, roadmaps and tasks will appear here once you create them.' } },
             analyze: { accent:'#3b82f6', icon:WIC.chart, title:'Analyze', sub:'Dashboards, metrics and insights from your data.', ph:'What data would you like to analyze?',
               cats:[{l:'Trends',s:'Find the trend in this data: '},{l:'KPIs',s:'Which KPIs should I track for '},{l:'Reports',s:'Summarize this report: '},{l:'Forecast',s:'Forecast from this data: '},{l:'Anomalies',s:'Spot anomalies in this data: '}],
-              starters:['Find the trend in this data','Turn these numbers into 3 insights','Summarize this report into key metrics','Forecast next quarter from this data'],
+              starters:[
+                {l:'Βρες το trend στα δεδομένα', p:'Ανάλυσε σαν data analyst τα δεδομένα: [επικόλλησε δεδομένα]. Δώσε :::stat με το βασικό metric, markdown πίνακα, ένα ```chart, 3 ποσοτικοποιημένα insights, και Σύσταση:.'},
+                {l:'Νούμερα → 3 insights', p:'Μετάτρεψε αυτά τα νούμερα σε 3 insights: [επικόλλησε νούμερα]. Κάθε insight: τι δείχνει + γιατί έχει σημασία. Κλείσε με Σύσταση:.'},
+                {l:'Σύνοψη report σε metrics', p:'Σύνοψε αυτό το report σε εκτελεστική περίληψη: [επικόλλησε]. 3-5 key metrics με νούμερα, τι σημαίνουν, και Σύσταση:.'},
+                {l:'Πρόβλεψη επόμενου τριμήνου', p:'Με βάση αυτά τα δεδομένα κάνε πρόβλεψη για το επόμενο τρίμηνο: [δεδομένα]. Παραδοχές, 3 σενάρια (αισιόδοξο/βασικό/απαισιόδοξο), και κίνδυνοι.'}
+              ],
               empty:{ ic:'chart', title:'No analysis yet', text:'Share data or ask a question — your dashboards and reports will appear here.' } },
             code: { accent:'#f59e0b', icon:WIC.repo, title:'Code', sub:'Build, debug and ship — your coding workspace.', ph:'Describe what to build, fix or refactor…',
               cats:[{l:'Build',s:'Build '},{l:'Debug',s:'Debug this error: '},{l:'Refactor',s:'Refactor this code: '},{l:'Tests',s:'Write tests for this: '},{l:'Explain',s:'Explain this code: '}],
-              starters:['Build a React component for…','Find and fix the bug in this code','Refactor this function to be cleaner','Write tests for this code'],
+              starters:[
+                {l:'Φτιάξε feature/component', p:'Φτιάξε [τι θέλω, π.χ. React component για upload αρχείων]: πλήρης λειτουργικός κώδικας σε code block, σύντομη εξήγηση των επιλογών, και πώς το τρέχω.'},
+                {l:'Βρες & διόρθωσε το bug', p:'Κάνε debug: [επικόλλησε κώδικα/σφάλμα]. Εξήγησε την πιθανότερη αιτία, δώσε τον διορθωμένο κώδικα σε code block, και πώς να το επιβεβαιώσω.'},
+                {l:'Refactor κώδικα', p:'Κάνε refactor τον κώδικα να είναι πιο καθαρός/αποδοτικός χωρίς αλλαγή συμπεριφοράς: [επικόλλησε κώδικα]. Νέος κώδικας σε code block + 3 bullets τι βελτίωσες.'},
+                {l:'Γράψε tests', p:'Γράψε ολοκληρωμένα unit tests για: [επικόλλησε κώδικα]. Κάλυψε happy path, edge cases & σφάλματα, σε code block, με αναφορά framework.'}
+              ],
               empty:{ ic:'code', title:'No projects yet', text:'Your repositories, files and coding sessions will appear here.' } },
             create: { accent:'#ec4899', icon:I.create, title:'Create', sub:'Generate content, assets and campaigns.', ph:'What do you want to create?',
               cats:[{l:'Copy',s:'Write copy for '},{l:'Social',s:'Write social posts about '},{l:'Email',s:'Draft an email to '},{l:'Naming',s:'Give me name ideas for '},{l:'Long-form',s:'Write a long-form piece about '}],
-              starters:['Write a launch announcement','Generate a week of social posts','Draft a cold outreach email','Give me 10 product name ideas'],
+              starters:[
+                {l:'Ανακοίνωση launch', p:'Γράψε ανακοίνωση launch για [προϊόν]: headline, 2 παραλλαγές κειμένου, και ένα call-to-action. Έτοιμο προς χρήση, σωστός τόνος.'},
+                {l:'Εβδομάδα social posts', p:'Φτιάξε 5 social posts για [θέμα/προϊόν]: διαφορετικά hooks, σύντομα, με κατάλληλα hashtags, και σημείωση δικτύου ανά post.'},
+                {l:'Cold outreach email', p:'Γράψε cold outreach email προς [ποιον] για [σκοπό]: subject + σύντομο σώμα με σαφές value + CTA. Έτοιμο να σταλεί.'},
+                {l:'10 ιδέες ονομάτων', p:'Δώσε 10 ιδέες ονομάτων για [προϊόν/brand], ομαδοποιημένα σε στιλ, με μία λέξη αιτιολογία το καθένα.'}
+              ],
               empty:{ ic:'doc', title:'Nothing created yet', text:'Your documents, assets and campaigns will appear here.' } },
             learn: { accent:'#22d3ee', icon:I.learn, title:'Learn', sub:'Courses, learning paths and AI tutoring.', ph:'What do you want to learn?',
               cats:[{l:'Simplify',s:'Explain simply: '},{l:'Learning path',s:'Create a learning path for '},{l:'Practice',s:'Quiz me on '},{l:'Recaps',s:'Summarize what I learned about '},{l:'Skills',s:'Help me build the skill of '}],
-              starters:['Explain a concept simply, with an example','Build me a learning path for…','Quiz me on what I just learned','Teach me a topic in 10 minutes'],
+              starters:[
+                {l:'Εξήγησέ μου απλά', p:'Εξήγησέ μου απλά το [έννοια], σαν να μην ξέρω τίποτα: καθημερινή αναλογία + συγκεκριμένο παράδειγμα, και ένα επίπεδο πιο βαθιά στο τέλος.'},
+                {l:'Learning path', p:'Φτιάξε learning path για [δεξιότητα]: 4-6 στάδια από αρχάριο σε προχωρημένο, τι μαθαίνω σε κάθε στάδιο, και μία πρακτική άσκηση ανά στάδιο.'},
+                {l:'Κάνε μου quiz', p:'Κάνε μου quiz 5 ερωτήσεων για [θέμα] (mix πολλαπλής επιλογής & ανοιχτών). Μην δίνεις απαντήσεις ακόμη — θα απαντήσω και μετά τις διορθώνεις.'},
+                {l:'Δίδαξέ με σε 10 λεπτά', p:'Δίδαξέ μου το [θέμα] σε 10 λεπτά: τα 5 πιο σημαντικά πράγματα, με ένα παράδειγμα στο καθένα, και ένα take-away στο τέλος.'}
+              ],
               empty:{ ic:'book', title:'Nothing here yet', text:'Your courses, saved lessons and progress will appear here.' } }
           };
 
@@ -35852,9 +35882,11 @@
               return '<button class="hx-ws-cat" type="button" data-seed="' + ct.s + '" style="--wc:' + c.accent + '">' + ct.l + '</button>';
             }).join('');
             var starters = (c.starters || []).map(function(s){
-              return '<button class="hx-home-rec" type="button" data-seed="' + s + '" style="--wc:' + c.accent + '">' +
+              var label = (typeof s === 'string') ? s : s.l;
+              var seed  = (typeof s === 'string') ? s : s.p;
+              return '<button class="hx-home-rec" type="button" data-seed="' + seed + '" style="--wc:' + c.accent + '">' +
                 '<span class="hx-home-rec-ic">' + sg(c.icon) + '</span>' +
-                '<span class="hx-home-rec-body"><span class="hx-home-rec-t">' + s + '</span></span>' +
+                '<span class="hx-home-rec-body"><span class="hx-home-rec-t">' + label + '</span></span>' +
                 '<span class="hx-home-rec-act">' + sg('<path d="M9 18l6-6-6-6"/>', 2) + '</span></button>';
             }).join('');
             var e = c.empty || {};
