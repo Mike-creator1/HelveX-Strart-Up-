@@ -34902,23 +34902,137 @@
           bulb:'<path d="M9.5 18h5M10.5 22h3"/><path d="M12 2a6.5 6.5 0 0 0-3.8 11.8c.7.5 1.3 1.3 1.3 2.2h5c0-.9.6-1.7 1.3-2.2A6.5 6.5 0 0 0 12 2z"/>',
           book:'<path d="M6 3h12v18l-6-3.5L6 21z"/>'
         };
+        // ── Functional tool actions ───────────────────────────────────────
+        // Each workspace quick-tool is a REAL action, not a text shortcut: it
+        // engages the matching engine mode (workflowMode + web search), then
+        // builds a task-specific instruction around whatever is in the composer
+        // (or the conversation so far) and fires send(). Empty composer →
+        // prefill a focused template so the user just types the subject.
+        var HX_TOOL_ACT = {
+          // RESEARCH
+          websearch:{ mode:'research', web:true,
+            onText:function(t){return 'Ψάξε στο web και δώσε μου ενημερωμένη απάντηση με πηγές (outlet/σύνδεσμο). Ξεχώρισε επιβεβαιωμένα γεγονότα από εκτιμήσεις και επισήμανε ό,τι είναι χρονικά ευαίσθητο.\n\nΕρώτημα:\n'+t;},
+            onCtx:function(){return 'Ψάξε στο web για το θέμα που συζητάμε παραπάνω και ενημέρωσέ με με πρόσφατα στοιχεία και πηγές. Ξεχώρισε επιβεβαιωμένα από εκτιμήσεις.';},
+            onEmpty:'Ψάξε στο web: ' },
+          sources:{ mode:'research', web:true,
+            onText:function(t){return 'Βρες 4-6 αξιόπιστες, πρόσφατες πηγές για το παρακάτω. Για κάθε πηγή δώσε: τίτλο, outlet/σύνδεσμο και μία πρόταση με το τι υποστηρίζει.\n\nΘέμα:\n'+t;},
+            onCtx:function(){return 'Βρες 4-6 αξιόπιστες πηγές για το θέμα που συζητάμε, με τίτλο, outlet/σύνδεσμο και μία πρόταση η καθεμία.';},
+            onEmpty:'Βρες πηγές για: ' },
+          compare:{ mode:'compare',
+            onText:function(t){return 'Σύγκρινε τα παρακάτω σε markdown πίνακα με στήλες για τα πιο σχετικά κριτήρια (κόστος, χρόνος, ρίσκο, καταλληλότητα). Κλείσε με **Καλύτερη επιλογή:** και έναν σύντομο λόγο.\n\nΕπιλογές:\n'+t;},
+            onCtx:function(){return 'Σύγκρινε τις επιλογές που συζητάμε παραπάνω σε markdown πίνακα με τα πιο σχετικά κριτήρια και κλείσε με **Καλύτερη επιλογή:** + λόγο.';},
+            onEmpty:'Σύγκρινε: ' },
+          summarize:{ mode:'summarize',
+            onText:function(t){return 'Σύνοψέ μου το παρακάτω σε 3 bullets: (1) τι ισχύει, (2) ανοιχτά ερωτήματα, (3) το βασικό takeaway. Κλείσε με **Επόμενο βήμα:**.\n\n'+t;},
+            onCtx:function(){return 'Σύνοψε τη συζήτηση παραπάνω σε 3 bullets: (1) τι έχει καθοριστεί, (2) ανοιχτά ερωτήματα, (3) βασικό takeaway. Κλείσε με **Επόμενο βήμα:**.';},
+            onEmpty:'Σύνοψε: ' },
+          // PLAN
+          roadmap:{ mode:'plan',
+            onText:function(t){return 'Φτιάξε ένα roadmap για το παρακάτω: φάσεις, βασικά milestones ανά φάση, ρεαλιστικό χρονοδιάγραμμα και εξαρτήσεις. Κλείσε με **Επόμενο βήμα:**.\n\nΣτόχος:\n'+t;},
+            onCtx:function(){return 'Φτιάξε ένα roadmap για ό,τι συζητάμε παραπάνω: φάσεις, milestones, χρονοδιάγραμμα, εξαρτήσεις, και **Επόμενο βήμα:**.';},
+            onEmpty:'Φτιάξε roadmap για: ' },
+          milestones:{ mode:'plan',
+            onText:function(t){return 'Σπάσε τον παρακάτω στόχο σε 4-7 μετρήσιμα milestones με σειρά, κριτήριο ολοκλήρωσης για το καθένα και εκτίμηση χρόνου.\n\nΣτόχος:\n'+t;},
+            onCtx:function(){return 'Σπάσε τον στόχο που συζητάμε σε 4-7 μετρήσιμα milestones με κριτήριο ολοκλήρωσης και εκτίμηση χρόνου το καθένα.';},
+            onEmpty:'Σπάσε σε milestones: ' },
+          week:{ mode:'plan',
+            onText:function(t){return 'Φτιάξε ένα εβδομαδιαίο πλάνο γύρω από τις παρακάτω προτεραιότητες: ομαδοποίησε ανά ημέρα (Δευτέρα-Παρασκευή), κράτα ρεαλιστικό φόρτο και βάλε έναν κύριο στόχο ανά ημέρα.\n\nΠροτεραιότητες:\n'+t;},
+            onCtx:function(){return 'Φτιάξε εβδομαδιαίο πλάνο (Δευτέρα-Παρασκευή) γύρω από όσα συζητάμε, με έναν κύριο στόχο ανά ημέρα και ρεαλιστικό φόρτο.';},
+            onEmpty:'Πλάνο εβδομάδας για: ' },
+          tasks:{ mode:'plan',
+            onText:function(t){return 'Μετάτρεψε το παρακάτω σε actionable λίστα tasks: για κάθε task δώσε τίτλο, προτεινόμενο owner/ρόλο, προτεραιότητα (Υ/Μ/Χ) και εκτίμηση. Δώσε checkbox λίστα.\n\n'+t;},
+            onCtx:function(){return 'Μετάτρεψε όσα συζητάμε σε actionable λίστα tasks με owner/ρόλο, προτεραιότητα και εκτίμηση, σε checkbox λίστα.';},
+            onEmpty:'Λίστα tasks για: ' },
+          // ANALYZE
+          trends:{ mode:'analyze',
+            onText:function(t){return 'Ανάλυσε τα παρακάτω δεδομένα σαν data analyst: βρες το βασικό trend, κάνε markdown πίνακα όπου συγκρίνονται οι αριθμοί, δώσε 3 ποσοτικοποιημένα insights και κλείσε με **Σύσταση:**.\n\nΔεδομένα:\n'+t;},
+            onCtx:function(){return 'Ανάλυσε τα δεδομένα/θέμα που συζητάμε σαν data analyst: trend, πίνακας, 3 insights, **Σύσταση:**.';},
+            onEmpty:'Βρες το trend στα δεδομένα: ' },
+          kpis:{ mode:'analyze',
+            onText:function(t){return 'Πρότεινε 5-7 KPIs που πρέπει να παρακολουθώ για το παρακάτω. Για κάθε KPI: ορισμός, γιατί έχει σημασία και ένα ενδεικτικό target/benchmark. Δώσε markdown πίνακα.\n\nΠλαίσιο:\n'+t;},
+            onCtx:function(){return 'Πρότεινε 5-7 KPIs για ό,τι συζητάμε, με ορισμό, σημασία και ενδεικτικό target, σε markdown πίνακα.';},
+            onEmpty:'Ποια KPIs για: ' },
+          report:{ mode:'analyze',
+            onText:function(t){return 'Σύνοψε το παρακάτω report σε εκτελεστική περίληψη: 3-5 βασικά metrics με νούμερα, τι σημαίνουν, και **Σύσταση:** στο τέλος.\n\nReport:\n'+t;},
+            onCtx:function(){return 'Σύνοψε όσα συζητάμε σε εκτελεστική περίληψη με 3-5 βασικά metrics, τι σημαίνουν, και **Σύσταση:**.';},
+            onEmpty:'Σύνοψε το report: ' },
+          forecast:{ mode:'analyze',
+            onText:function(t){return 'Με βάση τα παρακάτω δεδομένα, κάνε μια λογική πρόβλεψη για το επόμενο διάστημα: ανάφερε τις παραδοχές σου, δώσε αισιόδοξο/βασικό/απαισιόδοξο σενάριο και τους κινδύνους.\n\nΔεδομένα:\n'+t;},
+            onCtx:function(){return 'Με βάση όσα συζητάμε, κάνε πρόβλεψη με παραδοχές, 3 σενάρια (αισιόδοξο/βασικό/απαισιόδοξο) και κινδύνους.';},
+            onEmpty:'Κάνε πρόβλεψη βάσει: ' },
+          // CODE
+          debug:{ mode:'code',
+            onText:function(t){return 'Κάνε debug τον παρακάτω κώδικα/σφάλμα. Εξήγησε την πιθανότερη αιτία, δώσε τον διορθωμένο κώδικα σε code block, και πες πώς να το επιβεβαιώσω.\n\n'+t;},
+            onCtx:function(){return 'Κάνε debug τον κώδικα/σφάλμα που συζητάμε παραπάνω: αιτία, διορθωμένος κώδικας σε code block, και πώς να το επιβεβαιώσω.';},
+            onEmpty:'Κάνε debug (επικόλλησε κώδικα/σφάλμα):\n' },
+          refactor:{ mode:'code',
+            onText:function(t){return 'Κάνε refactor τον παρακάτω κώδικα να είναι πιο καθαρός, αναγνώσιμος και αποδοτικός χωρίς να αλλάξει η συμπεριφορά. Δώσε τον νέο κώδικα σε code block και 3 bullets τι βελτίωσες.\n\n'+t;},
+            onCtx:function(){return 'Κάνε refactor τον κώδικα που συζητάμε: καθαρότερος/αποδοτικότερος χωρίς αλλαγή συμπεριφοράς, με code block και 3 bullets τι άλλαξε.';},
+            onEmpty:'Κάνε refactor (επικόλλησε κώδικα):\n' },
+          tests:{ mode:'code',
+            onText:function(t){return 'Γράψε ολοκληρωμένα unit tests για τον παρακάτω κώδικα: κάλυψε happy path, edge cases και σφάλματα. Δώσε τα tests σε code block και πες ποιο framework χρησιμοποιείς.\n\n'+t;},
+            onCtx:function(){return 'Γράψε unit tests για τον κώδικα που συζητάμε: happy path, edge cases, errors, σε code block, αναφέροντας framework.';},
+            onEmpty:'Γράψε tests για (επικόλλησε κώδικα):\n' },
+          codeexplain:{ mode:'code',
+            onText:function(t){return 'Εξήγησέ μου τον παρακάτω κώδικα βήμα-βήμα: τι κάνει συνολικά, τι κάνει κάθε σημαντικό κομμάτι, και τυχόν παγίδες/πολυπλοκότητα.\n\n'+t;},
+            onCtx:function(){return 'Εξήγησε τον κώδικα που συζητάμε βήμα-βήμα: τι κάνει, ανά κομμάτι, και πιθανές παγίδες.';},
+            onEmpty:'Εξήγησε τον κώδικα (επικόλλησε):\n' },
+          build:{ mode:'code',
+            onText:function(t){return 'Φτιάξε το παρακάτω. Δώσε πλήρη, λειτουργικό κώδικα σε code block, εξήγησε σύντομα τις επιλογές σου, και πες πώς το τρέχω.\n\nΖητούμενο:\n'+t;},
+            onCtx:function(){return 'Φτιάξε αυτό που συζητάμε: πλήρης λειτουργικός κώδικας σε code block, σύντομη εξήγηση, και πώς τρέχει.';},
+            onEmpty:'Φτιάξε μου: ' },
+          // CREATE
+          copy:{ mode:'draft',
+            onText:function(t){return 'Γράψε έτοιμο-προς-χρήση marketing copy για το παρακάτω: δώσε headline, 2-3 παραλλαγές κειμένου και ένα call-to-action. Ταίριαξε τον τόνο.\n\nΖητούμενο:\n'+t;},
+            onCtx:function(){return 'Γράψε marketing copy για ό,τι συζητάμε: headline, 2-3 παραλλαγές, call-to-action.';},
+            onEmpty:'Γράψε copy για: ' },
+          social:{ mode:'draft',
+            onText:function(t){return 'Φτιάξε 3-5 social posts για το παρακάτω: διαφορετικά hooks, σύντομα και με κατάλληλα hashtags/emoji όπου ταιριάζει. Σημείωσε για ποιο δίκτυο ταιριάζει το καθένα.\n\nΘέμα:\n'+t;},
+            onCtx:function(){return 'Φτιάξε 3-5 social posts για ό,τι συζητάμε, με διαφορετικά hooks και σημείωση δικτύου.';},
+            onEmpty:'Social posts για: ' },
+          email:{ mode:'draft',
+            onText:function(t){return 'Γράψε ένα επαγγελματικό, έτοιμο-να-σταλεί email για το παρακάτω: θέμα (subject), σώμα με σωστό τόνο, και κλείσιμο. Κράτα το σύντομο.\n\nΖητούμενο:\n'+t;},
+            onCtx:function(){return 'Γράψε έτοιμο email για ό,τι συζητάμε: subject, σώμα με σωστό τόνο, κλείσιμο.';},
+            onEmpty:'Γράψε email για: ' },
+          names:{ mode:'draft',
+            onText:function(t){return 'Δώσε 10 ιδέες ονομάτων για το παρακάτω. Ομαδοποίησέ τα σε στιλ (περιγραφικά, ευρηματικά, σύντομα) και δίπλα σε κάθε όνομα μία λέξη γιατί δουλεύει.\n\nΖητούμενο:\n'+t;},
+            onCtx:function(){return 'Δώσε 10 ιδέες ονομάτων για ό,τι συζητάμε, ομαδοποιημένα σε στιλ, με μία λέξη αιτιολογίας το καθένα.';},
+            onEmpty:'Ιδέες ονομάτων για: ' },
+          // LEARN
+          simply:{ mode:'explain',
+            onText:function(t){return 'Εξήγησέ μου το παρακάτω απλά, σαν να μην ξέρω τίποτα: χρησιμοποίησε μια καθημερινή αναλογία και ένα συγκεκριμένο παράδειγμα. Στο τέλος πρόσθεσε ένα επίπεδο πιο βαθιά.\n\nΘέμα:\n'+t;},
+            onCtx:function(){return 'Εξήγησε απλά ό,τι συζητάμε με αναλογία και παράδειγμα, και ένα επίπεδο πιο βαθιά στο τέλος.';},
+            onEmpty:'Εξήγησε απλά: ' },
+          quiz:{ mode:'explain',
+            onText:function(t){return 'Φτιάξε μου ένα σύντομο quiz 5 ερωτήσεων πάνω στο παρακάτω (mix πολλαπλής επιλογής & ανοιχτών). Μην δώσεις απαντήσεις ακόμη — θα απαντήσω και μετά τις διορθώνεις.\n\nΘέμα:\n'+t;},
+            onCtx:function(){return 'Φτιάξε quiz 5 ερωτήσεων πάνω σε ό,τι συζητάμε, χωρίς απαντήσεις ακόμη.';},
+            onEmpty:'Κάνε μου quiz πάνω σε: ' },
+          path:{ mode:'explain',
+            onText:function(t){return 'Φτιάξε ένα learning path για το παρακάτω: 4-6 στάδια από αρχάριο σε προχωρημένο, τι να μάθω σε κάθε στάδιο, και μία πρακτική άσκηση ανά στάδιο.\n\nΣτόχος μάθησης:\n'+t;},
+            onCtx:function(){return 'Φτιάξε learning path για ό,τι συζητάμε: 4-6 στάδια αρχάριο→προχωρημένο, με άσκηση ανά στάδιο.';},
+            onEmpty:'Learning path για: ' },
+          example:{ mode:'explain',
+            onText:function(t){return 'Δώσε μου ένα συγκεκριμένο, πρακτικό παράδειγμα για το παρακάτω που να ξεκαθαρίζει την έννοια — και εξήγησε γιατί δουλεύει.\n\nΈννοια:\n'+t;},
+            onCtx:function(){return 'Δώσε ένα συγκεκριμένο παράδειγμα για ό,τι συζητάμε και εξήγησε γιατί δουλεύει.';},
+            onEmpty:'Δώσε παράδειγμα για: ' }
+        };
         // Per-workspace identity shown in the conversation's accent header, so
         // each chat instantly reads as its own product: icon + name + tagline,
         // plus a row of workspace-specific quick tools (with icons) that seed
         // the composer.
         var HX_WS_IDENTITY = {
           research: { name:'Research', sub:'Βρες, επαλήθευσε & εξερεύνησε — με πηγές', ic:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>',
-            tools:[ {l:'Web search', i:'web', s:'Ψάξε στο web και απάντησέ μου με πηγές: '}, {l:'Πηγές', i:'doc', s:'Βρες αξιόπιστες πηγές για: '}, {l:'Σύγκριση', i:'compare', s:'Σύγκρινε με στοιχεία: '}, {l:'Σύνοψη', i:'sum', s:'Σύνοψε με τα κύρια σημεία: '} ] },
+            tools:[ {l:'Web search', i:'web', a:'websearch'}, {l:'Πηγές', i:'doc', a:'sources'}, {l:'Σύγκριση', i:'compare', a:'compare'}, {l:'Σύνοψη', i:'sum', a:'summarize'} ] },
           plan:     { name:'Plan',     sub:'Ιδέες σε roadmaps, milestones & tasks', ic:'<path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h10"/><circle cx="19" cy="19" r="1.6"/>',
-            tools:[ {l:'Roadmap', i:'map', s:'Φτιάξε ένα roadmap για: '}, {l:'Milestones', i:'check', s:'Σπάσε σε milestones: '}, {l:'Εβδομάδα', i:'cal', s:'Πλάνο εβδομάδας με προτεραιότητες: '}, {l:'Tasks', i:'list', s:'Λίστα tasks με owners για: '} ] },
+            tools:[ {l:'Roadmap', i:'map', a:'roadmap'}, {l:'Milestones', i:'check', a:'milestones'}, {l:'Εβδομάδα', i:'cal', a:'week'}, {l:'Tasks', i:'list', a:'tasks'} ] },
           analyze:  { name:'Analyze',  sub:'Μετρικές, insights & αναφορές από δεδομένα', ic:'<path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="12" y="6" width="3" height="11"/><rect x="17" y="13" width="3" height="4"/>',
-            tools:[ {l:'Trends', i:'trend', s:'Βρες το trend στα δεδομένα: '}, {l:'KPIs', i:'target', s:'Ποια KPIs να παρακολουθώ για: '}, {l:'Report', i:'doc', s:'Σύνοψε αυτό το report σε metrics: '}, {l:'Forecast', i:'forecast', s:'Κάνε πρόβλεψη βάσει: '} ] },
+            tools:[ {l:'Trends', i:'trend', a:'trends'}, {l:'KPIs', i:'target', a:'kpis'}, {l:'Report', i:'doc', a:'report'}, {l:'Forecast', i:'forecast', a:'forecast'} ] },
           code:     { name:'Code',     sub:'Φτιάξε, κάνε debug & ship', ic:'<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
-            tools:[ {l:'Debug', i:'bug', s:'Κάνε debug αυτό το σφάλμα: '}, {l:'Refactor', i:'wand', s:'Κάνε refactor αυτόν τον κώδικα: '}, {l:'Tests', i:'testcheck', s:'Γράψε tests για: '}, {l:'Explain', i:'explain', s:'Εξήγησέ μου αυτόν τον κώδικα: '}, {l:'Build', i:'build', s:'Φτιάξε μου: '} ] },
+            tools:[ {l:'Debug', i:'bug', a:'debug'}, {l:'Refactor', i:'wand', a:'refactor'}, {l:'Tests', i:'testcheck', a:'tests'}, {l:'Explain', i:'explain', a:'codeexplain'}, {l:'Build', i:'build', a:'build'} ] },
           create:   { name:'Create',   sub:'Περιεχόμενο, assets & καμπάνιες', ic:'<path d="M12 19l7-7 2.5 2.5-7 7L12 19z"/><path d="M17.5 6.5l1 1"/><path d="M3 21l3-1 9-9-2-2-9 9-1 3z"/>',
-            tools:[ {l:'Copy', i:'text', s:'Γράψε copy για: '}, {l:'Social', i:'share', s:'Φτιάξε social posts για: '}, {l:'Email', i:'mail', s:'Γράψε ένα email για: '}, {l:'Ονόματα', i:'tag', s:'Δώσε 10 ιδέες ονομάτων για: '} ] },
+            tools:[ {l:'Copy', i:'text', a:'copy'}, {l:'Social', i:'share', a:'social'}, {l:'Email', i:'mail', a:'email'}, {l:'Ονόματα', i:'tag', a:'names'} ] },
           learn:    { name:'Learn',    sub:'Μάθε με παραδείγματα, paths & quiz', ic:'<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2.7 2 6 2s6-1 6-2v-5"/>',
-            tools:[ {l:'Απλά', i:'bulb', s:'Εξήγησέ μου απλά, με παράδειγμα: '}, {l:'Quiz', i:'explain', s:'Κάνε μου quiz πάνω σε: '}, {l:'Learning path', i:'map', s:'Φτιάξε learning path για: '}, {l:'Παράδειγμα', i:'book', s:'Δώσε μου ένα παράδειγμα για: '} ] }
+            tools:[ {l:'Απλά', i:'bulb', a:'simply'}, {l:'Quiz', i:'explain', a:'quiz'}, {l:'Learning path', i:'map', a:'path'}, {l:'Παράδειγμα', i:'book', a:'example'} ] }
         };
         function hxApplyWsBand() {
           var band = document.getElementById('hx-c-wsband'); if (!band) return;
@@ -34933,12 +35047,45 @@
           if (sb) sb.textContent = id.sub;
           if (tl) tl.innerHTML = (id.tools || []).map(function (t) {
             var ip = HX_TOOL_IC[t.i] || '';
-            return '<button class="hx-ws-tool" type="button" data-ws-suggest="' + t.s + '">' +
+            return '<button class="hx-ws-tool" type="button" data-ws-tool="' + t.a + '">' +
               (ip ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ip + '</svg>' : '') +
               '<span>' + t.l + '</span></button>';
           }).join('');
           band.setAttribute('data-on', '1');
         }
+        // Run a workspace quick-tool as a REAL action: engage its engine mode
+        // (+ web search), build a task prompt from the composer text / context,
+        // and fire send(). Empty composer → prefill a focused template.
+        function hxRunWsTool(actId) {
+          var act = HX_TOOL_ACT[actId]; if (!act) return;
+          if (state.sending || state.streaming) return;
+          if (act.web) { try { state.webEnabled = true; } catch (e) {} }
+          if (act.mode) { try { state.workflowMode = act.mode; refreshModeUI(); } catch (e) {} }
+          var text = (inputEl && inputEl.value || '').trim();
+          var hasMessages = !!(state.messages && state.messages.length);
+          var prompt, autoSend = false;
+          if (text) { prompt = act.onText(text); autoSend = true; }
+          else if (hasMessages && act.onCtx) { prompt = act.onCtx(); autoSend = true; }
+          else { prompt = act.onEmpty; autoSend = false; }
+          if (!inputEl) return;
+          inputEl.value = prompt;
+          try { autoSize(inputEl); } catch (e) {}
+          try { refreshSendDisabled(); } catch (e) {}
+          if (autoSend) { try { send(); } catch (e) { try { inputEl.focus(); } catch (_) {} } }
+          else { try { inputEl.focus(); inputEl.selectionStart = inputEl.selectionEnd = inputEl.value.length; } catch (e) {} }
+          try { updatePresence(); } catch (e) {}
+        }
+        (function wireWsBandTools() {
+          var band = document.getElementById('hx-c-wsband');
+          if (!band || band.__toolsWired) return;
+          band.__toolsWired = true;
+          band.addEventListener('click', function (e) {
+            var b = e.target.closest && e.target.closest('.hx-ws-tool[data-ws-tool]');
+            if (!b) return;
+            e.preventDefault();
+            hxRunWsTool(b.getAttribute('data-ws-tool'));
+          });
+        })();
 
         var hxMode = null;  // active preset key (null = general Helix)
 
