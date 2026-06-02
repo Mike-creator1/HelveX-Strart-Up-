@@ -32708,8 +32708,10 @@
         focusMode: false,      // Focus pill — deep, distraction-free, no-fluff answers
         workflowMode: null,    // V86 — null | 'plan' | 'research' | 'compare' | 'draft' | 'explain' | 'summarize'
       };
-      // Appended to the system prompt while Focus is engaged.
-      var HX_FOCUS_SYSTEM = ' FOCUS MODE: The user wants a focused, high-signal answer. Go straight to the point — no preamble, no filler, no restating the question. Give the single best answer with only the essential reasoning, tightly structured. Cut anything that is not necessary.';
+      // Appended to the system prompt while Focus is engaged. Focus = maximum
+      // effort: think harder, reason more rigorously, and deliver an expert,
+      // decision-ready answer — high signal, zero filler.
+      var HX_FOCUS_SYSTEM = ' FOCUS MODE (maximum effort): Treat this as a high-stakes question that deserves your best thinking. Reason rigorously and step-by-step internally before answering; consider edge cases, second-order effects and the strongest counter-argument, then resolve them. Deliver an expert, decision-ready answer: lead with the single clearest takeaway, support it with only the load-bearing reasoning and concrete specifics (numbers, names, trade-offs), and end with the recommended next move. No preamble, no filler, no restating the question — every line must earn its place. If something is genuinely uncertain, state it plainly and give your best-judgement call anyway.';
 
       // Agent capability is derived from the model — not a separate toggle.
       // Ether: real-time, no agent. Nexus: reasoning agent. Prometheus:
@@ -34255,7 +34257,7 @@
                 system:          HELIX_SYSTEM + (currentlyAgentic() ? HELIX_AGENT_SYSTEM : '') + (HELIX_MODE_SYSTEM[state.workflowMode] || '') + (state.focusMode ? HX_FOCUS_SYSTEM : ''),
                 messages:        send_msgs,
                 user_attachments: persistAttachs,
-                max_tokens:      currentlyAgentic() ? 8192 : 4096,
+                max_tokens:      (currentlyAgentic() || state.focusMode) ? 8192 : 4096,
                 temperature:     (function (m) { var T = { code:0.2, analyze:0.3, compare:0.3, summarize:0.3, plan:0.4, research:0.5, explain:0.6, draft:0.85 }; return T[m] != null ? T[m] : 0.7; })(state.workflowMode),
                 stream:          true,
                 tools:           {
@@ -35069,8 +35071,8 @@
         var HX_TOOL_ACT = {
           // RESEARCH
           websearch:{ mode:'research', web:true,
-            onText:function(t){return 'Ψάξε στο web και δώσε μου ενημερωμένη απάντηση με πηγές (outlet/σύνδεσμο). Ξεχώρισε επιβεβαιωμένα γεγονότα από εκτιμήσεις και επισήμανε ό,τι είναι χρονικά ευαίσθητο.\n\nΕρώτημα:\n'+t;},
-            onCtx:function(){return 'Ψάξε στο web για το θέμα που συζητάμε παραπάνω και ενημέρωσέ με με πρόσφατα στοιχεία και πηγές. Ξεχώρισε επιβεβαιωμένα από εκτιμήσεις.';},
+            onText:function(t){return 'Κάνε ΒΑΘΙΑ έρευνα στο web: εξέτασε το θέμα από πολλές οπτικές, διασταύρωσε ΠΟΛΛΑΠΛΕΣ ανεξάρτητες, πρόσφατες πηγές, και σύνθεσέ τα — μη βασιστείς σε μία πηγή. Δώσε: (1) μια πυκνή απάντηση-σύνθεση, (2) τα βασικά ευρήματα με inline παραπομπές (outlet/σύνδεσμο), (3) σημεία όπου οι πηγές διαφωνούν ή είναι αβέβαιες, (4) τι είναι χρονικά ευαίσθητο. Ξεχώρισε επιβεβαιωμένα γεγονότα από εκτιμήσεις. Ποτέ μην εφεύρεις πηγή.\n\nΕρώτημα:\n'+t;},
+            onCtx:function(){return 'Κάνε βαθιά έρευνα στο web για το θέμα που συζητάμε: διασταύρωσε πολλαπλές πρόσφατες πηγές, σύνθεσέ τα, δώσε inline παραπομπές, σημείωσε διαφωνίες/αβεβαιότητες και ό,τι είναι χρονικά ευαίσθητο.';},
             onEmpty:'Ψάξε στο web: ' },
           sources:{ mode:'research', web:true,
             onText:function(t){return 'Βρες 4-6 αξιόπιστες, πρόσφατες πηγές για το παρακάτω. Για κάθε πηγή δώσε: τίτλο, outlet/σύνδεσμο και μία πρόταση με το τι υποστηρίζει.\n\nΘέμα:\n'+t;},
