@@ -30660,36 +30660,68 @@
        =================================================================== */
     body[data-active="chat"] .hx-ws-band{ display:none; }
     body[data-active="chat"][data-wsmode] .hx-ws-band{
-      display:flex; align-items:center; gap:11px; padding:9px 16px;
-      background:linear-gradient(90deg, var(--hx-mc-soft), transparent 72%);
-      border-bottom:1px solid color-mix(in srgb, var(--hx-mc) 20%, var(--hx-line));
-      box-shadow:inset 3px 0 0 0 var(--hx-mc);
+      display:flex; flex-direction:column; gap:11px; padding:14px 16px 13px;
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--hx-mc) 9%, var(--hx-bg)) 0%, var(--hx-bg) 100%);
+      border-bottom:1px solid color-mix(in srgb, var(--hx-mc) 16%, var(--hx-line));
+      position:relative;
     }
+    body[data-active="chat"][data-wsmode] .hx-ws-band::before{
+      content:''; position:absolute; left:0; top:0; right:0; height:3px;
+      background:linear-gradient(90deg, var(--hx-mc), color-mix(in srgb, var(--hx-mc) 35%, transparent));
+    }
+    body[data-active="chat"][data-wsmode] .hx-ws-band-top{ display:flex; align-items:center; gap:12px; }
     body[data-active="chat"][data-wsmode] .hx-ws-band-ic{
-      width:30px; height:30px; flex:0 0 auto; border-radius:9px;
-      display:flex; align-items:center; justify-content:center;
-      color:var(--hx-mc); background:var(--hx-mc-soft);
-      box-shadow:0 0 0 1px color-mix(in srgb, var(--hx-mc) 30%, transparent) inset;
+      width:38px; height:38px; flex:0 0 auto; border-radius:11px;
+      display:flex; align-items:center; justify-content:center; color:#fff;
+      background:linear-gradient(145deg, var(--hx-mc), color-mix(in srgb, var(--hx-mc) 72%, #000));
+      box-shadow:0 4px 14px var(--hx-mc-glow), inset 0 1px 0 rgba(255,255,255,.25);
     }
-    body[data-active="chat"][data-wsmode] .hx-ws-band-ic svg{ width:18px; height:18px; }
-    body[data-active="chat"][data-wsmode] .hx-ws-band-txt{ display:flex; flex-direction:column; gap:1px; min-width:0; }
+    body[data-active="chat"][data-wsmode] .hx-ws-band-ic svg{ width:20px; height:20px; }
+    body[data-active="chat"][data-wsmode] .hx-ws-band-txt{ display:flex; flex-direction:column; gap:2px; min-width:0; flex:1; }
     body[data-active="chat"][data-wsmode] .hx-ws-band-name{
-      font-size:14.5px; font-weight:750; letter-spacing:-.02em; color:var(--hx-text); line-height:1.15;
+      font-size:17px; font-weight:780; letter-spacing:-.025em; color:var(--hx-text); line-height:1.1;
+      display:flex; align-items:center; gap:7px;
+    }
+    body[data-active="chat"][data-wsmode] .hx-ws-band-name::after{
+      content:'Workspace'; font-size:9.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+      color:var(--hx-mc); background:var(--hx-mc-soft); padding:2px 7px; border-radius:999px;
     }
     body[data-active="chat"][data-wsmode] .hx-ws-band-sub{
-      font-size:11.5px; font-weight:500; color:var(--hx-text-mid); line-height:1.2;
+      font-size:12.5px; font-weight:500; color:var(--hx-text-mid); line-height:1.25;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
+    body[data-active="chat"][data-wsmode] .hx-ws-band-tools{
+      display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none;
+      margin:0 -16px; padding:1px 16px 1px;
+    }
+    body[data-active="chat"][data-wsmode] .hx-ws-band-tools::-webkit-scrollbar{ display:none; }
+    body[data-active="chat"][data-wsmode] .hx-ws-tool{
+      flex:0 0 auto; appearance:none; -webkit-appearance:none; cursor:pointer;
+      border:1px solid color-mix(in srgb, var(--hx-mc) 26%, var(--hx-line));
+      background:color-mix(in srgb, var(--hx-mc) 7%, var(--hx-bg));
+      color:color-mix(in srgb, var(--hx-mc) 72%, var(--hx-text));
+      font:inherit; font-size:12.5px; font-weight:650; letter-spacing:-.01em;
+      padding:7px 13px; border-radius:999px; line-height:1; white-space:nowrap;
+      transition:border-color .15s, background .15s, transform .12s, box-shadow .15s;
+    }
+    body[data-active="chat"][data-wsmode] .hx-ws-tool:hover{
+      border-color:color-mix(in srgb, var(--hx-mc) 50%, var(--hx-line));
+      background:var(--hx-mc-soft); box-shadow:0 2px 8px var(--hx-mc-glow);
+    }
+    body[data-active="chat"][data-wsmode] .hx-ws-tool:active{ transform:scale(.95); }
+
     /* a whisper of the accent at the very top of the thread */
     body[data-active="chat"][data-wsmode] #hx-c-thread{
-      background:radial-gradient(130% 55% at 50% 0%, var(--hx-mc-soft), transparent 58%);
+      background:radial-gradient(130% 50% at 50% 0%, var(--hx-mc-soft), transparent 55%);
     }
     /* user bubbles take the category tint */
     body[data-active="chat"][data-wsmode] .hx-msg.is-user .hx-msg-content{
       background:var(--hx-mc-soft) !important;
-      border:1px solid color-mix(in srgb, var(--hx-mc) 26%, transparent) !important;
+      border:1px solid color-mix(in srgb, var(--hx-mc) 28%, transparent) !important;
+      color:var(--hx-text) !important;
     }
-    /* assistant identity dot in the accent */
+    /* assistant identity name in the accent */
     body[data-active="chat"][data-wsmode] .hx-msg.is-assistant .hx-msg-head{ color:var(--hx-mc); }
     /* composer + send button in the category accent */
     body[data-active="chat"][data-wsmode] #hx-c-send{
@@ -30801,11 +30833,14 @@
                recognisable as Research / Plan / Analyze / Code / Create / Learn.
                Hidden in the general (home) chat. Driven by body[data-wsmode]. -->
           <div class="hx-ws-band" id="hx-c-wsband">
-            <span class="hx-ws-band-ic" id="hx-c-wsband-ic" aria-hidden="true"></span>
-            <span class="hx-ws-band-txt">
-              <span class="hx-ws-band-name" id="hx-c-wsband-name"></span>
-              <span class="hx-ws-band-sub" id="hx-c-wsband-sub"></span>
-            </span>
+            <div class="hx-ws-band-top">
+              <span class="hx-ws-band-ic" id="hx-c-wsband-ic" aria-hidden="true"></span>
+              <span class="hx-ws-band-txt">
+                <span class="hx-ws-band-name" id="hx-c-wsband-name"></span>
+                <span class="hx-ws-band-sub" id="hx-c-wsband-sub"></span>
+              </span>
+            </div>
+            <div class="hx-ws-band-tools" id="hx-c-wsband-tools" role="group" aria-label="Εργαλεία workspace"></div>
           </div>
 
           <button class="hx-chat-scroll-fab" id="hx-c-scroll-fab" type="button" aria-label="Scroll to latest" title="Scroll to latest" hidden>
@@ -34829,15 +34864,22 @@
             suggest:[ 'Πώς δουλεύει το blockchain, απλά', 'Βασικά γαλλικά για δουλειά', 'Τι είναι τα επιτόκια, με παράδειγμα' ] }
         };
 
-        // Per-workspace identity shown in the conversation's accent band, so
-        // each chat instantly reads as its own product (icon + name + tagline).
+        // Per-workspace identity shown in the conversation's accent header, so
+        // each chat instantly reads as its own product: icon + name + tagline,
+        // plus a row of workspace-specific quick tools that seed the composer.
         var HX_WS_IDENTITY = {
-          research: { name:'Research', sub:'Βρες, επαλήθευσε & εξερεύνησε — με πηγές', ic:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>' },
-          plan:     { name:'Plan',     sub:'Ιδέες σε roadmaps, milestones & tasks', ic:'<path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h10"/><circle cx="19" cy="19" r="1.6"/>' },
-          analyze:  { name:'Analyze',  sub:'Μετρικές, insights & αναφορές από δεδομένα', ic:'<path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="12" y="6" width="3" height="11"/><rect x="17" y="13" width="3" height="4"/>' },
-          code:     { name:'Code',     sub:'Φτιάξε, κάνε debug & ship', ic:'<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>' },
-          create:   { name:'Create',   sub:'Περιεχόμενο, assets & καμπάνιες', ic:'<path d="M12 19l7-7 2.5 2.5-7 7L12 19z"/><path d="M17.5 6.5l1 1"/><path d="M3 21l3-1 9-9-2-2-9 9-1 3z"/>' },
-          learn:    { name:'Learn',    sub:'Μάθε με παραδείγματα, paths & quiz', ic:'<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2.7 2 6 2s6-1 6-2v-5"/>' }
+          research: { name:'Research', sub:'Βρες, επαλήθευσε & εξερεύνησε — με πηγές', ic:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>',
+            tools:[ {l:'Web search', s:'Ψάξε στο web και απάντησέ μου με πηγές: '}, {l:'Πηγές', s:'Βρες αξιόπιστες πηγές για: '}, {l:'Σύγκριση', s:'Σύγκρινε με στοιχεία: '}, {l:'Σύνοψη', s:'Σύνοψε με τα κύρια σημεία: '} ] },
+          plan:     { name:'Plan',     sub:'Ιδέες σε roadmaps, milestones & tasks', ic:'<path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h10"/><circle cx="19" cy="19" r="1.6"/>',
+            tools:[ {l:'Roadmap', s:'Φτιάξε ένα roadmap για: '}, {l:'Milestones', s:'Σπάσε σε milestones: '}, {l:'Εβδομάδα', s:'Πλάνο εβδομάδας με προτεραιότητες: '}, {l:'Tasks', s:'Λίστα tasks με owners για: '} ] },
+          analyze:  { name:'Analyze',  sub:'Μετρικές, insights & αναφορές από δεδομένα', ic:'<path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="12" y="6" width="3" height="11"/><rect x="17" y="13" width="3" height="4"/>',
+            tools:[ {l:'Trends', s:'Βρες το trend στα δεδομένα: '}, {l:'KPIs', s:'Ποια KPIs να παρακολουθώ για: '}, {l:'Report', s:'Σύνοψε αυτό το report σε metrics: '}, {l:'Forecast', s:'Κάνε πρόβλεψη βάσει: '} ] },
+          code:     { name:'Code',     sub:'Φτιάξε, κάνε debug & ship', ic:'<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+            tools:[ {l:'Debug', s:'Κάνε debug αυτό το σφάλμα: '}, {l:'Refactor', s:'Κάνε refactor αυτόν τον κώδικα: '}, {l:'Tests', s:'Γράψε tests για: '}, {l:'Explain', s:'Εξήγησέ μου αυτόν τον κώδικα: '}, {l:'Build', s:'Φτιάξε μου: '} ] },
+          create:   { name:'Create',   sub:'Περιεχόμενο, assets & καμπάνιες', ic:'<path d="M12 19l7-7 2.5 2.5-7 7L12 19z"/><path d="M17.5 6.5l1 1"/><path d="M3 21l3-1 9-9-2-2-9 9-1 3z"/>',
+            tools:[ {l:'Copy', s:'Γράψε copy για: '}, {l:'Social', s:'Φτιάξε social posts για: '}, {l:'Email', s:'Γράψε ένα email για: '}, {l:'Ονόματα', s:'Δώσε 10 ιδέες ονομάτων για: '} ] },
+          learn:    { name:'Learn',    sub:'Μάθε με παραδείγματα, paths & quiz', ic:'<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2.7 2 6 2s6-1 6-2v-5"/>',
+            tools:[ {l:'Απλά', s:'Εξήγησέ μου απλά, με παράδειγμα: '}, {l:'Quiz', s:'Κάνε μου quiz πάνω σε: '}, {l:'Learning path', s:'Φτιάξε learning path για: '}, {l:'Παράδειγμα', s:'Δώσε μου ένα παράδειγμα για: '} ] }
         };
         function hxApplyWsBand() {
           var band = document.getElementById('hx-c-wsband'); if (!band) return;
@@ -34846,9 +34888,13 @@
           var ic = document.getElementById('hx-c-wsband-ic');
           var nm = document.getElementById('hx-c-wsband-name');
           var sb = document.getElementById('hx-c-wsband-sub');
+          var tl = document.getElementById('hx-c-wsband-tools');
           if (ic) ic.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' + id.ic + '</svg>';
           if (nm) nm.textContent = id.name;
           if (sb) sb.textContent = id.sub;
+          if (tl) tl.innerHTML = (id.tools || []).map(function (t) {
+            return '<button class="hx-ws-tool" type="button" data-ws-suggest="' + t.s + '">' + t.l + '</button>';
+          }).join('');
           band.setAttribute('data-on', '1');
         }
 
