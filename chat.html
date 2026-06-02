@@ -30650,6 +30650,56 @@
       background:var(--hx-mc); margin-right:8px; vertical-align:middle;
       box-shadow:0 0 0 3px var(--hx-mc-soft), 0 0 8px var(--hx-mc-glow);
     }
+
+    /* ===================================================================
+       PER-WORKSPACE CONVERSATION IDENTITY
+       Each workspace's chat is visually its own product: an identity band
+       under the toolbar, plus the category accent applied across the user
+       bubbles, the composer, the send button and a whisper across the thread.
+       The general (home) chat has NO data-wsmode → stays the clean Main Chat.
+       =================================================================== */
+    body[data-active="chat"] .hx-ws-band{ display:none; }
+    body[data-active="chat"][data-wsmode] .hx-ws-band{
+      display:flex; align-items:center; gap:11px; padding:9px 16px;
+      background:linear-gradient(90deg, var(--hx-mc-soft), transparent 72%);
+      border-bottom:1px solid color-mix(in srgb, var(--hx-mc) 20%, var(--hx-line));
+      box-shadow:inset 3px 0 0 0 var(--hx-mc);
+    }
+    body[data-active="chat"][data-wsmode] .hx-ws-band-ic{
+      width:30px; height:30px; flex:0 0 auto; border-radius:9px;
+      display:flex; align-items:center; justify-content:center;
+      color:var(--hx-mc); background:var(--hx-mc-soft);
+      box-shadow:0 0 0 1px color-mix(in srgb, var(--hx-mc) 30%, transparent) inset;
+    }
+    body[data-active="chat"][data-wsmode] .hx-ws-band-ic svg{ width:18px; height:18px; }
+    body[data-active="chat"][data-wsmode] .hx-ws-band-txt{ display:flex; flex-direction:column; gap:1px; min-width:0; }
+    body[data-active="chat"][data-wsmode] .hx-ws-band-name{
+      font-size:14.5px; font-weight:750; letter-spacing:-.02em; color:var(--hx-text); line-height:1.15;
+    }
+    body[data-active="chat"][data-wsmode] .hx-ws-band-sub{
+      font-size:11.5px; font-weight:500; color:var(--hx-text-mid); line-height:1.2;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    /* a whisper of the accent at the very top of the thread */
+    body[data-active="chat"][data-wsmode] #hx-c-thread{
+      background:radial-gradient(130% 55% at 50% 0%, var(--hx-mc-soft), transparent 58%);
+    }
+    /* user bubbles take the category tint */
+    body[data-active="chat"][data-wsmode] .hx-msg.is-user .hx-msg-content{
+      background:var(--hx-mc-soft) !important;
+      border:1px solid color-mix(in srgb, var(--hx-mc) 26%, transparent) !important;
+    }
+    /* assistant identity dot in the accent */
+    body[data-active="chat"][data-wsmode] .hx-msg.is-assistant .hx-msg-head{ color:var(--hx-mc); }
+    /* composer + send button in the category accent */
+    body[data-active="chat"][data-wsmode] #hx-c-send{
+      background:var(--hx-mc) !important;
+      box-shadow:0 4px 16px var(--hx-mc-glow) !important;
+    }
+    body[data-active="chat"][data-wsmode] #hx-c-input-row:focus-within{
+      border-color:color-mix(in srgb, var(--hx-mc) 55%, var(--hx-line)) !important;
+      box-shadow:0 0 0 3px var(--hx-mc-soft) !important;
+    }
   </style>
 </head>
 <body data-active="chat">
@@ -30746,6 +30796,17 @@
             <button class="hx-chat-pill" type="button" id="hx-c-clear" hidden aria-hidden="true" style="display:none !important;"></button>
             <span class="hx-chat-balance" id="hx-c-balance" hidden aria-hidden="true" style="display:none !important;">—</span>
           </header>
+
+          <!-- Per-workspace identity band: makes each conversation instantly
+               recognisable as Research / Plan / Analyze / Code / Create / Learn.
+               Hidden in the general (home) chat. Driven by body[data-wsmode]. -->
+          <div class="hx-ws-band" id="hx-c-wsband">
+            <span class="hx-ws-band-ic" id="hx-c-wsband-ic" aria-hidden="true"></span>
+            <span class="hx-ws-band-txt">
+              <span class="hx-ws-band-name" id="hx-c-wsband-name"></span>
+              <span class="hx-ws-band-sub" id="hx-c-wsband-sub"></span>
+            </span>
+          </div>
 
           <button class="hx-chat-scroll-fab" id="hx-c-scroll-fab" type="button" aria-label="Scroll to latest" title="Scroll to latest" hidden>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
@@ -34768,6 +34829,29 @@
             suggest:[ 'Πώς δουλεύει το blockchain, απλά', 'Βασικά γαλλικά για δουλειά', 'Τι είναι τα επιτόκια, με παράδειγμα' ] }
         };
 
+        // Per-workspace identity shown in the conversation's accent band, so
+        // each chat instantly reads as its own product (icon + name + tagline).
+        var HX_WS_IDENTITY = {
+          research: { name:'Research', sub:'Βρες, επαλήθευσε & εξερεύνησε — με πηγές', ic:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>' },
+          plan:     { name:'Plan',     sub:'Ιδέες σε roadmaps, milestones & tasks', ic:'<path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h10"/><circle cx="19" cy="19" r="1.6"/>' },
+          analyze:  { name:'Analyze',  sub:'Μετρικές, insights & αναφορές από δεδομένα', ic:'<path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="12" y="6" width="3" height="11"/><rect x="17" y="13" width="3" height="4"/>' },
+          code:     { name:'Code',     sub:'Φτιάξε, κάνε debug & ship', ic:'<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>' },
+          create:   { name:'Create',   sub:'Περιεχόμενο, assets & καμπάνιες', ic:'<path d="M12 19l7-7 2.5 2.5-7 7L12 19z"/><path d="M17.5 6.5l1 1"/><path d="M3 21l3-1 9-9-2-2-9 9-1 3z"/>' },
+          learn:    { name:'Learn',    sub:'Μάθε με παραδείγματα, paths & quiz', ic:'<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2.7 2 6 2s6-1 6-2v-5"/>' }
+        };
+        function hxApplyWsBand() {
+          var band = document.getElementById('hx-c-wsband'); if (!band) return;
+          var id = hxMode && HX_WS_IDENTITY[hxMode];
+          if (!id) { band.removeAttribute('data-on'); return; }
+          var ic = document.getElementById('hx-c-wsband-ic');
+          var nm = document.getElementById('hx-c-wsband-name');
+          var sb = document.getElementById('hx-c-wsband-sub');
+          if (ic) ic.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' + id.ic + '</svg>';
+          if (nm) nm.textContent = id.name;
+          if (sb) sb.textContent = id.sub;
+          band.setAttribute('data-on', '1');
+        }
+
         var hxMode = null;  // active preset key (null = general Helix)
 
         function hxWelcomeScope() {
@@ -34825,6 +34909,7 @@
           state.workflowMode = hxMode ? (HX_WS_MAP[hxMode] || null) : null;
           if (hxMode) document.body.setAttribute('data-wsmode', hxMode);
           else document.body.removeAttribute('data-wsmode');
+          try { hxApplyWsBand(); } catch (e) {}
           if (inputEl) inputEl.setAttribute('placeholder', hxMode ? (HX_MODES[hxMode].ph || HX_DEFAULT_PH) : HX_DEFAULT_PH);
           hxSyncPresetUI();
           hxRenderSuggest();
@@ -34846,6 +34931,7 @@
         function exitWorkspace(silent) {
           hxMode = null;
           document.body.removeAttribute('data-wsmode');
+          try { hxApplyWsBand(); } catch (e) {}
           if (inputEl) inputEl.setAttribute('placeholder', HX_DEFAULT_PH);
           hxSyncPresetUI();
           hxRenderSuggest();
