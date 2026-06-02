@@ -34430,8 +34430,8 @@
         function openDrawer() {
           // In a category, the ☰ opens that category's OWN full-screen
           // conversations view — never the generic shared drawer.
-          var wk = (typeof state !== 'undefined' && state.workspace) || 'home';
-          if (wk !== 'home' && typeof hxOpenCategoryConvos === 'function') { hxOpenCategoryConvos(wk); return; }
+          var k = (typeof hxCurrentCategory === 'function') ? hxCurrentCategory() : null;
+          if (k && typeof hxOpenCategoryConvos === 'function') { hxOpenCategoryConvos(k); return; }
           if (drawerRail) drawerRail.classList.add('is-open');
           if (drawerBackdrop) drawerBackdrop.classList.add('is-visible');
         }
@@ -35272,6 +35272,13 @@
           }).join('');
         }
         try { window.hxOpenCategoryConvos = hxOpenCategoryConvos; } catch (e) {}
+        // The category the user is visually in — prefer the active band mode
+        // (hxMode) so it always matches what's on screen, fall back to state.
+        function hxCurrentCategory() {
+          var k = (typeof hxMode !== 'undefined' && hxMode) ? hxMode : ((typeof state !== 'undefined' && state.workspace) || 'home');
+          return (HX_WS_IDENTITY[k]) ? k : null;
+        }
+        try { window.hxCurrentCategory = hxCurrentCategory; } catch (e) {}
         // Run a workspace quick-tool as a REAL action: engage its engine mode
         // (+ web search), build a task prompt from the composer text / context,
         // and fire send(). Empty composer → prefill a focused template.
@@ -37974,8 +37981,8 @@
           }
 
           function openDrawer() {
-            var wk = (typeof state !== 'undefined' && state.workspace) || 'home';
-            if (wk !== 'home' && window.hxOpenCategoryConvos) { window.hxOpenCategoryConvos(wk); return; }
+            var k = window.hxCurrentCategory ? window.hxCurrentCategory() : null;
+            if (k && window.hxOpenCategoryConvos) { window.hxOpenCategoryConvos(k); return; }
             rail.classList.add('is-open');
             rail.classList.remove('is-collapsed'); // ensure not in collapsed-desktop state
             if (backdrop) {
