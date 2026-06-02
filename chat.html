@@ -30876,23 +30876,31 @@
          min-width:900 'position:absolute' rule that squeezed it into the pane) */
       body[data-active="chat"] #hx-home,
       body[data-active="chat"] #hx-ws{ position:fixed !important; inset:0 !important; z-index:120 !important; }
+      /* Fill the desktop width — a wide container, no dead left/right gaps. */
       body[data-active="chat"] #hx-home .hx-home-bar,
       body[data-active="chat"] #hx-home .hx-home-scroll,
       body[data-active="chat"] #hx-ws .hx-home-bar,
-      body[data-active="chat"] #hx-ws .hx-home-scroll{ max-width:760px; margin-left:auto; margin-right:auto; width:100%; box-sizing:border-box; padding-left:28px; padding-right:28px; }
-      body[data-active="chat"] #hx-home .hx-home-scroll{ padding-top:14px; }
+      body[data-active="chat"] #hx-ws .hx-home-scroll{ max-width:1180px; margin-left:auto; margin-right:auto; width:100%; box-sizing:border-box; padding-left:clamp(32px,5vw,72px); padding-right:clamp(32px,5vw,72px); }
+      body[data-active="chat"] #hx-home .hx-home-scroll{ padding-top:18px; }
       body[data-active="chat"] #hx-home .hx-home-tabs,
       body[data-active="chat"] #hx-ws .hx-home-tabs{ display:none !important; }
-      /* greeting + composer sized intentionally for desktop */
+      /* greeting + composer sized for desktop; composer spans the container */
       body[data-active="chat"] #hx-home .hx-home-greet,
-      body[data-active="chat"] #hx-ws .hx-home-greet{ font-size:46px !important; }
+      body[data-active="chat"] #hx-ws .hx-home-greet{ font-size:48px !important; }
       body[data-active="chat"] #hx-home .hx-home-composer,
-      body[data-active="chat"] #hx-ws .hx-home-composer{ max-width:760px; }
-      /* category conversations: centred column too */
+      body[data-active="chat"] #hx-ws .hx-home-composer{ max-width:none !important; }
+      /* cards + starters spread across the full width (no empty band) */
+      body[data-active="chat"] #hx-home .hx-home-cards,
+      body[data-active="chat"] #hx-ws .hx-home-cards{ grid-template-columns:repeat(3,1fr) !important; gap:16px !important; }
+      body[data-active="chat"] #hx-home .hx-home-recent,
+      body[data-active="chat"] #hx-home .hx-home-suggest,
+      body[data-active="chat"] #hx-ws .hx-home-recent{ display:grid !important; grid-template-columns:repeat(2,1fr) !important; gap:12px !important; }
+      body[data-active="chat"] #hx-ws .hx-ws-cats{ }
+      /* category conversations: comfortably wide, no dead band */
       body[data-active="chat"] #hx-wsc .hx-wsc-head,
       body[data-active="chat"] #hx-wsc .hx-wsc-searchrow,
       body[data-active="chat"] #hx-wsc .hx-wsc-scroll,
-      body[data-active="chat"] #hx-wsc .hx-wsc-new{ max-width:760px; margin-left:auto; margin-right:auto; width:100%; box-sizing:border-box; }
+      body[data-active="chat"] #hx-wsc .hx-wsc-new{ max-width:1180px; margin-left:auto; margin-right:auto; width:100%; box-sizing:border-box; padding-left:clamp(24px,4vw,56px); padding-right:clamp(24px,4vw,56px); }
       /* When the ☰ opens conversations over the full-screen home, the rail must
          sit ABOVE it (it is a static column in chat — only .is-open is overlaid). */
       body[data-active="chat"] #hx-c-rail.is-open{ position:fixed !important; left:0 !important; top:0 !important; bottom:0 !important; height:100% !important; z-index:140 !important; transform:none !important; box-shadow:6px 0 44px rgba(0,0,0,.22) !important; }
