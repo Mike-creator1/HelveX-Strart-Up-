@@ -35875,7 +35875,19 @@
               /* Navigation lives in the header hamburger (opens the sessions drawer); no categories / quick-start / workflows */
               P+'.hx-home-menu{display:grid !important;place-items:center;width:40px;height:40px;border-radius:12px !important;background:rgba(255,255,255,.04) !important;border:1px solid rgba(255,255,255,.08) !important;color:#F4F4F5 !important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}',
               P+'.hx-home-cards,'+P+'.hx-ws-cats,'+P+'.hx-smart-grid,'+P+'.hx-wf-grid,'+P+'.hx-sec-quickstart,'+P+'.hx-sec-workflows{display:none !important;}',
-              P+'.hx-home-greet{margin-top:14px !important;}',
+              /* ── NEW STRUCTURE: minimal, vertically-centred, input-first ── */
+              P+'.hx-home-bar{border-bottom:none !important;padding-top:calc(env(safe-area-inset-top,0px) + 16px) !important;}',
+              P+'.hx-home-status{display:none !important;}',                       /* drop status pill — minimal header */
+              P+'.hx-home-scroll{justify-content:center !important;align-items:stretch !important;text-align:center !important;padding:18px 22px 40px !important;}',
+              P+'.hx-home-greet::before{display:none !important;}',               /* no AI COMMAND CENTER overline */
+              P+'.hx-home-greet{margin:0 0 0 0 !important;font-size:clamp(28px,8.5vw,36px) !important;font-weight:700 !important;letter-spacing:-.02em !important;line-height:1.12 !important;text-align:center !important;}',
+              P+'.hx-home-greet-1 span{color:#6E6E76 !important;}',
+              P+'.hx-home-sub{text-align:center !important;margin:10px auto 0 !important;max-width:300px;color:#8A8A92 !important;}',
+              P+'.hx-home-composer{margin:26px auto 0 !important;max-width:560px;width:100%;}',
+              P+'.hx-home-pills{justify-content:center !important;}',
+              /* recent history moves to the hamburger drawer — off the start screen */
+              P+'.hx-home-recent,'+P+'.hx-home-recent + *{display:none !important;}',
+              P+'.hx-w-sughead{display:none !important;}',
               '}'
             ].join('\n');
             document.head.appendChild(st);
