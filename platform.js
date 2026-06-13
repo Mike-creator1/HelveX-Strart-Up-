@@ -62,7 +62,7 @@
       label: 'Workspace',
       items: [
         { id: 'dashboard',   href: '/dashboard.html',   label: 'Overview',    icon: 'home' },
-        { id: 'chat',        href: '/chat.html',        label: 'HeliX',       icon: 'chat' },
+        { id: 'chat',        href: '/chat',        label: 'HeliX',       icon: 'chat' },
         { id: 'memory',      href: '/memory.html',      label: 'Memory',      icon: 'memory' },
         { id: 'projects',    href: '/projects.html',    label: 'Projects',    icon: 'folder' },
         { id: 'deployments', href: '/deployments.html', label: 'Deployments', icon: 'cloud' },
@@ -690,7 +690,7 @@
 
   var PAGES = [
     { title: 'Overview',          href: '/dashboard.html',  hint: 'Workspace' },
-    { title: 'HeliX',             href: '/chat.html',       hint: 'Workspace' },
+    { title: 'HeliX',             href: '/chat',       hint: 'Workspace' },
     { title: 'Memory',            href: '/memory.html',     hint: 'Workspace' },
     { title: 'Projects',          href: '/projects.html',   hint: 'Workspace' },
     { title: 'Services',          href: '/services.html',   hint: 'Workspace' },
