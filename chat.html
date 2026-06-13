@@ -35604,13 +35604,86 @@
           }).join('') :
             '<div class="hx-ws-empty"><span class="hx-ws-empty-t">No sessions yet</span><span class="hx-ws-empty-d">Start a conversation above and it will appear here.</span></div>';
 
+          // ── Premium home additions: AI status, smart quick-start cards,
+          //    suggested workflows, and a desktop command-center layout.
+          var aiStatus = '<div class="hx-home-status"><span class="hx-home-status-dot"></span><span>All systems · Pro</span></div>';
+          var SMART = [
+            { tag:'Write',     t:'Draft a polished email',  d:'Turn a few notes into a ready-to-send message.', seed:'Draft a polished, professional email. Here are my notes: ' },
+            { tag:'Decide',    t:'Weigh two options',        d:'Lay out the trade-offs and get a recommendation.', seed:'Help me decide between these options — show the trade-offs and recommend one: ' },
+            { tag:'Summarize', t:'Summarize a document',     d:'Key points and action items in seconds.', seed:'Summarize the following into key points and action items: ' },
+            { tag:'Ideate',    t:'Brainstorm 10 ideas',      d:'Fresh angles for any project or problem.', seed:'Brainstorm 10 creative ideas for ' }
+          ];
+          var smartCards = SMART.map(function (x) {
+            return '<button class="hx-smart-card" type="button" data-home-seed="' + x.seed + '">' +
+              '<span class="hx-smart-tag">' + x.tag + '</span>' +
+              '<span class="hx-smart-t">' + x.t + '</span>' +
+              '<span class="hx-smart-d">' + x.d + '</span>' +
+              '<span class="hx-smart-arr" aria-hidden="true">' + S.chevR + '</span></button>';
+          }).join('');
+          var WORKFLOWS = [
+            { c:'#3b82f6', ic:I.analyze, t:'Analyze data',   d:'Paste a CSV → trends, a chart and a recommendation.', seed:'Analyze this data and give me the key trends, a chart, and a clear recommendation: ' },
+            { c:'#22c55e', ic:I.plan,    t:'Plan a launch',  d:'Turn a goal into a 30-day weekly timeline.', seed:'Create a 30-day launch plan with a weekly timeline for: ' },
+            { c:'#f59e0b', ic:I.code,    t:'Debug an error', d:'Paste a stack trace → root cause and the fix.', seed:'Debug this error — explain the root cause and give the fixed code: ' }
+          ];
+          var wfCards = WORKFLOWS.map(function (x) {
+            return '<button class="hx-wf-card" type="button" data-home-seed="' + x.seed + '" style="--wc:' + x.c + '">' +
+              '<span class="hx-wf-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + x.ic + '</svg></span>' +
+              '<span class="hx-wf-body"><span class="hx-wf-t">' + x.t + '</span><span class="hx-wf-d">' + x.d + '</span></span>' +
+              '<span class="hx-wf-arr" aria-hidden="true">' + S.chevR + '</span></button>';
+          }).join('');
+          (function injectHomePremium(){
+            if (document.getElementById('hx-home-premium-v2')) return;
+            var st = document.createElement('style'); st.id = 'hx-home-premium-v2';
+            st.textContent = [
+              'body[data-active="chat"] #hx-home .hx-home-status{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:-.01em;color:var(--hx-text-mid);background:var(--hx-bg-2);border:1px solid var(--hx-line);white-space:nowrap;}',
+              'body[data-active="chat"] #hx-home .hx-home-status-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:hxStatusPulse 2.2s ease-out infinite;}',
+              '@keyframes hxStatusPulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.45);}70%{box-shadow:0 0 0 6px rgba(34,197,94,0);}100%{box-shadow:0 0 0 0 rgba(34,197,94,0);}}',
+              'body[data-active="chat"] #hx-home .hx-w-sughead{display:flex;align-items:center;margin:30px 0 14px;}',
+              'body[data-active="chat"] #hx-home .hx-w-sec-label{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--hx-text-dim);}',
+              'body[data-active="chat"] #hx-home .hx-w-seeall{margin-left:auto;display:inline-flex;align-items:center;gap:3px;background:none;border:0;color:var(--hx-violet);font:inherit;font-size:13px;font-weight:600;cursor:pointer;}',
+              'body[data-active="chat"] #hx-home .hx-w-seeall svg{width:15px;height:15px;}',
+              'body[data-active="chat"] #hx-home .hx-smart-grid{display:grid;grid-template-columns:1fr;gap:12px;}',
+              'body[data-active="chat"] #hx-home .hx-smart-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;padding:16px 44px 16px 16px;border-radius:16px;cursor:pointer;background:var(--hx-surface);border:1px solid var(--hx-line);box-shadow:0 1px 2px rgba(20,18,12,.04);transition:transform .15s cubic-bezier(.2,.8,.2,1),border-color .16s,box-shadow .18s;}',
+              'body[data-active="chat"] #hx-home .hx-smart-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--hx-violet) 36%,var(--hx-line));box-shadow:0 16px 32px -22px rgba(20,18,12,.4);}',
+              'body[data-active="chat"] #hx-home .hx-smart-tag{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--hx-violet);background:color-mix(in srgb,var(--hx-violet) 12%,transparent);padding:2px 8px;border-radius:999px;}',
+              'body[data-active="chat"] #hx-home .hx-smart-t{font-size:15px;font-weight:700;letter-spacing:-.015em;color:var(--hx-text);}',
+              'body[data-active="chat"] #hx-home .hx-smart-d{font-size:12.5px;color:var(--hx-text-mid);line-height:1.45;}',
+              'body[data-active="chat"] #hx-home .hx-smart-arr{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--hx-text-dim);display:flex;}',
+              'body[data-active="chat"] #hx-home .hx-smart-arr svg{width:18px;height:18px;}',
+              'body[data-active="chat"] #hx-home .hx-wf-grid{display:grid;grid-template-columns:1fr;gap:12px;}',
+              'body[data-active="chat"] #hx-home .hx-wf-card{display:flex;align-items:center;gap:13px;text-align:left;padding:14px 16px;border-radius:16px;cursor:pointer;background:var(--hx-surface);border:1px solid var(--hx-line);box-shadow:0 1px 2px rgba(20,18,12,.04);transition:transform .15s cubic-bezier(.2,.8,.2,1),border-color .16s,box-shadow .18s;}',
+              'body[data-active="chat"] #hx-home .hx-wf-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--wc) 40%,var(--hx-line));box-shadow:0 16px 32px -22px rgba(20,18,12,.4);}',
+              'body[data-active="chat"] #hx-home .hx-wf-ic{width:42px;height:42px;flex-shrink:0;border-radius:13px;display:grid;place-items:center;color:var(--wc);background:color-mix(in srgb,var(--wc) 13%,transparent);}',
+              'body[data-active="chat"] #hx-home .hx-wf-ic svg{width:21px;height:21px;}',
+              'body[data-active="chat"] #hx-home .hx-wf-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}',
+              'body[data-active="chat"] #hx-home .hx-wf-t{font-size:14.5px;font-weight:700;letter-spacing:-.015em;color:var(--hx-text);}',
+              'body[data-active="chat"] #hx-home .hx-wf-d{font-size:12.5px;color:var(--hx-text-mid);line-height:1.4;}',
+              'body[data-active="chat"] #hx-home .hx-wf-arr{flex-shrink:0;color:var(--hx-text-dim);display:flex;}',
+              'body[data-active="chat"] #hx-home .hx-wf-arr svg{width:18px;height:18px;}',
+              'body[data-active="chat"] #hx-home .hx-home-rec-empty{grid-column:1/-1;}',
+              'html[data-theme="dark"] body[data-active="chat"] #hx-home .hx-smart-card,html[data-theme="dark"] body[data-active="chat"] #hx-home .hx-wf-card,html[data-theme="dark"] body[data-active="chat"] #hx-home .hx-home-status{background:var(--hx-bg-2);}',
+              '@media (min-width:900px){',
+              'body[data-active="chat"] #hx-home .hx-home-scroll{max-width:940px;margin:0 auto;width:100%;padding:34px clamp(20px,4vw,44px) 64px;}',
+              'body[data-active="chat"] #hx-home .hx-home-greet{font-size:46px !important;}',
+              'body[data-active="chat"] #hx-home .hx-home-composer{margin-top:26px;}',
+              'body[data-active="chat"] #hx-home .hx-home-cards{grid-template-columns:repeat(3,1fr);gap:14px;}',
+              'body[data-active="chat"] #hx-home .hx-smart-grid{grid-template-columns:repeat(2,1fr);}',
+              'body[data-active="chat"] #hx-home .hx-wf-grid{grid-template-columns:repeat(3,1fr);}',
+              'body[data-active="chat"] #hx-home .hx-wf-card{flex-direction:column;align-items:flex-start;gap:11px;}',
+              'body[data-active="chat"] #hx-home .hx-wf-arr{display:none;}',
+              'body[data-active="chat"] #hx-home .hx-home-recent{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}',
+              '}'
+            ].join('\n');
+            document.head.appendChild(st);
+          })();
+
           var el = document.createElement('div');
           el.id = 'hx-home'; el.hidden = true;
           el.innerHTML =
             '<div class="hx-home-bar">' +
               '<button class="hx-home-menu" type="button" id="hx-home-menu" aria-label="Menu">' + S.menu + '</button>' +
               '<div class="hx-home-brand">' + glyph + '<span class="hx-home-brand-name">Helix</span><span class="hx-home-brand-pro">PRO</span></div>' +
-              '<span class="hx-home-bar-spacer" aria-hidden="true"></span>' +
+              aiStatus +
             '</div>' +
             '<div class="hx-home-scroll">' +
               '<h1 class="hx-home-greet" id="hx-home-greet"><span class="hx-home-greet-1">Good morning,</span><span class="hx-home-greet-2"></span></h1>' +
@@ -35630,10 +35703,12 @@
                   '<button class="hx-home-pill hx-home-pill-more" type="button" data-pill="more" aria-label="More">' + S.chevD + '</button>' +
                 '</div>' +
               '</div>' +
-              '<div class="hx-home-cards" role="group" aria-label="Λειτουργία Helix">' + cards + '</div>' +
+              '<div class="hx-home-cards" role="group" aria-label="Helix modes">' + cards + '</div>' +
               '<div class="hx-w-sughead"><span class="hx-w-sec-label">Quick start</span></div>' +
               '<div class="hx-ws-cats">' + homeCats + '</div>' +
-              '<div class="hx-home-recent hx-home-suggest">' + homeStarters + '</div>' +
+              '<div class="hx-smart-grid">' + smartCards + '</div>' +
+              '<div class="hx-w-sughead"><span class="hx-w-sec-label">Suggested workflows</span></div>' +
+              '<div class="hx-wf-grid">' + wfCards + '</div>' +
               '<div class="hx-w-sughead">' +
                 '<span class="hx-w-sec-label">Recent sessions</span>' +
                 '<button class="hx-w-seeall" type="button">View all' + S.chevR + '</button>' +
