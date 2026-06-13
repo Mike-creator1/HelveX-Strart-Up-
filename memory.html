@@ -8,22 +8,19 @@
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://yjmpallrtpeinpdilptj.supabase.co" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
   <link rel="stylesheet" href="/workbench.css" />
   <style>
     .mem-card { display:flex; flex-direction:column; }
-    .mem-card.off { opacity:.62; }
     .mem-quote { font-size:14px; line-height:1.55; color:var(--hx-text); margin:2px 0 14px; }
     .mem-meta-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
-    .mem-imp { display:inline-flex; gap:2px; }
-    .mem-imp i { width:6px; height:6px; border-radius:50%; background:var(--hx-line-strong); }
-    .mem-imp i.on { background:var(--hx-yellow); }
+    .mem-imp { display:inline-flex; gap:2px; } .mem-imp i { width:6px; height:6px; border-radius:50%; background:var(--hx-line-strong); } .mem-imp i.on { background:var(--hx-yellow); }
     .mem-foot { display:flex; align-items:center; gap:10px; padding-top:12px; border-top:1px solid var(--hx-line-soft); margin-top:auto; }
-    .mem-foot .used { font-size:11.5px; color:var(--hx-text-dim); display:flex; align-items:center; gap:5px; }
-    .mem-foot .used svg { width:12px; height:12px; }
+    .mem-foot .used { font-size:11.5px; color:var(--hx-text-dim); display:flex; align-items:center; gap:5px; } .mem-foot .used svg { width:12px; height:12px; }
     .mem-acts { margin-left:auto; display:flex; gap:5px; }
-    .mem-cat-ic { width:40px; height:40px; border-radius:11px; display:grid; place-items:center; flex-shrink:0; }
+    .mem-ic { width:40px; height:40px; border-radius:11px; display:grid; place-items:center; flex-shrink:0; background:var(--hx-yellow-soft); color:var(--hx-yellow-deep); }
   </style>
 </head>
 <body data-active="memory">
@@ -40,7 +37,7 @@
           <div class="hx-pg-hero-grid">
             <div>
               <h1 class="hx-pg-title">Memory</h1>
-              <p class="hx-pg-sub">Everything your AI agent remembers about you and your work — curated, searchable and under your control. Active memories are injected into every new conversation so the assistant stays in context.</p>
+              <p class="hx-pg-sub">Everything your AI agent remembers about you and your work — curated, searchable and under your control. The 10 most important memories are injected into every new conversation so the assistant stays in context.</p>
               <div class="hx-pg-cta-row">
                 <button class="hx-cta-primary" id="mem-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New memory</button>
                 <a href="/chat.html" class="hx-cta-secondary">Open chat</a>
@@ -54,18 +51,16 @@
         <div class="wb-toolbar">
           <div class="wb-search">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="search" id="mem-q" placeholder="Search memories, categories, sources…" />
+            <input type="search" id="mem-q" placeholder="Search memories, tags, sources…" />
           </div>
           <select class="wb-select" id="mem-sort">
-            <option value="recent">Sort: Recently used</option>
             <option value="importance">Sort: Importance</option>
+            <option value="recent">Sort: Recently updated</option>
             <option value="created">Sort: Newest</option>
-            <option value="used">Sort: Most used</option>
           </select>
         </div>
 
-        <div class="wb-seg" id="mem-cats" style="margin-bottom:16px"></div>
-
+        <div class="wb-seg" id="mem-tags" style="margin-bottom:16px"></div>
         <div id="mem-host"></div>
 
       </main>
@@ -76,62 +71,42 @@
   <script src="/workbench.js"></script>
   <script>
   (function(){
-    var CATS = {
-      identity:   { label:'Identity',    color:'#6C5DD3', icon:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>' },
-      preference: { label:'Preferences', color:'#C9A227', icon:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9"/>' },
-      project:    { label:'Projects',    color:'#0EA5E9', icon:'<path d="M3 7a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>' },
-      people:     { label:'People',      color:'#10B981', icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>' },
-      style:      { label:'Style',       color:'#EC4899', icon:'<path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/>' }
-    };
-    function seed(){
-      return [
-        { id:WB.uid(), content:'Runs a 12-person digital agency in Zürich focused on Swiss SaaS and fintech clients.', cat:'identity', source:'You', importance:5, enabled:true, used:42, lastUsed:WB.ago(90), createdAt:WB.ago(60*24*40) },
-        { id:WB.uid(), content:'Prefers concise, direct answers with concrete examples — no filler, no hedging.', cat:'style', source:'You', importance:5, enabled:true, used:128, lastUsed:WB.ago(20), createdAt:WB.ago(60*24*38) },
-        { id:WB.uid(), content:'Primary stack: Next.js, Supabase, Stripe and Vercel. Avoid recommending other backends.', cat:'preference', source:'Auto-captured', importance:4, enabled:true, used:67, lastUsed:WB.ago(60*5), createdAt:WB.ago(60*24*30) },
-        { id:WB.uid(), content:'Currently shipping "HelveX OS" — an AI workspace rebuild. Launch target is Q3.', cat:'project', source:'From chat', importance:4, enabled:true, used:31, lastUsed:WB.ago(60*2), createdAt:WB.ago(60*24*6) },
-        { id:WB.uid(), content:'Works closely with Mike (co-founder, handles infra) and Sara (design lead).', cat:'people', source:'From chat', importance:3, enabled:true, used:14, lastUsed:WB.ago(60*24*2), createdAt:WB.ago(60*24*12) },
-        { id:WB.uid(), content:'Writes customer-facing copy in a warm, confident tone. British spelling.', cat:'style', source:'You', importance:3, enabled:false, used:9, lastUsed:WB.ago(60*24*9), createdAt:WB.ago(60*24*20) },
-        { id:WB.uid(), content:'Billing runs on the Pro plan; cares about keeping the Supabase project always-on.', cat:'preference', source:'Auto-captured', importance:2, enabled:true, used:5, lastUsed:WB.ago(60*24*4), createdAt:WB.ago(60*24*3) }
-      ];
-    }
-    var store = WB.store('memories', seed);
-    var ST = { q:'', cat:'all', sort:'recent', loading:true };
-    var $ = function(id){ return document.getElementById(id); };
+    var $=function(id){return document.getElementById(id);};
+    var ST={ q:'', tag:'all', sort:'importance', loading:true, error:null, items:[] };
+    var sb=null, owner=null, db=null;
 
     function impDots(n){ var s=''; for(var i=1;i<=5;i++) s+='<i class="'+(i<=n?'on':'')+'"></i>'; return '<span class="mem-imp" title="Importance '+n+'/5">'+s+'</span>'; }
+    function injectedIds(){ return ST.items.slice().sort(function(a,b){return b.importance-a.importance || new Date(b.updated_at)-new Date(a.updated_at);}).slice(0,10).map(function(m){return m.id;}); }
 
     function metrics(){
-      var all = store.all();
-      var active = all.filter(function(m){return m.enabled;}).length;
-      var week = all.filter(function(m){ return m.lastUsed && (Date.now()-new Date(m.lastUsed))<7*864e5; }).length;
-      var cats = new Set(all.map(function(m){return m.cat;})).size;
-      $('mem-metrics').innerHTML =
-        metric('Total memories', all.length, all.length?'across '+cats+' categories':'none yet','<path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0-3 3v1a3 3 0 0 0-1 5.83V18a3 3 0 0 0 3 3h1.5a2.5 2.5 0 0 0 5 0H16a3 3 0 0 0 3-3v-2.17A3 3 0 0 0 18 10V9a3 3 0 0 0-3-3V5a3 3 0 0 0-3-3z"/>')+
-        metric('Active', active, 'injected into new chats','<polyline points="20 6 9 17 4 12"/>')+
-        metric('Used this week', week, 'memories recalled','<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>')+
-        metric('Categories', cats, 'distinct contexts','<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>');
+      var all=ST.items, inj=injectedIds().length;
+      var tags=new Set(); all.forEach(function(m){(m.tags||[]).forEach(function(t){tags.add(t);});});
+      var avg=all.length?(all.reduce(function(s,m){return s+m.importance;},0)/all.length).toFixed(1):'—';
+      $('mem-metrics').innerHTML=
+        mt('Total memories',all.length,'in your workspace','<path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0-3 3v1a3 3 0 0 0-1 5.83V18a3 3 0 0 0 3 3h1.5a2.5 2.5 0 0 0 5 0H16a3 3 0 0 0 3-3v-2.17A3 3 0 0 0 18 10V9a3 3 0 0 0-3-3V5a3 3 0 0 0-3-3z"/>')+
+        mt('Injected',inj,'attached to new chats','<polyline points="20 6 9 17 4 12"/>')+
+        mt('Tags',tags.size,'distinct contexts','<path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10z"/><circle cx="7" cy="7" r="1.4"/>')+
+        mt('Avg importance',avg,'across all memories','<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>');
     }
-    function metric(l,v,m,icon){ return '<div class="wb-metric"><div class="ml">'+WB.svg(icon)+l+'</div><div class="mv">'+v+'</div><div class="mm">'+m+'</div></div>'; }
+    function mt(l,v,m,icon){return '<div class="wb-metric"><div class="ml">'+WB.svg(icon)+l+'</div><div class="mv">'+v+'</div><div class="mm">'+m+'</div></div>';}
 
-    function cats(){
-      var all = store.all();
-      var counts = {}; all.forEach(function(m){ counts[m.cat]=(counts[m.cat]||0)+1; });
-      var html = seg('all','All',all.length);
-      Object.keys(CATS).forEach(function(k){ if(counts[k]) html+=seg(k,CATS[k].label,counts[k]); });
-      $('mem-cats').innerHTML = html;
-      $('mem-cats').querySelectorAll('button').forEach(function(b){ b.onclick=function(){ ST.cat=b.dataset.k; cats(); render(); }; });
+    function tags(){
+      var counts={}; ST.items.forEach(function(m){(m.tags||[]).forEach(function(t){counts[t]=(counts[t]||0)+1;});});
+      var ks=Object.keys(counts).sort();
+      var html='<button data-k="all" class="'+(ST.tag==='all'?'on':'')+'">All <span class="ct">'+ST.items.length+'</span></button>';
+      ks.forEach(function(t){ html+='<button data-k="'+WB.esc(t)+'" class="'+(ST.tag===t?'on':'')+'">'+WB.esc(t)+' <span class="ct">'+counts[t]+'</span></button>'; });
+      $('mem-tags').innerHTML=ks.length?html:'';
+      $('mem-tags').querySelectorAll('button').forEach(function(b){ b.onclick=function(){ST.tag=b.dataset.k;tags();render();}; });
     }
-    function seg(k,label,ct){ return '<button data-k="'+k+'" class="'+(ST.cat===k?'on':'')+'">'+label+' <span class="ct">'+ct+'</span></button>'; }
 
     function visible(){
-      var rows = store.all();
-      if(ST.cat!=='all') rows=rows.filter(function(m){return m.cat===ST.cat;});
-      if(ST.q){ var q=ST.q.toLowerCase(); rows=rows.filter(function(m){ return (m.content+' '+m.source+' '+(CATS[m.cat]?CATS[m.cat].label:'')).toLowerCase().indexOf(q)>=0; }); }
+      var rows=ST.items.slice();
+      if(ST.tag!=='all') rows=rows.filter(function(m){return (m.tags||[]).indexOf(ST.tag)>=0;});
+      if(ST.q){var q=ST.q.toLowerCase();rows=rows.filter(function(m){return (m.content+' '+(m.tags||[]).join(' ')+' '+(m.source||'')).toLowerCase().indexOf(q)>=0;});}
       rows.sort(function(a,b){
-        if(ST.sort==='importance') return b.importance-a.importance;
-        if(ST.sort==='created') return new Date(b.createdAt)-new Date(a.createdAt);
-        if(ST.sort==='used') return b.used-a.used;
-        return new Date(b.lastUsed||0)-new Date(a.lastUsed||0);
+        if(ST.sort==='recent') return new Date(b.updated_at)-new Date(a.updated_at);
+        if(ST.sort==='created') return new Date(b.created_at)-new Date(a.created_at);
+        return b.importance-a.importance || new Date(b.updated_at)-new Date(a.updated_at);
       });
       return rows;
     }
@@ -139,81 +114,88 @@
     function render(){
       var host=$('mem-host');
       if(ST.loading){ host.innerHTML=WB.skeletonCards(6); return; }
-      var rows=visible();
+      if(ST.error){ host.innerHTML='<div class="wb-empty"><div class="orb">'+WB.svg('<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>')+'</div><h3>Couldn’t load memories</h3><p>'+WB.esc(ST.error)+'</p><button class="wb-btn" id="mem-retry">Try again</button></div>'; $('mem-retry').onclick=load; return; }
+      var rows=visible(), inj=injectedIds();
       if(!rows.length){
-        var empty = store.all().length===0;
+        var empty=ST.items.length===0;
         host.innerHTML='<div class="wb-empty"><div class="orb">'+WB.svg('<path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0-3 3v1a3 3 0 0 0-1 5.83V18a3 3 0 0 0 3 3h1.5a2.5 2.5 0 0 0 5 0H16a3 3 0 0 0 3-3v-2.17A3 3 0 0 0 18 10V9a3 3 0 0 0-3-3V5a3 3 0 0 0-3-3z"/>')+'</div>'+
-          '<h3>'+(empty?'Your agent has no memories yet':'Nothing matches')+'</h3>'+
-          '<p>'+(empty?'Add one short fact the assistant should always know — your role, your stack, your style. Active memories are attached to every new conversation.':'Try a different search or category.')+'</p>'+
-          (empty?'<button class="hx-cta-primary" id="mem-empty-new">Add your first memory</button>':'<button class="wb-btn" id="mem-clear">Clear filters</button>')+'</div>';
-        var b=$('mem-empty-new'); if(b) b.onclick=openNew;
-        var c=$('mem-clear'); if(c) c.onclick=function(){ST.q='';ST.cat='all';$('mem-q').value='';cats();render();};
+          '<h3>'+(empty?'Your agent has no memories yet':'Nothing matches')+'</h3><p>'+(empty?'Add a short fact the assistant should always know — your role, your stack, your style. Or load a starter set to see how it works.':'Try a different search or tag.')+'</p>'+
+          (empty?'<div style="display:flex;gap:8px;justify-content:center"><button class="hx-cta-primary" id="mem-empty-new">Add memory</button><button class="wb-btn" id="mem-seed">Load sample data</button></div>':'<button class="wb-btn" id="mem-clear">Clear filters</button>')+'</div>';
+        var b=$('mem-empty-new'); if(b)b.onclick=openNew;
+        var s=$('mem-seed'); if(s)s.onclick=seed;
+        var c=$('mem-clear'); if(c)c.onclick=function(){ST.q='';ST.tag='all';$('mem-q').value='';tags();render();};
         return;
       }
-      host.innerHTML='<div class="wb-grid">'+rows.map(card).join('')+'</div>';
+      host.innerHTML='<div class="wb-grid">'+rows.map(function(m){return card(m,inj.indexOf(m.id)>=0);}).join('')+'</div>';
       rows.forEach(function(m){
-        $('mem-tog-'+m.id).onclick=function(){ store.update(m.id,{enabled:!m.enabled}); WB.toast(m.enabled?'Memory paused':'Memory activated',m.enabled?'info':'ok'); metrics(); render(); };
-        $('mem-edit-'+m.id).onclick=function(){ openEdit(m); };
-        $('mem-del-'+m.id).onclick=function(e){ WB.arm(e.currentTarget,'Delete?',function(){ store.remove(m.id); WB.toast('Memory deleted','ok'); metrics(); cats(); render(); }); };
+        $('mem-edit-'+m.id).onclick=function(){openEdit(m);};
+        $('mem-del-'+m.id).onclick=function(e){ WB.arm(e.currentTarget,'Delete?',function(){ remove(m); }); };
       });
     }
 
-    function card(m){
-      var c=CATS[m.cat]||{label:m.cat,color:'#888',icon:''};
-      return '<div class="wb-card mem-card '+(m.enabled?'':'off')+'">'+
-        '<div class="wb-card-head"><div class="mem-cat-ic" style="background:'+c.color+'1a;color:'+c.color+'">'+WB.svg(c.icon)+'</div>'+
-          '<div style="flex:1;min-width:0"><h3 style="font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:'+c.color+'">'+WB.esc(c.label)+'</h3>'+
-          '<div class="sub">'+WB.esc(m.source)+'</div></div>'+
-          '<span class="wb-pill '+(m.enabled?'active':'paused')+'"><span class="d"></span>'+(m.enabled?'Active':'Paused')+'</span></div>'+
+    function card(m,injected){
+      return '<div class="wb-card mem-card">'+
+        '<div class="wb-card-head"><div class="mem-ic">'+WB.svg('<path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0-3 3v1a3 3 0 0 0-1 5.83V18a3 3 0 0 0 3 3h1.5a2.5 2.5 0 0 0 5 0H16a3 3 0 0 0 3-3v-2.17A3 3 0 0 0 18 10V9a3 3 0 0 0-3-3V5a3 3 0 0 0-3-3z"/>')+'</div>'+
+          '<div style="flex:1;min-width:0"><div class="sub" style="font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--hx-text-dim)">'+WB.esc(m.source||'Manual')+'</div></div>'+
+          (injected?'<span class="wb-pill ok"><span class="d"></span>Injected</span>':'<span class="wb-pill idle"><span class="d"></span>Stored</span>')+'</div>'+
         '<p class="mem-quote">'+WB.esc(m.content)+'</p>'+
-        '<div class="mem-meta-row">'+impDots(m.importance)+'<span class="wb-tag">used '+m.used+'×</span></div>'+
-        '<div class="mem-foot"><span class="used">'+WB.svg('<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>')+'last used '+WB.relTime(m.lastUsed)+'</span>'+
-          '<span class="mem-acts">'+
-            '<button class="wb-switch '+(m.enabled?'on':'')+'" id="mem-tog-'+m.id+'" title="Toggle"></button>'+
-            '<button class="wb-btn sm icon" id="mem-edit-'+m.id+'" title="Edit">'+WB.svg('<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/>')+'</button>'+
-            '<button class="wb-btn sm icon" id="mem-del-'+m.id+'" title="Delete">'+WB.svg('<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/>')+'</button>'+
-          '</span></div>'+
+        '<div class="mem-meta-row">'+impDots(m.importance)+(m.tags||[]).map(function(t){return '<span class="wb-tag">'+WB.esc(t)+'</span>';}).join('')+'</div>'+
+        '<div class="mem-foot"><span class="used">'+WB.svg('<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>')+(m.last_used_at?'last used '+WB.relTime(m.last_used_at):'never used')+'</span>'+
+          '<span class="mem-acts"><button class="wb-btn sm icon" id="mem-edit-'+m.id+'" title="Edit">'+WB.svg('<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/>')+'</button>'+
+          '<button class="wb-btn sm icon" id="mem-del-'+m.id+'" title="Delete">'+WB.svg('<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>')+'</button></span></div>'+
       '</div>';
     }
 
     function form(m){
-      m=m||{cat:'identity',importance:3,enabled:true,source:'You'};
-      var opts=Object.keys(CATS).map(function(k){return '<option value="'+k+'" '+(m.cat===k?'selected':'')+'>'+CATS[k].label+'</option>';}).join('');
+      m=m||{importance:3,tags:[]};
       return '<div class="wb-field"><label>Memory</label><textarea id="f-content" placeholder="One short fact the assistant should remember…">'+WB.esc(m.content||'')+'</textarea></div>'+
-        '<div class="wb-field"><label>Category</label><select id="f-cat">'+opts+'</select></div>'+
-        '<div class="wb-field"><label>Importance · <span id="f-impv">'+m.importance+'</span>/5</label><input type="range" id="f-imp" min="1" max="5" value="'+m.importance+'" style="padding:0"></div>'+
-        '<div class="wb-field" style="display:flex;align-items:center;gap:10px"><button class="wb-switch '+(m.enabled?'on':'')+'" id="f-enabled" type="button"></button><label style="margin:0">Active — inject into new conversations</label></div>';
+        '<div class="wb-field"><label>Tags (comma-separated)</label><input id="f-tags" value="'+WB.esc((m.tags||[]).join(', '))+'" placeholder="e.g. company, stack, style"></div>'+
+        '<div class="wb-field"><label>Importance · <span id="f-impv">'+m.importance+'</span>/5 — higher means more likely to be injected</label><input type="range" id="f-imp" min="1" max="5" value="'+m.importance+'" style="padding:0"></div>';
     }
-    function openNew(){
-      WB.drawer.open({ title:'New memory', body:form(), foot:'<button class="wb-btn primary" id="f-save" style="flex:1">Save memory</button><button class="wb-btn" id="f-cancel">Cancel</button>',
-        onMount:function(){ wireForm(null); } });
-    }
-    function openEdit(m){
-      WB.drawer.open({ title:'Edit memory', body:form(m), foot:'<button class="wb-btn primary" id="f-save" style="flex:1">Save changes</button><button class="wb-btn" id="f-cancel">Cancel</button>',
-        onMount:function(){ wireForm(m); } });
-    }
+    function openNew(){ WB.drawer.open({ title:'New memory', body:form(), foot:'<button class="wb-btn primary" id="f-save" style="flex:1">Save memory</button><button class="wb-btn" id="f-cancel">Cancel</button>', onMount:function(){wireForm(null);} }); }
+    function openEdit(m){ WB.drawer.open({ title:'Edit memory', body:form(m), foot:'<button class="wb-btn primary" id="f-save" style="flex:1">Save changes</button><button class="wb-btn" id="f-cancel">Cancel</button>', onMount:function(){wireForm(m);} }); }
     function wireForm(m){
-      var en = m? m.enabled : true;
-      var imp=document.getElementById('f-imp'); imp.oninput=function(){ document.getElementById('f-impv').textContent=imp.value; };
-      var sw=document.getElementById('f-enabled'); sw.onclick=function(){ en=!en; sw.classList.toggle('on',en); };
-      document.getElementById('f-cancel').onclick=WB.drawer.close;
-      document.getElementById('f-save').onclick=function(){
-        var content=document.getElementById('f-content').value.trim();
-        if(!content){ WB.toast('Memory text is required','err'); return; }
-        var data={ content:content, cat:document.getElementById('f-cat').value, importance:parseInt(imp.value,10), enabled:en };
-        if(m){ store.update(m.id,data); WB.toast('Memory updated','ok'); }
-        else { store.add(Object.assign({ id:WB.uid(), source:'You', used:0, lastUsed:null, createdAt:new Date().toISOString() },data)); WB.toast('Memory saved','ok'); }
-        WB.drawer.close(); metrics(); cats(); render();
+      var imp=$('f-imp'); imp.oninput=function(){$('f-impv').textContent=imp.value;};
+      $('f-cancel').onclick=WB.drawer.close;
+      $('f-save').onclick=function(){
+        var content=$('f-content').value.trim(); if(!content){WB.toast('Memory text is required','err');return;}
+        var tags=$('f-tags').value.split(',').map(function(t){return t.trim();}).filter(Boolean);
+        var data={ content:content, tags:tags, importance:parseInt(imp.value,10), updated_at:new Date().toISOString() };
+        var btn=$('f-save'); btn.disabled=true; btn.textContent='Saving…';
+        var p = m ? db.update(m.id,data) : db.insert(Object.assign({source:'Manual'},data));
+        p.then(function(r){ if(r.error) throw r.error; WB.toast(m?'Memory updated':'Memory saved','ok'); WB.drawer.close(); load(); })
+         .catch(function(e){ btn.disabled=false; btn.textContent=m?'Save changes':'Save memory'; WB.toast(e.message||'Save failed','err'); });
       };
     }
+    function remove(m){ db.remove(m.id).then(function(r){ if(r.error) throw r.error; WB.toast('Memory deleted','ok'); load(); }).catch(function(e){WB.toast(e.message||'Delete failed','err');}); }
 
-    $('mem-new').onclick=openNew;
-    var qt; $('mem-q').oninput=function(e){ ST.q=e.target.value.trim(); clearTimeout(qt); qt=setTimeout(render,140); };
-    $('mem-sort').onchange=function(e){ ST.sort=e.target.value; render(); };
+    function seed(){
+      var rows=[
+        {content:'Runs a 12-person digital agency in Zürich focused on Swiss SaaS and fintech clients.',tags:['company','identity'],importance:5,source:'Manual'},
+        {content:'Prefers concise, direct answers with concrete examples — no filler.',tags:['style'],importance:5,source:'Manual'},
+        {content:'Primary stack: Next.js, Supabase, Stripe and Vercel.',tags:['stack','preference'],importance:4,source:'Manual'},
+        {content:'Currently shipping HelveX OS — an AI workspace rebuild. Launch target Q3.',tags:['project'],importance:4,source:'Manual'},
+        {content:'Works with Mike (infra) and Sara (design).',tags:['people'],importance:3,source:'Manual'}
+      ].map(function(r){ return Object.assign({owner_id:owner},r); });
+      WB.toast('Adding sample memories…','info');
+      sb.from('memories').insert(rows).then(function(r){ if(r.error) throw r.error; WB.toast('Sample data added','ok'); load(); }).catch(function(e){WB.toast(e.message||'Could not add sample data','err');});
+    }
 
-    metrics(); cats(); render();
-    // simulate initial load so the page shows a real loading state
-    setTimeout(function(){ ST.loading=false; render(); }, 480);
+    function load(){
+      if(!db){ ST.loading=false; ST.error='You need to be signed in.'; render(); return; }
+      ST.loading=true; render();
+      db.list('*',{col:'importance',asc:false}).then(function(r){
+        if(r.error) throw r.error;
+        ST.items=r.data||[]; ST.loading=false; ST.error=null; metrics(); tags(); render();
+      }).catch(function(e){ ST.loading=false; ST.error=e.message||'Load failed'; render(); });
+    }
+
+    $('mem-new').onclick=function(){ if(!db){WB.toast('Sign in to add memories','err');return;} openNew(); };
+    var qt; $('mem-q').oninput=function(e){ST.q=e.target.value.trim();clearTimeout(qt);qt=setTimeout(render,140);};
+    $('mem-sort').onchange=function(e){ST.sort=e.target.value;render();};
+
+    render(); // skeleton
+    WB.ready(function(s,u){ sb=s; owner=u?u.id:null; db=(s&&u)?WB.tbl(s,'memories',owner):null; load(); });
   })();
   </script>
 </body>

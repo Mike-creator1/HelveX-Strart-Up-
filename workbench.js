@@ -120,4 +120,31 @@
   WB.svg = function (path, sw) {
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (sw || 1.8) + '" stroke-linecap="round" stroke-linejoin="round">' + path + '</svg>';
   };
+
+  /* ---- Live Supabase data layer ----
+     WB.ready(cb) resolves cb(sb, user) once the shared Supabase client
+     (set up by auth.js via platform.js) is available and the user is
+     known. WB.tbl gives a thin typed CRUD wrapper over a table. */
+  WB.ready = function (cb) {
+    function go() {
+      var sb = window.HX && window.HX.supabase;
+      if (!sb) { cb(null, null); return; }
+      sb.auth.getUser().then(function (r) { cb(sb, r && r.data ? r.data.user : null); })
+        .catch(function () { cb(sb, null); });
+    }
+    if (window.HX && window.HX.supabase) go();
+    else document.addEventListener('hx:auth-ready', go, { once: true });
+  };
+  WB.tbl = function (sb, name, owner) {
+    return {
+      list: function (sel, order) {
+        var q = sb.from(name).select(sel || '*');
+        if (order) q = q.order(order.col, { ascending: !!order.asc });
+        return q;
+      },
+      insert: function (row) { return sb.from(name).insert(Object.assign({ owner_id: owner }, row)).select().single(); },
+      update: function (id, patch) { return sb.from(name).update(patch).eq('id', id).select().single(); },
+      remove: function (id) { return sb.from(name).delete().eq('id', id); }
+    };
+  };
 })();
