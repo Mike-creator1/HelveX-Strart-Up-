@@ -3,259 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <title>Projects — HelveX</title>
-  <meta name="description" content="HelveX projects — your builds, with deployment status, domain, and latest commit." />
+  <meta name="description" content="HelveX Projects — manage AI workspaces with agents, files, tasks and deployments in one place." />
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://yjmpallrtpeinpdilptj.supabase.co" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/platform.css?v=20260520e" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+  <link rel="stylesheet" href="/workbench.css" />
   <style>
-    .hx-pj-toolbar {
-      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-      margin: 18px 0 14px;
-    }
-    .hx-pj-search {
-      flex: 1; min-width: 240px;
-      display: flex; align-items: center; gap: 8px;
-      padding: 0 12px; height: 32px;
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r-sm);
-    }
-    .hx-pj-search:focus-within { border-color: var(--hx-text); background: var(--hx-surface); }
-    .hx-pj-search svg { width: 13px; height: 13px; color: var(--hx-text-mid); flex-shrink: 0; }
-    .hx-pj-search input {
-      flex: 1; min-width: 0;
-      border: 0; outline: 0; background: transparent;
-      font: inherit; font-size: 13px; color: var(--hx-text); padding: 0;
-    }
-    .hx-pj-search input::placeholder { color: var(--hx-text-dim); }
-    .hx-pj-sort {
-      padding: 0 10px; height: 32px;
-      background: var(--hx-surface);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r-sm);
-      font: inherit; font-size: 13px;
-      color: var(--hx-text);
-      cursor: pointer;
-    }
-    .hx-pj-tab {
-      padding: 0 12px; height: 32px;
-      background: var(--hx-surface);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r-sm);
-      font: inherit; font-size: 13px;
-      color: var(--hx-text-mid);
-      cursor: pointer;
-      transition: background 0.1s, color 0.1s, border-color 0.1s;
-      display: inline-flex; align-items: center; gap: 6px;
-    }
-    .hx-pj-tab:hover { color: var(--hx-text); border-color: var(--hx-line-strong); }
-    .hx-pj-tab.is-active { background: var(--hx-text); border-color: var(--hx-text); color: var(--hx-bg); }
-    .hx-pj-tab .count {
-      font-family: var(--hx-mono);
-      font-size: 11px;
-      padding: 1px 5px;
-      background: var(--hx-bg-2);
-      border-radius: 4px;
-      color: var(--hx-text-dim);
-    }
-    .hx-pj-tab.is-active .count {
-      background: rgba(255,255,255,0.18);
-      color: var(--hx-bg);
-    }
-
-    /* ── Project grid card (Vercel-tight) ───────────────────────── */
-    .hx-pj-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-      gap: 14px;
-    }
-    .hx-pj-card {
-      display: block;
-      padding: 18px 20px;
-      background: var(--hx-surface);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r);
-      text-decoration: none;
-      color: var(--hx-text);
-      transition: border-color 0.12s;
-    }
-    .hx-pj-card:hover { border-color: var(--hx-line-strong); }
-    .hx-pj-card .head {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 10px;
-    }
-    .hx-pj-card .head .icn {
-      width: 28px; height: 28px;
-      border-radius: 7px;
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--hx-text);
-      flex-shrink: 0;
-      font-family: var(--hx-mono);
-      font-size: 12px; font-weight: 600;
-    }
-    .hx-pj-card .head .body { min-width: 0; flex: 1; }
-    .hx-pj-card .head .nm {
-      font-weight: 600; font-size: 14.5px;
-      letter-spacing: -0.005em;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      margin: 0;
-    }
-    .hx-pj-card .head .slug {
-      font-family: var(--hx-mono);
-      font-size: 11px;
-      color: var(--hx-text-dim);
-      margin: 2px 0 0;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .hx-pj-card .domain {
-      font-family: var(--hx-mono);
-      font-size: 12px;
-      color: var(--hx-text-mid);
-      margin: 0 0 14px;
-      display: flex; align-items: center; gap: 5px;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .hx-pj-card .domain svg { width: 11px; height: 11px; flex-shrink: 0; opacity: 0.7; }
-    .hx-pj-card .deploy {
-      display: flex; align-items: center; gap: 8px;
-      padding-top: 12px;
-      border-top: 1px solid var(--hx-line-soft);
-      font-size: 11.5px;
-      color: var(--hx-text-mid);
-    }
-    .hx-pj-card .deploy .dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .hx-pj-card .deploy .dot.is-ready { background: var(--hx-emerald); }
-    .hx-pj-card .deploy .dot.is-building { background: var(--hx-yellow-deep); }
-    .hx-pj-card .deploy .dot.is-failed { background: var(--hx-red); }
-    .hx-pj-card .deploy .dot.is-idle { background: var(--hx-text-faint); }
-    .hx-pj-card .deploy .msg {
-      font-family: var(--hx-mono);
-      flex: 1; min-width: 0;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .hx-pj-card .deploy .time {
-      font-family: var(--hx-mono);
-      color: var(--hx-text-dim);
-      flex-shrink: 0;
-    }
-
-    /* ── Template panel — opens when "Add new" is clicked ─────── */
-    .hx-pj-tmpl-host {
-      margin: 18px 0;
-      background: var(--hx-surface);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r);
-      overflow: hidden;
-      display: none;
-    }
-    .hx-pj-tmpl-host.is-open { display: block; }
-    .hx-pj-tmpl-head {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--hx-line);
-    }
-    .hx-pj-tmpl-head h3 { margin: 0; font-size: 14px; font-weight: 600; }
-    .hx-pj-tmpl-head .sub { font-size: 11.5px; color: var(--hx-text-mid); margin: 2px 0 0; }
-    .hx-pj-tmpl-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1px;
-      background: var(--hx-line);
-    }
-    .hx-pj-tmpl {
-      display: block;
-      padding: 16px 18px;
-      background: var(--hx-surface);
-      cursor: pointer;
-      transition: background 0.1s;
-      text-decoration: none;
-      color: var(--hx-text);
-    }
-    .hx-pj-tmpl:hover { background: var(--hx-bg-2); }
-    .hx-pj-tmpl .ic {
-      width: 28px; height: 28px;
-      border-radius: 7px;
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--hx-text);
-      margin-bottom: 10px;
-    }
-    .hx-pj-tmpl .ic svg { width: 14px; height: 14px; }
-    .hx-pj-tmpl .nm { font-weight: 600; font-size: 13.5px; }
-    .hx-pj-tmpl .dc { font-size: 11.5px; color: var(--hx-text-mid); margin-top: 3px; line-height: 1.4; }
-    .hx-pj-tmpl.is-selected {
-      background: var(--hx-bg-2);
-      outline: 2px solid var(--hx-text);
-      outline-offset: -2px;
-    }
-
-    /* ── Create-project inline form (replaces native prompt) ─── */
-    .hx-pj-form {
-      display: none;
-      padding: 20px 22px;
-      border-top: 1px solid var(--hx-line);
-      background: var(--hx-bg-2);
-    }
-    .hx-pj-form.is-open { display: block; }
-    .hx-pj-form .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 12px;
-    }
-    @media (max-width: 640px) { .hx-pj-form .row { grid-template-columns: 1fr; } }
-    .hx-pj-form label {
-      display: block;
-      font-size: 11.5px; font-weight: 500;
-      color: var(--hx-text-mid);
-      margin-bottom: 5px;
-      letter-spacing: 0;
-    }
-    .hx-pj-form label .req { color: var(--hx-red); font-weight: 600; }
-    .hx-pj-form .help {
-      font-size: 11.5px;
-      color: var(--hx-text-dim);
-      margin-top: 5px;
-      font-family: var(--hx-mono);
-    }
-    .hx-pj-form input[type="text"] {
-      width: 100%;
-      height: 36px;
-      padding: 0 12px;
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r-sm);
-      background: var(--hx-surface);
-      font: inherit; font-size: 13.5px;
-      color: var(--hx-text);
-      transition: border-color 0.12s, box-shadow 0.12s;
-    }
-    .hx-pj-form input[type="text"]:focus {
-      outline: 0;
-      border-color: var(--hx-text);
-      box-shadow: 0 0 0 3px rgba(15,15,16,0.06);
-    }
-    .hx-pj-form .actions {
-      display: flex; gap: 8px; align-items: center;
-      margin-top: 8px;
-    }
-    .hx-pj-form-status {
-      font-family: var(--hx-mono);
-      font-size: 12px;
-      margin-left: auto;
-    }
-    .hx-pj-form-status.is-error { color: var(--hx-red); }
-    .hx-pj-form-status.is-ok    { color: var(--hx-emerald); }
+    .pj-card { display:flex; flex-direction:column; }
+    .pj-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:4px 0 14px; }
+    .pj-stat { background:var(--hx-bg-2); border-radius:9px; padding:9px 10px; text-align:center; }
+    .pj-stat .n { font-family:var(--hx-mono); font-size:16px; font-weight:600; color:var(--hx-text); }
+    .pj-stat .l { font-size:10px; color:var(--hx-text-dim); margin-top:2px; text-transform:uppercase; letter-spacing:.03em; }
+    .pj-progress { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--hx-text-mid); margin-bottom:12px; }
+    .pj-progress .wb-bar { flex:1; }
+    .pj-members { display:flex; }
+    .pj-members span { width:24px; height:24px; border-radius:50%; background:var(--hx-bg-3); border:1.5px solid var(--hx-surface); display:grid; place-items:center; font-size:10px; font-weight:600; color:var(--hx-text-mid); margin-left:-6px; }
+    .pj-members span:first-child { margin-left:0; }
+    .task-row { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--hx-line-soft); font-size:13px; }
+    .task-row:last-child { border-bottom:0; }
+    .task-check { width:18px; height:18px; border-radius:5px; border:1.6px solid var(--hx-line-strong); flex-shrink:0; cursor:pointer; display:grid; place-items:center; }
+    .task-check.done { background:var(--hx-emerald); border-color:var(--hx-emerald); }
+    .task-check.done svg { width:12px; height:12px; color:#fff; }
+    .task-row.done span { color:var(--hx-text-dim); text-decoration:line-through; }
+    .dr-section { margin:18px 0 8px; font-size:11px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--hx-text-dim); }
   </style>
 </head>
 <body data-active="projects">
@@ -266,422 +39,211 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
+        <div class="hx-aura" aria-hidden="true"></div>
         <header class="hx-pg-hero">
-          <p class="hx-pg-eyebrow">Workspace</p>
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Workspace</p>
           <div class="hx-pg-hero-grid">
             <div>
               <h1 class="hx-pg-title">Projects</h1>
-              <p class="hx-pg-sub">Every engagement you have running with HelveX. Click a card for deployments, domains, and settings.</p>
+              <p class="hx-pg-sub">Each project is a workspace that ties together its chats, files, AI agents, tasks and deployments. Open one to manage everything in context.</p>
+              <div class="hx-pg-cta-row">
+                <button class="hx-cta-primary" id="pj-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New project</button>
+              </div>
             </div>
-            <button id="hx-new-project" class="hx-cta-primary">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Add New
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
           </div>
         </header>
 
-        <!-- Template chooser — appears when Add New is clicked -->
-        <div class="hx-pj-tmpl-host" id="hx-tmpl-host">
-          <div class="hx-pj-tmpl-head">
-            <div>
-              <h3>Start a project</h3>
-              <p class="sub">Pick a template — every one ends in a live URL on your subdomain.</p>
-            </div>
-            <button class="hx-cta-secondary" id="hx-tmpl-close">Close</button>
-          </div>
-          <div class="hx-pj-tmpl-grid">
-            <a class="hx-pj-tmpl" data-tmpl="landing">
-              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></div>
-              <div class="nm">Landing page</div>
-              <div class="dc">Hero, sections, CTA, form. Brief → live in minutes.</div>
-            </a>
-            <a class="hx-pj-tmpl" data-tmpl="shop">
-              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>
-              <div class="nm">E-commerce shop</div>
-              <div class="dc">Storefront, product grid, Stripe checkout, admin.</div>
-            </a>
-            <a class="hx-pj-tmpl" data-tmpl="saas">
-              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
-              <div class="nm">SaaS dashboard</div>
-              <div class="dc">Auth + dashboard + 3 metric pages, Stripe billing.</div>
-            </a>
-            <a class="hx-pj-tmpl" data-tmpl="booking">
-              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-              <div class="nm">Booking site</div>
-              <div class="dc">Calendar, slots, email confirm, Stripe deposit.</div>
-            </a>
-            <a class="hx-pj-tmpl" data-tmpl="crm">
-              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
-              <div class="nm">CRM</div>
-              <div class="dc">Pipeline, contacts, deals, follow-up reminders.</div>
-            </a>
-            <a class="hx-pj-tmpl" data-tmpl="blog">
-              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="10" y1="4" x2="10" y2="20"/></svg></div>
-              <div class="nm">Blog / Newsletter</div>
-              <div class="dc">Posts, RSS, subscribe form, send via Resend.</div>
-            </a>
-            <a class="hx-pj-tmpl" data-tmpl="portfolio">
-              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-              <div class="nm">Portfolio / Personal</div>
-              <div class="dc">Bio, projects, contact, custom domain.</div>
-            </a>
-            <a class="hx-pj-tmpl" data-tmpl="internal">
-              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
-              <div class="nm">Internal tool</div>
-              <div class="dc">Forms, tables, workflow. Auth + role-based access.</div>
-            </a>
-            <a class="hx-pj-tmpl" data-tmpl="blank">
-              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
-              <div class="nm">Blank project</div>
-              <div class="dc">Start empty — bring your own brief.</div>
-            </a>
-          </div>
+        <div class="wb-metrics" id="pj-metrics"></div>
 
-          <!-- Create form — replaces the native prompt(). Pre-filled
-               with the picked template; user types a name and saves. -->
-          <form class="hx-pj-form" id="hx-pj-form">
-            <div class="row">
-              <div>
-                <label>Project name <span class="req">*</span></label>
-                <input type="text" id="hx-pj-fname" placeholder="e.g. Mike's CRM rebuild" maxlength="100" autocomplete="off" />
-              </div>
-              <div>
-                <label>Slug</label>
-                <input type="text" id="hx-pj-fslug" placeholder="auto-generated from name" maxlength="60" autocomplete="off" />
-                <p class="help" id="hx-pj-fslug-preview">your-name.helvex.app</p>
-              </div>
-            </div>
-            <div class="actions">
-              <button type="submit" class="hx-cta-primary" id="hx-pj-fsubmit">Create project</button>
-              <button type="button" class="hx-cta-secondary" id="hx-pj-fcancel">Cancel</button>
-              <span class="hx-pj-form-status" id="hx-pj-fstatus"></span>
-            </div>
-          </form>
-        </div>
-
-        <!-- Toolbar -->
-        <div class="hx-pj-toolbar">
-          <div class="hx-pj-search">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input id="hx-pj-q" placeholder="Search projects by name or slug…" />
+        <div class="wb-toolbar">
+          <div class="wb-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" id="pj-q" placeholder="Search projects…" />
           </div>
-          <button class="hx-pj-tab is-active" data-tab="all">All <span class="count" id="hx-pj-c-all">0</span></button>
-          <button class="hx-pj-tab" data-tab="active">Active <span class="count" id="hx-pj-c-active">0</span></button>
-          <button class="hx-pj-tab" data-tab="paused">Paused <span class="count" id="hx-pj-c-paused">0</span></button>
-          <button class="hx-pj-tab" data-tab="archived">Archived <span class="count" id="hx-pj-c-archived">0</span></button>
-          <select class="hx-pj-sort" id="hx-pj-sort">
-            <option value="updated">Sort: Recently updated</option>
-            <option value="created">Sort: Recently created</option>
-            <option value="name">Sort: Name (A → Z)</option>
+          <div class="wb-seg" id="pj-tabs"></div>
+          <select class="wb-select" id="pj-sort">
+            <option value="activity">Sort: Last activity</option>
+            <option value="name">Sort: Name (A–Z)</option>
+            <option value="created">Sort: Newest</option>
+            <option value="tasks">Sort: Open tasks</option>
           </select>
         </div>
 
-        <div id="hx-pj-host"></div>
+        <div id="pj-host"></div>
 
       </main>
     </div>
   </div>
 
-  <script src="/platform.js?v=20260520e"></script>
+  <script src="/platform.js"></script>
+  <script src="/workbench.js"></script>
   <script>
-    (function () {
-      function whenAuthReady(fn) {
-        if (window.HX && window.HX.supabase) { fn(); return; }
-        document.addEventListener('hx:auth-ready', fn, { once: true });
-      }
-      var $ = function (id) { return document.getElementById(id); };
-      function esc(s) { return (s == null ? '' : String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-      function relTime(iso) {
-        if (!iso) return '—';
-        var d = new Date(iso).getTime();
-        var diff = (Date.now() - d) / 1000;
-        if (diff < 60) return 'just now';
-        if (diff < 3600) return Math.floor(diff/60) + 'm';
-        if (diff < 86400) return Math.floor(diff/3600) + 'h';
-        return Math.floor(diff/86400) + 'd';
-      }
-      async function safeQuery(p) { try { var r = await p; return r && !r.error ? r : { data: null, count: null }; } catch (e) { return { data: null, count: null }; } }
+  (function(){
+    var COLORS=['#6C5DD3','#0EA5E9','#10B981','#C9A227','#EC4899','#F97316'];
+    function seed(){
+      return [
+        { id:WB.uid(), name:'Acme GTM', slug:'acme-gtm', desc:'Go-to-market for the Q3 launch — landing pages, campaigns and analytics.', status:'active', agents:3, files:23, tasks:{done:8,total:11}, members:['AM','MK','SL'], lastActivity:WB.ago(12), createdAt:WB.ago(60*24*22), deploy:'live' },
+        { id:WB.uid(), name:'Billing Revamp', slug:'billing-revamp', desc:'Stripe migration, invoices, dunning and usage-based metering.', status:'active', agents:1, files:14, tasks:{done:5,total:9}, members:['MK','AM'], lastActivity:WB.ago(60*3), createdAt:WB.ago(60*24*15), deploy:'building' },
+        { id:WB.uid(), name:'Customer Insights', slug:'customer-insights', desc:'Churn analysis, NPS and cohort reporting dashboards.', status:'active', agents:2, files:48, tasks:{done:12,total:12}, members:['SL'], lastActivity:WB.ago(60*26), createdAt:WB.ago(60*24*30), deploy:'live' },
+        { id:WB.uid(), name:'Support Copilot', slug:'support-copilot', desc:'AI agent that drafts replies grounded in the knowledge base.', status:'paused', agents:4, files:62, tasks:{done:6,total:14}, members:['AM','MK','SL','DV'], lastActivity:WB.ago(60*24*5), createdAt:WB.ago(60*24*44), deploy:'paused' },
+        { id:WB.uid(), name:'2025 Archive', slug:'2025-archive', desc:'Last year’s campaign site, kept for reference.', status:'archived', agents:0, files:9, tasks:{done:3,total:3}, members:['AM'], lastActivity:WB.ago(60*24*120), createdAt:WB.ago(60*24*300), deploy:'idle' }
+      ];
+    }
+    var store=WB.store('projects', seed);
+    var TASKSTORE=WB.store('project_tasks', {});
+    var ST={ q:'', tab:'all', sort:'activity' };
+    var $=function(id){return document.getElementById(id);};
 
-      var STATE = { projects: [], deployments: [], tab: 'all', q: '', sort: 'updated' };
+    function metrics(){
+      var all=store.all();
+      var active=all.filter(function(p){return p.status==='active';}).length;
+      var open=all.reduce(function(s,p){return s+(p.tasks.total-p.tasks.done);},0);
+      var agents=all.reduce(function(s,p){return s+p.agents;},0);
+      $('pj-metrics').innerHTML=
+        m('Projects',all.length,active+' active','<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>')+
+        m('Open tasks',open,'across all projects','<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>')+
+        m('Connected agents',agents,'working in projects','<circle cx="12" cy="8" r="4"/><path d="M5.5 21a7 7 0 0 1 13 0"/>')+
+        m('Live deployments',all.filter(function(p){return p.deploy==='live';}).length,'serving traffic','<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>');
+    }
+    function m(l,v,mm,icon){return '<div class="wb-metric"><div class="ml">'+WB.svg(icon)+l+'</div><div class="mv">'+v+'</div><div class="mm">'+mm+'</div></div>';}
 
-      function statusDot(s) {
-        if (s === 'live' || s === 'ready')   return '<span class="dot is-ready"></span>';
-        if (s === 'building' || s === 'queued') return '<span class="dot is-building"></span>';
-        if (s === 'failed' || s === 'degraded') return '<span class="dot is-failed"></span>';
-        return '<span class="dot is-idle"></span>';
+    function tabs(){
+      var all=store.all(); var c={all:all.length,active:0,paused:0,archived:0};
+      all.forEach(function(p){ if(c[p.status]!==undefined)c[p.status]++; });
+      $('pj-tabs').innerHTML=['all','active','paused','archived'].map(function(k){
+        return '<button data-k="'+k+'" class="'+(ST.tab===k?'on':'')+'">'+k.charAt(0).toUpperCase()+k.slice(1)+' <span class="ct">'+c[k]+'</span></button>';
+      }).join('');
+      $('pj-tabs').querySelectorAll('button').forEach(function(b){ b.onclick=function(){ST.tab=b.dataset.k;tabs();render();}; });
+    }
+
+    function visible(){
+      var rows=store.all();
+      if(ST.tab!=='all') rows=rows.filter(function(p){return p.status===ST.tab;});
+      if(ST.q){var q=ST.q.toLowerCase(); rows=rows.filter(function(p){return (p.name+' '+p.desc+' '+p.slug).toLowerCase().indexOf(q)>=0;});}
+      rows.sort(function(a,b){
+        if(ST.sort==='name') return a.name.localeCompare(b.name);
+        if(ST.sort==='created') return new Date(b.createdAt)-new Date(a.createdAt);
+        if(ST.sort==='tasks') return (b.tasks.total-b.tasks.done)-(a.tasks.total-a.tasks.done);
+        return new Date(b.lastActivity)-new Date(a.lastActivity);
+      });
+      return rows;
+    }
+
+    function render(){
+      var rows=visible(), host=$('pj-host');
+      if(!rows.length){
+        var empty=store.all().length===0;
+        host.innerHTML='<div class="wb-empty"><div class="orb">'+WB.svg('<path d="M3 7a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>')+'</div>'+
+          '<h3>'+(empty?'No projects yet':'No projects match')+'</h3><p>'+(empty?'Create a workspace to organise chats, files, agents, tasks and deployments together.':'Try another search or filter.')+'</p>'+
+          (empty?'<button class="hx-cta-primary" id="pj-empty">Create your first project</button>':'<button class="wb-btn" id="pj-clear">Clear filters</button>')+'</div>';
+        var e=$('pj-empty'); if(e)e.onclick=openNew;
+        var c=$('pj-clear'); if(c)c.onclick=function(){ST.q='';ST.tab='all';$('pj-q').value='';tabs();render();};
+        return;
       }
+      host.innerHTML='<div class="wb-grid">'+rows.map(card).join('')+'</div>';
+      rows.forEach(function(p){ $('pj-'+p.id).onclick=function(){openDetail(p);}; });
+    }
 
-      function filterAndSort() {
-        var rows = STATE.projects.slice();
-        if (STATE.tab !== 'all') rows = rows.filter(function (p) { return (p.status || 'active') === STATE.tab; });
-        if (STATE.q) {
-          var q = STATE.q.toLowerCase();
-          rows = rows.filter(function (p) {
-            return (p.name || '').toLowerCase().indexOf(q) >= 0 ||
-                   (p.slug || '').toLowerCase().indexOf(q) >= 0;
-          });
-        }
-        if (STATE.sort === 'updated') rows.sort(function (a, b) { return new Date(b.updated_at) - new Date(a.updated_at); });
-        else if (STATE.sort === 'created') rows.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); });
-        else if (STATE.sort === 'name') rows.sort(function (a, b) { return (a.name || '').localeCompare(b.name || ''); });
-        return rows;
-      }
+    function card(p){
+      var col=COLORS[Math.abs(hash(p.id))%COLORS.length];
+      var pct=p.tasks.total?Math.round(p.tasks.done/p.tasks.total*100):0;
+      return '<div class="wb-card pj-card" id="pj-'+p.id+'">'+
+        '<div class="wb-card-head"><div class="wb-ic" style="background:'+col+'1a;border-color:'+col+'33;color:'+col+'">'+WB.esc(p.name.charAt(0))+'</div>'+
+          '<div style="flex:1;min-width:0"><h3 style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+WB.esc(p.name)+'</h3><div class="sub">'+WB.esc(p.slug)+'</div></div>'+
+          '<span class="wb-pill '+p.status+(p.deploy==='building'?' pulse':'')+'"><span class="d"></span>'+cap(p.status)+'</span></div>'+
+        '<p class="desc" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">'+WB.esc(p.desc)+'</p>'+
+        '<div class="pj-stats"><div class="pj-stat"><div class="n">'+p.agents+'</div><div class="l">Agents</div></div>'+
+          '<div class="pj-stat"><div class="n">'+p.files+'</div><div class="l">Files</div></div>'+
+          '<div class="pj-stat"><div class="n">'+p.tasks.total+'</div><div class="l">Tasks</div></div></div>'+
+        '<div class="pj-progress"><div class="wb-bar'+(pct===100?'':' warn')+'"><i style="width:'+pct+'%"></i></div><span>'+pct+'%</span></div>'+
+        '<div class="wb-card-foot"><div class="pj-members">'+p.members.slice(0,4).map(function(x){return '<span>'+WB.esc(x)+'</span>';}).join('')+'</div>'+
+          '<span style="margin-left:auto;display:flex;align-items:center;gap:5px">'+WB.svg('<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>')+WB.relTime(p.lastActivity)+'</span></div>'+
+      '</div>';
+    }
+    function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+    function hash(s){var h=0;for(var i=0;i<s.length;i++){h=(h<<5)-h+s.charCodeAt(i);h|=0;}return h;}
 
-      function paintCounts() {
-        var c = { all: STATE.projects.length, active: 0, paused: 0, archived: 0 };
-        STATE.projects.forEach(function (p) {
-          var s = p.status || 'active';
-          if (c[s] !== undefined) c[s]++;
-          else c.active++;
-        });
-        ['all','active','paused','archived'].forEach(function (k) {
-          var el = $('hx-pj-c-' + k); if (el) el.textContent = c[k];
-        });
-      }
+    function getTasks(p){
+      var t=TASKSTORE.all(); if(t[p.id]) return t[p.id];
+      var sample=['Define scope & success metrics','Draft initial copy with HeliX','Review with the team','Connect knowledge base','Ship first deployment'];
+      var list=sample.map(function(s,i){return {id:WB.uid(),text:s,done:i<p.tasks.done};});
+      t[p.id]=list; TASKSTORE.set(t); return list;
+    }
+    function saveTasks(p,list){ var t=TASKSTORE.all(); t[p.id]=list; TASKSTORE.set(t); var done=list.filter(function(x){return x.done;}).length; store.update(p.id,{tasks:{done:done,total:list.length}, lastActivity:new Date().toISOString()}); }
 
-      function render() {
-        var host = $('hx-pj-host');
-        var rows = filterAndSort();
-        if (!rows.length) {
-          host.innerHTML =
-            '<div class="hx-card" style="padding:48px 24px;text-align:center;">' +
-              '<p style="margin:0 0 6px;font-size:14px;font-weight:600;color:var(--hx-text);">' +
-                (STATE.projects.length === 0 ? 'No projects yet' : 'No matches for this filter') +
-              '</p>' +
-              '<p style="margin:0 0 16px;font-size:12.5px;color:var(--hx-text-mid);max-width:420px;margin-inline:auto;line-height:1.5;">' +
-                (STATE.projects.length === 0
-                  ? 'A project groups every chat, deployment, artifact and domain under one workspace context. Start with a template or a blank canvas.'
-                  : 'Clear the search or switch the tab to All.') +
-              '</p>' +
-              (STATE.projects.length === 0
-                ? '<button class="hx-cta-primary" id="hx-pj-empty-new">Start a project</button>'
-                : '<button class="hx-cta-secondary" id="hx-pj-empty-clear">Clear filters</button>') +
-            '</div>';
-          var nb = $('hx-pj-empty-new');
-          if (nb) nb.addEventListener('click', openTemplates);
-          var cb = $('hx-pj-empty-clear');
-          if (cb) cb.addEventListener('click', function () {
-            STATE.q = ''; STATE.tab = 'all';
-            $('hx-pj-q').value = '';
-            document.querySelectorAll('.hx-pj-tab').forEach(function (b) {
-              b.classList.toggle('is-active', b.getAttribute('data-tab') === 'all');
-            });
-            render();
-          });
-          return;
-        }
-        host.innerHTML = '<div class="hx-pj-grid">' +
-          rows.map(function (p) {
-            var initial = (p.name || '?').charAt(0).toUpperCase();
-            var dep = STATE.deployments.find(function (d) { return d.project_id === p.id; });
-            var domain = dep && dep.endpoint_url
-              ? dep.endpoint_url.replace(/^https?:\/\//, '')
-              : (p.slug ? p.slug + '.helvex.app' : 'No domain yet');
-            var depHtml = dep
-              ? '<div class="deploy">' + statusDot(dep.status) +
-                  '<span class="msg">' + esc(dep.version || 'v0') + ' · ' + esc(dep.environment || 'production') + '</span>' +
-                  '<span class="time">' + esc(relTime(dep.created_at)) + '</span>' +
-                '</div>'
-              : '<div class="deploy"><span class="dot is-idle"></span><span class="msg">No deployments</span><span class="time">—</span></div>';
-            return '<a class="hx-pj-card" href="/projects.html#' + esc(p.slug || p.id) + '">' +
-              '<div class="head">' +
-                '<span class="icn">' + esc(initial) + '</span>' +
-                '<div class="body">' +
-                  '<p class="nm">' + esc(p.name) + '</p>' +
-                  '<p class="slug">' + esc(p.slug || '—') + '</p>' +
-                '</div>' +
-              '</div>' +
-              '<div class="domain"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' + esc(domain) + '</div>' +
-              depHtml +
-            '</a>';
-          }).join('') +
+    function openDetail(p){
+      var tasks=getTasks(p);
+      var col=COLORS[Math.abs(hash(p.id))%COLORS.length];
+      var body=
+        '<div class="wb-kv"><span class="k">Status</span><span class="v"><span class="wb-pill '+p.status+'"><span class="d"></span>'+cap(p.status)+'</span></span></div>'+
+        '<div class="wb-kv"><span class="k">Deployment</span><span class="v"><span class="wb-pill '+(p.deploy==='live'?'live':p.deploy==='building'?'building pulse':'idle')+'"><span class="d"></span>'+cap(p.deploy)+'</span></span></div>'+
+        '<div class="wb-kv"><span class="k">Live URL</span><span class="v wb-mono">'+WB.esc(p.slug)+'.helvex.app</span></div>'+
+        '<div class="wb-kv"><span class="k">Connected agents</span><span class="v">'+p.agents+'</span></div>'+
+        '<div class="wb-kv"><span class="k">Files</span><span class="v">'+p.files+'</span></div>'+
+        '<div class="wb-kv"><span class="k">Created</span><span class="v">'+WB.fmtDate(p.createdAt)+'</span></div>'+
+        '<div class="wb-kv"><span class="k">Last activity</span><span class="v">'+WB.relTime(p.lastActivity)+'</span></div>'+
+        '<div class="dr-section">Tasks</div><div id="dr-tasks">'+tasks.map(taskRow).join('')+'</div>'+
+        '<div style="display:flex;gap:6px;margin-top:10px"><input id="dr-newtask" class="wb-field" style="margin:0;flex:1" placeholder="Add a task…"><button class="wb-btn" id="dr-addtask">Add</button></div>'+
+        '<div class="dr-section">Quick actions</div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
+          '<a class="wb-btn" href="/chat.html">'+WB.svg('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>')+'Open chat</a>'+
+          '<a class="wb-btn" href="/deployments.html">'+WB.svg('<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>')+'Deploy</a>'+
+          '<a class="wb-btn" href="/memory.html">'+WB.svg('<path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0-3 3v1a3 3 0 0 0-1 5.83V18a3 3 0 0 0 3 3h1.5a2.5 2.5 0 0 0 5 0H16a3 3 0 0 0 3-3v-2.17A3 3 0 0 0 18 10V9a3 3 0 0 0-3-3V5a3 3 0 0 0-3-3z"/>')+'Knowledge</a>'+
+          '<a class="wb-btn" href="/services.html">'+WB.svg('<path d="M9 2v4M15 2v4M5 6h14l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2z"/>')+'Services</a>'+
         '</div>';
-      }
-
-      function openTemplates() {
-        $('hx-tmpl-host').classList.add('is-open');
-        try { $('hx-tmpl-host').scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (_) {}
-      }
-      function closeTemplates() { $('hx-tmpl-host').classList.remove('is-open'); }
-
-      var SELECTED_TEMPLATE = 'blank';
-
-      function slugify(s) {
-        return (s || '').toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/^-+|-+$/g, '')
-          .slice(0, 60);
-      }
-
-      function pickTemplate(tmpl) {
-        SELECTED_TEMPLATE = tmpl || 'blank';
-        document.querySelectorAll('.hx-pj-tmpl').forEach(function (x) {
-          x.classList.toggle('is-selected', x.getAttribute('data-tmpl') === SELECTED_TEMPLATE);
-        });
-        // Reveal the form; focus the name input.
-        var form = $('hx-pj-form');
-        if (form) form.classList.add('is-open');
-        // Prefill placeholder hint with the template label.
-        var tnm = SELECTED_TEMPLATE === 'blank' ? 'Project' : (SELECTED_TEMPLATE.charAt(0).toUpperCase() + SELECTED_TEMPLATE.slice(1));
-        $('hx-pj-fname').setAttribute('placeholder', 'e.g. ' + tnm + ' for Acme Co.');
-        setTimeout(function () { $('hx-pj-fname').focus(); }, 30);
-      }
-
-      function setFormStatus(msg, kind) {
-        var el = $('hx-pj-fstatus');
-        if (!el) return;
-        el.textContent = msg || '';
-        el.className = 'hx-pj-form-status' + (kind === 'error' ? ' is-error' : kind === 'ok' ? ' is-ok' : '');
-      }
-
-      // Wire UI immediately
-      function wireUI() {
-        var nb = $('hx-new-project'); if (nb) nb.addEventListener('click', openTemplates);
-        var cl = $('hx-tmpl-close'); if (cl) cl.addEventListener('click', closeTemplates);
-        document.querySelectorAll('.hx-pj-tmpl').forEach(function (t) {
-          t.addEventListener('click', function (e) {
-            e.preventDefault();
-            pickTemplate(t.getAttribute('data-tmpl'));
-          });
-        });
-
-        // Form interactions
-        var nameEl = $('hx-pj-fname');
-        var slugEl = $('hx-pj-fslug');
-        var slugPv = $('hx-pj-fslug-preview');
-        var slugTouched = false;
-        if (slugEl) slugEl.addEventListener('input', function () { slugTouched = true; updateSlugPreview(); });
-        if (nameEl) nameEl.addEventListener('input', function () {
-          if (!slugTouched) slugEl.value = slugify(nameEl.value);
-          updateSlugPreview();
-          setFormStatus('');
-        });
-        function updateSlugPreview() {
-          var s = slugEl.value || slugify(nameEl.value) || 'your-project';
-          slugPv.textContent = s + '.helvex.app';
-        }
-
-        var cancelBtn = $('hx-pj-fcancel');
-        if (cancelBtn) cancelBtn.addEventListener('click', function () {
-          $('hx-pj-form').classList.remove('is-open');
-          nameEl.value = ''; slugEl.value = '';
-          slugTouched = false;
-          setFormStatus('');
-        });
-
-        var form = $('hx-pj-form');
-        if (form) form.addEventListener('submit', function (e) {
-          e.preventDefault();
-          createProject();
-        });
-
-        document.querySelectorAll('.hx-pj-tab').forEach(function (b) {
-          b.addEventListener('click', function () {
-            document.querySelectorAll('.hx-pj-tab').forEach(function (x) { x.classList.remove('is-active'); });
-            b.classList.add('is-active');
-            STATE.tab = b.getAttribute('data-tab');
-            render();
-          });
-        });
-        var sortEl = $('hx-pj-sort');
-        if (sortEl) sortEl.addEventListener('change', function () { STATE.sort = sortEl.value; render(); });
-        var qt = null;
-        $('hx-pj-q').addEventListener('input', function (e) {
-          STATE.q = (e.target.value || '').trim();
-          if (qt) clearTimeout(qt);
-          qt = setTimeout(render, 150);
+      var foot='<button class="wb-btn" id="dr-toggle" style="flex:1">'+(p.status==='active'?'Pause project':'Activate project')+'</button>'+
+        '<button class="wb-btn danger" id="dr-archive">'+(p.status==='archived'?'Delete':'Archive')+'</button>';
+      WB.drawer.open({ title:'<span style="display:inline-flex;align-items:center;gap:10px"><span class="wb-ic" style="width:30px;height:30px;font-size:14px;background:'+col+'1a;border-color:'+col+'33;color:'+col+'">'+WB.esc(p.name.charAt(0))+'</span>'+WB.esc(p.name)+'</span>', body:body, foot:foot, onMount:function(){ wireDetail(p); } });
+    }
+    function taskRow(t){ return '<div class="task-row '+(t.done?'done':'')+'" data-id="'+t.id+'"><span class="task-check '+(t.done?'done':'')+'">'+(t.done?WB.svg('<polyline points="20 6 9 17 4 12"/>',3):'')+'</span><span style="flex:1">'+WB.esc(t.text)+'</span></div>'; }
+    function wireDetail(p){
+      function rebindTasks(){
+        document.querySelectorAll('#dr-tasks .task-row').forEach(function(row){
+          row.querySelector('.task-check').onclick=function(){
+            var list=getTasks(p).map(function(t){return t.id===row.dataset.id?Object.assign(t,{done:!t.done}):t;});
+            saveTasks(p,list); document.getElementById('dr-tasks').innerHTML=list.map(taskRow).join(''); rebindTasks(); metrics(); render();
+          };
         });
       }
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', wireUI, { once: true });
-      } else { wireUI(); }
+      rebindTasks();
+      document.getElementById('dr-addtask').onclick=function(){
+        var inp=document.getElementById('dr-newtask'); var v=inp.value.trim(); if(!v)return;
+        var list=getTasks(p); list.push({id:WB.uid(),text:v,done:false}); saveTasks(p,list);
+        document.getElementById('dr-tasks').innerHTML=list.map(taskRow).join(''); inp.value=''; rebindTasks(); WB.toast('Task added','ok'); metrics(); render();
+      };
+      document.getElementById('dr-toggle').onclick=function(){ var ns=p.status==='active'?'paused':'active'; store.update(p.id,{status:ns,lastActivity:new Date().toISOString()}); p.status=ns; WB.toast('Project '+ns,'ok'); WB.drawer.close(); metrics();tabs();render(); };
+      document.getElementById('dr-archive').onclick=function(e){
+        if(p.status==='archived'){ WB.arm(e.currentTarget,'Delete forever?',function(){ store.remove(p.id); WB.toast('Project deleted','ok'); WB.drawer.close(); metrics();tabs();render(); }); }
+        else { store.update(p.id,{status:'archived'}); WB.toast('Project archived','info'); WB.drawer.close(); metrics();tabs();render(); }
+      };
+    }
 
-      async function createProject() {
-        var name = ($('hx-pj-fname').value || '').trim();
-        if (!name) { setFormStatus('Name is required.', 'error'); $('hx-pj-fname').focus(); return; }
-        var slug = slugify($('hx-pj-fslug').value || name);
-        if (!slug) { setFormStatus('Slug must contain at least one letter or digit.', 'error'); return; }
+    function openNew(){
+      WB.drawer.open({ title:'New project', body:
+        '<div class="wb-field"><label>Project name</label><input id="np-name" placeholder="e.g. Spring Campaign"></div>'+
+        '<div class="wb-field"><label>Description</label><textarea id="np-desc" placeholder="What is this workspace for?"></textarea></div>'+
+        '<div class="wb-field"><label>Subdomain</label><input id="np-slug" placeholder="auto from name"><div style="font-size:11px;color:var(--hx-text-dim);font-family:var(--hx-mono);margin-top:5px" id="np-prev">your-project.helvex.app</div></div>',
+        foot:'<button class="wb-btn primary" id="np-save" style="flex:1">Create project</button><button class="wb-btn" id="np-cancel">Cancel</button>',
+        onMount:function(){
+          var name=document.getElementById('np-name'), slug=document.getElementById('np-slug'), prev=document.getElementById('np-prev'), touched=false;
+          function sl(s){return (s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+          name.oninput=function(){ if(!touched)slug.value=sl(name.value); prev.textContent=(slug.value||'your-project')+'.helvex.app'; };
+          slug.oninput=function(){ touched=true; slug.value=sl(slug.value); prev.textContent=(slug.value||'your-project')+'.helvex.app'; };
+          document.getElementById('np-cancel').onclick=WB.drawer.close;
+          document.getElementById('np-save').onclick=function(){
+            var n=name.value.trim(); if(!n){WB.toast('Name is required','err');return;}
+            store.add({ id:WB.uid(), name:n, slug:sl(slug.value||n), desc:document.getElementById('np-desc').value.trim()||'New workspace — start a chat to populate it.', status:'active', agents:0, files:0, tasks:{done:0,total:0}, members:['AM'], lastActivity:new Date().toISOString(), createdAt:new Date().toISOString(), deploy:'idle' });
+            WB.toast('Project created','ok'); WB.drawer.close(); metrics();tabs();render();
+          };
+        } });
+    }
 
-        var sb = window.HX && window.HX.supabase;
-        if (!sb) { setFormStatus('Sign in required.', 'error'); return; }
-        var u = (await sb.auth.getUser()).data.user;
-        if (!u) { setFormStatus('Sign in required.', 'error'); return; }
-
-        var submitBtn = $('hx-pj-fsubmit');
-        var lbl = submitBtn.textContent;
-        submitBtn.disabled = true; submitBtn.textContent = 'Creating…';
-        setFormStatus('Saving…');
-
-        // Compose the description from the template choice — keeps the
-        // record useful without depending on a `template` column that
-        // doesn't exist in this Supabase schema. Insert only fields the
-        // table is known to have.
-        var desc = (SELECTED_TEMPLATE && SELECTED_TEMPLATE !== 'blank')
-          ? 'Started from the ' + SELECTED_TEMPLATE + ' template.'
-          : null;
-
-        var insertPayload = {
-          owner_id: u.id,
-          name: name,
-          slug: slug,
-          status: 'active'
-        };
-        if (desc) insertPayload.description = desc;
-
-        try {
-          var r = await sb.from('projects').insert(insertPayload).select().single();
-          if (r.error) throw r.error;
-          // Log the template choice as an activity event — that way the
-          // info isn't lost, even though the projects table doesn't
-          // store it directly.
-          try {
-            await sb.rpc('log_event', {
-              p_kind: 'project.created',
-              p_payload: { project_id: r.data.id, slug: slug, template: SELECTED_TEMPLATE }
-            });
-          } catch (_) {}
-          setFormStatus('Created.', 'ok');
-          // Reset + close + reload list
-          setTimeout(function () {
-            $('hx-pj-form').classList.remove('is-open');
-            $('hx-pj-fname').value = '';
-            $('hx-pj-fslug').value = '';
-            closeTemplates();
-            setFormStatus('');
-            load();
-          }, 400);
-        } catch (err) {
-          setFormStatus((err && err.message) || 'Could not create project.', 'error');
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = lbl;
-        }
-      }
-
-      async function load() {
-        var sb = window.HX.supabase;
-        // Do NOT select a `template` column — the projects table in
-        // this Supabase schema doesn't have one. Asking for it returned
-        // a schema-cache error every time. Template info lives in the
-        // description string and the activity_events log instead.
-        var [projects, deploys] = await Promise.all([
-          safeQuery(sb.from('projects').select('id,name,slug,status,description,updated_at,created_at')),
-          safeQuery(sb.from('deployments').select('id,project_id,status,version,region,environment,endpoint_url,created_at').order('created_at', { ascending: false }))
-        ]);
-        STATE.projects = projects.data || [];
-        STATE.deployments = deploys.data || [];
-        paintCounts();
-        render();
-
-        // ?new=1 → auto-open template chooser
-        try {
-          if (new URLSearchParams(window.location.search).get('new') === '1') openTemplates();
-        } catch (_) {}
-      }
-
-      whenAuthReady(load);
-    })();
+    $('pj-new').onclick=openNew;
+    var qt; $('pj-q').oninput=function(e){ST.q=e.target.value.trim();clearTimeout(qt);qt=setTimeout(render,140);};
+    $('pj-sort').onchange=function(e){ST.sort=e.target.value;render();};
+    metrics(); tabs(); render();
+    try{ if(new URLSearchParams(location.search).get('new')==='1') openNew(); }catch(e){}
+  })();
   </script>
 </body>
 </html>

@@ -3,327 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <title>Deployments — HelveX</title>
-  <meta name="description" content="HelveX deployments — every live agent, copilot, and workflow with status, version, branch, and rollback." />
+  <meta name="description" content="HelveX Deployments — environments, build history, health, logs, redeploy and rollback." />
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/platform.css?v=20260520f" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/platform.css" />
+  <link rel="stylesheet" href="/workbench.css" />
   <style>
-    /* ── Filter toolbar — five Vercel-style dropdowns ────────────── */
-    .hx-dp-bar {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 8px;
-      margin: 20px 0 16px;
-    }
-    @media (max-width: 980px) {
-      .hx-dp-bar { grid-template-columns: 1fr 1fr; }
-    }
-    .hx-dp-drop {
-      position: relative;
-      display: flex; align-items: center;
-      height: 38px;
-      padding: 0 12px;
-      background: var(--hx-surface);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r-sm);
-      font-size: 13px;
-      color: var(--hx-text);
-      cursor: pointer;
-      transition: border-color 0.12s;
-      gap: 8px;
-    }
-    .hx-dp-drop:hover { border-color: var(--hx-line-strong); }
-    .hx-dp-drop .ic {
-      width: 14px; height: 14px;
-      color: var(--hx-text-mid);
-      flex-shrink: 0;
-    }
-    .hx-dp-drop .lbl {
-      flex: 1; min-width: 0;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      color: var(--hx-text-mid);
-    }
-    .hx-dp-drop.is-set .lbl { color: var(--hx-text); }
-    .hx-dp-drop .chev {
-      width: 12px; height: 12px;
-      color: var(--hx-text-dim);
-      flex-shrink: 0;
-    }
-    .hx-dp-drop select {
-      position: absolute; inset: 0;
-      opacity: 0;
-      cursor: pointer;
-      font: inherit;
-    }
-    .hx-dp-status {
-      position: relative;
-      display: flex; align-items: center;
-      height: 38px;
-      padding: 0 12px;
-      background: var(--hx-surface);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r-sm);
-      font-size: 13px;
-      gap: 8px;
-    }
-    .hx-dp-status .pies {
-      display: inline-flex; gap: 2px; align-items: center;
-      flex-shrink: 0;
-    }
-    .hx-dp-status .pie {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-    }
-    .hx-dp-status .pie.is-ready    { background: var(--hx-emerald); }
-    .hx-dp-status .pie.is-building { background: var(--hx-yellow-deep); }
-    .hx-dp-status .pie.is-failed   { background: var(--hx-red); }
-    .hx-dp-status .lbl { flex: 1; min-width: 0; color: var(--hx-text-mid); }
-    .hx-dp-status .frac {
-      font-family: var(--hx-mono);
-      font-size: 11.5px;
-      padding: 2px 6px;
-      background: var(--hx-bg-2);
-      border-radius: 4px;
-      color: var(--hx-text-mid);
-    }
-
-    /* ── Deployment row (Vercel format) ───────────────────────────── */
-    .hx-dp-list { border-top: 1px solid var(--hx-line); }
-    .hx-dp-row {
-      display: grid;
-      grid-template-columns: 220px 160px 220px 1fr 200px 32px;
-      gap: 18px;
-      align-items: center;
-      padding: 18px 8px;
-      border-bottom: 1px solid var(--hx-line);
-      transition: background 0.1s;
-      text-decoration: none;
-      color: var(--hx-text);
-    }
-    .hx-dp-row:hover { background: var(--hx-bg-2); }
-    .hx-dp-row .hash {
-      font-family: var(--hx-mono);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--hx-text);
-      letter-spacing: -0.005em;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .hx-dp-row .env {
-      display: flex; align-items: center; gap: 6px;
-      margin-top: 5px;
-      font-size: 12px;
-      color: var(--hx-text-mid);
-    }
-    .hx-dp-row .env .badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-family: var(--hx-mono);
-      font-size: 10px; font-weight: 500;
-      padding: 2px 7px;
-      background: var(--hx-yellow-soft);
-      color: var(--hx-yellow-deep);
-      border: 1px solid rgba(252, 211, 77, 0.42);
-      border-radius: 999px;
-    }
-    .hx-dp-row .env .badge svg { width: 9px; height: 9px; }
-    .hx-dp-row .clock {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-family: var(--hx-mono);
-      font-size: 11px;
-      color: var(--hx-text-dim);
-    }
-    .hx-dp-row .clock svg { width: 11px; height: 11px; }
-    .hx-dp-row .status {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 14px;
-      color: var(--hx-text);
-    }
-    .hx-dp-row .status .dot {
-      width: 9px; height: 9px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .hx-dp-row .status .dot.is-ready    { background: var(--hx-emerald); }
-    .hx-dp-row .status .dot.is-building { background: var(--hx-yellow-deep); animation: hx-dp-blink 1.4s ease-in-out infinite; }
-    .hx-dp-row .status .dot.is-failed   { background: var(--hx-red); }
-    .hx-dp-row .status .dot.is-idle     { background: var(--hx-text-faint); }
-    @keyframes hx-dp-blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
-    .hx-dp-row .dur {
-      display: block;
-      font-family: var(--hx-mono);
-      font-size: 12px;
-      color: var(--hx-text-dim);
-      margin-top: 4px;
-    }
-    .hx-dp-row .branchcol {
-      font-family: var(--hx-mono);
-      font-size: 13px;
-      color: var(--hx-text);
-      overflow: hidden;
-    }
-    .hx-dp-row .branch {
-      display: inline-flex; align-items: center; gap: 5px;
-    }
-    .hx-dp-row .branch svg { width: 11px; height: 11px; opacity: 0.7; }
-    .hx-dp-row .commit {
-      font-family: var(--hx-mono);
-      font-size: 12.5px;
-      color: var(--hx-text-mid);
-      margin-top: 5px;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .hx-dp-row .commit::before {
-      content: '>_';
-      font-weight: 600;
-      color: var(--hx-text-dim);
-    }
-    .hx-dp-row .commit .h {
-      color: var(--hx-text);
-      font-weight: 500;
-    }
-    .hx-dp-row .pjcol {
-      display: flex; align-items: center; gap: 9px;
-      min-width: 0;
-    }
-    .hx-dp-row .pjcol .pjicon {
-      width: 22px; height: 22px;
-      border-radius: 6px;
-      background: linear-gradient(135deg, var(--hx-bg-2), var(--hx-surface-3));
-      border: 1px solid var(--hx-line);
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--hx-mono);
-      font-size: 10.5px;
-      font-weight: 600;
-      color: var(--hx-text);
-      flex-shrink: 0;
-    }
-    .hx-dp-row .pjcol .pjmeta { min-width: 0; }
-    .hx-dp-row .pjcol .pjname {
-      font-size: 13px; font-weight: 500;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .hx-dp-row .pjcol .pjsub {
-      font-family: var(--hx-mono);
-      font-size: 11px;
-      color: var(--hx-text-dim);
-      margin-top: 2px;
-    }
-    .hx-dp-row .timecol {
-      display: flex; align-items: center; gap: 10px;
-      justify-content: flex-end;
-    }
-    .hx-dp-row .timecol .when {
-      font-size: 13px;
-      color: var(--hx-text-mid);
-      text-align: right;
-    }
-    .hx-dp-row .timecol .by {
-      font-family: var(--hx-mono);
-      font-size: 11.5px;
-      color: var(--hx-text-dim);
-      margin-top: 3px;
-    }
-    .hx-dp-row .timecol .av {
-      width: 26px; height: 26px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #10B981, #059669);
-      color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--hx-mono);
-      font-size: 10px;
-      font-weight: 600;
-      flex-shrink: 0;
-    }
-    .hx-dp-row .menu {
-      width: 26px; height: 26px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--hx-text-dim);
-      border-radius: 4px;
-      flex-shrink: 0;
-      transition: background 0.1s, color 0.1s;
-    }
-    .hx-dp-row:hover .menu { background: var(--hx-bg-2); color: var(--hx-text); }
-
-    @media (max-width: 1280px) {
-      .hx-dp-row {
-        grid-template-columns: 1fr 140px 200px 32px;
-        grid-template-areas:
-          "hash   status  time     menu"
-          "branch branch  branch   branch";
-        row-gap: 10px;
-      }
-      .hx-dp-row .pjcol { grid-area: hash; }
-      .hx-dp-row .status { grid-area: status; }
-      .hx-dp-row .timecol { grid-area: time; }
-      .hx-dp-row .menu { grid-area: menu; }
-      .hx-dp-row .branchcol { grid-area: branch; padding-left: 31px; }
-    }
-    @media (max-width: 640px) {
-      .hx-dp-row {
-        grid-template-columns: 1fr auto 32px;
-        grid-template-areas:
-          "hash   status   menu"
-          "time   time     time"
-          "branch branch   branch";
-        gap: 6px 10px;
-        padding: 14px 4px;
-      }
-      .hx-dp-row .timecol { grid-area: time; font-size: 11.5px; }
-      .hx-dp-row .branchcol { padding-left: 0; font-size: 11.5px; }
-      .hx-dp-row .hash { font-size: 12px; }
-    }
-
-    /* ── Empty + snapshot ─────────────────────────────────────────── */
-    .hx-dp-empty {
-      background: var(--hx-surface);
-      border: 1px dashed var(--hx-line);
-      border-radius: var(--hx-r);
-      padding: 56px 24px;
-      text-align: center;
-    }
-    .hx-dp-empty h3 { margin: 0 0 6px; font-size: 16px; font-weight: 600; }
-    .hx-dp-empty p { margin: 0 0 16px; font-size: 13px; color: var(--hx-text-mid); max-width: 460px; margin-inline: auto; line-height: 1.5; }
-
-    .hx-dp-snap {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1px;
-      background: var(--hx-line);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r);
-      overflow: hidden;
-      margin-top: 18px;
-    }
-    .hx-dp-snap .cell {
-      background: var(--hx-surface);
-      padding: 14px 16px;
-    }
-    .hx-dp-snap .cell .lbl {
-      font-family: var(--hx-mono);
-      font-size: 10.5px; font-weight: 500;
-      text-transform: uppercase; letter-spacing: 0.04em;
-      color: var(--hx-text-dim);
-      margin: 0 0 4px;
-    }
-    .hx-dp-snap .cell .val {
-      font-family: var(--hx-mono);
-      font-size: 18px; font-weight: 500;
-      color: var(--hx-text);
-      letter-spacing: -0.01em;
-      font-variant-numeric: tabular-nums;
-      margin: 0;
-    }
-    .hx-dp-snap .cell .delta {
-      font-family: var(--hx-mono);
-      font-size: 10.5px;
-      color: var(--hx-text-mid);
-      margin: 2px 0 0;
-    }
+    .env-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; margin-bottom:8px; }
+    .env-card { background:var(--hx-surface); border:1px solid var(--hx-line); border-radius:var(--hx-r); padding:18px; }
+    .env-card .top { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+    .env-card .top .nm { font-size:14.5px; font-weight:600; }
+    .env-card .top .nm small { display:block; font-family:var(--hx-mono); font-size:11px; color:var(--hx-text-dim); font-weight:400; margin-top:2px; }
+    .env-health { display:flex; align-items:center; justify-content:space-between; font-size:11.5px; color:var(--hx-text-mid); margin:12px 0 6px; }
+    .timeline { position:relative; padding-left:26px; }
+    .timeline::before { content:""; position:absolute; left:8px; top:6px; bottom:6px; width:2px; background:var(--hx-line); }
+    .tl-item { position:relative; padding:0 0 22px; }
+    .tl-item:last-child { padding-bottom:0; }
+    .tl-dot { position:absolute; left:-22px; top:3px; width:14px; height:14px; border-radius:50%; border:3px solid var(--hx-surface); }
+    .tl-dot.live { background:var(--hx-emerald); } .tl-dot.building { background:var(--hx-yellow-deep); } .tl-dot.failed { background:var(--hx-red); } .tl-dot.paused,.tl-dot.idle { background:var(--hx-text-faint); }
+    .log { background:#0b0b0d; border-radius:10px; padding:14px 16px; font-family:var(--hx-mono); font-size:12px; line-height:1.75; color:#d4d4d8; max-height:340px; overflow:auto; white-space:pre-wrap; }
+    .log .t { color:#6b7280; } .log .ok { color:#4ade80; } .log .warn { color:#fbbf24; } .log .err { color:#f87171; } .log .dim { color:#9ca3af; }
   </style>
 </head>
 <body data-active="deployments">
@@ -334,331 +36,205 @@
       <div class="hx-topbar"></div>
       <main class="hx-main">
 
+        <div class="hx-aura" aria-hidden="true"></div>
         <header class="hx-pg-hero">
-          <p class="hx-pg-eyebrow"><span id="hx-team-name">Workspace</span></p>
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Deployments · infrastructure</p>
           <div class="hx-pg-hero-grid">
             <div>
               <h1 class="hx-pg-title">Deployments</h1>
-              <p class="hx-pg-sub">Every live agent, copilot, and workflow shipped from this workspace. Filter by project, branch, environment, or status. All EU-CH-1.</p>
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;">
-              <a href="/projects.html?new=1" class="hx-cta-primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                New deployment
-              </a>
-              <a href="/monitoring.html" class="hx-cta-secondary">Monitoring</a>
+              <p class="hx-pg-sub">Every build across your environments — with live health, version history, logs and one-click redeploy or rollback. Know instantly what’s live, building, failed or paused.</p>
+              <div class="hx-pg-cta-row">
+                <button class="hx-cta-primary" id="dp-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>New deployment</button>
+                <a href="/projects.html" class="hx-cta-secondary">View projects</a>
+              </div>
             </div>
           </div>
         </header>
 
-        <!-- ═══════════════ SNAPSHOT STRIP ═══════════════ -->
-        <div class="hx-dp-snap">
-          <div class="cell">
-            <p class="lbl">Live</p>
-            <p class="val" id="hx-dp-live">0</p>
-            <p class="delta" id="hx-dp-live-meta">Nothing running</p>
+        <div class="wb-metrics" id="dp-metrics"></div>
+
+        <h2 style="font-size:13px;font-weight:600;margin:22px 0 12px;color:var(--hx-text-mid)">Environments</h2>
+        <div class="env-grid" id="dp-envs"></div>
+
+        <div class="wb-toolbar">
+          <div class="wb-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" id="dp-q" placeholder="Search by project, version or commit…" />
           </div>
-          <div class="cell">
-            <p class="lbl">Total</p>
-            <p class="val" id="hx-dp-total">0</p>
-            <p class="delta">Across all states</p>
-          </div>
-          <div class="cell">
-            <p class="lbl">Uptime (30d)</p>
-            <p class="val" id="hx-dp-uptime">—</p>
-            <p class="delta">SLO 99.9%</p>
-          </div>
-          <div class="cell">
-            <p class="lbl">Errors (24h)</p>
-            <p class="val" id="hx-dp-errors">0</p>
-            <p class="delta" id="hx-dp-errors-meta">From log_events</p>
-          </div>
-          <div class="cell">
-            <p class="lbl">Region</p>
-            <p class="val">EU-CH-1</p>
-            <p class="delta">Swiss-only</p>
-          </div>
+          <div class="wb-seg" id="dp-tabs"></div>
         </div>
 
-        <!-- ═══════════════ FILTER TOOLBAR ═══════════════ -->
-        <div class="hx-dp-bar">
-          <div class="hx-dp-drop" id="hx-dd-project">
-            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <span class="lbl" id="hx-dd-project-lbl">All Projects…</span>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            <select id="hx-dd-project-sel"><option value="">All Projects…</option></select>
-          </div>
-          <div class="hx-dp-drop" id="hx-dd-branch">
-            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <span class="lbl" id="hx-dd-branch-lbl">All Branches…</span>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            <select id="hx-dd-branch-sel"><option value="">All Branches…</option></select>
-          </div>
-          <div class="hx-dp-drop" id="hx-dd-env">
-            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-            <span class="lbl" id="hx-dd-env-lbl">All Environments</span>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            <select id="hx-dd-env-sel">
-              <option value="">All Environments</option>
-              <option value="production">Production</option>
-              <option value="staging">Staging</option>
-              <option value="development">Development</option>
-            </select>
-          </div>
-          <div class="hx-dp-drop" id="hx-dd-range">
-            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <span class="lbl" id="hx-dd-range-lbl">Select Date Range</span>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            <select id="hx-dd-range-sel">
-              <option value="">Select Date Range</option>
-              <option value="1">Last 24 hours</option>
-              <option value="7">Last 7 days</option>
-              <option value="30">Last 30 days</option>
-              <option value="90">Last 90 days</option>
-            </select>
-          </div>
-          <div class="hx-dp-status">
-            <span class="pies">
-              <span class="pie is-ready"></span>
-              <span class="pie is-building"></span>
-              <span class="pie is-failed"></span>
-            </span>
-            <span class="lbl">Status</span>
-            <span class="frac" id="hx-dd-status-frac">0/0</span>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;color:var(--hx-text-dim);"><polyline points="6 9 12 15 18 9"/></svg>
-            <select id="hx-dd-status-sel" style="position:absolute;inset:0;opacity:0;cursor:pointer;font:inherit;">
-              <option value="">All statuses</option>
-              <option value="live">Ready</option>
-              <option value="building">Building</option>
-              <option value="failed">Failed</option>
-              <option value="stopped">Stopped</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- ═══════════════ DEPLOYMENT LIST ═══════════════ -->
-        <div id="hx-dp-host" class="hx-dp-list"></div>
+        <h2 style="font-size:13px;font-weight:600;margin:4px 0 14px;color:var(--hx-text-mid)">Build history</h2>
+        <div id="dp-host"></div>
 
       </main>
     </div>
   </div>
 
-  <script src="/platform.js?v=20260520f"></script>
+  <script src="/platform.js"></script>
+  <script src="/workbench.js"></script>
   <script>
-    (function () {
-      function whenAuthReady(fn) {
-        if (window.HX && window.HX.supabase) { fn(); return; }
-        document.addEventListener('hx:auth-ready', fn, { once: true });
+  (function(){
+    function sha(){return Math.random().toString(16).slice(2,9);}
+    function ver(maj,min,pat){return 'v'+maj+'.'+min+'.'+pat;}
+    function seed(){
+      return [
+        { id:WB.uid(), project:'Acme GTM', env:'production', status:'live', version:ver(2,4,1), commit:sha(), branch:'main', uptime:99.98, build:18, author:'AM', createdAt:WB.ago(12), msg:'Q3 launch — pricing update' },
+        { id:WB.uid(), project:'Billing Revamp', env:'preview', status:'building', version:ver(1,9,0), commit:sha(), branch:'feat/stripe', uptime:0, build:0, author:'MK', createdAt:WB.ago(1), msg:'Migrate invoices to new schema' },
+        { id:WB.uid(), project:'Customer Insights', env:'production', status:'live', version:ver(3,1,0), commit:sha(), branch:'main', uptime:99.91, build:24, author:'SL', createdAt:WB.ago(60*6), msg:'Add cohort retention chart' },
+        { id:WB.uid(), project:'Acme GTM', env:'preview', status:'failed', version:ver(2,4,0), commit:sha(), branch:'feat/hero', uptime:0, build:31, author:'AM', createdAt:WB.ago(60*9), msg:'Redesign hero section' },
+        { id:WB.uid(), project:'Support Copilot', env:'staging', status:'paused', version:ver(0,8,2), commit:sha(), branch:'main', uptime:0, build:12, author:'DV', createdAt:WB.ago(60*24*3), msg:'Agent guardrails update' },
+        { id:WB.uid(), project:'Acme GTM', env:'production', status:'live', version:ver(2,3,5), commit:sha(), branch:'main', uptime:100, build:17, author:'AM', createdAt:WB.ago(60*24*2), msg:'Fix analytics tracking' }
+      ];
+    }
+    var store=WB.store('deployments', seed);
+    var ST={ q:'', tab:'all' };
+    var $=function(id){return document.getElementById(id);};
+
+    function metrics(){
+      var all=store.all();
+      var live=all.filter(function(d){return d.status==='live';});
+      var avg=live.length?(live.reduce(function(s,d){return s+d.uptime;},0)/live.length).toFixed(2):'—';
+      var failed=all.filter(function(d){return d.status==='failed' && (Date.now()-new Date(d.createdAt))<864e5;}).length;
+      $('dp-metrics').innerHTML=
+        m('Total builds',all.length,'all environments','<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>')+
+        m('Live',live.length,'serving traffic','<circle cx="12" cy="12" r="3"/><path d="M5 12a7 7 0 0 1 14 0"/>')+
+        m('Avg uptime',avg==='—'?'—':avg+'%','live services','<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>')+
+        m('Failed · 24h',failed,failed?'needs attention':'all green','<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>');
+    }
+    function m(l,v,mm,icon){return '<div class="wb-metric"><div class="ml">'+WB.svg(icon)+l+'</div><div class="mv">'+v+'</div><div class="mm">'+mm+'</div></div>';}
+
+    function envs(){
+      var defs=[['production','Production','main'],['preview','Preview','feature branches'],['staging','Staging','pre-release']];
+      $('dp-envs').innerHTML=defs.map(function(e){
+        var latest=store.all().filter(function(d){return d.env===e[0];}).sort(function(a,b){return new Date(b.createdAt)-new Date(a.createdAt);})[0];
+        var st=latest?latest.status:'idle';
+        var up=latest&&latest.status==='live'?latest.uptime:0;
+        var bar=up>=99.9?'':up>=99?' warn':' err';
+        return '<div class="env-card"><div class="top"><span class="wb-ic" style="width:34px;height:34px">'+WB.svg('<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>')+'</span>'+
+          '<div class="nm">'+e[1]+'<small>'+e[2]+'</small></div><span class="wb-pill '+(st==='live'?'live':st==='building'?'building pulse':st==='failed'?'failed':'idle')+'" style="margin-left:auto"><span class="d"></span>'+cap(st)+'</span></div>'+
+          (latest?'<div class="wb-kv" style="padding:7px 0"><span class="k">Version</span><span class="v wb-mono">'+latest.version+'</span></div>'+
+          '<div class="wb-kv" style="padding:7px 0"><span class="k">Commit</span><span class="v wb-mono">'+latest.commit+' · '+WB.esc(latest.branch)+'</span></div>'+
+          '<div class="env-health"><span>Uptime</span><span class="wb-mono">'+(latest.status==='live'?up+'%':'—')+'</span></div><div class="wb-bar'+bar+'"><i style="width:'+(latest.status==='live'?up:0)+'%"></i></div>':'<p class="desc" style="margin:6px 0 0;color:var(--hx-text-mid);font-size:12.5px">No deployment in this environment yet.</p>')+
+        '</div>';
+      }).join('');
+    }
+    function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+
+    function tabs(){
+      var all=store.all(); var c={all:all.length,live:0,building:0,failed:0,paused:0};
+      all.forEach(function(d){ if(c[d.status]!==undefined)c[d.status]++; });
+      $('dp-tabs').innerHTML=['all','live','building','failed','paused'].map(function(k){
+        return '<button data-k="'+k+'" class="'+(ST.tab===k?'on':'')+'">'+cap(k)+' <span class="ct">'+c[k]+'</span></button>';
+      }).join('');
+      $('dp-tabs').querySelectorAll('button').forEach(function(b){ b.onclick=function(){ST.tab=b.dataset.k;tabs();render();}; });
+    }
+
+    function visible(){
+      var rows=store.all();
+      if(ST.tab!=='all') rows=rows.filter(function(d){return d.status===ST.tab;});
+      if(ST.q){var q=ST.q.toLowerCase();rows=rows.filter(function(d){return (d.project+' '+d.version+' '+d.commit+' '+d.branch+' '+d.msg).toLowerCase().indexOf(q)>=0;});}
+      rows.sort(function(a,b){return new Date(b.createdAt)-new Date(a.createdAt);});
+      return rows;
+    }
+
+    function render(){
+      var rows=visible(), host=$('dp-host');
+      if(!rows.length){
+        host.innerHTML='<div class="wb-empty"><div class="orb">'+WB.svg('<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>')+'</div><h3>No deployments</h3><p>'+(store.all().length===0?'Ship your first build and it will appear here with full history and health.':'Nothing matches this filter.')+'</p>'+(store.all().length===0?'<button class="hx-cta-primary" id="dp-empty">New deployment</button>':'<button class="wb-btn" id="dp-clear">Clear filters</button>')+'</div>';
+        var e=$('dp-empty'); if(e)e.onclick=newDeploy;
+        var c=$('dp-clear'); if(c)c.onclick=function(){ST.q='';ST.tab='all';$('dp-q').value='';tabs();render();};
+        return;
       }
-      var $ = function (id) { return document.getElementById(id); };
-      function esc(s) { return (s == null ? '' : String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-      function relTime(iso) {
-        if (!iso) return '—';
-        var d = new Date(iso).getTime();
-        var diff = (Date.now() - d) / 1000;
-        if (diff < 60) return Math.floor(diff) + 's ago';
-        if (diff < 3600) return Math.floor(diff/60) + 'm ago';
-        if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
-        return Math.floor(diff/86400) + 'd ago';
-      }
-      async function safeQuery(p) { try { var r = await p; return r && !r.error ? r : { data: null, count: null }; } catch (e) { return { data: null, count: null }; } }
-
-      var STATE = {
-        rows: [], projects: [],
-        filter: { project: '', branch: '', env: '', range: '', status: '' }
-      };
-
-      function statusDot(s) {
-        if (s === 'live' || s === 'ready')   return '<span class="dot is-ready"></span>';
-        if (s === 'building' || s === 'queued') return '<span class="dot is-building"></span>';
-        if (s === 'failed' || s === 'degraded') return '<span class="dot is-failed"></span>';
-        return '<span class="dot is-idle"></span>';
-      }
-      function statusLabel(s) {
-        if (s === 'live' || s === 'ready')   return 'Ready';
-        if (s === 'building' || s === 'queued') return 'Building';
-        if (s === 'failed') return 'Failed';
-        if (s === 'degraded') return 'Degraded';
-        if (s === 'stopped') return 'Stopped';
-        return (s || 'Pending').charAt(0).toUpperCase() + (s || 'pending').slice(1);
-      }
-      function shortHash(id) {
-        return (id || '').replace(/-/g, '').slice(0, 10);
-      }
-      function avatarInitials(email) {
-        if (!email) return '··';
-        var name = email.split('@')[0];
-        var parts = name.split(/[._-]/);
-        if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-        return name.slice(0, 2).toUpperCase();
-      }
-
-      function applyFilters() {
-        var f = STATE.filter;
-        var filtered = STATE.rows.filter(function (r) {
-          if (f.project && r.project_id !== f.project) return false;
-          if (f.branch && (r.branch || 'main') !== f.branch) return false;
-          if (f.env && (r.environment || 'production') !== f.env) return false;
-          if (f.status && r.status !== f.status) return false;
-          if (f.range) {
-            var days = parseInt(f.range, 10) || 30;
-            var since = Date.now() - days * 86400 * 1000;
-            if (new Date(r.created_at).getTime() < since) return false;
-          }
-          return true;
-        });
-        renderList(filtered);
-      }
-
-      function renderList(rows) {
-        var host = $('hx-dp-host');
-        if (!rows.length) {
-          host.innerHTML =
-            '<div class="hx-dp-empty">' +
-              '<h3>No deployments match these filters</h3>' +
-              '<p>' + (STATE.rows.length === 0
-                ? 'Build a workflow or an agent and ship it. Every promotion appears here with version, branch, status, and a rollback link.'
-                : 'Try clearing one filter at a time, or pick a wider date range.') + '</p>' +
-              (STATE.rows.length === 0
-                ? '<a href="/projects.html?new=1" class="hx-cta-primary" style="display:inline-flex;">Create a project</a>'
-                : '<button class="hx-cta-secondary" id="hx-dp-clear">Clear all filters</button>') +
-            '</div>';
-          var cb = $('hx-dp-clear');
-          if (cb) cb.addEventListener('click', function () {
-            STATE.filter = { project: '', branch: '', env: '', range: '', status: '' };
-            document.querySelectorAll('.hx-dp-bar select').forEach(function (s) { s.value = ''; });
-            document.querySelectorAll('.hx-dp-drop').forEach(function (d) { d.classList.remove('is-set'); });
-            paintLabels();
-            applyFilters();
-          });
-          return;
-        }
-        host.innerHTML = rows.map(function (r) {
-          var proj = STATE.projects.find(function (p) { return p.id === r.project_id; });
-          var projName = proj ? proj.name : (r.name || 'Untitled');
-          var projInit = projName.charAt(0).toUpperCase();
-          var slug = proj && proj.slug ? proj.slug : (r.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
-          var env = (r.environment || 'production');
-          var isCurrent = r.status === 'live' && env === 'production';
-          var actor = r.created_by_email || r.actor_email || 'mixalis-09-8621';
-          var actorShort = actor.split('@')[0];
-          var commitMsg = r.commit_message || r.payload_message || (r.name || 'Deployment') + ' — ' + statusLabel(r.status);
-          var branch = r.branch || 'main';
-          var dur = r.build_duration_s || (r.status === 'live' ? Math.floor(Math.random() * 8) + 8 : null);
-          return '<a class="hx-dp-row" href="#' + esc(r.id) + '">' +
-            '<div class="pjcol">' +
-              '<span class="pjicon">' + esc(projInit) + '</span>' +
-              '<div class="pjmeta">' +
-                '<div class="pjname">' + esc(shortHash(r.id)) + '</div>' +
-                '<div class="env">' +
-                  '<span class="badge">' + esc(env.charAt(0).toUpperCase() + env.slice(1)) +
-                    (isCurrent ? ' · <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Current' : '') +
-                  '</span>' +
-                '</div>' +
-              '</div>' +
-            '</div>' +
-            '<div class="status">' +
-              statusDot(r.status) +
-              '<span>' + esc(statusLabel(r.status)) + '</span>' +
-              (dur ? '<span class="dur">' + dur + 's</span>' : '') +
-            '</div>' +
-            '<div class="branchcol">' +
-              '<div class="branch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>' + esc(branch) + '</div>' +
-              '<div class="commit"><span class="h">' + esc(r.version || 'v0') + '</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + esc(commitMsg) + '</span></div>' +
-            '</div>' +
-            '<div class="pjname" style="font-family:var(--hx-mono);font-size:12.5px;color:var(--hx-text-mid);">' + esc(projName) + ' · ' + esc(r.region || 'EU-CH-1') + '</div>' +
-            '<div class="timecol">' +
-              '<div>' +
-                '<div class="when">' + esc(relTime(r.created_at)) + '</div>' +
-                '<div class="by">by ' + esc(actorShort) + '</div>' +
-              '</div>' +
-              '<div class="av">' + esc(avatarInitials(actor)) + '</div>' +
-            '</div>' +
-            '<div class="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>' +
-          '</a>';
-        }).join('');
-      }
-
-      function paintLabels() {
-        $('hx-dd-project-lbl').textContent = STATE.filter.project
-          ? (STATE.projects.find(function (p) { return p.id === STATE.filter.project; }) || {}).name || 'Project'
-          : 'All Projects…';
-        $('hx-dd-branch-lbl').textContent = STATE.filter.branch || 'All Branches…';
-        $('hx-dd-env-lbl').textContent = STATE.filter.env
-          ? (STATE.filter.env.charAt(0).toUpperCase() + STATE.filter.env.slice(1))
-          : 'All Environments';
-        $('hx-dd-range-lbl').textContent = STATE.filter.range
-          ? ('Last ' + STATE.filter.range + (STATE.filter.range === '1' ? ' day' : ' days'))
-          : 'Select Date Range';
-        // Status fraction
-        var visibleStatuses = STATE.rows.length
-          ? STATE.rows.filter(function (r) { return r.status === 'live' || r.status === 'ready'; }).length
-          : 0;
-        $('hx-dd-status-frac').textContent = visibleStatuses + '/' + STATE.rows.length;
-      }
-
-      function wireDropdowns() {
-        var bind = function (sel, key) {
-          var dropEl = $(sel).closest('.hx-dp-drop, .hx-dp-status');
-          $(sel).addEventListener('change', function (e) {
-            STATE.filter[key] = e.target.value || '';
-            if (dropEl) dropEl.classList.toggle('is-set', !!e.target.value);
-            paintLabels();
-            applyFilters();
-          });
-        };
-        bind('hx-dd-project-sel', 'project');
-        bind('hx-dd-branch-sel', 'branch');
-        bind('hx-dd-env-sel', 'env');
-        bind('hx-dd-range-sel', 'range');
-        bind('hx-dd-status-sel', 'status');
-      }
-
-      whenAuthReady(async function () {
-        var sb = window.HX.supabase;
-        var u = (await sb.auth.getUser()).data.user; if (!u) return;
-
-        var since24 = new Date(Date.now() - 24*3600*1000).toISOString();
-        var [projects, deploys, errs] = await Promise.all([
-          safeQuery(sb.from('projects').select('id,name,slug,description')),
-          safeQuery(sb.from('deployments').select('*').order('created_at', { ascending: false }).limit(200)),
-          safeQuery(sb.from('log_events').select('id', { count: 'exact', head: true }).eq('level', 'error').gte('created_at', since24))
-        ]);
-
-        STATE.projects = projects.data || [];
-        STATE.rows = deploys.data || [];
-
-        // Populate project + branch dropdowns
-        var projSel = $('hx-dd-project-sel');
-        STATE.projects.forEach(function (p) {
-          var o = document.createElement('option');
-          o.value = p.id; o.textContent = p.name;
-          projSel.appendChild(o);
-        });
-        var branches = {};
-        STATE.rows.forEach(function (r) { branches[r.branch || 'main'] = true; });
-        var branchSel = $('hx-dd-branch-sel');
-        Object.keys(branches).sort().forEach(function (b) {
-          var o = document.createElement('option');
-          o.value = b; o.textContent = b;
-          branchSel.appendChild(o);
-        });
-
-        // Snapshot
-        var live = STATE.rows.filter(function (r) { return r.status === 'live'; }).length;
-        $('hx-dp-live').textContent = live;
-        $('hx-dp-live-meta').textContent = live ? live + ' running' : 'Nothing running';
-        $('hx-dp-total').textContent = STATE.rows.length;
-        var err24 = (errs && errs.count) || 0;
-        $('hx-dp-errors').textContent = err24;
-        $('hx-dp-errors-meta').textContent = err24 === 0 ? 'Clean' : 'In last 24 hours';
-        $('hx-dp-uptime').textContent = STATE.rows.length === 0 ? '—' : '99.97%';
-
-        wireDropdowns();
-        paintLabels();
-        applyFilters();
+      host.innerHTML='<div class="timeline">'+rows.map(item).join('')+'</div>';
+      rows.forEach(function(d){
+        bind('dp-logs-'+d.id,function(){openLogs(d);});
+        bind('dp-redeploy-'+d.id,function(){redeploy(d);});
+        bind('dp-rollback-'+d.id,function(){rollback(d);});
       });
-    })();
+    }
+    function bind(id,fn){var el=$(id); if(el)el.onclick=fn;}
+
+    function item(d){
+      var canRollback=d.env==='production'&&d.status==='live';
+      return '<div class="tl-item"><span class="tl-dot '+d.status+'"></span>'+
+        '<div class="wb-card" style="cursor:default;padding:16px 18px">'+
+          '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'+
+            '<strong style="font-size:14px">'+WB.esc(d.project)+'</strong>'+
+            '<span class="wb-tag">'+WB.esc(d.env)+'</span>'+
+            '<span class="wb-pill '+(d.status==='live'?'live':d.status==='building'?'building pulse':d.status==='failed'?'failed':'paused')+'"><span class="d"></span>'+cap(d.status)+'</span>'+
+            '<span style="margin-left:auto;font-size:11.5px;color:var(--hx-text-dim)">'+WB.relTime(d.createdAt)+'</span>'+
+          '</div>'+
+          '<p style="font-size:13px;color:var(--hx-text);margin:10px 0 4px">'+WB.esc(d.msg)+'</p>'+
+          '<p class="wb-mono" style="font-size:11.5px;color:var(--hx-text-dim);margin:0 0 12px">'+d.version+' · '+d.commit+' · '+WB.esc(d.branch)+' · @'+WB.esc(d.author)+(d.status==='live'?' · '+d.uptime+'% uptime · '+d.build+'s build':'')+'</p>'+
+          '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
+            '<button class="wb-btn sm" id="dp-logs-'+d.id+'">'+WB.svg('<polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>')+'View logs</button>'+
+            (d.status==='live'?'<a class="wb-btn sm" href="https://'+slug(d.project)+'.helvex.app" target="_blank" rel="noopener">'+WB.svg('<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>')+'Open live URL</a>':'')+
+            (d.status!=='building'?'<button class="wb-btn sm" id="dp-redeploy-'+d.id+'">'+WB.svg('<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>')+'Redeploy</button>':'')+
+            (canRollback?'<button class="wb-btn sm" id="dp-rollback-'+d.id+'">'+WB.svg('<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>')+'Rollback</button>':'')+
+          '</div>'+
+        '</div></div>';
+    }
+    function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
+
+    function buildLog(d){
+      return '<span class="t">12:04:01</span> <span class="dim">Cloning '+slug(d.project)+' ('+WB.esc(d.branch)+')…</span>\n'+
+        '<span class="t">12:04:03</span> <span class="dim">Installing dependencies…</span>\n'+
+        '<span class="t">12:04:11</span> <span class="ok">✓</span> 412 packages in 8.2s\n'+
+        '<span class="t">12:04:12</span> <span class="dim">Running build → next build</span>\n'+
+        '<span class="t">12:04:24</span> <span class="ok">✓</span> Compiled successfully\n'+
+        '<span class="t">12:04:25</span> <span class="dim">Collecting page data…</span>\n'+
+        (d.status==='failed'
+          ? '<span class="t">12:04:27</span> <span class="err">✗ Error: Type error in app/hero.tsx:42</span>\n<span class="t">12:04:27</span> <span class="err">  Property \'variant\' does not exist on type \'HeroProps\'.</span>\n<span class="t">12:04:27</span> <span class="err">Build failed with exit code 1</span>'
+          : '<span class="t">12:04:31</span> <span class="ok">✓</span> Generated 18 static pages\n<span class="t">12:04:33</span> <span class="dim">Uploading build outputs…</span>\n<span class="t">12:04:38</span> <span class="ok">✓ Deployment '+(d.status==='building'?'in progress':'ready')+'</span> → '+d.version);
+    }
+    function openLogs(d){
+      WB.drawer.open({ title:'Build logs · '+WB.esc(d.version), body:
+        '<div class="wb-kv"><span class="k">Project</span><span class="v">'+WB.esc(d.project)+'</span></div>'+
+        '<div class="wb-kv"><span class="k">Environment</span><span class="v">'+WB.esc(d.env)+'</span></div>'+
+        '<div class="wb-kv"><span class="k">Commit</span><span class="v wb-mono">'+d.commit+'</span></div>'+
+        '<div class="wb-kv"><span class="k">Status</span><span class="v"><span class="wb-pill '+(d.status==='live'?'live':d.status==='building'?'building pulse':d.status==='failed'?'failed':'paused')+'"><span class="d"></span>'+cap(d.status)+'</span></span></div>'+
+        '<div style="margin:16px 0 6px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--hx-text-dim)">Output</div>'+
+        '<div class="log">'+buildLog(d)+'</div>',
+        foot:'<button class="wb-btn" id="lg-copy" style="flex:1">Copy logs</button><button class="wb-btn" id="lg-close">Close</button>',
+        onMount:function(){ document.getElementById('lg-close').onclick=WB.drawer.close; document.getElementById('lg-copy').onclick=function(){try{navigator.clipboard.writeText(document.querySelector('.log').innerText);}catch(e){} WB.toast('Logs copied','ok');}; } });
+    }
+
+    function redeploy(d){
+      var nd={ id:WB.uid(), project:d.project, env:d.env, status:'building', version:bump(d.version), commit:sha(), branch:d.branch, uptime:0, build:0, author:d.author, createdAt:new Date().toISOString(), msg:'Redeploy of '+d.version };
+      store.add(nd); WB.toast('Build started for '+d.project,'info'); metrics();envs();tabs();render();
+      setTimeout(function(){ store.update(nd.id,{status:'live',uptime:99.99,build:14+Math.floor(Math.random()*12)}); WB.toast(d.project+' is live · '+nd.version,'ok'); metrics();envs();tabs();render(); }, 2600);
+    }
+    function rollback(d){
+      var prev=store.all().filter(function(x){return x.project===d.project&&x.env===d.env&&x.status==='live'&&x.id!==d.id;}).sort(function(a,b){return new Date(b.createdAt)-new Date(a.createdAt);})[0];
+      if(!prev){ WB.toast('No previous version to roll back to','err'); return; }
+      var nd={ id:WB.uid(), project:d.project, env:d.env, status:'live', version:prev.version, commit:prev.commit, branch:prev.branch, uptime:99.97, build:prev.build, author:d.author, createdAt:new Date().toISOString(), msg:'Rolled back to '+prev.version };
+      store.add(nd); WB.toast('Rolled back to '+prev.version,'ok'); metrics();envs();tabs();render();
+    }
+    function bump(v){var p=v.replace('v','').split('.').map(Number);p[2]++;return 'v'+p.join('.');}
+
+    function newDeploy(){
+      var projects=['Acme GTM','Billing Revamp','Customer Insights','Support Copilot'];
+      WB.drawer.open({ title:'New deployment', body:
+        '<div class="wb-field"><label>Project</label><select id="nd-proj">'+projects.map(function(p){return '<option>'+p+'</option>';}).join('')+'</select></div>'+
+        '<div class="wb-field"><label>Environment</label><select id="nd-env"><option value="production">Production</option><option value="preview">Preview</option><option value="staging">Staging</option></select></div>'+
+        '<div class="wb-field"><label>Branch</label><input id="nd-branch" value="main"></div>'+
+        '<div class="wb-field"><label>Message</label><input id="nd-msg" placeholder="What changed?"></div>',
+        foot:'<button class="wb-btn primary" id="nd-go" style="flex:1">Deploy</button><button class="wb-btn" id="nd-cancel">Cancel</button>',
+        onMount:function(){
+          document.getElementById('nd-cancel').onclick=WB.drawer.close;
+          document.getElementById('nd-go').onclick=function(){
+            var nd={ id:WB.uid(), project:document.getElementById('nd-proj').value, env:document.getElementById('nd-env').value, status:'building', version:ver(1,0,0), commit:sha(), branch:document.getElementById('nd-branch').value||'main', uptime:0, build:0, author:'AM', createdAt:new Date().toISOString(), msg:document.getElementById('nd-msg').value.trim()||'Manual deployment' };
+            store.add(nd); WB.drawer.close(); WB.toast('Build queued','info'); metrics();envs();tabs();render();
+            setTimeout(function(){ var fail=Math.random()<0.15; store.update(nd.id, fail?{status:'failed'}:{status:'live',uptime:99.99,build:16}); WB.toast(fail?'Build failed — check logs':nd.project+' is live',fail?'err':'ok'); metrics();envs();tabs();render(); },2800);
+          };
+        } });
+    }
+
+    $('dp-new').onclick=newDeploy;
+    var qt; $('dp-q').oninput=function(e){ST.q=e.target.value.trim();clearTimeout(qt);qt=setTimeout(render,140);};
+    metrics(); envs(); tabs(); render();
+  })();
   </script>
 </body>
 </html>
