@@ -2469,36 +2469,44 @@ html[data-theme="dark"] .hx-cmdp-foot kbd {
 
 /* ── Settings tab bar (Vercel-style horizontal nav) ──────────── */
 .hx-settings-tabs {
-  display: flex; gap: 0;
-  border-bottom: 1px solid var(--hx-line);
-  margin: -10px 0 22px;
+  display: flex; gap: 4px;
+  margin: -4px 0 24px;
+  padding: 5px;
+  background: var(--hx-bg-2);
+  border: 1px solid var(--hx-line);
+  border-radius: 12px;
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
 .hx-settings-tabs::-webkit-scrollbar { display: none; }
 @media (max-width: 720px) {
-  .hx-settings-tabs { margin: -6px 0 18px; }
-  .hx-settings-tabs a { padding: 10px 12px; font-size: 12.5px; }
+  .hx-settings-tabs { margin: -2px 0 18px; }
+  .hx-settings-tabs a span { display: none; }
+  .hx-settings-tabs a { padding: 9px 11px; }
 }
 .hx-settings-tabs a {
   position: relative;
-  padding: 10px 14px;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 13px;
   font-size: 13px;
   font-weight: 500;
   color: var(--hx-text-mid);
   text-decoration: none;
   white-space: nowrap;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  transition: color 0.12s, border-color 0.12s;
+  border-radius: 8px;
+  transition: color 0.14s, background 0.14s, box-shadow 0.14s;
 }
-.hx-settings-tabs a:hover { color: var(--hx-text); }
+.hx-settings-tabs a svg { width: 15px; height: 15px; opacity: 0.8; flex-shrink: 0; }
+.hx-settings-tabs a:hover { color: var(--hx-text); background: var(--hx-bg-3); }
 .hx-settings-tabs a.is-active {
   color: var(--hx-text);
-  border-bottom-color: var(--hx-text);
+  background: var(--hx-surface);
   font-weight: 600;
+  box-shadow: var(--hx-shadow-xs);
 }
+.hx-settings-tabs a.is-active svg { opacity: 1; color: var(--hx-yellow); }
+html[data-theme="dark"] .hx-settings-tabs a.is-active { background: rgba(255,255,255,0.07); }
 
 @media (max-width: 760px) {
   .hx-metric-value { font-size: 42px; }
