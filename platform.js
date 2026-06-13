@@ -553,15 +553,15 @@
     (function injectSettingsTabs() {
       var active = (document.body.getAttribute('data-active') || '').toLowerCase();
       var SETTINGS_FAMILY = {
-        settings:      { href: '/settings.html',       label: 'General' },
-        profile:       { href: '/profile.html',        label: 'Profile' },
-        team:          { href: '/team.html',           label: 'Members' },
-        notifications: { href: '/notifications.html',  label: 'Notifications' },
-        security:      { href: '/security.html',       label: 'Security' },
-        sessions:      { href: '/sessions.html',       label: 'Sessions' },
-        billing:       { href: '/billing.html',        label: 'Billing' },
-        'audit-log':   { href: '/audit-log.html',      label: 'Audit log' },
-        support:       { href: '/tickets.html',        label: 'Support' }
+        settings:      { href: '/settings.html',       label: 'General',       ic: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>' },
+        profile:       { href: '/profile.html',        label: 'Profile',       ic: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>' },
+        team:          { href: '/team.html',           label: 'Members',       ic: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>' },
+        notifications: { href: '/notifications.html',  label: 'Notifications', ic: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>' },
+        security:      { href: '/security.html',       label: 'Password & MFA', ic: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
+        sessions:      { href: '/sessions.html',       label: 'Sessions',      ic: '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>' },
+        billing:       { href: '/billing.html',        label: 'Billing',       ic: '<rect x="2" y="6" width="20" height="14" rx="2"/><line x1="2" y1="11" x2="22" y2="11"/><line x1="6" y1="16" x2="10" y2="16"/>' },
+        'audit-log':   { href: '/audit-log.html',      label: 'Audit log',     ic: '<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/><line x1="12" y1="7" x2="12" y2="12"/><line x1="12" y1="12" x2="15" y2="14"/>' },
+        support:       { href: '/tickets.html',        label: 'Support',       ic: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>' }
       };
       if (!SETTINGS_FAMILY[active]) return;
       var main = document.querySelector('.hx-main'); if (!main) return;
@@ -569,7 +569,9 @@
       bar.className = 'hx-settings-tabs';
       bar.innerHTML = Object.keys(SETTINGS_FAMILY).map(function (k) {
         var t = SETTINGS_FAMILY[k];
-        return '<a href="' + t.href + '"' + (k === active ? ' class="is-active"' : '') + '>' + t.label + '</a>';
+        return '<a href="' + t.href + '"' + (k === active ? ' class="is-active"' : '') + '>' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + t.ic + '</svg>' +
+          '<span>' + t.label + '</span></a>';
       }).join('');
       // Insert AFTER the hero (so the hero still reads as the page header)
       // but BEFORE the first real content section.

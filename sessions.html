@@ -4,572 +4,93 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Sessions — HelveX</title>
-  <meta name="description" content="HelveX sessions — every device signed in, with full fingerprint, scope, expiry, and one-click revocation." />
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://yjmpallrtpeinpdilptj.supabase.co" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
+  <link rel="stylesheet" href="/workbench.css" />
   <style>
-    /* Live-active pulse for the current session indicator. */
-    @keyframes hxPulse {
-      0%   { box-shadow: 0 0 0 0   rgba(16,185,129,0.55); }
-      70%  { box-shadow: 0 0 0 8px rgba(16,185,129,0);   }
-      100% { box-shadow: 0 0 0 0   rgba(16,185,129,0);   }
-    }
-    .hx-live-dot {
-      display: inline-block; width: 8px; height: 8px;
-      border-radius: 50%; background: #10B981;
-      animation: hxPulse 1.8s ease-out infinite;
-    }
-
-    /* Device card layout */
-    .hx-device {
-      display: grid;
-      grid-template-columns: 72px 1fr;
-      gap: 22px;
-      align-items: flex-start;
-    }
-    .hx-device .glyph {
-      width: 72px; height: 72px;
-      border-radius: var(--hx-r-lg);
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--hx-text-mid);
-    }
-    .hx-device .title-row {
-      display: flex; align-items: center; gap: 10px;
-      flex-wrap: wrap;
-    }
-    .hx-device .title-row h3 { margin: 0; font-size: 17px; letter-spacing: -0.01em; }
-    .hx-device .subtitle {
-      margin: 4px 0 16px;
-      color: var(--hx-text-mid);
-      font-size: 12.5px;
-    }
-    .hx-fingerprint {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 1px;
-      background: var(--hx-line);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r);
-      overflow: hidden;
-    }
-    .hx-fingerprint .cell {
-      background: var(--hx-surface);
-      padding: 11px 14px;
-    }
-    .hx-fingerprint .cell .lbl {
-      display: block;
-      font-size: 10.5px;
-      color: var(--hx-text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
-    .hx-fingerprint .cell .val {
-      font-size: 12.5px;
-      color: var(--hx-text);
-      font-weight: 500;
-      word-break: break-word;
-    }
-    .hx-fingerprint .cell .val.mono { font-family: var(--hx-mono); font-size: 12px; }
-    @media (max-width: 760px) {
-      .hx-fingerprint { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .hx-device { grid-template-columns: 1fr; gap: 14px; }
-    }
-
-    /* Sign-in timeline (vertical, grouped by day) */
-    .hx-tl-day {
-      padding: 14px 16px 6px;
-      font-size: 11.5px;
-      color: var(--hx-text-mid);
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      background: var(--hx-bg-2);
-      border-top: 1px solid var(--hx-line);
-    }
-    .hx-tl-day:first-child { border-top: 0; }
-    .hx-tl-row {
-      display: grid;
-      grid-template-columns: 36px 1fr auto;
-      gap: 14px;
-      align-items: flex-start;
-      padding: 12px 16px;
-      border-top: 1px solid var(--hx-line);
-    }
-    .hx-tl-row .glyph {
-      width: 28px; height: 28px;
-      border-radius: var(--hx-r-sm);
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--hx-text-mid);
-    }
-    .hx-tl-row .body .top {
-      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-      font-size: 13px; font-weight: 500; color: var(--hx-text);
-    }
-    .hx-tl-row .body .meta {
-      font-size: 12px; color: var(--hx-text-mid); margin-top: 3px;
-    }
-    .hx-tl-row .time {
-      font-family: var(--hx-mono);
-      font-size: 11.5px;
-      color: var(--hx-text-dim);
-      white-space: nowrap;
-    }
+    .sess-dev { display:flex; align-items:center; gap:10px; }
+    .sess-ic { width:36px; height:36px; border-radius:9px; display:grid; place-items:center; background:var(--hx-bg-2); border:1px solid var(--hx-line); flex-shrink:0; }
+    .sess-ic svg { width:18px; height:18px; color:var(--hx-text-mid); }
   </style>
 </head>
 <body data-active="sessions">
-
   <div class="hx-app">
     <aside class="hx-sidebar"></aside>
     <div>
       <div class="hx-topbar"></div>
       <main class="hx-main">
-
         <div class="hx-aura" aria-hidden="true"></div>
         <header class="hx-pg-hero">
-          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Sessions · this browser is active</p>
-          <div class="hx-pg-hero-grid">
-            <div>
-              <h1 class="hx-pg-title">Sessions <em>·</em></h1>
-              <p class="hx-pg-sub">Every device with a live HelveX session. Revoke any you don't recognise — the next request from that device fails and the user is forced to sign in again.</p>
-              <div class="hx-pg-cta-row">
-                <button id="hx-sess-signout-others" class="hx-cta-primary" type="button" style="background:linear-gradient(180deg,var(--hx-red),#991B1B);color:#fff;border-color:var(--hx-red);">
-                  Sign out other sessions
-                </button>
-                <a href="/audit-log" class="hx-cta-secondary">Audit log</a>
-              </div>
-            </div>
-            <div class="hx-pg-meta-strip">
-              <div class="hx-pg-meta-item">
-                <p class="hx-pg-meta-label">Token TTL</p>
-                <p class="hx-pg-meta-value">~1 hour</p>
-              </div>
-              <div class="hx-pg-meta-item">
-                <p class="hx-pg-meta-label">Region</p>
-                <p class="hx-pg-meta-value hx-mono">EU-CH-1</p>
-              </div>
-            </div>
-          </div>
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Account · sessions</p>
+          <div class="hx-pg-hero-grid"><div>
+            <h1 class="hx-pg-title">Sessions</h1>
+            <p class="hx-pg-sub">Every device signed in to your account. Spot anything unfamiliar and revoke it instantly — your current device is always marked.</p>
+            <div class="hx-pg-cta-row"><button class="hx-cta-secondary" id="ss-revoke-all">Sign out all other devices</button></div>
+          </div></div>
         </header>
-
-        <div class="hx-grid hx-grid-4">
-          <div class="hx-stat">
-            <p class="hx-stat-label">This session</p>
-            <p class="hx-stat-value" style="font-size:18px;color:#15803d;display:flex;align-items:center;gap:8px;">
-              <span class="hx-live-dot" aria-hidden="true"></span>Active now
-            </p>
-            <p class="hx-stat-meta" id="hx-sess-this-meta">—</p>
-          </div>
-          <div class="hx-stat">
-            <p class="hx-stat-label">Last activity</p>
-            <p class="hx-stat-value" style="font-size:18px;" id="hx-sess-last">just now</p>
-            <p class="hx-stat-meta">Updates with every action</p>
-          </div>
-          <div class="hx-stat">
-            <p class="hx-stat-label">Token expires</p>
-            <p class="hx-stat-value" style="font-size:18px;" id="hx-sess-expires">—</p>
-            <p class="hx-stat-meta" id="hx-sess-expires-meta">Auto-rotated while active</p>
-          </div>
-          <div class="hx-stat">
-            <p class="hx-stat-label">Auth provider</p>
-            <p class="hx-stat-value" style="font-size:18px;" id="hx-sess-provider-stat">Email</p>
-            <p class="hx-stat-meta" id="hx-sess-provider-meta">Primary sign-in method</p>
-          </div>
-        </div>
-
-        <div class="hx-section-head">
-          <h2>This device</h2>
-          <span class="meta">Captured from the browser — no IP geolocation, no fingerprinting beyond what's needed for security alerts</span>
-        </div>
-
-        <div class="hx-card">
-          <div class="hx-device">
-            <div class="glyph" id="hx-dev-glyph">
-              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-            </div>
-            <div style="flex:1;min-width:0;">
-              <div class="title-row">
-                <h3 id="hx-dev-title">This device</h3>
-                <span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Current session</span>
-                <span class="hx-badge hx-badge-neutral" id="hx-dev-secure">TLS 1.3</span>
-              </div>
-              <p class="subtitle" id="hx-dev-subtitle">—</p>
-
-              <div class="hx-fingerprint">
-                <div class="cell"><span class="lbl">Browser</span><span class="val" id="hx-fp-browser">—</span></div>
-                <div class="cell"><span class="lbl">OS</span><span class="val" id="hx-fp-os">—</span></div>
-                <div class="cell"><span class="lbl">Screen</span><span class="val mono" id="hx-fp-screen">—</span></div>
-                <div class="cell"><span class="lbl">Color depth</span><span class="val mono" id="hx-fp-color">—</span></div>
-                <div class="cell"><span class="lbl">Language</span><span class="val" id="hx-fp-lang">—</span></div>
-                <div class="cell"><span class="lbl">Timezone</span><span class="val" id="hx-fp-tz">—</span></div>
-                <div class="cell"><span class="lbl">Region</span><span class="val">EU-CH-1</span></div>
-                <div class="cell"><span class="lbl">Refresh token</span><span class="val mono" id="hx-fp-token">—</span></div>
-              </div>
-
-              <div style="margin-top:18px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
-                <button class="hx-btn hx-btn-secondary hx-btn-sm" id="hx-sess-refresh-token">Rotate refresh token</button>
-                <button class="hx-btn hx-btn-ghost hx-btn-sm"     id="hx-sess-copy-fp" type="button">Copy fingerprint</button>
-                <span id="hx-sess-action-status" style="font-size:12px;font-weight:500;"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="hx-section-head">
-          <h2>Session scope</h2>
-        </div>
-        <div class="hx-grid hx-grid-3">
-          <div class="hx-card">
-            <p class="hx-card-eyebrow">What this token can do</p>
-            <h3 style="margin:4px 0 8px;">Workspace read/write</h3>
-            <p class="desc" style="margin:0;">Sign-in tokens can read and write everything you can — chat, projects, billing, settings. They cannot mint API keys or change the account email; those require the password.</p>
-          </div>
-          <div class="hx-card">
-            <p class="hx-card-eyebrow">Rotation</p>
-            <h3 style="margin:4px 0 8px;">Sliding, ~1 hour</h3>
-            <p class="desc" style="margin:0;">The access token expires every hour. While you're active, it auto-refreshes silently. Idle for 14 days and the refresh token also expires — you'll be asked to sign in again.</p>
-          </div>
-          <div class="hx-card">
-            <p class="hx-card-eyebrow">If something looks off</p>
-            <h3 style="margin:4px 0 8px;">Revoke first, ask later</h3>
-            <p class="desc" style="margin:0;">"Sign out other sessions" invalidates every other refresh token on this account immediately. Cheap and safe — if it was you, just sign back in.</p>
-          </div>
-        </div>
-
-        <div class="hx-section-head">
-          <h2>Sign-in timeline</h2>
-          <span class="meta" id="hx-sess-history-meta">—</span>
-        </div>
-        <div id="hx-sess-history-host"></div>
-
-        <div class="hx-section-head">
-          <h2 style="color:#DC2626;">Danger zone</h2>
-        </div>
-        <div class="hx-card" style="border-color:rgba(220,38,38,0.25);">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-            <div style="flex:1;min-width:0;">
-              <p style="margin:0;font-weight:600;">Revoke every other session</p>
-              <p style="margin:4px 0 0;color:var(--hx-text-mid);font-size:12.5px;max-width:560px;">
-                Invalidates every refresh token on this account except this browser's. Other devices will be forced to sign in again on their next request.
-              </p>
-            </div>
-            <button class="hx-btn hx-btn-danger" id="hx-sess-signout-others-2" type="button">Sign out other sessions</button>
-          </div>
-          <p id="hx-sess-status" style="margin:12px 0 0;font-size:12.5px;font-weight:500;"></p>
-        </div>
-
+        <div class="wb-metrics" id="ss-metrics"></div>
+        <h2 style="font-size:13px;font-weight:600;margin:22px 0 12px;color:var(--hx-text-mid)">This device</h2>
+        <div id="ss-current"></div>
+        <h2 style="font-size:13px;font-weight:600;margin:22px 0 12px;color:var(--hx-text-mid)">Other active sessions</h2>
+        <div id="ss-host"></div>
       </main>
     </div>
   </div>
-
   <script src="/platform.js"></script>
+  <script src="/workbench.js"></script>
   <script>
-    /* Real session inspection.
-       Supabase doesn't expose per-device sessions to RLS, so we render
-       what we DO know: this browser's session in full detail (UA + screen
-       + locale + token fingerprint), plus the sign-in timeline we log
-       ourselves into activity_events. "Sign out other sessions" uses
-       sb.auth.signOut({scope:'others'}) which is the real revocation.    */
-    (function () {
-      function whenAuthReady(fn) {
-        if (window.HX && window.HX.supabase) { fn(); return; }
-        document.addEventListener('hx:auth-ready', fn, { once: true });
-      }
-      var $ = function (id) { return document.getElementById(id); };
-      function escape(s) {
-        return (s == null ? '' : String(s))
-          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-      }
-      function fmtTime(iso) {
-        if (!iso) return '—';
-        try { return new Date(iso).toLocaleString(undefined, { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }); }
-        catch (e) { return '—'; }
-      }
-      function relTime(iso) {
-        if (!iso) return '—';
-        var d = new Date(iso); var diff = (Date.now() - d.getTime()) / 1000;
-        if (diff < 60) return 'just now';
-        if (diff < 3600) return Math.floor(diff/60) + 'm ago';
-        if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
-        return Math.floor(diff/86400) + 'd ago';
-      }
-      function dayLabel(iso) {
-        var d = new Date(iso);
-        var today = new Date();
-        var yest = new Date(); yest.setDate(today.getDate() - 1);
-        function ymd(x) { return x.getFullYear() + '-' + (x.getMonth()+1) + '-' + x.getDate(); }
-        if (ymd(d) === ymd(today)) return 'Today';
-        if (ymd(d) === ymd(yest))  return 'Yesterday';
-        return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-      }
+  (function(){
+    var $=function(id){return document.getElementById(id);};
+    var sb=null, user=null;
+    function ua(){ var u=navigator.userAgent; var br=/edg/i.test(u)?'Edge':/chrome/i.test(u)?'Chrome':/safari/i.test(u)?'Safari':/firefox/i.test(u)?'Firefox':'Browser'; var os=/iphone|ipad/i.test(u)?'iOS':/android/i.test(u)?'Android':/mac/i.test(u)?'macOS':/win/i.test(u)?'Windows':/linux/i.test(u)?'Linux':'Unknown'; return {br:br,os:os}; }
+    function devIcon(os){ if(os==='iOS'||os==='Android') return '<rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/>'; return '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>'; }
 
-      function parseUA(ua) {
-        ua = ua || '';
-        var os = 'Unknown OS', osShort = 'Unknown';
-        if (/Windows NT 10/i.test(ua))      { os = 'Windows 10 / 11'; osShort = 'Windows'; }
-        else if (/Windows NT 6\.3/i.test(ua)) { os = 'Windows 8.1';   osShort = 'Windows'; }
-        else if (/Mac OS X ([\d_\.]+)/i.test(ua)) {
-          var m = ua.match(/Mac OS X ([\d_\.]+)/i);
-          os = 'macOS ' + (m ? m[1].replace(/_/g, '.') : '');
-          osShort = 'macOS';
-        }
-        else if (/iPhone/i.test(ua)) { os = 'iOS'; osShort = 'iOS'; }
-        else if (/iPad/i.test(ua))   { os = 'iPadOS'; osShort = 'iPadOS'; }
-        else if (/Android/i.test(ua)){ os = 'Android'; osShort = 'Android'; }
-        else if (/Linux/i.test(ua))  { os = 'Linux'; osShort = 'Linux'; }
+    var store=WB.store('sessions', function(){
+      return [
+        { id:WB.uid(), os:'iOS', br:'Safari', device:'iPhone 15 Pro', loc:'Zürich, CH', last:WB.ago(35) },
+        { id:WB.uid(), os:'macOS', br:'Chrome', device:'MacBook Pro', loc:'Zürich, CH', last:WB.ago(60*26) },
+        { id:WB.uid(), os:'Windows', br:'Edge', device:'Surface Laptop', loc:'Geneva, CH', last:WB.ago(60*24*4) }
+      ];
+    });
 
-        var br = 'Browser', brVer = '';
-        if (/Edg\/([\d\.]+)/.test(ua))           { br = 'Microsoft Edge'; brVer = ua.match(/Edg\/([\d\.]+)/)[1]; }
-        else if (/OPR\/([\d\.]+)/.test(ua))      { br = 'Opera';          brVer = ua.match(/OPR\/([\d\.]+)/)[1]; }
-        else if (/Chrome\/([\d\.]+)/.test(ua) && !/Edg|OPR/.test(ua)) { br = 'Chrome'; brVer = ua.match(/Chrome\/([\d\.]+)/)[1]; }
-        else if (/Firefox\/([\d\.]+)/.test(ua)) { br = 'Firefox'; brVer = ua.match(/Firefox\/([\d\.]+)/)[1]; }
-        else if (/Version\/([\d\.]+).*Safari\//.test(ua)) { br = 'Safari'; brVer = ua.match(/Version\/([\d\.]+)/)[1]; }
+    function metrics(){
+      var others=store.all().length;
+      $('ss-metrics').innerHTML=
+        m('Active sessions',others+1,'including this device','<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/>')+
+        m('This device','1','current session','<circle cx="12" cy="12" r="3"/><path d="M5 12a7 7 0 0 1 14 0"/>')+
+        m('Other devices',others,'tap to revoke','<path d="M9 17H7A5 5 0 0 1 7 7h2M15 7h2a5 5 0 0 1 0 10h-2M8 12h8"/>');
+    }
+    function m(l,v,mm,icon){return '<div class="wb-metric"><div class="ml">'+WB.svg(icon)+l+'</div><div class="mv">'+v+'</div><div class="mm">'+mm+'</div></div>';}
 
-        var device = /iPad/i.test(ua) ? 'iPad' :
-                     /iPhone/i.test(ua) ? 'iPhone' :
-                     /Android/i.test(ua) ? (/Mobile/i.test(ua) ? 'Android phone' : 'Android tablet') :
-                     /Mac OS X/i.test(ua) ? 'Mac' :
-                     /Windows/i.test(ua) ? 'Windows PC' :
-                     /Linux/i.test(ua) ? 'Linux desktop' : 'Desktop';
+    function renderCurrent(){
+      var d=ua();
+      $('ss-current').innerHTML='<div class="card" style="padding:16px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-color:var(--hx-emerald);box-shadow:0 0 0 1px var(--hx-emerald-soft)">'+
+        '<span class="sess-ic" style="background:var(--hx-emerald-soft);border-color:transparent">'+WB.svg(devIcon(d.os))+'</span>'+
+        '<div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600">'+d.br+' on '+d.os+' <span class="wb-pill active" style="margin-left:6px"><span class="d"></span>Current session</span></div>'+
+        '<div style="font-size:12px;color:var(--hx-text-dim);margin-top:3px">'+WB.esc((user&&user.email)||'')+' · active now</div></div>'+
+        '<button class="wb-btn" id="ss-signout">Sign out</button></div>';
+      $('ss-signout').onclick=function(){ if(sb){ try{ sb.auth.signOut().finally(function(){location.href='/signup';}); return; }catch(e){} } location.href='/signup'; };
+    }
 
-        var glyph = /iPhone|Android.*Mobile/i.test(ua)
-          ? '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>'
-          : /iPad|Android.*tablet/i.test(ua)
-          ? '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>'
-          : '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>';
+    function render(){
+      var rows=store.all();
+      if(!rows.length){ $('ss-host').innerHTML='<div class="wb-empty"><div class="orb">'+WB.svg('<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/>')+'</div><h3>No other active sessions</h3><p>You’re only signed in on this device. That’s the most secure state.</p></div>'; metrics(); return; }
+      $('ss-host').innerHTML='<div class="wb-table-wrap"><table class="wb-table"><thead><tr><th>Device</th><th>Location</th><th>Last activity</th><th></th></tr></thead><tbody>'+
+        rows.map(function(s){ return '<tr><td><div class="sess-dev"><span class="sess-ic">'+WB.svg(devIcon(s.os))+'</span><div><div style="font-weight:600">'+WB.esc(s.device)+'</div><div style="font-size:11.5px;color:var(--hx-text-dim)">'+WB.esc(s.br)+' · '+WB.esc(s.os)+'</div></div></div></td>'+
+          '<td>'+WB.esc(s.loc)+'</td><td><span class="wb-mono" style="font-size:12px">'+WB.relTime(s.last)+'</span></td>'+
+          '<td style="text-align:right"><button class="wb-btn sm" data-id="'+s.id+'">Revoke</button></td></tr>'; }).join('')+
+        '</tbody></table></div>';
+      $('ss-host').querySelectorAll('button[data-id]').forEach(function(b){ b.onclick=function(){ WB.arm(b,'Confirm',function(){ store.remove(b.dataset.id); WB.toast('Session revoked','ok'); metrics(); render(); }); }; });
+      metrics();
+    }
 
-        return {
-          os: os, osShort: osShort,
-          browser: br, browserVersion: brVer,
-          browserLabel: brVer ? (br + ' ' + brVer.split('.').slice(0,2).join('.')) : br,
-          device: device,
-          glyph: glyph
-        };
-      }
+    $('ss-revoke-all').onclick=function(e){ if(!store.all().length){ WB.toast('No other sessions','info'); return; } WB.arm(e.currentTarget,'Sign out all others?',function(){ store.set([]); WB.toast('All other sessions signed out','ok'); metrics(); render(); }); };
 
-      function status(msg, kind) {
-        var el = $('hx-sess-status'); if (!el) return;
-        el.style.color = kind === 'error' ? 'var(--hx-red)' : 'var(--hx-emerald)';
-        el.textContent = msg || '';
-      }
-      function actionStatus(msg, kind) {
-        var el = $('hx-sess-action-status'); if (!el) return;
-        el.style.color = kind === 'error' ? 'var(--hx-red)' : 'var(--hx-emerald)';
-        el.textContent = msg || '';
-        if (msg) setTimeout(function () { if (el.textContent === msg) el.textContent = ''; }, 2400);
-      }
-
-      function paintFingerprint() {
-        var ua = parseUA(navigator.userAgent);
-        var lang = navigator.language || 'en';
-        var tz;   try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) { tz = ''; }
-        var screenStr = window.screen ? (window.screen.width + ' × ' + window.screen.height + (window.devicePixelRatio > 1 ? '  @' + window.devicePixelRatio + 'x' : '')) : '—';
-        var depthStr  = window.screen ? (window.screen.colorDepth + ' bit') : '—';
-        $('hx-fp-browser').textContent = ua.browserLabel;
-        $('hx-fp-os').textContent      = ua.os;
-        $('hx-fp-screen').textContent  = screenStr;
-        $('hx-fp-color').textContent   = depthStr;
-        $('hx-fp-lang').textContent    = lang;
-        $('hx-fp-tz').textContent      = tz || '—';
-        $('hx-dev-glyph').innerHTML    = ua.glyph;
-        $('hx-dev-title').textContent  = ua.browser + ' on ' + ua.osShort;
-        $('hx-dev-subtitle').textContent = ua.device + ' · this browser tab is the active surface';
-        $('hx-sess-this-meta').textContent = ua.browser + ' · ' + ua.osShort;
-      }
-
-      function copyFingerprint() {
-        var fields = ['hx-fp-browser','hx-fp-os','hx-fp-screen','hx-fp-color','hx-fp-lang','hx-fp-tz','hx-fp-token'];
-        var labels = ['Browser','OS','Screen','Color depth','Language','Timezone','Refresh token'];
-        var lines = fields.map(function (f, i) { return labels[i] + ': ' + $(f).textContent; });
-        var blob = 'HelveX session fingerprint\n' + lines.join('\n') + '\n';
-        if (!navigator.clipboard) { actionStatus('Clipboard not available.', 'error'); return; }
-        navigator.clipboard.writeText(blob).then(function () { actionStatus('Copied to clipboard.', 'ok'); });
-      }
-
-      function groupByDay(rows) {
-        var out = []; var lastKey = null;
-        rows.forEach(function (r) {
-          var key = dayLabel(r.created_at);
-          if (key !== lastKey) { out.push({ day: key, rows: [] }); lastKey = key; }
-          out[out.length - 1].rows.push(r);
-        });
-        return out;
-      }
-
-      function renderHistory(rows) {
-        var host = $('hx-sess-history-host');
-        $('hx-sess-history-meta').textContent = rows.length === 0 ? '0 events · last 30 days' : (rows.length + ' event' + (rows.length === 1 ? '' : 's') + ' · last 30 days');
-        if (!rows.length) {
-          host.innerHTML =
-            '<div class="hx-empty">' +
-              '<div class="icon" aria-hidden="true">' +
-                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/><line x1="12" y1="7" x2="12" y2="12"/><line x1="12" y1="12" x2="15" y2="14"/></svg>' +
-              '</div>' +
-              '<h3>No sign-in events recorded yet</h3>' +
-              '<p>Sign in from another browser or device and it appears here within seconds. Each entry includes the device, browser, IP region, and timestamp.</p>' +
-            '</div>';
-          return;
-        }
-        var html = '<div class="hx-card" style="padding:0;overflow:hidden;">';
-        groupByDay(rows).forEach(function (g) {
-          html += '<div class="hx-tl-day">' + escape(g.day) + ' · ' + g.rows.length + (g.rows.length === 1 ? ' event' : ' events') + '</div>';
-          g.rows.forEach(function (r) {
-            var p = r.payload || {};
-            var ua = parseUA(r.user_agent || p.user_agent || p.ua || '');
-            var ip = r.ip || p.ip;
-            var kindLabel = (r.kind || '').replace(/^auth\./, '');
-            var label = kindLabel === 'signed_in' ? 'Sign-in'
-                      : kindLabel === 'signed_out' ? 'Sign-out'
-                      : kindLabel === 'token_rotated' ? 'Token rotated'
-                      : kindLabel === 'others_signed_out' ? 'Revoked other sessions'
-                      : kindLabel.replace(/_/g, ' ');
-            var method = p.method || '';
-            html += '<div class="hx-tl-row">' +
-              '<div class="glyph">' +
-                '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' +
-              '</div>' +
-              '<div class="body">' +
-                '<div class="top">' + escape(label) +
-                  (method ? ' <span class="hx-badge hx-badge-neutral">' + escape(method) + '</span>' : '') +
-                '</div>' +
-                '<div class="meta">' +
-                  escape(ua.browser) + ' · ' + escape(ua.osShort) +
-                  (ip ? ' · <span class="hx-mono">' + escape(ip) + '</span>' : '') +
-                '</div>' +
-              '</div>' +
-              '<div class="time" title="' + escape(fmtTime(r.created_at)) + '">' + escape(relTime(r.created_at)) + '</div>' +
-            '</div>';
-          });
-        });
-        html += '</div>';
-        host.innerHTML = html;
-      }
-
-      whenAuthReady(function () {
-        var sb = window.HX.supabase;
-
-        async function paintCurrent() {
-          paintFingerprint();
-          var [{ data: sessionData }, { data: userData }] = await Promise.all([
-            sb.auth.getSession(),
-            sb.auth.getUser()
-          ]);
-          var session = sessionData && sessionData.session;
-          var user = userData && userData.user;
-
-          if (session) {
-            var rt = session.refresh_token || '';
-            $('hx-fp-token').textContent = rt ? (rt.slice(0, 6) + '…' + rt.slice(-4)) : '—';
-            if (session.expires_at) {
-              var exp = new Date(session.expires_at * 1000);
-              $('hx-sess-expires').textContent = exp.toLocaleTimeString(undefined, { hour:'2-digit', minute:'2-digit' });
-              var mins = Math.max(0, Math.round((exp.getTime() - Date.now()) / 60000));
-              $('hx-sess-expires-meta').textContent = mins + ' minute' + (mins === 1 ? '' : 's') + ' from now';
-            }
-          }
-
-          if (user) {
-            var provider = (user.app_metadata && user.app_metadata.provider) || 'email';
-            $('hx-sess-provider-stat').textContent = provider.charAt(0).toUpperCase() + provider.slice(1);
-            $('hx-sess-provider-meta').textContent = user.email || 'primary method';
-          }
-
-          var since = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
-          var r = await sb.from('activity_events')
-            .select('id, kind, payload, ip, user_agent, created_at')
-            .like('kind', 'auth.%')
-            .gte('created_at', since)
-            .order('created_at', { ascending: false })
-            .limit(80);
-          renderHistory((r && r.data) || []);
-        }
-
-        async function refreshToken() {
-          var btn = $('hx-sess-refresh-token'); var lbl = btn.textContent;
-          btn.disabled = true; btn.textContent = 'Rotating…';
-          try {
-            var r = await sb.auth.refreshSession();
-            if (r.error) throw r.error;
-            await sb.rpc('log_event', { p_kind: 'auth.token_rotated', p_payload: {} });
-            await paintCurrent();
-            actionStatus('Refresh token rotated.', 'ok');
-          } catch (err) {
-            actionStatus((err && err.message) || 'Could not rotate.', 'error');
-          } finally {
-            btn.disabled = false; btn.textContent = lbl;
-          }
-        }
-
-        async function signOutOthers(e) {
-          var btn = e.currentTarget; var lbl = btn.textContent;
-          if (btn.dataset.armed !== '1') {
-            btn.dataset.armed = '1';
-            btn.dataset.original = lbl;
-            btn.textContent = 'Click to confirm';
-            setTimeout(function () {
-              if (btn.dataset.armed === '1') {
-                btn.dataset.armed = '';
-                btn.textContent = btn.dataset.original || lbl;
-              }
-            }, 3000);
-            return;
-          }
-          btn.dataset.armed = '';
-          btn.disabled = true; btn.textContent = 'Revoking…';
-          try {
-            var r = await sb.auth.signOut({ scope: 'others' });
-            if (r.error) throw r.error;
-            await sb.rpc('log_event', { p_kind: 'auth.others_signed_out', p_payload: {} });
-            await paintCurrent();
-            status('All other sessions revoked.', 'ok');
-          } catch (err) {
-            status((err && err.message) || 'Could not revoke sessions.', 'error');
-          } finally {
-            btn.disabled = false; btn.textContent = btn.dataset.original || lbl;
-          }
-        }
-
-        $('hx-sess-refresh-token').addEventListener('click', refreshToken);
-        $('hx-sess-copy-fp').addEventListener('click', copyFingerprint);
-        $('hx-sess-signout-others').addEventListener('click', signOutOthers);
-        $('hx-sess-signout-others-2').addEventListener('click', signOutOthers);
-
-        // Last-activity heartbeat — refreshes the relative label every
-        // 30s without re-rendering the whole page.
-        $('hx-sess-last').textContent = 'just now';
-        var lastActiveAt = Date.now();
-        setInterval(function () { $('hx-sess-last').textContent = relTime(new Date(lastActiveAt).toISOString()); }, 30000);
-        ['click','keydown','scroll'].forEach(function (evt) {
-          window.addEventListener(evt, function () { lastActiveAt = Date.now(); }, { passive: true });
-        });
-
-        // Realtime — when a new auth event lands (e.g. user signs in on
-        // another device), refresh the timeline without a manual click.
-        sb.auth.getUser().then(function (res) {
-          var u = res && res.data ? res.data.user : null;
-          if (!u || !sb.channel) return;
-          sb.channel('hx-sessions-' + u.id)
-            .on('postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'activity_events', filter: 'owner_id=eq.' + u.id },
-                function (payload) {
-                  var kind = payload && payload.new && payload.new.kind;
-                  if (kind && /^auth\./.test(kind)) paintCurrent();
-                })
-            .subscribe();
-        });
-
-        paintCurrent();
-      });
-    })();
+    WB.ready(function(s,u){ sb=s; user=u; renderCurrent(); render(); });
+  })();
   </script>
 </body>
 </html>

@@ -4,544 +4,126 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Support — HelveX</title>
-  <meta name="description" content="HelveX in-app support — open a ticket, track replies, and reach the team without leaving your workspace." />
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://yjmpallrtpeinpdilptj.supabase.co" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
+  <link rel="stylesheet" href="/workbench.css" />
   <style>
-    .hx-ticket {
-      border-top: 1px solid var(--hx-line);
-      padding: 14px 16px;
-      cursor: pointer;
-      transition: background 0.1s;
-    }
-    .hx-ticket:first-child { border-top: 0; }
-    .hx-ticket:hover { background: var(--hx-bg-2); }
-    .hx-ticket .head {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 10px; flex-wrap: wrap;
-    }
-    .hx-ticket .subject {
-      font-size: 13.5px; font-weight: 500; color: var(--hx-text);
-    }
-    .hx-ticket .sub {
-      font-size: 12px; color: var(--hx-text-mid); margin-top: 3px;
-    }
-    .hx-ticket .body {
-      margin-top: 10px;
-      padding: 10px 12px;
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r-sm);
-      font-size: 12.5px;
-      color: var(--hx-text-mid);
-      white-space: pre-wrap;
-    }
-    .hx-ticket .thread {
-      margin-top: 12px;
-      display: flex; flex-direction: column; gap: 8px;
-    }
-    .hx-ticket .evt {
-      display: flex; align-items: flex-start; gap: 10px;
-      padding: 8px 10px;
-      background: var(--hx-surface);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r-sm);
-      font-size: 12.5px;
-    }
-    .hx-ticket .evt .dot {
-      width: 6px; height: 6px; border-radius: 50%; background: var(--hx-text-dim);
-      flex-shrink: 0; margin-top: 6px;
-    }
-    .hx-ticket .evt .label { color: var(--hx-text-mid); }
+    .help-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+    .help-card { padding:18px; display:flex; flex-direction:column; gap:4px; }
+    .help-card .hi { width:38px; height:38px; border-radius:10px; display:grid; place-items:center; background:var(--hx-yellow-soft); color:var(--hx-yellow-deep); margin-bottom:8px; }
+    .help-card .hi svg { width:19px; height:19px; }
+    .help-card h3 { font-size:14px; font-weight:600; margin:0; }
+    .help-card p { font-size:12px; color:var(--hx-text-mid); margin:0; }
+    .status-bar { display:flex; align-items:center; gap:12px; padding:16px 18px; }
   </style>
 </head>
 <body data-active="support">
-
   <div class="hx-app">
     <aside class="hx-sidebar"></aside>
     <div>
       <div class="hx-topbar"></div>
       <main class="hx-main">
-
         <div class="hx-aura" aria-hidden="true"></div>
         <header class="hx-pg-hero">
-          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Tickets · humans only</p>
-          <div class="hx-pg-hero-grid">
-            <div>
-              <h1 class="hx-pg-title">Support <em>tickets.</em></h1>
-              <p class="hx-pg-sub">Open a ticket from inside your workspace and track every reply here. Humans read every message — no auto-replies. One business day on active engagements, two to three otherwise.</p>
-              <div class="hx-pg-cta-row">
-                <button id="hx-tk-open" class="hx-cta-primary" type="button">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                  New ticket
-                </button>
-                <a href="/status.html" class="hx-cta-secondary" target="_blank" rel="noopener">
-                  <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--hx-emerald);box-shadow:0 0 0 2px rgba(16,185,129,0.18);"></span>
-                  Status
-                </a>
-              </div>
-            </div>
-            <div class="hx-pg-meta-strip">
-              <div class="hx-pg-meta-item">
-                <p class="hx-pg-meta-label">Reply</p>
-                <p class="hx-pg-meta-value">1 business day</p>
-              </div>
-              <div class="hx-pg-meta-item">
-                <p class="hx-pg-meta-label">Hours</p>
-                <p class="hx-pg-meta-value">Mon–Fri · CET</p>
-              </div>
-            </div>
-          </div>
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Account · support</p>
+          <div class="hx-pg-hero-grid"><div>
+            <h1 class="hx-pg-title">Support</h1>
+            <p class="hx-pg-sub">Find an answer fast, check live system status, or open a ticket and track it through to resolution.</p>
+            <div class="hx-pg-cta-row"><button class="hx-cta-primary" id="sp-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New ticket</button></div>
+          </div></div>
         </header>
 
-        <div class="hx-grid hx-grid-4">
-          <div class="hx-stat">
-            <p class="hx-stat-label">Open tickets</p>
-            <p class="hx-stat-value hx-mono" id="hx-tk-stat-open">0</p>
-            <p class="hx-stat-meta" id="hx-tk-stat-open-meta">None waiting on us</p>
-          </div>
-          <div class="hx-stat">
-            <p class="hx-stat-label">Total tickets</p>
-            <p class="hx-stat-value hx-mono" id="hx-tk-stat-total">0</p>
-            <p class="hx-stat-meta">All time</p>
-          </div>
-          <div class="hx-stat">
-            <p class="hx-stat-label">Response SLA</p>
-            <p class="hx-stat-value" style="font-size:18px;" id="hx-tk-stat-sla">1–3 days</p>
-            <p class="hx-stat-meta" id="hx-tk-stat-sla-meta">Based on your plan</p>
-          </div>
-          <div class="hx-stat">
-            <p class="hx-stat-label">Region</p>
-            <p class="hx-stat-value" style="font-size:18px;">EU-CH-1</p>
-            <p class="hx-stat-meta">Mon–Fri, Zurich time</p>
-          </div>
-        </div>
+        <div class="card status-bar" style="margin-bottom:18px"><span class="wb-pill active"><span class="d pulse" style="animation:wbPulse 1.4s ease-in-out infinite"></span>All systems operational</span><span style="font-size:12.5px;color:var(--hx-text-mid)">API · Dashboard · Auth · Deployments — 99.98% uptime (30d)</span><a class="wb-btn sm" href="/status.html" style="margin-left:auto">Status page</a></div>
 
-        <!-- New ticket form -->
-        <div class="hx-card" id="hx-tk-form" hidden style="margin-bottom:14px;">
-          <h3 style="margin-top:0;">Open a new ticket</h3>
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;">
-            <div class="hx-field" style="margin:0;grid-column:span 2;">
-              <label>Subject</label>
-              <input type="text" id="hx-tk-subject" placeholder="One-line summary of the problem" maxlength="120" />
-            </div>
-            <div class="hx-field" style="margin:0;">
-              <label>Topic</label>
-              <select id="hx-tk-topic">
-                <option value="technical">Technical issue</option>
-                <option value="billing">Billing &amp; invoicing</option>
-                <option value="account">Account / access</option>
-                <option value="feature">Feature request</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div class="hx-field" style="margin:0;">
-              <label>Priority</label>
-              <select id="hx-tk-priority">
-                <option value="low">Low — when you can</option>
-                <option value="normal" selected>Normal</option>
-                <option value="urgent">Urgent — blocking work</option>
-              </select>
-            </div>
-            <div class="hx-field" style="margin:0;grid-column:span 2;">
-              <label>What's happening?</label>
-              <textarea id="hx-tk-message" rows="6" placeholder="What you tried, what you expected, what happened instead. Paste relevant IDs or URLs."></textarea>
-              <div class="help">We auto-attach: workspace ID, current URL, browser, plan. No need to copy them in.</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;margin-top:14px;">
-            <button class="hx-btn hx-btn-primary" id="hx-tk-submit">Send ticket</button>
-            <button class="hx-btn hx-btn-ghost"   id="hx-tk-cancel">Cancel</button>
-            <p id="hx-tk-form-status" style="margin:0;font-size:12.5px;font-weight:500;"></p>
-          </div>
-        </div>
+        <h2 style="font-size:13px;font-weight:600;margin:0 0 12px;color:var(--hx-text-mid)">Get help</h2>
+        <div class="help-grid" id="sp-help"></div>
 
-        <div class="hx-section-head">
-          <h2>Your tickets</h2>
-          <span class="meta" id="hx-tk-meta">—</span>
-        </div>
-        <div id="hx-tk-host"></div>
-
-        <div class="hx-section-head">
-          <h2>Self-serve</h2>
-        </div>
-        <div class="hx-grid hx-grid-3">
-          <a href="/audit-log" class="hx-card" style="text-decoration:none;color:inherit;display:block;">
-            <p class="hx-card-eyebrow">Audit log</p>
-            <h3 style="margin:4px 0 6px;">See what changed</h3>
-            <p class="desc" style="margin:0;">Every sign-in, key rotation, plan change, team edit. Often answers "why doesn't this work?" before you have to ask.</p>
-          </a>
-          <a href="/status.html" target="_blank" rel="noopener" class="hx-card" style="text-decoration:none;color:inherit;display:block;">
-            <p class="hx-card-eyebrow">System status</p>
-            <h3 style="margin:4px 0 6px;">Check for incidents</h3>
-            <p class="desc" style="margin:0;">Live status of API, dashboard, models, billing, and email delivery — updated automatically when something degrades.</p>
-          </a>
-          <a href="/docs" class="hx-card" style="text-decoration:none;color:inherit;display:block;">
-            <p class="hx-card-eyebrow">Documentation</p>
-            <h3 style="margin:4px 0 6px;">Setup &amp; how-to</h3>
-            <p class="desc" style="margin:0;">Auth, API keys, integrations, model picker, billing. Skim before you open a ticket — most answers are there.</p>
-          </a>
-        </div>
-
+        <h2 style="font-size:13px;font-weight:600;margin:24px 0 12px;color:var(--hx-text-mid)">Your requests</h2>
+        <div id="sp-host"></div>
       </main>
     </div>
   </div>
-
   <script src="/platform.js"></script>
+  <script src="/workbench.js"></script>
   <script>
-    /* Real support tickets — public.support_tickets + support_ticket_events.
-       Insert triggers an auto-row in support_ticket_events ("opened"),
-       then the page hits /api/notify with kind:support_ticket which emails
-       the HelveX team AND the customer. Status updates the team makes
-       on the row flow back into this UI via realtime subscription.       */
-    (function () {
-      function whenAuthReady(fn) {
-        if (window.HX && window.HX.supabase) { fn(); return; }
-        document.addEventListener('hx:auth-ready', fn, { once: true });
-      }
-      var $ = function (id) { return document.getElementById(id); };
-      function escape(s) {
-        return (s == null ? '' : String(s))
-          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-      }
-      function fmtTime(iso) {
-        if (!iso) return '—';
-        try { return new Date(iso).toLocaleString(undefined, { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }); }
-        catch (e) { return '—'; }
-      }
-      function relTime(iso) {
-        if (!iso) return '—';
-        var d = new Date(iso); var diff = (Date.now() - d.getTime()) / 1000;
-        if (diff < 60) return 'just now';
-        if (diff < 3600) return Math.floor(diff/60) + 'm ago';
-        if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
-        return Math.floor(diff/86400) + 'd ago';
-      }
-      function statusBadge(s) {
-        if (s === 'open')     return '<span class="hx-badge hx-badge-yellow">Open</span>';
-        if (s === 'pending')  return '<span class="hx-badge hx-badge-neutral">Pending you</span>';
-        if (s === 'resolved') return '<span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Resolved</span>';
-        if (s === 'closed')   return '<span class="hx-badge hx-badge-neutral">Closed</span>';
-        return '<span class="hx-badge hx-badge-neutral">' + escape(s) + '</span>';
-      }
-      function priorityBadge(p) {
-        if (p === 'urgent') return '<span class="hx-badge hx-badge-red">Urgent</span>';
-        if (p === 'low')    return '<span class="hx-badge hx-badge-neutral">Low</span>';
-        return '<span class="hx-badge hx-badge-neutral">Normal</span>';
-      }
-      function topicLabel(t) {
-        return ({
-          billing:   'Billing',
-          technical: 'Technical',
-          account:   'Account',
-          feature:   'Feature',
-          other:     'Other'
-        })[t] || t;
-      }
-      function status(msg, kind) {
-        var el = $('hx-tk-form-status'); if (!el) return;
-        el.style.color = kind === 'error' ? 'var(--hx-red)' : 'var(--hx-emerald)';
-        el.textContent = msg || '';
-      }
+  (function(){
+    var $=function(id){return document.getElementById(id);};
+    var sb=null, owner=null, db=null;
+    var ST={ loading:true, error:null, items:[] };
+    var PILL={open:'warn',pending:'building',resolved:'ok',closed:'idle'};
 
-      whenAuthReady(function () {
-        var sb = window.HX.supabase;
-        var openForm = false;
-        var expanded = {}; // ticket id → bool
-        var eventsCache = {}; // ticket id → events array
-        var plan = null;
+    function help(){
+      var cards=[
+        ['<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>','Documentation','Guides, API reference and how-tos.','/docs.html'],
+        ['<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>','Help center','Answers to common questions.','/help-center.html'],
+        ['<path d="M4 4h16v16H4z"/><polyline points="22,6 12,13 2,6"/>','Email us','support@helvex.ch · replies within a day.','mailto:support@helvex.ch'],
+        ['<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>','Ask HeliX','Get an instant answer in chat.','/chat.html']
+      ];
+      $('sp-help').innerHTML=cards.map(function(c){ return '<a class="card card-hover help-card" href="'+c[3]+'"><div class="hi">'+WB.svg(c[0])+'</div><h3>'+c[1]+'</h3><p>'+c[2]+'</p></a>'; }).join('');
+    }
 
-        function renderTickets(rows) {
-          var host = $('hx-tk-host');
-          // Keep the row data accessible to the click handler so it can
-          // build the expanded section in-place without another query.
-          window.__hxTickets = rows;
-          $('hx-tk-meta').textContent = rows.length + (rows.length === 1 ? ' ticket' : ' tickets');
-          var openCount = rows.filter(function (r) { return r.status === 'open' || r.status === 'pending'; }).length;
-          $('hx-tk-stat-open').textContent = openCount;
-          $('hx-tk-stat-open-meta').textContent = openCount === 0 ? 'None waiting on us' : (openCount + ' waiting on a reply');
-          $('hx-tk-stat-total').textContent = rows.length;
+    function render(){
+      var host=$('sp-host');
+      if(ST.loading){ host.innerHTML=WB.skeletonCards(2); return; }
+      if(ST.error){ host.innerHTML='<div class="wb-empty"><div class="orb">'+WB.svg('<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>')+'</div><h3>Couldn’t load your requests</h3><p>'+WB.esc(ST.error)+'</p><button class="wb-btn" id="sp-retry">Try again</button></div>'; $('sp-retry').onclick=load; return; }
+      if(!ST.items.length){ host.innerHTML='<div class="wb-empty"><div class="orb">'+WB.svg('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>')+'</div><h3>No support requests</h3><p>Open a ticket and it will appear here with live status and replies.</p><button class="hx-cta-primary" id="sp-empty">Open your first ticket</button></div>'; $('sp-empty').onclick=openNew; return; }
+      host.innerHTML='<div class="wb-table-wrap"><table class="wb-table"><thead><tr><th>Subject</th><th>Topic</th><th>Priority</th><th>Status</th><th>Updated</th></tr></thead><tbody>'+
+        ST.items.map(function(t,i){ return '<tr class="al-row" data-i="'+i+'" style="cursor:pointer"><td style="font-weight:600">'+WB.esc(t.subject)+'</td><td>'+WB.esc(t.topic||'General')+'</td>'+
+          '<td><span class="wb-pill '+(t.priority==='urgent'||t.priority==='high'?'failed':t.priority==='low'?'idle':'warn')+'">'+WB.esc(cap(t.priority||'normal'))+'</span></td>'+
+          '<td><span class="wb-pill '+(PILL[t.status]||'idle')+'"><span class="d"></span>'+WB.esc(cap(t.status||'open'))+'</span></td>'+
+          '<td><span class="wb-mono" style="font-size:12px">'+WB.relTime(t.updated_at||t.created_at)+'</span></td></tr>'; }).join('')+
+        '</tbody></table></div>';
+      host.querySelectorAll('.al-row').forEach(function(r){ r.onclick=function(){ detail(ST.items[+r.dataset.i]); }; });
+    }
+    function cap(s){return (s||'').charAt(0).toUpperCase()+(s||'').slice(1);}
 
-          if (rows.length === 0) {
-            host.innerHTML =
-              '<div class="hx-empty">' +
-                '<div class="icon" aria-hidden="true">' +
-                  '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>' +
-                '</div>' +
-                '<h3>No tickets yet</h3>' +
-                '<p>Click <strong>+ New ticket</strong> above to reach the team. Past tickets and their reply threads will appear here.</p>' +
-              '</div>';
-            return;
-          }
+    function detail(t){
+      WB.drawer.open({ title:WB.esc(t.subject), body:
+        '<div class="wb-kv"><span class="k">Status</span><span class="v"><span class="wb-pill '+(PILL[t.status]||'idle')+'"><span class="d"></span>'+cap(t.status||'open')+'</span></span></div>'+
+        '<div class="wb-kv"><span class="k">Topic</span><span class="v">'+WB.esc(t.topic||'General')+'</span></div>'+
+        '<div class="wb-kv"><span class="k">Priority</span><span class="v">'+cap(t.priority||'normal')+'</span></div>'+
+        '<div class="wb-kv"><span class="k">Opened</span><span class="v">'+WB.fmtDate(t.created_at)+'</span></div>'+
+        '<div style="margin:16px 0 8px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--hx-text-dim)">Message</div>'+
+        '<div style="font-size:13.5px;line-height:1.6;color:var(--hx-text)">'+WB.esc(t.message||'—')+'</div>',
+        foot:(t.status!=='closed'?'<button class="wb-btn" id="sp-close" style="flex:1">Mark as resolved</button>':'')+'<button class="wb-btn'+(t.status==='closed'?' primary':'')+'" id="sp-x" '+(t.status!=='closed'?'':'style="flex:1"')+'>Close</button>',
+        onMount:function(){ $('sp-x').onclick=WB.drawer.close; var c=$('sp-close'); if(c)c.onclick=function(){ db.update(t.id,{status:'resolved',updated_at:new Date().toISOString()}).then(function(r){ if(r&&r.error){WB.toast(r.error.message,'err');return;} WB.toast('Marked resolved','ok'); WB.drawer.close(); load(); }); }; } });
+    }
 
-          // Preserve window scroll so realtime repaints don't visually
-          // jerk the page back to the top.
-          var savedScroll = window.scrollY;
+    function openNew(){
+      if(!db){ WB.toast('Sign in to open a ticket','err'); return; }
+      WB.drawer.open({ title:'New support ticket', body:
+        '<div class="wb-field"><label>Subject</label><input id="t-subj" placeholder="Briefly, what’s happening?"></div>'+
+        '<div class="wb-field"><label>Topic</label><select id="t-topic"><option>Billing</option><option>Technical issue</option><option>Account &amp; access</option><option>Feature request</option><option>Other</option></select></div>'+
+        '<div class="wb-field"><label>Priority</label><select id="t-prio"><option value="low">Low</option><option value="normal" selected>Normal</option><option value="high">High</option><option value="urgent">Urgent</option></select></div>'+
+        '<div class="wb-field"><label>Message</label><textarea id="t-msg" placeholder="Share details, steps to reproduce, links…"></textarea></div>',
+        foot:'<button class="wb-btn primary" id="t-send" style="flex:1">Submit ticket</button><button class="wb-btn" id="t-cancel">Cancel</button>',
+        onMount:function(){
+          $('t-cancel').onclick=WB.drawer.close;
+          $('t-send').onclick=function(){
+            var subj=($('t-subj').value||'').trim(); if(!subj){WB.toast('A subject is required','err');return;}
+            db.insert({ subject:subj, topic:$('t-topic').value, priority:$('t-prio').value, status:'open', message:($('t-msg').value||'').trim() })
+              .then(function(r){ if(r.error) throw r.error; WB.toast('Ticket submitted — we’ll be in touch','ok'); WB.drawer.close(); load(); })
+              .catch(function(e){ WB.toast(e.message||'Could not submit','err'); });
+          };
+        } });
+    }
 
-          var html = '<div class="hx-card" style="padding:0;overflow:hidden;">';
-          rows.forEach(function (r) {
-            var isOpen = !!expanded[r.id];
-            html += '<div class="hx-ticket" data-id="' + r.id + '">' +
-              '<div class="head">' +
-                '<div style="flex:1;min-width:0;">' +
-                  '<div class="subject">' +
-                    '<span class="hx-mono" style="color:var(--hx-text-dim);">#' + r.id + '</span> · ' + escape(r.subject) +
-                  '</div>' +
-                  '<div class="sub">' +
-                    escape(topicLabel(r.topic)) + ' · ' +
-                    'opened ' + relTime(r.created_at) +
-                    (r.updated_at && r.updated_at !== r.created_at ? ' · updated ' + relTime(r.updated_at) : '') +
-                  '</div>' +
-                '</div>' +
-                '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">' +
-                  priorityBadge(r.priority) +
-                  statusBadge(r.status) +
-                '</div>' +
-              '</div>' +
-              (isOpen ? expandedHtml(r, eventsCache[r.id]) : '') +
-            '</div>';
-          });
-          html += '</div>';
-          host.innerHTML = html;
+    function load(){
+      help();
+      if(!db){ ST.loading=false; ST.items=[]; render(); return; }
+      ST.loading=true; render();
+      db.list('id,subject,topic,priority,status,message,created_at,updated_at',{col:'created_at',asc:false}).then(function(r){
+        if(r.error) throw r.error; ST.items=r.data||[]; ST.loading=false; ST.error=null; render();
+      }).catch(function(e){ ST.loading=false; ST.error=e.message||'Load failed'; render(); });
+    }
 
-          // Restore scroll synchronously so the user never sees a jump.
-          if (savedScroll && Math.abs(window.scrollY - savedScroll) > 4) {
-            window.scrollTo({ top: savedScroll, behavior: 'instant' });
-          }
-        }
-
-        async function refresh() {
-          var r = await sb.from('support_tickets')
-            .select('*')
-            .order('created_at', { ascending: false });
-          if (r.error) {
-            $('hx-tk-host').innerHTML = '<div class="hx-empty"><h3>Could not load tickets</h3><p>' + escape(r.error.message) + '</p></div>';
-            return;
-          }
-          var rows = r.data || [];
-          // Hydrate event threads for any currently-expanded ticket.
-          var expandedIds = Object.keys(expanded).filter(function (k) { return expanded[k]; });
-          if (expandedIds.length) {
-            var ev = await sb.from('support_ticket_events')
-              .select('*')
-              .in('ticket_id', expandedIds)
-              .order('created_at', { ascending: true });
-            eventsCache = {};
-            (ev.data || []).forEach(function (e) {
-              if (!eventsCache[e.ticket_id]) eventsCache[e.ticket_id] = [];
-              eventsCache[e.ticket_id].push(e);
-            });
-          }
-          renderTickets(rows);
-        }
-
-        async function loadPlan() {
-          try {
-            var s = await sb.from('subscriptions').select('plan').maybeSingle();
-            plan = (s && s.data && s.data.plan) || 'free';
-            $('hx-tk-stat-sla').textContent = plan === 'scale' ? '4h' : plan === 'growth' ? '24h' : '1–3 days';
-            $('hx-tk-stat-sla-meta').textContent = plan.charAt(0).toUpperCase() + plan.slice(1) + ' plan';
-          } catch (e) {}
-        }
-
-        function showForm(yes) {
-          openForm = !!yes;
-          $('hx-tk-form').hidden = !openForm;
-          if (openForm) $('hx-tk-subject').focus();
-          status('');
-        }
-
-        $('hx-tk-open').addEventListener('click', function () { showForm(true); });
-        $('hx-tk-cancel').addEventListener('click', function () {
-          showForm(false);
-          $('hx-tk-subject').value = '';
-          $('hx-tk-message').value = '';
-          $('hx-tk-priority').value = 'normal';
-          $('hx-tk-topic').value = 'technical';
-        });
-
-        $('hx-tk-submit').addEventListener('click', async function (e) {
-          e.preventDefault();
-          var subject  = ($('hx-tk-subject').value || '').trim();
-          var topic    = $('hx-tk-topic').value;
-          var priority = $('hx-tk-priority').value;
-          var message  = ($('hx-tk-message').value || '').trim();
-          if (subject.length < 4)  { status('Add a subject (≥ 4 chars).', 'error'); return; }
-          if (message.length < 10) { status('Describe what\'s happening (≥ 10 chars).', 'error'); return; }
-
-          var btn = e.currentTarget; var lbl = btn.textContent;
-          btn.disabled = true; btn.textContent = 'Sending…';
-          try {
-            var u = (await sb.auth.getUser()).data.user;
-            if (!u) throw new Error('Sign in again to send a ticket.');
-
-            var meta = {
-              url: window.location.href,
-              user_agent: navigator.userAgent,
-              plan: plan || 'unknown',
-              language: (document.documentElement && document.documentElement.lang) || navigator.language
-            };
-
-            var ins = await sb.from('support_tickets').insert({
-              owner_id: u.id, subject: subject, topic: topic,
-              priority: priority, message: message, meta: meta
-            }).select().single();
-            if (ins.error) throw ins.error;
-            var ticket = ins.data;
-
-            // Email the team + customer. If this fails, the ticket still
-            // exists in the DB — we log a warning but don't roll back.
-            try {
-              var sess = (await sb.auth.getSession()).data.session;
-              await fetch('/api/notify', {
-                method: 'POST',
-                headers: {
-                  'content-type': 'application/json',
-                  authorization: 'Bearer ' + (sess && sess.access_token)
-                },
-                body: JSON.stringify({ kind: 'support_ticket', ticket_id: ticket.id })
-              });
-            } catch (emailErr) { /* non-fatal */ }
-
-            await sb.rpc('log_event', { p_kind: 'support.ticket_opened', p_payload: { id: ticket.id, topic: topic, priority: priority } });
-
-            // Reset + close form
-            $('hx-tk-subject').value = '';
-            $('hx-tk-message').value = '';
-            $('hx-tk-priority').value = 'normal';
-            $('hx-tk-topic').value = 'technical';
-            showForm(false);
-            status('');
-            expanded[ticket.id] = true;
-            await refresh();
-          } catch (err) {
-            status((err && err.message) || 'Could not send the ticket.', 'error');
-          } finally {
-            btn.disabled = false; btn.textContent = lbl;
-          }
-        });
-
-        // Build just the expanded body for one ticket — used for in-place
-        // toggle so we don't have to wipe and rebuild the whole list
-        // (which threw away the user's scroll position on every click).
-        function expandedHtml(row, threadRows) {
-          var thread = (threadRows || []).filter(function (e) { return e.kind !== 'opened'; });
-          var html = '<div class="body">' + escape(row.message || '') + '</div>';
-          if (thread.length) {
-            html += '<div class="thread">' + thread.map(function (e) {
-              return '<div class="evt">' +
-                '<div class="dot"></div>' +
-                '<div style="flex:1;min-width:0;">' +
-                  '<span class="label">' + escape(e.kind.replace(/_/g, ' ')) + '</span> · ' +
-                  '<span class="hx-mono" style="font-size:11.5px;color:var(--hx-text-dim);">' + escape(relTime(e.created_at)) + '</span>' +
-                  (e.body ? '<div style="margin-top:4px;color:var(--hx-text);">' + escape(e.body) + '</div>' : '') +
-                '</div>' +
-              '</div>';
-            }).join('') + '</div>';
-          }
-          if (row.status !== 'closed') {
-            html += '<div style="margin-top:12px;display:flex;gap:8px;">' +
-              '<button class="hx-btn hx-btn-secondary hx-btn-sm" data-act="close" data-id="' + row.id + '">Close this ticket</button>' +
-            '</div>';
-          }
-          return '<div data-expanded="1">' + html + '</div>';
-        }
-
-        // Expand/collapse + close action — fully in-place, NO refresh()
-        // call on user clicks. refresh() only runs on initial load,
-        // realtime events, and after submitting a new ticket. This is
-        // what kept resetting the page to the top after every click.
-        $('hx-tk-host').addEventListener('click', async function (e) {
-          var btn = e.target.closest && e.target.closest('button[data-act]');
-          if (btn) {
-            e.stopPropagation();
-            var id = btn.getAttribute('data-id');
-            if (btn.getAttribute('data-act') === 'close') {
-              if (btn.dataset.armed !== '1') {
-                btn.dataset.armed = '1';
-                btn.dataset.original = btn.textContent;
-                btn.textContent = 'Click to confirm';
-                setTimeout(function () {
-                  if (btn.dataset.armed === '1') {
-                    btn.dataset.armed = '';
-                    btn.textContent = btn.dataset.original || 'Close this ticket';
-                  }
-                }, 3000);
-                return;
-              }
-              btn.dataset.armed = '';
-              btn.disabled = true; btn.textContent = 'Closing…';
-              try {
-                var u = (await sb.auth.getUser()).data.user;
-                var upd = await sb.from('support_tickets').update({ status: 'closed' }).eq('id', id);
-                if (upd.error) throw upd.error;
-                await sb.from('support_ticket_events').insert({
-                  ticket_id: id, owner_id: u.id, kind: 'closed_by_owner', body: null
-                });
-                await sb.rpc('log_event', { p_kind: 'support.ticket_closed', p_payload: { id: parseInt(id, 10) } });
-                // The realtime subscription will repaint; no manual call.
-              } catch (err) {
-                alert((err && err.message) || 'Could not close.');
-                btn.disabled = false; btn.textContent = btn.dataset.original || 'Close this ticket';
-              }
-            }
-            return;
-          }
-          // Ignore clicks on links inside the row (status / docs cards
-          // aren't here, but be defensive).
-          if (e.target.closest && e.target.closest('a')) return;
-          var row = e.target.closest('.hx-ticket');
-          if (!row) return;
-          var rid = row.getAttribute('data-id');
-          var existing = row.querySelector('[data-expanded="1"]');
-          if (existing) {
-            // Collapse: drop the expanded section in place. Scroll stays put.
-            existing.remove();
-            expanded[rid] = false;
-            return;
-          }
-          // Expand: fetch thread if not cached, then insert the section
-          // at the end of the row. Window scroll is untouched.
-          expanded[rid] = true;
-          if (!eventsCache[rid]) {
-            var ev = await sb.from('support_ticket_events')
-              .select('*').eq('ticket_id', rid).order('created_at', { ascending: true });
-            eventsCache[rid] = ev.data || [];
-          }
-          // Find the source row in the data so we have the original
-          // message body to render.
-          var src = (window.__hxTickets || []).find(function (t) { return String(t.id) === String(rid); });
-          if (!src) return;
-          row.insertAdjacentHTML('beforeend', expandedHtml(src, eventsCache[rid]));
-        });
-
-        // Realtime — team replies / status changes show up immediately.
-        sb.auth.getUser().then(function (res) {
-          var u = res && res.data ? res.data.user : null;
-          if (!u || !sb.channel) return;
-          sb.channel('hx-tickets-' + u.id)
-            .on('postgres_changes',
-                { event: '*', schema: 'public', table: 'support_tickets', filter: 'owner_id=eq.' + u.id },
-                function () { refresh(); })
-            .on('postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'support_ticket_events', filter: 'owner_id=eq.' + u.id },
-                function (payload) {
-                  var tid = payload && payload.new && payload.new.ticket_id;
-                  if (tid && eventsCache[tid]) {
-                    eventsCache[tid].push(payload.new);
-                  }
-                  refresh();
-                })
-            .subscribe();
-        });
-
-        loadPlan().then(refresh);
-      });
-    })();
+    $('sp-new').onclick=openNew;
+    help(); render();
+    WB.ready(function(s,u){ sb=s; owner=u?u.id:null; db=(s&&u)?WB.tbl(s,'support_tickets',owner):null; load(); });
+  })();
   </script>
 </body>
 </html>

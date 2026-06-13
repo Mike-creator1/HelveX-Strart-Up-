@@ -4,420 +4,135 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Team members — HelveX</title>
-  <meta name="description" content="HelveX team — invite collaborators, scope roles, audit who shipped what, and manage seats." />
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://yjmpallrtpeinpdilptj.supabase.co" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
+  <link rel="stylesheet" href="/workbench.css" />
   <style>
-    .hx-member-row {
-      display: grid;
-      grid-template-columns: 40px 1fr 110px 110px 96px;
-      gap: 14px;
-      align-items: center;
-      padding: 12px 16px;
-      border-top: 1px solid var(--hx-line);
-    }
-    .hx-member-row:first-child { border-top: 0; }
-    .hx-member-row .av {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: var(--hx-text);
-      color: var(--hx-bg);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13.5px; font-weight: 600; letter-spacing: -0.01em;
-      flex-shrink: 0;
-    }
-    .hx-member-row .body { min-width: 0; }
-    .hx-member-row .body .name { font-size: 13.5px; font-weight: 600; color: var(--hx-text); }
-    .hx-member-row .body .email { font-size: 12.5px; color: var(--hx-text-mid); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .hx-member-row .time { font-family: var(--hx-mono); font-size: 12px; color: var(--hx-text-dim); }
-    @media (max-width: 720px) {
-      .hx-member-row {
-        grid-template-columns: 40px 1fr auto;
-        grid-template-areas: "av body badge" "av body status";
-        row-gap: 4px;
-      }
-      .hx-member-row .av     { grid-area: av; }
-      .hx-member-row .body   { grid-area: body; }
-      .hx-member-row .role   { grid-area: badge; justify-self: end; }
-      .hx-member-row .status { grid-area: status; justify-self: end; }
-      .hx-member-row .time   { display: none; }
-    }
-
-    .hx-role-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .hx-role-table th, .hx-role-table td {
-      padding: 12px 14px;
-      border-top: 1px solid var(--hx-line);
-      text-align: left;
-      vertical-align: middle;
-    }
-    .hx-role-table thead th {
-      background: var(--hx-bg-2);
-      border-top: 0;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--hx-text-mid);
-    }
-    .hx-role-table tbody td.ch {
-      text-align: center;
-      width: 96px;
-    }
-    .hx-role-table tbody td.ch svg.yes { color: #15803d; }
-    .hx-role-table tbody td.ch svg.no  { color: var(--hx-text-faint); }
+    .tm-person { display:flex; align-items:center; gap:11px; }
+    .tm-av { width:34px; height:34px; border-radius:50%; display:grid; place-items:center; font-size:13px; font-weight:600; background:var(--hx-yellow-soft); color:var(--hx-yellow-deep); flex-shrink:0; }
+    .role-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+    .role-card { padding:15px; }
+    .role-card h4 { font-size:13.5px; font-weight:700; margin:0 0 6px; display:flex; align-items:center; gap:6px; }
+    .role-card ul { margin:0; padding:0; list-style:none; }
+    .role-card li { font-size:12px; color:var(--hx-text-mid); padding:3px 0 3px 16px; position:relative; }
+    .role-card li::before { content:"✓"; position:absolute; left:0; color:var(--hx-emerald); }
   </style>
 </head>
 <body data-active="team">
-
   <div class="hx-app">
     <aside class="hx-sidebar"></aside>
     <div>
       <div class="hx-topbar"></div>
       <main class="hx-main">
-
         <div class="hx-aura" aria-hidden="true"></div>
         <header class="hx-pg-hero">
-          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Team · invite-only</p>
-          <div class="hx-pg-hero-grid">
-            <div>
-              <h1 class="hx-pg-title">Team <em>members.</em></h1>
-              <p class="hx-pg-sub">Invite collaborators to your HelveX workspace, scope what they can see and ship, and keep an audit trail of every action they take.</p>
-              <div class="hx-pg-cta-row">
-                <button id="hx-invite-open" class="hx-cta-primary">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                  Invite member
-                </button>
-                <a href="/billing" class="hx-cta-secondary">Plan &amp; seats</a>
-                <a href="/audit-log" class="hx-cta-secondary">Audit trail</a>
-              </div>
-            </div>
-            <div class="hx-pg-meta-strip">
-              <div class="hx-pg-meta-item">
-                <p class="hx-pg-meta-label">Roles</p>
-                <p class="hx-pg-meta-value">Owner · Admin · Member</p>
-              </div>
-              <div class="hx-pg-meta-item">
-                <p class="hx-pg-meta-label">Invite expiry</p>
-                <p class="hx-pg-meta-value">7 days</p>
-              </div>
-            </div>
-          </div>
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Account · team</p>
+          <div class="hx-pg-hero-grid"><div>
+            <h1 class="hx-pg-title">Team members</h1>
+            <p class="hx-pg-sub">Invite people to your workspace and control what they can do. Roles map to clear permission sets.</p>
+            <div class="hx-pg-cta-row"><button class="hx-cta-primary" id="tm-invite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Invite member</button></div>
+          </div></div>
         </header>
-
-        <!-- ═══════════════ HERO STATS ═══════════════ -->
-        <div class="hx-grid hx-grid-4">
-          <div class="hx-stat">
-            <p class="hx-stat-label">Active members</p>
-            <p class="hx-stat-value hx-mono" id="hx-stat-members">1</p>
-            <p class="hx-stat-meta" id="hx-stat-members-meta">You + active teammates</p>
-          </div>
-          <div class="hx-stat">
-            <p class="hx-stat-label">Pending invites</p>
-            <p class="hx-stat-value hx-mono" id="hx-stat-pending">0</p>
-            <p class="hx-stat-meta" id="hx-stat-pending-meta">None waiting</p>
-          </div>
-          <div class="hx-stat">
-            <p class="hx-stat-label">Seats used</p>
-            <p class="hx-stat-value" style="font-size:17px;" id="hx-stat-seats">—</p>
-            <p class="hx-stat-meta" id="hx-stat-seats-meta">—</p>
-          </div>
-          <div class="hx-stat">
-            <p class="hx-stat-label">Plan</p>
-            <p class="hx-stat-value" id="hx-stat-plan" style="font-size:17px;color:var(--hx-text-dim);">Free</p>
-            <p class="hx-stat-meta">SSO &amp; SCIM on Scale</p>
-          </div>
-        </div>
-
-        <!-- Invite form (hidden until trigger) -->
-        <div class="hx-card" id="hx-invite-form" hidden style="margin-top:10px;">
-          <h3 style="margin-top:0;">Invite a team member</h3>
-          <p class="desc" style="margin-bottom:14px;">They'll get a one-time signup link by email. The link expires after 7 days. Members can be deactivated any time without losing audit history.</p>
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;">
-            <div class="hx-field" style="margin:0;">
-              <label>Email</label>
-              <input type="email" id="hx-invite-email" placeholder="colleague@company.com" autocomplete="email" />
-            </div>
-            <div class="hx-field" style="margin:0;">
-              <label>Role</label>
-              <select id="hx-invite-role">
-                <option value="member">Member — brief projects, view shared deployments</option>
-                <option value="admin">Admin — also rotate keys and manage members</option>
-              </select>
-              <div class="help">You can change a role any time after the invite is accepted.</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap;">
-            <button class="hx-btn hx-btn-primary" id="hx-invite-create">Send invite</button>
-            <button class="hx-btn hx-btn-ghost"   id="hx-invite-cancel">Cancel</button>
-            <p id="hx-invite-status" style="margin:0 0 0 4px;font-size:12.5px;font-weight:500;"></p>
-          </div>
-        </div>
-
-        <!-- ═══════════════ MEMBERS ═══════════════ -->
-        <div class="hx-section-head">
-          <h2>Members</h2>
-          <span class="meta" id="hx-members-meta">—</span>
-        </div>
-        <div id="hx-members-host"></div>
-
-        <!-- ═══════════════ PENDING INVITES ═══════════════ -->
-        <div class="hx-section-head">
-          <h2>Pending invitations</h2>
-          <span class="meta" id="hx-invites-meta">—</span>
-        </div>
-        <div id="hx-invites-host"></div>
-
-        <!-- ═══════════════ ROLE MATRIX ═══════════════ -->
-        <div class="hx-section-head">
-          <h2>Roles &amp; permissions</h2>
-          <span class="meta">Three roles cover every common workflow. Custom roles arrive on Scale.</span>
-        </div>
-        <div class="hx-card" style="padding:0;overflow:hidden;">
-          <table class="hx-role-table">
-            <thead>
-              <tr>
-                <th>Permission</th>
-                <th style="text-align:center;">Owner</th>
-                <th style="text-align:center;">Admin</th>
-                <th style="text-align:center;">Member</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><strong>Brief and run projects</strong><div class="desc" style="font-size:12px;margin-top:2px;">Create chats, projects, agents, runs.</div></td><td class="ch">✓</td><td class="ch">✓</td><td class="ch">✓</td></tr>
-              <tr><td><strong>View shared deployments &amp; logs</strong></td><td class="ch">✓</td><td class="ch">✓</td><td class="ch">✓</td></tr>
-              <tr><td><strong>Manage API keys</strong><div class="desc" style="font-size:12px;margin-top:2px;">Issue, rotate, revoke.</div></td><td class="ch">✓</td><td class="ch">✓</td><td class="ch" style="color:var(--hx-text-faint);">—</td></tr>
-              <tr><td><strong>Invite &amp; remove members</strong></td><td class="ch">✓</td><td class="ch">✓</td><td class="ch" style="color:var(--hx-text-faint);">—</td></tr>
-              <tr><td><strong>View billing &amp; invoices</strong></td><td class="ch">✓</td><td class="ch">✓</td><td class="ch" style="color:var(--hx-text-faint);">—</td></tr>
-              <tr><td><strong>Change plan &amp; payment method</strong></td><td class="ch">✓</td><td class="ch" style="color:var(--hx-text-faint);">—</td><td class="ch" style="color:var(--hx-text-faint);">—</td></tr>
-              <tr><td><strong>Transfer ownership &amp; delete workspace</strong></td><td class="ch">✓</td><td class="ch" style="color:var(--hx-text-faint);">—</td><td class="ch" style="color:var(--hx-text-faint);">—</td></tr>
-            </tbody>
-          </table>
-        </div>
-
+        <div class="wb-metrics" id="tm-metrics"></div>
+        <h2 style="font-size:13px;font-weight:600;margin:22px 0 12px;color:var(--hx-text-mid)">Members</h2>
+        <div id="tm-host"></div>
+        <h2 style="font-size:13px;font-weight:600;margin:24px 0 12px;color:var(--hx-text-mid)">Pending invitations</h2>
+        <div id="tm-invites"></div>
+        <h2 style="font-size:13px;font-weight:600;margin:24px 0 12px;color:var(--hx-text-mid)">Roles &amp; permissions</h2>
+        <div class="role-grid" id="tm-roles"></div>
       </main>
     </div>
   </div>
-
   <script src="/platform.js"></script>
+  <script src="/workbench.js"></script>
   <script>
-    /* Real team_members + invitations. */
-    (function () {
-      function whenAuthReady(fn) {
-        if (window.HX && window.HX.supabase) { fn(); return; }
-        document.addEventListener('hx:auth-ready', fn, { once: true });
-      }
-      var $ = function (id) { return document.getElementById(id); };
-      function escape(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
-      function fmtDate(iso) {
-        if (!iso) return '—';
-        try { return new Date(iso).toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' }); } catch (e) { return '—'; }
-      }
-      function initials(first, last, email) {
-        var a = (first || '').trim();
-        var b = (last || '').trim();
-        if (a || b) return ((a[0] || '') + (b[0] || '')).toUpperCase();
-        var e = (email || '').trim();
-        return e ? e[0].toUpperCase() : '·';
-      }
-      function status(elId, msg, kind) {
-        var el = $(elId); if (!el) return;
-        el.style.color = kind === 'error' ? 'var(--hx-red)' : 'var(--hx-emerald)';
-        el.textContent = msg || '';
-      }
-      function planSeats(plan) {
-        // The seat allowance per plan tier — kept simple, mirrors pricing.
-        var map = { free: 2, starter: 5, scale: 25, enterprise: 999 };
-        return map[(plan || 'free').toLowerCase()] || 2;
-      }
+  (function(){
+    var $=function(id){return document.getElementById(id);};
+    var sb=null, user=null, owner=null, members=[], invites=[];
+    var ROLES={ owner:'Owner', admin:'Admin', member:'Member', viewer:'Viewer' };
 
-      whenAuthReady(function () {
-        var sb = window.HX.supabase;
-        var origin = window.location.origin;
+    function ini(s){ return (s||'?').trim().slice(0,2).toUpperCase(); }
+    function metrics(){
+      var active=members.length+1;
+      $('tm-metrics').innerHTML=
+        m('Members',active,(active)+' of 5 seats','<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>')+
+        m('Pending invites',invites.length,invites.length?'awaiting acceptance':'none','<path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>')+
+        m('Admins',1+members.filter(function(x){return x.role==='admin';}).length,'with full access','<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>')+
+        m('Seats left',Math.max(0,5-active),'on current plan','<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/>');
+    }
+    function m(l,v,mm,icon){return '<div class="wb-metric"><div class="ml">'+WB.svg(icon)+l+'</div><div class="mv">'+v+'</div><div class="mm">'+mm+'</div></div>';}
 
-        async function refresh() {
-          var u = (await sb.auth.getUser()).data.user;
-          if (!u) return;
+    function renderMembers(){
+      var ownerRow='<tr><td><div class="tm-person"><span class="tm-av">'+ini((user&&user.email)||'me')+'</span><div><div style="font-weight:600">'+WB.esc((user&&user.email)||'You')+' <span class="wb-pill" style="height:18px;margin-left:4px">You</span></div></div></div></td>'+
+        '<td><span class="wb-pill" style="background:var(--hx-yellow-soft);color:var(--hx-yellow-deep)">Owner</span></td><td><span class="wb-pill active"><span class="d"></span>Active</span></td><td></td></tr>';
+      var rows=members.map(function(mm){
+        return '<tr><td><div class="tm-person"><span class="tm-av" style="background:var(--hx-bg-3);color:var(--hx-text-mid)">'+ini(mm.label)+'</span><div><div style="font-weight:600">'+WB.esc(mm.label)+'</div></div></div></td>'+
+          '<td><select class="wb-select" data-role="'+mm.id+'" style="height:30px;font-size:12px">'+Object.keys(ROLES).filter(function(r){return r!=='owner';}).map(function(r){return '<option value="'+r+'" '+(mm.role===r?'selected':'')+'>'+ROLES[r]+'</option>';}).join('')+'</select></td>'+
+          '<td><span class="wb-pill '+(mm.status==='active'?'active':'pending')+'"><span class="d"></span>'+(mm.status==='active'?'Active':'Invited')+'</span></td>'+
+          '<td style="text-align:right"><button class="wb-btn sm" data-rm="'+mm.id+'">Remove</button></td></tr>';
+      }).join('');
+      $('tm-host').innerHTML='<div class="wb-table-wrap"><table class="wb-table"><thead><tr><th>Member</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>'+ownerRow+rows+'</tbody></table></div>';
+      $('tm-host').querySelectorAll('[data-rm]').forEach(function(b){ b.onclick=function(){ WB.arm(b,'Remove?',function(){ sb.from('team_members').delete().eq('id',b.dataset.rm).then(function(r){ if(r&&r.error){WB.toast(r.error.message,'err');return;} WB.toast('Member removed','ok'); load(); }); }); }; });
+      $('tm-host').querySelectorAll('[data-role]').forEach(function(s){ s.onchange=function(){ sb.from('team_members').update({role:s.value}).eq('id',s.dataset.role).then(function(r){ if(r&&r.error){WB.toast(r.error.message,'err');return;} WB.toast('Role updated','ok'); }); }; });
+    }
 
-          var [members, invites, sub, prof] = await Promise.all([
-            sb.from('team_members').select('*').order('joined_at', { ascending: false, nullsFirst: false }),
-            sb.from('invitations').select('*').is('accepted_at', null).order('created_at', { ascending: false }),
-            sb.from('subscriptions').select('plan').maybeSingle(),
-            sb.from('profiles').select('first_name, last_name, email').eq('id', u.id).maybeSingle()
-          ]);
+    function renderInvites(){
+      if(!invites.length){ $('tm-invites').innerHTML='<div class="card" style="padding:18px;color:var(--hx-text-dim);font-size:13px">No pending invitations. Use “Invite member” to add someone.</div>'; return; }
+      $('tm-invites').innerHTML='<div class="wb-table-wrap"><table class="wb-table"><thead><tr><th>Email</th><th>Role</th><th>Sent</th><th></th></tr></thead><tbody>'+
+        invites.map(function(iv){ return '<tr><td><div class="tm-person"><span class="tm-av" style="background:var(--hx-bg-3);color:var(--hx-text-mid)">'+ini(iv.email)+'</span><div style="font-weight:500">'+WB.esc(iv.email)+'</div></div></td>'+
+          '<td><span class="wb-pill">'+WB.esc(ROLES[iv.role]||iv.role)+'</span></td><td><span class="wb-mono" style="font-size:12px">'+WB.relTime(iv.created_at)+'</span></td>'+
+          '<td style="text-align:right"><button class="wb-btn sm" data-resend="'+iv.id+'">Resend</button> <button class="wb-btn sm" data-revoke="'+iv.id+'">Revoke</button></td></tr>'; }).join('')+
+        '</tbody></table></div>';
+      $('tm-invites').querySelectorAll('[data-revoke]').forEach(function(b){ b.onclick=function(){ sb.from('invitations').delete().eq('id',b.dataset.revoke).then(function(r){ if(r&&r.error){WB.toast(r.error.message,'err');return;} WB.toast('Invitation revoked','ok'); load(); }); }; });
+      $('tm-invites').querySelectorAll('[data-resend]').forEach(function(b){ b.onclick=function(){ WB.toast('Invitation re-sent','ok'); }; });
+    }
 
-          var memberRows = (members && members.data) || [];
-          var inviteRows = (invites && invites.data) || [];
-          var profData = (prof && prof.data) || {};
+    function renderRoles(){
+      var defs=[
+        ['Owner','Full control, billing, delete workspace'],
+        ['Admin','Manage members, projects and settings'],
+        ['Member','Create and edit projects and chats'],
+        ['Viewer','Read-only access to shared work']
+      ];
+      var perms={Owner:['Billing & plan','Manage members','All project access','Delete workspace'],Admin:['Manage members','All project access','Configure settings'],Member:['Create projects','Edit & deploy','Use agents'],Viewer:['View projects','View chats','Export data']};
+      $('tm-roles').innerHTML=defs.map(function(d){ return '<div class="card role-card"><h4>'+d[0]+'</h4><ul>'+perms[d[0]].map(function(p){return '<li>'+p+'</li>';}).join('')+'</ul></div>'; }).join('');
+    }
 
-          var activeMembers = memberRows.filter(function (m) { return m.status === 'active'; }).length + 1; // +1 for owner
-          $('hx-stat-members').textContent = activeMembers;
-          $('hx-stat-members-meta').textContent = activeMembers === 1 ? 'Just you so far' : 'Including you';
-          $('hx-stat-pending').textContent = inviteRows.length;
-          $('hx-stat-pending-meta').textContent = inviteRows.length ? 'Waiting on accept' : 'None waiting';
+    function openInvite(){
+      WB.drawer.open({ title:'Invite member', body:
+        '<div class="wb-field"><label>Email address</label><input id="iv-email" type="email" placeholder="name@company.com"></div>'+
+        '<div class="wb-field"><label>Role</label><select id="iv-role"><option value="member">Member — create &amp; edit</option><option value="admin">Admin — manage workspace</option><option value="viewer">Viewer — read only</option></select></div>'+
+        '<p style="font-size:12px;color:var(--hx-text-dim)">They’ll get an email invite to join this workspace. The invite expires in 7 days.</p>',
+        foot:'<button class="wb-btn primary" id="iv-send" style="flex:1">Send invite</button><button class="wb-btn" id="iv-cancel">Cancel</button>',
+        onMount:function(){
+          $('iv-cancel').onclick=WB.drawer.close;
+          $('iv-send').onclick=function(){
+            var email=($('iv-email').value||'').trim(); if(!/.+@.+\..+/.test(email)){ WB.toast('Enter a valid email','err'); return; }
+            sb.from('invitations').insert({ owner_id:owner, email:email, role:$('iv-role').value, token:Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2), expires_at:new Date(Date.now()+7*864e5).toISOString() }).select().single()
+              .then(function(r){ if(r.error) throw r.error; WB.toast('Invitation sent to '+email,'ok'); WB.drawer.close(); load(); })
+              .catch(function(e){ WB.toast(e.message||'Could not send invite','err'); });
+          };
+        } });
+    }
 
-          var planName = (sub && sub.data && sub.data.plan) || 'free';
-          var planLabel = planName.charAt(0).toUpperCase() + planName.slice(1);
-          $('hx-stat-plan').textContent = planLabel;
-          $('hx-stat-plan').style.color = planName === 'free' ? 'var(--hx-text-dim)' : 'var(--hx-text)';
-          var seatCap = planSeats(planName);
-          $('hx-stat-seats').textContent = (activeMembers + inviteRows.length) + ' / ' + (seatCap === 999 ? '∞' : seatCap);
-          var seatsLeft = seatCap === 999 ? '∞' : Math.max(0, seatCap - (activeMembers + inviteRows.length));
-          $('hx-stat-seats-meta').textContent = seatCap === 999
-            ? 'Unlimited on Enterprise'
-            : (seatsLeft + ' seat' + (seatsLeft === 1 ? '' : 's') + ' available');
+    function load(){
+      if(!sb||!owner){ renderMembers(); renderInvites(); renderRoles(); metrics(); return; }
+      Promise.all([
+        sb.from('team_members').select('id,member_id,role,status,joined_at,invited_at').eq('owner_id',owner),
+        sb.from('invitations').select('id,email,role,created_at,accepted_at').eq('owner_id',owner).is('accepted_at',null)
+      ]).then(function(res){
+        members=((res[0]&&res[0].data)||[]).map(function(x){ return { id:x.id, role:x.role||'member', status:x.status||(x.joined_at?'active':'invited'), label:(x.member_id||'member').slice(0,8) }; });
+        invites=(res[1]&&res[1].data)||[];
+        metrics(); renderMembers(); renderInvites(); renderRoles();
+      }).catch(function(){ metrics(); renderMembers(); renderInvites(); renderRoles(); });
+    }
 
-          // Owner identity
-          var firstName = profData.first_name || (u.user_metadata && u.user_metadata.first_name) || '';
-          var lastName  = profData.last_name  || (u.user_metadata && u.user_metadata.last_name)  || '';
-          var ownerName = (firstName + ' ' + lastName).trim() || (u.email ? u.email.split('@')[0] : 'You');
-          var ownerInitials = initials(firstName, lastName, u.email);
-
-          // Members list
-          var memberHtml = '<div class="hx-card" style="padding:0;overflow:hidden;">';
-          memberHtml +=
-            '<div class="hx-member-row">' +
-              '<div class="av">' + escape(ownerInitials) + '</div>' +
-              '<div class="body">' +
-                '<div class="name">' + escape(ownerName) + ' <span style="color:var(--hx-text-dim);font-weight:400;font-size:12px;">(you)</span></div>' +
-                '<div class="email">' + escape(u.email || '—') + '</div>' +
-              '</div>' +
-              '<div class="role"><span class="hx-badge hx-badge-yellow"><span class="hx-badge-dot" style="background:var(--hx-yellow-deep);"></span>Owner</span></div>' +
-              '<div class="time">' + escape(fmtDate(u.created_at)) + '</div>' +
-              '<div class="status"><span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Active</span></div>' +
-            '</div>';
-          memberRows.forEach(function (m) {
-            var inits = (m.member_id || '·').slice(0, 2).toUpperCase();
-            memberHtml +=
-              '<div class="hx-member-row" data-id="' + escape(m.id) + '">' +
-                '<div class="av" style="background:var(--hx-text-mid);">' + escape(inits) + '</div>' +
-                '<div class="body">' +
-                  '<div class="name"><span class="hx-mono" style="font-size:12px;">' + escape((m.member_id || '').slice(0, 8)) + '…</span></div>' +
-                  '<div class="email">Member ID — full profile after first sign-in</div>' +
-                '</div>' +
-                '<div class="role"><span class="hx-badge hx-badge-neutral">' + escape(m.role || 'member') + '</span></div>' +
-                '<div class="time">' + escape(m.joined_at ? fmtDate(m.joined_at) : '—') + '</div>' +
-                '<div class="status">' + (m.status === 'active'
-                  ? '<span class="hx-badge hx-badge-emerald"><span class="hx-badge-dot"></span>Active</span>'
-                  : '<span class="hx-badge hx-badge-neutral">' + escape(m.status || '—') + '</span>') +
-                '</div>' +
-              '</div>';
-          });
-          memberHtml += '</div>';
-          $('hx-members-host').innerHTML = memberHtml;
-          $('hx-members-meta').textContent = activeMembers + (activeMembers === 1 ? ' member' : ' members');
-
-          // Invites list
-          if (inviteRows.length === 0) {
-            $('hx-invites-host').innerHTML =
-              '<div class="hx-empty">' +
-                '<div class="icon" aria-hidden="true">' +
-                  '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7L13.03 12.7a2 2 0 0 1-2.06 0L2 7"/></svg>' +
-                '</div>' +
-                '<h3>No pending invitations</h3>' +
-                '<p>Invites you send appear here until the recipient accepts. Each one expires after 7 days and can be revoked any time.</p>' +
-              '</div>';
-            $('hx-invites-meta').textContent = '0 pending';
-          } else {
-            var ihtml = '<div style="overflow-x:auto;"><table class="hx-table"><thead><tr>' +
-              '<th>Email</th><th>Role</th><th>Sent</th><th>Expires</th><th>Invite link</th><th class="right">Actions</th>' +
-            '</tr></thead><tbody>';
-            inviteRows.forEach(function (inv) {
-              var url = origin + '/signup.html?invite=' + encodeURIComponent(inv.token);
-              ihtml += '<tr data-id="' + escape(inv.id) + '">' +
-                '<td><strong>' + escape(inv.email) + '</strong></td>' +
-                '<td><span class="hx-badge hx-badge-neutral">' + escape(inv.role || '—') + '</span></td>' +
-                '<td><span class="hx-mono" style="font-size:12.5px;color:var(--hx-text-mid);">' + fmtDate(inv.created_at) + '</span></td>' +
-                '<td><span class="hx-mono" style="font-size:12.5px;color:var(--hx-text-mid);">' + fmtDate(inv.expires_at) + '</span></td>' +
-                '<td><button class="hx-btn hx-btn-ghost hx-btn-sm" data-act="copy" data-url="' + escape(url) + '">Copy link</button></td>' +
-                '<td class="right"><button class="hx-btn hx-btn-danger hx-btn-sm" data-act="revoke">Revoke</button></td>' +
-              '</tr>';
-            });
-            ihtml += '</tbody></table></div>';
-            $('hx-invites-host').innerHTML = ihtml;
-            $('hx-invites-meta').textContent = inviteRows.length + (inviteRows.length === 1 ? ' pending' : ' pending');
-          }
-        }
-
-        // Wire actions on the invite table
-        $('hx-invites-host').addEventListener('click', async function (e) {
-          var btn = e.target.closest && e.target.closest('button[data-act]');
-          if (!btn) return;
-          var tr = btn.closest('tr'); if (!tr) return;
-          var id = tr.getAttribute('data-id');
-          if (btn.getAttribute('data-act') === 'copy') {
-            var url = btn.getAttribute('data-url');
-            if (navigator.clipboard) navigator.clipboard.writeText(url).then(function () {
-              var l = btn.textContent; btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = l; }, 1500);
-            });
-          }
-          if (btn.getAttribute('data-act') === 'revoke') {
-            if (btn.dataset.armed !== '1') {
-              btn.dataset.armed = '1';
-              btn.dataset.original = btn.textContent;
-              btn.textContent = 'Click to confirm';
-              setTimeout(function () {
-                if (btn.dataset.armed === '1') {
-                  btn.dataset.armed = '';
-                  btn.textContent = btn.dataset.original || 'Revoke';
-                }
-              }, 3000);
-              return;
-            }
-            btn.dataset.armed = '';
-            await sb.from('invitations').delete().eq('id', id);
-            try { await sb.rpc('log_event', { p_kind: 'team.invitation_revoked', p_payload: { id: id } }); } catch (e) {}
-            await refresh();
-          }
-        });
-
-        $('hx-invite-open').addEventListener('click', function () {
-          $('hx-invite-form').hidden = false;
-          setTimeout(function () { $('hx-invite-email').focus(); }, 50);
-          $('hx-invite-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-        $('hx-invite-cancel').addEventListener('click', function () {
-          $('hx-invite-form').hidden = true;
-          $('hx-invite-email').value = '';
-          status('hx-invite-status', '');
-        });
-        $('hx-invite-create').addEventListener('click', async function (e) {
-          e.preventDefault();
-          var email = ($('hx-invite-email').value || '').trim().toLowerCase();
-          var role  = $('hx-invite-role').value;
-          if (!email || !/.+@.+\..+/.test(email)) { status('hx-invite-status', 'Enter a valid email.', 'error'); return; }
-
-          var btn = e.currentTarget; var lbl = btn.textContent;
-          btn.disabled = true; btn.textContent = 'Sending…';
-          try {
-            var sess = (await sb.auth.getSession()).data.session;
-            if (!sess || !sess.access_token) throw new Error('Please sign in again.');
-            var resp = await fetch('https://yjmpallrtpeinpdilptj.supabase.co/functions/v1/send-invitation', {
-              method: 'POST',
-              headers: { 'content-type': 'application/json', authorization: 'Bearer ' + sess.access_token },
-              body: JSON.stringify({ email: email, role: role })
-            });
-            var body = null; try { body = await resp.json(); } catch (ee) {}
-            if (!resp.ok || !body || body.error) throw new Error((body && (body.message || body.error)) || ('HTTP ' + resp.status));
-            $('hx-invite-form').hidden = true;
-            $('hx-invite-email').value = '';
-            status('hx-invite-status', body.delivered ? 'Invitation emailed to ' + email + '.' : 'Invitation saved — email delivery is offline, share the link manually.');
-            await refresh();
-          } catch (err) {
-            status('hx-invite-status', (err && err.message) || 'Could not send invite.', 'error');
-          } finally {
-            btn.disabled = false; btn.textContent = lbl;
-          }
-        });
-
-        refresh();
-      });
-    })();
+    $('tm-invite').onclick=function(){ if(!sb||!owner){WB.toast('Sign in required','err');return;} openInvite(); };
+    WB.ready(function(s,u){ sb=s; user=u; owner=u?u.id:null; load(); });
+  })();
   </script>
 </body>
 </html>

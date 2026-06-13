@@ -4,500 +4,120 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Preferences — HelveX</title>
-  <meta name="description" content="HelveX preferences — workspace identity, locale, display, data residency, and the hub for security, notifications, and team." />
   <link rel="icon" type="image/png" href="/helvex-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://yjmpallrtpeinpdilptj.supabase.co" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/platform.css" />
+  <link rel="stylesheet" href="/workbench.css" />
   <style>
-    .hx-seg {
-      display: inline-flex;
-      padding: 3px;
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r-sm);
-      gap: 2px;
-    }
-    .hx-seg button {
-      padding: 5px 12px;
-      font-size: 12.5px;
-      font-weight: 500;
-      color: var(--hx-text-mid);
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.12s, color 0.12s, border-color 0.12s;
-    }
-    .hx-seg button:hover { color: var(--hx-text); }
-    .hx-seg button.is-active {
-      background: var(--hx-surface);
-      color: var(--hx-text);
-      border-color: var(--hx-line);
-      box-shadow: var(--hx-shadow-xs);
-    }
-    .hx-hub-link {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px;
-      border: 1px solid var(--hx-line);
-      border-radius: var(--hx-r);
-      background: var(--hx-surface);
-      text-decoration: none;
-      color: var(--hx-text);
-      transition: border-color 0.12s, transform 0.12s;
-    }
-    .hx-hub-link:hover { border-color: var(--hx-line-strong); transform: translateY(-1px); }
-    .hx-hub-link .ico {
-      width: 34px; height: 34px;
-      border-radius: var(--hx-r-sm);
-      background: var(--hx-bg-2);
-      border: 1px solid var(--hx-line);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .hx-hub-link .ico svg { width: 15px; height: 15px; color: var(--hx-text); }
-    .hx-hub-link .body { flex: 1; min-width: 0; }
-    .hx-hub-link .ttl { font-size: 13.5px; font-weight: 600; }
-    .hx-hub-link .desc { font-size: 12px; color: var(--hx-text-mid); margin-top: 2px; }
-    .hx-hub-link .arr { color: var(--hx-text-dim); transition: transform 0.12s, color 0.12s; }
-    .hx-hub-link:hover .arr { color: var(--hx-text); transform: translateX(2px); }
+    .pref-row { display:flex; align-items:center; gap:16px; padding:16px 0; border-top:1px solid var(--hx-line-soft); }
+    .pref-row:first-child { border-top:0; }
+    .pref-row .grow { flex:1; min-width:0; }
+    .pref-row .lbl { font-size:13.5px; font-weight:600; }
+    .pref-row .sub { font-size:12px; color:var(--hx-text-dim); margin-top:2px; }
+    .theme-seg { display:inline-flex; border:1px solid var(--hx-line); border-radius:9px; overflow:hidden; }
+    .theme-seg button { padding:8px 14px; font-size:12.5px; color:var(--hx-text-mid); background:transparent; border:0; cursor:pointer; display:flex; align-items:center; gap:6px; }
+    .theme-seg button svg { width:14px; height:14px; }
+    .theme-seg button.on { background:var(--hx-bg-3); color:var(--hx-text); font-weight:600; }
+    .sec-h { font-size:13px; font-weight:600; color:var(--hx-text-mid); margin:0 0 4px; }
   </style>
 </head>
 <body data-active="settings">
-
   <div class="hx-app">
     <aside class="hx-sidebar"></aside>
     <div>
       <div class="hx-topbar"></div>
       <main class="hx-main">
-
         <div class="hx-aura" aria-hidden="true"></div>
         <header class="hx-pg-hero">
-          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Preferences · synced</p>
-          <div class="hx-pg-hero-grid">
-            <div>
-              <h1 class="hx-pg-title">Preferences <em>·</em></h1>
-              <p class="hx-pg-sub">Workspace identity, locale, display, and the hub for the rest of your account controls. Changes save instantly and propagate to every device.</p>
-              <div class="hx-pg-cta-row">
-                <a href="/profile.html" class="hx-cta-primary">Profile</a>
-                <a href="/team.html" class="hx-cta-secondary">Team</a>
-              </div>
-            </div>
-            <div class="hx-pg-meta-strip">
-              <div class="hx-pg-meta-item">
-                <p class="hx-pg-meta-label">Sync</p>
-                <p class="hx-pg-meta-value">Every device</p>
-              </div>
-              <div class="hx-pg-meta-item">
-                <p class="hx-pg-meta-label">Region</p>
-                <p class="hx-pg-meta-value hx-mono">EU-CH-1</p>
-              </div>
-            </div>
-          </div>
+          <p class="hx-pg-eyebrow"><span class="hx-pg-eyebrow-dot" aria-hidden="true"></span>Account · preferences</p>
+          <div class="hx-pg-hero-grid"><div>
+            <h1 class="hx-pg-title">Preferences</h1>
+            <p class="hx-pg-sub">Make HelveX feel like yours — appearance, language, defaults and privacy. Changes apply instantly and sync to your account.</p>
+          </div></div>
         </header>
-
-        <!-- ═══════════════ HERO STATS ═══════════════ -->
-        <div class="hx-grid hx-grid-4">
-          <div class="hx-stat">
-            <p class="hx-stat-label">Workspace</p>
-            <p class="hx-stat-value" style="font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="hx-stat-ws">—</p>
-            <p class="hx-stat-meta">Shown on invoices &amp; in the team portal</p>
-          </div>
-          <div class="hx-stat">
-            <p class="hx-stat-label">Locale</p>
-            <p class="hx-stat-value" style="font-size:17px;" id="hx-stat-locale">—</p>
-            <p class="hx-stat-meta" id="hx-stat-locale-meta">—</p>
-          </div>
-          <div class="hx-stat">
-            <p class="hx-stat-label">Theme</p>
-            <p class="hx-stat-value" style="font-size:17px;" id="hx-stat-theme">—</p>
-            <p class="hx-stat-meta" id="hx-stat-theme-meta">Applies on every device</p>
-          </div>
-          <div class="hx-stat">
-            <p class="hx-stat-label">Region</p>
-            <p class="hx-stat-value hx-mono" style="font-size:15px;">EU-CH-1</p>
-            <p class="hx-stat-meta">Data stays in Switzerland</p>
-          </div>
-        </div>
-
-        <!-- ═══════════════ WORKSPACE IDENTITY ═══════════════ -->
-        <div class="hx-section-head">
-          <h2>Workspace identity</h2>
-          <span class="meta">The name and locale your team and invoices use.</span>
-        </div>
-        <div class="hx-card">
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;">
-            <div class="hx-field" style="margin:0;grid-column:span 2;">
-              <label>Workspace name</label>
-              <input type="text" id="hx-ws-name-input" placeholder="Your company name" maxlength="120" autocomplete="organization" />
-              <div class="help">Same value as <a href="/profile.html" style="color:var(--hx-text);text-decoration:underline;text-decoration-color:var(--hx-line-strong);text-underline-offset:2px;">Company on your Profile</a>. Editing here updates both.</div>
-            </div>
-            <div class="hx-field" style="margin:0;">
-              <label>Default time zone</label>
-              <select id="hx-ws-timezone">
-                <option value="Europe/Zurich">Europe / Zurich (UTC+1)</option>
-                <option value="Europe/Berlin">Europe / Berlin (UTC+1)</option>
-                <option value="Europe/Athens">Europe / Athens (UTC+2)</option>
-                <option value="Europe/London">Europe / London (UTC)</option>
-                <option value="Europe/Paris">Europe / Paris (UTC+1)</option>
-                <option value="Europe/Rome">Europe / Rome (UTC+1)</option>
-                <option value="Europe/Madrid">Europe / Madrid (UTC+1)</option>
-                <option value="Europe/Vienna">Europe / Vienna (UTC+1)</option>
-                <option value="Europe/Amsterdam">Europe / Amsterdam (UTC+1)</option>
-                <option value="America/New_York">America / New York (UTC−5)</option>
-                <option value="America/Chicago">America / Chicago (UTC−6)</option>
-                <option value="America/Los_Angeles">America / Los Angeles (UTC−8)</option>
-                <option value="America/Sao_Paulo">America / São Paulo (UTC−3)</option>
-                <option value="Asia/Dubai">Asia / Dubai (UTC+4)</option>
-                <option value="Asia/Singapore">Asia / Singapore (UTC+8)</option>
-                <option value="Asia/Tokyo">Asia / Tokyo (UTC+9)</option>
-                <option value="Australia/Sydney">Australia / Sydney (UTC+10)</option>
-              </select>
-              <div class="help">Used for digest scheduling, quiet hours, and timestamps in shared threads.</div>
-            </div>
-            <div class="hx-field" style="margin:0;">
-              <label>Language</label>
-              <select id="hx-ws-language">
-                <option value="en">English</option>
-                <option value="de">Deutsch</option>
-                <option value="el">Ελληνικά</option>
-                <option value="fr">Français</option>
-                <option value="it">Italiano</option>
-                <option value="es">Español</option>
-              </select>
-              <div class="help">UI language. Applies on save and on every future sign-in.</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;margin-top:22px;flex-wrap:wrap;">
-            <button class="hx-btn hx-btn-primary" id="hx-ws-save">Save workspace</button>
-            <button class="hx-btn hx-btn-ghost"   id="hx-ws-cancel">Cancel</button>
-            <p id="hx-ws-status" style="margin:0 0 0 4px;font-size:12.5px;font-weight:500;"></p>
-          </div>
-        </div>
-
-        <!-- ═══════════════ DISPLAY ═══════════════ -->
-        <div class="hx-section-head">
-          <h2>Display</h2>
-          <span class="meta">Visual preferences for this account. Stored on the server — same on every device.</span>
-        </div>
-        <div class="hx-card">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--hx-line-soft);">
-            <div style="flex:1;min-width:200px;">
-              <p style="margin:0;font-weight:600;font-size:13.5px;">Theme</p>
-              <p style="margin:3px 0 0;font-size:12.5px;color:var(--hx-text-mid);">Light is the HelveX default. Dark is calibrated for low-light rooms.</p>
-            </div>
-            <div class="hx-seg" role="group" aria-label="Theme">
-              <button type="button" data-theme="light"  id="hx-theme-light">Light</button>
-              <button type="button" data-theme="dark"   id="hx-theme-dark">Dark</button>
-              <button type="button" data-theme="system" id="hx-theme-system">System</button>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:14px 0 8px;">
-            <div style="flex:1;min-width:200px;">
-              <p style="margin:0;font-weight:600;font-size:13.5px;">Density</p>
-              <p style="margin:3px 0 0;font-size:12.5px;color:var(--hx-text-mid);">Compact tightens spacing across tables and lists for power-user workflows.</p>
-            </div>
-            <div class="hx-seg" role="group" aria-label="Density">
-              <button type="button" data-density="comfortable" id="hx-density-comfortable">Comfortable</button>
-              <button type="button" data-density="compact"     id="hx-density-compact">Compact</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══════════════ HUB ═══════════════ -->
-        <div class="hx-section-head">
-          <h2>Account controls</h2>
-          <span class="meta">Each surface has its own page — keeps every setting one click deep.</span>
-        </div>
-        <div class="hx-grid hx-grid-2">
-          <a href="/notifications" class="hx-hub-link">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
-            <div class="body"><div class="ttl">Notifications</div><div class="desc">Per-category toggles, digest schedule, quiet hours.</div></div>
-            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-          </a>
-          <a href="/sessions" class="hx-hub-link">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-            <div class="body"><div class="ttl">Sessions</div><div class="desc">Live devices, fingerprint, refresh tokens, revoke.</div></div>
-            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-          </a>
-          <a href="/security" class="hx-hub-link">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-            <div class="body"><div class="ttl">Password &amp; MFA</div><div class="desc">Rotate password, enrol an authenticator, recovery.</div></div>
-            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-          </a>
-          <a href="/team" class="hx-hub-link">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-            <div class="body"><div class="ttl">Team members</div><div class="desc">Invite collaborators, scope roles, audit edits.</div></div>
-            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-          </a>
-          <a href="/audit-log" class="hx-hub-link">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/><line x1="12" y1="7" x2="12" y2="12"/><line x1="12" y1="12" x2="15" y2="14"/></svg></div>
-            <div class="body"><div class="ttl">Audit log</div><div class="desc">Account-impacting actions with actor, IP, timestamp.</div></div>
-            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-          </a>
-        </div>
-
-        <!-- ═══════════════ DATA & PRIVACY ═══════════════ -->
-        <div class="hx-section-head">
-          <h2>Data &amp; privacy</h2>
-          <span class="meta">Switzerland-only residency. Your data does not leave EU-CH-1.</span>
-        </div>
-        <div class="hx-grid hx-grid-2">
-          <div class="hx-card">
-            <p class="hx-card-eyebrow">Export</p>
-            <h3>Download your account data</h3>
-            <p class="desc">A signed JSON archive with your profile, settings, team membership, audit events, and support history. Generated on demand — usually ready in under 60 seconds.</p>
-            <div style="display:flex;gap:8px;margin-top:14px;align-items:center;flex-wrap:wrap;">
-              <button class="hx-btn hx-btn-secondary" id="hx-export-btn" type="button">Request export</button>
-              <span id="hx-export-status" style="font-size:12.5px;font-weight:500;color:var(--hx-text-mid);"></span>
-            </div>
-          </div>
-          <div class="hx-card">
-            <p class="hx-card-eyebrow">Residency</p>
-            <h3>Swiss-only data plane</h3>
-            <p class="desc">Prompts, embeddings, logs, and model weights stay in EU-CH-1. No US, no UK, no shadow replication. Encryption is AES-256 at rest, TLS 1.3 in transit, per-tenant KMS envelope keys.</p>
-            <a href="/trust-center" class="hx-card-link" target="_blank" rel="noopener">Trust center</a>
-          </div>
-        </div>
-
-        <!-- ═══════════════ DANGER ZONE ═══════════════ -->
-        <div class="hx-section-head">
-          <h2 style="color:var(--hx-red);">Danger zone</h2>
-        </div>
-        <div class="hx-card" style="border-color:rgba(220,38,38,0.25);">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:10px;">
-            <div>
-              <p style="margin:0;font-weight:600;">Sign out of HelveX</p>
-              <p style="margin:3px 0 0;color:var(--hx-text-mid);font-size:12.5px;">Ends your session on this device only. Other devices stay signed in — manage them in <a href="/sessions" style="color:var(--hx-text);text-decoration:underline;text-decoration-color:var(--hx-line-strong);text-underline-offset:2px;">Sessions</a>.</p>
-            </div>
-            <button class="hx-btn hx-btn-secondary" data-action="signout">Sign out</button>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:14px;border-top:1px solid rgba(220,38,38,0.18);">
-            <div>
-              <p style="margin:0;font-weight:600;color:var(--hx-red);">Delete this account</p>
-              <p style="margin:3px 0 0;color:var(--hx-text-mid);font-size:12.5px;">Permanent. Removes your profile, workspace data, audit history. We confirm with you first and honour a 30-day grace period.</p>
-            </div>
-            <a href="mailto:support@helvex.ai?subject=Account%20deletion%20request" class="hx-btn hx-btn-danger">Request deletion</a>
-          </div>
-        </div>
-
+        <div id="pr-host"></div>
       </main>
     </div>
   </div>
-
   <script src="/platform.js"></script>
+  <script src="/workbench.js"></script>
   <script>
-    /* Workspace identity → profiles.company.
-       Locale + theme + density → user_settings (new "density" column,
-       optional — falls back silently if the column doesn't exist).         */
-    (function () {
-      function whenAuthReady(fn) {
-        if (window.HX && window.HX.supabase) { fn(); return; }
-        document.addEventListener('hx:auth-ready', fn, { once: true });
-      }
-      var $ = function (id) { return document.getElementById(id); };
+  (function(){
+    var $=function(id){return document.getElementById(id);};
+    var sb=null, user=null, projects=[];
+    var cfg={ theme:(localStorage.getItem('hx.theme')||'light'), language:'en', timezone:'Europe/Zurich', default_project_id:null, default_model:'nexus' };
+    var privacy=JSON.parse(localStorage.getItem('hx.privacy')||'{"analytics":true,"suggestions":true,"presence":true}');
+    var host=$('pr-host'); host.innerHTML=WB.skeletonCards(2);
 
-      function applyTheme(theme) {
-        var root = document.documentElement;
-        var resolved = theme;
-        if (theme === 'system') {
-          resolved = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        }
-        root.setAttribute('data-theme', resolved);
-        root.style.colorScheme = resolved;
-        try { localStorage.setItem('hx.theme', theme); } catch (e) {}
-      }
-      function applyLanguage(lang) {
-        document.documentElement.setAttribute('lang', lang || 'en');
-        try { localStorage.setItem('hx.language', lang || 'en'); } catch (e) {}
-      }
-      function applyTimezone(tz) {
-        if (tz) try { localStorage.setItem('hx.timezone', tz); } catch (e) {}
-      }
-      function applyDensity(d) {
-        document.documentElement.setAttribute('data-density', d || 'comfortable');
-        try { localStorage.setItem('hx.density', d || 'comfortable'); } catch (e) {}
-      }
+    var LANGS=[['en','English'],['el','Ελληνικά'],['de','Deutsch'],['fr','Français'],['it','Italiano'],['es','Español']];
+    var TZS=['Europe/Zurich','Europe/London','Europe/Berlin','America/New_York','America/Los_Angeles','Asia/Tokyo','Australia/Sydney'];
+    var MODELS=[['ether','Ether — fast'],['nexus','Nexus — balanced'],['prometheus','Prometheus — deep']];
 
-      function statusMsg(elId, msg, kind) {
-        var el = $(elId); if (!el) return;
-        el.style.color = kind === 'error' ? 'var(--hx-red)' : 'var(--hx-emerald)';
-        el.textContent = msg || '';
-        if (msg && kind !== 'error') {
-          setTimeout(function () { if (el.textContent === msg) el.textContent = ''; }, 2400);
-        }
-      }
+    function render(){
+      host.innerHTML=
+        '<div class="card" style="padding:22px;margin-bottom:16px"><div class="sec-h">Appearance</div><p style="font-size:12px;color:var(--hx-text-dim);margin:0 0 14px">Light, dark, or follow your system.</p>'+
+          '<div class="theme-seg" id="pr-theme">'+
+            seg('light','<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.2" y1="4.2" x2="5.6" y2="5.6"/><line x1="18.4" y1="18.4" x2="19.8" y2="19.8"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.2" y1="19.8" x2="5.6" y2="18.4"/><line x1="18.4" y1="5.6" x2="19.8" y2="4.2"/>','Light')+
+            seg('dark','<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>','Dark')+
+            seg('system','<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/>','System')+
+          '</div></div>'+
 
-      function setSegActive(group, value) {
-        document.querySelectorAll('.hx-seg button[data-' + group + ']').forEach(function (b) {
-          b.classList.toggle('is-active', b.getAttribute('data-' + group) === value);
-        });
-      }
+        '<div class="card" style="padding:22px;margin-bottom:16px"><div class="sec-h">Localization</div>'+
+          '<div class="pref-row"><div class="grow"><div class="lbl">Language</div><div class="sub">Interface language across HelveX.</div></div><select class="wb-select" id="pr-lang">'+LANGS.map(function(l){return '<option value="'+l[0]+'" '+(cfg.language===l[0]?'selected':'')+'>'+l[1]+'</option>';}).join('')+'</select></div>'+
+          '<div class="pref-row"><div class="grow"><div class="lbl">Timezone</div><div class="sub">Used for timestamps and scheduling.</div></div><select class="wb-select" id="pr-tz">'+TZS.map(function(t){return '<option '+(cfg.timezone===t?'selected':'')+'>'+t+'</option>';}).join('')+'</select></div>'+
+        '</div>'+
 
-      function setStatThemeLabel(theme) {
-        var label = theme === 'dark' ? 'Dark' : theme === 'system' ? 'System' : 'Light';
-        $('hx-stat-theme').textContent = label;
-      }
+        '<div class="card" style="padding:22px;margin-bottom:16px"><div class="sec-h">Workspace defaults</div>'+
+          '<div class="pref-row"><div class="grow"><div class="lbl">Default project</div><div class="sub">New chats and artifacts land here.</div></div><select class="wb-select" id="pr-proj"><option value="">None</option>'+projects.map(function(p){return '<option value="'+p.id+'" '+(cfg.default_project_id===p.id?'selected':'')+'>'+WB.esc(p.name)+'</option>';}).join('')+'</select></div>'+
+          '<div class="pref-row"><div class="grow"><div class="lbl">Default model</div><div class="sub">Pre-selected when you open a new chat.</div></div><select class="wb-select" id="pr-model">'+MODELS.map(function(m){return '<option value="'+m[0]+'" '+(cfg.default_model===m[0]?'selected':'')+'>'+m[1]+'</option>';}).join('')+'</select></div>'+
+        '</div>'+
 
-      function setStatLocaleLabel(lang, tz) {
-        var langMap = { en: 'English', de: 'Deutsch', el: 'Ελληνικά', fr: 'Français', it: 'Italiano', es: 'Español' };
-        $('hx-stat-locale').textContent = langMap[lang] || (lang || '—');
-        var tzShort = tz ? tz.split('/').slice(-1)[0].replace(/_/g, ' ') : '—';
-        $('hx-stat-locale-meta').textContent = tz ? tzShort + ' · ' + tz : '—';
-      }
+        '<div class="card" style="padding:22px;margin-bottom:16px"><div class="sec-h">Privacy</div>'+
+          privRow('analytics','Product analytics','Help improve HelveX with anonymous usage data.')+
+          privRow('suggestions','Personalised suggestions','Use your activity to tailor recommendations.')+
+          privRow('presence','Show online status','Let teammates see when you’re active.')+
+        '</div>'+
 
-      // React to OS theme changes when theme === 'system'
-      if (window.matchMedia) {
-        try {
-          var mql = window.matchMedia('(prefers-color-scheme: dark)');
-          var listener = function () {
-            var pref = (function () { try { return localStorage.getItem('hx.theme') || 'light'; } catch (e) { return 'system'; } })();
-            if (pref === 'system') applyTheme('system');
-          };
-          if (mql.addEventListener) mql.addEventListener('change', listener);
-          else if (mql.addListener) mql.addListener(listener);
-        } catch (e) {}
-      }
+        '<div style="display:flex;align-items:center;gap:12px"><span id="pr-state" style="font-size:12.5px;color:var(--hx-emerald)">All preferences saved</span><span style="flex:1"></span><button class="wb-btn primary" id="pr-save">Save preferences</button></div>';
 
-      whenAuthReady(function () {
-        var sb = window.HX.supabase;
-        var uid = null;
-        var snapshot = {};
+      // theme
+      host.querySelectorAll('#pr-theme button').forEach(function(b){ b.onclick=function(){ cfg.theme=b.dataset.t; applyTheme(); markTheme(); markDirty(); }; });
+      markTheme();
+      ['pr-lang','pr-tz','pr-proj','pr-model'].forEach(function(id){ $(id).onchange=function(){ markDirty(); }; });
+      host.querySelectorAll('.wb-switch[data-p]').forEach(function(sw){ sw.onclick=function(){ var k=sw.dataset.p; privacy[k]=!privacy[k]; sw.classList.toggle('on',privacy[k]); markDirty(); }; });
+      $('pr-save').onclick=save;
+    }
+    function seg(v,ic,label){ return '<button data-t="'+v+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+ic+'</svg>'+label+'</button>'; }
+    function privRow(k,label,sub){ return '<div class="pref-row"><div class="grow"><div class="lbl">'+label+'</div><div class="sub">'+sub+'</div></div><button class="wb-switch '+(privacy[k]?'on':'')+'" data-p="'+k+'"></button></div>'; }
+    function markTheme(){ host.querySelectorAll('#pr-theme button').forEach(function(b){ b.classList.toggle('on',b.dataset.t===cfg.theme); }); }
+    function markDirty(){ var s=$('pr-state'); if(s){ s.textContent='Unsaved changes'; s.style.color='var(--hx-yellow-deep)'; } }
+    function applyTheme(){ try{ localStorage.setItem('hx.theme',cfg.theme); }catch(e){} var r=cfg.theme==='system'?((window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'):cfg.theme; document.documentElement.setAttribute('data-theme',r); document.documentElement.style.colorScheme=r; }
 
-        sb.auth.getUser().then(async function (res) {
-          var user = res && res.data ? res.data.user : null;
-          if (!user) return;
-          uid = user.id;
+    function save(){
+      cfg.language=$('pr-lang').value; cfg.timezone=$('pr-tz').value; cfg.default_project_id=$('pr-proj').value||null; cfg.default_model=$('pr-model').value;
+      try{ localStorage.setItem('hx.privacy',JSON.stringify(privacy)); localStorage.setItem('hx.language',cfg.language); }catch(e){}
+      if(!sb||!user){ done(); return; }
+      var btn=$('pr-save'); btn.disabled=true; btn.textContent='Saving…';
+      sb.from('user_settings').upsert({ user_id:user.id, theme:cfg.theme, language:cfg.language, timezone:cfg.timezone, default_project_id:cfg.default_project_id, updated_at:new Date().toISOString() },{onConflict:'user_id'}).then(function(r){
+        btn.disabled=false; btn.textContent='Save preferences'; if(r.error) throw r.error; done();
+      }).catch(function(e){ btn.disabled=false; btn.textContent='Save preferences'; WB.toast(e.message||'Save failed','err'); });
+    }
+    function done(){ var s=$('pr-state'); s.textContent='All preferences saved'; s.style.color='var(--hx-emerald)'; WB.toast('Preferences saved','ok'); }
 
-          var p = await sb.from('profiles').select('company').eq('id', uid).maybeSingle();
-          var company = (p && p.data && p.data.company) || (user.user_metadata && user.user_metadata.company) || '';
-          $('hx-ws-name-input').value = company;
-          $('hx-stat-ws').textContent = company || 'Untitled workspace';
-
-          var s = await sb.from('user_settings').select('*').eq('user_id', uid).maybeSingle();
-          var st = (s && s.data) || { language:'en', timezone:'Europe/Zurich', theme:'light', density:'comfortable' };
-          $('hx-ws-timezone').value = st.timezone || 'Europe/Zurich';
-          $('hx-ws-language').value = st.language || 'en';
-          // The theme/density shown as "active" mirrors what the user has
-          // in localStorage RIGHT NOW (set by platform.js bootstrap, which
-          // defaults to light). We deliberately do NOT auto-apply the DB
-          // value here — that caused the surprise "platform went dark the
-          // moment I clicked Preferences" bug. The DB value is what gets
-          // saved on the next manual click; it is not authoritative for
-          // the page on load.
-          var currentTheme = 'light';
-          var currentDensity = 'comfortable';
-          try { currentTheme   = localStorage.getItem('hx.theme')   || 'light'; } catch (e) {}
-          try { currentDensity = localStorage.getItem('hx.density') || 'comfortable'; } catch (e) {}
-          setSegActive('theme',   currentTheme);
-          setSegActive('density', currentDensity);
-          setStatThemeLabel(currentTheme);
-          setStatLocaleLabel(st.language || 'en', st.timezone || 'Europe/Zurich');
-
-          snapshot = { company: company, timezone: $('hx-ws-timezone').value, language: $('hx-ws-language').value, theme: currentTheme, density: currentDensity };
-
-          // Only locale/language preview on load — they don't visually
-          // disrupt the page the way a theme flip does.
-          applyLanguage(st.language || 'en');
-          applyTimezone(st.timezone || 'Europe/Zurich');
-        });
-
-        // Live preview as the user changes locale selectors
-        $('hx-ws-language').addEventListener('change', function () {
-          applyLanguage($('hx-ws-language').value);
-          setStatLocaleLabel($('hx-ws-language').value, $('hx-ws-timezone').value);
-        });
-        $('hx-ws-timezone').addEventListener('change', function () {
-          applyTimezone($('hx-ws-timezone').value);
-          setStatLocaleLabel($('hx-ws-language').value, $('hx-ws-timezone').value);
-        });
-        $('hx-ws-name-input').addEventListener('input', function () {
-          $('hx-stat-ws').textContent = $('hx-ws-name-input').value.trim() || 'Untitled workspace';
-        });
-
-        // Theme segmented control — saves immediately
-        document.querySelectorAll('.hx-seg button[data-theme]').forEach(function (b) {
-          b.addEventListener('click', async function () {
-            var t = b.getAttribute('data-theme');
-            setSegActive('theme', t);
-            setStatThemeLabel(t);
-            applyTheme(t);
-            if (uid) {
-              try { await sb.from('user_settings').upsert({ user_id: uid, theme: t }, { onConflict: 'user_id' }); } catch (e) {}
-            }
-          });
-        });
-        // Density segmented control — saves immediately, falls back if the
-        // column isn't present in this environment.
-        document.querySelectorAll('.hx-seg button[data-density]').forEach(function (b) {
-          b.addEventListener('click', async function () {
-            var d = b.getAttribute('data-density');
-            setSegActive('density', d);
-            applyDensity(d);
-            if (uid) {
-              try { await sb.from('user_settings').upsert({ user_id: uid, density: d }, { onConflict: 'user_id' }); } catch (e) {}
-            }
-          });
-        });
-
-        // Save workspace identity
-        $('hx-ws-save').addEventListener('click', async function (e) {
-          e.preventDefault();
-          if (!uid) return;
-          var btn = e.currentTarget; var lbl = btn.textContent;
-          btn.disabled = true; btn.textContent = 'Saving…';
-          try {
-            var email = (await sb.auth.getUser()).data.user.email;
-            var company = ($('hx-ws-name-input').value || '').trim() || null;
-            var tz = $('hx-ws-timezone').value;
-            var lg = $('hx-ws-language').value;
-            var [r1, r2] = await Promise.all([
-              sb.from('profiles').upsert({ id: uid, email: email, company: company }, { onConflict: 'id' }),
-              sb.from('user_settings').upsert({ user_id: uid, timezone: tz, language: lg }, { onConflict: 'user_id' })
-            ]);
-            if (r1.error) throw r1.error;
-            if (r2.error) throw r2.error;
-            snapshot = { company: company || '', timezone: tz, language: lg, theme: snapshot.theme, density: snapshot.density };
-            $('hx-stat-ws').textContent = company || 'Untitled workspace';
-            try { await sb.rpc('log_event', { p_kind: 'settings.workspace_updated', p_payload: { timezone: tz, language: lg, company: !!company } }); } catch (e) {}
-            statusMsg('hx-ws-status', 'Saved.', 'ok');
-          } catch (err) {
-            statusMsg('hx-ws-status', (err && err.message) || 'Could not save.', 'error');
-          } finally {
-            btn.disabled = false; btn.textContent = lbl;
-          }
-        });
-        $('hx-ws-cancel').addEventListener('click', function () {
-          $('hx-ws-name-input').value = snapshot.company || '';
-          $('hx-ws-timezone').value = snapshot.timezone || 'Europe/Zurich';
-          $('hx-ws-language').value = snapshot.language || 'en';
-          $('hx-stat-ws').textContent = snapshot.company || 'Untitled workspace';
-          setStatLocaleLabel(snapshot.language, snapshot.timezone);
-          applyLanguage(snapshot.language);
-          statusMsg('hx-ws-status', 'Reverted.', 'ok');
-        });
-
-        // Account-data export — logs an event the server-side worker picks up.
-        $('hx-export-btn').addEventListener('click', async function () {
-          if (!uid) return;
-          var btn = $('hx-export-btn'); var lbl = btn.textContent;
-          btn.disabled = true; btn.textContent = 'Requesting…';
-          try {
-            await sb.rpc('log_event', { p_kind: 'settings.account_export_requested', p_payload: {} });
-            $('hx-export-status').textContent = 'Requested — you\'ll get an email link when the archive is ready.';
-            $('hx-export-status').style.color = 'var(--hx-emerald)';
-          } catch (e) {
-            $('hx-export-status').textContent = (e && e.message) || 'Could not request export.';
-            $('hx-export-status').style.color = 'var(--hx-red)';
-          } finally {
-            setTimeout(function () { btn.disabled = false; btn.textContent = lbl; }, 1500);
-          }
-        });
-      });
-    })();
+    WB.ready(function(s,u){
+      sb=s; user=u;
+      if(!s||!u){ render(); return; }
+      Promise.all([
+        sb.from('user_settings').select('theme,language,timezone,default_project_id').eq('user_id',u.id).maybeSingle(),
+        sb.from('projects').select('id,name').order('updated_at',{ascending:false})
+      ]).then(function(res){
+        var d=res[0]&&res[0].data; if(d){ cfg.theme=d.theme||cfg.theme; cfg.language=d.language||cfg.language; cfg.timezone=d.timezone||cfg.timezone; cfg.default_project_id=d.default_project_id||null; }
+        projects=(res[1]&&res[1].data)||[]; render();
+      }).catch(render);
+    });
+  })();
   </script>
 </body>
 </html>
