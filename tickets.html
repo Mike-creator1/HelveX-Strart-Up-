@@ -60,7 +60,7 @@
         ['<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>','Documentation','Guides, API reference and how-tos.','/docs.html'],
         ['<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>','Help center','Answers to common questions.','/help-center.html'],
         ['<path d="M4 4h16v16H4z"/><polyline points="22,6 12,13 2,6"/>','Email us','support@helvex.ch · replies within a day.','mailto:support@helvex.ch'],
-        ['<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>','Ask HeliX','Get an instant answer in chat.','/chat.html']
+        ['<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>','Ask HeliX','Get an instant answer in chat.','/chat']
       ];
       $('sp-help').innerHTML=cards.map(function(c){ return '<a class="card card-hover help-card" href="'+c[3]+'"><div class="hi">'+WB.svg(c[0])+'</div><h3>'+c[1]+'</h3><p>'+c[2]+'</p></a>'; }).join('');
     }
