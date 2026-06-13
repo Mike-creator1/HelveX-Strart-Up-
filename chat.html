@@ -35874,20 +35874,28 @@
               P+'.hx-home-tab.is-on::after{content:"" !important;position:absolute;top:5px;left:50%;transform:translateX(-50%);width:20px;height:2.5px;border-radius:2px;background:#E5484D;box-shadow:0 0 10px rgba(229,72,77,.5);}',
               /* Navigation lives in the header hamburger (opens the sessions drawer); no categories / quick-start / workflows */
               P+'.hx-home-menu{display:grid !important;place-items:center;width:40px;height:40px;border-radius:12px !important;background:rgba(255,255,255,.04) !important;border:1px solid rgba(255,255,255,.08) !important;color:#F4F4F5 !important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}',
-              P+'.hx-home-cards,'+P+'.hx-ws-cats,'+P+'.hx-smart-grid,'+P+'.hx-wf-grid,'+P+'.hx-sec-quickstart,'+P+'.hx-sec-workflows{display:none !important;}',
-              /* ── NEW STRUCTURE: minimal, vertically-centred, input-first ── */
-              P+'.hx-home-bar{border-bottom:none !important;padding-top:calc(env(safe-area-inset-top,0px) + 16px) !important;}',
-              P+'.hx-home-status{display:none !important;}',                       /* drop status pill — minimal header */
-              P+'.hx-home-scroll{justify-content:center !important;align-items:stretch !important;text-align:center !important;padding:18px 22px 40px !important;}',
-              P+'.hx-home-greet::before{display:none !important;}',               /* no AI COMMAND CENTER overline */
-              P+'.hx-home-greet{margin:0 0 0 0 !important;font-size:clamp(28px,8.5vw,36px) !important;font-weight:700 !important;letter-spacing:-.02em !important;line-height:1.12 !important;text-align:center !important;}',
-              P+'.hx-home-greet-1 span{color:#6E6E76 !important;}',
-              P+'.hx-home-sub{text-align:center !important;margin:10px auto 0 !important;max-width:300px;color:#8A8A92 !important;}',
-              P+'.hx-home-composer{margin:26px auto 0 !important;max-width:560px;width:100%;}',
-              P+'.hx-home-pills{justify-content:center !important;}',
-              /* recent history moves to the hamburger drawer — off the start screen */
-              P+'.hx-home-recent,'+P+'.hx-home-recent + *{display:none !important;}',
-              P+'.hx-w-sughead{display:none !important;}',
+              /* ── RESTORE full rich home + force monochrome (overrides earlier flag colours) ── */
+              P+'.hx-home-scroll{justify-content:flex-start !important;align-items:stretch !important;text-align:left !important;}',
+              P+'.hx-home-greet{font-size:clamp(30px,8vw,40px) !important;text-align:left !important;line-height:1.06 !important;margin-top:4px !important;}',
+              P+'.hx-home-sub{text-align:left !important;margin:12px 0 0 !important;max-width:none !important;}',
+              P+'.hx-home-pills{justify-content:flex-start !important;}',
+              P+'.hx-home-card-t{text-transform:none !important;font-weight:700 !important;font-size:14.5px !important;}',
+              P+'.hx-home-card-ic{color:#EDEDF0 !important;background:rgba(255,255,255,.05) !important;border:1px solid rgba(255,255,255,.08) !important;margin-bottom:14px !important;}',
+              P+'.hx-home-card:nth-child(3n+1) .hx-home-card-ic,'+P+'.hx-home-card:nth-child(3n+2) .hx-home-card-ic,'+P+'.hx-home-card:nth-child(3n) .hx-home-card-ic{color:#EDEDF0 !important;}',
+              P+'.hx-home-card{background:rgba(255,255,255,.035) !important;border:1px solid rgba(255,255,255,.08) !important;}',
+              P+'.hx-home-card::after{display:none !important;content:none !important;}',
+              P+'.hx-home-card.is-on{border-color:rgba(255,255,255,.28) !important;background:rgba(255,255,255,.06) !important;}',
+              P+'.hx-ws-cat{color:#D6D6DD !important;background:rgba(255,255,255,.04) !important;border:1px solid rgba(255,255,255,.08) !important;}',
+              P+'.hx-ws-cat:hover,'+P+'.hx-ws-cat:active{border-color:rgba(255,255,255,.2) !important;background:rgba(255,255,255,.07) !important;color:#fff !important;}',
+              P+'.hx-smart-tag{color:#B0B0B6 !important;background:rgba(255,255,255,.07) !important;}',
+              P+'.hx-smart-t{text-transform:none !important;}',
+              P+'.hx-smart-arr{color:#6E6E76 !important;}',
+              P+'.hx-smart-card:hover,'+P+'.hx-smart-card:active{border-color:rgba(255,255,255,.2) !important;}',
+              P+'.hx-wf-ic{color:#EDEDF0 !important;}',
+              P+'.hx-wf-card:nth-child(odd) .hx-wf-ic,'+P+'.hx-wf-card:nth-child(even) .hx-wf-ic{color:#EDEDF0 !important;}',
+              P+'.hx-wf-t{text-transform:none !important;}',
+              P+'.hx-wf-arr{color:#6E6E76 !important;}',
+              P+'.hx-wf-card:hover,'+P+'.hx-wf-card:active{border-color:rgba(255,255,255,.2) !important;}',
               '}'
             ].join('\n');
             document.head.appendChild(st);
