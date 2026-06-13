@@ -6,30 +6,27 @@
 <title>Helix Home — mobile preview</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  /* Faithful 1:1 reproduction of the production mobile home (luxury-tech:
-     deep black, glass panels, hairline borders, champagne-gold accent,
-     red ONLY on the primary send action). */
+  /* NEW STRUCTURE — minimal, vertically-centred, input-first (Claude/ChatGPT-like).
+     Black + white/grey, red only on send, one tiny gold brand dot. */
   *{box-sizing:border-box;margin:0;}
   body{display:flex;justify-content:center;background:#1a1a1c;font-family:'Inter',system-ui,sans-serif;}
-  #home{
-    width:390px;min-height:844px;position:relative;display:flex;flex-direction:column;color:#F4F4F5;
-    background:radial-gradient(120% 48% at 50% -14%, rgba(255,255,255,.05), transparent 62%), #060607;
-  }
-  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 18px 12px;border-bottom:1px solid rgba(255,255,255,.06);}
+  #home{width:390px;min-height:844px;display:flex;flex-direction:column;color:#F4F4F5;
+    background:radial-gradient(120% 42% at 50% 30%, rgba(255,255,255,.045), transparent 60%), #060607;}
+  .bar{display:flex;align-items:center;gap:12px;padding:20px 18px 8px;}
   .menu{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#F4F4F5;}
   .menu svg{width:19px;height:19px;}
-  .brand{display:flex;align-items:center;gap:9px;}
-  .brand::before{content:"";width:7px;height:7px;border-radius:50%;background:#C8A24A;box-shadow:0 0 10px rgba(200,162,74,.6);}
-  .brand-name{font-size:23px;font-weight:700;letter-spacing:-.02em;color:#F4F4F5;}
+  .brand{display:flex;align-items:center;gap:8px;}
+  .brand::before{content:"";width:6px;height:6px;border-radius:50%;background:#C8A24A;box-shadow:0 0 8px rgba(200,162,74,.45);}
+  .brand-name{font-size:18px;font-weight:700;letter-spacing:-.02em;}
   .pro{font-size:10px;font-weight:600;color:#9A9AA0;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);border-radius:5px;letter-spacing:.14em;padding:3px 8px;}
-  .status{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:500;color:#9A9AA0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(10px);}
-  .status .d{width:7px;height:7px;border-radius:50%;background:#C9C9CF;box-shadow:0 0 7px rgba(255,255,255,.35);}
-  .scroll{flex:1;padding:18px 18px 32px;}
-  .overline{font-size:10.5px;font-weight:600;letter-spacing:.34em;color:#6E6E76;margin-bottom:16px;}
-  .greet{font-size:54px;font-weight:800;letter-spacing:-.03em;line-height:1.0;color:#F4F4F5;margin-top:6px;}
+  /* centred core */
+  .core{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:18px 22px 60px;}
+  .glyph{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;margin:0 auto 22px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);}
+  .glyph svg{width:26px;height:26px;color:#F4F4F5;}
+  .greet{font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1.12;}
   .greet .dot{color:#6E6E76;}
-  .sub{color:#8A8A92;font-size:14.5px;margin-top:13px;}
-  .composer{margin-top:24px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:20px;box-shadow:0 24px 60px -34px rgba(0,0,0,.9);padding:14px;backdrop-filter:blur(16px);}
+  .sub{color:#8A8A92;font-size:14.5px;margin:10px auto 0;max-width:300px;}
+  .composer{width:100%;max-width:560px;margin:26px auto 0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:20px;box-shadow:0 24px 60px -34px rgba(0,0,0,.9);padding:14px;backdrop-filter:blur(16px);text-align:left;}
   .inrow{display:flex;align-items:center;gap:10px;}
   .input{flex:1;border:0;background:none;outline:none;color:#F4F4F5;font:inherit;font-size:16px;}
   .input::placeholder{color:#5A5A62;}
@@ -37,21 +34,10 @@
   .mic svg{width:18px;height:18px;}
   .send{width:40px;height:40px;background:#E5484D;border:0;border-radius:12px;color:#fff;display:grid;place-items:center;box-shadow:0 10px 26px -12px rgba(229,72,77,.6);}
   .send svg{width:19px;height:19px;}
-  .pills{display:flex;gap:8px;margin-top:14px;}
-  .pill{display:inline-flex;align-items:center;gap:7px;padding:10px 13px;border-radius:11px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);color:#B0B0B6;font-size:13px;font-weight:500;}
+  .pills{display:flex;gap:8px;margin-top:14px;justify-content:center;}
+  .pill{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:11px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);color:#B0B0B6;font-size:13px;font-weight:500;}
   .pill svg{width:16px;height:16px;}
   .pill.on{color:#F4F4F5;border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.06);}
-  .sughead{display:flex;align-items:center;margin:30px 0 13px;}
-  .sec-label{color:#6E6E76;font-weight:700;letter-spacing:.16em;font-size:10.5px;}
-  .seeall{margin-left:auto;color:#B0B0B6;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:3px;}
-  .seeall svg{width:15px;height:15px;}
-  .rec-empty{padding:18px 16px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);color:#7A7A82;border-radius:14px;font-size:13.5px;text-align:center;}
-  .tabs{display:flex;align-items:stretch;gap:4px;padding:8px 10px 16px;border-top:1px solid rgba(255,255,255,.07);background:rgba(8,8,10,.82);backdrop-filter:saturate(160%) blur(20px);}
-  .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:52px;padding:7px 4px;border:0;background:transparent;border-radius:14px;color:#6B6B73;position:relative;}
-  .tab svg{width:21px;height:21px;}
-  .tab .l{font-size:10.5px;font-weight:600;letter-spacing:.01em;line-height:1;}
-  .tab.on{color:#F4F4F5;background:rgba(255,255,255,.06);}
-  .tab.on::after{content:"";position:absolute;top:5px;left:50%;transform:translateX(-50%);width:20px;height:2.5px;border-radius:2px;background:#E5484D;box-shadow:0 0 10px rgba(229,72,77,.5);}
   button{cursor:pointer;font-family:inherit;}
 </style>
 </head>
@@ -60,10 +46,8 @@
   <div class="bar">
     <button class="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
     <div class="brand"><span class="brand-name">Helix</span><span class="pro">PRO</span></div>
-    <div class="status"><span class="d"></span>All systems · Pro</div>
   </div>
-  <div class="scroll">
-    <div class="overline">AI COMMAND CENTER</div>
+  <div class="core">
     <h1 class="greet">Good evening<span class="dot">.</span></h1>
     <p class="sub">What would you like to achieve today?</p>
     <div class="composer">
@@ -73,13 +57,11 @@
         <button class="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"/><path d="m6 11 6-6 6 6"/></svg></button>
       </div>
       <div class="pills">
-        <button class="pill on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18"/></svg>Web search</button>
+        <button class="pill on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18"/></svg>Web</button>
         <button class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><polyline points="14 3 14 8 19 8"/></svg>Sources</button>
         <button class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Focus</button>
       </div>
     </div>
-    <div class="sughead"><span class="sec-label">RECENT SESSIONS</span><span class="seeall">View all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></div>
-    <div class="rec-empty">No sessions yet — start a conversation and it will appear here.</div>
   </div>
 </div>
 </body>
