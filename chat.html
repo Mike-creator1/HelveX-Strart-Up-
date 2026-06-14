@@ -36051,7 +36051,7 @@
               '@media (max-width:719px){' + R + '.hxd-hero-stats{display:none;}}',
               '@media (max-width:540px){' + R + '.hxd-caps{grid-template-columns:1fr !important;}' + R + '.hxd-smart{grid-template-columns:1fr;}' + R + '.hxd-send span{display:none;}' + R + '.hxd-send{padding:0 13px !important;}}',
               '@media (min-width:760px){' + R + '.hxd-kbd{display:inline-flex;}}',
-              '@media (min-width:1080px){' + R + '.hxd-body{grid-template-columns:minmax(0,1fr) 348px;gap:24px;align-items:start;}' + R + '.hxd-col-side{position:sticky;top:18px;}}'
+              '@media (min-width:900px){' + R + '.hxd-caps{grid-template-columns:repeat(3,1fr) !important;}' + R + '.hxd-smart{grid-template-columns:repeat(2,1fr);}}'
             ].join('\n');
             document.head.appendChild(st);
           })();
@@ -36107,20 +36107,6 @@
                   '<div class="hxd-quick">' + homeCats + '</div>' +
                   '<div class="hxd-smart">' + smartCards + '</div>' +
                 '</main>' +
-                '<aside class="hxd-col-side">' +
-                  '<div class="hxd-panel">' +
-                    '<div class="hxd-panel-h"><span>Suggested workflows</span></div>' +
-                    '<div class="hxd-wf">' + wfCards + '</div>' +
-                  '</div>' +
-                  '<div class="hxd-panel">' +
-                    '<div class="hxd-panel-h"><span>Recent sessions</span><button class="hxd-panel-link hx-w-seeall" type="button">View all</button></div>' +
-                    '<div class="hx-home-recent hxd-recent" id="hx-home-recent"></div>' +
-                  '</div>' +
-                  '<div class="hxd-panel">' +
-                    '<div class="hxd-panel-h"><span>Pro tip</span></div>' +
-                    '<p class="hxd-tip-text">Turn on <b>Web search</b> for live, cited answers — or <b>Focus</b> for deep, no-fluff responses.</p>' +
-                  '</div>' +
-                '</aside>' +
               '</div>' +
             '</div>';
           pane.appendChild(el);
@@ -36195,7 +36181,8 @@
           if (morePill) morePill.addEventListener('click', function () { var d = document.getElementById('hx-c-attach'); if (d) d.click(); });
 
           // Recent-session rows → open the real conversation.
-          document.getElementById('hx-home-recent').addEventListener('click', function (e) {
+          var recentBox = document.getElementById('hx-home-recent');
+          if (recentBox) recentBox.addEventListener('click', function (e) {
             var b = e.target.closest && e.target.closest('[data-conv-id]'); if (!b) return;
             e.preventDefault(); e.stopPropagation();
             var id = b.getAttribute('data-conv-id'); if (!id) return;
