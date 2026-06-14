@@ -410,6 +410,50 @@
         }).join('');
       }
 
+      /* Realistic usage so a fresh account never shows an all-zero page.
+         Generated events flow through the exact same aggregation as live
+         data, so charts, headline stats and the model table all populate. */
+      function genSampleUsage(d) {
+        var models = [
+          { m: 'nexus',      w: 0.5, lat: [380, 1100] },
+          { m: 'ether',      w: 0.32, lat: [180, 520] },
+          { m: 'prometheus', w: 0.18, lat: [900, 2200] }
+        ];
+        var surfaces = ['chat', 'assistant', 'api', 'workflow'];
+        var rows = [];
+        for (var day = 0; day < d; day++) {
+          var base = 6 + Math.round(8 * (0.6 + 0.4 * Math.sin(day / 2)));
+          for (var i = 0; i < base; i++) {
+            var rnd = Math.random(), pick = models[0], acc = 0;
+            for (var k = 0; k < models.length; k++) { acc += models[k].w; if (rnd <= acc) { pick = models[k]; break; } }
+            var lat = Math.round(pick.lat[0] + Math.random() * (pick.lat[1] - pick.lat[0]));
+            var err = Math.random() < 0.012;
+            var ts = Date.now() - (d - 1 - day) * 86400000 - Math.round(Math.random() * 86000000);
+            rows.push({
+              model: pick.m,
+              latency_ms: lat,
+              status: err ? 'error' : 'ok',
+              prompt_tokens: 200 + Math.round(Math.random() * 1400),
+              completion_tokens: 120 + Math.round(Math.random() * 1800),
+              credits_consumed: 1 + Math.round(Math.random() * 3),
+              surface: surfaces[Math.floor(Math.random() * surfaces.length)],
+              created_at: new Date(ts).toISOString()
+            });
+          }
+        }
+        return rows;
+      }
+      function showSampleBanner(id, text) {
+        if (document.getElementById(id)) return;
+        var hero = document.querySelector('.hx-pg-hero'); if (!hero) return;
+        var b = document.createElement('div');
+        b.id = id; b.className = 'hx-card';
+        b.style.cssText = 'display:flex;align-items:center;gap:10px;padding:11px 14px;margin:0 0 16px;border-style:dashed;';
+        b.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--hx-text-mid)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' +
+          '<span style="font-size:12.5px;color:var(--hx-text-mid);">' + text + '</span>';
+        hero.insertAdjacentElement('afterend', b);
+      }
+
       whenAuthReady(function () {
         var sb = window.HX.supabase;
 
@@ -431,6 +475,12 @@
           ]);
 
           var rows = events.data || [];
+          if (!rows.length) {
+            rows = genSampleUsage(d);
+            showSampleBanner('hx-usage-sample', 'Showing <strong style="color:var(--hx-text);">sample usage</strong> for the last ' + d + ' days — your real metrics replace this as soon as you make AI calls.');
+          } else {
+            var sb2 = document.getElementById('hx-usage-sample'); if (sb2) sb2.remove();
+          }
           var totalCalls = rows.length;
           var totalCredits = rows.reduce(function (s, r) { return s + (r.credits_consumed || 0); }, 0);
 

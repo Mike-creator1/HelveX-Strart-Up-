@@ -248,8 +248,21 @@
           .select('id, amount, source, reference, created_at')
           .order('created_at', { ascending: false }).limit(50);
         const host = $('hx-bx-credits-list');
+        const sampleNote = '<div class="hx-bx-empty" style="text-align:left;padding:10px 14px;margin-bottom:8px;">Showing <strong style="color:var(--hx-text);">sample history</strong> — real grants replace this once credits move on your account.</div>';
+        const dayAgo = (n) => new Date(Date.now() - n*864e5).toISOString();
         if (!grants.data || !grants.data.length) {
-          host.innerHTML = '<div class="hx-bx-empty">No credit grants yet. Grants appear here when credits are added (sign-up bonus, top-up, subscription renewal).</div>';
+          const sg = [
+            { created_at: dayAgo(2),  source: 'subscription renewal', reference: 'Pro · monthly', amount: 1000 },
+            { created_at: dayAgo(11), source: 'top-up',               reference: 'card •••• 4242', amount: 2000 },
+            { created_at: dayAgo(30), source: 'sign-up bonus',        reference: 'welcome',        amount: 500 }
+          ];
+          host.innerHTML = sampleNote + sg.map(g =>
+            '<div class="hx-bx-row-item">'
+            + '<span class="when">' + esc(fmtDate(g.created_at)) + '</span>'
+            + '<span class="what">' + esc(g.source) + ' · <em style="color:var(--hx-text-dim);">' + esc(g.reference) + '</em></span>'
+            + '<span class="amt" style="color:#15803d;">+' + g.amount.toLocaleString() + '</span>'
+            + '</div>'
+          ).join('');
         } else {
           host.innerHTML = grants.data.map(g =>
             '<div class="hx-bx-row-item">'
@@ -268,7 +281,21 @@
         const ihost = $('hx-bx-invoices-list');
         $('hx-bx-invoices-meta').textContent = (inv.data && inv.data.length ? inv.data.length : 0) + ' total';
         if (!inv.data || !inv.data.length) {
-          ihost.innerHTML = '<div class="hx-bx-empty">No invoices yet. They appear here as soon as Stripe issues the first one for your account.</div>';
+          const si = [
+            { created_at: dayAgo(2),  ref: 'INV-2041', period_end: dayAgo(-28), status: 'paid', amount_cents: 2900, currency: 'EUR' },
+            { created_at: dayAgo(32), ref: 'INV-1988', period_end: dayAgo(2),   status: 'paid', amount_cents: 2900, currency: 'EUR' },
+            { created_at: dayAgo(62), ref: 'INV-1934', period_end: dayAgo(32),  status: 'paid', amount_cents: 2900, currency: 'EUR' }
+          ];
+          $('hx-bx-invoices-meta').textContent = 'sample · ' + si.length + ' shown';
+          ihost.innerHTML = sampleNote.replace('grants','invoices').replace('credits move on','invoices are issued for') + si.map(i =>
+            '<div class="hx-bx-row-item">'
+            + '<span class="when">' + esc(fmtDate(i.created_at)) + '</span>'
+            + '<span class="what">' + esc(i.ref) + ' · period ends ' + esc(fmtDate(i.period_end)) + '</span>'
+            + '<span class="hx-bx-stat-pill ' + esc(i.status) + '">' + esc(i.status) + '</span>'
+            + '<span class="amt">' + esc(fmtMoney(i.amount_cents, i.currency)) + '</span>'
+            + '<span class="actions"></span>'
+            + '</div>'
+          ).join('');
         } else {
           ihost.innerHTML = inv.data.map(i =>
             '<div class="hx-bx-row-item">'

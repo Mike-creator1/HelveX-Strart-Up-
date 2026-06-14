@@ -454,6 +454,48 @@
         if (path) path.setAttribute('d', d);
       }
 
+      /* Realistic log stream so a fresh account never shows a blank
+         console. Generated events feed the same filters, counts,
+         sources, error families, sparkline and CSV export as live data. */
+      function genSampleLogs() {
+        var pools = [
+          { lvl: 'info',  w: 0.78, src: ['assistant', 'chat-api', 'model-router'], msgs: ['Request completed', 'Stream opened', 'Model responded', 'Memory block attached', 'Session resumed', 'Tool call executed'] },
+          { lvl: 'warn',  w: 0.17, src: ['model-router', 'workflow-engine', 'rate-limiter'], msgs: ['Latency above p95 budget', 'Retrying upstream after timeout', 'Approaching credit cap', 'Token window truncated'] },
+          { lvl: 'error', w: 0.05, src: ['billing', 'model-router', 'workflow-engine'], msgs: ['Upstream 529 — overloaded, retried', 'debit_credits RPC timeout', 'Tool call failed: invalid arguments', 'Stream closed unexpectedly'] }
+        ];
+        function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+        var out = [];
+        for (var day = 13; day >= 0; day--) {
+          var n = day === 0 ? 16 : 4 + Math.round(Math.random() * 9);
+          for (var i = 0; i < n; i++) {
+            var rnd = Math.random(), p = pools[0], acc = 0;
+            for (var k = 0; k < pools.length; k++) { acc += pools[k].w; if (rnd <= acc) { p = pools[k]; break; } }
+            var ts = Date.now() - day * 86400000 - Math.round(Math.random() * 86000000);
+            out.push({
+              id: 'sample_' + day + '_' + i,
+              level: p.lvl,
+              source: pick(p.src),
+              message: pick(p.msgs),
+              trace_id: 'hxr_' + Math.random().toString(36).slice(2, 12),
+              latency_ms: 120 + Math.round(Math.random() * 1900),
+              created_at: new Date(ts).toISOString(),
+              payload: p.lvl === 'error' ? { retried: true, attempt: 1 + Math.floor(Math.random() * 2) } : {}
+            });
+          }
+        }
+        return out.sort(function (a, b) { return b.created_at < a.created_at ? -1 : 1; });
+      }
+      function showLogSampleBanner() {
+        if (document.getElementById('hx-log-sample')) return;
+        var hero = document.querySelector('.hx-pg-hero'); if (!hero) return;
+        var b = document.createElement('div');
+        b.id = 'hx-log-sample'; b.className = 'hx-card';
+        b.style.cssText = 'display:flex;align-items:center;gap:10px;padding:11px 14px;margin:0 0 16px;border-style:dashed;';
+        b.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--hx-text-mid)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' +
+          '<span style="font-size:12.5px;color:var(--hx-text-mid);">Showing a <strong style="color:var(--hx-text);">sample log stream</strong> — your real events take over live as soon as you make AI calls.</span>';
+        hero.insertAdjacentElement('afterend', b);
+      }
+
       whenAuthReady(function () {
         var sb = window.HX.supabase;
         var channel = null;
@@ -476,6 +518,19 @@
           var totErr = (err24 && err24.count) || 0;
           var totWarn = (warn24 && warn24.count) || 0;
           var liveCount = (liveDeps && liveDeps.count) || 0;
+
+          if (!STATE.all.length) {
+            STATE.all = genSampleLogs();
+            var s24 = STATE.all.filter(function (r) { return r.created_at >= since24; });
+            totEvents = s24.length;
+            totErr = s24.filter(function (r) { return r.level === 'error'; }).length;
+            totWarn = s24.filter(function (r) { return r.level === 'warn'; }).length;
+            if (!liveCount) liveCount = 2;
+            last14 = { data: STATE.all.map(function (r) { return { created_at: r.created_at }; }) };
+            showLogSampleBanner();
+          } else {
+            var lsb = document.getElementById('hx-log-sample'); if (lsb) lsb.remove();
+          }
 
           $('hx-stat-events').textContent = totEvents.toLocaleString();
           $('hx-stat-errs').textContent = totErr.toLocaleString();
