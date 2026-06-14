@@ -90,7 +90,7 @@
         var c=$('al-clear'); if(c)c.onclick=function(){ST.q='';ST.cat='all';ST.sev='all';$('al-q').value='';$('al-sev').value='all';cats();render();};
         return;
       }
-      host.innerHTML='<div class="wb-table-wrap"><table class="wb-table"><thead><tr><th>Event</th><th>Actor</th><th>Severity</th><th>IP</th><th>When</th></tr></thead><tbody>'+
+      host.innerHTML=(ST.sample?sampleBanner():'')+'<div class="wb-table-wrap"><table class="wb-table"><thead><tr><th>Event</th><th>Actor</th><th>Severity</th><th>IP</th><th>When</th></tr></thead><tbody>'+
         rows.map(function(e,i){ return '<tr class="al-row" data-i="'+i+'"><td><span class="al-kind">'+WB.esc(e.kind||'event')+'</span></td>'+
           '<td>'+WB.esc(e.actor_email||'—')+'</td><td>'+sevPill(severity(e.kind))+'</td>'+
           '<td><span class="wb-mono" style="font-size:12px">'+WB.esc(e.ip||'—')+'</span></td>'+
@@ -133,11 +133,34 @@
       sb.from('activity_events').insert(rows).then(function(r){ if(r.error) throw r.error; WB.toast('Sample events added','ok'); load(); }).catch(function(e){WB.toast(e.message||'Could not add events','err');});
     }
 
+    // In-memory sample trail so the page is never blank on a fresh
+    // account (no DB write — purely illustrative until real events land).
+    function sampleEvents(){
+      var now=Date.now(), email=(window.HX&&window.HX.user&&window.HX.user.email)||'you@workspace.com', ip='85.4.12.9';
+      return [
+        {id:'s1',kind:'auth.signed_in',actor_email:email,ip:ip,user_agent:navigator.userAgent,payload:{method:'email'},created_at:new Date(now-9e5).toISOString()},
+        {id:'s2',kind:'project.created',actor_email:email,ip:ip,payload:{name:'Q3 GTM'},created_at:new Date(now-36e5).toISOString()},
+        {id:'s3',kind:'deploy.succeeded',actor_email:email,ip:ip,payload:{version:'v2.4.1',build:'4f866ef'},created_at:new Date(now-72e5).toISOString()},
+        {id:'s4',kind:'billing.plan_changed',actor_email:email,ip:ip,payload:{from:'Free',to:'Pro'},created_at:new Date(now-26e6).toISOString()},
+        {id:'s5',kind:'member.invited',actor_email:email,ip:ip,payload:{email:'maria@workspace.com',role:'admin'},created_at:new Date(now-9e6).toISOString()},
+        {id:'s6',kind:'security.password_changed',actor_email:email,ip:ip,payload:{},created_at:new Date(now-864e5).toISOString()},
+        {id:'s7',kind:'api_key.created',actor_email:email,ip:ip,payload:{name:'server-prod'},created_at:new Date(now-1.6*864e5).toISOString()},
+        {id:'s8',kind:'project.deleted',actor_email:email,ip:ip,payload:{name:'Old draft'},created_at:new Date(now-2*864e5).toISOString()}
+      ];
+    }
+    function sampleBanner(){
+      return '<div class="card" style="display:flex;align-items:center;gap:10px;padding:11px 14px;margin-bottom:12px;border-style:dashed">'+
+        WB.svg('<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>')+
+        '<span style="font-size:12.5px;color:var(--hx-text-mid)">Showing a <strong style="color:var(--hx-text)">sample audit trail</strong> — every real action is recorded here as you and your team work.</span></div>';
+    }
+
     function load(){
-      if(!db){ ST.loading=false; ST.error='You need to be signed in.'; render(); return; }
+      if(!db){ ST.items=sampleEvents(); ST.sample=true; ST.loading=false; ST.error=null; metrics(); cats(); render(); return; }
       ST.loading=true; render();
       db.list('id,kind,actor_email,ip,user_agent,payload,created_at',{col:'created_at',asc:false}).then(function(r){
-        if(r.error) throw r.error; ST.items=r.data||[]; ST.loading=false; ST.error=null; metrics(); cats(); render();
+        if(r.error) throw r.error; ST.items=r.data||[]; ST.sample=false;
+        if(!ST.items.length){ ST.items=sampleEvents(); ST.sample=true; }
+        ST.loading=false; ST.error=null; metrics(); cats(); render();
       }).catch(function(e){ ST.loading=false; ST.error=e.message||'Load failed'; render(); });
     }
 

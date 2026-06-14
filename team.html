@@ -51,8 +51,26 @@
   <script>
   (function(){
     var $=function(id){return document.getElementById(id);};
-    var sb=null, user=null, owner=null, members=[], invites=[];
+    var sb=null, user=null, owner=null, members=[], invites=[], sample=false;
     var ROLES={ owner:'Owner', admin:'Admin', member:'Member', viewer:'Viewer' };
+
+    // Realistic sample roster so a fresh workspace never looks empty.
+    function sampleData(){
+      sample=true;
+      members=[
+        { id:'sample-1', role:'admin',  status:'active',  label:'Maria Keller' },
+        { id:'sample-2', role:'member', status:'active',  label:'Luca Ferrari' },
+        { id:'sample-3', role:'viewer', status:'invited', label:'Anna Roth' }
+      ];
+      invites=[
+        { id:'sample-i1', email:'david@workspace.com', role:'member', created_at:new Date(Date.now()-2*864e5).toISOString() }
+      ];
+    }
+    function sampleBanner(){
+      return '<div class="card" style="display:flex;align-items:center;gap:10px;padding:11px 14px;margin-bottom:12px;border-style:dashed">'+
+        WB.svg('<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>')+
+        '<span style="font-size:12.5px;color:var(--hx-text-mid)">Showing a <strong style="color:var(--hx-text)">sample team</strong> — invite real members and this fills with your workspace.</span></div>';
+    }
 
     function ini(s){ return (s||'?').trim().slice(0,2).toUpperCase(); }
     function metrics(){
@@ -74,9 +92,9 @@
           '<td><span class="wb-pill '+(mm.status==='active'?'active':'pending')+'"><span class="d"></span>'+(mm.status==='active'?'Active':'Invited')+'</span></td>'+
           '<td style="text-align:right"><button class="wb-btn sm" data-rm="'+mm.id+'">Remove</button></td></tr>';
       }).join('');
-      $('tm-host').innerHTML='<div class="wb-table-wrap"><table class="wb-table"><thead><tr><th>Member</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>'+ownerRow+rows+'</tbody></table></div>';
-      $('tm-host').querySelectorAll('[data-rm]').forEach(function(b){ b.onclick=function(){ WB.arm(b,'Remove?',function(){ sb.from('team_members').delete().eq('id',b.dataset.rm).then(function(r){ if(r&&r.error){WB.toast(r.error.message,'err');return;} WB.toast('Member removed','ok'); load(); }); }); }; });
-      $('tm-host').querySelectorAll('[data-role]').forEach(function(s){ s.onchange=function(){ sb.from('team_members').update({role:s.value}).eq('id',s.dataset.role).then(function(r){ if(r&&r.error){WB.toast(r.error.message,'err');return;} WB.toast('Role updated','ok'); }); }; });
+      $('tm-host').innerHTML=(sample?sampleBanner():'')+'<div class="wb-table-wrap"><table class="wb-table"><thead><tr><th>Member</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>'+ownerRow+rows+'</tbody></table></div>';
+      $('tm-host').querySelectorAll('[data-rm]').forEach(function(b){ b.onclick=function(){ if(/^sample/.test(b.dataset.rm)){ WB.arm(b,'Remove?',function(){ members=members.filter(function(x){return x.id!==b.dataset.rm;}); WB.toast('Member removed','ok'); metrics(); renderMembers(); }); return; } WB.arm(b,'Remove?',function(){ sb.from('team_members').delete().eq('id',b.dataset.rm).then(function(r){ if(r&&r.error){WB.toast(r.error.message,'err');return;} WB.toast('Member removed','ok'); load(); }); }); }; });
+      $('tm-host').querySelectorAll('[data-role]').forEach(function(s){ s.onchange=function(){ if(/^sample/.test(s.dataset.role)){ WB.toast('Role updated','ok'); return; } sb.from('team_members').update({role:s.value}).eq('id',s.dataset.role).then(function(r){ if(r&&r.error){WB.toast(r.error.message,'err');return;} WB.toast('Role updated','ok'); }); }; });
     }
 
     function renderInvites(){
@@ -86,7 +104,7 @@
           '<td><span class="wb-pill">'+WB.esc(ROLES[iv.role]||iv.role)+'</span></td><td><span class="wb-mono" style="font-size:12px">'+WB.relTime(iv.created_at)+'</span></td>'+
           '<td style="text-align:right"><button class="wb-btn sm" data-resend="'+iv.id+'">Resend</button> <button class="wb-btn sm" data-revoke="'+iv.id+'">Revoke</button></td></tr>'; }).join('')+
         '</tbody></table></div>';
-      $('tm-invites').querySelectorAll('[data-revoke]').forEach(function(b){ b.onclick=function(){ sb.from('invitations').delete().eq('id',b.dataset.revoke).then(function(r){ if(r&&r.error){WB.toast(r.error.message,'err');return;} WB.toast('Invitation revoked','ok'); load(); }); }; });
+      $('tm-invites').querySelectorAll('[data-revoke]').forEach(function(b){ b.onclick=function(){ if(/^sample/.test(b.dataset.revoke)){ invites=invites.filter(function(x){return x.id!==b.dataset.revoke;}); WB.toast('Invitation revoked','ok'); metrics(); renderInvites(); return; } sb.from('invitations').delete().eq('id',b.dataset.revoke).then(function(r){ if(r&&r.error){WB.toast(r.error.message,'err');return;} WB.toast('Invitation revoked','ok'); load(); }); }; });
       $('tm-invites').querySelectorAll('[data-resend]').forEach(function(b){ b.onclick=function(){ WB.toast('Invitation re-sent','ok'); }; });
     }
 
@@ -118,16 +136,19 @@
         } });
     }
 
+    function paint(){ metrics(); renderMembers(); renderInvites(); renderRoles(); }
     function load(){
-      if(!sb||!owner){ renderMembers(); renderInvites(); renderRoles(); metrics(); return; }
+      if(!sb||!owner){ sampleData(); paint(); return; }
       Promise.all([
         sb.from('team_members').select('id,member_id,role,status,joined_at,invited_at').eq('owner_id',owner),
         sb.from('invitations').select('id,email,role,created_at,accepted_at').eq('owner_id',owner).is('accepted_at',null)
       ]).then(function(res){
         members=((res[0]&&res[0].data)||[]).map(function(x){ return { id:x.id, role:x.role||'member', status:x.status||(x.joined_at?'active':'invited'), label:(x.member_id||'member').slice(0,8) }; });
         invites=(res[1]&&res[1].data)||[];
-        metrics(); renderMembers(); renderInvites(); renderRoles();
-      }).catch(function(){ metrics(); renderMembers(); renderInvites(); renderRoles(); });
+        sample=false;
+        if(!members.length && !invites.length) sampleData();
+        paint();
+      }).catch(function(){ sampleData(); paint(); });
     }
 
     $('tm-invite').onclick=function(){ if(!sb||!owner){WB.toast('Sign in required','err');return;} openInvite(); };
